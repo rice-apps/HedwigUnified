@@ -3,6 +3,10 @@ var express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 import http from 'http';
 
+// For subscriptions
+import ws from 'ws';
+import { pubsub } from './pubsub';
+
 // var path = require('path');
 // var cookieParser = require('cookie-parser');
 var exjwt = require('express-jwt');
@@ -26,12 +30,15 @@ import Schema from './schema';
  */
 const server = new ApolloServer({ 
     schema: Schema,
-    context: async ({ req }) => {
-      // Gets the decoded jwt object which our exjwt (below) creates for us as req.user
-      // Inspiration from: https://www.apollographql.com/blog/setting-up-authentication-and-authorization-with-apollo-federation
-      const decodedJWT = req.user || null;
-      // const user = await getUserFromToken(token);
-      return { decodedJWT };
+    context: async ({ req, connection }) => {
+      // We will NOT have a req when using subscriptions / sockets, so we can't always expect it to be here!
+      if (req) {
+        // Gets the decoded jwt object which our exjwt (below) creates for us as req.user
+        // Inspiration from: https://www.apollographql.com/blog/setting-up-authentication-and-authorization-with-apollo-federation
+        const decodedJWT = req.user || null;
+        // const user = await getUserFromToken(token);
+        return { decodedJWT };
+      }
     }
 });
 
@@ -55,7 +62,7 @@ app.use(exjwt({
 server.applyMiddleware({ app });
 
 // Create WebSockets server for subscriptions: https://stackoverflow.com/questions/59254814/apollo-server-express-subscriptions-error
-const httpServer = http.createServer(app);
+export const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 // If we have custom routes, we need these to accept JSON input

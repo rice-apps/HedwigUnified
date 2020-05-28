@@ -63,7 +63,10 @@ export const client = new ApolloClient({
 // Initial local state
 const initialState = {
     service: SERVICE_URL,
-    recentUpdate: false
+    user: {
+        recentUpdate: false,
+        _id: ''
+    }
 }
 
 // Initialize cache with a state
@@ -71,7 +74,10 @@ cache.writeQuery({
     query: gql`
         query InitialState {
             service
-            recentUpdate
+            user {
+                recentUpdate
+                _id
+            }
         }
   `,
     data: initialState

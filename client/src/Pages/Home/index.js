@@ -8,7 +8,9 @@ import { useToasts } from "react-toast-notifications";
  */
 const GET_RECENT_UPDATE = gql`
     query GetRecentUpdate {
-        recentUpdate @client
+        user @client {
+            recentUpdate
+        }
     }
 `
 
@@ -26,7 +28,7 @@ const SEEN_RECENT_UPDATE = gql`
 const Home = () => {
     // Check for recent update from cache
     let { data: storeData } = useQuery(GET_RECENT_UPDATE);
-    let { recentUpdate } = storeData;
+    let { recentUpdate } = storeData.user;
 
     // Need to be able to update recentUpdate field on the user when they dismiss
     let [ seenRecentUpdate, ] = useMutation(SEEN_RECENT_UPDATE);

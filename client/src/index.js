@@ -15,6 +15,7 @@ import { ToastProvider } from 'react-toast-notifications'
 // Import apollo client for graphql
 import { client } from './apollo';
 import { ApolloProvider } from '@apollo/client'
+import App from './App';
 
 export const history = createBrowserHistory();
 
@@ -22,7 +23,7 @@ render(
     <ApolloProvider client={client}>
         <Router history={history}>
             <ToastProvider>
-                <Routes />
+                <App />
             </ToastProvider>
         </Router>
     </ApolloProvider>, 

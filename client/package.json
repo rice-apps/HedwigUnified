@@ -17,6 +17,7 @@
     "react-router": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-toast-notifications": "^2.4.0",
+    "styled-components": "^5.1.1",
     "subscriptions-transport-ws": "^0.9.16"
   },
   "scripts": {

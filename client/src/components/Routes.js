@@ -8,9 +8,9 @@ import Home from '../Pages/Home';
 // Vendor imports
 import Orders from '../Pages/Vendor/Orders';
 import VendorSettings from '../Pages/Vendor/Settings';
-import VendorList from "../Pages/User/Vendors";
+import VendorList from "../Pages/User/Vendors/VendorList";
 import VendorDetail from "../Pages/User/Vendors/VendorDetail";
-import ProductDetail from "../Pages/User/Vendors/Products";
+import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from "../Pages/User/Cart";
 
 /**

@@ -17,13 +17,11 @@ const GET_VENDOR_PRODUCTS_QUERY = gql`
     }
 `
 
-const ProductCard = ({ product }) => {
-    const location = useLocation();
+const ProductCard = ({ product, slug }) => {
     const history = useHistory();
 
     const handleClick = () => {
-        let path = location.pathname + "/products/" + product._id;
-        return history.push(path);
+        return history.push(`/user/vendors/${slug}/products/${product._id}`);
     }
     
     return (
@@ -55,9 +53,10 @@ const VendorDetail = ({ }) => {
     return (
         <div>
             {products.map(product => {
-                return (<ProductCard product={product} />);
+                return (<ProductCard product={product} slug={slug} />);
             })}
             <button title="View Cart" onClick={handleClick}>Cart</button>
+            <button title="Go Back" onClick={() => history.goBack()}>Go Back</button>
         </div>
     );
 }

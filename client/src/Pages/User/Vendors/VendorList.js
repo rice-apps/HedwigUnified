@@ -2,27 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 
-const GET_USER_CARTS = gql`
-    query UserCarts {
-        userOne {
-            carts {
-                vendor {
-                    slug
-                }
-                items {
-                    _id
-                    product {
-                        _id
-                        name
-                    }
-                    quantity
-                    comments
-                }
-            }
-        }
-    }    
-`
-
 const GET_VENDORS_QUERY = gql`
     query VendorList {
         vendorMany {
@@ -45,14 +24,10 @@ const GET_VENDORS_QUERY = gql`
 
 const VendorCard = ({ vendor }) => {
     const history = useHistory();
-    const location = useLocation();
 
     const handleClick = () => {
         // Go to this particular vendor's detail page
-        let path = location.pathname + "/" + vendor.slug;
-        // Change page
-        return history.push(path);
-        // navigation.navigate('VendorDetail', { vendor: vendor });
+        return history.push(`/user/vendors/${vendor.slug}`);
     }
 
     return (

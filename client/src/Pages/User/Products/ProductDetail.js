@@ -3,9 +3,6 @@ import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
 import omitDeep from 'omit-deep-lodash';
 
-
-
-
 const GET_PRODUCT_DETAIL = gql`
     query GetProduct($_id:MongoID!){
         productOne(filter:{_id:$_id}){
@@ -81,12 +78,6 @@ const ProductDetail = ({ }) => {
     let userID = "";
     let vendorID = "5ecf473841ccf22523280c3b";
 
-    // Mutations for cart behavior
-    // const [addToCart, ] = useMutation(
-    //     ADD_TO_CART,
-    //     { variables: { }}
-    // )
-    
     // We'll use this hook to initialize our cart when we want to create an order
     const [findOrCreateCart, { data: cartData, loading: cartLoading, error: cartError }] = useMutation(
         FIND_OR_CREATE_CART,
@@ -118,13 +109,6 @@ const ProductDetail = ({ }) => {
     const { _id: productID, name, description, price } = productData.productOne;
     const { _id: cartID, items, fulfillment } = cartData.findOrCreateCart;
 
-    // We define
-    // const orderItem = {
-    //     product: product,
-    //     addons: [],
-    //     comments: ""
-    // }
-
     // Check if this product is already in the cart
     let item;
     let _filteredItems = items.filter(item => item.product._id == productID);
@@ -143,7 +127,6 @@ const ProductDetail = ({ }) => {
     const handleAddToCart = () => {
         // This is necessary because __typename cannot be a field on the item when it is passed to the backend
         let itemForMutation = omitDeep(item, "__typename");
-        console.log(itemForMutation);
         addItemToCart({ variables: { _id: cartID, item: itemForMutation } });
     };
 

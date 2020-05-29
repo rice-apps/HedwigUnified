@@ -1,6 +1,24 @@
 import React, { useConp, useEffect } from 'react';
-import { useQuery, gql, useMutation } from '@apollo/client';
+import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router';
+
+const FIND_OR_CREATE_CART = gql`
+    mutation FindOrCreateCart($vendorID:MongoID!){
+        findOrCreateCart(record:{vendor:$vendorID}) {
+            _id
+            __typename
+            items {
+                product {
+                    _id
+                    name
+                }
+                quantity
+                comments
+            }
+            fulfillment
+        }
+    }
+`
 
 const CREATE_ORDER_MUTATION = gql`
     mutation CreateOrder($userID:MongoID!, $vendorID:MongoID!, $items:[OrdersItemsInput] ) {
@@ -20,7 +38,36 @@ const CREATE_ORDER_MUTATION = gql`
     }
 `
 
-const CartItem = ({ }) => {
+const CREATE_CART_MUTATION = gql`
+    mutation CreateCart($userID:MongoID!, $vendorID:MongoID!) {
+        orderCreateOne(record:{user:$userID, vendor:$vendorID}) {
+            record {
+                _id
+            }
+            recordId
+        }
+    }
+`
+
+const GET_CART = gql`
+    query GetCart {
+        cart @client {
+            vendor @client {
+                name
+                items {
+                    product {
+                        _id 
+                        price
+                    }
+                    quantity
+                    comments
+                }
+            }
+        }
+    }
+`
+
+const CartItem = ({ item }) => {
 
     const handleClick = () => {
         console.log("Should navigate to product detail page!");
@@ -28,14 +75,17 @@ const CartItem = ({ }) => {
 
     return (
         <div onClick={handleClick}>
-            <p>Meme</p>
-            <p>Lmao</p>
+            <p>Name: {item.product.name}</p>
+            <p>Quantity: {item.quantity}</p>
+            <p>End.</p>
         </div>
     )
 }
 
 const CartDetail = ({ }) => {
     const history = useHistory();
+
+    const [findOrCreateCart, { data, loading, error } ] = useMutation(FIND_OR_CREATE_CART);
 
     // Move this to a utils folder
     const transformToOrderItems = (cart) => {
@@ -49,7 +99,16 @@ const CartDetail = ({ }) => {
         });
     }
 
-    const [createOrder, { data, loading, error }] = useMutation(CREATE_ORDER_MUTATION);
+    useEffect(() => {
+        let vendorID = "5ecf473841ccf22523280c3b";
+        findOrCreateCart({ variables: { vendorID: vendorID } });
+    }, []);
+
+    if (error) return <p>Errors...</p>;
+    if (loading) return <p>Loading...</p>
+    if (!data) return (<p>No data...</p>);
+
+    const { items, fulfillment } = data.findOrCreateCart;
 
     // let orderVariables = { userID: userID, vendorID: vendorID };
 
@@ -63,6 +122,9 @@ const CartDetail = ({ }) => {
     return (
         <div>
             <p>Cart Items Below:</p>
+            {items.map(item => {
+                return (<CartItem item={item} />)
+            })}
             <button title={"Confirm"} onPress={handleClick}>Confirm Order</button>
         </div>
     );

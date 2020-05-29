@@ -1,5 +1,22 @@
-import { User, UserTC } from '../models';
+import { User, UserTC, OrderTC } from '../models';
 import { authenticateTicket, verifyToken, createToken } from '../utils/authenticationUtils';
+
+/**
+ * Relations (necessary for any fields that link to other types in the schema)
+ * https://graphql-compose.github.io/docs/plugins/plugin-mongoose.html#how-to-build-nesting-relations
+ */
+
+// Creates relation to carts (order schema)
+UserTC.addRelation("carts", {
+    "resolver": () => OrderTC.getResolver('findMany'),
+    prepareArgs: {
+        filter: (source) => ({
+            fulfillment: "Cart",
+            user: source.id
+        })
+    },
+    projection: { carts: 1 }
+});
 
 /**
  * Custom Resolvers

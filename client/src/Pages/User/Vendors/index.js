@@ -2,6 +2,27 @@ import React, { useContext, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 
+const GET_USER_CARTS = gql`
+    query UserCarts {
+        userOne {
+            carts {
+                vendor {
+                    slug
+                }
+                items {
+                    _id
+                    product {
+                        _id
+                        name
+                    }
+                    quantity
+                    comments
+                }
+            }
+        }
+    }    
+`
+
 const GET_VENDORS_QUERY = gql`
     query VendorList {
         vendorMany {

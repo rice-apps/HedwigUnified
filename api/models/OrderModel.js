@@ -18,10 +18,10 @@ export var OrderItemSchema = new Schema({
 
 var OrderSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: User },
-    vendor: { type: Schema.Types.ObjectId, ref: Vendor },
+    vendor: { type: Schema.Types.ObjectId, ref: Vendor, required: true },
     items: [OrderItemSchema],
     discount: { type: Number, min: 1, max: 100 }, // Percentage
-    fulfillment: { type: String, enum: ['Placed', 'Preparing', 'Ready', 'Cancelled'], default: "Placed" }
+    fulfillment: { type: String, enum: ['Cart', 'Placed', 'Preparing', 'Ready', 'Cancelled'], default: "Cart" }
 }, { timestamps: true });
 
 export const Order = mongoose.model("Orders", OrderSchema);

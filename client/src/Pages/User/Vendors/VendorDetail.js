@@ -49,7 +49,7 @@ const VendorDetail = ({ }) => {
     const { products } = data.vendorOne;
 
     const handleClick = () => {
-        history.push("/user/cart");
+        history.push(`/user/vendors/${slug}/cart`);
     }
 
     return (

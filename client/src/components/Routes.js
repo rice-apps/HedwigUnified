@@ -107,7 +107,7 @@ const routesArray = [
         privateRoute: true
     },
     {
-        path: "/user/cart",
+        path: "/user/vendors/:slug/cart",
         component: CartDetail,
         privateRoute: true
     },

@@ -59,6 +59,86 @@ OrderTC.addResolver({
     }
 });
 
+OrderTC.addResolver({
+    name: "findOrCreate",
+    type: OrderTC,
+    args: { record: OrderTC.getInputTypeComposer() },
+    resolve: async ({ source, args, context, info }) => {
+        // Check if the user already has a cart for this vendor
+        let { user, vendor } = args.record;
+
+        const order = await Order.findOne({
+            user,
+            vendor,
+            fulfillment: 'Cart'
+        });
+
+        if (order) return order;
+        return await Order.create({
+            user,
+            vendor,
+            fulfillment: 'Cart'
+        });
+    }
+})
+
+OrderTC.addResolver({
+    name: "updateItems",
+    type: OrderTC,
+    args: { _id: "ID!", push: "Boolean", item: OrderTC.getFieldTC("items").getInputTypeComposer() },
+    resolve: async({ source, args, context, info }) => {
+        // This determines whether we add or remove from the array
+        let operation = args.push ? "$addToSet" : "$pull";
+        // Setup update based on operation
+        let update = {}
+        update[operation] = { items: args.item };
+        // Execute update
+        await Order.updateOne(
+            { _id: args._id }, // find Order by id
+            update,
+        );
+        // Return the updated order
+        return await Order.findById(args._id);
+    }
+});
+
+OrderTC.addResolver({
+    name: "updateItem",
+    type: OrderTC,
+    args: { _id: "ID!", item: OrderTC.getFieldTC("items").getInputTypeComposer() },
+    resolve: async({ source, args, context, info }) => {
+        // Update operation
+        // Check that requested order and requesting user match
+        // let match = checkOrderUserMatch(args._id, context.decodedJWT);
+        // if (!match) {
+        //     throw Error("Decoded user and Schedule do not match!");
+        // }
+
+        // We will update ONLY the keys that the request desires to update
+        let update = {};
+        for (let key of Object.keys(args.item)) {
+            // For every key present, we will need to add to the update object
+            update[`items.$[elem].${key}`] = args.item[key];
+        }
+
+        let options = {
+            upsert: false,
+            new: true,
+            // We need to find the corresponding product
+            arrayFilters: [ { "elem.product": args.item.product } ]
+        }
+
+        // Perform update
+        await Order.updateOne(
+            { _id: args._id },
+            update,
+            // { "items.$[elem].quantity": args.item.quantity, "items.$[elem].comments": args.item.comments },
+            options
+        );
+        return await Order.findById(args._id);
+    }
+});
+
 const OrderQuery = {
     orderOne: OrderTC.getResolver('findOne'),
     orderMany: OrderTC.getResolver('findMany'),
@@ -66,8 +146,9 @@ const OrderQuery = {
 };
 
 const OrderMutation = {
+    findOrCreateCart: OrderTC.getResolver("findOrCreate", [authMiddleware]),
     // https://graphql-compose.github.io/docs/basics/what-is-resolver.html#via-resolverwrapresolve
-    orderCreateOne: OrderTC.getResolver("createOne").wrapResolve(next => rp => {
+    orderCreateOne: OrderTC.getResolver("createOne", [authMiddleware]).wrapResolve(next => rp => {
         // Inspiration from: https://github.com/graphql-compose/graphql-compose/issues/60#issuecomment-354152014
         // First, execute the creation
         const createOne = next(rp);
@@ -78,7 +159,29 @@ const OrderMutation = {
             return payload;
         });
     }),
+    orderAddItem: OrderTC.getResolver("updateItems").wrapResolve(next => rp => {
+        rp.args.push = true;
+        return next(rp);
+    }),
+    orderRemoveItem: OrderTC.getResolver("updateItems").wrapResolve(next => rp => {
+        rp.args.push = false;
+        return next(rp);
+    }),
+    orderUpdateItem: OrderTC.getResolver("updateItem"),
     orderUpdateOne: OrderTC.getResolver("updateOne")
 };
+
+async function authMiddleware(resolve, source, args, context, info) {
+    // Without header, throw error
+    if (!context.decodedJWT) {
+        throw new Error("You need to be logged in.");
+    }
+
+    // Pull out unique MongoDB User id (not the netid) from decoded JWT 
+    let { id } = context.decodedJWT;
+
+    // Allows a user to only access THEIR user object, while maintaining any other filters/args they might have requested
+    return resolve(source, {...args, record: {...args.record, user: id } }, context, info);
+}
 
 export { OrderQuery, OrderMutation };

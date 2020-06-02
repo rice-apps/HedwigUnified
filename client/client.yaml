@@ -1,6 +1,12 @@
 runtime: nodejs
 env: flex
 service: default
+
+resources:
+  cpu: 2
+  memory_gb: 1.5
+  disk_size_gb: 10
+
 handlers:
     # Serve all static files with urls ending with a file extension
     - url: /(.*\..+)$

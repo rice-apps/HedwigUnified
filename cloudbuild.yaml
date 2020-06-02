@@ -14,6 +14,14 @@ steps:
   args: ['install']
   dir: 'client'
 - name: 'gcr.io/cloud-builders/npm'
+  args: ["run", "create-env"]
+  env:
+    - 'REACT_APP_SERVICE_URL=${_REACT_APP_SERVICE_URL}'
+    - 'REACT_APP_BACKEND_URL=${_REACT_APP_BACKEND_URL}'
+    - 'REACT_APP_GRAPHQL_URL=${_REACT_APP_GRAPHQL_URL}'
+    - 'REACT_APP_GRAPHQL_WS_URL=${_REACT_APP_GRAPHQL_WS_URL}'
+  dir: 'client/'
+- name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   dir: 'client'
 - name: "gcr.io/cloud-builders/gcloud"

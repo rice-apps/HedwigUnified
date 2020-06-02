@@ -1,6 +1,17 @@
 steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
+  dir: 'api/'
+- name: 'gcr.io/cloud-builders/npm'
+  args: ["run", "create-env"]
+  env:
+    - 'MONGODB_CONNECTION_STRING=${_MONGODB_CONNECTION_STRING}'
+    - 'SERVICE_URL=${_SERVICE_URL}'
+  dir: 'api/'
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ["app", "deploy", "api/api.yaml", "-v", "$_GAE_VERSION"]
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
   dir: 'client'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
@@ -11,15 +22,4 @@ steps:
   args: ["app", "deploy", "client/dispatch.yaml", "-v", "$_GAE_VERSION"]
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "services", "--project", "$PROJECT_ID", "set-traffic", "--splits", "$_GAE_TRAFFIC"]
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-  dir: 'api/'
-- name: 'gcr.io/cloud-builders/npm'
-  args: ["run", "create-env"]
-  env:
-    - 'MONGODB_CONNECTION_STRING=${_MONGODB_CONNECTION_STRING}'
-    - 'SERVICE_URL=${_SERVICE_URL}'
-  dir: 'api/'
-- name: "gcr.io/cloud-builders/gcloud"
-  args: ["app", "deploy", "api/api.yaml", "-v", "$_GAE_VERSION"]
 timeout: "1600s"

@@ -7,9 +7,6 @@ resources:
   memory_gb: 1.5
   disk_size_gb: 10
 
-health_check:
-  enable_health_check: False
-
 handlers:
     # Serve all static files with urls ending with a file extension
     - url: /(.*\..+)$

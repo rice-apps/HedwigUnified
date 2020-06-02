@@ -23,6 +23,7 @@
   },
   "scripts": {
     "start": "serve -s build -l $PORT",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "create-env": "printenv > .env",
     "test": "react-scripts test",

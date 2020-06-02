@@ -17,11 +17,12 @@
     "react-router": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-toast-notifications": "^2.4.0",
+    "serve": "^11.3.1",
     "styled-components": "^5.1.1",
     "subscriptions-transport-ws": "^0.9.16"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build -l $PORT",
     "build": "react-scripts build",
     "create-env": "printenv > .env",
     "test": "react-scripts test",

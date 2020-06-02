@@ -55,6 +55,7 @@ const Header = () => {
             <Logo onClick={() => history.push("/home")}>Hedwig</Logo>
             <LinksDiv>
                 <Link onClick={() => history.push("/user/vendors/ewtea/cart")}>Cart</Link>
+                <Link onClick={() => history.push("/user/orders")}>Orders</Link>
                 <Link onClick={() => history.push("/user/vendors")}>Vendors</Link>
                 <Link onClick={() => history.push("/user/settings")}>Settings</Link>
             </LinksDiv>

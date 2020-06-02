@@ -67,6 +67,18 @@ const GET_CART = gql`
     }
 `
 
+const PLACE_ORDER = gql`
+    mutation PlaceOrder($_id: MongoID!) {
+        orderUpdateOne(filter: { _id: $_id } , record: { fulfillment: Placed } ){
+            record {
+                _id
+                __typename
+                fulfillment
+            }
+        }
+    }
+`
+
 const CartItem = ({ item }) => {
 
     const handleClick = () => {
@@ -86,6 +98,7 @@ const CartDetail = ({ }) => {
     const history = useHistory();
 
     const [findOrCreateCart, { data, loading, error } ] = useMutation(FIND_OR_CREATE_CART);
+    const [placeOrder, { data: placeOrderData, loading: placeOrderLoading, error: placeOrderError } ] = useMutation(PLACE_ORDER);
 
     // Move this to a utils folder
     const transformToOrderItems = (cart) => {
@@ -104,19 +117,29 @@ const CartDetail = ({ }) => {
         findOrCreateCart({ variables: { vendorID: vendorID } });
     }, []);
 
+    useEffect(() => {
+        if (placeOrderData) {
+            history.push("/user/orders");
+        }
+    }, [placeOrderData]);
+
+    if (placeOrderLoading) return <p>Creating order...</p>;
+    if (placeOrderError) return <p>Error while placing order...</p>;
+
     if (error) return <p>Errors...</p>;
     if (loading) return <p>Loading...</p>
     if (!data) return (<p>No data...</p>);
 
-    const { items, fulfillment } = data.findOrCreateCart;
+    const { _id, items, fulfillment } = data.findOrCreateCart;
 
     // let orderVariables = { userID: userID, vendorID: vendorID };
 
     const handleClick = () => {
         // Submit order
+        placeOrder({ variables: { _id: _id } });
+
         // createOrder({ variables: {...orderVariables, items: transformToOrderItems(cart) }});
         // Then navigate back to order detail page
-        history.push("/login"); 
     }
     
     return (
@@ -125,7 +148,7 @@ const CartDetail = ({ }) => {
             {items.map(item => {
                 return (<CartItem item={item} />)
             })}
-            <button title={"Confirm"} onPress={handleClick}>Confirm Order</button>
+            <button title={"Confirm"} onClick={handleClick}>Confirm Order</button>
         </div>
     );
 }

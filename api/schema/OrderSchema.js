@@ -141,7 +141,7 @@ OrderTC.addResolver({
 
 const OrderQuery = {
     orderOne: OrderTC.getResolver('findOne'),
-    orderMany: OrderTC.getResolver('findMany'),
+    orderMany: OrderTC.getResolver('findMany', [queryAuthMiddleware]),
     findManyByVendor: OrderTC.getResolver('findManyByVendor')
 };
 
@@ -168,8 +168,31 @@ const OrderMutation = {
         return next(rp);
     }),
     orderUpdateItem: OrderTC.getResolver("updateItem"),
-    orderUpdateOne: OrderTC.getResolver("updateOne")
+    orderUpdateOne: OrderTC.getResolver("updateOne").wrapResolve(next => rp => {
+        // Inspiration from: https://github.com/graphql-compose/graphql-compose/issues/60#issuecomment-354152014
+        // First, execute the creation
+        const updateOne = next(rp);
+        // We want to execute our pubsub AFTER the "createOne" resolver executes
+        return updateOne.then(payload => {
+            pubsub.publish(['ORDER_PLACED'], payload);
+            // This makes sure we still return the created object to the original mutation call
+            return payload;
+        });
+    }),
 };
+
+async function queryAuthMiddleware(resolve, source, args, context, info) {
+    // Without header, throw error
+    if (!context.decodedJWT) {
+        throw new Error("You need to be logged in.");
+    }
+
+    // Pull out unique MongoDB User id (not the netid) from decoded JWT 
+    let { id } = context.decodedJWT;
+
+    // Allows a user to only access info from THEIR user object, while maintaining any other filters/args they might have requested
+    return resolve(source, {...args, filter: {...args.filter, user: id } }, context, info);
+}
 
 async function authMiddleware(resolve, source, args, context, info) {
     // Without header, throw error

@@ -12,6 +12,7 @@ import VendorList from "../Pages/User/Vendors/VendorList";
 import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from "../Pages/User/Cart";
+import OrderList from "../Pages/User/Orders";
 
 /**
  * Requests to verify the user's token on the backend
@@ -124,6 +125,11 @@ const routesArray = [
     {
         path: "/user/vendors",
         component: VendorList,
+        privateRoute: true,
+    },
+    {
+        path: "/user/orders",
+        component: OrderList,
         privateRoute: true,
     },
     {

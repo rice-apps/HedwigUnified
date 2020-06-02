@@ -12,6 +12,9 @@ import { pubsub } from './pubsub';
 var exjwt = require('express-jwt');
 var cors = require('cors')
 
+// Ensure that dotenv loads
+require('dotenv').config();
+
 // Import hidden values from .env
 import { PORT, SECRET } from './config';
 
@@ -53,8 +56,10 @@ app.use(cors({
 
 // Add JWT so that it is AVAILABLE; does NOT protect all routes (nor do we want it to)
 // Inspiration from: https://www.apollographql.com/blog/setting-up-authentication-and-authorization-with-apollo-federation
+console.log("Secret below:");
+console.log(SECRET);
 app.use(exjwt({
-  secret: SECRET || 'testsec', 
+  secret: process.env.SECRET || SECRET, 
   credentialsRequired: false 
 }));
 

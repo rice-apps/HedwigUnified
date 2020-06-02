@@ -54,7 +54,7 @@ app.use(cors({
 // Add JWT so that it is AVAILABLE; does NOT protect all routes (nor do we want it to)
 // Inspiration from: https://www.apollographql.com/blog/setting-up-authentication-and-authorization-with-apollo-federation
 app.use(exjwt({
-  secret: SECRET, 
+  secret: SECRET || 'testsec', 
   credentialsRequired: false 
 }));
 

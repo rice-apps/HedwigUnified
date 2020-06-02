@@ -29,7 +29,7 @@ const ORDERS_QUERY = gql`
 
 const ORDER_SUBSCRIPTION = gql`
     subscription($vendor: ID!) {
-        orderAdded(vendor: $vendor) {
+        orderChanged(vendor: $vendor) {
             _id
             user {
                 name

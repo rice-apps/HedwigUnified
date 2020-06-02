@@ -172,10 +172,13 @@ const OrderMutation = {
         // Inspiration from: https://github.com/graphql-compose/graphql-compose/issues/60#issuecomment-354152014
         // First, execute the creation
         const updateOne = next(rp);
-        // We want to execute our pubsub AFTER the "createOne" resolver executes
+        // We want to execute our pubsub AFTER the "updateOne" resolver executes
         return updateOne.then(payload => {
-            pubsub.publish(['ORDER_PLACED'], payload);
-            // This makes sure we still return the created object to the original mutation call
+            // We only want to publish events for a non-tentative order (i.e. a non-cart order)
+            if (payload.record.fulfillment != "Cart") {
+                pubsub.publish(['ORDER_UPDATED'], payload);
+            }
+            // This makes sure we still return the updated object to the original mutation call
             return payload;
         });
     }),

@@ -128,9 +128,9 @@ const VendorMutation = {
 
 // Need a custom subscription resolver: https://github.com/graphql-compose/graphql-compose-subscription-boilerplate/blob/master/src/schema/index.js
 const VendorSubscription = {
-    orderAdded: {
+    // We want to subscribe to whenever an order is added or changes (such as fulfillment status changes)
+    orderChanged: {
         // "type" field has to be a TypeComposer, not just a string.
-        kind: OrderTC.getResolver("createOne").getKind(),
         type: OrderTC,
         args: { vendor: "ID!" },
         /**
@@ -144,12 +144,12 @@ const VendorSubscription = {
         resolve: payload => payload.record ? payload.record : payload,
         // withFilter wrapper https://www.apollographql.com/docs/graphql-subscriptions/setup/#filter-subscriptions
         subscribe: withFilter(
-            () => pubsub.asyncIterator(['ORDER_ADDED']),
+            () => pubsub.asyncIterator(['ORDER_ADDED', 'ORDER_UPDATED']),
             (payload, variables) => {
                 return payload.record.vendor == variables.vendor
             }
         )
-    }
+    },
 }
 
 export { VendorQuery, VendorMutation, VendorSubscription };

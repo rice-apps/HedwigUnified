@@ -1,2 +1,3 @@
-runtime: nodejs10
+runtime: nodejs
+env: flex
 service: api

@@ -7,6 +7,7 @@ const ORDERS_QUERY = gql`
     query OrdersForVendor($vendor:MongoID){
         orderMany(filter: { vendor: $vendor, OR: [{ fulfillment: Placed }, { fulfillment: Preparing }]}) {
             _id
+            __typename
             user {
                 name
             }
@@ -31,6 +32,7 @@ const ORDER_SUBSCRIPTION = gql`
     subscription($vendor: ID!) {
         orderChanged(vendor: $vendor) {
             _id
+            __typename
             user {
                 name
             }
@@ -59,6 +61,8 @@ const ORDER_FULFILLMENT_MUTATE = gql`
         ) 
         {
             record {
+                _id
+                __typename
                 fulfillment
             }
             recordId
@@ -158,10 +162,23 @@ const Orders = () => {
         variables: { vendor: vendor },
         updateQuery: (prev, { subscriptionData } ) => {
             if (!subscriptionData.data) return prev; // no new data, return existing orders
-            const newFeedOrder = subscriptionData.data.orderAdded;
-            return Object.assign({}, prev, {
-                orderMany: [...prev.orderMany, newFeedOrder]
-            });
+            // Get new/updated order from subscription
+            const newFeedOrder = subscriptionData.data.orderChanged;
+            // TODO: ADD LOGIC FOR REMOVING AN ORDER IF THE USER CANCELS IT
+            
+            // Check if the order is already in the list
+            const orderIndex = prev.orderMany.findIndex(order => order._id == newFeedOrder._id);
+            if (orderIndex > -1) {
+                // Found, replace that index with new order
+                let newOrderMany = [...prev.orderMany];
+                newOrderMany[orderIndex] = newFeedOrder;
+                return Object.assign({}, prev, { orderMany: newOrderMany });
+            } else {
+                // Not found, add to end of the list
+                return Object.assign({}, prev, {
+                    orderMany: [...prev.orderMany, newFeedOrder]
+                });
+            }
         }
     });
 

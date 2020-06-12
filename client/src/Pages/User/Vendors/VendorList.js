@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 
+import "./vendor.css";
+
 const GET_VENDORS_QUERY = gql`
     query VendorList {
         vendorMany {
@@ -18,6 +20,7 @@ const GET_VENDORS_QUERY = gql`
             locations {
                 name
             }
+            imageURL
         }
     }
 `
@@ -31,8 +34,8 @@ const VendorCard = ({ vendor }) => {
     }
 
     return (
-        <div onClick={handleClick}>
-            <p>{vendor.name}</p>
+        <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>
+            <h1>{vendor.name}</h1>
         </div>
     )
 }
@@ -47,10 +50,12 @@ const VendorList = ({ }) => {
     const vendors = data.vendorMany;
 
     return (
-        <div>
-            {vendors.map(vendor => {
-                return (<VendorCard vendor={vendor} />)
-            })}
+        <div className="vendorcontainer">
+            <div className="vendorlist">
+                {vendors.map(vendor => {
+                    return (<VendorCard vendor={vendor} />)
+                })}
+            </div>
         </div>
     );
 }

@@ -6,7 +6,7 @@ const Primary = css`
     @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
     font-family: 'Raleway', sans-serif;
     font-weight: 500;
-    background-color: #6fffe9;
+    /* background-color: #6fffe9; */
     color: #0b132b;
 `
 
@@ -17,7 +17,6 @@ const HeaderDiv = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     height: 50px;
-    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
 `;
 
 const LinksDiv = styled.div`
@@ -43,6 +42,7 @@ const Link = styled.a`
     margin-right: 50px;
 
     :hover {
+        color: red;
         cursor: pointer;
     }
 `

@@ -1,0 +1,53 @@
+.vendorcontainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 95vh;
+}
+
+.vendorlist {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	overflow: hidden;
+	box-shadow: 0px 10px 15px 5px gray;
+	transition-duration: 0.25s;
+	transition-property: width;
+	border-radius: 2.5%;
+}
+
+.vendorlist:hover > .vendorcard {
+	opacity: 0.5;
+}
+
+.vendorlist:hover > .vendorcard:hover {
+	opacity: 1;
+	width: 35vw;
+}
+
+.vendorcard {
+    background-position: center; /* necessary for ensuring we don't get a random crop of the image */
+    cursor: pointer;
+	/* background-image: url("https://images.unsplash.com/photo-1517705549887-405e7cd7b59a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1234&q=80"); */
+	height: 75vh;
+	width: 15vw;
+	transition-duration: inherit;
+	transition-property: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: inherit;
+	overflow: hidden;
+}
+
+h1 {
+	font-size: 30px;
+	letter-spacing: -1px;
+	color: #848fdf;
+	text-transform: uppercase;
+	text-shadow: 1px 1px 0 #000;
+	margin: 10px 0 24px;
+	text-align: center;
+	line-height: 50px;
+	cursor: pointer;
+}

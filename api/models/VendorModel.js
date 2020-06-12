@@ -16,6 +16,7 @@ var OpenIntervalSchema = new Schema({
 
 var VendorSchema = new Schema({
     name: String,
+    imageURL: String,
     slug: { type: String, min: 3, max: 5, unique: true, required: true }, // short 3 letter slug that identifies this vendor
     phone: String,
     type: { type: String, enum: ['SRB', 'Retail', 'Servery']},

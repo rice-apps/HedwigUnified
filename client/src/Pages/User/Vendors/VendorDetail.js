@@ -25,7 +25,7 @@ const ProductCard = ({ product, slug }) => {
     }
     
     return (
-        <div onClick={handleClick}>
+        <div className="productdetail" onClick={handleClick}>
             <p>{product.name}</p>
         </div>
     )
@@ -51,7 +51,7 @@ const VendorDetail = ({ }) => {
     }
 
     return (
-        <div>
+        <div className="productlist">
             {products.map(product => {
                 return (<ProductCard product={product} slug={slug} />);
             })}

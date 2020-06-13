@@ -22,7 +22,8 @@ var ProductSchema = new Schema({
     vendor: { type: Schema.Types.ObjectId, ref: Vendor },
     price: Number,
     type: { type: String, required: true, enum: Object.keys(enumProductType) },
-    category: String
+    category: String,
+    imageURL: String,
 });
 
 ProductSchema.set("discriminatorKey", DKey);

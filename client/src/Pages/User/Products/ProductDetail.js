@@ -3,6 +3,8 @@ import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
 import omitDeep from 'omit-deep-lodash';
 
+import "./product.css";
+
 const GET_PRODUCT_DETAIL = gql`
     query GetProduct($_id:MongoID!){
         productOne(filter:{_id:$_id}){
@@ -13,6 +15,7 @@ const GET_PRODUCT_DETAIL = gql`
             description
             price
             category
+            imageURL
         }
     }
 `;
@@ -71,6 +74,83 @@ const REMOVE_ITEM_FROM_CART = gql`
     }
 `
 
+const OptionVariant = ({ variant, disabled, selected, addToSelected, removeFromSelected }) => {
+    const [classNames, setClassNames] = useState(["optionVariant"]);
+
+    useEffect(() => {
+        console.log(selected);
+        console.log(variant);
+        console.log("-------")
+        if (selected.includes(variant) && !classNames.includes("selected")) {
+            console.log("Executing");
+            setClassNames([...classNames, "selected"]);
+        } 
+        else if (!selected.includes(variant) && classNames.includes("selected")) {
+            setClassNames(["optionVariant"]);
+        }
+    }, [selected]);
+
+    useEffect(() => {
+        if (disabled && !selected.includes(variant)) {
+            setClassNames([...classNames, "disabled"]);
+        } 
+        else if (!disabled && classNames.includes("disabled")) {
+            // In this case, disabled has just been changed yet this component is still afflicted by the "disabled" class; so we remove it
+            setClassNames(["optionVariant"]);
+        }
+    }, [disabled]);
+
+    const handleClick = () => {
+        if (selected.includes(variant)) {
+            return removeFromSelected(variant);
+        } else {
+            if (disabled) return null;
+            return addToSelected(variant);
+        }
+    }
+
+    return (
+        <div 
+        className={classNames.join(" ")}
+        onClick={handleClick}
+        >
+            <p>{ variant }</p>
+        </div>
+    )
+}
+
+const OptionSet = ({ optionSet }) => {
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
+    const addToSelected = (newSelection) => setSelectedOptions([...selectedOptions, newSelection]);
+    const removeFromSelected = (newSelection) => {
+        setSelectedOptions(
+            selectedOptions.slice().filter(option => option != newSelection)
+        );
+    }
+    // If multi is true, then use checkboxes
+
+
+    // Otherwise, use radio
+
+    return (
+        <div className="optionSetContainer">
+            <h2>{optionSet.title}</h2>
+            <div className="optionSet">
+            {optionSet.variants.map(variant => (
+                <OptionVariant 
+                variant={variant}
+                disabled={!optionSet.multi && selectedOptions.length > 0} 
+                selected={selectedOptions}
+                addToSelected={addToSelected}
+                removeFromSelected={removeFromSelected} 
+                />
+            ))}
+            </div>
+        </div>
+    )
+}
+
 const ProductDetail = ({ }) => {
     const { slug, product } = useParams();
     const history = useHistory();
@@ -106,7 +186,7 @@ const ProductDetail = ({ }) => {
     if (productLoading || cartLoading) return <p>Loading...</p>
     if (!productData || !cartData) return (<p>No data...</p>);
 
-    const { _id: productID, name, description, price } = productData.productOne;
+    const { _id: productID, name, type, description, price, category } = productData.productOne;
     const { _id: cartID, items, fulfillment } = cartData.findOrCreateCart;
 
     // Check if this product is already in the cart
@@ -135,12 +215,27 @@ const ProductDetail = ({ }) => {
         removeItemFromCart({ variables: { _id: cartID, item: itemForMutation } });
     };
 
+    const optionSets = [{title: "Size", multi: false, variants: ["M", "L"]}, {title: "Toppings", multi: true, variants: ["Boba", "Oreo", "Lychee"]}];
+
     return (
-        <div>
-            <p>Product Name: {name}</p>
-            <button onClick={handleAddToCart}>Add to Cart</button>
-            <button onClick={handleRemoveFromCart}>Remove from Cart</button>
-            <button onClick={() => history.push(`/user/vendors/${slug}/cart`)}>Go to Cart</button>
+        <div className="heroImage">
+            <div className="productInfo">
+                <p>{category}</p>
+                <p>Product Name: {name}</p>
+                <p>${price}</p>
+                <p>{description}</p>
+                {optionSets.map(optionSet => {
+                    
+                    return (
+                        <OptionSet optionSet={optionSet} />
+                    )
+                })}
+                <div className="cartActions">
+                    <button onClick={handleAddToCart}>Add to Cart</button>
+                    <button onClick={handleRemoveFromCart}>Remove from Cart</button>
+                </div>
+                <button onClick={() => history.push(`/user/vendors/${slug}/cart`)}>Go to Cart</button>
+            </div>
         </div>
     );
 }

@@ -62,13 +62,15 @@
     height: 10%;
     width: 20%;
 	padding: 10px;
-	border-radius: 5%;
-    box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.8);
+	border-radius: 10%;
+    box-shadow: 1px 2px 6px 1px rgba(91, 91, 91, 0.8);
     cursor: pointer;
 }
 
-.optionVariant:hover {
-    background-color: rgba(72, 100, 255, 0.8);
+/* This ensures that our new box shadow will ONLY apply for when optionVariant is alone */
+[class="optionVariant"]:hover {
+    /* background-color: rgba(72, 100, 255, 0.8); */
+    box-shadow: 1px 2px 12px 5px rgba(91, 91, 91, 0.8);
 }
 
 /* .optionVariant.selected {
@@ -81,10 +83,6 @@
 
 .optionVariant.disabled {
     cursor: not-allowed;
-}
-
-.optionVariant.disabled:hover {
-    background-color: inherit;
 }
 
 .optionInput {

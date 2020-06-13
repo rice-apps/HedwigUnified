@@ -225,7 +225,6 @@ const ProductDetail = ({ }) => {
             <div className="productInfo">
                 <p>{category}</p>
                 <p>Product Name: {name}</p>
-                <p>${price}</p>
                 <p>{description}</p>
                 {optionSets.map(optionSet => {
                     
@@ -233,6 +232,7 @@ const ProductDetail = ({ }) => {
                         <OptionSet optionSet={optionSet} />
                     )
                 })}
+                <p>Price: ${price}</p>
                 <div className="cartActions">
                     <button onClick={handleAddToCart}>Add to Cart</button>
                     <button onClick={handleRemoveFromCart}>Remove from Cart</button>

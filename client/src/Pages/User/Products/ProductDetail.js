@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
 import omitDeep from 'omit-deep-lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 import "./product.css";
 
@@ -114,6 +116,7 @@ const OptionVariant = ({ variant, disabled, selected, addToSelected, removeFromS
         className={classNames.join(" ")}
         onClick={handleClick}
         >
+            { selected.includes(variant) ? <FontAwesomeIcon icon={faCheck} /> : null}
             <p>{ variant }</p>
         </div>
     )

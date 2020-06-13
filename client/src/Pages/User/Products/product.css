@@ -55,6 +55,10 @@
 }
 
 .optionVariant {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
     height: 10%;
     width: 20%;
 	padding: 10px;
@@ -67,9 +71,9 @@
     background-color: rgba(72, 100, 255, 0.8);
 }
 
-.optionVariant.selected {
+/* .optionVariant.selected {
     background-color: rgba(72, 100, 255, 0.8);
-}
+} */
 
 .optionVariant.selected:hover {
     background-color: rgba(255, 68, 68, 0.8)
@@ -77,6 +81,10 @@
 
 .optionVariant.disabled {
     cursor: not-allowed;
+}
+
+.optionVariant.disabled:hover {
+    background-color: inherit;
 }
 
 .optionInput {

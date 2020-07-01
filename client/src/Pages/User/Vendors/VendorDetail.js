@@ -40,7 +40,7 @@ const VendorDetail = ({ }) => {
         { variables: { slug: slug } }
     ); 
 
-    if (error) return <p>Errors...</p>;
+    if (error) return <p>Error: {error.message}</p>;
     if (loading) return <p>Loading...</p>
     if (!data) return (<p>No data...</p>);
 

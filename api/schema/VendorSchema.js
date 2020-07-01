@@ -1,6 +1,6 @@
 import { Vendor, VendorTC, OrderTC, Order, ProductTC, Product, UserTC, LocationTC, EntreeTC } from '../models';
 // import { pubsub } from '../pubsub';
-import { withFilter } from 'apollo-server-express';
+import { withFilter, ApolloError } from 'apollo-server-express';
 import { pubsub } from '../pubsub';
 
 /**
@@ -108,8 +108,17 @@ VendorTC.addResolver({
     }
 });
 
+// Middleware to ensure that error is thrown when vendor isn't found.
+const noVendorError = async (resolve, source, args, context, info) => {
+    const res = await resolve(source, args, context, info);
+    if (res === null) {
+        throw new ApolloError("Vendor doesn't exist!", "NO_VENDOR");
+    }
+    return res;
+};
+
 const VendorQuery = {
-    vendorOne: VendorTC.getResolver('findOne'),
+    vendorOne: VendorTC.getResolver('findOne').withMiddlewares([noVendorError]),
     vendorMany: VendorTC.getResolver('findMany'),
 };
 

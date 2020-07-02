@@ -1,4 +1,4 @@
-import { User, UserTC, OrderTC } from '../models';
+import { User, UserTC, OrderTC, VendorTC } from '../models';
 import { authenticateTicket, verifyToken, createToken } from '../utils/authenticationUtils';
 
 /**
@@ -12,12 +12,22 @@ UserTC.addRelation("carts", {
     prepareArgs: {
         filter: (source) => ({
             fulfillment: "Cart",
-            user: source.id
+            user: source._id
         })
     },
     projection: { carts: 1 }
 });
 
+UserTC.addRelation("employer", {
+    "resolver": () => VendorTC.getResolver('findOne'),
+    args: { filter: VendorTC.getInputTypeComposer() },
+    prepareArgs: {
+        filter: (source) => ({
+            employer: source._id, // Uses the vendor _id
+        })
+    },
+    projection: { employer: 1 }
+});
 /**
  * Custom Resolvers
  */
@@ -78,7 +88,7 @@ UserTC.addResolver({
 
 // Using auth middleware for sensitive info: https://github.com/graphql-compose/graphql-compose-mongoose/issues/158
 const UserQuery = {
-    userOne: UserTC.getResolver('findOne', [authMiddleware]),
+    userOne: UserTC.getResolver('findOne'),
 };
 
 const UserMutation = {

@@ -28,8 +28,16 @@ EntreeTC.addResolver({
     }
 })
 
+const noProductError = async (resolve, source, args, context, info) => {
+    const res = await resolve(source, args, context, info);
+    if (res === null) {
+        throw new ApolloError("Bogus product ID!", "NO_PRODUCT");
+    }
+    return res;
+};
+
 const ProductQuery = {
-    productOne: ProductTC.getResolver('findOne'),
+    productOne: ProductTC.getResolver('findOne').withMiddlewares([noProductError]),
     productMany: ProductTC.getResolver("findMany"),
     entreeMany: EntreeTC.getResolver("findMany")
 };

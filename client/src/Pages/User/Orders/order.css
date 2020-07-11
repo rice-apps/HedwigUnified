@@ -24,6 +24,25 @@
 .ordercard > p {
 }
 
+div.order_tab{
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 100%;
+	align-items: center;
+	text-align: center;
+	border-bottom: 2px solid rgb(244, 159, 134);
+
+}
+
+p.order_tab_selected{
+	background-color: rgb(244, 159, 134);
+	color: white;
+}
+
+p.order_tab_unselected{
+	color: black
+}
+
 .modal {
 	margin: auto;
 	display: flex;

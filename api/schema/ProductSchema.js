@@ -1,4 +1,5 @@
 import { Product, ProductTC, VendorTC, EntreeTC, Vendor } from '../models';
+import { ApolloError } from 'apollo-server-express';
 
 /**
  * Relations (necessary for any fields that link to other types in the schema)

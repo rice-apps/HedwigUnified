@@ -40,7 +40,7 @@ const VendorDetail = ({}) => {
     variables: { slug: slug },
   });
 
-  if (error) return <ErrorPage errMessage="Vendor doesn't exist!"/>
+  if (error) return <ErrorPage errMessage={error.message}/>
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>No data...</p>;
 

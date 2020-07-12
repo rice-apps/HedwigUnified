@@ -59,6 +59,7 @@ const OrderItemList = ({ items }) => {
 			{items.map((item) => (
 				<p>{item.product.name} ${item.product.price}</p>
 			))}
+			<hr class="solid"></hr>
 		</div>
 	);
 };
@@ -107,17 +108,9 @@ const OrderDetail = ({ order }) => {
 
 	 		<p>Total: {total_and_tax(items)[0]}</p>
 
-            <button onClick={openModal}>Show Order Items</button>
 			{order.fulfillment == "Placed" ? (
 				<button onClick={handleCancelOrder}>Cancel Order</button>
 			) : null}
-            <Modal
-            className="modal"
-            isOpen={modalOpen}
-            onRequestClose={closeModal}
-            >
-                <OrderItemList items={items} />
-            </Modal>
 		</div>
 	);
 };

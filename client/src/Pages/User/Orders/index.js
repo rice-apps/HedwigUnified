@@ -26,12 +26,14 @@ const GET_PAST_ORDERS = gql`
 			items {
 				product {
 					name
+					price
 				}
 			}
 			user {
 				netid
 			}
 			fulfillment
+			createdAt
 		}
 	}
 `;
@@ -54,17 +56,17 @@ const CANCEL_ORDER = gql`
 const OrderItemList = ({ items }) => {
 	return (
 		<div>
-			<p>Order Items: </p>
 			{items.map((item) => (
-				<p>{item.product.name}</p>
+				<p>{item.product.name} ${item.product.price}</p>
 			))}
 		</div>
 	);
 };
 
 const OrderDetail = ({ order }) => {
-    const { _id, items, vendor, user } = order;
-    const [modalOpen, setModalOpen] = useState(false);
+    const { _id, items, vendor, user, createdAt} = order;
+	const [modalOpen, setModalOpen] = useState(false);
+	const [detailOpen, setDetailOpen] = useState(false);
 
     const openModal = () => setModalOpen(true);
     const closeModal = () => setModalOpen(false);
@@ -75,10 +77,36 @@ const OrderDetail = ({ order }) => {
 		cancelOrder({ variables: { _id: _id } });
 	};
 
+	function detailsClick(){
+		if(detailOpen){
+			setDetailOpen(false);
+		}
+		else{
+			setDetailOpen(true);
+		}
+	}
+
+	function total_and_tax({items}){
+		var total = 0;
+		for(var item in items){
+			total += parseInt(item.product.price);}
+		return [total, total*.1];
+	}
+
 	return (
 		<div className="ordercard">
-			<h2>{order.fulfillment}</h2>
-			<p>{vendor.name}</p>
+			<div className = "orderText">
+			<p><strong>{vendor.name}</strong></p>
+			<p className = "pinkText"><strong>{order.fulfillment}</strong></p>
+			<p>{order.createdAt}</p>
+			<hr class="solid"></hr>
+			<p  className = "pinkText" onClick = {detailsClick}>Details</p>
+			<p>{detailOpen ? <strong><OrderItemList items={items} /></strong>:null}</p>
+			</div>
+			<hr class="solid"></hr>
+
+	 		<p>Total: {total_and_tax(items)[0]}</p>
+
             <button onClick={openModal}>Show Order Items</button>
 			{order.fulfillment == "Placed" ? (
 				<button onClick={handleCancelOrder}>Cancel Order</button>
@@ -119,6 +147,8 @@ const OrderList = ({}) => {
 			}	
 	}
 
+
+
 	return (
 		<div>
 		<div className = "order_tab">
@@ -127,7 +157,12 @@ const OrderList = ({}) => {
 		</div>
 		<div className="orderlist">
 			{orders.map((order) => {
-				return <OrderDetail order={order} />;
+				if(!tab_selected_past){
+					return <OrderDetail order={order} />;
+				}
+				else{
+					return null //Return OrderDetail of past orders fetched from backend?
+				}
 			})}
 		</div>
 		</div>

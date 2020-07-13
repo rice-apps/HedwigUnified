@@ -43,3 +43,7 @@
     color: green;
   }
 }
+
+.pickupDropdownControl {
+	border: 0px;
+}

@@ -1,3 +1,140 @@
+input[type="radio"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.container {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.heroImage {
+	position: relative;
+	height: 25vh;
+	width: 95%;
+	object-fit: cover;
+	border-radius: 10px;
+}
+
+.itemHeading {
+	color: #5a5953;
+	padding-left: 1rem;
+	padding-right: 20%;
+}
+
+.itemHeading > h2 {
+	font-size: 25px;
+	font-weight: 700;
+	line-height: 34px;
+	margin-top: 24px;
+	margin-bottom: 0px;
+}
+
+.itemHeading > p {
+	font-size: 15px;
+	line-height: 20px;
+	margin-top: 0px;
+	margin-bottom: 28px;
+}
+
+.variantsContainer {
+	display: flex;
+	width: 100%;
+	background-color: #faf8f8;
+}
+
+.variant {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	width: 100vw;
+}
+
+.heading {
+	width: 100%;
+	margin-left: 24px;
+	margin-right: 24px;
+}
+
+.heading > h1,
+h2 {
+	font-size: 17px;
+	line-height: 23px;
+}
+
+.variant > .options {
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
+}
+
+.options > .optionSet {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	width: inherit;
+
+	margin-left: 24px;
+	margin-right: 24px;
+}
+
+.optionSet > label {
+	flex-grow: 1;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	font-size: 15px;
+	line-height: 20px;
+}
+
+.optionSet p:first-child {
+	flex-grow: 2;
+	text-align: left;
+}
+
+.optionSet p:last-child {
+	flex-grow: 1;
+	text-align: right;
+}
+
+.optionSet input[type='radio']:checked ~ .customRadio {
+	background-color: #FFFFFF;
+	border: 3px solid #F49F86;
+}
+
+.optionSet .customRadio {
+	height: 20px;
+	width: 20px;
+	border-radius: 20px;
+	border: 3px solid #5A59534D;
+	margin-right: 5px;
+}
+
+.customRadio::after {
+	content: "";
+	position: relative;
+	display: none;
+}
+
+.optionSet input[type='radio']:checked ~ .customRadio::after {
+	display: block;
+}
+
+.optionSet .customRadio::after {
+	top: 5px;
+	left: 5px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #F49F86;
+}
+
 .productInfo {
 	display: flex;
 	flex-direction: column;
@@ -18,7 +155,7 @@
 	margin: 10px;
 }
 
-.heroImage {
+.heroImageOld {
 	/* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
 	background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
 		url("https://images.unsplash.com/photo-1482349274213-19ca6126f02f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2600&q=80");
@@ -49,28 +186,28 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-around;
-    align-items: center;
-    
-    width: 20vw;
+	align-items: center;
+
+	width: 20vw;
 }
 
 .optionVariant {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 10%;
-    width: 20%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+	height: 10%;
+	width: 20%;
 	padding: 10px;
 	border-radius: 10%;
-    box-shadow: 1px 2px 6px 1px rgba(91, 91, 91, 0.8);
-    cursor: pointer;
+	box-shadow: 1px 2px 6px 1px rgba(91, 91, 91, 0.8);
+	cursor: pointer;
 }
 
 /* This ensures that our new box shadow will ONLY apply for when optionVariant is alone */
 [class="optionVariant"]:hover {
-    /* background-color: rgba(72, 100, 255, 0.8); */
-    box-shadow: 1px 2px 12px 5px rgba(91, 91, 91, 0.8);
+	/* background-color: rgba(72, 100, 255, 0.8); */
+	box-shadow: 1px 2px 12px 5px rgba(91, 91, 91, 0.8);
 }
 
 /* .optionVariant.selected {
@@ -78,11 +215,11 @@
 } */
 
 .optionVariant.selected:hover {
-    background-color: rgba(255, 68, 68, 0.8)
+	background-color: rgba(255, 68, 68, 0.8);
 }
 
 .optionVariant.disabled {
-    cursor: not-allowed;
+	cursor: not-allowed;
 }
 
 .optionInput {

@@ -35,7 +35,7 @@ const VariantSelection = ({ variant }) => {
 const ModifierSelection = ({ modifier }) => {
 	let { question, description, multiSelect, options } = modifier;
 	return (
-		<div className="variant">
+		<div className="modifier">
 			<div className="heading">
 				<h1>{question}</h1>
 				{description ? <p>{description}</p> : null}
@@ -119,6 +119,14 @@ const Product = ({}) => {
 					return <ModifierSelection modifier={modifier} />;
 				})}
 			</div>
+            <div className="quantityContainer">
+                <button>-</button>
+                <p>1</p>
+                <button>+</button>
+            </div>
+            <div className="submitContainer">
+                <button className="submitButton">Add</button>
+            </div>
 		</div>
 	);
 };

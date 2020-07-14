@@ -41,13 +41,13 @@ input[type="radio"], input[type="checkbox"] {
 	margin-bottom: 28px;
 }
 
-.variantsContainer {
+.variantsContainer, .modifiersContainer, .quantityContainer, .submitContainer {
 	display: flex;
 	width: 100%;
 	background-color: #faf8f8;
 }
 
-.variant {
+.variant, .modifier {
 	display: flex;
 	flex-direction: column;
 	text-align: left;
@@ -66,7 +66,7 @@ h2 {
 	line-height: 23px;
 }
 
-.variant > .options {
+.variant > .options, .modifier > .options {
 	display: flex;
 	flex-direction: column;
 	background-color: #ffffff;
@@ -172,6 +172,52 @@ h2 {
     color: #FFFFFF;
 }
 /* End */
+
+.quantityContainer {
+	display: flex;
+	flex-direction: row;
+	text-align: center;
+	justify-content: center;
+	align-items: baseline;
+	width: 100%;
+}
+
+.quantityContainer > button:first-child, .quantityContainer > button:last-child {
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	background-color: #5A5953;
+	border: 0px;
+
+	text-align: center;
+	font-size: 25px;
+	line-height: 25px;
+	color: #FFFFFF;
+}
+
+.quantityContainer > p {
+	font-size: 25px;
+	line-height: 35px;
+	color: #5A5953;
+	padding: 10px;
+}
+
+.submitContainer {
+	display: flex;
+	justify-content: center;
+}
+
+.submitButton {
+	font-size: 20px;
+	line-height: 27px;
+	color: #F49F86;
+
+	height: 5vh;
+	width: 30vw;
+	background-color: #FFFFFF;
+	border: 1px solid #5A595326;
+	border-radius: 20px;
+}
 
 .productInfo {
 	display: flex;

@@ -15,7 +15,46 @@ const VariantSelection = ({ variant }) => {
 					<div className="optionSet">
 						<label>
 							<input type="radio" name={question} />
-                            <span className="customRadio" />
+
+							<span className="customRadio" />
+							<p>{option.name}</p>
+							<p>
+								{currency(option.price).format({
+									symbol: "$",
+									format: "USD",
+								})}
+							</p>
+						</label>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+};
+
+const ModifierSelection = ({ modifier }) => {
+	let { question, description, multiSelect, options } = modifier;
+	return (
+		<div className="variant">
+			<div className="heading">
+				<h1>{question}</h1>
+				{description ? <p>{description}</p> : null}
+			</div>
+			<div className="options">
+				{options.map((option) => (
+					<div className="optionSet">
+						<label>
+							{multiSelect ? (
+								<React.Fragment>
+									<input type="checkbox" name={question} />
+									<span className="customCheck" />
+								</React.Fragment>
+							) : (
+								<React.Fragment>
+									<input type="radio" name={question} />
+									<span className="customRadio" />
+								</React.Fragment>
+							)}
 							<p>{option.name}</p>
 							<p>
 								{currency(option.price).format({
@@ -77,7 +116,7 @@ const Product = ({}) => {
 			</div>
 			<div className="modifiersContainer">
 				{product.modifiers.map((modifier) => {
-					return <VariantSelection variant={modifier} />;
+					return <ModifierSelection modifier={modifier} />;
 				})}
 			</div>
 		</div>

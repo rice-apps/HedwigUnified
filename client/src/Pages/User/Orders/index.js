@@ -57,7 +57,9 @@ const OrderItemList = ({ items }) => {
 	return (
 		<div>
 			{items.map((item) => (
-				<p>{item.product.name} ${item.product.price}</p>
+				<span className = "item">
+				<p>{item.product.name}</p> <p>${item.product.price}</p>
+				</span>
 			))}
 			<hr class="solid"></hr>
 		</div>
@@ -90,7 +92,8 @@ const OrderDetail = ({ order }) => {
 	function total_and_tax({items}){
 		var total = 0;
 		for(var item in items){
-			total += parseInt(item.product.price);}
+			total += parseInt(item.product.price);
+		}
 		return [total, total*.1];
 	}
 
@@ -100,14 +103,17 @@ const OrderDetail = ({ order }) => {
 			<p><strong>{vendor.name}</strong></p>
 			<p className = "pinkText"><strong>{order.fulfillment}</strong></p>
 			<p>{order.createdAt}</p>
-			<hr class="solid"></hr>
 			<p  className = "pinkText" onClick = {detailsClick}>Details</p>
+			<hr class="solid"></hr>
 			<p>{detailOpen ? <strong><OrderItemList items={items} /></strong>:null}</p>
 			</div>
 			<hr class="solid"></hr>
-
-	 		<p>Total: {total_and_tax(items)[0]}</p>
-
+			
+			<span className = "tax-total">
+			<p>Tax: <strong>${total_and_tax(items)[1]}</strong></p>
+			<p>Total: <strong>${total_and_tax(items)[0]}</strong></p>
+			</span>
+	 		
 			{order.fulfillment == "Placed" ? (
 				<button onClick={handleCancelOrder}>Cancel Order</button>
 			) : null}

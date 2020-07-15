@@ -56,12 +56,14 @@ const ModifierSelection = ({ modifier }) => {
 								</React.Fragment>
 							)}
 							<p>{option.name}</p>
-							<p>
-								{currency(option.price).format({
-									symbol: "$",
-									format: "USD",
-								})}
-							</p>
+							{option.price ? (
+								<p>
+									{currency(option.price).format({
+										symbol: "$",
+										format: "USD",
+									})}
+								</p>
+							) : <p></p>}
 						</label>
 					</div>
 				))}
@@ -96,6 +98,29 @@ const Product = ({}) => {
 					{ name: "Tapioca Pearls (Boba)" },
 				],
 			},
+			{
+				question: "Choose your ice level",
+				description: "",
+				multiSelect: false,
+				options: [
+					{ name: "No Ice" },
+					{ name: "Light Ice" },
+					{ name: "Regular Ice" },
+					{ name: "More Ice" },
+				],
+			},
+			{
+				question: "Choose your sugar level",
+				description: "",
+				multiSelect: false,
+				options: [
+					{ name: "0%" },
+					{ name: "25%" },
+					{ name: "50%" },
+					{ name: "75%" },
+					{ name: "100%" },
+				],
+			},
 		],
 	};
 
@@ -119,14 +144,14 @@ const Product = ({}) => {
 					return <ModifierSelection modifier={modifier} />;
 				})}
 			</div>
-            <div className="quantityContainer">
-                <button>-</button>
-                <p>1</p>
-                <button>+</button>
-            </div>
-            <div className="submitContainer">
-                <button className="submitButton">Add</button>
-            </div>
+			<div className="quantityContainer">
+				<button>-</button>
+				<p>1</p>
+				<button>+</button>
+			</div>
+			<div className="submitContainer">
+				<button className="submitButton">Add</button>
+			</div>
 		</div>
 	);
 };

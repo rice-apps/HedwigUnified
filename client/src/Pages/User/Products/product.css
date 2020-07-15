@@ -43,6 +43,7 @@ input[type="radio"], input[type="checkbox"] {
 
 .variantsContainer, .modifiersContainer, .quantityContainer, .submitContainer {
 	display: flex;
+	flex-direction: column;
 	width: 100%;
 	background-color: #faf8f8;
 }

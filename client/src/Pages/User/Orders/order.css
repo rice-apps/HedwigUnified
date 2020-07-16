@@ -21,6 +21,38 @@
 	background-color: white;
 }
 
+span.bottom_bar{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	background-color: white;
+	padding: 3px;
+}
+
+span.order_card_buttons{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+p.order_card_button{
+	background-color: #F49F864D;
+	padding: 15px;
+	border-radius: 15px;
+	color: #5A5953;
+}
+
+p.bottom_bar_buttons{
+	border-style: solid;
+	border-radius: 15px;
+	font-size: 20px;
+	border-color: #5A595326;
+	color: #F49F86;
+	padding: 10px
+}
+
 span.item{
 	display: flex;
 	flex-direction: row;

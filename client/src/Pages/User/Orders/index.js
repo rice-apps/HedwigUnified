@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import './tabs.css';
 import "./order.css";
 
 Modal.bind("#app");
@@ -113,6 +115,13 @@ const OrderDetail = ({ order }) => {
 			<p>Tax: <strong>${total_and_tax(items)[1]}</strong></p>
 			<p>Total: <strong>${total_and_tax(items)[0]}</strong></p>
 			</span>
+
+			<hr class="solid"></hr>
+
+			<span className = "order_card_buttons">
+				<p className = "order_card_button">Reorder</p>
+				<p className = "order_card_button">Need Help?</p>
+			</span>
 	 		
 			{order.fulfillment == "Placed" ? (
 				<button onClick={handleCancelOrder}>Cancel Order</button>
@@ -149,7 +158,26 @@ const OrderList = ({}) => {
 
 
 	return (
-		<div>
+	<div>
+		<Tabs>
+    		<TabList>
+    		  <Tab>Upcoming</Tab>
+    		  <Tab>Past Orders</Tab>
+    </TabList>
+
+    <TabPanel>
+	<div className="orderlist">
+			{orders.map((order) => {
+					return <OrderDetail order={order} />;
+			})}
+		</div>
+    </TabPanel>
+    <TabPanel>
+      <h2>OrderDetail of Past Orders</h2>
+    </TabPanel>
+  </Tabs>
+			
+  {/* ///Deprecated///
 		<div className = "order_tab">
 			<p className = {tab_selected_past == false ? "order_tab_selected":"order_tab_unselected"} onClick = {() => orders_tab("upcoming")}>Upcoming</p> 
 			<p className = {tab_selected_past == true ? "order_tab_selected":"order_tab_unselected"} onClick = {() => orders_tab("past")}>Past Orders</p> 
@@ -165,6 +193,13 @@ const OrderList = ({}) => {
 			})}
 		</div>
 		</div>
+	*/}
+
+	<span className = "bottom_bar">
+		<p className = "bottom_bar_buttons">New Order</p>
+		<p className = "bottom_bar_buttons">Sign Out</p>
+	</span>
+	</div>
 	);
 };
 

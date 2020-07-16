@@ -2,6 +2,7 @@ import React, { Component, useEffect } from "react"
 import { Switch, Route, Redirect } from 'react-router'
 import { gql, useQuery, useApolloClient } from '@apollo/client';
 import Login from '../Pages/Login';
+import CreateProfile from '../Pages/Login/CreateProfile.js';
 import Auth from '../Pages/Auth';
 import Home from '../Pages/Home';
 
@@ -96,6 +97,11 @@ const routesArray = [
         path: "/login",
         component: Login,
         privateRoute: false
+    },
+    {
+        path: "/createprofile",
+        component: CreateProfile,
+        privateRoute: true
     },
     {
         path: "/auth",

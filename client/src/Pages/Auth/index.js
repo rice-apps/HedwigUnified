@@ -49,7 +49,8 @@ const Auth = ({}) => {
 
     // Set recent update in client state
     return (
-        <Redirect path={"/home"} />
+        
+        <Redirect to={"/createprofile"} />
     )
 }
 

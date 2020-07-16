@@ -111,7 +111,7 @@ const CreateProfile = () => {
 
     // Handles click of skip button
     const handleClick = (props) => {
-        if props.skip
+        // if props.skip
         // Redirects user to the home page
         history.push("/home");
     }

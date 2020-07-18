@@ -108,7 +108,7 @@ const OrderList = ({}) => {
 	if (!orderData) return <p>No data...</p>;
 
 	const orders = orderData.orderMany;
-
+	console.log(orderData);
 	return (
 		<div className="orderlist">
 			{orders.map((order) => {

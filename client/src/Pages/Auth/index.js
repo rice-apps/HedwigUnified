@@ -35,23 +35,30 @@ const Auth = ({}) => {
 
     useEffect(() => {
         // We only want this mutation to run once; if we hit any errors we redirect to login
-        authenticateUser().catch(err => <Redirect path={"/login"} />);
+        authenticateUser().catch(err => <Redirect to={"/login"} />);
     }, []);
 
-    if (error) return <Redirect path={"/login"} />;
-    if (loading) return <p>Bad.</p>;
-    if (!data) return <p>Bad.</p>;
+    if (error) return <Redirect to={"/login"} />;
+    if (loading) return <p>Loading.</p>;
+    if (!data) return <p>No data.</p>;
 
     let { netid, token, recentUpdate } = data.authenticateUser;
 
     // Set token in local storage
     localStorage.setItem('token', token);
-
+    localStorage.setItem('netid',netid);
     // Set recent update in client state
-    return (
-        
-        <Redirect to={"/createprofile"} />
-    )
+    if (clientInformation.phone == null){
+        return (
+            <Redirect to={"/createprofile"} />
+        )
+    }
+    else{
+        return (
+            <Redirect to={"/home"} />
+        )
+    }
+    
 }
 
 export default Auth;

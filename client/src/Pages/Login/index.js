@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useQuery, gql } from "@apollo/client";
 import { SERVICE_URL } from '../../config';
 import logo from '../../assets/logo.svg';
-// import CreateProfile from './CreateProfile.js';
+import CreateProfile from './CreateProfile.js';
 const casLoginURL = "https://idp.rice.edu/idp/profile/cas/login";
 
 // const GET_SERVICE_LOCAL = gql`
@@ -13,17 +13,17 @@ const casLoginURL = "https://idp.rice.edu/idp/profile/cas/login";
 // `;
 
 
-const Login = () => {
-    // Fetch service from cache since it depends on where this app is deployed
-    // const { data } = useQuery(GET_SERVICE_LOCAL);
+    const Login = () => {
+        // Fetch service from cache since it depends on where this app is deployed
+        // const { data } = useQuery(GET_SERVICE_LOCAL);
 
-    // Handles click of login button
-    const handleClick = () => {
-        // Redirects user to the CAS login page
-        let redirectURL = casLoginURL + "?service=" + SERVICE_URL;
-        window.open(redirectURL, "_self");
-    }
-    
+        // Handles click of login button
+        const handleClick = () => {
+            // Redirects user to the CAS login page
+            let redirectURL = casLoginURL + "?service=" + SERVICE_URL;
+            window.open(redirectURL, "_self");
+        }
+
     const MainDiv = styled.div`
     height: 100vh;
     width: 100vw;
@@ -32,7 +32,7 @@ const Login = () => {
     text-align: center;
     align-items: center;
     justify-items: center;
-    background-color: #F49F86;
+    background-image: linear-gradient(180deg,#EAC8C3 0%,#ED533D 100%);
     max-width: 100%;
     font-family: 'Raleway', sans-serif;
     `
@@ -71,12 +71,15 @@ const Login = () => {
     font-weight: bold;
     font-family: Avenir;
     align-self: start;
-    color: #F49F86;
+    color: #ED533D;
     :hover {
-        text-decoration: underline;
+        color: white;
+        background-color: #ED533D;
         box-shadow: 2px 8px 5px -5px #9D7A96;
     }
+    outline: none;
     `
+    
     
 
     return (
@@ -85,7 +88,6 @@ const Login = () => {
             <Title>Hedwig</Title>
             {/* <SubTitle>brought to you by riceapps</SubTitle> */}
             <LoginButton onClick={handleClick}>Login with NetID</LoginButton>
-            {/* <CreateProfile/> */}
         </MainDiv>
         
     )

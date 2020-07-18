@@ -1,9 +1,40 @@
 import React from "react";
 import styled from 'styled-components';
-import { useQuery, gql } from "@apollo/client";
 import { SERVICE_URL } from '../../config';
 import { useHistory } from "react-router";
 import illustration from "../../assets/coffee_cup.svg";
+import { gql, useQuery, useMutation } from "@apollo/client";
+
+/**
+ * This simply fetches from our cache whether a recent update has occurred
+ */
+const GET_USER_INFO = gql`
+    query GetUserInfo {
+        user @client{
+            _id
+            recentUpdate
+            firstName
+            lastName
+            netid
+            phone
+        }
+    }
+`
+// const { user } = client.readQuery(GET_USER_INFO);
+
+// const FirstNameQuery = () => {
+//     const { loading, error, data } = useQuery(GET_USER_INFO);
+  
+//     if (loading) {
+//       return <div>Loading...</div>;
+//     }
+//     if (error) {
+//       return <div>ERROR: {error.message}</div>;
+//     }
+//     return <span> ,{data.user.firstName} </span>;
+//   };
+
+
 
 const MainDiv = styled.div`
     height: 100vh;
@@ -12,7 +43,7 @@ const MainDiv = styled.div`
     background-color: white;
     max-width: 100%;
     font-family: Avenir;    
-    color: #F49F86;
+    color: #ED533D;
     display: grid;
     grid-template-rows: 20% 12% 68%;
     grid-template-columns: 100%;
@@ -83,19 +114,21 @@ const Button = styled.button`
     // max-width: 
     height: 4vh;
     border-radius: 25pt;
-    border: 1px solid #F49F86;
+    border: 1px solid #ED533D;
     margin-bottom: 30px;
     background-color: white;
     font-weight: bold;
     font-size: 2.5vh;
-    color: #F49F86;
+    color: #ED533D;
     :hover {
-        text-decoration: underline;
+        color: white;
+        background-color: #ED533D;
     }
     justify-self: center;
     align-self: end;
     grid-area: 1/1/2/2;
     z-index: 1;
+    outline: none;
 `
 
 const IllusButtonDiv = styled.div`
@@ -108,20 +141,36 @@ const IllusButtonDiv = styled.div`
 
 const CreateProfile = () => {
     const history = useHistory();
-
+    // attempting to get user info from the backend
+    const{loading, query, data} = useQuery(GET_USER_INFO);
     // Handles click of skip button
-    const handleClick = (props) => {
-        // if props.skip
+    const handleClick = () => {
+        var input_number = document.getElementById("phoneNumber");
+        // Push the phone number into localStorage (temporarily. will be pushed to backend)
+        localStorage.setItem('phone', input_number.value);
         // Redirects user to the home page
         history.push("/home");
     }
     
+    const PartOfDay = () =>{
+        // Return part of the day based on user's current time
+        const hour = new Date().getHours();
+        if(hour<=12){
+            return "Good Morning"
+        }
+        if(hour<17 && hour > 12){
+            return  "Good Afternoon"
+        }
+        if(hour >=17) {
+            return  "Good Evening"
+        }
+        }
 
     return (
         <MainDiv>
            
             <Title>Hedwig</Title>
-            <Greeting>Good Morning, Helena!</Greeting>
+            <Greeting>{PartOfDay()},(want to show user's firstName)</Greeting>
             <Paragraph>
                 <div>
                 <span style={{fontWeight: "bold"}}>Tell us your phone number so we can better assist you! </span>
@@ -129,10 +178,10 @@ const CreateProfile = () => {
                 <br/>
                 <br/> <span style={{fontWeight: "bold"}}>Phone Number:</span>
                 </div>
-                <Input type='text' placeholder="Phone number" />
+                <Input type='text' placeholder="Phone number" id="phoneNumber"/>
                 <IllusButtonDiv>
-                    <Button>Confirm</Button>
-                    <Button style={{gridColumn: '2/3'}}  onClick={handleClick()}>Skip</Button>
+                    <Button onClick={handleClick}>Confirm</Button>
+                    <Button style={{gridColumn: '2/3'}}  onClick={() => history.push("/home")}>Skip</Button>
                     <Illustration src={illustration}/>
                 </IllusButtonDiv>
             </Paragraph>

@@ -28,6 +28,8 @@
     border-color: #F49F86;
     color: white;
     border-radius: 5px 5px 0 0;
+    padding-left: 10vw;
+    padding-right: 10vw;
   }
   
   .react-tabs__tab--disabled {

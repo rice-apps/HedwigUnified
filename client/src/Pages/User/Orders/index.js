@@ -68,6 +68,32 @@ const OrderItemList = ({ items }) => {
 	);
 };
 
+const TotalAndTax = ({ items }) => {
+	var tax = .1;
+	var list = items.map((item) => {
+		if(parseInt(item.product.price) != undefined){
+				return ((item.product.price*tax), item.product.price)
+			}
+		else{
+			return (0 , 0)
+		}
+		}
+	)
+
+	if(list.length == 0){
+		list.push(0);
+		list.push(0);
+	}		
+
+	console.log(list[1])
+	return (
+	<div>
+		<p>Tax: <strong>${list[0]}</strong></p>
+		<p>Total: <strong>${list[1]}</strong></p>
+	</div>
+	);
+};
+
 const OrderDetail = ({ order }) => {
     const { _id, items, vendor, user, createdAt} = order;
 	const [modalOpen, setModalOpen] = useState(false);
@@ -91,20 +117,22 @@ const OrderDetail = ({ order }) => {
 		}
 	}
 
-	function total_and_tax({items}){
-		var total = 0;
-		for(var item in items){
-			total += parseInt(item.product.price);
-		}
-		return [total, total*.1];
+	function DateFormatter({date}){
+		var formattedDate = date.split("-");
+		var months = [
+			'January', 'February', 'March', 'April', 'May',
+			'June', 'July', 'August', 'September',
+			'October', 'November', 'December'
+			];
+		return <p>{months[parseInt(formattedDate[1])-1]} {formattedDate[2].substring(0,2)}, {formattedDate[0]}</p>
 	}
 
 	return (
 		<div className="ordercard">
 			<div className = "orderText">
-			<p><strong>{vendor.name}</strong></p>
+			<p id = "vendorName"><strong>{vendor.name}</strong></p>
 			<p className = "pinkText"><strong>{order.fulfillment}</strong></p>
-			<p>{order.createdAt}</p>
+			<p><DateFormatter date = {order.createdAt} /></p>
 			<p  className = "pinkText" onClick = {detailsClick}>Details</p>
 			<hr class="solid"></hr>
 			<p>{detailOpen ? <strong><OrderItemList items={items} /></strong>:null}</p>
@@ -112,8 +140,7 @@ const OrderDetail = ({ order }) => {
 			<hr class="solid"></hr>
 			
 			<span className = "tax-total">
-			<p>Tax: <strong>${total_and_tax(items)[1]}</strong></p>
-			<p>Total: <strong>${total_and_tax(items)[0]}</strong></p>
+			<p><TotalAndTax items = {items} /></p>
 			</span>
 
 			<hr class="solid"></hr>

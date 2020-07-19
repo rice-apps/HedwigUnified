@@ -101,6 +101,10 @@ p.order_tab_unselected{
 	color: black
 }
 
+p#vendorName{
+	font-size: 20px;
+}
+
 .pinkText{
 	color: rgb(244, 159, 134);
 }

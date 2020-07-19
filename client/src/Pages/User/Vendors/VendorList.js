@@ -1,8 +1,17 @@
-import React, { useContext, useEffect } from 'react';
+import React, { AppBar, ToolBar, Container, Fragment, useContext, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 
 import "./vendor.css";
+import "../../fonts/style.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+//fontawesome imports
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDoorOpen } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap'
+import { graphqlSync } from 'graphql';
+
 
 const GET_VENDORS_QUERY = gql`
     query VendorList {
@@ -25,6 +34,21 @@ const GET_VENDORS_QUERY = gql`
     }
 `
 
+ 
+const NavTop = ({ }) => {
+    return (
+    <Navbar className="navtop" variant="light" bg="white" expand="lg">
+        <NavDropdown title="Pickup Time: " class="nav-pickup">
+            <NavDropdown.Item className="itemtext" href="#">As soon as possible</NavDropdown.Item>
+            <NavDropdown.Item className="itemtext" href="#">Schedule an order</NavDropdown.Item>
+        </NavDropdown>
+        <FontAwesomeIcon class="user" icon={faUser} />
+    </Navbar>
+    )
+
+}
+
+
 const VendorCard = ({ vendor }) => {
     const history = useHistory();
 
@@ -34,13 +58,31 @@ const VendorCard = ({ vendor }) => {
     }
 
     return (
+        <Fragment>
+        <h2>{vendor.name}</h2>
+        <p>{vendor.hours.start}</p>
+        <FontAwesomeIcon class="door" icon={faDoorOpen} />
         <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>
-            <h1>{vendor.name}</h1>
         </div>
+        </Fragment>
+
     )
 }
 
-const VendorList = ({ }) => {
+const VendorLine = ( {} ) => {
+        return (
+            <div class="linebreak"> </div>
+        ) 
+    
+}
+
+class HeaderExclusion extends React.Component {
+    screenOptions = {
+        headerShown: false
+    }
+}
+
+const VendorList = ({  }) => {
     const { data, loading, error } = useQuery(GET_VENDORS_QUERY);
 
     if (error) return <p>Error...</p>;
@@ -52,11 +94,24 @@ const VendorList = ({ }) => {
     return (
         <div className="vendorcontainer">
             <div className="vendorlist">
+                <Fragment>
+                <NavTop />
+                </Fragment>
                 {vendors.map(vendor => {
-                    return (<VendorCard vendor={vendor} />)
-                })}
+                    return (
+                            <Fragment>
+                            <VendorLine /> 
+                            <VendorCard vendor={vendor} />
+                            </Fragment>
+                            )
+                },
+                <AppBar position="fixed">
+
+                </AppBar>
+                )}
+
             </div>
-        </div>
+            </div>
     );
 }
 

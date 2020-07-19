@@ -1,20 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
 .vendorcontainer {
 	display: flex;
 	justify-content: center;
+	align-content: center;
 	align-items: center;
-	height: 95vh;
+	height: 100vh;
+	margin-bottom: 25px;
+	max-width: 100%;
+	max-height: 100%;
+}
+ 
+.door {
+	display: flex;
+	position: relative;
+	align-items: right;
+	align-content: right;
+	justify-content: right;
+	margin-left: auto !important;
+	bottom: 7vh;
+	height: 6.5vh;
+	width: 6.5vw;
+} 
+
+.user {
+	display: flex;
+	width: 3.03vw;
+	height: 3.03vh;
+	margin-left: auto !important;
+}
+
+.navtop {
+	display: flex;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15pt;
+	color: #5A5953;
+	background-color: #FFFFFF;
+}
+
+.nav-pickup {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15pt;
+	color: #5A5953;
+}
+
+.itemtext {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
 }
 
 .vendorlist {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
 	overflow: hidden;
-	box-shadow: 0px 10px 15px 5px gray;
 	transition-duration: 0.25s;
 	transition-property: width;
-	border-radius: 2.5%;
+	padding: 0px 0px 30px;
+	width: 100vw;
+	height: 100vh;
 }
+
 
 .vendorlist:hover > .vendorcard {
 	opacity: 0.5;
@@ -29,25 +76,38 @@
     background-position: center; /* necessary for ensuring we don't get a random crop of the image */
     cursor: pointer;
 	/* background-image: url("https://images.unsplash.com/photo-1517705549887-405e7cd7b59a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1234&q=80"); */
-	height: 75vh;
-	width: 15vw;
+	display: flex;
+	height: 30vh;
+	width: 100vw;
 	transition-duration: inherit;
 	transition-property: inherit;
-	display: flex;
 	align-items: center;
-	justify-content: center;
-	box-shadow: inherit;
+	justify-content: center, space-evenly;
 	overflow: hidden;
+	margin: 0px auto 35px;
 }
 
-.vendorcard > h1 {
-	font-size: 30px;
+h2 {
+	font-family: 'Santana-Bold';
 	letter-spacing: -1px;
-	color: #848fdf;
-	text-transform: uppercase;
+	color: #5A5953;
 	text-shadow: 1px 1px 0 #000;
-	margin: 10px 0 24px;
-	text-align: center;
+	margin: 10px 0px 10px 15px;
+	padding-top: 30px;
+	text-align: left;
 	line-height: 50px;
 	cursor: pointer;
 }
+
+p {
+	font-family: 'Nunito';
+}
+
+
+.linebreak {
+	margin: 3px 0px;
+	border-bottom: 1px solid #7070704D;
+	width: 100vw;
+}
+
+

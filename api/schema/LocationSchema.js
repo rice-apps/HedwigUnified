@@ -1,11 +1,11 @@
-import { Location, LocationTC } from '../models';
+import { Location, LocationTC } from "../models";
 
 const LocationQuery = {
-    locationOne: LocationTC.getResolver('findOne')
+    locationOne: LocationTC.getResolver("findOne"),
 };
 
 const LocationMutation = {
-    locationCreateOne: LocationTC.getResolver('createOne')
+    locationCreateOne: LocationTC.getResolver("createOne"),
 };
 
 export { LocationQuery, LocationMutation };

@@ -1,16 +1,16 @@
-import { Product, ProductTC, VendorTC, EntreeTC, Vendor } from '../models';
-import { ApolloError } from 'apollo-server-express';
+import { ApolloError } from "apollo-server-express";
+import { Product, ProductTC, VendorTC, EntreeTC, Vendor } from "../models";
 
 /**
  * Relations (necessary for any fields that link to other types in the schema)
  * https://graphql-compose.github.io/docs/plugins/plugin-mongoose.html#how-to-build-nesting-relations
  */
 ProductTC.addRelation("vendor", {
-    "resolver": () => VendorTC.getResolver('findById'),
+    resolver: () => VendorTC.getResolver("findById"),
     prepareArgs: {
         _id: (source) => source.vendor,
     },
-    projection: { vendor: 1 }
+    projection: { vendor: 1 },
 });
 
 /**
@@ -26,8 +26,8 @@ EntreeTC.addResolver({
     args: { _id: "ID!" },
     resolve: async ({ source, args, context, info }) => {
         return await Product.find({ vendor: args._id });
-    }
-})
+    },
+});
 
 const noProductError = async (resolve, source, args, context, info) => {
     const res = await resolve(source, args, context, info);
@@ -38,13 +38,15 @@ const noProductError = async (resolve, source, args, context, info) => {
 };
 
 const ProductQuery = {
-    productOne: ProductTC.getResolver('findOne').withMiddlewares([noProductError]),
+    productOne: ProductTC.getResolver("findOne").withMiddlewares([
+        noProductError,
+    ]),
     productMany: ProductTC.getResolver("findMany"),
-    entreeMany: EntreeTC.getResolver("findMany")
+    entreeMany: EntreeTC.getResolver("findMany"),
 };
 
 const ProductMutation = {
-    productCreateOne: ProductTC.getResolver('createOne')
+    productCreateOne: ProductTC.getResolver("createOne"),
 };
 
 export { ProductQuery, ProductMutation };

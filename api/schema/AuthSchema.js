@@ -1,7 +1,7 @@
-import { User, UserTC } from '../models';
+import { User, UserTC } from "../models";
 
 const AuthQuery = {
-    verifyUser: UserTC.getResolver("verify")
+    verifyUser: UserTC.getResolver("verify"),
 };
 
 const AuthMutation = {

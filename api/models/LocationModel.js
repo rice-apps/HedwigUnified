@@ -1,11 +1,12 @@
-var mongoose = require('mongoose')
-    , Schema = mongoose.Schema
+import { composeWithMongoose } from "graphql-compose-mongoose";
 
-import { composeWithMongoose } from 'graphql-compose-mongoose';
+const mongoose = require("mongoose");
 
-require('../db');
+const { Schema } = mongoose;
 
-var LocationSchema = new Schema({
+require("../db");
+
+const LocationSchema = new Schema({
     name: String,
 });
 

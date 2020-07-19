@@ -1,45 +1,75 @@
-var mongoose = require('mongoose')
-    , Schema = mongoose.Schema
+import { schemaComposer } from "graphql-compose";
 
-import { composeWithMongooseDiscriminators } from 'graphql-compose-mongoose';
+import { VendorTC } from "./VendorModel";
 
-import { Vendor, VendorTC } from './VendorModel';
-
-require('../db');
+require("../db");
 
 // Uses mongoose discriminator: https://github.com/graphql-compose/graphql-compose-mongoose/blob/master/README.md#working-with-mongoose-collection-level-discriminators
 
-const DKey = "type";
-
-const enumProductType = {
-    ENTREE: "Entree",
-    ADDON: "Addon"
-}
-
-var ProductSchema = new Schema({
-    name: String,
-    description: String,
-    vendor: { type: Schema.Types.ObjectId, ref: Vendor },
-    price: Number,
-    type: { type: String, required: true, enum: Object.keys(enumProductType) },
-    category: String,
-    imageURL: String,
+export const DataSourceEnum = schemaComposer.createEnumTC({
+    name: "DataSourceEnum",
+    values: {
+        SQUARE: { value: "Square" },
+        SHOPIFY: { value: "Shopify" },
+        EXCEL: { value: "Excel" },
+    },
 });
 
-ProductSchema.set("discriminatorKey", DKey);
-
-export const Product = mongoose.model("Products", ProductSchema);
-
-var EntreeSchema = new Schema({
-    random: String
+const ProductInterface = schemaComposer.createInterfaceTC({
+    name: "Product",
+    description: "The base type for our products",
+    fields: {
+        name: "String!",
+        description: "String!",
+        vendor: () => VendorTC,
+        dataSource: () => DataSourceEnum,
+        category: "String",
+        tags: "[String]",
+        image: "String",
+    },
 });
-var AddonSchema = new Schema({
-    products: { type: Schema.Types.ObjectId, ref: Product }
-});
 
-var Entree = Product.discriminator("Entree", EntreeSchema);
-var Addon = Product.discriminator("Addon", AddonSchema);
+const SquareProduct = schemaComposer
+    .createObjectTC({
+        name: "SquareProduct",
+        description: "Products with Square as a data source",
+        fields: {
+            itemID: "String!",
+        },
+    })
+    .addInterfaces([ProductInterface]);
 
-export const ProductTC = composeWithMongooseDiscriminators(Product);
-export const EntreeTC = ProductTC.discriminator(Entree);
-export const AddonTC = ProductTC.discriminator(Addon);
+const ShopifyProduct = schemaComposer
+    .createObjectTC({
+        name: "ShopifyProduct",
+        description: "Products with Shopify as a data source",
+        fields: {
+            itemID: "String!",
+        },
+    })
+    .addInterfaces([ProductInterface]);
+
+const ExcelProduct = schemaComposer
+    .createObjectTC({
+        name: "ExcelProduct",
+        description: "Products with Excel as a data source",
+        fields: {
+            daysOffered: "[String]",
+        },
+    })
+    .addInterfaces([ProductInterface]);
+
+ProductInterface.addTypeResolver(
+    SquareProduct,
+    (value) => value.dataSource === "Square",
+)
+    .addTypeResolver(ShopifyProduct, (value) => value.dataSource === "Shopify")
+    .addTypeResolver(ExcelProduct, (value) => value.dataSource === "Excel");
+
+export {
+    DataSourceEnum,
+    ProductInterface,
+    SquareProduct,
+    ShopifyProduct,
+    ExcelProduct,
+};

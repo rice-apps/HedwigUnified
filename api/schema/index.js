@@ -1,15 +1,19 @@
-import { SchemaComposer } from 'graphql-compose';
+import { SchemaComposer } from "graphql-compose";
 
-require('../db'); 
+import { UserQuery, UserMutation } from "./UserSchema";
+import { AuthQuery, AuthMutation } from "./AuthSchema";
+import { LocationQuery, LocationMutation } from "./LocationSchema";
+import { ProductQuery, ProductMutation } from "./ProductSchema";
+import { OrderQuery, OrderMutation } from "./OrderSchema";
+import {
+    VendorQuery,
+    VendorMutation,
+    VendorSubscription,
+} from "./VendorSchema";
+
+require("../db");
 
 const schemaComposer = new SchemaComposer();
-
-import { UserQuery, UserMutation } from './UserSchema';
-import { AuthQuery, AuthMutation } from './AuthSchema';
-import { LocationQuery, LocationMutation } from './LocationSchema';
-import { ProductQuery, ProductMutation } from './ProductSchema';
-import { OrderQuery, OrderMutation } from './OrderSchema';
-import { VendorQuery, VendorMutation, VendorSubscription } from './VendorSchema';
 
 schemaComposer.Query.addFields({
     ...UserQuery,
@@ -30,7 +34,7 @@ schemaComposer.Mutation.addFields({
 });
 
 schemaComposer.Subscription.addFields({
-    ...VendorSubscription
-})
+    ...VendorSubscription,
+});
 
 export default schemaComposer.buildSchema();

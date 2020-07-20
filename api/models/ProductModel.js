@@ -2,10 +2,6 @@ import { schemaComposer } from "graphql-compose";
 
 import { VendorTC } from "./VendorModel";
 
-require("../db");
-
-// Uses mongoose discriminator: https://github.com/graphql-compose/graphql-compose-mongoose/blob/master/README.md#working-with-mongoose-collection-level-discriminators
-
 export const DataSourceEnum = schemaComposer.createEnumTC({
     name: "DataSourceEnum",
     values: {

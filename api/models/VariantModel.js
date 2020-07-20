@@ -1,11 +1,4 @@
-let mongoose = require("mongoose"),
-    ; var {Schema} = mongoose
-
-import { composeWithMongoose } from "graphql-compose-mongoose";
-
 import { schemaComposer } from "graphql-compose";
-
-require("../db");
 
 const OptionTC = schemaComposer.createObjectTC({
     name: "Option",
@@ -26,5 +19,5 @@ const VariantTC = schemaComposer.createObjectTC({
         options: () => OptionTC,
     },
 });
-// export const Location = mongoose.model("Variants", VariantSchema);
-// export const LocationTC = composeWithMongoose(Location);
+
+export { OptionTC, VariantTC };

@@ -1,5 +1,4 @@
-let mongoose = require("mongoose"),
-    ; var {Schema} = mongoose
+import mongoose from "mongoose";
 
 import { composeWithMongoose } from "graphql-compose-mongoose";
 
@@ -8,13 +7,13 @@ import { Location, LocationTC } from "./LocationModel";
 
 require("../db");
 
-let OpenIntervalSchema = new Schema({
+const OpenIntervalSchema = new mongoose.Schema({
     day: { type: String, enum: ["M", "T", "W", "R", "F", "S", "U"] },
     start: Number,
     end: Number,
 });
 
-let VendorSchema = new Schema({
+const VendorSchema = new mongoose.Schema({
     name: String,
     imageURL: String,
     slug: { type: String, min: 3, max: 5, unique: true, required: true }, // short 3 letter slug that identifies this vendor

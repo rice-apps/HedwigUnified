@@ -1,11 +1,10 @@
 import { composeWithMongoose } from "graphql-compose-mongoose";
 
-let mongoose = require("mongoose"),
-    ; var {Schema} = mongoose
+import mongoose from "mongoose";
 
 require("../db");
 
-let UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
     name: String,
     netid: { type: String, required: true, unique: true }, // This will be our unique identifier across systems
     token: { type: String, default: "" }, // We will use this to store the user's JWT token

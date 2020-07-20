@@ -1,5 +1,4 @@
-let mongoose = require("mongoose"),
-    ; var {Schema} = mongoose
+import mongoose from "mongoose";
 
 import { composeWithMongoose } from "graphql-compose-mongoose";
 
@@ -9,14 +8,14 @@ import { Product, ProductTC } from "./ProductModel";
 
 require("../db");
 
-export var OrderItemSchema = new Schema({
+export var OrderItemSchema = new mongoose.Schema({
     product: { type: Schema.Types.ObjectId, ref: Product },
     addons: [{ type: Schema.Types.ObjectId, ref: Product }],
     quantity: Number,
     comments: String, // special requests, etc
 });
 
-let OrderSchema = new Schema(
+const OrderSchema = new mongoose.Schema(
     {
         user: { type: Schema.Types.ObjectId, ref: User },
         vendor: { type: Schema.Types.ObjectId, ref: Vendor, required: true },

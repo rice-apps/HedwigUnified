@@ -62,7 +62,7 @@ const OrderItemList = ({ items }) => {
       {items.map((item) => (
         <span className="item">
           <p>{item.product.name}</p>{" "}
-          <p>${roundMoney(parseFloat(item.product.price))}</p>
+          <p>${parseFloat(item.product.price).toFixed(2)}</p>
         </span>
       ))}
       <hr class="solid"></hr>
@@ -74,7 +74,7 @@ const TotalAndTax = ({ items }) => {
   var tax = 0.1;
   var total = 0;
   var list = items.map((item) => {
-    if (parseInt(item.product.price) != undefined) {
+    if (parseFloat(item.product.price) != undefined) {
       return parseFloat(item.product.price);
     } else {
       return 0.0;
@@ -155,18 +155,28 @@ const OrderDetail = ({ order }) => {
     <div className="ordercard">
       <div className="orderText">
         <img src={vendorLogo(vendor.name)} className="vendorLogo" />
-        <p id="vendorName">
-          <strong>{vendor.name}</strong>
-        </p>
-        <p className="pinkText">
-          <strong>{order.fulfillment}</strong>
-        </p>
-        <p>
-          <DateFormatter date={order.createdAt} />
-        </p>
-        <p className="pinkText" onClick={detailsClick}>
-          Details
-        </p>
+        <div>
+          <span id="vendorHeader">
+            <p id="vendorName">
+              <strong>{vendor.name}</strong>
+            </p>
+            <a className="pinkText vendorLink" href="">
+              Visit Store
+            </a>
+          </span>
+          <p className="pinkText">
+            <strong>{order.fulfillment}</strong>
+          </p>
+          <p>
+            <DateFormatter date={order.createdAt} />
+          </p>
+          <p className="pinkText" onClick={detailsClick}>
+            Details
+          </p>
+        </div>
+      </div>
+
+      <div>
         <hr class="solid"></hr>
         <p>
           {detailOpen ? (
@@ -176,7 +186,6 @@ const OrderDetail = ({ order }) => {
           ) : null}
         </p>
       </div>
-      <hr class="solid"></hr>
 
       <span className="tax-total">
         <p>
@@ -187,8 +196,8 @@ const OrderDetail = ({ order }) => {
       <hr class="solid"></hr>
 
       <span className="order_card_buttons">
-        <p className="order_card_button">Reorder</p>
-        <p className="order_card_button">Need Help?</p>
+        <button className="order_card_button">Reorder</button>
+        <button className="order_card_button">Need Help?</button>
       </span>
 
       {order.fulfillment == "Placed" ? (

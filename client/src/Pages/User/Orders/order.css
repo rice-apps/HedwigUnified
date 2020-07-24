@@ -8,6 +8,8 @@
 
 img.vendorLogo {
   height: 20vw;
+  margin-right: 4vw;
+  padding: 1vh;
 }
 
 .ordercard {
@@ -41,11 +43,13 @@ span.order_card_buttons {
   align-items: center;
 }
 
-p.order_card_button {
+button.order_card_button {
   background-color: #f49f864d;
-  padding: 15px;
-  border-radius: 15px;
+  padding: 5px 10px 5px 10px;
+  margin: 5px;
+  border-radius: 26px;
   color: #5a5953;
+  border-width: 0;
 }
 
 p.bottom_bar_buttons {
@@ -76,7 +80,11 @@ span.tax-total {
 }
 
 div.orderText {
+  display: flex;
+  flex-direction: row;
   line-height: 0.2;
+  justify-content: left;
+  align-items: center;
 }
 
 .ordercard > h2 {
@@ -104,12 +112,25 @@ p.order_tab_unselected {
   color: black;
 }
 
+span#vendorHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-right: 20px;
+}
+
 p#vendorName {
   font-size: 20px;
 }
 
 .pinkText {
   color: rgb(244, 159, 134);
+}
+
+a.vendorLink {
+  font-size: 12px;
+  margin-left: 8vw;
 }
 
 .modal {

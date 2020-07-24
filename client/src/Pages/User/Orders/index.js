@@ -88,10 +88,10 @@ const TotalAndTax = ({ items }) => {
   return (
     <div>
       <p>
-        Tax: <strong>${roundMoney(total * tax)}</strong>
+        Tax: <strong>${roundMoney(total * tax).toFixed(2)}</strong>
       </p>
       <p>
-        Total: <strong>${roundMoney(total + total * tax)}</strong>
+        Total: <strong>${roundMoney(total + total * tax).toFixed(2)}</strong>
       </p>
     </div>
   );

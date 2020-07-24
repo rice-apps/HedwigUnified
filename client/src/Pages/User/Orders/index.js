@@ -145,7 +145,6 @@ const OrderDetail = ({ order }) => {
 
   function vendorLogo(name) {
     if (name == "East West Tea") {
-      console.log(true);
       return "//static1.squarespace.com/static/58559451725e25a3d8206027/t/58559539f5e2315e3ef1127c/1593500228704/?format=1500w";
     }
     //CoffeeHouse

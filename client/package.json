@@ -20,7 +20,6 @@
     "react-modal": "^3.11.2",
     "react-router": "^5.2.0",
     "react-scripts": "3.4.1",
-    "react-tabs": "^3.1.1",
     "react-toast-notifications": "^2.4.0",
     "serve": "^11.3.1",
     "styled-components": "^5.1.1",

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "./tabs.css";
 import "./order.css";
 
 Modal.bind("#app");
@@ -28,14 +26,12 @@ const GET_PAST_ORDERS = gql`
       items {
         product {
           name
-          price
         }
       }
       user {
         netid
       }
       fulfillment
-      createdAt
     }
   }
 `;
@@ -51,10 +47,6 @@ const CANCEL_ORDER = gql`
     }
   }
 `;
-
-function roundMoney(value) {
-  return Math.round((value + Number.EPSILON) * 100) / 100;
-}
 
 const OrderItemList = ({ items }) => {
   return (
@@ -209,7 +201,6 @@ const OrderDetail = ({ order }) => {
 
 const OrderList = ({}) => {
   const history = useHistory();
-  const [tab_selected_past, setTab] = useState(false);
 
   const {
     data: orderData,
@@ -223,56 +214,11 @@ const OrderList = ({}) => {
 
   const orders = orderData.orderMany;
 
-  function orders_tab(tab) {
-    if (tab == "past") {
-      setTab(true);
-    } else {
-      setTab(false);
-    }
-  }
-
   return (
-    <div>
-      <Tabs>
-        <TabList>
-          <Tab>Upcoming</Tab>
-          <Tab>Past Orders</Tab>
-        </TabList>
-
-        <TabPanel>
-          <div className="orderlist">
-            {orders.map((order) => {
-              return <OrderDetail order={order} />;
-            })}
-          </div>
-        </TabPanel>
-        <TabPanel>
-          <h2>OrderDetail of Past Orders</h2>
-        </TabPanel>
-      </Tabs>
-
-      {/* ///Deprecated///
-		<div className = "order_tab">
-			<p className = {tab_selected_past == false ? "order_tab_selected":"order_tab_unselected"} onClick = {() => orders_tab("upcoming")}>Upcoming</p> 
-			<p className = {tab_selected_past == true ? "order_tab_selected":"order_tab_unselected"} onClick = {() => orders_tab("past")}>Past Orders</p> 
-		</div>
-		<div className="orderlist">
-			{orders.map((order) => {
-				if(!tab_selected_past){
-					return <OrderDetail order={order} />;
-				}
-				else{
-					return null //Return OrderDetail of past orders fetched from backend?
-				}
-			})}
-		</div>
-		</div>
-	*/}
-
-      <span className="bottom_bar">
-        <p className="bottom_bar_buttons">New Order</p>
-        <p className="bottom_bar_buttons">Sign Out</p>
-      </span>
+    <div className="orderlist">
+      {orders.map((order) => {
+        return <OrderDetail order={order} />;
+      })}
     </div>
   );
 };

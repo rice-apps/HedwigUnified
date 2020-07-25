@@ -1,3 +1,225 @@
+input[type="radio"], input[type="checkbox"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.container {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.heroImage {
+	position: relative;
+	height: 25vh;
+	width: 95%;
+	object-fit: cover;
+	border-radius: 10px;
+}
+
+.itemHeading {
+	color: #5a5953;
+	padding-left: 1rem;
+	padding-right: 20%;
+}
+
+.itemHeading > h2 {
+	font-size: 25px;
+	font-weight: 700;
+	line-height: 34px;
+	margin-top: 24px;
+	margin-bottom: 0px;
+}
+
+.itemHeading > p {
+	font-size: 15px;
+	line-height: 20px;
+	margin-top: 0px;
+	margin-bottom: 28px;
+}
+
+.variantsContainer, .modifiersContainer, .quantityContainer, .submitContainer {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	background-color: #faf8f8;
+}
+
+.variant, .modifier {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	width: 100vw;
+}
+
+.heading {
+	width: 100%;
+	margin-left: 24px;
+	margin-right: 24px;
+}
+
+.heading > h1,
+h2 {
+	font-size: 17px;
+	line-height: 23px;
+}
+
+.variant > .options, .modifier > .options {
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
+}
+
+.options > .optionSet {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	width: inherit;
+
+	margin-left: 24px;
+	margin-right: 24px;
+}
+
+.optionSet > label {
+	flex-grow: 1;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	font-size: 15px;
+	line-height: 20px;
+}
+
+.optionSet p:first-child {
+	flex-grow: 2;
+	text-align: left;
+}
+
+.optionSet p:last-child {
+	flex-grow: 1;
+	text-align: right;
+}
+
+/* Custom radio button */
+.optionSet input[type='radio']:checked ~ .customRadio {
+	background-color: #FFFFFF;
+	border: 3px solid #F49F86;
+}
+
+.optionSet .customRadio {
+	height: 20px;
+	width: 20px;
+	border-radius: 20px;
+	border: 3px solid #5A59534D;
+	margin-right: 5px;
+}
+
+.customRadio::after {
+	content: "";
+	position: relative;
+	display: none;
+}
+
+.optionSet input[type='radio']:checked ~ .customRadio::after {
+	display: block;
+}
+
+.optionSet .customRadio::after {
+	top: 5px;
+	left: 5px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #F49F86;
+}
+
+/* Custom checkbox */
+.optionSet input[type='checkbox']:checked ~ .customCheck {
+	background-color: #F49F86;
+	border: 3px solid #F49F86;
+}
+
+.optionSet .customCheck {
+	height: 18px;
+	width: 18px;
+	border: 3px solid #5A59534D;
+	margin-right: 5px;
+}
+
+.customCheck::after {
+	content: "";
+	position: relative;
+	display: none;
+}
+
+.optionSet input[type='checkbox']:checked ~ .customCheck::after {
+	display: block;
+}
+
+.optionSet .customCheck::after {
+	left: 4px;
+    top: -1px;
+    width: 7px;
+    height: 14px;
+    border: solid white;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    color: #FFFFFF;
+}
+/* End */
+
+.quantityContainer {
+	display: flex;
+	flex-direction: row;
+	text-align: center;
+	justify-content: center;
+	align-items: baseline;
+	width: 100%;
+}
+
+.quantityContainer > button:first-child, .quantityContainer > button:last-child {
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	background-color: #5A5953;
+	border: 0px;
+
+	text-align: center;
+	font-size: 25px;
+	line-height: 25px;
+	color: #FFFFFF;
+}
+
+.quantityContainer > p {
+	font-size: 25px;
+	line-height: 35px;
+	color: #5A5953;
+	padding: 10px;
+}
+
+.submitContainer {
+	display: flex;
+	justify-content: center;
+}
+
+.submitButton {
+	font-size: 20px;
+	line-height: 27px;
+	color: #F49F86;
+
+	height: 5vh;
+	width: 30vw;
+	background-color: #FFFFFF;
+	border: 1px solid #5A595326;
+	border-radius: 20px;
+}
+
 .productInfo {
 	display: flex;
 	flex-direction: column;
@@ -18,7 +240,7 @@
 	margin: 10px;
 }
 
-.heroImage {
+.heroImageOld {
 	/* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
 	background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
 		url("https://images.unsplash.com/photo-1482349274213-19ca6126f02f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2600&q=80");
@@ -49,28 +271,28 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-around;
-    align-items: center;
-    
-    width: 20vw;
+	align-items: center;
+
+	width: 20vw;
 }
 
 .optionVariant {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 10%;
-    width: 20%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+	height: 10%;
+	width: 20%;
 	padding: 10px;
 	border-radius: 10%;
-    box-shadow: 1px 2px 6px 1px rgba(91, 91, 91, 0.8);
-    cursor: pointer;
+	box-shadow: 1px 2px 6px 1px rgba(91, 91, 91, 0.8);
+	cursor: pointer;
 }
 
 /* This ensures that our new box shadow will ONLY apply for when optionVariant is alone */
 [class="optionVariant"]:hover {
-    /* background-color: rgba(72, 100, 255, 0.8); */
-    box-shadow: 1px 2px 12px 5px rgba(91, 91, 91, 0.8);
+	/* background-color: rgba(72, 100, 255, 0.8); */
+	box-shadow: 1px 2px 12px 5px rgba(91, 91, 91, 0.8);
 }
 
 /* .optionVariant.selected {
@@ -78,11 +300,11 @@
 } */
 
 .optionVariant.selected:hover {
-    background-color: rgba(255, 68, 68, 0.8)
+	background-color: rgba(255, 68, 68, 0.8);
 }
 
 .optionVariant.disabled {
-    cursor: not-allowed;
+	cursor: not-allowed;
 }
 
 .optionInput {

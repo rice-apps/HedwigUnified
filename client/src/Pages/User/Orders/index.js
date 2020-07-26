@@ -26,12 +26,14 @@ const GET_PAST_ORDERS = gql`
       items {
         product {
           name
+          price
         }
       }
       user {
         netid
       }
       fulfillment
+      createdAt
     }
   }
 `;
@@ -80,10 +82,10 @@ const TotalAndTax = ({ items }) => {
   return (
     <div>
       <p>
-        Tax: <strong>${roundMoney(total * tax).toFixed(2)}</strong>
+        Tax: <strong>${(total * tax).toFixed(2)}</strong>
       </p>
       <p>
-        Total: <strong>${roundMoney(total + total * tax).toFixed(2)}</strong>
+        Total: <strong>${(total + total * tax).toFixed(2)}</strong>
       </p>
     </div>
   );
@@ -112,7 +114,7 @@ const OrderDetail = ({ order }) => {
   }
 
   function DateFormatter({ date }) {
-    var formattedDate = date.split("-");
+    var formattedDate = String(date).split("-");
     var months = [
       "January",
       "February",
@@ -130,7 +132,7 @@ const OrderDetail = ({ order }) => {
     return (
       <p>
         {months[parseInt(formattedDate[1]) - 1]}{" "}
-        {formattedDate[2].substring(0, 2)}, {formattedDate[0]}
+        {String(formattedDate[2]).substring(0, 2)}, {formattedDate[0]}
       </p>
     );
   }
@@ -142,7 +144,6 @@ const OrderDetail = ({ order }) => {
     //CoffeeHouse
     //Grillosophy
   }
-
   return (
     <div className="ordercard">
       <div className="orderText">
@@ -160,7 +161,7 @@ const OrderDetail = ({ order }) => {
             <strong>{order.fulfillment}</strong>
           </p>
           <p>
-            <DateFormatter date={order.createdAt} />
+            <DateFormatter date={createdAt} />
           </p>
           <p className="pinkText" onClick={detailsClick}>
             Details

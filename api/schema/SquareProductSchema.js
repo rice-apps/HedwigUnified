@@ -8,19 +8,18 @@ const SquareProductQuery = {
         resolve: async (_, args) => {
             let product = await getProduct(args.id);
             return product;
-        }
+        },
     },
     squareProductMany: {
         type: SquareProductTC, // need to change to listcatalog output
-        args: { },
+        args: {},
         resolve: async (_, args) => {
             let products = await getProducts();
-            return products
-        }
-    }
+            return products;
+        },
+    },
 };
 
-const SquareProductMutation = {
-};
+const SquareProductMutation = {};
 
 export { SquareProductQuery, SquareProductMutation };

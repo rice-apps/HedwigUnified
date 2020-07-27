@@ -4,7 +4,7 @@ import {
     GraphQLNonNull,
     GraphQLBoolean,
     GraphQLList,
-    GraphQLNullableType
+    GraphQLNullableType,
 } from "graphql";
 import { schemaComposer } from "graphql-compose";
 
@@ -38,8 +38,8 @@ const MoneyTC = schemaComposer.createObjectTC({
     name: "Money",
     description: "Square's representation of money",
     fields: {
-        amount: () => GraphQLNonNull(GraphQLInt),
-        currency: () => GraphQLNonNull(GraphQLString),
+        amount: GraphQLNonNull(GraphQLInt),
+        currency: GraphQLNonNull(GraphQLString),
     },
 });
 
@@ -47,23 +47,23 @@ const SquareCatalogObject = schemaComposer.createObjectTC({
     name: "CatalogObject",
     description: "Catalog Object wrapper defined by Square",
     fields: {
-        type: () => GraphQLNonNull(GraphQLString),
-        id: () => GraphQLNonNull(GraphQLString),
+        type: GraphQLNonNull(GraphQLString),
+        id: GraphQLNonNull(GraphQLString),
         // NonNull if type matches; null otherwise
-        itemData: () => GraphQLNullableType(SquareCatalogItem.getType()),
-        itemVariationData: () => GraphQLNullableType(SquareCatalogItemVariation.getType()),
-        modifierListData: () => GraphQLNullableType(ModifierListTC.getType()),
-        modifierData: () => GraphQLNullableType(ModifierTC.getType()),
-    }
-})
+        itemData: () => SquareCatalogItem,
+        itemVariationData: () => SquareCatalogItemVariation,
+        modifierListData: () => ModifierListTC,
+        modifierData: () => ModifierTC,
+    },
+});
 
 const SquareCatalogItemVariation = schemaComposer.createObjectTC({
     name: "CatalogItemVariation",
     description: "Catalog item for Square",
     fields: {
-        itemID: () => GraphQLNonNull(GraphQLString),
-        name: () => GraphQLNonNull(GraphQLString),
-        price_money: () => GraphQLNonNull(MoneyTC.getType()),
+        itemID: GraphQLNonNull(GraphQLString),
+        name: GraphQLNonNull(GraphQLString),
+        price_money: GraphQLNonNull(MoneyTC.getType()),
     },
 });
 
@@ -72,13 +72,13 @@ const SquareCatalogItem = schemaComposer
         name: "SquareProduct",
         description: "Products with Square as a data source",
         fields: {
-            itemID: () => GraphQLNonNull(GraphQLString),
-            modifierListInfo: () =>
-                GraphQLNonNull(GraphQLList(ModifierListTC.getType())),
-            variations: () =>
-                GraphQLNonNull(
-                    GraphQLList(SquareCatalogItemVariation.getType()),
-                ),
+            itemID: GraphQLNonNull(GraphQLString),
+            modifierListInfo: GraphQLNonNull(
+                GraphQLList(ModifierListTC.getType()),
+            ),
+            variations: GraphQLNonNull(
+                GraphQLList(SquareCatalogItemVariation.getType()),
+            ),
         },
     })
     .addInterfaces([ProductInterface]);

@@ -57,7 +57,7 @@ const SignUp = () => {
                   {errors.name && touched.name ? ( <div>{errors.name}</div>) : null}
           
                   <Field name="phone" type="tel" placeholder="Phone Number"/>
-                  {errors.phone && touched.phone ? <div>{errors.email}</div> : null}
+                  {errors.phone && touched.phone ? <div>{errors.phone}</div> : null}
 
                   <button type="submit">Submit</button>
                 </EditProfileDiv>

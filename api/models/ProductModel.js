@@ -105,7 +105,7 @@ const ExcelProduct = schemaComposer
     .addInterfaces([ProductInterface]);
 
 ProductInterface.addTypeResolver(
-    SquareProduct,
+    SquareCatalogItem,
     (value) => value.dataSource === "Square",
 )
     .addTypeResolver(ShopifyProduct, (value) => value.dataSource === "Shopify")

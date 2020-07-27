@@ -1,6 +1,6 @@
 import { schemaComposer } from "graphql-compose";
 import { Money } from "./index";
-import { GraphQLBoolean, GraphQLString, GraphQLInt } from "graphql";
+import { GraphQLBoolean, GraphQLString, GraphQLInt, GraphQLNonNull } from "graphql";
 
 const ModifierTC = schemaComposer.createObjectTC({
     name: "Modifier",

@@ -1,6 +1,6 @@
 import { composeWithMongoose } from "graphql-compose-mongoose";
 
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 require("../db");
 

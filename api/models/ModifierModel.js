@@ -1,24 +1,30 @@
 import { schemaComposer } from "graphql-compose";
-
-const ModifierOptionTC = schemaComposer.createObjectTC({
-    name: "Option",
-    description: "",
-    fields: {
-        name: "String!",
-        price: "Int",
-    },
-});
+import { Money } from "./index";
+import { GraphQLBoolean, GraphQLString, GraphQLInt } from "graphql";
 
 const ModifierTC = schemaComposer.createObjectTC({
-    name: "Product",
+    name: "Modifier",
     description: "",
     fields: {
-        name: "String!",
-        description: "String",
-        displayQuestion: "String!",
-        multiSelect: "Boolean!",
-        options: () => ModifierOptionTC,
+        name: GraphQLNonNull(GraphQLString),
+        price: () => Money, // change to money
     },
 });
 
-export { ModifierOptionTC, ModifierTC };
+const ModifierListTC = schemaComposer.createObjectTC({
+    name: "ModifierList",
+    description: "",
+    fields: {
+        name: GraphQLNonNull(GraphQLString),
+        description: GraphQLNonNull(GraphQLString),
+        displayQuestion: GraphQLNonNull(GraphQLString),
+        selectionType: GraphQLNonNull(GraphQLBoolean),
+        modifiers: () => ModifierOptionTC,
+        // From CatalogItemModifierListInfo
+        minSelected: GraphQLNonNull(GraphQLInt),
+        maxSelected: GraphQLNonNull(GraphQLInt),
+        enabled: GraphQLNonNull(GraphQLBoolean)
+    },
+});
+
+export { ModifierListTC, ModifierTC };

@@ -26,22 +26,22 @@ OrderTC.addRelation("vendor", {
  * But the .getByPath(path) method doesn't exist anymore, so to get the TypeComposer of the nested field (in this case, "items")
  * We need to use .getFieldTC(path)
  */
-const ItemsTC = OrderTC.getFieldTC("items");
-ItemsTC.addRelation("product", {
-    resolver: () => ProductTC.getResolver("findById"),
-    prepareArgs: {
-        _id: (source) => source.product,
-    },
-    projection: { product: 1 },
-});
+// const ItemsTC = OrderTC.getFieldTC("items");
+// ItemsTC.addRelation("product", {
+//     resolver: () => ProductTC.getResolver("findById"),
+//     prepareArgs: {
+//         _id: (source) => source.product,
+//     },
+//     projection: { product: 1 },
+// });
 
-ItemsTC.addRelation("addons", {
-    resolver: () => ProductTC.getResolver("findByIds"),
-    prepareArgs: {
-        _ids: (source) => source.addons,
-    },
-    projection: { addons: 1 },
-});
+// ItemsTC.addRelation("addons", {
+//     resolver: () => ProductTC.getResolver("findByIds"),
+//     prepareArgs: {
+//         _ids: (source) => source.addons,
+//     },
+//     projection: { addons: 1 },
+// });
 
 /**
  * Custom Resolvers

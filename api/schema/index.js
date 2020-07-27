@@ -3,8 +3,8 @@ import { SchemaComposer } from "graphql-compose";
 import { UserQuery, UserMutation } from "./UserSchema";
 import { AuthQuery, AuthMutation } from "./AuthSchema";
 import { LocationQuery, LocationMutation } from "./LocationSchema";
-import { ProductQuery, ProductMutation } from "./ProductSchema";
-import { OrderQuery, OrderMutation } from "./OrderSchema";
+// import { ProductQuery, ProductMutation } from "./ProductSchema";
+// import { OrderQuery, OrderMutation } from "./OrderSchema";
 import {
     VendorQuery,
     VendorMutation,
@@ -19,18 +19,18 @@ schemaComposer.Query.addFields({
     ...UserQuery,
     ...AuthQuery,
     ...LocationQuery,
-    ...ProductQuery,
-    ...OrderQuery,
-    ...VendorQuery,
+    // ...ProductQuery,
+    // ...OrderQuery,
+    // ...VendorQuery,
 });
 
 schemaComposer.Mutation.addFields({
     ...UserMutation,
     ...AuthMutation,
     ...LocationMutation,
-    ...ProductMutation,
-    ...OrderMutation,
-    ...VendorMutation,
+    // ...ProductMutation,
+    // ...OrderMutation,
+    // ...VendorMutation,
 });
 
 schemaComposer.Subscription.addFields({

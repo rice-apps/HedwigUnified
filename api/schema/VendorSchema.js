@@ -4,8 +4,6 @@ import {
     VendorTC,
     OrderTC,
     Order,
-    ProductTC,
-    Product,
     UserTC,
     LocationTC,
     EntreeTC,
@@ -18,7 +16,7 @@ import { pubsub } from "../pubsub";
  */
 
 VendorTC.addFields({
-    products: [ProductTC],
+    // products: [ProductTC],
     activeOrders: [OrderTC],
     completedOrders: [OrderTC],
     cancelledOrders: [OrderTC],
@@ -48,16 +46,16 @@ VendorTC.addRelation("locations", {
 });
 
 // Creates relation to product schema
-VendorTC.addRelation("products", {
-    resolver: () => EntreeTC.getResolver("findMany"),
-    args: { filter: EntreeTC.getInputTypeComposer() },
-    prepareArgs: {
-        filter: (source) => ({
-            vendor: source._id, // Uses the vendor _id
-        }),
-    },
-    projection: { products: 1 },
-});
+// VendorTC.addRelation("products", {
+//     resolver: () => EntreeTC.getResolver("findMany"),
+//     args: { filter: EntreeTC.getInputTypeComposer() },
+//     prepareArgs: {
+//         filter: (source) => ({
+//             vendor: source._id, // Uses the vendor _id
+//         }),
+//     },
+//     projection: { products: 1 },
+// });
 
 // Creates relation to order schema; grabs all ACTIVE orders
 VendorTC.addRelation("activeOrders", {

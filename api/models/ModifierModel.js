@@ -1,8 +1,13 @@
-import { schemaComposer } from "graphql-compose";
+import { sc } from "graphql-compose";
 import { Money } from "./index";
-import { GraphQLBoolean, GraphQLString, GraphQLInt, GraphQLNonNull } from "graphql";
+import {
+    GraphQLBoolean,
+    GraphQLString,
+    GraphQLInt,
+    GraphQLNonNull,
+} from "graphql";
 
-const ModifierTC = schemaComposer.createObjectTC({
+const ModifierTC = sc.createObjectTC({
     name: "Modifier",
     description: "",
     fields: {
@@ -11,7 +16,7 @@ const ModifierTC = schemaComposer.createObjectTC({
     },
 });
 
-const ModifierListTC = schemaComposer.createObjectTC({
+const ModifierListTC = sc.createObjectTC({
     name: "ModifierList",
     description: "",
     fields: {

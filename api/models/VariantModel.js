@@ -1,6 +1,6 @@
-import { schemaComposer } from "graphql-compose";
+import { sc } from "graphql-compose";
 
-const VariantOptionTC = schemaComposer.createObjectTC({
+const VariantOptionTC = sc.createObjectTC({
     name: "VariantOption",
     description: "",
     fields: {
@@ -9,7 +9,7 @@ const VariantOptionTC = schemaComposer.createObjectTC({
     },
 });
 
-const VariantTC = schemaComposer.createObjectTC({
+const VariantTC = sc.createObjectTC({
     name: "Variant",
     description: "",
     fields: {

@@ -2,16 +2,14 @@ import {
     GraphQLInt,
     GraphQLString,
     GraphQLNonNull,
-    GraphQLBoolean,
     GraphQLList,
-    GraphQLNullableType,
 } from "graphql";
-import { schemaComposer } from "graphql-compose";
+import { sc } from "graphql-compose";
 
 import { VendorTC } from "./VendorModel";
 import { ModifierListTC, ModifierTC } from "./ModifierModel";
 
-export const DataSourceEnum = schemaComposer.createEnumTC({
+const DataSourceEnum = sc.createEnumTC({
     name: "DataSourceEnum",
     values: {
         SQUARE: { value: "Square" },
@@ -20,7 +18,7 @@ export const DataSourceEnum = schemaComposer.createEnumTC({
     },
 });
 
-const ProductInterface = schemaComposer.createInterfaceTC({
+const ProductInterface = sc.createInterfaceTC({
     name: "Product",
     description: "The base type for our products",
     fields: {
@@ -34,7 +32,7 @@ const ProductInterface = schemaComposer.createInterfaceTC({
     },
 });
 
-const MoneyTC = schemaComposer.createObjectTC({
+const MoneyTC = sc.createObjectTC({
     name: "Money",
     description: "Square's representation of money",
     fields: {
@@ -43,7 +41,7 @@ const MoneyTC = schemaComposer.createObjectTC({
     },
 });
 
-const SquareCatalogObject = schemaComposer.createObjectTC({
+const SquareCatalogObject = sc.createObjectTC({
     name: "CatalogObject",
     description: "Catalog Object wrapper defined by Square",
     fields: {
@@ -57,7 +55,7 @@ const SquareCatalogObject = schemaComposer.createObjectTC({
     },
 });
 
-const SquareCatalogItemVariation = schemaComposer.createObjectTC({
+const SquareCatalogItemVariation = sc.createObjectTC({
     name: "CatalogItemVariation",
     description: "Catalog item for Square",
     fields: {
@@ -67,7 +65,7 @@ const SquareCatalogItemVariation = schemaComposer.createObjectTC({
     },
 });
 
-const SquareCatalogItem = schemaComposer
+const SquareCatalogItem = sc
     .createObjectTC({
         name: "SquareProduct",
         description: "Products with Square as a data source",
@@ -84,7 +82,7 @@ const SquareCatalogItem = schemaComposer
     .addInterfaces([ProductInterface]);
 
 // go victor!! go victor!! and will! and will!
-const ShopifyProduct = schemaComposer
+const ShopifyProduct = sc
     .createObjectTC({
         name: "ShopifyProduct",
         description: "Products with Shopify as a data source",
@@ -94,7 +92,7 @@ const ShopifyProduct = schemaComposer
     })
     .addInterfaces([ProductInterface]);
 
-const ExcelProduct = schemaComposer
+const ExcelProduct = sc
     .createObjectTC({
         name: "ExcelProduct",
         description: "Products with Excel as a data source",
@@ -112,10 +110,11 @@ ProductInterface.addTypeResolver(
     .addTypeResolver(ExcelProduct, (value) => value.dataSource === "Excel");
 
 export {
-    // DataSourceEnum,
+    DataSourceEnum,
     MoneyTC,
     ProductInterface,
     SquareCatalogItem,
     ShopifyProduct,
     ExcelProduct,
+    SquareCatalogObject,
 };

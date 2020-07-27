@@ -1,6 +1,14 @@
-import React, { useConp, useEffect } from 'react';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core'
+import Modal from 'react-modal'
+import React, { useEffect, useState } from 'react';
 import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
+import logo from './tealogo.png'; 
+import './cart.scss'
+import { centerCenter, row, column, startStart, centerStart,startCenter } from '../../../Styles/flex';
+import CartProduct from './CartProducts'
+Modal.bind("#app");
 
 const FIND_OR_CREATE_CART = gql`
     mutation FindOrCreateCart($vendorID:MongoID!){
@@ -11,6 +19,7 @@ const FIND_OR_CREATE_CART = gql`
                 product {
                     _id
                     name
+                    price
                 }
                 quantity
                 comments
@@ -79,26 +88,106 @@ const PLACE_ORDER = gql`
     }
 `
 
+const quantityCss = css`
+        border-radius: 10px;  
+        border: 2px solid #00CB2C;
+        padding: 5px;
+        justify-content: center;
+        margin: 8px;
+        width: 60px;
+        display: flex;
+        flex-direction: row;
+`
+
+const cardCss = css`
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 100%;
+    height: 60vh;
+    border-radius: 0 0 20px 20px;
+`
+const bottomCardCss = css`
+    box-shadow: 8px 0 4px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 20px 20px 0 0;
+`
+
+const modalCss = css`
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	height: 25%;
+	width: 25%;
+	margin-top: 35vh;
+	background-color: white;
+`
+
+
+const savingModalTextContainer = [
+  column,
+  centerCenter,
+  css`
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+  `,
+]
+
 const CartItem = ({ item }) => {
     const history = useHistory();
     const { slug, product } = useParams();
-    const handleClick = () => {
-        history.replace(`products/${item.product._id}`)
-        console.log("Should navigate to product detail page!");
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openModal = () => setModalOpen(true);
+    const closeModal = () => setModalOpen(false);
+
+    const [quantity, setQuantity] = useState(item.quantity)
+    const increase = () =>{
+        setQuantity(prevCount => prevCount + 1)
+    }
+
+    const decrease = () => {
+        setQuantity(prevCount => prevCount - 1)
     }
     const handleDeleteClick = () => {
 }
+
     return (
-        <div onClick={handleClick}>
-            <p>Name: {item.product.name}</p>
-            <p>Quantity: {item.quantity}</p>
-            <p>End.</p>
+    <div css={[row], {margin: '20px'}}>
+        <div css={[column]}>
+            <h3 css={{margin: '16px', width: '100px'}}>{item.product.name}</h3>
+            <p css={{margin: '16px', width: '100px'}}>Oreo, Boba</p>
         </div>
+        <div css={[row, quantityCss]}>
+            <div css={{height: '20px'}} onClick={decrease} disabled={quantity === 1}>-</div>
+            <h5 css={{width: '10px', margin: '0 5px 0 5px'}}>{quantity}</h5>
+            <div css={{height: '20px'}} onClick={increase}>+</div>
+        </div>
+        <p css={{margin: '16px'}}>${item.product.price * quantity}</p>
+        <h4 onClick={openModal}>Customize</h4>
+        <Modal
+            css={modalCss}
+            isOpen={modalOpen}
+            onRequestClose={closeModal}
+            >
+            <p>Hola</p>
+        </Modal>
+    </div>
     )
 }
 
 const CartDetail = ({ }) => {
     const history = useHistory();
+   
 
     const [findOrCreateCart, { data, loading, error } ] = useMutation(FIND_OR_CREATE_CART);
     const [placeOrder, { data: placeOrderData, loading: placeOrderLoading, error: placeOrderError } ] = useMutation(PLACE_ORDER);
@@ -147,13 +236,32 @@ const CartDetail = ({ }) => {
 
 
     return (
-        <div>
-            <p>Cart Items Below:</p>
+        <div className="float-cart">
+        <div className="float-cart__content">
+          <div className="float-cart__shelf-container">
+            
+            <div css={[centerCenter, row]}>
+                <img src={logo} className="logo" alt="Logo" />
+                <div>
+                <p css={{margin: '16px 0 0 10px'}}>East West Tea</p>
+                <p css={{margin: '0 0 0 10px', color: 'grey'}}>Houston, TX</p>
+                </div>
+      
+            </div>
             {items.map(item => {
-                return (<CartItem item={item} />)
+                return (<CartProduct product={item} key={item.id} />)
             })}
-            <button title={"Confirm"} onClick={handleConfirmClick}>Confirm Order</button>
-        </div>
+           
+            </div>
+            <div className="float-cart__footer">
+            <div className="sub">SUBTOTAL</div>
+            <div className="sub-price">
+              <p className="sub-price__val">$ 10</p>
+            </div>
+            <div className="buy-btn" title={"Confirm"} onClick={handleConfirmClick}>Confirm Order</div>
+            </div>
+     </div>
+</div>
     );
 }
 

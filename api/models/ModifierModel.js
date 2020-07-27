@@ -19,7 +19,7 @@ const ModifierListTC = schemaComposer.createObjectTC({
         description: GraphQLNonNull(GraphQLString),
         displayQuestion: GraphQLNonNull(GraphQLString),
         selectionType: GraphQLNonNull(GraphQLBoolean),
-        modifiers: () => ModifierOptionTC,
+        modifiers: () => ModifierTC,
         // From CatalogItemModifierListInfo
         minSelected: GraphQLNonNull(GraphQLInt),
         maxSelected: GraphQLNonNull(GraphQLInt),

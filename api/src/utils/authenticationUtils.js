@@ -4,16 +4,15 @@ import axios from "axios";
 import { SECRET, SERVICE_URL } from "../config";
 import { User } from "../models";
 
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken"
 
-const xml2js = require("xml2js");
-const { stripPrefix } = require("xml2js").processors;
+import { Parser, processors } from "xml2js";
 
 /**
  * Parser used for XML response by CAS
  */
-const parser = new xml2js.Parser({
-    tagNameProcessors: [stripPrefix],
+const parser = new Parser({
+    tagNameProcessors: [processors.stripPrefix],
     explicitArray: false,
 });
 

@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "formik": "^2.1.5",
     "graphql": "^15.0.0",
     "history": "^4.10.1",
     "omit-deep-lodash": "^1.1.4",
@@ -20,10 +21,12 @@
     "react-modal": "^3.11.2",
     "react-router": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-scroll": "^1.8.0",
     "react-toast-notifications": "^2.4.0",
     "serve": "^11.3.1",
     "styled-components": "^5.1.1",
-    "subscriptions-transport-ws": "^0.9.16"
+    "subscriptions-transport-ws": "^0.9.16",
+    "yup": "^0.29.1"
   },
   "scripts": {
     "start": "serve -s build -l $PORT",

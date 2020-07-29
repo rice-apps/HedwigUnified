@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {row} from '../../../Styles/flex'
-
-
+import Thumb from './Thumb.js'
+import { DropDownList } from '@progress/kendo-react-dropdowns';
 
 class CartProduct extends Component {
   static propTypes = {
@@ -32,28 +31,30 @@ class CartProduct extends Component {
     const { product } = this.props
     // quantity = product.quantity
     const classes = ['shelf-item']
-
+    const sports = [ "Baseball", "Basketball", "Cricket", "Field Hockey", "Football", "Table Tennis", "Tennis", "Volleyball" ]
     if (!!this.state.isMouseOver) {
       classes.push('shelf-item--mouseover')
     }
-  
+    
     return (
       <div className={classes.join(' ')}>
-        
+       <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" /> 
         <div
           className="shelf-item__del"
           onMouseOver={() => this.handleMouseOver()}
           onMouseOut={() => this.handleMouseOut()}
         />
+         
+                    
+         
         <Thumb
           classes="shelf-item__thumb"
-          src={require(``)}
-          alt={product.title}
+          
+          alt={product.product.name}
         />
         <div className="shelf-item__details">
           <p className="title">{product.product.name}</p>
         <div>
-          
           <div className="quantityCss">
             <button onClick={this.decrease} disabled={this.state.quantity === 1}>-</button>
             <h5>{this.state.quantity}</h5>

@@ -1,6 +1,6 @@
 import React, { useConp, useEffect } from 'react';
 import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
-import { useHistory } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 
 const FIND_OR_CREATE_CART = gql`
     mutation FindOrCreateCart($vendorID:MongoID!){
@@ -80,11 +80,14 @@ const PLACE_ORDER = gql`
 `
 
 const CartItem = ({ item }) => {
-
+    const history = useHistory();
+    const { slug, product } = useParams();
     const handleClick = () => {
+        history.replace(`products/${item.product._id}`)
         console.log("Should navigate to product detail page!");
     }
-
+    const handleDeleteClick = () => {
+}
     return (
         <div onClick={handleClick}>
             <p>Name: {item.product.name}</p>
@@ -134,21 +137,22 @@ const CartDetail = ({ }) => {
 
     // let orderVariables = { userID: userID, vendorID: vendorID };
 
-    const handleClick = () => {
+    const handleConfirmClick = () => {
         // Submit order
         placeOrder({ variables: { _id: _id } });
 
         // createOrder({ variables: {...orderVariables, items: transformToOrderItems(cart) }});
         // Then navigate back to order detail page
     }
-    
+
+
     return (
         <div>
             <p>Cart Items Below:</p>
             {items.map(item => {
                 return (<CartItem item={item} />)
             })}
-            <button title={"Confirm"} onClick={handleClick}>Confirm Order</button>
+            <button title={"Confirm"} onClick={handleConfirmClick}>Confirm Order</button>
         </div>
     );
 }

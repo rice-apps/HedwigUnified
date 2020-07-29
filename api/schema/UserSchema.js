@@ -88,7 +88,7 @@ UserTC.addResolver({
 
 // Using auth middleware for sensitive info: https://github.com/graphql-compose/graphql-compose-mongoose/issues/158
 const UserQuery = {
-    userOne: UserTC.getResolver('findOne'),
+    userOne: UserTC.getResolver('findOne', [authMiddleware]),
 };
 
 const UserMutation = {

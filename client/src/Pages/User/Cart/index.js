@@ -234,6 +234,7 @@ const CartDetail = ({ }) => {
         // Then navigate back to order detail page
     }
 
+    const cart_menu = [{title: 'Thai Tea', varients: 'Medium, Orea, Boba', price: 3.50}, {title: 'Jasmine Tea', varients: 'Large, Orea, Boba', price: 4.50}]
 
     return (
         <div className="float-cart">
@@ -248,7 +249,9 @@ const CartDetail = ({ }) => {
                 </div>
       
             </div>
-            {items.map(item => {
+            {cart_menu.map(item => {
+                console.log(item)
+                console.log(item.title)
                 return (<CartProduct product={item} />)
             })}
            

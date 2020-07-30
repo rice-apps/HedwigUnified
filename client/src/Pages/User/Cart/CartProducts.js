@@ -6,7 +6,7 @@ import logo from './icons8-team-7LNatQYMzm4-unsplash.jpg'
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
-const CartProduct = (product) => {
+const CartProduct = ({product}) => {
   const [isMouseOver, setIsMouseOver] = useState(false)
   const [quantity, setQuantity] = useState(2)
 const handleMouseOver = () => {
@@ -45,7 +45,10 @@ const defaultOption = options[0];
         
        
         <div className="shelf-item__details">
-          <p className="shelf-item__price">Thai Tea</p>
+          <div className="shelf-item__price">
+          <p >{product.title}</p>
+          <p>{product.varients}</p>
+          </div>
         <div className="shelf-item__price">
             <button onClick={decrease} disabled={quantity === 1}>-</button>
             <h5>{quantity}</h5>
@@ -54,7 +57,7 @@ const defaultOption = options[0];
       
          <Dropdown className="dropdowncontainer" options={options} value={defaultOption} placeholder="Select an option" />
         <div className="shelf-item__price">
-          <p>${3.5 * quantity}</p>
+          <p>${product.price * quantity}</p>
         </div>
  </div>
       </div>

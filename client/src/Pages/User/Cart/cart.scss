@@ -183,13 +183,13 @@
 
       &__thumb {
         vertical-align: middle;
-        width: 15%;
+        width: 100px;
         margin-right: 3%;
 
         img {
           align: middle;
           border-radius: 50%;
-          width: 50%;
+          width: 100%;
           height: auto;
         }
       }
@@ -219,7 +219,7 @@
       &__price {
         color: #000;
         text-align: right;
-        width: 25%;
+        width: 20%;
       }
     }
   }

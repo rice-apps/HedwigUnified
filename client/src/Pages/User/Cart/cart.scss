@@ -187,7 +187,9 @@
         margin-right: 3%;
 
         img {
-          width: 100%;
+          align: middle;
+          border-radius: 50%;
+          width: 50%;
           height: auto;
         }
       }
@@ -196,7 +198,7 @@
 
         .title {
           color: #000;
-          margin: 0;
+          margin: 0px
         }
 
         .desc {
@@ -300,4 +302,12 @@
 .float-cart__content {
   height: 100%;
   overflow-y: scroll;
+}
+
+.dropdowncontainer {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  vertical-align: middle;
+  margin-left: 20px;
 }

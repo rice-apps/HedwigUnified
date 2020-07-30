@@ -2,11 +2,11 @@
 import { css, jsx } from '@emotion/core'
 import Modal from 'react-modal'
 import React, { useEffect, useState } from 'react';
-import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
+import { gql, useMutation, useApolloClient } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
 import logo from './tealogo.png'; 
 import './cart.scss'
-import { centerCenter, row, column, startStart, centerStart,startCenter } from '../../../Styles/flex';
+import { centerCenter, row, column, } from '../../../Styles/flex';
 import CartProduct from './CartProducts'
 Modal.bind("#app");
 
@@ -249,7 +249,7 @@ const CartDetail = ({ }) => {
       
             </div>
             {items.map(item => {
-                return (<CartProduct product={item} key={item.id} />)
+                return (<CartProduct product={item} />)
             })}
            
             </div>

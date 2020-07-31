@@ -44,6 +44,7 @@
         "jsonwebtoken": "^8.5.1",
         "loglevel": "^1.6.8",
         "mongoose": "^5.9.26",
+        "square-connect": "^4.20200722.1",
         "xml2js": "^0.4.23"
     }
 }

@@ -1,13 +1,16 @@
 import { sc } from "graphql-compose";
-import { GraphQLID } from "graphql";
+import { GraphQLString } from "graphql";
+import { SquareMoneyTC } from "../models/square/Common";
 
 sc.createResolver({
     name: "SquareCreatePayment",
     type: "type SquarePayment { id: ID, orderId: ID, total: Float }",
     args: {
-        orderId: GraphQLID,
+        sourceId: GraphQLString,
+        orderId: GraphQLString,
+        amount_money: () => SquareMoneyTC,
     },
-    resolve: async ({ args }) => {
-        
+    resolve: async ({ args, context }) => {
+        // TODO: add Square Connect API instance to context
     }
 })

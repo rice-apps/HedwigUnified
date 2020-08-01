@@ -1,15 +1,19 @@
 import { sc } from "graphql-compose";
-import { GraphQLString } from "graphql";
-import { SquareMoneyTC } from "../models/square/Common";
-import { PaymentsApi, CreatePaymentRequest } from "square-connect";
+import { GraphQLNonNull, GraphQLString, GraphQLScalarType } from "graphql";
+import { SquareMoneyTC } from "../legacy/square/Common";
+import {
+    PaymentsApi,
+    CreatePaymentRequest,
+    CompletePaymentRequest,
+} from "square-connect";
 
 sc.createResolver({
     name: "SquareCreatePayment",
     type: "type SquarePayment { id: ID, orderId: ID, total: Float }",
     args: {
-        sourceId: GraphQLString,
-        orderId: GraphQLString,
-        amount_money: SquareMoneyTC.getITC(),
+        sourceId: GraphQLNonNull(GraphQLString),
+        orderId: GraphQLNonNull(GraphQLString),
+        amount_money: GraphQLNonNull(SquareMoneyTC.getITC().getType()),
     },
     resolve: async ({ args }) => {
         // TODO: add Square Connect API instance to context
@@ -25,5 +29,24 @@ sc.createResolver({
         });
 
         return paymentResponse;
+    },
+});
+
+sc.createResolver({
+    name: "SquareCapturePayment",
+    type: "type SquarePayment { id: ID, orderId: ID, total: Float }",
+    args: {
+        paymentId: GraphQLNonNull(GraphQLString),
+    },
+    resolve: async ({ args }) => {
+        const apiInstance = new PaymentsApi();
+        const body = new CompletePaymentRequest();
+
+        const capturedPayment = await apiInstance.completePayment(
+            args.paymentId,
+            body,
+        );
+
+        return capturedPayment;
     },
 });

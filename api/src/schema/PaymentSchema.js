@@ -1,52 +1,94 @@
-import { sc } from "graphql-compose";
-import { GraphQLNonNull, GraphQLString, GraphQLScalarType } from "graphql";
-import { SquareMoneyTC } from "../legacy/square/Common";
+import { CreatePaymentITC, PaymentTC } from "../models";
 import {
     PaymentsApi,
     CreatePaymentRequest,
     CompletePaymentRequest,
 } from "square-connect";
+import { GraphQLString, GraphQLNonNull } from "graphql";
+import { v4 as uuid } from "uuid";
+import { ApolloError } from "apollo-server-express";
 
-sc.createResolver({
-    name: "SquareCreatePayment",
-    type: "type SquarePayment { id: ID, orderId: ID, total: Float }",
+PaymentTC.addResolver({
+    name: "createPayment",
     args: {
-        sourceId: GraphQLNonNull(GraphQLString),
-        orderId: GraphQLNonNull(GraphQLString),
-        amount_money: GraphQLNonNull(SquareMoneyTC.getITC().getType()),
+        record: GraphQLNonNull(CreatePaymentITC.getType()),
     },
+    type: PaymentTC,
     resolve: async ({ args }) => {
-        // TODO: add Square Connect API instance to context
-        const apiInstance = new PaymentsApi();
-        const body = new CreatePaymentRequest();
+        // TODO: Add shopify payment flow
+        const api = new PaymentsApi();
+        const paymentBody = new CreatePaymentRequest();
 
-        const paymentResponse = await apiInstance.createPayment({
-            ...body,
-            source_id: args.sourceId,
-            order_id: args.orderId,
-            amount_money: args.amount_money,
+        const paymentResponse = await api.createPayment({
+            ...paymentBody,
+            source_id: args.record.sourceId,
+            idempotency_key: uuid(),
+            amount_money: args.record.subtotal,
+            tip_money: args.record.tip,
+            order_id: args.record.orderId,
+            customer_id: args.record.customerId,
             autocomplete: false,
         });
 
-        return paymentResponse;
+        if (paymentResponse.errors) {
+            return new ApolloError(
+                `Encounter the following errors while create payment: ${paymentResponse.errors}`,
+            );
+        }
+
+        const { payment } = paymentResponse;
+
+        return {
+            id: payment.id,
+            order: payment.order_id,
+            customer: payment.customer_id,
+            subtotal: payment.amount_money,
+            tip: payment.tip_money,
+            total: payment.total_money,
+            status: payment.status,
+        };
     },
 });
 
-sc.createResolver({
-    name: "SquareCapturePayment",
-    type: "type SquarePayment { id: ID, orderId: ID, total: Float }",
+PaymentTC.addResolver({
+    name: "completePayment",
     args: {
+        // TODO: add fields for Shopify
         paymentId: GraphQLNonNull(GraphQLString),
     },
+    type: PaymentTC,
     resolve: async ({ args }) => {
-        const apiInstance = new PaymentsApi();
-        const body = new CompletePaymentRequest();
+        const api = new PaymentsApi();
+        const paymentBody = new CompletePaymentRequest();
 
-        const capturedPayment = await apiInstance.completePayment(
+        const paymentResponse = await api.completePayment(
             args.paymentId,
-            body,
+            paymentBody,
         );
 
-        return capturedPayment;
+        if (paymentResponse.errors) {
+            return new ApolloError(
+                `Encounter the following errors while complete payment: ${paymentResponse.errors}`,
+            );
+        }
+
+        const { payment } = paymentResponse;
+
+        return {
+            id: payment.id,
+            order: payment.order_id,
+            customer: payment.customer_id,
+            subtotal: payment.amount_money,
+            tip: payment.tip_money,
+            total: payment.total_money,
+            status: payment.status,
+        };
     },
 });
+
+const PaymentMutations = {
+    createPayment: PaymentTC.getResolver("createPayment"),
+    completePayment: PaymentTC.getResolver("completePayment"),
+};
+
+export { PaymentMutations };

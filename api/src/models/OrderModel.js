@@ -9,6 +9,7 @@ const OrderTC = sc.createObjectTC({
     fields: {
         id: GraphQLNonNull(GraphQLString),
         merchant: GraphQLNonNull(GraphQLString),
+        customer: GraphQLNonNull(GraphQLString),
         items: GraphQLNonNull(GraphQLString), // TODO: create new subtype for variants, modifiers, and items
         totalTax: GraphQLNonNull(MoneyTC.getType()),
         totalDiscount: GraphQLNonNull(MoneyTC.getType()),
@@ -16,4 +17,4 @@ const OrderTC = sc.createObjectTC({
     },
 });
 
-export { OrderTC }
+export { OrderTC };

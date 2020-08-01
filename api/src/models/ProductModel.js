@@ -10,6 +10,7 @@ const ProductInterfaceTC = sc.createInterfaceTC({
         name: GraphQLNonNull(GraphQLString),
         description: GraphQLNonNull(GraphQLString),
         dataSource: () => DataSourceEnumTC,
+        merchant: GraphQLNonNull(GraphQLString), // TODO: Add merchant data type
     },
 });
 

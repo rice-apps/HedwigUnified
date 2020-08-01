@@ -24,8 +24,8 @@ const GET_USER_INFO = gql`
 `;
 
 const getLinks = (user) => {
-    // Missing help path, feedback form, and edit phone number page
-    let links = [
+	// Missing help path, feedback form, and edit phone number page
+	let links = [
 		{ icon: "envelope", content: user.netid, path: "" },
 
 		{ icon: "phone", content: user.phone, path: "" },
@@ -43,24 +43,20 @@ const getLinks = (user) => {
 		},
 
 		{ icon: "paper-plane", content: "Feedback", path: "" },
-    ];
-    
-    return links;
+	];
+
+	return links;
 };
 
 const Profile = () => {
 	const { data, loading, error } = useQuery(GET_USER_INFO);
 
-	console.log(loading);
-	console.log("Hello!");
-
 	if (error) return <p>Error!</p>;
 	if (loading) return <p>Waiting...</p>;
-	console.log(data);
 	if (!data) return <p> work pls </p>;
 
-    let { user } = data;
-    const links = getLinks(user);
+	let { user } = data;
+	const links = getLinks(user);
 
 	return (
 		<div class="background">

@@ -4,7 +4,7 @@ import axios from "axios";
 import { SECRET, SERVICE_URL } from "../config";
 import { User } from "../models";
 
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 import { Parser, processors } from "xml2js";
 

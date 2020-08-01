@@ -40,6 +40,12 @@ const CartDetail = ({ }) => {
             <div className="sub-price">
               <p className="sub-price__val">$ 10</p>
             </div>
+            {/* <Dropdown
+				className="dropdowncontainer"
+				options={options}
+				value={defaultOption}
+				placeholder="Select an option"
+			/> */}
             <div className="buy-btn" title={"Confirm"} onClick={handleConfirmClick}>Confirm Order</div>
             </div>
      </div>

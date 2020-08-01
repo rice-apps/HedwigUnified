@@ -4,6 +4,18 @@ import logo from "./icons8-team-7LNatQYMzm4-unsplash.jpg";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
+const QuantitySelector = ({ quantity, decrease, increase }) => {
+	return (
+		<div className="shelf-item__quantity">
+			<button onClick={decrease} disabled={quantity === 1}>
+      &ndash;
+			</button>
+			<p>{quantity}</p>
+			<button onClick={increase}>+</button>
+		</div>
+	);
+};
+
 const CartProduct = ({ product }) => {
 	const [isMouseOver, setIsMouseOver] = useState(false);
 	const [quantity, setQuantity] = useState(2);
@@ -35,26 +47,17 @@ const CartProduct = ({ product }) => {
 				onMouseOut={() => handleMouseOut()}
 			/>
 
-			<Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} />
+			{/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
 			{/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}
 			<div className="shelf-item__title">
-				<p>{product.title}</p>
-				<p>{product.varients}</p>
+				<p id="title">{product.title}</p>
+				<p id="options">{product.varients}</p>
 			</div>
-
-			<div className="shelf-item__quantity">
-				<button onClick={decrease} disabled={quantity === 1}>
-					-
-				</button>
-				<h5>{quantity}</h5>
-				<button onClick={increase}>+</button>
-			</div>
-			<Dropdown
-				className="dropdowncontainer"
-				options={options}
-				value={defaultOption}
-				placeholder="Select an option"
-			/>
+			<QuantitySelector 
+      quantity={quantity}
+      increase={increase}
+      decrease={decrease}
+      />
 			<div className="shelf-item__price">
 				<p>${product.price * quantity}</p>
 			</div>

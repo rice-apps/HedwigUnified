@@ -14,18 +14,6 @@ const ProductInterfaceTC = sc.createInterfaceTC({
     },
 });
 
-const ItemTC = sc
-    .createObjectTC({
-        name: "Item",
-        description: "An item in the common data model",
-        fields: {
-            dataSourceId: GraphQLNonNull(GraphQLString),
-            variants: GraphQLList(ItemVariantTC.getType()),
-            modifiers: GraphQLList(ItemModifierTC.getType()),
-        },
-    })
-    .addInterfaces([ProductInterfaceTC]);
-
 const ItemVariantTC = sc
     .createObjectTC({
         name: "ItemVariant",
@@ -45,6 +33,18 @@ const ItemModifierTC = sc
         fields: {
             dataSourceId: GraphQLNonNull(GraphQLString),
             price: GraphQLNonNull(MoneyTC.getType()),
+        },
+    })
+    .addInterfaces([ProductInterfaceTC]);
+
+const ItemTC = sc
+    .createObjectTC({
+        name: "Item",
+        description: "An item in the common data model",
+        fields: {
+            dataSourceId: GraphQLNonNull(GraphQLString),
+            variants: GraphQLList(ItemVariantTC.getType()),
+            modifiers: GraphQLList(ItemModifierTC.getType()),
         },
     })
     .addInterfaces([ProductInterfaceTC]);

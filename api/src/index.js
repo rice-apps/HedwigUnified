@@ -4,6 +4,8 @@ import express from "express";
 import http from "http";
 import log from "loglevel";
 
+import Schema from "./schema";
+
 import { ALLOWED_ORIGINS, DEV_PORT } from "./config";
 
 import "./utils/db";
@@ -15,7 +17,10 @@ const app = express().use(
     }),
 );
 
-const server = new ApolloServer();
+const server = new ApolloServer({
+    schema: Schema,
+    introspection: true,
+});
 
 server.applyMiddleware({ app });
 

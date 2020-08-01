@@ -48,9 +48,7 @@ PaymentTC.addResolver({
             status: payment.status,
         };
     },
-});
-
-PaymentTC.addResolver({
+}).addResolver({
     name: "completePayment",
     args: {
         // TODO: add fields for Shopify

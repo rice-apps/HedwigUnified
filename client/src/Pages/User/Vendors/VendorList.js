@@ -140,7 +140,7 @@ const VendorList = ({ classes }) => {
         <div className="vendorPage">
             <div className="pickup">
                 Pickup Time:
-                <PickupDropdown options={["ASAP", "Schedule an order"]} selectedOption="ASAP" onChange={() => console.log("Yeet")} />
+                <PickupDropdown options={["ASAP", "Schedule an order"]} selectedOption="ASAP" />
                 <FontAwesomeIcon icon={faUser} className="userIcon"></FontAwesomeIcon>
             </div>
             <div>
@@ -154,28 +154,6 @@ const VendorList = ({ classes }) => {
         </div>
     );
             };
-
-//     return (
-//     <div>
-//         <div className="vendorcontainer">
-//             <div className="vendorlist">
-//                 <Fragment>
-//                 </Fragment>
-//                 {vendors.map(vendor => {
-//                     return (
-//                             <Fragment>
-//                             <VendorLine /> 
-//                             <VendorCard vendor={vendor} />
-//                             </Fragment>
-//                             )
-//                 },
-//                 )}
-
-//             </div>
-//             </div>
-//             </div>
-//     );
-// }
 
 
 

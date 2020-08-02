@@ -142,7 +142,7 @@ const OptionSet = ({ optionSet }) => {
             <h2>{optionSet.title}</h2>
             <div className="optionSet">
             {optionSet.variants.map(variant => (
-                <OptionVariant 
+                <OptionVariant
                 variant={variant}
                 disabled={!optionSet.multi && selectedOptions.length > 0} 
                 selected={selectedOptions}
@@ -157,6 +157,7 @@ const OptionSet = ({ optionSet }) => {
 
 const ProductDetail = ({ }) => {
     const { slug, product } = useParams();
+    const [count, setCount] = useState(1)
     const history = useHistory();
 
     let userID = "";
@@ -203,7 +204,7 @@ const ProductDetail = ({ }) => {
     } else {
         item = {
             product: productID,
-            quantity: 1,
+            quantity: count,
             comments: ""
         };
     }
@@ -218,9 +219,14 @@ const ProductDetail = ({ }) => {
         let itemForMutation = omitDeep(item, "__typename");
         removeItemFromCart({ variables: { _id: cartID, item: itemForMutation } });
     };
-
+    function increment() {
+        setCount(prevCount => prevCount + 1)
+    }
+    
+    function decrement() {
+        setCount(prevCount => prevCount - 1)
+    }
     const optionSets = [{title: "Size", multi: false, variants: ["M", "L"]}, {title: "Toppings", multi: true, variants: ["Boba", "Oreo", "Lychee"]}];
-
     return (
         <div className="heroImage">
             <div className="productInfo">
@@ -233,6 +239,12 @@ const ProductDetail = ({ }) => {
                         <OptionSet optionSet={optionSet} />
                     )
                 })}
+                <h2>Amount</h2>
+                <h1>{count}</h1>
+                <div>
+                    <button onClick={increment}>+</button>
+                    <button onClick={decrement} disabled={count === 1}>-</button>
+                </div>
                 <p>Price: ${price}</p>
                 <div className="cartActions">
                     <button onClick={handleAddToCart}>Add to Cart</button>

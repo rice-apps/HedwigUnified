@@ -7,27 +7,27 @@ import { authenticateTicket, verifyToken, createToken } from '../utils/authentic
  */
 
 // Creates relation to carts (order schema)
-UserTC.addRelation("carts", {
-    "resolver": () => OrderTC.getResolver('findMany'),
-    prepareArgs: {
-        filter: (source) => ({
-            fulfillment: "Cart",
-            user: source._id
-        })
-    },
-    projection: { carts: 1 }
-});
+// UserTC.addRelation("carts", {
+//     "resolver": () => OrderTC.getResolver('findMany'),
+//     prepareArgs: {
+//         filter: (source) => ({
+//             fulfillment: "Cart",
+//             user: source._id
+//         })
+//     },
+//     projection: { carts: 1 }
+// });
 
-UserTC.addRelation("employer", {
-    "resolver": () => VendorTC.getResolver('findOne'),
-    args: { filter: VendorTC.getInputTypeComposer() },
-    prepareArgs: {
-        filter: (source) => ({
-            employer: source._id, // Uses the vendor _id
-        })
-    },
-    projection: { employer: 1 }
-});
+// UserTC.addRelation("employer", {
+//     "resolver": () => VendorTC.getResolver('findOne'),
+//     args: { filter: VendorTC.getInputTypeComposer() },
+//     prepareArgs: {
+//         filter: (source) => ({
+//             employer: source._id, // Uses the vendor _id
+//         })
+//     },
+//     projection: { employer: 1 }
+// });
 /**
  * Custom Resolvers
  */
@@ -87,11 +87,11 @@ UserTC.addResolver({
 })
 
 // Using auth middleware for sensitive info: https://github.com/graphql-compose/graphql-compose-mongoose/issues/158
-const UserQuery = {
+const UserQueries = {
     userOne: UserTC.getResolver('findOne', [authMiddleware]),
 };
 
-const UserMutation = {
+const UserMutations = {
     userUpdateOne: UserTC.getResolver('updateOne', [authMiddleware]),
 };
 
@@ -108,4 +108,4 @@ async function authMiddleware(resolve, source, args, context, info) {
     return resolve(source, {...args, filter: {...args.filter, _id: id } }, context, info);
 }
 
-export { UserQuery, UserMutation };
+export { UserQueries, UserMutations };

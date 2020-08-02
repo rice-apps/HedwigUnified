@@ -3,6 +3,15 @@ import { GraphQLList, GraphQLNonNull, GraphQLString } from "graphql";
 
 import { DataSourceEnumTC, MoneyTC } from "./CommonModels";
 
+const SelectionTypeEnumTC = sc.createEnumTC({
+    name: "SelectionTypeEnum",
+    description: "",
+    values: {
+        SINGLE: { value: "SINGLE" },
+        MULTIPLE: { value: "MULTIPLE" },
+    },
+});
+
 const ProductInterfaceTC = sc.createInterfaceTC({
     name: "Product",
     description: "The base product interface for the common data model",
@@ -12,7 +21,7 @@ const ProductInterfaceTC = sc.createInterfaceTC({
             description: "The vendor's name for the product",
         },
         description: {
-            type: GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
             description: "The vendor's description of the product",
         },
         dataSource: {
@@ -49,7 +58,8 @@ const ItemVariantTC = sc
             },
         },
     })
-    .addInterfaces([ProductInterfaceTC]);
+    .addInterfaces([ProductInterfaceTC])
+    .merge(ProductInterfaceTC);
 
 const ItemModifierTC = sc
     .createObjectTC({
@@ -61,13 +71,42 @@ const ItemModifierTC = sc
                 description:
                     "The ID of the item modifier in the data source. Up to developer to verify correctness.",
             },
+            parentListId: {
+                type: GraphQLNonNull(GraphQLString),
+                description: "The ID of the modifier list containing this modifier in the data source. Up to the developer to verify correctness.",
+            },
             price: {
                 type: GraphQLNonNull(MoneyTC.getType()),
                 description: "The base price of this variant.",
             },
         },
     })
-    .addInterfaces([ProductInterfaceTC]);
+    .addInterfaces([ProductInterfaceTC])
+    .merge(ProductInterfaceTC);
+
+const ItemModifierListTC = sc.createObjectTC({
+    name: "ItemModifierList",
+    description: "A modifier list containing modifiers that apply to Items",
+    fields: {
+        dataSourceId: {
+            type: GraphQLNonNull(GraphQLString),
+            description:
+                "The ID of the modifier list in the data source. Up to developer to verify correctness.",
+        },
+        name: {
+            type: GraphQLNonNull(GraphQLString),
+            description: "The name of the modifier list in the data source.",
+        },
+        selectionType: {
+            type: () => SelectionTypeEnumTC,
+            description: "Can either be SINGLE or MULTIPLE; if SINGLE, only one modifier can be selected. If MULTIPLE, more than one can be selected.",
+        },
+        modifiers: {
+            type: GraphQLList(ItemModifierTC.getType()),
+            description: "The modifiers that are included in this modifier list.",
+        },
+    },
+});
 
 const ItemTC = sc
     .createObjectTC({
@@ -83,12 +122,13 @@ const ItemTC = sc
                 type: GraphQLList(ItemVariantTC.getType()),
                 description: "A list of variants of this item",
             },
-            modifiers: {
-                type: GraphQLList(ItemModifierTC.getType()),
-                description: "A list of modifiers application to this item",
+            modifierLists: {
+                type: GraphQLList(ItemModifierListTC.getType()),
+                description: "A list of modifier lists that apply to this item",
             },
         },
     })
-    .addInterfaces([ProductInterfaceTC]);
+    .addInterfaces([ProductInterfaceTC])
+    .merge(ProductInterfaceTC);
 
 export { ProductInterfaceTC, ItemTC };

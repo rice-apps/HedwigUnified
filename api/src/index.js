@@ -10,6 +10,9 @@ import { ALLOWED_ORIGINS, DEV_PORT } from "./config";
 
 import "./utils/db";
 
+// Initialize connection to Square with API token
+import './square';
+
 const app = express().use(
     cors({
         origin: ALLOWED_ORIGINS,
@@ -29,6 +32,7 @@ const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 httpServer.listen({ port: DEV_PORT }, () => {
+    console.log("Server running.");
     log.info(
         `🚀 Server ready at http://localhost:${DEV_PORT}${server.graphqlPath}`,
     );

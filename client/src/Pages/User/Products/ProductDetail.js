@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
+import { useQuery, gql, useMutation, useApolloClient, ApolloError } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
 import omitDeep from 'omit-deep-lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import ErrorPage from "../../../components/ErrorPage";
 
 import "./product.css";
 
@@ -141,7 +142,7 @@ const OptionSet = ({ optionSet }) => {
             <h2>{optionSet.title}</h2>
             <div className="optionSet">
             {optionSet.variants.map(variant => (
-                <OptionVariant 
+                <OptionVariant
                 variant={variant}
                 disabled={!optionSet.multi && selectedOptions.length > 0} 
                 selected={selectedOptions}
@@ -156,6 +157,7 @@ const OptionSet = ({ optionSet }) => {
 
 const ProductDetail = ({ }) => {
     const { slug, product } = useParams();
+    const [count, setCount] = useState(1)
     const history = useHistory();
 
     let userID = "";
@@ -185,7 +187,7 @@ const ProductDetail = ({ }) => {
         findOrCreateCart();
     }, []);
 
-    if (productError || cartError) return <p>Errors...</p>;
+    if (productError || cartError) return <ErrorPage errMessage="Bogus Product ID!"/>;
     if (productLoading || cartLoading) return <p>Loading...</p>
     if (!productData || !cartData) return (<p>No data...</p>);
 
@@ -202,7 +204,7 @@ const ProductDetail = ({ }) => {
     } else {
         item = {
             product: productID,
-            quantity: 1,
+            quantity: count,
             comments: ""
         };
     }
@@ -217,9 +219,14 @@ const ProductDetail = ({ }) => {
         let itemForMutation = omitDeep(item, "__typename");
         removeItemFromCart({ variables: { _id: cartID, item: itemForMutation } });
     };
-
+    function increment() {
+        setCount(prevCount => prevCount + 1)
+    }
+    
+    function decrement() {
+        setCount(prevCount => prevCount - 1)
+    }
     const optionSets = [{title: "Size", multi: false, variants: ["M", "L"]}, {title: "Toppings", multi: true, variants: ["Boba", "Oreo", "Lychee"]}];
-
     return (
         <div className="heroImage">
             <div className="productInfo">
@@ -232,6 +239,12 @@ const ProductDetail = ({ }) => {
                         <OptionSet optionSet={optionSet} />
                     )
                 })}
+                <h2>Amount</h2>
+                <h1>{count}</h1>
+                <div>
+                    <button onClick={increment}>+</button>
+                    <button onClick={decrement} disabled={count === 1}>-</button>
+                </div>
                 <p>Price: ${price}</p>
                 <div className="cartActions">
                     <button onClick={handleAddToCart}>Add to Cart</button>

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, gql, useMutation, ApolloError } from "@apollo/client";
 import { useParams, useHistory, useLocation } from "react-router";
 import ErrorPage from "../../../components/ErrorPage";
 
@@ -40,7 +40,7 @@ const VendorDetail = ({}) => {
     variables: { slug: slug },
   });
 
-  if (error) return <ErrorPage />;
+  if (error) return <ErrorPage errMessage={error.message}/>
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>No data...</p>;
 

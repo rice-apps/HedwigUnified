@@ -5,7 +5,6 @@ import { AppBar, Grid, Toolbar, BottomNavigation, Divider } from '@material-ui/c
 import withStyles from '@material-ui/core/styles/withStyles';
 import "./vendor.css";
 import "../../fonts/style.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
 //fontawesome imports
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

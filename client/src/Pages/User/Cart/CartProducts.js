@@ -41,12 +41,6 @@ const CartProduct = ({ product }) => {
 				isMouseOver ? "shelf-item shelf-item--mouseover" : "shelf-item"
 			}
 		>
-			<div
-				className="shelf-item__del"
-				onMouseOver={() => handleMouseOver()}
-				onMouseOut={() => handleMouseOut()}
-			/>
-
 			{/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
 			{/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}
 			<div className="shelf-item__title">
@@ -61,6 +55,11 @@ const CartProduct = ({ product }) => {
 			<div className="shelf-item__price">
 				<p>${product.price * quantity}</p>
 			</div>
+			<div
+				className="shelf-item__del"
+				onMouseOver={() => handleMouseOver()}
+				onMouseOut={() => handleMouseOut()}
+			/>
 		</div>
 	);
 };

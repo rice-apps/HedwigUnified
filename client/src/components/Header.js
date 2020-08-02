@@ -12,39 +12,59 @@ const Primary = css`
 
 const HeaderDiv = styled.div`
     ${Primary}
-
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    height: 50px;
+    width: 100vw;
+    height: 8vh;
+    display: grid;
+    grid-template-columns: 25% 75%;
+    font-size: 15pt;
 `;
 
 const LinksDiv = styled.div`
-    flex-grow: 1;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 25%, 25%, 25%, 25%;
 `
 
 const Logo = styled.div`
+    justify-self: center;
     align-self: center;
-    flex-grow: 3;
-    margin-left: 50px;
-
+    grid-column : 1/2;
     :hover {
         cursor: pointer;
     }
 `
 
-const Link = styled.a`
-    margin-right: 50px;
-
+const CartLink = styled.a`
+    grid-column: 1/2;
     :hover {
         color: red;
         cursor: pointer;
     }
+    align-self: center;
+`
+const OrdersLink = styled.a`
+    grid-column:2/3;
+    :hover {
+        color: red;
+        cursor: pointer;
+    }
+    align-self: center;
+`
+const VendorsLink = styled.a`
+    grid-column:3/4;
+    :hover {
+        color: red;
+        cursor: pointer;
+    }
+    align-self: center;
+`
+
+const SettingsLink = styled.a`
+    grid-column:4/5;
+    :hover {
+        color: red;
+        cursor: pointer;
+    }
+    align-self: center;
 `
 
 const Header = () => {
@@ -54,10 +74,10 @@ const Header = () => {
         <HeaderDiv>
             <Logo onClick={() => history.push("/home")}>Hedwig</Logo>
             <LinksDiv>
-                <Link onClick={() => history.push("/user/vendors/ewtea/cart")}>Cart</Link>
-                <Link onClick={() => history.push("/user/orders")}>Orders</Link>
-                <Link onClick={() => history.push("/user/vendors")}>Vendors</Link>
-                <Link onClick={() => history.push("/user/settings")}>Settings</Link>
+                <CartLink onClick={() => history.push("/user/vendors/ewtea/cart")}>Cart</CartLink>
+                <OrdersLink onClick={() => history.push("/user/orders")}>Orders</OrdersLink>
+                <VendorsLink onClick={() => history.push("/user/vendors")}>Vendors</VendorsLink>
+                <SettingsLink onClick={() => history.push("/user/settings")}>Settings</SettingsLink>
             </LinksDiv>
         </HeaderDiv>
     )

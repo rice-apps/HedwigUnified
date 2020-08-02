@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useQuery, gql, useMutation, useApolloClient } from '@apollo/client';
+import { useQuery, gql, useMutation, useApolloClient, ApolloError } from '@apollo/client';
 import { useParams, useHistory } from 'react-router';
 import omitDeep from 'omit-deep-lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import ErrorPage from "../../../components/ErrorPage";
 
 import "./product.css";
 
@@ -186,7 +187,7 @@ const ProductDetail = ({ }) => {
         findOrCreateCart();
     }, []);
 
-    if (productError || cartError) return <p>Errors...</p>;
+    if (productError || cartError) return <ErrorPage errMessage="Bogus Product ID!"/>;
     if (productLoading || cartLoading) return <p>Loading...</p>
     if (!productData || !cartData) return (<p>No data...</p>);
 

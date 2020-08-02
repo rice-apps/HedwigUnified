@@ -1,8 +1,8 @@
 import React, { Component, useState } from "react";
 import Thumb from "./Thumb.js";
 import logo from "./icons8-team-7LNatQYMzm4-unsplash.jpg";
-import Dropdown from "react-dropdown";
-import "react-dropdown/style.css";
+// import Dropdown from "react-dropdown";
+// import "react-dropdown/style.css";
 
 const QuantitySelector = ({ quantity, decrease, increase }) => {
 	return (

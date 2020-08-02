@@ -11,7 +11,7 @@ import { ALLOWED_ORIGINS, DEV_PORT } from "./config";
 import "./utils/db";
 
 // Initialize connection to Square with API token
-import './square';
+import "./square";
 
 const app = express().use(
     cors({

@@ -1,4 +1,3 @@
-import { CreatePaymentITC, PaymentTC } from "../models";
 import {
     PaymentsApi,
     CreatePaymentRequest,
@@ -7,6 +6,7 @@ import {
 import { GraphQLString, GraphQLNonNull } from "graphql";
 import { v4 as uuid } from "uuid";
 import { ApolloError } from "apollo-server-express";
+import { CreatePaymentITC, PaymentTC } from "../models";
 
 PaymentTC.addResolver({
     name: "createPayment",

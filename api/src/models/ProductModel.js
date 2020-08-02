@@ -73,7 +73,8 @@ const ItemModifierTC = sc
             },
             parentListId: {
                 type: GraphQLNonNull(GraphQLString),
-                description: "The ID of the modifier list containing this modifier in the data source. Up to the developer to verify correctness.",
+                description:
+                    "The ID of the modifier list containing this modifier in the data source. Up to the developer to verify correctness.",
             },
             price: {
                 type: GraphQLNonNull(MoneyTC.getType()),
@@ -99,11 +100,13 @@ const ItemModifierListTC = sc.createObjectTC({
         },
         selectionType: {
             type: () => SelectionTypeEnumTC,
-            description: "Can either be SINGLE or MULTIPLE; if SINGLE, only one modifier can be selected. If MULTIPLE, more than one can be selected.",
+            description:
+                "Can either be SINGLE or MULTIPLE; if SINGLE, only one modifier can be selected. If MULTIPLE, more than one can be selected.",
         },
         modifiers: {
             type: GraphQLList(ItemModifierTC.getType()),
-            description: "The modifiers that are included in this modifier list.",
+            description:
+                "The modifiers that are included in this modifier list.",
         },
     },
 });

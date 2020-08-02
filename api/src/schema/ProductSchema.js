@@ -1,7 +1,7 @@
-import { ItemTC } from "../models";
 import { BatchRetrieveCatalogObjectsRequest, CatalogApi } from "square-connect";
-import { DataSourceEnumTC } from "../models/CommonModels";
 import { ApolloError } from "apollo-server-express";
+import { ItemTC } from "../models";
+import { DataSourceEnumTC } from "../models/CommonModels";
 
 ItemTC.addResolver({
     name: "getItem",
@@ -12,7 +12,7 @@ ItemTC.addResolver({
     type: ItemTC,
     resolve: async ({ args }) => {
         // Extract data source to interact with as well as ID of product (as used inside data source)
-        let { dataSource, dataSourceId } = args;
+        const { dataSource, dataSourceId } = args;
 
         // Check for data source ID - if missing, transaction cannot be completed
         if (!dataSource || !dataSourceId) {
@@ -32,14 +32,19 @@ ItemTC.addResolver({
         const { object } = retrievalResponse;
 
         // Step 2: Process Square Item into Common Data Model
-        let { item_data } = object;
-        let { name: baseItemName, description: baseItemDescription, variations, modifier_list_info } = item_data;
+        const { item_data } = object;
+        const {
+            name: baseItemName,
+            description: baseItemDescription,
+            variations,
+            modifier_list_info,
+        } = item_data;
 
         // Parse variation data
-        let returnedVariants = [];
-        for (let variant of variations) {
-            let { item_variation_data } = variant;
-            let { item_id, name, price_money } = item_variation_data;
+        const returnedVariants = [];
+        for (const variant of variations) {
+            const { item_variation_data } = variant;
+            const { item_id, name, price_money } = item_variation_data;
             const ItemVariant = {
                 dataSourceId: item_id,
                 parentItemId: dataSourceId,
@@ -48,36 +53,38 @@ ItemTC.addResolver({
                     currency: price_money.currency,
                 },
                 // From interface
-                name: name,
-                dataSource: dataSource,
+                name,
+                dataSource,
                 merchant: "",
             };
             returnedVariants.push(ItemVariant);
         }
 
         // Get all modifier list IDs that correspond to this item
-        let modifier_list_ids = modifier_list_info.map(
+        const modifier_list_ids = modifier_list_info.map(
             (info) => info.modifier_list_id,
         );
         // Create request body for batch retrieval, using modifier list IDs
-        var modifierRequestBody = new BatchRetrieveCatalogObjectsRequest();
+        const modifierRequestBody = new BatchRetrieveCatalogObjectsRequest();
         modifierRequestBody.object_ids = modifier_list_ids;
 
         // Make request for modifier lists
-        let modifierListsData = await api.batchRetrieveCatalogObjects(modifierRequestBody);
-        let { objects: modifierObjects } = modifierListsData;
+        const modifierListsData = await api.batchRetrieveCatalogObjects(
+            modifierRequestBody,
+        );
+        const { objects: modifierObjects } = modifierListsData;
 
         // Parse modifier lists data
-        let returnedModifierLists = [];
-        for (let modifierList of modifierObjects) {
-            let { id: parentListId, modifier_list_data } = modifierList;
-            let { name, selection_type, modifiers } = modifier_list_data;
+        const returnedModifierLists = [];
+        for (const modifierList of modifierObjects) {
+            const { id: parentListId, modifier_list_data } = modifierList;
+            const { name, selection_type, modifiers } = modifier_list_data;
 
             // For each modifier in list, create ItemModifier
-            let returnedModifiers = [];
-            for (let modifier of modifiers) {
-                let { id, modifier_data } = modifier;
-                let { name, modifier_list_id } = modifier_data;
+            const returnedModifiers = [];
+            for (const modifier of modifiers) {
+                const { id, modifier_data } = modifier;
+                const { name, modifier_list_id } = modifier_data;
                 const ItemModifier = {
                     dataSourceId: id,
                     parentListId: modifier_list_id,
@@ -91,8 +98,8 @@ ItemTC.addResolver({
                             : "USD",
                     },
                     // For interface
-                    name: name,
-                    dataSource: dataSource,
+                    name,
+                    dataSource,
                     merchant: "",
                 };
                 returnedModifiers.push(ItemModifier);
@@ -101,7 +108,7 @@ ItemTC.addResolver({
             // Return modifier list in CMD (Common Data Model) format
             const ItemModifierList = {
                 dataSourceId: parentListId,
-                name: name,
+                name,
                 selectionType: selection_type,
                 modifiers: returnedModifiers,
             };
@@ -110,11 +117,11 @@ ItemTC.addResolver({
 
         // Step 3: Return product in common data model format
         const Item = {
-            dataSourceId: dataSourceId,
+            dataSourceId,
             variants: returnedVariants,
             modifierLists: returnedModifierLists,
             // From interface
-            dataSource: dataSource,
+            dataSource,
             name: baseItemName,
             description: baseItemDescription,
             merchant: "",

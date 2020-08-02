@@ -5,8 +5,8 @@ import { ItemQueries } from "./ProductSchema";
 
 sc.Query.addFields({
     ...UserQueries,
-    ...ItemQueries
-})
+    ...ItemQueries,
+});
 
 sc.Mutation.addFields({
     ...PaymentMutations,

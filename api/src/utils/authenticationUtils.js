@@ -1,12 +1,10 @@
 // This will be created when the user logs in
 import axios from "axios";
 
+import jwt from "jsonwebtoken";
+import { Parser, processors } from "xml2js";
 import { SECRET, SERVICE_URL } from "../config";
 import { User } from "../models";
-
-import jwt from "jsonwebtoken";
-
-import { Parser, processors } from "xml2js";
 
 /**
  * Parser used for XML response by CAS

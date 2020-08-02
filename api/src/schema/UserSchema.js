@@ -1,5 +1,9 @@
-import { User, UserTC, OrderTC, VendorTC } from '../models';
-import { authenticateTicket, verifyToken, createToken } from '../utils/authenticationUtils';
+import { User, UserTC, OrderTC, VendorTC } from "../models";
+import {
+    authenticateTicket,
+    verifyToken,
+    createToken,
+} from "../utils/authenticationUtils";
 
 /**
  * Relations (necessary for any fields that link to other types in the schema)
@@ -41,32 +45,35 @@ UserTC.addResolver({
     type: UserTC,
     args: { ticket: "String!" },
     resolve: async ({ source, args, context, info }) => {
-        let authenticationResponse = await authenticateTicket(args.ticket);
+        const authenticationResponse = await authenticateTicket(args.ticket);
         if (authenticationResponse.success) {
             let user; // this will be used as the return object
 
             // Get the netid of the authenticated user
-            let { netid } = authenticationResponse;
+            const { netid } = authenticationResponse;
 
             // Check if user exists based on netid
-            let exists = await User.exists({ netid: netid });
+            const exists = await User.exists({ netid });
             if (!exists) {
                 // Create user
-                user = await User.create({ netid: netid });
+                user = await User.create({ netid });
             } else {
-                user = await User.findOne({ netid: netid });
+                user = await User.findOne({ netid });
             }
 
             // Get a new token for the user
-            let token = createToken(user);
+            const token = createToken(user);
 
             // Update the user's token and get their updated information
-            return await User.findByIdAndUpdate(user._id, { token: token }, { new: true });
-        } else {
-            console.log("Bad auth!");
-            throw Error("Bad authentication.");
+            return await User.findByIdAndUpdate(
+                user._id,
+                { token },
+                { new: true },
+            );
         }
-    }
+        console.log("Bad auth!");
+        throw Error("Bad authentication.");
+    },
 });
 
 UserTC.addResolver({
@@ -74,25 +81,24 @@ UserTC.addResolver({
     type: UserTC,
     args: { token: UserTC.getFieldTC("token") },
     resolve: async ({ source, args, context, info }) => {
-        let verificationResponse = await verifyToken(args.token);
+        const verificationResponse = await verifyToken(args.token);
         if (verificationResponse.success) {
-            let { id } = verificationResponse;
+            const { id } = verificationResponse;
             // Return logged in user's info
             return await User.findById(id);
-        } else {
-            console.log("Bad verify!");
-            throw Error("Bad Verification.");
         }
-    }
-})
+        console.log("Bad verify!");
+        throw Error("Bad Verification.");
+    },
+});
 
 // Using auth middleware for sensitive info: https://github.com/graphql-compose/graphql-compose-mongoose/issues/158
 const UserQueries = {
-    userOne: UserTC.getResolver('findOne', [authMiddleware]),
+    userOne: UserTC.getResolver("findOne", [authMiddleware]),
 };
 
 const UserMutations = {
-    userUpdateOne: UserTC.getResolver('updateOne', [authMiddleware]),
+    userUpdateOne: UserTC.getResolver("updateOne", [authMiddleware]),
 };
 
 async function authMiddleware(resolve, source, args, context, info) {
@@ -101,11 +107,16 @@ async function authMiddleware(resolve, source, args, context, info) {
         throw new Error("You need to be logged in.");
     }
 
-    // Pull out unique MongoDB User id (not the netid) from decoded JWT 
-    let { id } = context.decodedJWT;
+    // Pull out unique MongoDB User id (not the netid) from decoded JWT
+    const { id } = context.decodedJWT;
 
     // Allows a user to only access THEIR user object, while maintaining any other filters/args they might have requested
-    return resolve(source, {...args, filter: {...args.filter, _id: id } }, context, info);
+    return resolve(
+        source,
+        { ...args, filter: { ...args.filter, _id: id } },
+        context,
+        info,
+    );
 }
 
 export { UserQueries, UserMutations };

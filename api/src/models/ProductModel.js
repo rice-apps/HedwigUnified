@@ -34,6 +34,10 @@ const ProductInterfaceTC = sc.createInterfaceTC({
             description:
                 "Must be a merchant supported by Hedwig; check the list before using this field.",
         }, // TODO: Add merchant data type
+        image: {
+            type: GraphQLString,
+            description: "An image associated with a product, may or may not be present."
+        }
     },
 });
 

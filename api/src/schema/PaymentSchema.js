@@ -15,18 +15,22 @@ PaymentTC.addResolver({
     },
     type: PaymentTC,
     resolve: async ({ args }) => {
+        const {
+            record: { sourceId, subtotal, tip, orderId, customerId },
+        } = args;
+
         // TODO: Add shopify payment flow
         const api = new PaymentsApi();
         const paymentBody = new CreatePaymentRequest();
 
         const paymentResponse = await api.createPayment({
             ...paymentBody,
-            source_id: args.record.sourceId,
+            source_id: sourceId,
             idempotency_key: uuid(),
-            amount_money: args.record.subtotal,
-            tip_money: args.record.tip,
-            order_id: args.record.orderId,
-            customer_id: args.record.customerId,
+            amount_money: subtotal,
+            tip_money: tip,
+            order_id: orderId,
+            customer_id: customerId,
             autocomplete: false,
         });
 
@@ -70,16 +74,26 @@ PaymentTC.addResolver({
             );
         }
 
-        const { payment } = paymentResponse;
+        const {
+            payment: {
+                id,
+                order_id,
+                customer_id,
+                amount_money,
+                tip_money,
+                total_money,
+                status,
+            },
+        } = paymentResponse;
 
         return {
-            id: payment.id,
-            order: payment.order_id,
-            customer: payment.customer_id,
-            subtotal: payment.amount_money,
-            tip: payment.tip_money,
-            total: payment.total_money,
-            status: payment.status,
+            id: id,
+            order: order_id,
+            customer: customer_id,
+            subtotal: amount_money,
+            tip: tip_money,
+            total: total_money,
+            status: status,
         };
     },
 });

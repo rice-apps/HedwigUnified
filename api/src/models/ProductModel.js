@@ -129,6 +129,10 @@ const ItemTC = sc
                 type: GraphQLList(ItemModifierListTC.getType()),
                 description: "A list of modifier lists that apply to this item",
             },
+            category: {
+                type: GraphQLString,
+                description: "The category of this item as defined in the data source. May or may not be present."
+            }
         },
     })
     .addInterfaces([ProductInterfaceTC])

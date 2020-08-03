@@ -44,18 +44,18 @@ ItemTC.addResolver({
         // Parse variation data
         const returnedVariants = variations.map((variant) => {
             const {
-                item_variation_data: { item_id, name, price_money },
+                item_variation_data: { item_id: itemVariationId, name: itemVariationName, price_money },
             } = variant;
 
             return {
-                dataSourceId: item_id,
+                dataSourceId: itemVariationId,
                 parentItemId: dataSourceId,
                 price: {
                     amount: price_money.amount,
                     currency: price_money.currency,
                 },
                 // From interface
-                name,
+                name: itemVariationName,
                 dataSource,
                 merchant: "",
             };
@@ -79,7 +79,7 @@ ItemTC.addResolver({
         const returnedModifierLists = modifierObjects.map((modifierList) => {
             const {
                 id: parentListId,
-                modifier_list_data: { name, selection_type, modifiers },
+                modifier_list_data: { name: modifierListName, selection_type, modifiers },
             } = modifierList;
 
             const returnedModifiers = modifiers.map((modifier) => {
@@ -101,7 +101,7 @@ ItemTC.addResolver({
                         currency: price_money ? price_money.currency : "USD",
                     },
                     // For interface
-                    modifierName,
+                    name: modifierName,
                     dataSource,
                     merchant: "",
                 };
@@ -109,7 +109,7 @@ ItemTC.addResolver({
 
             return {
                 dataSourceId: parentListId,
-                name,
+                name: modifierListName,
                 selectionType: selection_type,
                 modifiers: returnedModifiers,
             };

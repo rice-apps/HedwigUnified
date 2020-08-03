@@ -32,7 +32,7 @@ const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 httpServer.listen({ port: DEV_PORT }, () => {
-    console.log("Server running.");
+    log.info("Server running.");
     log.info(
         `🚀 Server ready at http://localhost:${DEV_PORT}${server.graphqlPath}`,
     );

@@ -32,13 +32,14 @@ ItemTC.addResolver({
         const { object } = retrievalResponse;
 
         // Step 2: Process Square Item into Common Data Model
-        const { item_data } = object;
         const {
-            name: baseItemName,
-            description: baseItemDescription,
-            variations,
-            modifier_list_info,
-        } = item_data;
+            item_data: {
+                name: baseItemName,
+                description: baseItemDescription,
+                variations,
+                modifier_list_info,
+            },
+        } = object;
 
         // Parse variation data
         const returnedVariants = variations.map((variant) => {
@@ -84,7 +85,11 @@ ItemTC.addResolver({
             const returnedModifiers = modifiers.map((modifier) => {
                 const {
                     id,
-                    modifier_data: { name, modifier_list_id },
+                    modifier_data: {
+                        name: modifierName,
+                        modifier_list_id,
+                        price_money,
+                    },
                 } = modifier;
 
                 return {
@@ -92,15 +97,11 @@ ItemTC.addResolver({
                     parentListId: modifier_list_id,
                     // Some modifiers do not have an associated price
                     price: {
-                        amount: modifier_data.price_money
-                            ? modifier_data.price_money.amount
-                            : 0,
-                        currency: modifier_data.price_money
-                            ? modifier_data.price_money.currency
-                            : "USD",
+                        amount: price_money ? price_money.amount : 0,
+                        currency: price_money ? price_money.currency : "USD",
                     },
                     // For interface
-                    name,
+                    modifierName,
                     dataSource,
                     merchant: "",
                 };

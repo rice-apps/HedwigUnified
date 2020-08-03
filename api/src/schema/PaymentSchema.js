@@ -87,13 +87,13 @@ PaymentTC.addResolver({
         } = paymentResponse;
 
         return {
-            id: id,
+            id,
             order: order_id,
             customer: customer_id,
             subtotal: amount_money,
             tip: tip_money,
             total: total_money,
-            status: status,
+            status,
         };
     },
 });

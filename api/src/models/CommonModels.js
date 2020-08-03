@@ -1,10 +1,5 @@
 import { sc } from "graphql-compose";
-import {
-    GraphQLList,
-    GraphQLNonNull,
-    GraphQLString,
-    GraphQLInt,
-} from "graphql";
+import { GraphQLNonNull, GraphQLString, GraphQLInt } from "graphql";
 
 const DataSourceEnumTC = sc.createEnumTC({
     name: "DataSourceEnum",

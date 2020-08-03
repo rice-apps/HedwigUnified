@@ -42,8 +42,9 @@ ItemTC.addResolver({
 
         // Parse variation data
         const returnedVariants = variations.map((variant) => {
-            const { item_variation_data } = variant;
-            const { item_id, name, price_money } = item_variation_data;
+            const {
+                item_variation_data: { item_id, name, price_money },
+            } = variant;
 
             return {
                 dataSourceId: item_id,
@@ -75,12 +76,16 @@ ItemTC.addResolver({
 
         // Parse modifier lists data
         const returnedModifierLists = modifierObjects.map((modifierList) => {
-            const { id: parentListId, modifier_list_data } = modifierList;
-            const { name, selection_type, modifiers } = modifier_list_data;
+            const {
+                id: parentListId,
+                modifier_list_data: { name, selection_type, modifiers },
+            } = modifierList;
 
             const returnedModifiers = modifiers.map((modifier) => {
-                const { id, modifier_data } = modifier;
-                const { name, modifier_list_id } = modifier_data;
+                const {
+                    id,
+                    modifier_data: { name, modifier_list_id },
+                } = modifier;
 
                 return {
                     dataSourceId: id,

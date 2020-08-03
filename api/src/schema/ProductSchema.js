@@ -41,11 +41,11 @@ ItemTC.addResolver({
         } = item_data;
 
         // Parse variation data
-        const returnedVariants = [];
-        for (const variant of variations) {
+        const returnedVariants = variations.map((variant) => {
             const { item_variation_data } = variant;
             const { item_id, name, price_money } = item_variation_data;
-            const ItemVariant = {
+
+            return {
                 dataSourceId: item_id,
                 parentItemId: dataSourceId,
                 price: {
@@ -57,8 +57,7 @@ ItemTC.addResolver({
                 dataSource,
                 merchant: "",
             };
-            returnedVariants.push(ItemVariant);
-        }
+        });
 
         // Get all modifier list IDs that correspond to this item
         const modifier_list_ids = modifier_list_info.map(
@@ -75,17 +74,15 @@ ItemTC.addResolver({
         const { objects: modifierObjects } = modifierListsData;
 
         // Parse modifier lists data
-        const returnedModifierLists = [];
-        for (const modifierList of modifierObjects) {
+        const returnedModifierLists = modifierObjects.map((modifierList) => {
             const { id: parentListId, modifier_list_data } = modifierList;
             const { name, selection_type, modifiers } = modifier_list_data;
 
-            // For each modifier in list, create ItemModifier
-            const returnedModifiers = [];
-            for (const modifier of modifiers) {
+            const returnedModifiers = modifiers.map((modifier) => {
                 const { id, modifier_data } = modifier;
                 const { name, modifier_list_id } = modifier_data;
-                const ItemModifier = {
+
+                return {
                     dataSourceId: id,
                     parentListId: modifier_list_id,
                     // Some modifiers do not have an associated price
@@ -102,21 +99,18 @@ ItemTC.addResolver({
                     dataSource,
                     merchant: "",
                 };
-                returnedModifiers.push(ItemModifier);
-            }
+            });
 
-            // Return modifier list in CMD (Common Data Model) format
-            const ItemModifierList = {
+            return {
                 dataSourceId: parentListId,
                 name,
                 selectionType: selection_type,
                 modifiers: returnedModifiers,
             };
-            returnedModifierLists.push(ItemModifierList);
-        }
+        });
 
         // Step 3: Return product in common data model format
-        const Item = {
+        return {
             dataSourceId,
             variants: returnedVariants,
             modifierLists: returnedModifierLists,
@@ -126,8 +120,6 @@ ItemTC.addResolver({
             description: baseItemDescription,
             merchant: "",
         };
-
-        return Item;
     },
 });
 

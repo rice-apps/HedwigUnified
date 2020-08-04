@@ -9,7 +9,7 @@ import "../../fonts/style.css";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDoorOpen, faDoorClosed, faUser, faShoppingCart, faReceipt } from '@fortawesome/free-solid-svg-icons';
-import {PickupDropdown} from "../../../components/PickupDropdown"
+import { PickupDropdown } from "../../../components/PickupDropdown"
 
 
 const GET_VENDORS_QUERY = gql`
@@ -138,10 +138,8 @@ const VendorList = ({ classes }) => {
 
     return (
         <div className="vendorPage">
-            <div className="pickup">
-                Pickup Time:
-                <PickupDropdown options={["ASAP", "Schedule an order"]} selectedOption="ASAP" />
-                <FontAwesomeIcon icon={faUser} className="userIcon"></FontAwesomeIcon>
+            <div className="topBar">
+                <FontAwesomeIcon icon={faUser} className="userIcon" iconlarge></FontAwesomeIcon>
             </div>
             <div>
                 {vendors.map((vendor) => {

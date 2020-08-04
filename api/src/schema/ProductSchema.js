@@ -2,22 +2,18 @@ import { BatchRetrieveCatalogObjectsRequest, CatalogApi } from "square-connect";
 import { ApolloError } from "apollo-server-express";
 import { ItemTC } from "../models";
 import { DataSourceEnumTC } from "../models/CommonModels";
+import { GraphQLNonNull } from "graphql";
 
 ItemTC.addResolver({
     name: "getItem",
     args: {
-        dataSource: DataSourceEnumTC.getType(),
-        dataSourceId: ItemTC.getFieldTC("dataSourceId"),
+        dataSource: GraphQLNonNull(DataSourceEnumTC.getType()),
+        dataSourceId: GraphQLNonNull(ItemTC.getFieldTC("dataSourceId").getType()),
     },
     type: ItemTC,
     resolve: async ({ args }) => {
         // Extract data source to interact with as well as ID of product (as used inside data source)
         const { dataSource, dataSourceId } = args;
-
-        // Check for data source ID - if missing, transaction cannot be completed
-        if (!dataSource || !dataSourceId) {
-            return new ApolloError("Data Source and Data Source ID required.");
-        }
 
         // Step 1: Make request to Square to fetch this item ID
         const api = new CatalogApi();

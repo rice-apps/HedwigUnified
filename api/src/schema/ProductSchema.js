@@ -148,9 +148,7 @@ ItemTC.addResolver({
             };
         });
     },
-});
-
-ItemTC.addResolver({
+}).addResolver({
     name: "getItem",
     args: {
         dataSource: GraphQLNonNull(DataSourceEnumTC.getType()),

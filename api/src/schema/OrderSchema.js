@@ -56,7 +56,7 @@ OrderTC.addResolver({
                 total_discount_money,
                 total_money,
                 state,
-                fulfillments: [first, ...rest],
+                fulfillments: [first],
             },
         } = orderResponse;
 

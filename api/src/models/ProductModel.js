@@ -1,5 +1,5 @@
 import { sc } from "graphql-compose";
-import { GraphQLList, GraphQLNonNull, GraphQLString } from "graphql";
+import { GraphQLNonNull, GraphQLString } from "graphql";
 
 import { DataSourceEnumTC, MoneyTC } from "./CommonModels";
 

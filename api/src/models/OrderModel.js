@@ -1,17 +1,24 @@
 import { sc } from "graphql-compose";
-import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLList } from "graphql";
+import {
+    GraphQLNonNull,
+    GraphQLString,
+    GraphQLInt,
+    GraphQLList,
+    GraphQLScalarType,
+} from "graphql";
 
 import { MoneyTC } from "./CommonModels";
 
 const LineItemTC = sc.createObjectTC({
     name: "LineItem",
-    description: "Common data model representation of line items, useful when placing an Order.",
+    description:
+        "Common data model representation of line items, useful when placing an Order.",
     fields: {
         quantity: GraphQLNonNull(GraphQLInt),
         itemVariationId: GraphQLNonNull(GraphQLString),
         itemModifiersId: GraphQLList(GraphQLString),
-    }
-})
+    },
+});
 
 const OrderTC = sc.createObjectTC({
     name: "Order",
@@ -23,7 +30,9 @@ const OrderTC = sc.createObjectTC({
         items: GraphQLNonNull(LineItemTC.getType()), // TODO: create new subtype for variants, modifiers, and items
         totalTax: GraphQLNonNull(MoneyTC.getType()),
         totalDiscount: GraphQLNonNull(MoneyTC.getType()),
-        status: GraphQLNonNull(GraphQLString), // TODO: add custom Enum for the state
+        total: GraphQLNonNull(MoneyTC.getType()),
+        orderStatus: GraphQLNonNull(GraphQLString), // TODO: add custom Enum for the state
+        fulfillmentStatus: GraphQLNonNull(GraphQLString), // TODO: add custom Enum for this too.
     },
 });
 
@@ -31,9 +40,10 @@ const CreateOrderInputTC = sc.createInputTC({
     name: "CreateOrderInput",
     description: "Input type for creating orders",
     fields: {
+        idempotencyKey: GraphQLNonNull(GraphQLString),
         lineItems: GraphQLList(LineItemTC.getType()),
-        fulfillments: GraphQLList,
-    }
-})
+        recipient: GraphQLNonNull(GraphQLString), // TODO: create User type to put here.
+    },
+});
 
-export { OrderTC };
+export { OrderTC, CreateOrderInputTC };

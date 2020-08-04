@@ -34,6 +34,11 @@ const ProductInterfaceTC = sc.createInterfaceTC({
             description:
                 "Must be a merchant supported by Hedwig; check the list before using this field.",
         }, // TODO: Add merchant data type
+        image: {
+            type: GraphQLString,
+            description:
+                "An image associated with a product, may or may not be present.",
+        },
     },
 });
 
@@ -128,6 +133,11 @@ const ItemTC = sc
             modifierLists: {
                 type: GraphQLList(ItemModifierListTC.getType()),
                 description: "A list of modifier lists that apply to this item",
+            },
+            category: {
+                type: GraphQLString,
+                description:
+                    "The category of this item as defined in the data source. May or may not be present.",
             },
         },
     })

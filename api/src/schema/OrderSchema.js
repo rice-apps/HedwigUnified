@@ -8,7 +8,7 @@ OrderTC.addResolver({
     type: OrderTC,
     args: {
         locationId: GraphQLNonNull(GraphQLString),
-        record: GraphQLNonNull(CreateOrderInputTC.getType()),
+        record: () => GraphQLNonNull(CreateOrderInputTC.getType()),
     },
     resolve: async ({ args }) => {
         const {
@@ -73,3 +73,9 @@ OrderTC.addResolver({
         };
     },
 });
+
+const OrderMutations = {
+    createOrder: OrderTC.getResolver("createOrder"),
+};
+
+export { OrderMutations };

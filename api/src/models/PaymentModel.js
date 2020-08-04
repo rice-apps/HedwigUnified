@@ -9,9 +9,9 @@ const PaymentTC = sc.createObjectTC({
         id: GraphQLNonNull(GraphQLString),
         order: GraphQLNonNull(GraphQLString),
         customer: GraphQLNonNull(GraphQLString),
-        subtotal: GraphQLNonNull(MoneyTC.getType()),
-        tip: GraphQLNonNull(MoneyTC.getType()),
-        total: GraphQLNonNull(MoneyTC.getType()),
+        subtotal: MoneyTC.getTypeNonNull(),
+        tip: MoneyTC.getTypeNonNull(),
+        total: MoneyTC.getTypeNonNull(),
         status: GraphQLNonNull(GraphQLString),
     },
 });
@@ -23,7 +23,7 @@ const CreatePaymentITC = sc.createInputTC({
         sourceId: GraphQLNonNull(GraphQLString),
         orderId: GraphQLNonNull(GraphQLString),
         customerId: GraphQLNonNull(GraphQLString),
-        subtotal: GraphQLNonNull(MoneyTC.getITC().getType()),
+        subtotal: MoneyTC.getITC().getTypeNonNull().getType(),
         tip: MoneyTC.getITC().getType(),
     },
 });

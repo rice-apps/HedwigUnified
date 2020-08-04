@@ -25,7 +25,7 @@ const ProductInterfaceTC = sc.createInterfaceTC({
             description: "The vendor's description of the product",
         },
         dataSource: {
-            type: () => DataSourceEnumTC,
+            type: DataSourceEnumTC.getTypeNonNull().getType(),
             description:
                 "The data source for this product. Must be one of SQUARE, SHOPIFY, or EXCEL",
         },
@@ -58,7 +58,7 @@ const ItemVariantTC = sc
                     "The ID of the item of which this is a variant. May not be applicable for all data sources.",
             },
             price: {
-                type: GraphQLNonNull(MoneyTC.getType()),
+                type: MoneyTC.getTypeNonNull().getType(),
                 description: "The base price of this variant.",
             },
         },
@@ -82,7 +82,7 @@ const ItemModifierTC = sc
                     "The ID of the modifier list containing this modifier in the data source. Up to the developer to verify correctness.",
             },
             price: {
-                type: GraphQLNonNull(MoneyTC.getType()),
+                type: MoneyTC.getTypeNonNull().getType(),
                 description: "The base price of this variant.",
             },
         },
@@ -104,12 +104,12 @@ const ItemModifierListTC = sc.createObjectTC({
             description: "The name of the modifier list in the data source.",
         },
         selectionType: {
-            type: () => SelectionTypeEnumTC,
+            type: SelectionTypeEnumTC.getType(),
             description:
                 "Can either be SINGLE or MULTIPLE; if SINGLE, only one modifier can be selected. If MULTIPLE, more than one can be selected.",
         },
         modifiers: {
-            type: GraphQLList(ItemModifierTC.getType()),
+            type: ItemModifierTC.getTypePlural().getType(),
             description:
                 "The modifiers that are included in this modifier list.",
         },
@@ -127,11 +127,11 @@ const ItemTC = sc
                     "The ID of the item in the data source. Up to developer to verify correctness.",
             },
             variants: {
-                type: GraphQLList(ItemVariantTC.getType()),
+                type: ItemVariantTC.getTypePlural().getType(),
                 description: "A list of variants of this item",
             },
             modifierLists: {
-                type: GraphQLList(ItemModifierListTC.getType()),
+                type: ItemModifierListTC.getTypePlural().getType(),
                 description: "A list of modifier lists that apply to this item",
             },
             category: {

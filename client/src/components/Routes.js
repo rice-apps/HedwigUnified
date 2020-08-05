@@ -11,7 +11,7 @@ import Profile from "../Pages/User/Profile";
 // Vendor imports
 import Orders from '../Pages/Vendor/Orders';
 // import VendorSettings from '../Pages/Vendor/Settings';
-// import VendorList from "../Pages/User/Vendors/VendorList";
+import VendorList from "../Pages/User/Vendors/VendorList";
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from "../Pages/User/Cart";
@@ -102,23 +102,24 @@ const newRoutesArray = [
         element: <Login/>
     },
     {
-        path: "/signup",
-        element: <PrivateRoute element={<SignUp/>}/>
-    },
-    {
         path: "/auth",
         element: <Auth/>
     },
     {
+        path: "/signup",
+        element: <PrivateRoute element={<SignUp/>}/>
+    },
+    {
         path: "/eat/*",
         children: [
-            { path: "/profile", element: <PrivateRoute element={<Profile/>}/>},
-            { path: "/orders", element: <Orders/>},
+            { path: "/", element: <PrivateRoute element={ <VendorList/>}/>},
+            { path: "/profile", element: <PrivateRoute element={ <Profile/> }/>},
+            { path: "/orders", element: <PrivateRoute element={ <OrderList/>}/>},
             { path: "/:vendor/*", 
                 children: [
-                    { path: '/', exact: true, element: <Menu /> },
-                    { path: '/:product', element: <Product /> },
-                    { path: "/cart", element: <CartDetail/>}
+                    { path: '/', element: <PrivateRoute element={ <Menu />}/> },
+                    { path: '/:product', element: <PrivateRoute element={ <Product />}/> },
+                    { path: "/cart", element: <PrivateRoute element={ <CartDetail/> }/>}
                 ]}
         ],
     },

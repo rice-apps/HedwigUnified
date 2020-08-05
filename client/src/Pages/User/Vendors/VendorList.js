@@ -3,6 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 
 import "./vendor.css";
+import { useNavigate } from 'react-router-dom';
 
 const GET_VENDORS_QUERY = gql`
     query VendorList {
@@ -26,11 +27,12 @@ const GET_VENDORS_QUERY = gql`
 `
 
 const VendorCard = ({ vendor }) => {
-    const history = useHistory();
+    // const history = useHistory();
+    const navigate = useNavigate();
 
     const handleClick = () => {
         // Go to this particular vendor's detail page
-        return history.push(`/user/vendors/${vendor.slug}`);
+        return navigate(`/eat/${vendor.slug}`);
     }
 
     return (

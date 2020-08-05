@@ -8,7 +8,7 @@ OrderTC.addResolver({
     type: OrderTC,
     args: {
         locationId: GraphQLNonNull(GraphQLString),
-        record: () => GraphQLNonNull(CreateOrderInputTC.getType()),
+        record: CreateOrderInputTC.getTypeNonNull().getType(),
     },
     resolve: async ({ args }) => {
         const {

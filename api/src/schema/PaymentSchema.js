@@ -11,7 +11,7 @@ import { CreatePaymentITC, PaymentTC } from "../models";
 PaymentTC.addResolver({
     name: "createPayment",
     args: {
-        record: GraphQLNonNull(CreatePaymentITC.getType()),
+        record: CreatePaymentITC.getTypeNonNull().getType(),
     },
     type: PaymentTC,
     resolve: async ({ args }) => {

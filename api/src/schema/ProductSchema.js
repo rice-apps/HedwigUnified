@@ -12,7 +12,7 @@ ItemTC.addResolver({
     name: "getCatalog",
     args: {
         vendor: GraphQLNonNull(GraphQLString),
-        dataSource: GraphQLNonNull(DataSourceEnumTC.getType()),
+        dataSource: DataSourceEnumTC.getTypeNonNull().getType(),
     },
     type: [ItemTC],
     resolve: async ({ args }) => {
@@ -151,10 +151,10 @@ ItemTC.addResolver({
 }).addResolver({
     name: "getItem",
     args: {
-        dataSource: GraphQLNonNull(DataSourceEnumTC.getType()),
-        dataSourceId: GraphQLNonNull(
-            ItemTC.getFieldTC("dataSourceId").getType(),
-        ),
+        dataSource: DataSourceEnumTC.getTypeNonNull().getType(),
+        dataSourceId: ItemTC.getFieldTC("dataSourceId")
+            .getTypeNonNull()
+            .getType(),
     },
     type: ItemTC,
     resolve: async ({ args }) => {

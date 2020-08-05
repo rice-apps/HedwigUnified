@@ -1,6 +1,7 @@
 import React, { Component, useEffect } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { Redirect } from "react-router";
+import { Navigate } from 'react-router-dom';
 
 const AUTHENTICATE_USER = gql`
   mutation AuthenticateMutation($ticket: String!) {
@@ -41,10 +42,10 @@ const Auth = ({}) => {
 
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
-    authenticateUser().catch((err) => <Redirect path={"/login"} />);
+    authenticateUser().catch((err) => <Navigate to="/login" />);
   }, [authenticateUser]);
 
-  if (error) return <Redirect path={"/login"} />;
+  if (error) return <Navigate to="/login" />;
   if (loading) return <p>Bad.</p>;
   if (!authenticationData) return <p>Bad.</p>;
 
@@ -55,9 +56,9 @@ const Auth = ({}) => {
 
   // Set recent update in client state
   if (!employer || employer === 0) {
-    return <Redirect path={"/vendor"} />;
+    return <Navigate to="/vendor" />;
   }
-  return <Redirect path={"/home"} />;
+  return <Navigate to="/home" />;
 };
 
 export default Auth;

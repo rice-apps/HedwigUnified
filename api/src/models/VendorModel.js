@@ -9,7 +9,7 @@ const { Schema } = mongoose;
 const SquareInfo = new Schema({
     merchantId: { type: String, required: true, unique: true },
     locationId: { type: String, required: true },
-    loyaltyId: { type: String, unique: true }
+    loyaltyId: { type: String, unique: true },
 });
 
 const VendorSchema = new Schema({

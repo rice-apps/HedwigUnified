@@ -8,13 +8,13 @@ import { VendorQueries, VendorMutations } from "./VendorSchema";
 sc.Query.addFields({
     ...UserQueries,
     ...ItemQueries,
-    ...VendorQueries
+    ...VendorQueries,
 });
 
 sc.Mutation.addFields({
     ...PaymentMutations,
     ...OrderMutations,
-    ...VendorMutations
+    ...VendorMutations,
 });
 
 const Schema = sc.buildSchema();

@@ -101,6 +101,11 @@ const Menu = () => {
   });
 
   useEffect(() => {
+    const parsedCategories = (catalog) => {
+    let newCategories = catalog.map((item) => item.category);
+    setCategories(new Set(newCategories));
+  };
+
     if (getCatalogResponse) {
       const { getCatalog: menu } = getCatalogResponse;
       parsedCategories(menu);
@@ -113,11 +118,6 @@ const Menu = () => {
   if (!getCatalogResponse) return <p>No data...</p>;
 
   const { getCatalog: menu } = getCatalogResponse;
-
-  const parsedCategories = (catalog) => {
-    let newCategories = catalog.map((item) => item.category);
-    setCategories(new Set(newCategories));
-  };
 
 
   // use effect

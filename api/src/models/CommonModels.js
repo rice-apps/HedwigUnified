@@ -42,9 +42,35 @@ const FulfillmentStatusEnumTC = sc.createEnumTC({
     },
 });
 
+const DayEnumTC = sc.createEnumTC({
+    name: "DayEnum",
+    description: "The possible states for a day",
+    values: {
+        MONDAY: { value: "M" },
+        TUESDAY: { value: "T" },
+        WEDNESDAY: { value: "W" },
+        THURSDAY: { value: "R" },
+        FRIDAY: { value: "F" },
+        SATURDAY: { value: "S" },
+        SUNDAY: { value: "U" },
+    },
+});
+
+const PeriodTC = sc.createObjectTC({
+    name: "Period",
+    description:
+        "Common data model representing a period which the business is operating during.",
+    fields: {
+        start: GraphQLInt,
+        end: GraphQLInt,
+        day: DayEnumTC.getType(),
+    },
+});
+
 export {
     DataSourceEnumTC,
     MoneyTC,
     OrderStatusEnumTC,
     FulfillmentStatusEnumTC,
+    PeriodTC,
 };

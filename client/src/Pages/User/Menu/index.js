@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import hero from "./hero.jpg";
 import boba from "./boba.jpg";
 import './index.css'
 import { Link, animateScroll as scroll } from "react-scroll";
+import { gql, useQuery } from "@apollo/client";
+
+
 
 const vendor = {
     name:"East West Tea",
@@ -33,6 +36,55 @@ const vendor = {
     }    
 
 const Menu = () => {
+const [categories, setCategories] = useState(new Set([]))
+    const GET_CATALOG = gql`
+    query GET_CATALOG($item: String!){
+  getCatalog(dataSource:SQUARE, vendor: $item){
+    name
+    category
+    image
+    variants {
+      name
+      description
+      price{
+        amount
+      }
+    }
+  }
+}
+`
+
+    const { data: getCatalogResponse, loading, error } = useQuery(GET_CATALOG, {
+    variables: {
+        item:  "xoop"
+    }
+  })
+
+    const parsedCategories = (catalog) => {
+        for (item = 0; item<catalog.length(); item++) {
+            categories.append(catalog[item].category)
+        }
+        return categories
+    }
+
+    useEffect(() => {
+            const { getCatalog: menu } = getCatalogResponse;
+            setCategories(parsedCategories(menu))
+        return () => {
+            
+        }
+    }, [getCatalogResponse])
+// use effect 
+// use effect depend on getCatalogResponse changing
+
+    if (error) return <p>Error...</p>;
+    if (loading) return <p>Loading...</p>;
+    if (!getCatalogResponse) return <p>No data...</p>;
+
+    const { getCatalog: menu } = getCatalogResponse;
+    let item = 0
+    
+    console.log(categories)
     return(
         <div>
             {/* Hero Image */}
@@ -51,7 +103,7 @@ const Menu = () => {
 
             {/* Category Select Bar */}
             <div class = "categoryselect">
-                {vendor.categories.map(category => (
+                {categories.map(category => (
                     // smooth scrolling feature
                     <h1 class="categoryname">
                         <Link
@@ -72,12 +124,12 @@ const Menu = () => {
             <div class = "itemlist">
                 
                 {/* Appending each category to the list */}
-                {vendor.categories.map(category =>
+                {categories.map(category =>
                     <div id={category}> 
                         {/* Giving each category a header */}
                         <h3 class="categoryheader">{category}</h3>
                         {/*  Filtering out all items that fall under the category */}
-                        {vendor.products.filter(item => item.category === category).map(product => (
+                        {menu.filter(item => item.category === category).map(product => (
                             <div class="itemgrid">
                                 {/* Displaying the item: image, name, and price */}
                                 <img src={product.image} class="itemimage" alt="boba"/>

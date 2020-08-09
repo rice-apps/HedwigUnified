@@ -1,4 +1,4 @@
-import { sc } from "graphql-compose";
+import { sc, toInputObjectType, InputTypeComposer } from "graphql-compose";
 import {
     GraphQLNonNull,
     GraphQLString,
@@ -6,6 +6,7 @@ import {
     GraphQLList,
 } from "graphql";
 
+import { Order } from "square-connect";
 import {
     MoneyTC,
     OrderStatusEnumTC,
@@ -52,4 +53,37 @@ const CreateOrderInputTC = sc.createInputTC({
     },
 });
 
-export { OrderTC, CreateOrderInputTC };
+const FilterOrderInputTC = sc
+    .createInputTC({
+        name: "FilterOrderInput",
+        description: "Input type for filter orders",
+        fields: {
+            ids: GraphQLList(GraphQLNonNull(GraphQLString)),
+        },
+    })
+    .merge(toInputObjectType(OrderTC).removeField("id"));
+
+const SortOrderEnumTC = sc.createEnumTC({
+    name: "SortOrderInput",
+    description: "Input type for sort orders",
+    values: {
+        PICKUP_TIME: { value: "PICKUP_TIME" },
+    },
+});
+
+const FindManyOrderPayloadTC = sc.createObjectTC({
+    name: "FindManyOrderPayload",
+    description: "Payload for findMany resolver",
+    fields: {
+        cursor: "String",
+        orders: OrderTC.getTypePlural().getType(),
+    },
+});
+
+export {
+    OrderTC,
+    CreateOrderInputTC,
+    FilterOrderInputTC,
+    SortOrderEnumTC,
+    FindManyOrderPayloadTC,
+};

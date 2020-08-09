@@ -44,6 +44,7 @@ OrderTC.addResolver({
                 filter,
                 sort,
             },
+            return_entries: false,
         });
 
         if (searchOrderResponse.errors) {

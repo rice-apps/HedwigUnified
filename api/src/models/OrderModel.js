@@ -60,8 +60,7 @@ const FilterOrderInputTC = sc
         fields: {
             ids: GraphQLList(GraphQLNonNull(GraphQLString)),
         },
-    })
-    .merge(toInputObjectType(OrderTC).removeField("id"));
+    });
 
 const SortOrderEnumTC = sc.createEnumTC({
     name: "SortOrderInput",

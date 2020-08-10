@@ -47,7 +47,7 @@ const VendorCard = ({ vendor }) => {
 
     return (
         <Fragment>
-        <div className="vendorContainer">
+        <div className="vendorContainer" onClick={() => handleClick()}>
             <div className="vendorHeading">
             <div className="vendorHeadingText">
                 <h3 class="vendorName">{name}</h3>

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import currency from "currency.js";
 import "./product.css";
+import { useNavigate } from 'react-router-dom'; 
 
 const VariantSelection = ({ variant }) => {
 	let { question, description, options } = variant;
@@ -63,7 +64,9 @@ const ModifierSelection = ({ modifier }) => {
 										format: "USD",
 									})}
 								</p>
-							) : <p></p>}
+							) : (
+								<p></p>
+							)}
 						</label>
 					</div>
 				))}
@@ -73,6 +76,19 @@ const ModifierSelection = ({ modifier }) => {
 };
 
 const Product = ({}) => {
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, []);
+
+	let vendor = {
+		slug: "EWT"
+	}
+	const navigate = useNavigate();
+
+	const handleClick = () => {
+		return navigate(`/eat/${vendor.slug}/cart`);
+	}
+
 	const product = {
 		name: "Oreo Milk Tea",
 		description:
@@ -150,7 +166,7 @@ const Product = ({}) => {
 				<button>+</button>
 			</div>
 			<div className="submitContainer">
-				<button className="submitButton">Add</button>
+				<button className="submitButton" onClick={() => handleClick()}>Add</button>
 			</div>
 		</div>
 	);

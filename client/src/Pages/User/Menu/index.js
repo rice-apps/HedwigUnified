@@ -3,6 +3,7 @@ import hero from "./hero.jpg";
 import boba from "./boba.jpg";
 import './index.css'
 import { Link, animateScroll as scroll } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 
 const vendor = {
     name:"East West Tea",
@@ -33,6 +34,27 @@ const vendor = {
     }    
 
 const Menu = () => {
+
+    const navigate = useNavigate();
+
+    // Later in the code, we call sampleFunction(product.number)
+
+    // sampleFunction
+    // input: a number
+    // output: number * 3
+    const sampleFunction = (price) => {
+        return price * 3;
+    }
+
+    /**
+     * Input: a product id
+     * Output: Navigates to page with that product
+     */
+    const handleClick = (productID) => {
+        // Go to this particular vendor's detail page
+        return navigate(`${productID}`);
+    }
+
     return(
         <div>
             {/* Hero Image */}
@@ -78,7 +100,7 @@ const Menu = () => {
                         <h3 class="categoryheader">{category}</h3>
                         {/*  Filtering out all items that fall under the category */}
                         {vendor.products.filter(item => item.category === category).map(product => (
-                            <div class="itemgrid">
+                            <div class="itemgrid" onClick={() => handleClick(product.name)}>
                                 {/* Displaying the item: image, name, and price */}
                                 <img src={product.image} class="itemimage" alt="boba"/>
                                 <h1 class="itemname">{product.name}</h1>

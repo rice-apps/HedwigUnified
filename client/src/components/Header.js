@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { useHistory } from "react-router";
+import { useNavigate } from 'react-router-dom';
 
 const Primary = css`
     @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -68,16 +69,16 @@ const SettingsLink = styled.a`
 `
 
 const Header = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
         <HeaderDiv>
-            <Logo onClick={() => history.push("/home")}>Hedwig</Logo>
+            <Logo onClick={() => navigate("/home")}>Hedwig</Logo>
             <LinksDiv>
-                <CartLink onClick={() => history.push("/user/vendors/ewtea/cart")}>Cart</CartLink>
-                <OrdersLink onClick={() => history.push("/user/orders")}>Orders</OrdersLink>
-                <VendorsLink onClick={() => history.push("/user/vendors")}>Vendors</VendorsLink>
-                <SettingsLink onClick={() => history.push("/user/settings")}>Settings</SettingsLink>
+                <CartLink onClick={() => navigate("/eat/ewtea/cart")}>Cart</CartLink>
+                <OrdersLink onClick={() => navigate("/eat/orders")}>Orders</OrdersLink>
+                <VendorsLink onClick={() => navigate("/eat")}>Vendors</VendorsLink>
+                <SettingsLink onClick={() => navigate("/user/settings")}>Settings</SettingsLink>
             </LinksDiv>
         </HeaderDiv>
     )

@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDoorOpen, faDoorClosed, faUser, faShoppingCart, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { PickupDropdown } from "../../../components/PickupDropdown"
 
+import { useNavigate } from 'react-router-dom';
 
 const GET_VENDORS_QUERY = gql`
     query VendorList {
@@ -35,6 +36,15 @@ const GET_VENDORS_QUERY = gql`
 
 const VendorCard = ({ vendor }) => {
     const { name, hours, keywords, image, closed } = vendor;
+
+    
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        // Go to this particular vendor's detail page
+        return navigate(`/eat/${vendor.slug}`);
+    }
+
     return (
         <Fragment>
         <div className="vendorContainer">
@@ -77,6 +87,7 @@ const VendorCard = ({ vendor }) => {
 class HeaderExclusion extends React.Component {
     screenOptions = {
         headerShown: false
+    // const history = useHistory();
     }
 }
 

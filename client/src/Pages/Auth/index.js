@@ -46,7 +46,7 @@ const Auth = ({}) => {
   }, [authenticateUser]);
 
   if (error) return <Navigate to="/login" />;
-  if (loading) return <p>Bad.</p>;
+  if (loading) return <p>Loading...</p>;
   if (!authenticationData) return <p>Bad.</p>;
 
   let {token, employer} = authenticationData.authenticateUser;
@@ -58,7 +58,7 @@ const Auth = ({}) => {
   if (!employer || employer === 0) {
     return <Navigate to="/vendor" />;
   }
-  return <Navigate to="/home" />;
+  return <Navigate to="/eat" />;
 };
 
 export default Auth;

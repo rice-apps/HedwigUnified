@@ -10,8 +10,7 @@ import CartProduct from "./CartProducts";
 import currency from "currency.js";
 
 const cart_menu = [
-    { title: "Thai Tea", varients: "Medium, Orea, Boba", price: 3.5 },
-    { title: "Jasmine Tea", varients: "Large, Orea, Boba", price: 4.5 },
+    { title: "Milk Tea", varients: "Medium, Boba", price: 3.5 },
 ];
 
 const defaultTotals = {

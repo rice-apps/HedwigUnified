@@ -18,7 +18,7 @@ const QuantitySelector = ({ quantity, decrease, increase }) => {
 
 const CartProduct = ({ product }) => {
 	const [isMouseOver, setIsMouseOver] = useState(false);
-	const [quantity, setQuantity] = useState(2);
+	const [quantity, setQuantity] = useState(1);
 	const handleMouseOver = () => {
 		setIsMouseOver(true);
 	};

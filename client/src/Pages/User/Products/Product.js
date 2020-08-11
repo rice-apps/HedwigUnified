@@ -90,9 +90,9 @@ const Product = ({}) => {
 	}
 
 	const product = {
-		name: "Oreo Milk Tea",
+		name: "Milk Tea",
 		description:
-			"Super sweet tea with the small chunks of oreos. You can choose to added fresh and chewy bobas for an adventurous taste.",
+			"A refreshing blend of tea and milk. You can choose to added fresh and chewy bobas for an adventurous taste.",
 		variants: [
 			{
 				question: "Select your size",

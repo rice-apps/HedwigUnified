@@ -1,16 +1,10 @@
-import { sc, toInputObjectType, InputTypeComposer } from "graphql-compose";
-import {
-    GraphQLNonNull,
-    GraphQLString,
-    GraphQLInt,
-    GraphQLList,
-} from "graphql";
+import { sc } from "graphql-compose";
 
-import { Order } from "square-connect";
 import {
     MoneyTC,
     OrderStatusEnumTC,
     FulfillmentStatusEnumTC,
+    FindOrdersDateTimeFilterTC,
 } from "./CommonModels";
 
 const LineItemTC = sc.createObjectTC({
@@ -18,9 +12,9 @@ const LineItemTC = sc.createObjectTC({
     description:
         "Common data model representation of line items, useful when placing an Order.",
     fields: {
-        quantity: GraphQLNonNull(GraphQLInt),
-        itemVariationId: GraphQLNonNull(GraphQLString),
-        itemModifiersId: GraphQLList(GraphQLString),
+        quantity: "Int!",
+        itemVariationId: "String!",
+        itemModifiersId: "[String]",
     },
 });
 
@@ -28,9 +22,9 @@ const OrderTC = sc.createObjectTC({
     name: "Order",
     description: "The common data model representation of orders",
     fields: {
-        id: GraphQLNonNull(GraphQLString),
-        merchant: GraphQLNonNull(GraphQLString),
-        customer: GraphQLNonNull(GraphQLString),
+        id: "String!",
+        merchant: "String!",
+        customer: "String!",
         items: LineItemTC.getTypeNonNull().getType(),
         totalTax: MoneyTC.getTypeNonNull().getType(),
         totalDiscount: MoneyTC.getTypeNonNull().getType(),
@@ -44,29 +38,60 @@ const CreateOrderInputTC = sc.createInputTC({
     name: "CreateOrderInput",
     description: "Input type for creating orders",
     fields: {
-        idempotencyKey: GraphQLNonNull(GraphQLString),
+        idempotencyKey: "String!",
         lineItems: LineItemTC.getITC()
             .getTypePlural()
             .getTypeNonNull()
             .getType(),
-        recipient: GraphQLNonNull(GraphQLString),
+        recipient: "String!",
     },
 });
 
-const FilterOrderInputTC = sc
-    .createInputTC({
-        name: "FilterOrderInput",
-        description: "Input type for filter orders",
-        fields: {
-            ids: GraphQLList(GraphQLNonNull(GraphQLString)),
-        },
-    });
+const FindOrdersFulfillmentFilterTC = sc.createInputTC({
+    name: "FindOrderFulfillmentFilterInput",
+    description: "Input type for filtering by fulfillment",
+    fields: {
+        fulfillment_types: "[String]",
+        fulfillment_states: "[String]",
+    },
+});
+
+const FilterOrderInputTC = sc.createInputTC({
+    name: "FilterOrderInput",
+    description: "Input type for filter orders",
+    fields: {
+        state_filter: "[String]",
+        date_time_filter: FindOrdersDateTimeFilterTC,
+        fulfillment_filter: FindOrdersFulfillmentFilterTC,
+        customer_filter: "[String]",
+    },
+});
+
+const SortOrderTimeEnumTC = sc.createEnumTC({
+    name: "SortOrderTimeEnum",
+    description: "Enum type for sort orders",
+    values: {
+        CREATED_AT: { value: "CREATED_AT" },
+        UPDATED_AT: { value: "UPDATED_AT" },
+        CLOSED_AT: { value: "CLOSED_AT" },
+    },
+});
 
 const SortOrderEnumTC = sc.createEnumTC({
-    name: "SortOrderInput",
-    description: "Input type for sort orders",
+    name: "SortOrderEnum",
+    description: "Enum type for ascending or descending sort",
     values: {
-        PICKUP_TIME: { value: "PICKUP_TIME" },
+        ASC: { value: "ASC" },
+        DESC: { value: "DESC" },
+    },
+});
+
+const SortOrderInputTC = sc.createInputTC({
+    name: "SortOrderInput",
+    description: "Input type for sorting orders",
+    fields: {
+        sort_field: SortOrderTimeEnumTC,
+        sort_order: SortOrderEnumTC,
     },
 });
 
@@ -83,6 +108,6 @@ export {
     OrderTC,
     CreateOrderInputTC,
     FilterOrderInputTC,
-    SortOrderEnumTC,
+    SortOrderInputTC,
     FindManyOrderPayloadTC,
 };

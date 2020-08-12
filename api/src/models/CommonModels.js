@@ -67,10 +67,30 @@ const PeriodTC = sc.createObjectTC({
     },
 });
 
+const TimeRangeTC = sc.createObjectTC({
+    name: "TimeRange",
+    description: "A generic time range in RFC-3339 format",
+    fields: {
+        start_at: "String",
+        end_at: "String",
+    },
+});
+
+const FindOrdersDateTimeFilterTC = sc.createInputTC({
+    name: "FindOrdersDateTimeFilter",
+    description: "Input type for filtering orders by date and time",
+    fields: {
+        created_at: TimeRangeTC.getITC().getType(),
+        updated_at: TimeRangeTC.getITC().getType(),
+        closed_at: TimeRangeTC.getITC().getType(),
+    },
+});
+
 export {
     DataSourceEnumTC,
     MoneyTC,
     OrderStatusEnumTC,
     FulfillmentStatusEnumTC,
     PeriodTC,
+    FindOrdersDateTimeFilterTC,
 };

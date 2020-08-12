@@ -196,7 +196,7 @@ PaymentTC.addResolver({
     });
 
 const PaymentQueries = {
-    fetchPayments: PaymentTC.getResolver("fetchPayment"),
+    fetchPayments: PaymentTC.getResolver("fetchPayments"),
 };
 
 const PaymentMutations = {

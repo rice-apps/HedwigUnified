@@ -86,6 +86,25 @@ const FindOrdersDateTimeFilterTC = sc.createInputTC({
     },
 });
 
+const SortOrderTimeEnumTC = sc.createEnumTC({
+    name: "SortOrderTimeEnum",
+    description: "Enum type for sort orders",
+    values: {
+        CREATED_AT: { value: "CREATED_AT" },
+        UPDATED_AT: { value: "UPDATED_AT" },
+        CLOSED_AT: { value: "CLOSED_AT" },
+    },
+});
+
+const SortOrderEnumTC = sc.createEnumTC({
+    name: "SortOrderEnum",
+    description: "Enum type for ascending or descending sort",
+    values: {
+        ASC: { value: "ASC" },
+        DESC: { value: "DESC" },
+    },
+});
+
 export {
     DataSourceEnumTC,
     MoneyTC,
@@ -93,4 +112,6 @@ export {
     FulfillmentStatusEnumTC,
     PeriodTC,
     FindOrdersDateTimeFilterTC,
+    SortOrderEnumTC,
+    SortOrderTimeEnumTC,
 };

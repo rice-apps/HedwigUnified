@@ -5,6 +5,8 @@ import {
     OrderStatusEnumTC,
     FulfillmentStatusEnumTC,
     FindOrdersDateTimeFilterTC,
+    SortOrderTimeEnumTC,
+    SortOrderEnumTC,
 } from "./CommonModels";
 
 const LineItemTC = sc.createObjectTC({
@@ -64,25 +66,6 @@ const FilterOrderInputTC = sc.createInputTC({
         date_time_filter: FindOrdersDateTimeFilterTC,
         fulfillment_filter: FindOrdersFulfillmentFilterTC,
         customer_filter: "[String]",
-    },
-});
-
-const SortOrderTimeEnumTC = sc.createEnumTC({
-    name: "SortOrderTimeEnum",
-    description: "Enum type for sort orders",
-    values: {
-        CREATED_AT: { value: "CREATED_AT" },
-        UPDATED_AT: { value: "UPDATED_AT" },
-        CLOSED_AT: { value: "CLOSED_AT" },
-    },
-});
-
-const SortOrderEnumTC = sc.createEnumTC({
-    name: "SortOrderEnum",
-    description: "Enum type for ascending or descending sort",
-    values: {
-        ASC: { value: "ASC" },
-        DESC: { value: "DESC" },
     },
 });
 

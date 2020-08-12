@@ -28,4 +28,13 @@ const CreatePaymentITC = sc.createInputTC({
     },
 });
 
-export { PaymentTC, CreatePaymentITC };
+const FetchPaymentPayloadTC = sc.createObjectTC({
+    name: "FetchPaymentPayload",
+    description: "Payload for fetching payments",
+    fields: {
+        cursor: "String!",
+        payments: [PaymentTC],
+    },
+});
+
+export { PaymentTC, CreatePaymentITC, FetchPaymentPayloadTC };

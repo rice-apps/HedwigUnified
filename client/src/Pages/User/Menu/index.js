@@ -3,7 +3,7 @@ import hero from "./hero.jpg";
 import boba from "./boba.jpg";
 import "./index.css";
 import { Link, animateScroll as scroll } from "react-scroll";
-import { gql, useQuery } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 const vendor = {
   name: "East West Tea",
@@ -77,28 +77,26 @@ const vendor = {
 };
 
 const Menu = () => {
-  const [categories, setCategories] = useState(new Set([]));
-  const GET_CATALOG = gql`
-    query GET_CATALOG($item: String!) {
-      getCatalog(dataSource: SQUARE, vendor: $item) {
-        name
-        category
-        image
-        variants {
-          name
-          description
-          price {
-            amount
-          }
-        }
-      }
+
+    const navigate = useNavigate();
+
+    // Later in the code, we call sampleFunction(product.number)
+
+    // sampleFunction
+    // input: a number
+    // output: number * 3
+    const sampleFunction = (price) => {
+        return price * 3;
     }
-  `;
-  const { data: getCatalogResponse, loading, error } = useQuery(GET_CATALOG, {
-    variables: {
-      item: "xoop",
-    },
-  });
+
+    /**
+     * Input: a product id
+     * Output: Navigates to page with that product
+     */
+    const handleClick = (productID) => {
+        // Go to this particular vendor's detail page
+        return navigate(`${productID}`);
+    }
 
   useEffect(() => {
     const parsedCategories = (catalog) => {
@@ -166,8 +164,8 @@ const Menu = () => {
                         {/* Giving each category a header */}
                         <h3 class="categoryheader">{category}</h3>
                         {/*  Filtering out all items that fall under the category */}
-                        {menu.filter(item => item.category === category).map(product => (
-                            <div class="itemgrid">
+                        {vendor.products.filter(item => item.category === category).map(product => (
+                            <div class="itemgrid" onClick={() => handleClick(product.name)}>
                                 {/* Displaying the item: image, name, and price */}
                                 <img src={product.image} class="itemimage" alt="boba"/>
                                 <h1 class="itemname">{product.name}</h1>

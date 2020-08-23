@@ -1,5 +1,6 @@
 import { sc } from "graphql-compose";
 
+import { Order } from "square-connect";
 import {
     MoneyTC,
     OrderStatusEnumTC,
@@ -69,11 +70,19 @@ const FindOrdersFulfillmentFilterTC = sc.createInputTC({
     },
 });
 
+const FilterOrderStateInputTC = sc.createInputTC({
+    name: "FilterOrderStateInput",
+    description: "Input type for filtering orders by state",
+    fields: {
+        states: OrderStatusEnumTC.getTypePlural().getType(),
+    },
+});
+
 const FilterOrderInputTC = sc.createInputTC({
     name: "FilterOrderInput",
     description: "Input type for filter orders",
     fields: {
-        state_filter: "[String]",
+        state_filter: FilterOrderStateInputTC,
         date_time_filter: FindOrdersDateTimeFilterTC,
         fulfillment_filter: FindOrdersFulfillmentFilterTC,
         customer_filter: "[String]",

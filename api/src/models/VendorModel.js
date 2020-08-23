@@ -2,7 +2,7 @@ import { composeWithMongoose } from "graphql-compose-mongoose";
 
 import "../utils/db";
 
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const SquareInfo = new Schema({
     locationIds: { type: [String], required: true },
@@ -17,5 +17,5 @@ const VendorSchema = new Schema({
     squareInfo: SquareInfo,
 });
 
-export const Vendor = mongoose.model("Vendors", VendorSchema);
+export const Vendor = model("Vendors", VendorSchema);
 export const VendorTC = composeWithMongoose(Vendor);

@@ -23,6 +23,17 @@ const app = express().use(
 const server = new ApolloServer({
     schema: Schema,
     introspection: true,
+    context: ({req, res}) => {
+        console.log(req)
+        console.log(res)
+
+        return {
+            keyMap: {
+                "ZETW20E2NB4EG": process.env.SQUARE_ACCESS_TOKEN,
+                "FMXAFFWJR95WC": process.env.SQUARE_ACCESS_TOKEN,
+            }
+        }
+    }
 });
 
 server.applyMiddleware({ app });

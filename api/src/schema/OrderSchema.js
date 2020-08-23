@@ -35,7 +35,7 @@ OrderTC.addResolver({
 
         const api = new OrdersApi();
 
-        const query = null;
+        const query = {};
 
         if (filter) {
             query.filter = filter;
@@ -44,6 +44,8 @@ OrderTC.addResolver({
         if (sort) {
             query.sort = sort;
         }
+
+        console.log(query);
 
         const searchOrderResponse = await api.searchOrders({
             ...new SearchOrdersRequest(),
@@ -151,8 +153,10 @@ OrderTC.addResolver({
                 fulfillmentStatus: first.state,
             };
 
+            console.log(CDMOrder);
+
             pubsub.publish("orderCreated", {
-                payload: CDMOrder,
+                orderCreated: CDMOrder,
             });
 
             return CDMOrder;

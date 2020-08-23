@@ -14,9 +14,19 @@ const LineItemTC = sc.createObjectTC({
     description:
         "Common data model representation of line items, useful when placing an Order.",
     fields: {
-        quantity: "Int!",
-        itemVariationId: "String!",
-        itemModifiersId: "[String]",
+        quantity: {
+            type: "String!",
+            description:
+                "The amount of this item to order. Inputted as String for Square compatibility purposes",
+        },
+        catalog_object_id: {
+            type: "String!",
+            description: "The ID of the variant of this item",
+        },
+        modifiers: {
+            type: "[String]",
+            description: "A list of modifier IDs to apply to this line item",
+        },
     },
 });
 
@@ -46,6 +56,7 @@ const CreateOrderInputTC = sc.createInputTC({
             .getTypeNonNull()
             .getType(),
         recipient: "String!",
+        pickupTime: "String!",
     },
 });
 

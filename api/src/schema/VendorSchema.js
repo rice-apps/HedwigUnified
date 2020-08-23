@@ -43,7 +43,7 @@ const VendorQueries = {
 };
 
 const VendorMutations = {
-    // createVendor: VendorTC.getResolver("createOne"),
+    createVendor: VendorTC.getResolver("createOne"),
     updateVendor: VendorTC.getResolver("updateOne"),
 };
 

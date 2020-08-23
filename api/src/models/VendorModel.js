@@ -2,13 +2,10 @@ import { composeWithMongoose } from "graphql-compose-mongoose";
 
 import "../utils/db";
 
-const mongoose = require("mongoose");
-
-const { Schema } = mongoose;
+import { Schema } from "mongoose";
 
 const SquareInfo = new Schema({
-    merchantId: { type: String, required: true, unique: true },
-    locationId: { type: String, required: true },
+    locationIds: { type: [String], required: true },
     loyaltyId: { type: String, unique: true },
 });
 

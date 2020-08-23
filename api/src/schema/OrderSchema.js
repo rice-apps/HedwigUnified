@@ -35,15 +35,22 @@ OrderTC.addResolver({
 
         const api = new OrdersApi();
 
+        const query = null;
+
+        if (filter) {
+            query.filter = filter;
+        }
+
+        if (sort) {
+            query.sort = sort;
+        }
+
         const searchOrderResponse = await api.searchOrders({
             ...new SearchOrdersRequest(),
             location_ids: locations,
             cursor,
             limit,
-            query: {
-                filter,
-                sort,
-            },
+            query,
             return_entries: false,
         });
 
@@ -52,6 +59,8 @@ OrderTC.addResolver({
                 `Finding orders failed with errors: ${searchOrderResponse.errors}`,
             );
         }
+
+        console.log(searchOrderResponse);
 
         const { cursor: newCursor, orders } = searchOrderResponse;
 
@@ -82,9 +91,8 @@ OrderTC.addResolver({
         },
         resolve: async ({ args }) => {
             const {
-                idempotencyKey,
                 locationId,
-                record: { lineItems, recipient },
+                record: { idempotencyKey, lineItems, recipient, pickupTime },
             } = args;
 
             const api = new OrdersApi();
@@ -100,8 +108,9 @@ OrderTC.addResolver({
                             type: "PICKUP",
                             state: "PROPOSED",
                             pickup_details: {
+                                pickup_at: pickupTime,
                                 recipient: {
-                                    customer_id: recipient,
+                                    display_name: recipient,
                                 },
                             },
                         },

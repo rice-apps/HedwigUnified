@@ -45,8 +45,6 @@ OrderTC.addResolver({
             query.sort = sort;
         }
 
-        console.log(query);
-
         const searchOrderResponse = await api.searchOrders({
             ...new SearchOrdersRequest(),
             location_ids: locations,
@@ -61,8 +59,6 @@ OrderTC.addResolver({
                 `Finding orders failed with errors: ${searchOrderResponse.errors}`,
             );
         }
-
-        console.log(searchOrderResponse);
 
         const { cursor: newCursor, orders } = searchOrderResponse;
 
@@ -153,8 +149,6 @@ OrderTC.addResolver({
                 fulfillmentStatus: first.state,
             };
 
-            console.log(CDMOrder);
-
             pubsub.publish("orderCreated", {
                 orderCreated: CDMOrder,
             });
@@ -228,7 +222,7 @@ OrderTC.addResolver({
             };
 
             pubsub.publish("orderUpdated", {
-                payload: CDMOrder,
+                orderUpdated: CDMOrder,
             });
 
             return CDMOrder;

@@ -2,9 +2,7 @@ import { composeWithMongoose } from "graphql-compose-mongoose";
 
 import "../utils/db";
 
-const mongoose = require("mongoose");
-
-const { Schema } = mongoose;
+import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema({
     name: String,
@@ -20,5 +18,7 @@ const UserSchema = new Schema({
     isAdmin: { type: Boolean, default: false },
 });
 
-export const User = mongoose.model("Users", UserSchema);
-export const UserTC = composeWithMongoose(User);
+const User = model("Users", UserSchema);
+const UserTC = composeWithMongoose(User);
+
+export { User, UserTC };

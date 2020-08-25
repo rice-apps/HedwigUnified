@@ -11,7 +11,7 @@ import { DataSourceEnumTC } from "../models/CommonModels";
 ItemTC.addResolver({
     name: "getCatalog",
     args: {
-        vendor: GraphQLNonNull(GraphQLString),
+        vendor: "String!",
         dataSource: DataSourceEnumTC.getTypeNonNull().getType(),
     },
     type: [ItemTC],

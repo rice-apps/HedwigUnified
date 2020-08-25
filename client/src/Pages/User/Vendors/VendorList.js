@@ -21,11 +21,6 @@ const GET_VENDORS_QUERY = gql`
             slug
             type
             phone
-            hours {
-                day
-                start
-                end
-            }
             locations {
                 name
             }

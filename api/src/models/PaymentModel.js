@@ -6,13 +6,13 @@ const PaymentTC = sc.createObjectTC({
   name: 'Payment',
   description: 'Representation of payments in common data model',
   fields: {
-    id: GraphQLNonNull(GraphQLString),
-    order: GraphQLNonNull(GraphQLString),
-    customer: GraphQLNonNull(GraphQLString),
+    id: 'String!',
+    order: 'String!',
+    customer: 'String!',
     subtotal: MoneyTC.getTypeNonNull(),
     tip: MoneyTC.getTypeNonNull(),
     total: MoneyTC.getTypeNonNull(),
-    status: GraphQLNonNull(GraphQLString)
+    status: 'String!'
   }
 })
 
@@ -20,9 +20,10 @@ const CreatePaymentITC = sc.createInputTC({
   name: 'CreatePaymentInput',
   description: 'Input type for creating Payments',
   fields: {
-    sourceId: GraphQLNonNull(GraphQLString),
-    orderId: GraphQLNonNull(GraphQLString),
-    customerId: GraphQLNonNull(GraphQLString),
+    sourceId: 'String!',
+    orderId: 'String!',
+    locationId: 'String!',
+    customerId: 'String!',
     subtotal: MoneyTC.getITC()
       .getTypeNonNull()
       .getType(),

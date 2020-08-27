@@ -19,8 +19,8 @@ function PaymentPage (props) {
           process.env.NODE_ENV === 'development' ||
           process.env.NODE_ENV === 'test'
         }
-        applicationId={'HEDWIG_APPLICATION_ID'}
-        locationId={props.SELLER_LOCATION_ID}
+        applicationId={'sandbox-sq0idb-uulHV5znTofKYc-U1nJBuQ'}
+        locationId={'ZETW20E2NB4EG'}
         cardNonceResponseReceived={(
           errors,
           nonce,
@@ -28,19 +28,18 @@ function PaymentPage (props) {
           buyerVerificationToken
         ) => {
           if (errors) {
-            props.setPaymentErrors(errors) // TODO: find a parent to pass this function from
+            alert(errors) // TODO: find a parent to pass this function from
           }
 
-          props.setPaymentDetails({
-            // TODO: find a parent to pass this function from
-            nonce: nonce,
-            verification: buyerVerificationToken
-          })
+          alert(nonce)
         }}
         createVerificationDetails={() => ({
-          amount: String(props.amountToCharge), // TODO: find a parent to pass this charge from
-          currencyCode: String(props.currency),
-          intent: 'CHARGE' // TODO: pass in buyer's contact info
+          amount: String('2800'), // TODO: find a parent to pass this charge from
+          currencyCode: String('USD'),
+          intent: 'CHARGE', // TODO: pass in buyer's contact info,
+          billingContact: {
+            postalCode: '75036'
+          }
         })}
       >
         <fieldset className='sq-fieldset'>
@@ -58,9 +57,7 @@ function PaymentPage (props) {
           </div>
         </fieldset>
 
-        <CreditCardSubmitButton>
-          Pay ${props.amountToCharge}
-        </CreditCardSubmitButton>
+        <CreditCardSubmitButton>Pay $28.00</CreditCardSubmitButton>
       </SquarePaymentForm>
     </React.Fragment>
   )

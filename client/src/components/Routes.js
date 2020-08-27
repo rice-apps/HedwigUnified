@@ -23,6 +23,7 @@ import CartDetail from '../Pages/User/Cart'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import Product from '../Pages/User/Products/Product'
+import PaymentPage from '../Pages/User/Payment'
 
 /**
  * Requests to verify the user's token on the backend
@@ -131,6 +132,10 @@ const newRoutesArray = [
         ]
       }
     ]
+  },
+  {
+    path: '/payment',
+    element: <PaymentPage />
   }
 ]
 

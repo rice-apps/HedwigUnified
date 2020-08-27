@@ -21,7 +21,7 @@ PaymentTC.addResolver({
     },
     cursor: {
       type: 'String',
-      defaultValue: ''
+      defaultValue: null
     }
   },
   resolve: async ({ args }) => {
@@ -59,7 +59,7 @@ PaymentTC.addResolver({
     type: PaymentTC,
     resolve: async ({ args }) => {
       const {
-        record: { sourceId, subtotal, tip, orderId, customerId }
+        record: { sourceId, subtotal, tip, orderId, customerId, locationId }
       } = args
 
       // TODO: Add shopify payment flow
@@ -68,6 +68,7 @@ PaymentTC.addResolver({
 
       const paymentResponse = await api.createPayment({
         ...paymentBody,
+        location_id: locationId,
         source_id: sourceId,
         idempotency_key: uuid(),
         amount_money: subtotal,

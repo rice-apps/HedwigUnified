@@ -25,7 +25,8 @@
     "@babel/preset-env": "^7.9.0",
     "nodemon": "^2.0.4",
     "pkg": "^4.4.9",
-    "prettier-standard": "^16.4.1"
+    "prettier-standard": "^16.4.1",
+    "typescript": "^4.0.2"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
@@ -40,7 +41,7 @@
     "jsonwebtoken": "^8.5.1",
     "loglevel": "^1.7.0",
     "mongoose": "^5.10.1",
-    "square-connect": "^4.20200826.3",
+    "square-connect": "4.20200826.3",
     "uuid": "^8.3.0",
     "xml2js": "^0.4.23"
   }

@@ -95,10 +95,11 @@ OrderTC.addResolver({
 
       const api = new OrdersApi()
 
-      const orderResponse = await api.createOrder(locationId, {
+      const orderResponse = await api.createOrder({
         ...new CreateOrderRequest(),
         idempotency_key: idempotencyKey,
         order: {
+          location_id: locationId,
           line_items: lineItems,
           customer_id: recipient,
           fulfillments: [

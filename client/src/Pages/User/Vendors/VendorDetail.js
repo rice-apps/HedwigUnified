@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useQuery, gql, useMutation, ApolloError } from "@apollo/client";
-import { useParams, useHistory, useLocation } from "react-router";
-import ErrorPage from "../../../components/ErrorPage";
+import React, { useState, useContext, useEffect } from 'react'
+import { useQuery, gql, useMutation, ApolloError } from '@apollo/client'
+import { useParams, useHistory, useLocation } from 'react-router'
+import ErrorPage from '../../../components/ErrorPage'
 
 const GET_VENDOR_PRODUCTS_QUERY = gql`
   query GET_VENDOR_PRODUCTS($slug: String!) {
@@ -16,53 +16,53 @@ const GET_VENDOR_PRODUCTS_QUERY = gql`
       }
     }
   }
-`;
+`
 
 const ProductCard = ({ product, slug }) => {
-  const history = useHistory();
+  const history = useHistory()
 
   const handleClick = () => {
-    return history.push(`/user/vendors/${slug}/products/${product._id}`);
-  };
+    return history.push(`/user/vendors/${slug}/products/${product._id}`)
+  }
 
   return (
-    <div className="productdetail" onClick={handleClick}>
+    <div className='productdetail' onClick={handleClick}>
       <p>{product.name}</p>
     </div>
-  );
-};
+  )
+}
 
 const VendorDetail = ({}) => {
-  const { slug } = useParams();
-  const history = useHistory();
+  const { slug } = useParams()
+  const history = useHistory()
 
   const { data, loading, error } = useQuery(GET_VENDOR_PRODUCTS_QUERY, {
-    variables: { slug: slug },
-  });
+    variables: { slug: slug }
+  })
 
-  if (error) return <ErrorPage errMessage={error.message}/>
-  if (loading) return <p>Loading...</p>;
-  if (!data) return <p>No data...</p>;
+  if (error) return <ErrorPage errMessage={error.message} />
+  if (loading) return <p>Loading...</p>
+  if (!data) return <p>No data...</p>
 
-  const { products } = data.vendorOne;
+  const { products } = data.vendorOne
 
   const handleClick = () => {
-    history.push(`/user/vendors/${slug}/cart`);
-  };
+    history.push(`/user/vendors/${slug}/cart`)
+  }
 
   return (
-    <div className="productlist">
-      {products.map((product) => {
-        return <ProductCard product={product} slug={slug} />;
+    <div className='productlist'>
+      {products.map(product => {
+        return <ProductCard product={product} slug={slug} />
       })}
-      <button title="View Cart" onClick={handleClick}>
+      <button title='View Cart' onClick={handleClick}>
         Cart
       </button>
-      <button title="Go Back" onClick={() => history.goBack()}>
+      <button title='Go Back' onClick={() => history.goBack()}>
         Go Back
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default VendorDetail;
+export default VendorDetail

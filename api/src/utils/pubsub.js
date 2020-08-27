@@ -1,6 +1,6 @@
-import { PubSub } from "apollo-server-express";
+import { PubSub } from 'apollo-server-express'
 
 // Initialize PubSub: https://www.apollographql.com/docs/apollo-server/data/subscriptions/
-const pubsub = new PubSub();
+const pubsub = new PubSub()
 
-export default pubsub;
+export default pubsub

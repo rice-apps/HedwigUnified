@@ -1,13 +1,13 @@
-import { VendorTC } from "../models/VendorModel";
+import { VendorTC } from '../models/VendorModel'
 
 const VendorQueries = {
-    getVendor: VendorTC.getResolver("findOne"),
-    getVendors: VendorTC.getResolver("findMany"),
-};
+  getVendor: VendorTC.getResolver('findOne'),
+  getVendors: VendorTC.getResolver('findMany')
+}
 
 const VendorMutations = {
-    createVendor: VendorTC.getResolver("createOne"),
-    updateVendor: VendorTC.getResolver("updateOne"),
-};
+  createVendor: VendorTC.getResolver('createOne'),
+  updateVendor: VendorTC.getResolver('updateOne')
+}
 
-export { VendorQueries, VendorMutations };
+export { VendorQueries, VendorMutations }

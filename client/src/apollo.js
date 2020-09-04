@@ -13,9 +13,17 @@ import { setContext } from '@apollo/link-context'
 import { WebSocketLink } from '@apollo/link-ws'
 import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 
-console.log(GRAPHQL_URL)
-console.log(GRAPHQL_WS_URL)
-console.log(SERVICE_URL)
+
+import {makeVar} from '@apollo/client';
+
+console.log(GRAPHQL_URL);
+console.log(GRAPHQL_WS_URL);
+console.log(SERVICE_URL);
+
+
+export const cartItems = makeVar([]);
+
+
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
@@ -62,9 +70,23 @@ const cache = new InMemoryCache()
 
 // Initialize Client
 export const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: authLink.concat(splitLink)
-})
+
+    cache: new InMemoryCache({
+        typePolicies: {
+          Query: {
+            fields: {
+              cartItems: {
+                read() {
+                  return cartItems();
+                }
+              }
+            }
+          }
+        }
+      }),
+    link: authLink.concat(splitLink),
+});
+
 
 // Initial local state
 const initialState = {

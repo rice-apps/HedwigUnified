@@ -43,7 +43,9 @@ const CartDetail = ({}) => {
   const total = currency(
     Object.values(totals).reduce((total, current) => total + current, 0)
   );
-
+//	This is to make the page re-render so that updated state is shown when item 
+//  is deleted.
+	const [dummyDelete, setDummyDelete] = useState(0);
 	cartItems().map (item => console.log(item))
 
   console.log(cartItems());
@@ -62,7 +64,7 @@ const CartDetail = ({}) => {
             console.log(item);
 		  return <CartProduct product={item}/>})}; */}
 			{cartItems().map(item => {
-				return <CartProduct product={item}/>
+				return <CartProduct product={item} deleteItem={setDummyDelete}/>
 			})}
           
         </div>

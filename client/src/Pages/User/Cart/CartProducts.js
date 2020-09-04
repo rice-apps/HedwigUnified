@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 import Thumb from "./Thumb.js";
 import logo from "./icons8-team-7LNatQYMzm4-unsplash.jpg";
 import dispatch from "../Products/FunctionalCart";
-// import Dropdown from "react-dropdown";
+import {cartItems} from '../../../apollo';
 // import "react-dropdown/style.css";
 
 const QuantitySelector = ({ quantity, decrease, increase }) => {
@@ -17,7 +17,7 @@ const QuantitySelector = ({ quantity, decrease, increase }) => {
   );
 };
 
-const CartProduct = ({ product }) => {
+const CartProduct = ({ product, deleteItem }) => {
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [quantity, setQuantity] = useState(product.quantity);
   const handleMouseOver = () => {
@@ -28,6 +28,7 @@ const CartProduct = ({ product }) => {
   };
   const increase = () => {
 	setQuantity(quantity + 1);
+	
   };
 
   const decrease = () => {
@@ -48,9 +49,18 @@ const CartProduct = ({ product }) => {
 	//   }
 	//   console.log(VarModList)
 	  return VarModList
-	  
-
   }
+
+  function deleteCartItem() {
+	dispatch({
+		type: 'DELETE_ITEM',
+		item:{
+			...product
+		}
+	})
+  }
+
+  const date = new Date()
 
   const options = ["ASAP", "30 Minutes", "1 Hour"];
   const defaultOption = options[0];
@@ -65,7 +75,6 @@ const CartProduct = ({ product }) => {
 
       <div className="shelf-item__title">
         <p id="title">{product.name}</p>
-        {/* name ^^      varient vv */}
         <p id="options"> {getVarMod()}</p>
       </div>
       <QuantitySelector
@@ -79,9 +88,11 @@ const CartProduct = ({ product }) => {
       <div
         className="shelf-item__del"
         onMouseOver={() => handleMouseOver()}
-        onMouseOut={() => handleMouseOut()}
+		onMouseOut={() => handleMouseOut()}
+		onClick={() => {deleteCartItem() ; console.log(cartItems()); deleteItem(date.getTime())}}
       />
     </div>
+	
   );
 };
 

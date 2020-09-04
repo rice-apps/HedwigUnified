@@ -1,8 +1,4 @@
-import {
-  PaymentsApi,
-  CreatePaymentRequest,
-  CompletePaymentRequest
-} from 'square-connect'
+import { PaymentsApi, CreatePaymentRequest } from 'square-connect'
 import { GraphQLString, GraphQLNonNull } from 'graphql'
 import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
@@ -116,12 +112,8 @@ PaymentTC.addResolver({
     type: PaymentTC,
     resolve: async ({ args }) => {
       const api = new PaymentsApi()
-      const paymentBody = new CompletePaymentRequest()
 
-      const paymentResponse = await api.completePayment(
-        args.paymentId,
-        paymentBody
-      )
+      const paymentResponse = await api.completePayment(args.paymentId)
 
       if (paymentResponse.errors) {
         return new ApolloError(

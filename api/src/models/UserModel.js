@@ -15,7 +15,8 @@ const UserSchema = new Schema({
     enum: ['Undergraduate', 'Graduate', 'Faculty', 'Staff'],
     default: 'Undergraduate'
   },
-  isAdmin: { type: Boolean, default: false }
+  isAdmin: { type: Boolean, default: false },
+  vendor: { type: String, required: false }
 })
 
 const User = model('Users', UserSchema)

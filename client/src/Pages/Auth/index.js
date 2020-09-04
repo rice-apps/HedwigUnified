@@ -9,13 +9,6 @@ const AUTHENTICATE_USER = gql`
       _id
       netid
       token
-      employer {
-        _id
-        name
-        team {
-          netid
-        }
-      }
       recentUpdate
     }
   }

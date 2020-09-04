@@ -12,7 +12,8 @@ const { MONGODB_URL, SQUARE_ACCESS_TOKEN, SECRET, SERVICE_URL } = process.env
 const MONGOOSE_CONFIG = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false,
 }
 
 export {

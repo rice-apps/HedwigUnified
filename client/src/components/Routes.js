@@ -92,6 +92,7 @@ const PrivateRoute = ({ element, ...rest }) => {
   // let { _id, netid, recentUpdate } = data.verifyUser;
 
   // Upon verification, store the returned information
+
   client.writeQuery({
     query: GET_USER_INFO,
     data: { user: data.verifyUser }

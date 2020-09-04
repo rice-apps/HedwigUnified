@@ -2,7 +2,7 @@ import { MoneyTC, SortOrderEnumTC } from './CommonModels'
 import { CreateOrderInputTC, OrderTC } from './OrderModel'
 import { CreatePaymentITC, PaymentTC } from './PaymentModel'
 import { ItemTC } from './ProductModel'
-import { UserTC } from './UserModel'
+import { User, UserTC } from './UserModel'
 
 export {
   CreateOrderInputTC,
@@ -12,5 +12,6 @@ export {
   OrderTC,
   PaymentTC,
   UserTC,
-  SortOrderEnumTC
+  SortOrderEnumTC,
+  User,
 }

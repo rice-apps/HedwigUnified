@@ -31,22 +31,21 @@ import { PickupDropdown } from '../../../components/PickupDropdown'
 
 import { useNavigate } from 'react-router-dom'
 
-const GET_VENDORS_QUERY = gql`
-    query VendorList {
-        vendorMany {
-            _id
-            name
-            slug
-            type
-            phone
-            locations {
-                name
-            }
-            imageURL
-        }
-    }
-  }
-`
+// const GET_VENDORS_QUERY = gql`
+//     query VendorList {
+//         vendorMany {
+//             _id
+//             name
+//             slug
+//             type
+//             phone
+//             locations {
+//                 name
+//             }
+//             imageURL
+//         }
+//     }
+// `
 
 const VendorCard = ({ vendor }) => {
   const { name, hours, keywords, image, closed } = vendor
@@ -135,11 +134,11 @@ const BottomAppBar = ({}) => {
 }
 
 const VendorList = ({ classes }) => {
-  const { data, loading, error } = useQuery(GET_VENDORS_QUERY)
+  // const { data, loading, error } = useQuery(GET_VENDORS_QUERY)
 
-  if (error) return <p>Error...</p>
-  if (loading) return <p>Loading...</p>
-  if (!data) return <p>No data...</p>
+  // if (error) return <p>Error...</p>
+  // if (loading) return <p>Loading...</p>
+  // if (!data) return <p>No data...</p>
 
   const vendors = [
     {

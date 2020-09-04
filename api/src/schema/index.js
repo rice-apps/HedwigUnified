@@ -1,6 +1,6 @@
 import { sc } from 'graphql-compose'
 import { PaymentQueries, PaymentMutations } from './PaymentSchema'
-import { UserQueries } from './UserSchema'
+import { UserQueries, UserMutations } from './UserSchema'
 import { ItemQueries, ItemMutations } from './ProductSchema'
 import { OrderQueries, OrderMutations, OrderSubscriptions } from './OrderSchema'
 import { VendorQueries, VendorMutations } from './VendorSchema'
@@ -17,7 +17,8 @@ sc.Mutation.addFields({
   ...PaymentMutations,
   ...OrderMutations,
   ...VendorMutations,
-  ...ItemMutations
+  ...ItemMutations,
+  ...UserMutations,
 })
 
 sc.Subscription.addFields({

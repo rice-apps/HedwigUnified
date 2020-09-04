@@ -53,6 +53,7 @@ export const verifyToken = async token => {
   try {
     // In the future, we may need the other properties...
     const { id, netid, iat, exp } = await jwt.verify(token, SECRET)
+
     return { success: true, id }
   } catch (e) {
     return failureResponse

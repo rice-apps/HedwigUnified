@@ -32,22 +32,18 @@ import { PickupDropdown } from '../../../components/PickupDropdown'
 import { useNavigate } from 'react-router-dom'
 
 const GET_VENDORS_QUERY = gql`
-  query VendorList {
-    vendorMany {
-      _id
-      name
-      slug
-      type
-      phone
-      hours {
-        day
-        start
-        end
-      }
-      locations {
-        name
-      }
-      imageURL
+    query VendorList {
+        vendorMany {
+            _id
+            name
+            slug
+            type
+            phone
+            locations {
+                name
+            }
+            imageURL
+        }
     }
   }
 `

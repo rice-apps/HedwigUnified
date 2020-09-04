@@ -1,3 +1,4 @@
+
 import React from "react";
 import "./App.css";
 import { RoutesComponent } from "./components/Routes";
@@ -6,13 +7,14 @@ import { faWindowRestore } from "@fortawesome/free-solid-svg-icons";
 
 
 
-function App() {
+
+function App () {
   return (
     <React.Fragment>
       <Header />
       <RoutesComponent />
     </React.Fragment>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,4 +1,5 @@
 /** @jsx jsx */
+
 import { css, jsx } from "@emotion/core";
 import React, { useEffect, useState } from "react";
 import { gql, useMutation, useApolloClient } from "@apollo/client";
@@ -20,6 +21,7 @@ const defaultTotals = {
   subtotal: 0,
   tax: 0,
   discount: null
+
 };
 
 const CartDetail = ({}) => {
@@ -94,6 +96,7 @@ const CartDetail = ({}) => {
         </div>
 
         <div className="float-cart__footer">
+
           {/* <Dropdown
 				className="dropdowncontainer"
 				options={options}
@@ -101,8 +104,10 @@ const CartDetail = ({}) => {
 				placeholder="Select an option"
 			/> */}
           <div
+
             className="buy-btn"
             title={"Confirm"}
+
             onClick={handleConfirmClick}
           >
             Make Payment
@@ -110,7 +115,9 @@ const CartDetail = ({}) => {
         </div>
       </div>
     </div>
+
   );
 };
 
-export default CartDetail;
+
+export default CartDetail

@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from "react";
 import currency from "currency.js";
 import "./product.css";
@@ -85,14 +86,17 @@ const ModifierSelection = ({ modifier }) => {
                     value={JSON.stringify({ option })}
                   />
                   <span className="customRadio" />
+
                 </React.Fragment>
               )}
               <p>{option.name}</p>
               {option.price ? (
                 <p>
+
                   {currency(option.price.amount).format({
                     symbol: "$",
                     format: "USD"
+
                   })}
                 </p>
               ) : (
@@ -103,6 +107,7 @@ const ModifierSelection = ({ modifier }) => {
         ))}
       </div>
     </div>
+
   );
 };
 
@@ -319,11 +324,14 @@ const Product = ({}) => {
             makeCartItem();
           }}
         >
+
           Add
         </button>
       </div>
     </div>
+
   );
 };
 
-export default Product;
+
+export default Product

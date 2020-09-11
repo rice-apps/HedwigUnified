@@ -11,11 +11,20 @@ import CartProduct from "./CartProducts";
 import currency from "currency.js";
 import { cartItems } from "../../../apollo";
 import dispatch from "../Products/FunctionalCart";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import moment from 'moment';
 
 let cart_menu =
 
   cartItems();
 
+const pickupTimes = [
+  { value: 'ASAP', label: 'ASAP'},
+  { value: '30 min.', label: '30 minutes'},
+  { value: '1 hr.', label: '1 hour'},
+  { value: '1 hr 30 min.', label: '1 hour 30 minutes'},
+]
 
 const defaultTotals = {
   subtotal: 0,
@@ -26,6 +35,8 @@ const defaultTotals = {
 
 const CartDetail = ({}) => {
   const [totals, setTotals] = useState(defaultTotals);
+
+  const [pickupTime, setPickupTime] = useState({});
 
   const handleConfirmClick = () => {
     // Submit order
@@ -60,11 +71,15 @@ const CartDetail = ({}) => {
             <div>
               <p css={{ margin: "16px 0 0 10px" }}>East West Tea</p>
               <p css={{ margin: "0 0 0 10px", color: "grey" }}>Houston, TX</p>
+              
             </div>
           </div>
-          {/* {cart_menu.map(item => {
-            console.log(item);
-		  return <CartProduct product={item}/>})}; */}
+          <p css= {{alignSelf: 'center'}}> Pickup Time:</p>
+          <Select
+            options={pickupTimes}
+            css= {{marginTop: "-10px", width: '200px', alignSelf: 'center',}}
+            onChange={setPickupTime}
+          />
 			{cartItems().map(item => {
 				return <CartProduct product={item} deleteItem={setDummyDelete}/>
 			})}
@@ -96,18 +111,10 @@ const CartDetail = ({}) => {
         </div>
 
         <div className="float-cart__footer">
-
-          {/* <Dropdown
-				className="dropdowncontainer"
-				options={options}
-				value={defaultOption}
-				placeholder="Select an option"
-			/> */}
           <div
 
             className="buy-btn"
             title={"Confirm"}
-
             onClick={handleConfirmClick}
           >
             Make Payment

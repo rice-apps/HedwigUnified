@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router'
-import VendorImage from './erol-ahmed-d3pTF3r_hwY-unsplash.jpg'
-import UserImage from './photo-1593104885319-886382ec38cf.jpeg'
+import VendorImage from '../../images/vendorImage.jpg'
+import UserImage from '../../images/userImage.jpeg'
 import './portal.css'
 
 const PortalCard = () => {

@@ -1,13 +1,3 @@
-@font-face {
-  font-family: avenirbold;
-  src: url(Avenir-Black.otf);
-}
-
-@font-face {
-  font-family: avenirbook;
-  src: url(AvenirLTStd-Book.otf);
-}
-
 /* Background Color */
 .background {
   background-color: #faf8f8;

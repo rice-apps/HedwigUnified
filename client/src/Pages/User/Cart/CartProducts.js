@@ -1,7 +1,7 @@
 
 import React, { Component, useState } from "react";
 import Thumb from "./Thumb.js";
-import logo from "./icons8-team-7LNatQYMzm4-unsplash.jpg";
+import logo from "../../../images/headphones.jpg";
 import dispatch from "../Products/FunctionalCart";
 import {cartItems} from '../../../apollo';
 

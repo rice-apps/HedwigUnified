@@ -18,6 +18,8 @@ import { client } from './apollo'
 import { ApolloProvider } from '@apollo/client'
 import App from './App'
 
+import './fonts/style.css'
+
 // export const history = createBrowserHistory();
 
 render(

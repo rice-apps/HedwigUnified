@@ -1,6 +1,6 @@
 import React from 'react'
-import hero from './hero.jpg'
-import boba from './boba.jpg'
+import hero from '../../../images/hero.jpg'
+import boba from '../../../images/boba.jpg'
 import './index.css'
 import { Link, animateScroll as scroll } from 'react-scroll'
 import { useNavigate } from 'react-router-dom'

@@ -34,3 +34,32 @@
   font-weight: normal;
   src: url('Santana-Black.woff') format('woff');
 }
+
+@font-face {
+  font-family: santana;
+  src: url(Santana-Bold.ttf);
+}
+@font-face {
+  font-family: avenir;
+  src: url(AvenirLTStd-Book.otf);
+}
+@font-face {
+  font-family: avenirbold;
+  src: url(Avenir-Black.otf);
+}
+
+@font-face {
+  font-family: avenirmedium;
+  src: url(AvenirLTStd-Medium.otf);
+}
+
+@font-face {
+  font-family: avenirbold;
+  src: url(Avenir-Black.otf);
+}
+
+@font-face {
+  font-family: avenirbook;
+  src: url(AvenirLTStd-Book.otf);
+}
+

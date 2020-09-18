@@ -12,7 +12,7 @@ import Auth from '../Pages/Auth'
 import Home from '../Pages/Home'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
-
+import Confirmation from '../Pages/User/Confirmation'
 // Vendor imports
 import Orders from '../Pages/Vendor/Orders'
 // import VendorSettings from '../Pages/Vendor/Settings';
@@ -129,7 +129,8 @@ const newRoutesArray = [
             path: '/:product',
             element: <PrivateRoute element={<Product />} />
           },
-          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> }
+          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
+          { path: '/confirmation', element: <Route element={<Confirmation />} /> }
         ]
       }
     ]

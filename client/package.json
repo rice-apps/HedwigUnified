@@ -31,6 +31,7 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^3.4.3",
     "react-scroll": "^1.8.1",
+    "react-select": "^3.1.0",
     "react-square-payment-form": "^0.6.3",
     "react-toast-notifications": "^2.4.0",
     "serve": "^11.3.2",

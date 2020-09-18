@@ -23,7 +23,7 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
-const Auth = ({}) => {
+function Auth () {
   // First parse out ticket from URL href
   let ticket = parseTicket(window.location.href)
 

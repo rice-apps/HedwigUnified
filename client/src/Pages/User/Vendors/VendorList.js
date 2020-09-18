@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
-import '../../fonts/style.css'
 //fontawesome imports
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -47,7 +46,7 @@ import { useNavigate } from 'react-router-dom'
 //     }
 // `
 
-const VendorCard = ({ vendor }) => {
+function VendorCard ({ vendor }) {
   const { name, hours, keywords, image, closed } = vendor
 
   const navigate = useNavigate()
@@ -96,14 +95,7 @@ const VendorCard = ({ vendor }) => {
   )
 }
 
-class HeaderExclusion extends React.Component {
-  screenOptions = {
-    headerShown: false
-    // const history = useHistory();
-  }
-}
-
-const BottomAppBar = ({}) => {
+function BottomAppBar () {
   return (
     <AppBar position='sticky' color='white'>
       <BottomNavigation className='stickToBottom'>
@@ -133,7 +125,7 @@ const BottomAppBar = ({}) => {
   )
 }
 
-const VendorList = ({ classes }) => {
+function VendorList ({ classes }) {
   // const { data, loading, error } = useQuery(GET_VENDORS_QUERY)
 
   // if (error) return <p>Error...</p>

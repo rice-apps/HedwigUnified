@@ -16,7 +16,7 @@ width: 100%;
 .checkSvg {
 display: block;
 
-margin-top: 100px;
+margin-top: 8vh;
 margin-left: auto;
 margin-right: auto;
 height:auto;
@@ -44,7 +44,7 @@ margin: 8px 16px 8px 16px;
   border-radius: 20pt;
   height: 180px;
   width: 290px;
-  margin: 24px auto;
+  margin: 2vh auto;
   box-shadow:  0px 3px 6px 0px #aaaaaa;
 }
 
@@ -59,7 +59,7 @@ margin: 8px 16px 8px 16px;
 }
 
 .pickupInstructions {
-  margin: 5px 10px;
+  margin: 1vh 2vw;
   font-size: 14pt;
   color: #5A5953;
   position: relative;
@@ -92,6 +92,6 @@ margin: 8px 16px 8px 16px;
   background-color: #ffffff;
   border: 1px solid #5a595326;
   border-radius: 20px;
-  margin: 64px auto;
+  margin: 5vh auto;
 }
 

@@ -91,7 +91,7 @@ const TotalAndTax = ({ items }) => {
   )
 }
 
-const OrderDetail = ({ order }) => {
+function OrderDetail ({ order }) {
   const { _id, items, vendor, user, createdAt } = order
   const [modalOpen, setModalOpen] = useState(false)
   const [detailOpen, setDetailOpen] = useState(false)
@@ -200,7 +200,7 @@ const OrderDetail = ({ order }) => {
   )
 }
 
-const OrderList = ({}) => {
+function OrderList () {
   const history = useHistory()
 
   const {

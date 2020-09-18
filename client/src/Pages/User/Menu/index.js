@@ -76,7 +76,7 @@ const vendor = {
   ]
 }
 
-const Menu = () => {
+function Menu () {
   const navigate = useNavigate()
 
   // Later in the code, we call sampleFunction(product.number)

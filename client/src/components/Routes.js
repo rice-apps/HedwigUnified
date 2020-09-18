@@ -24,6 +24,13 @@ import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import Product from '../Pages/User/Products/Product'
 import PaymentPage from '../Pages/User/Payment'
+import VendorsideTemplate from '../Pages/Vendor/VendorComponents/VendorGridContainer.js'
+import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
+import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
+import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js'
+import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
+import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
+import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 
 /**
  * Requests to verify the user's token on the backend
@@ -138,7 +145,21 @@ const newRoutesArray = [
   {
     path: '/payment',
     element: <PaymentPage />
+  },
+  {
+    path: '/employee/*',
+    children: [
+      { path: '/', element:  <VendorsideTemplate/>},
+      { path: '/openorders', element:  <OpenOrdersPage/>},
+      { path: '/closedorders', element: <ClosedOrdersPage/> },
+      { path: '/items', element:  <ItemsMenuManagementPage/>},
+      { path: '/modifiers', element: <ModifiersMenuManagementPage/> },
+      { path: '/set-basic-info', element:  <SetBasicInfoPage/>},
+      { path: '/set-store-hours', element: <SetStoreHoursPage/> },
+    ]
+    
   }
+  
 ]
 
 // const routesArray = [

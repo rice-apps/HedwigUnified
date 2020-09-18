@@ -1,4 +1,3 @@
-
 import React, { Component, useState } from "react";
 import Thumb from "./Thumb.js";
 import logo from "../../../images/headphones.jpg";
@@ -8,7 +7,7 @@ import {cartItems} from '../../../apollo';
 // import Dropdown from "react-dropdown";
 // import "react-dropdown/style.css";
 
-const QuantitySelector = ({ quantity, decrease, increase }) => {
+function QuantitySelector ({ quantity, decrease, increase }) {
   return (
 
     <div className="shelf-item__quantity">

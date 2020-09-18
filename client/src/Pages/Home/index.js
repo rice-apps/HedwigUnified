@@ -26,7 +26,7 @@ const SEEN_RECENT_UPDATE = gql`
   }
 `
 
-const Home = () => {
+function Home () {
   // Check for recent update from cache
   let { data: storeData } = useQuery(GET_RECENT_UPDATE)
   let { recentUpdate } = storeData.user

@@ -1,117 +1,15 @@
-
 import React, { useContext, useEffect, useState } from "react";
-import currency from "currency.js";
 import "./product.css";
 import { useNavigate } from "react-router-dom";
 import { makeVar } from "@apollo/client";
 import dispatch from "./FunctionalCart";
 import { createMuiTheme } from "@material-ui/core";
-import {cartItems} from '../../../apollo';
+import { cartItems } from "../../../apollo";
+import VariantSelection from "./VariantSelection";
+import QuantitySelector from "./QuantitySelector";
+import ModifierSelection from "./ModifierSelection";
 
-const QuantitySelector = ({ quantity, decrease, increase }) => {
-  return (
-    <div className="quantityContainer">
-      <button onClick={decrease} disabled={quantity === 1}>
-        &ndash;
-      </button>
-      <p>{quantity}</p>
-      <button onClick={increase}>+</button>
-    </div>
-  );
-};
-
-const VariantSelection = ({ variant }) => {
-  let { question, description, options } = variant;
-  return (
-    <div className="variant">
-      <div className="heading">
-        <h1>{question}</h1>
-        {description ? <p>{description}</p> : null}
-      </div>
-      <div className="options">
-        {options.map(option => (
-          <div className="optionSet">
-            <label>
-              <input
-                type="radio"
-                name={question}
-                className="variantSelect"
-                value={JSON.stringify({ option })}
-              />
-
-              <span className="customRadio" />
-              <p>{option.name}</p>
-              <p>
-                {currency(option.price.amount).format({
-                  symbol: "$",
-                  format: "USD"
-                })}
-              </p>
-            </label>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const ModifierSelection = ({ modifier }) => {
-  let { question, description, multiSelect, options } = modifier;
-  return (
-    <div className="modifier">
-      <div className="heading">
-        <h1>{question}</h1>
-        {description ? <p>{description}</p> : null}
-      </div>
-      <div className="options">
-        {options.map(option => (
-          <div className="optionSet">
-            <label>
-              {multiSelect ? (
-                <React.Fragment>
-                  <input
-                    type="checkbox"
-                    name={question}
-                    className="modifierSelect"
-                    value={JSON.stringify({ option })}
-                  />
-                  <span className="customCheck" />
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <input
-                    type="radio"
-                    name={question}
-                    className="modifierSelect"
-                    value={JSON.stringify({ option })}
-                  />
-                  <span className="customRadio" />
-
-                </React.Fragment>
-              )}
-              <p>{option.name}</p>
-              {option.price ? (
-                <p>
-
-                  {currency(option.price.amount).format({
-                    symbol: "$",
-                    format: "USD"
-
-                  })}
-                </p>
-              ) : (
-                <p></p>
-              )}
-            </label>
-          </div>
-        ))}
-      </div>
-    </div>
-
-  );
-};
-
-const Product = ({}) => {
+function Product() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -205,11 +103,11 @@ const Product = ({}) => {
             description: "Fun, chewy balls",
             variantID: "123",
             price: { amount: 0.5, currency: "USD" }
-		  },
-		  {
+          },
+          {
             name: "No additional topping",
             description: "None",
-            variantID: "123",
+            variantID: "123"
           }
         ]
       },
@@ -245,48 +143,50 @@ const Product = ({}) => {
     let itemID = product.squareID;
     let variant = JSON.parse(
       document.querySelector(".variantSelect:checked").value
-	);
-	let variantObject = variant.option
+    );
+    let variantObject = variant.option;
     let variantCost = variant.option.price.amount;
 
     console.log(variantCost);
 
     let modifierNames = [];
-	var modifierCost = 0;
-	var modifierList = {}
+    var modifierCost = 0;
+    var modifierList = {};
     let modifiers = document.querySelectorAll(".modifierSelect:checked");
 
     for (var i = 0; i < modifiers.length; i++) {
-	  let currentModifier = JSON.parse(modifiers[i].value);
-	  modifierList[i] = currentModifier.option;
+      let currentModifier = JSON.parse(modifiers[i].value);
+      modifierList[i] = currentModifier.option;
       let currentModifierName = currentModifier.option.name;
-      {currentModifier.option.price ? (modifierCost += currentModifier.option.price.amount):(modifierCost += 0)};
+      {
+        currentModifier.option.price
+          ? (modifierCost += currentModifier.option.price.amount)
+          : (modifierCost += 0);
+      }
       modifierNames.push(currentModifierName);
-	}
-	
-	console.log(modifierCost);
-	console.log(modifierList);
+    }
 
-    let itemQuantity = {quantity}.quantity;
-	console.log(itemQuantity);
-	let totalPrice = modifierCost + variantCost;
+    console.log(modifierCost);
+    console.log(modifierList);
 
-	dispatch({
-		type:'ADD_ITEM',
-		item:{
-			name: itemName,
-			Id: Date.now(),
-			variant: variantObject,
-			modifiers: modifierList,
-			quantity: itemQuantity,
-			price: totalPrice,
-			modDisplay: modifierNames,
+    let itemQuantity = { quantity }.quantity;
+    console.log(itemQuantity);
+    let totalPrice = modifierCost + variantCost;
 
-		}
+    dispatch({
+      type: "ADD_ITEM",
+      item: {
+        name: itemName,
+        Id: Date.now(),
+        variant: variantObject,
+        modifiers: modifierList,
+        quantity: itemQuantity,
+        price: totalPrice,
+        modDisplay: modifierNames
+      }
+    });
 
-	})
-
-	console.log(cartItems())
+    console.log(cartItems());
   }
 
   return (
@@ -324,14 +224,11 @@ const Product = ({}) => {
             makeCartItem();
           }}
         >
-
           Add
         </button>
       </div>
     </div>
-
   );
-};
+}
 
-
-export default Product
+export default Product;

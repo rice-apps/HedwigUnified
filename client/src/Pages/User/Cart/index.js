@@ -4,7 +4,7 @@ import { css, jsx } from "@emotion/core";
 import React, { useEffect, useState } from "react";
 import { gql, useMutation, useApolloClient } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
-import logo from "./tealogo.png";
+import logo from "../../../images/tealogo.png";
 import "./cart.scss";
 import { centerCenter, row, column } from "../../../Styles/flex";
 import CartProduct from "./CartProducts";
@@ -12,8 +12,8 @@ import currency from "currency.js";
 import { cartItems } from "../../../apollo";
 import dispatch from "../Products/FunctionalCart";
 import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
-import moment from 'moment';
+//import makeAnimated from 'react-select/animated';
+//import moment from 'moment';
 
 let cart_menu =
 

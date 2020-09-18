@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
-import '../../fonts/style.css'
+import '../../../fonts/style.css'
 //fontawesome imports
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

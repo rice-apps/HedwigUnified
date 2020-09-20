@@ -1,4 +1,5 @@
 import { sc } from 'graphql-compose'
+import { Money } from 'square-connect'
 
 import {
   MoneyTC,
@@ -8,8 +9,6 @@ import {
   SortOrderTimeEnumTC,
   SortOrderEnumTC
 } from './CommonModels'
-
-import { ItemTC } from "./ProductModel"
 
 const LineItemTC = sc.createObjectTC({
   name: 'LineItem',
@@ -32,9 +31,27 @@ const LineItemTC = sc.createObjectTC({
   }
 })
 
-const OldLineItemTC = sc.createObjectTC({
-  name: "OldLineItem"
-}).merge(LineItemTC).merge(ItemTC)
+const PreviousLineItemTC = sc.createObjectTC({
+  name: "PreviousLineItem",
+  description: "A line item in a past order",
+  fields: {
+    name: 'String',
+    quantity: 'String',
+    catalog_object_id: 'String',
+    variation_name: 'String',
+    modifiers: `
+      type OrderLineItemModifier {
+        uid: String
+        catalog_object_id: String,
+        name: String
+        base_price_money: Money
+        total_price_money: Money
+      }
+    `,
+    total_money: MoneyTC,
+    total_tax: MoneyTC
+  }
+})
 
 const OrderTC = sc.createObjectTC({
   name: 'Order',
@@ -43,7 +60,7 @@ const OrderTC = sc.createObjectTC({
     id: 'String!',
     merchant: 'String!',
     customer: 'String!',
-    items: OldLineItemTC.getTypeNonNull()
+    items: PreviousLineItemTC.getTypeNonNull()
       .getTypePlural()
       .getType(),
     totalTax: MoneyTC.getTypeNonNull().getType(),

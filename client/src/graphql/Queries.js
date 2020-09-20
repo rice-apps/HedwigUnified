@@ -15,6 +15,11 @@ const GET_PAST_ORDERS = gql`
         items {
           quantity
           catalog_object_id
+          name
+          total_money {
+            amount
+            currency
+          }
         }
         total {
           amount

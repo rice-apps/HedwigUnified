@@ -5,8 +5,8 @@ const TotalAndTax = ({ items }) => {
     var tax = 0.1
     var total = 0
     var list = items.map(item => {
-      if (parseFloat(item.product.price) != undefined) {
-        return parseFloat(item.product.price)
+      if (parseFloat(item.total_money.amount) != undefined) {
+        return parseFloat(item.total_money.amount)
       } else {
         return 0.0
       }

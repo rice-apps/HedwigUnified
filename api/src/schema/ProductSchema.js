@@ -269,6 +269,31 @@ ItemTC.addResolver({
     }
   })
   .addResolver({
+    name: 'getAvailability',
+    args: {
+      productId: 'String!'
+    },
+    type: 'Boolean',
+    resolve: async ({ args }) => {
+      const { productId } = args
+
+      const api = new CatalogApi()
+
+      const retrieveCatalogObjectResponse = await api.retrieveCatalogObject(
+        productId
+      )
+
+      if (retrieveCatalogObjectResponse.errors) {
+        return new ApolloError(
+          `Updating availability failed: ${retrieveCatalogObjectResponse.errors}`
+        )
+      }
+
+      return retrieveCatalogObjectResponse.object.custom_attribute_values
+        .isAvailable.boolean_value
+    }
+  })
+  .addResolver({
     name: 'setAvailability',
     args: {
       idempotencyKey: 'String!',
@@ -309,7 +334,8 @@ ItemTC.addResolver({
 
 const ItemQueries = {
   getCatalog: ItemTC.getResolver('getCatalog'),
-  getItem: ItemTC.getResolver('getItem')
+  getItem: ItemTC.getResolver('getItem'),
+  getAvailability: ItemTC.getResolver('getAvailability')
 }
 
 const ItemMutations = {

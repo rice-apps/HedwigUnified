@@ -13,7 +13,7 @@ const MONGOOSE_CONFIG = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: false,
+  useFindAndModify: false
 }
 
 export {

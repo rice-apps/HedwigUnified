@@ -38,7 +38,9 @@ const OrderTC = sc.createObjectTC({
     id: 'String!',
     merchant: 'String!',
     customer: 'String!',
-    items: LineItemTC.getTypeNonNull().getTypePlural().getType(),
+    items: LineItemTC.getTypeNonNull()
+      .getTypePlural()
+      .getType(),
     totalTax: MoneyTC.getTypeNonNull().getType(),
     totalDiscount: MoneyTC.getTypeNonNull().getType(),
     total: MoneyTC.getTypeNonNull().getType(),

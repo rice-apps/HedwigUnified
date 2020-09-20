@@ -13,5 +13,5 @@ export {
   PaymentTC,
   UserTC,
   SortOrderEnumTC,
-  User,
+  User
 }

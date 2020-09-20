@@ -96,7 +96,7 @@ const UserQueries = {
 
 const UserMutations = {
   userUpdateOne: UserTC.getResolver('updateOne', [authMiddleware]),
-  authenticateUser: UserTC.getResolver('authenticate'),  
+  authenticateUser: UserTC.getResolver('authenticate')
 }
 
 async function authMiddleware (resolve, source, args, context, info) {

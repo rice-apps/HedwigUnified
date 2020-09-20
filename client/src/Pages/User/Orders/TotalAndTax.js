@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 const TotalAndTax = ({ items }) => {
+    console.log("ITEMS", items)
     var tax = 0.1
     var total = 0
     var list = items.map(item => {

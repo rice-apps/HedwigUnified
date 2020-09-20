@@ -1,32 +1,33 @@
 import { gql } from '@apollo/client'
 
-const GET_PAST_ORDERS = gql`
-  query getOrders {
+//past orders should be "COMPLETED" not "PROPOSED"
+const GET_PAST_ORDERS = gql` 
+  query getPastOrders{
     findOrders(
-        locations: ["FMXAFFWJR95WC"]
-        filter: { fulfillment_filter: { fulfillment_states: ["COMPLETED"] } }
-      ) {
-        cursor
-        orders {
-          id
-          merchant
-          customer
-          items {
-            quantity
-            catalog_object_id
-          }
-          total {
-            amount
-            currency
-          }
-          orderStatus
-          fulfillmentStatus
+      locations: ["FMXAFFWJR95WC"]
+      filter: { fulfillment_filter: { fulfillment_states: ["PROPOSED"] } }
+    ) {
+      cursor
+      orders {
+        id
+        merchant
+        customer
+        items {
+          quantity
+          catalog_object_id
         }
+        total {
+          amount
+          currency
+        }
+        orderStatus
+        fulfillmentStatus
       }
+    }
   }
 `
 const GET_FUTURE_ORDERS = gql`
-  query getOrders {
+  query getFutureOrders {
     findOrders(
         locations: ["FMXAFFWJR95WC"]
         filter: { fulfillment_filter: { fulfillment_states: ["PROPOSED"] } }

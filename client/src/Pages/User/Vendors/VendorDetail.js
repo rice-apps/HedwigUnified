@@ -18,7 +18,7 @@ const GET_VENDOR_PRODUCTS_QUERY = gql`
   }
 `
 
-const ProductCard = ({ product, slug }) => {
+function ProductCard ({ product, slug }) {
   const history = useHistory()
 
   const handleClick = () => {
@@ -32,7 +32,7 @@ const ProductCard = ({ product, slug }) => {
   )
 }
 
-const VendorDetail = ({}) => {
+function VendorDetail () {
   const { slug } = useParams()
   const history = useHistory()
 

@@ -4,7 +4,7 @@ import VendorImage from '../../images/vendorImage.jpg'
 import UserImage from '../../images/userImage.jpeg'
 import './portal.css'
 
-const PortalCard = () => {
+function PortalCard () {
   const history = useHistory()
 
   const handleVendorClick = () => {

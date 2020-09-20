@@ -83,13 +83,13 @@ const REMOVE_ITEM_FROM_CART = gql`
   }
 `
 
-const OptionVariant = ({
+function OptionVariant ({
   variant,
   disabled,
   selected,
   addToSelected,
   removeFromSelected
-}) => {
+}) {
   const [classNames, setClassNames] = useState(['optionVariant'])
 
   useEffect(() => {
@@ -130,7 +130,7 @@ const OptionVariant = ({
   )
 }
 
-const OptionSet = ({ optionSet }) => {
+function OptionSet ({ optionSet }) {
   const [selectedOptions, setSelectedOptions] = useState([])
 
   const addToSelected = newSelection =>
@@ -162,7 +162,7 @@ const OptionSet = ({ optionSet }) => {
   )
 }
 
-const ProductDetail = ({}) => {
+function ProductDetail () {
   const { slug, product } = useParams()
   const [count, setCount] = useState(1)
   const history = useHistory()

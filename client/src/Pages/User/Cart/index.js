@@ -12,8 +12,7 @@ import currency from "currency.js";
 import { cartItems } from "../../../apollo";
 import dispatch from "../Products/FunctionalCart";
 import Select from 'react-select';
-//import makeAnimated from 'react-select/animated';
-//import moment from 'moment';
+
 
 let cart_menu =
 
@@ -33,7 +32,7 @@ const defaultTotals = {
 
 };
 
-const CartDetail = ({}) => {
+function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals);
 
   const [pickupTime, setPickupTime] = useState({});

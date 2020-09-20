@@ -48,7 +48,7 @@ const getLinks = user => {
   return links
 }
 
-const Profile = () => {
+function Profile () {
   const { data, loading, error } = useQuery(GET_USER_INFO)
 
   if (error) return <p>Error!</p>

@@ -18,7 +18,7 @@ sc.Mutation.addFields({
   ...OrderMutations,
   ...VendorMutations,
   ...ItemMutations,
-  ...UserMutations,
+  ...UserMutations
 })
 
 sc.Subscription.addFields({

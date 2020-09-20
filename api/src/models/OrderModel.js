@@ -1,6 +1,5 @@
 import { sc } from 'graphql-compose'
 
-import { Order } from 'square-connect'
 import {
   MoneyTC,
   OrderStatusEnumTC,
@@ -9,6 +8,8 @@ import {
   SortOrderTimeEnumTC,
   SortOrderEnumTC
 } from './CommonModels'
+
+import { ItemTC } from "./ProductModel"
 
 const LineItemTC = sc.createObjectTC({
   name: 'LineItem',
@@ -31,6 +32,10 @@ const LineItemTC = sc.createObjectTC({
   }
 })
 
+const OldLineItemTC = sc.createObjectTC({
+  name: "OldLineItem"
+}).merge(LineItemTC).merge(ItemTC)
+
 const OrderTC = sc.createObjectTC({
   name: 'Order',
   description: 'The common data model representation of orders',
@@ -38,7 +43,7 @@ const OrderTC = sc.createObjectTC({
     id: 'String!',
     merchant: 'String!',
     customer: 'String!',
-    items: LineItemTC.getTypeNonNull()
+    items: OldLineItemTC.getTypeNonNull()
       .getTypePlural()
       .getType(),
     totalTax: MoneyTC.getTypeNonNull().getType(),

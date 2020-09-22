@@ -3,7 +3,7 @@ import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 
 function ItemsMenuManagementPage() {
     return (
-        <VendorsideTemplate name="Items"></VendorsideTemplate>
+        <VendorsideTemplate page="Items"></VendorsideTemplate>
     )
 }
 

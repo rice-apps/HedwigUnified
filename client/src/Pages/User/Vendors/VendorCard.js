@@ -30,14 +30,10 @@ function VendorCard ({ vendor }) {
      
     const determineIfClosed = (current_date, dayObj) =>{
         if (!dayObj) return;
-        console.log(
-        "CURREDATEHOURS", current_date.getHours())
-        console.log("DAYOBJ", dayObj.start);
         return current_date.getHours() < dayObj.end;
     } 
     
     const closed = determineIfClosed(current_date, dayObj); 
-    console.log("CLOSED", closed);
 
     return (
       <Fragment>
@@ -46,7 +42,6 @@ function VendorCard ({ vendor }) {
             <div className='vendorHeadingText'>
               <h3 className='vendorName'>{name}</h3>
               {dayObj && <p>Hours Open: {dayObj.start}-{dayObj.end} </p>}
-              {dayObj && console.log(dayObj.start, dayObj.end)}
             </div>
             <div className='vendorHoursIcon'>
               {closed ? (

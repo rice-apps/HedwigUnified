@@ -4,11 +4,7 @@ import { FaUserCircle, FaClock } from "react-icons/fa";
 import moment from 'moment';
 
 const VendorHeaderWrapper = styled.div`
-@font-face {
-    font-family: "AvenirLTStd-Book";
-    src: url("'../../../../fonts/AvenirLTStd-Book.otf'");
-  }
-  font-family: "AvenirLTStd-Book", sans-serif;
+  font-family: "Futura", sans-serif;
   display: grid;
   width: 100%;
   height: 100%;

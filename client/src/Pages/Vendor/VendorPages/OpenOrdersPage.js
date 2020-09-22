@@ -1,10 +1,14 @@
 import React from 'react'
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
+import OrderDashboard from './../VendorComponents/OpenOrderComponents/OrderDashboard.js'
+
 
 function OpenOrdersPage() {
     return (
         
-            <VendorsideTemplate name="Open Orders"></VendorsideTemplate>
+            <VendorsideTemplate page={<OrderDashboard/>}>
+
+            </VendorsideTemplate>
         
     )
 }

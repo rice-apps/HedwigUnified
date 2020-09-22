@@ -66,13 +66,7 @@ OrderTC.addResolver({
       id: order.id,
       merchant: order.location_id,
       customer: order.customer_id,
-      items: order.line_items.map(lineItem => ({
-        quantity: lineItem.quantity,
-        catalog_object_id: lineItem.catalog_object_id,
-        modifiers: lineItem.modifiers
-          ? lineItem.modifiers.map(modifier => modifier.catalog_object_id)
-          : null
-      })),
+      items: order.line_items,
       totalTax: order.total_tax_money,
       totalDiscount: order.total_discount_money,
       total: order.total_money,

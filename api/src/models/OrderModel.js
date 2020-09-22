@@ -1,6 +1,6 @@
 import { sc } from 'graphql-compose'
+import { Money } from 'square-connect'
 
-import { Order } from 'square-connect'
 import {
   MoneyTC,
   OrderStatusEnumTC,
@@ -31,6 +31,28 @@ const LineItemTC = sc.createObjectTC({
   }
 })
 
+const PreviousLineItemTC = sc.createObjectTC({
+  name: "PreviousLineItem",
+  description: "A line item in a past order",
+  fields: {
+    name: 'String',
+    quantity: 'String',
+    catalog_object_id: 'String',
+    variation_name: 'String',
+    modifiers: `
+      type OrderLineItemModifier {
+        uid: String
+        catalog_object_id: String,
+        name: String
+        base_price_money: Money
+        total_price_money: Money
+      }
+    `,
+    total_money: MoneyTC,
+    total_tax: MoneyTC
+  }
+})
+
 const OrderTC = sc.createObjectTC({
   name: 'Order',
   description: 'The common data model representation of orders',
@@ -38,7 +60,7 @@ const OrderTC = sc.createObjectTC({
     id: 'String!',
     merchant: 'String!',
     customer: 'String!',
-    items: LineItemTC.getTypeNonNull()
+    items: PreviousLineItemTC.getTypeNonNull()
       .getTypePlural()
       .getType(),
     totalTax: MoneyTC.getTypeNonNull().getType(),

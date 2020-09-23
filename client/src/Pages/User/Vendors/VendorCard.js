@@ -9,14 +9,14 @@ import {
 
 function VendorCard ({ vendor }) {
     const { name, hours, logoUrl } = vendor
-  
+
     // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
-  
+
     const navigate = useNavigate()
-    
+
     // if (errors) return <h1>lol oops something broke</h1>;
     // if (loading) return <h1>loading... be patient u hoe</h1>
-  
+
     const handleClick = () => {
       // Go to this particular vendor's detail page
       return navigate(`/eat/${vendor.slug}`)
@@ -26,14 +26,29 @@ function VendorCard ({ vendor }) {
     const current_date = new Date();
     const currentDay = current_date.getDay();
     const dayObj = hours[0];
-   
-     
+
+   const convertTimeToNum = (time) =>{
+     const [timeNum, halfOfDay] = time.split(' ');
+     let [hours, minutes] = timeNum.split(':');
+     hours = parseInt(hours);
+     minutes = parseInt(minutes)/60;
+     if(halfOfDay === 'a.m.'){
+       return hours + minutes;
+     }
+     else if(halfOfDay === 'p.m.'){
+       return 12 + hours + minutes;
+     }
+   }
+
     const determineIfClosed = (current_date, dayObj) =>{
         if (!dayObj) return;
-        return current_date.getHours() < dayObj.end;
-    } 
-    
-    const closed = determineIfClosed(current_date, dayObj); 
+        const currentTime = current_date.getHours()+current_date.getMinutes()/60;
+        const startTime = convertTimeToNum(dayObj.start);
+        const endTime = convertTimeToNum(dayObj.end);
+        return currentTime <= startTime || currentTime >= endTime;
+    }
+
+    const closed = determineIfClosed(current_date, dayObj);
 
     return (
       <Fragment>

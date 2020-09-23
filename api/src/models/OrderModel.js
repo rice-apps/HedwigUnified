@@ -32,8 +32,8 @@ const LineItemTC = sc.createObjectTC({
 })
 
 const PreviousLineItemTC = sc.createObjectTC({
-  name: "PreviousLineItem",
-  description: "A line item in a past order",
+  name: 'PreviousLineItem',
+  description: 'A line item in a past order',
   fields: {
     name: 'String',
     quantity: 'String',

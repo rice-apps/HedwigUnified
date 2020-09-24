@@ -31,7 +31,7 @@ import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManage
 import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
-
+import Payments from '../Pages/User/Cart/Payments'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -137,7 +137,8 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
-          { path: '/confirmation', element: <Route element={<Confirmation />} /> }
+          { path: '/payment', element: <PrivateRoute element={<Payments />} /> },
+          { path: '/confirmation', element: <PrivateRoute element={<Confirmation />} /> }
         ]
       }
     ]

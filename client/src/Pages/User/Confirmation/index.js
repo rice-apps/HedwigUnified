@@ -30,7 +30,8 @@ import {
 import { PickupDropdown } from '../../../components/PickupDropdown'
 
 import { useNavigate } from 'react-router-dom'
-import { ReactComponent as ReactLogo } from './check-circle.svg';
+import { ReactComponent as FailureSVG } from './alert-circle.svg';
+import { ReactComponent as ConfirmationSVG } from './check-circle.svg';
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
 //         vendorMany {
@@ -54,21 +55,26 @@ const Confirmation = ({ classes }) => {
   const handleOrdersClick = () => {
     return navigate(`/eat/orders`)
   }
+  const handleCartClick = () => {
+    return navigate(`/eat/${vendor.slug}/cart`)
+  }
   // if (error) return <p>Error...</p>
   // if (loading) return <p>Loading...</p>
   // if (!data) return <p>No data...</p>
-  let vendorID = '5ecf473841ccf22523280c3b'
+  let vendorId = '5ecf473e41ccf22523280c3c'
+  let dataSourceIdTest = 'WCCTHDOMDN564YCZYPJP5DF3'
 
-  const GET_CATALOG = gql`
-    query GET_CATALOG($item: String!){
-      getCatalog(dataSource: SQUARE, vendor: $item){
-        name
-        dataSourceId
-      }
-    }
-  `;
+  // const GET_CATALOG = gql`
+  //   query GET_CATALOG($item: String!){
+  //     getCatalog(dataSource: SQUARE, vendor: $item){
+  //       name
+  //       dataSourceId
+  //       isAvailable
+  //     }
+  //   }
+  // `;
 
-  const { data: catalog, loading: catalogLoading, error: catalogError } = useQuery(GET_CATALOG, { variables: { item: vendorId } });
+  // const { data: catalog, loading: catalogLoading, error: catalogError } = useQuery(GET_CATALOG, { variables: { item: vendorId } });
 
   const FETCH_AVAILABILITY = gql`
     query FETCH_AVAILABILITY($productId: String!){
@@ -76,11 +82,30 @@ const Confirmation = ({ classes }) => {
     }
   `;
 
-  const { data: availability, loading, error } = useQuery(FETCH_AVAILABILITY, { variables: { productID: catalog.dataSourceId } });
+  const { data: availability, loading, error } = useQuery(FETCH_AVAILABILITY, { variables: { venID: /*catalog.dataSourceId*/dataSourceIdTest } });
 
-  return (
-    <div className='mainDiv'>
-      <ReactLogo className='checkSvg' />
+  // how do we get the current item in cart? 
+  // right now we hard coded vendor id and item
+  // also availability is undefined
+  function renderFailure() {
+    return (
+      <div className='mainDiv'>
+      <FailureSVG className='checkSvg' />
+      <div>
+        <p className='orderConfirmed'>Order Failed</p>
+        <p className='statusUpdate'>Please go back to your cart and make adjustments. Your order will <strong>not</strong> be placed at this time</p>
+      </div>
+      <div className='buttonsContainer'>
+        <button className='bottomButton' onClick={handleCartClick}>View Cart</button>
+      </div>
+    </div>
+    )
+  }
+  function renderConfirmation() {
+
+    return (
+      <div className='mainDiv'>
+      <ConfirmationSVG className='checkSvg' />
       <div>
         <p className='orderConfirmed'>Order Confirmed!</p>
         <p className='statusUpdate'>You will receive order status updates via <strong>text.</strong></p>
@@ -96,6 +121,15 @@ const Confirmation = ({ classes }) => {
         <button className='bottomButton' onClick={handleMenuClick}>Main Menu</button>
         <button className='bottomButton' onClick={handleOrdersClick}>View Orders</button>
       </div>
+    </div>
+    )
+  }
+  
+  return (
+    <div>
+    
+    {(availability === false) ? renderConfirmation(): renderFailure()}
+
     </div>
   )
 }

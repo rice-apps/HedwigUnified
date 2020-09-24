@@ -57,7 +57,7 @@ const Confirmation = ({ classes }) => {
   // if (error) return <p>Error...</p>
   // if (loading) return <p>Loading...</p>
   // if (!data) return <p>No data...</p>
-  let vendorID = '5ecf473841ccf22523280c3b'
+  let vendorId = '5ecf473841ccf22523280c3b'
 
   const GET_CATALOG = gql`
     query GET_CATALOG($item: String!){

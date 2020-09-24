@@ -1,4 +1,4 @@
-import { User, UserTC, OrderTC, VendorTC } from '../models'
+import { User, UserTC } from '../models'
 import {
   authenticateTicket,
   verifyToken,
@@ -44,7 +44,7 @@ UserTC.addResolver({
   name: 'authenticate',
   type: UserTC,
   args: { ticket: 'String!' },
-  resolve: async ({ source, args, context, info }) => {
+  resolve: async ({ args }) => {
     const authenticationResponse = await authenticateTicket(args.ticket)
     if (authenticationResponse.success) {
       let user // this will be used as the return object
@@ -76,7 +76,7 @@ UserTC.addResolver({
   name: 'verify',
   type: UserTC,
   args: { token: UserTC.getFieldTC('token') },
-  resolve: async ({ source, args, context, info }) => {
+  resolve: async ({ args }) => {
     const verificationResponse = await verifyToken(args.token)
     if (verificationResponse.success) {
       const { id } = verificationResponse

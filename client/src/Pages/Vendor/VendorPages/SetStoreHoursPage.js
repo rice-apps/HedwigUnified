@@ -3,7 +3,7 @@ import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 
 function SetStoreHoursPage() {
     return (
-        <VendorsideTemplate name="Set Store Hours"></VendorsideTemplate>
+        <VendorsideTemplate page="Set Store Hours"></VendorsideTemplate>
     )
 }
 

@@ -61,8 +61,12 @@ const Confirmation = ({ classes }) => {
   // if (error) return <p>Error...</p>
   // if (loading) return <p>Loading...</p>
   // if (!data) return <p>No data...</p>
+<<<<<<< HEAD
   let vendorId = '5ecf473e41ccf22523280c3c'
   let dataSourceIdTest = 'WCCTHDOMDN564YCZYPJP5DF3'
+=======
+  let vendorId = '5ecf473841ccf22523280c3b'
+>>>>>>> 39888e112410575b7e08ae541ac6139d799c3c8e
 
   // const GET_CATALOG = gql`
   //   query GET_CATALOG($item: String!){

@@ -299,7 +299,7 @@ ItemTC.addResolver({
       }
 
       return retrieveCatalogObjectResponse.object.custom_attribute_values
-        .isAvailable.boolean_value
+        .is_available.boolean_value
     }
   })
   .addResolver({

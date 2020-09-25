@@ -4,7 +4,7 @@ import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 
 function ClosedOrdersPage() {
     return (
-      <VendorsideTemplate name="Closed Orders"></VendorsideTemplate>
+      <VendorsideTemplate page="Closed Orders"></VendorsideTemplate>
     )
 }
 

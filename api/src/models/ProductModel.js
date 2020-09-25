@@ -137,6 +137,10 @@ const ItemTC = sc
         type: GraphQLString,
         description:
           'The category of this item as defined in the data source. May or may not be present.'
+      },
+      isAvailable: {
+        type: 'Boolean',
+        description: 'Whether this item is available or not'
       }
     }
   })

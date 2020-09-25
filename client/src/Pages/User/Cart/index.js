@@ -8,10 +8,12 @@ import logo from "../../../images/tealogo.png";
 import "./cart.scss";
 import { centerCenter, row, column } from "../../../Styles/flex";
 import CartProduct from "./CartProducts";
+import Payments from "./Payments.js";
 import currency from "currency.js";
 import { cartItems } from "../../../apollo";
 import dispatch from "../Products/FunctionalCart";
 import Select from 'react-select';
+import { useNavigate } from "react-router-dom";
 
 
 let cart_menu =
@@ -36,9 +38,9 @@ function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals);
 
   const [pickupTime, setPickupTime] = useState({});
-
+  const navigate = useNavigate()
   const handleConfirmClick = () => {
-    // Submit order
+    return navigate(`/eat/ewtea/payment`)
   };
 
   useEffect(() => {

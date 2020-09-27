@@ -1,9 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
 import './index.css'
 import { Link, animateScroll as scroll } from 'react-scroll'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { GET_CATALOG } from '../../../graphql/CatalogQueries.js'
+import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
+import { useQuery, gql } from '@apollo/client'
+
 
 const vendor = {
   name: 'East West Tea',
@@ -76,9 +80,44 @@ const vendor = {
   ]
 }
 
+//<Menu currentVendor = {"East West Tea"}/>
 function Menu () {
-  const navigate = useNavigate()
+  const navigate = useNavigate(); 
+  const {state} = useLocation();
+  const {currentVendor} = state;
 
+  const { refetch, data : catalog_data, error : catalog_error, loading : catalog_loading } = useQuery(GET_CATALOG, {
+    variables: {
+      //dataSource: 'SQUARE',
+      vendor: currentVendor
+    },
+  });
+
+  //const catalog_data = vendor; 
+
+  const {data: vendor_data, error: vendor_error, loading: vendor_loading } = useQuery(VENDOR_QUERY, {
+    variables: {vendor: currentVendor},
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
+  }); 
+
+  if (vendor_loading){
+    return <p>Loading...</p>
+  }
+  if(vendor_error){
+    return <p>ErrorV...</p>
+  }
+  //const vendor_data = vendor_info.getVendor; 
+  if (catalog_loading){
+    return <p>Loading...</p>
+  }
+  if(catalog_error){
+    return <p>ErrorC...</p>
+  }
+
+  
+  console.log("CURVENDOR", currentVendor);  
+  console.log(vendor_data); 
   // Later in the code, we call sampleFunction(product.number)
 
   // sampleFunction
@@ -97,6 +136,7 @@ function Menu () {
     return navigate(`${productID}`)
   }
 
+  // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
       {/* Hero Image */}
@@ -105,17 +145,15 @@ function Menu () {
       {/* Vendor Info */}
       <div class='vendorinfocontainer'>
         {/* Vendor Name */}
-        <h1 class='vendortitle'> {vendor.name} </h1>
+        <h1 class='vendortitle'> {vendor_data.name} </h1>
         {/* Vendor Operating Hours */}
-        <p class='vendorinfo'>{vendor.hours}</p>
-        {/* Vendor Location */}
-        <p class='vendorinfo'> {vendor.location}</p>
+        <p class='vendorinfo'>{vendor_data.hours}</p>
         <button class='readmore'> More Info </button>
       </div>
 
       {/* Category Select Bar */}
       <div class='categoryselect'>
-        {vendor.categories.map(category => (
+        {catalog_data.categories.map(category => (
           // smooth scrolling feature
           <h1 class='categoryname'>
             <Link
@@ -135,12 +173,12 @@ function Menu () {
       {/* Products */}
       <div class='itemlist'>
         {/* Appending each category to the list */}
-        {vendor.categories.map(category => (
+        {catalog_data.categories.map(category => (
           <div id={category}>
             {/* Giving each category a header */}
             <h3 class='categoryheader'>{category}</h3>
             {/*  Filtering out all items that fall under the category */}
-            {vendor.products
+            {catalog_data.products
               .filter(item => item.category === category)
               .map(product => (
                 <div class='itemgrid' onClick={() => handleClick(product.name)}>

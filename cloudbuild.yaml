@@ -5,9 +5,11 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ["run", "create-env"]
   env:
-    - 'MONGODB_CONNECTION_STRING=${_MONGODB_CONNECTION_STRING}'
+    - 'MONGODB_URL=${_MONGODB_URL}'
     - 'SERVICE_URL=${_SERVICE_URL}'
     - 'SECRET=${_SECRET}'
+    - 'DEV_PORT=${_DEV_PORT}'
+    - 'SQUARE_ACCESS_TOKEN=${_SQUARE_ACCESS_TOKEN}'
   dir: 'api/'
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy", "api/api.yaml", "-v", "$_GAE_VERSION"]

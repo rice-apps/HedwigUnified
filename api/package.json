@@ -13,7 +13,8 @@
     "pkg": "pkg build/index.js -o build/HedwigBackend --options trace-warnings",
     "refresh": "rm -rf build node_modules && rm package-lock.json",
     "start": "nodemon",
-    "server": "node --trace-warnings build/index.js"
+    "server": "node --trace-warnings build/index.js",
+    "create-env": "printenv > .env"
   },
   "author": "vms2@rice.edu",
   "license": "MIT",

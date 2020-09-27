@@ -5,6 +5,7 @@ const OrderDashboardWrapper = styled.div`
   height: 100%;
   width: 100%;
   background-color: #f7f7f7;
+  overflow:hidden;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 45px auto;
@@ -39,9 +40,13 @@ const GeneralSpaceWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #f7f7f7;
   grid-auto-flow: column;
+  width: 99%;
+  height: 100%;
+  position:relative;
+  overflow:auto;
 `;
 
 const NewOrderSpaceWrapper = styled(GeneralSpaceWrapper)`

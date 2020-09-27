@@ -5,22 +5,25 @@ import { BsFillClockFill } from "react-icons/bs";
 import { BiFoodMenu } from "react-icons/bi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const OrderCardWrapper = styled.div`
+
+const OrderCardWrapper = styled.div.attrs(props => ({
+  className: props.className
+}))`
   background-color: white;
   border-radius: 20px;
   border-width: 2px;
   border-color: #cacaca;
   border-style: solid;
-  grid-area: ${props => props.spaceName || "NewOrderSpace"};
   justify-self: center;
   font-family: "Futura", sans-serif;
   display: grid;
-  width: 95%;
+  width: 94%;
   height: max-content;
   margin: 10px;
-  overflow: hidden;
+  margin-right: 14px;
+  overflow: visible;
   grid-template-columns: 1fr;
-  grid-template-rows: 35px 70px max-content 92px;
+  grid-template-rows: 35px max-content max-content 92px;
   grid-template-areas:
     "OrderTitleSpace"
     "OrderTimeSpace"
@@ -38,6 +41,9 @@ const OrderTitleSpaceWrapper = styled.div`
   align-items: flex-end;
   justify-content: space-around;
   padding-bottom: 0px;
+  overflow:hidden;
+  border-top-right-radius:20px;
+  border-top-left-radius:20px;
 `;
 
 function MakeOrderTitle(props) {
@@ -211,7 +217,7 @@ function OrderCard(props) {
     <IconContext.Provider
       value={{ style: { verticalAlign: "middle", marginBottom: "2px" } }}
     >
-      <OrderCardWrapper spaceName={props.orderStatus}>
+      <OrderCardWrapper className={props.orderStatus}>
         {/* Section of Order card with customer name, order number */}
         <MakeOrderTitle orderNumber="12" customerName="Allison Smith" />
 

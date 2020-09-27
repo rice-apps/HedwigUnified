@@ -1,36 +1,26 @@
-import React, {
-  ToolBar,
-  Container,
-  Fragment,
-  useContext,
-  useEffect
-} from 'react'
+import React from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { useHistory, useLocation } from 'react-router'
-import {
-  AppBar,
-  Grid,
-  Toolbar,
-  BottomNavigation,
-  Divider
-} from '@material-ui/core'
+
 import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
 import '../../../fonts/style.css'
 
 //fontawesome imports
-
+  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faDoorOpen,
-  faDoorClosed,
-  faUser,
-  faShoppingCart,
-  faReceipt
+  faUser
 } from '@fortawesome/free-solid-svg-icons'
 import { PickupDropdown } from '../../../components/PickupDropdown'
+import {
+  VENDOR_QUERY,
+  GET_ALL_VENDORS
+} from '../../../graphql/VendorQueries'
+import VendorCard from './VendorCard'
+import BottomAppBar from './BottomAppBar'
 
-import { useNavigate } from 'react-router-dom'
+
 
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
@@ -48,92 +38,17 @@ import { useNavigate } from 'react-router-dom'
 //     }
 // `
 
-function VendorCard ({ vendor }) {
-  const { name, hours, keywords, image, closed } = vendor
-
-  const navigate = useNavigate()
-
-  const handleClick = () => {
-    // Go to this particular vendor's detail page
-    return navigate(`/eat/${vendor.slug}`)
-  }
-
-  return (
-    <Fragment>
-      <div className='vendorContainer' onClick={() => handleClick()}>
-        <div className='vendorHeading'>
-          <div className='vendorHeadingText'>
-            <h3 class='vendorName'>{name}</h3>
-            <p>Hours: {hours} </p>
-          </div>
-          <div className='vendorHoursIcon'>
-            {closed ? (
-              <FontAwesomeIcon className='door' icon={faDoorClosed} />
-            ) : (
-              <FontAwesomeIcon className='door' icon={faDoorOpen} />
-            )}
-          </div>
-        </div>
-        <div className='vendorImageContainer'>
-          {/* {closed ? <span><p className="closedText">Closed</p></span>: null} */}
-          <img
-            className={closed ? `vendorImage closed` : `vendorImage`}
-            src={image}
-          />
-        </div>
-        <p className='vendorKeywords'>{keywords.join(', ')}</p>
-      </div>
-      {/* <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>
-        </div> */}
-      {/* <div>
-            <ul>
-                <li>Food</li>
-                <li>Drink</li>
-                <li>Snacks</li>
-                <li>Coffee</li>
-            </ul>
-        </div> */}
-    </Fragment>
-  )
-}
-
-function BottomAppBar () {
-  return (
-    <AppBar position='sticky' color='white'>
-      <BottomNavigation className='stickToBottom'>
-        <Grid container>
-          <Toolbar className='bottomBar'>
-            <div>
-              <FontAwesomeIcon
-                className='barIconCart'
-                icon={faShoppingCart}
-                flexItem
-              />
-              <p class='iconText'>Cart</p>
-            </div>
-            <Divider orientation='vertical' flexItem />
-            <div>
-              <FontAwesomeIcon
-                className='barIconReceipt'
-                icon={faReceipt}
-                flexItem
-              />
-              <p class='iconText'>Orders</p>
-            </div>
-          </Toolbar>
-        </Grid>
-      </BottomNavigation>
-    </AppBar>
-  )
-}
-
 function VendorList ({ classes }) {
-  // const { data, loading, error } = useQuery(GET_VENDORS_QUERY)
+  const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
-  // if (error) return <p>Error...</p>
-  // if (loading) return <p>Loading...</p>
-  // if (!data) return <p>No data...</p>
+  if (error) return <p>Error...</p>
+  if (loading) return <p>Loading...</p>
+  if (!data) return <p>No data...</p>
 
+  const {
+    getVendors
+  } = data
+  /*
   const vendors = [
     {
       name: 'East West Tea',
@@ -160,6 +75,7 @@ function VendorList ({ classes }) {
       closed: false
     }
   ]
+  */
 
   return (
     <div className='vendorPage'>
@@ -171,7 +87,7 @@ function VendorList ({ classes }) {
         ></FontAwesomeIcon>
       </div>
       <div>
-        {vendors.map(vendor => {
+        {getVendors.map(vendor => {
           return <VendorCard vendor={vendor} />
         })}
       </div>

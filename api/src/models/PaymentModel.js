@@ -1,5 +1,4 @@
 import { sc } from 'graphql-compose'
-import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { MoneyTC } from './CommonModels'
 
 const PaymentTC = sc.createObjectTC({

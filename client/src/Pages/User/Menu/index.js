@@ -82,24 +82,24 @@ const vendor = {
 
 //<Menu currentVendor = {"East West Tea"}/>
 function Menu () {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const {state} = useLocation();
   const {currentVendor} = state;
 
-  const { refetch, data : catalog_data, error : catalog_error, loading : catalog_loading } = useQuery(GET_CATALOG, {
+  const { refetch, data : catalog_info, error : catalog_error, loading : catalog_loading } = useQuery(GET_CATALOG, {
     variables: {
       //dataSource: 'SQUARE',
       vendor: currentVendor
     },
   });
 
-  //const catalog_data = vendor; 
+  //const catalog_data = vendor;
 
   const {data: vendor_data, error: vendor_error, loading: vendor_loading } = useQuery(VENDOR_QUERY, {
     variables: {vendor: currentVendor},
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
-  }); 
+  });
 
   if (vendor_loading){
     return <p>Loading...</p>
@@ -107,7 +107,7 @@ function Menu () {
   if(vendor_error){
     return <p>ErrorV...</p>
   }
-  //const vendor_data = vendor_info.getVendor; 
+  //const vendor_data = vendor_info.getVendor;
   if (catalog_loading){
     return <p>Loading...</p>
   }
@@ -115,17 +115,22 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
-  
-  console.log("CURVENDOR", currentVendor);  
-  console.log(vendor_data); 
+  const {getCatalog: catalog_data} = catalog_info;
   // Later in the code, we call sampleFunction(product.number)
 
   // sampleFunction
   // input: a number
   // output: number * 3
-  const sampleFunction = price => {
-    return price * 3
+  const compileCategories = (data) => {
+    let categories = []
+    data.forEach((product)=>{
+      categories.push(product.category);
+    });
+    categories =  new Set(categories);
+    return [...categories]
   }
+
+  const categories = compileCategories(catalog_data);
 
   /**
    * Input: a product id
@@ -153,7 +158,7 @@ function Menu () {
 
       {/* Category Select Bar */}
       <div class='categoryselect'>
-        {catalog_data.categories.map(category => (
+        {categories.map(category => (
           // smooth scrolling feature
           <h1 class='categoryname'>
             <Link
@@ -173,19 +178,19 @@ function Menu () {
       {/* Products */}
       <div class='itemlist'>
         {/* Appending each category to the list */}
-        {catalog_data.categories.map(category => (
+        {categories.map(category => (
           <div id={category}>
             {/* Giving each category a header */}
             <h3 class='categoryheader'>{category}</h3>
             {/*  Filtering out all items that fall under the category */}
-            {catalog_data.products
+            {catalog_data
               .filter(item => item.category === category)
               .map(product => (
                 <div class='itemgrid' onClick={() => handleClick(product.name)}>
                   {/* Displaying the item: image, name, and price */}
-                  <img src={product.image} class='itemimage' alt='boba' />
+                  <img src={product.image} class='itemimage' alt={product.name} />
                   <h1 class='itemname'>{product.name}</h1>
-                  <p class='itemprice'>{product.price}</p>
+                  <p class='itemprice'>{product.variants[0].price.amount/100}</p>
                 </div>
               ))}
           </div>

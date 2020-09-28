@@ -19,7 +19,7 @@ function VendorCard ({ vendor }) {
 
     const handleClick = () => {
       // Go to this particular vendor's detail page
-      return navigate(`/eat/${vendor.slug}`)
+      return navigate(`/eat/${vendor.slug}`, { state: {currentVendor: name} })
     }
 
     // includes time

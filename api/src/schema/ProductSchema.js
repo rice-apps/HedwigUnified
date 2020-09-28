@@ -541,13 +541,13 @@ ItemTC.addResolver({
         object => object.type == 'MODIFIER_LIST'
       )
       const items = objects.filter(object => object.type == 'ITEM')
-  
+
       // Step 1.7: Extract category names from categories
       const categoryId2Name = id =>
         categories.find(category => category.id == id).category_data.name
       const modifierListId2Data = id =>
         modifierLists.find(modifierList => modifierList.id == id)
-  
+
       // Step 2: Transform data into CMD
       return items.map(item => {
         const {
@@ -563,10 +563,10 @@ ItemTC.addResolver({
             is_available: { boolean_value: isAvailable }
           }
         } = item
-  
+
         // Step 2.25: Replace category IDs with names
         const categoryName = categoryId2Name(category_id)
-  
+
         const returnedVariants = variations.map(variant => {
           const {
             id: itemVariationId,
@@ -576,7 +576,7 @@ ItemTC.addResolver({
               price_money
             }
           } = variant
-  
+
           return {
             dataSourceId: itemVariationId,
             parentItemId,
@@ -591,13 +591,13 @@ ItemTC.addResolver({
             merchant: ''
           }
         })
-  
+
         const modifierLists = modifier_list_info
           ? modifier_list_info.map(info =>
               modifierListId2Data(info.modifier_list_id)
             )
           : []
-  
+
         const returnedModifierLists = modifierLists.map(modifierList => {
           const {
             id: parentListId,
@@ -607,13 +607,17 @@ ItemTC.addResolver({
               modifiers
             }
           } = modifierList
-  
+
           const returnedModifiers = modifiers.map(modifier => {
             const {
               id: modifierId,
-              modifier_data: { name: modifierName, modifier_list_id, price_money }
+              modifier_data: {
+                name: modifierName,
+                modifier_list_id,
+                price_money
+              }
             } = modifier
-  
+
             return {
               dataSourceId: modifierId,
               parentListId: modifier_list_id,
@@ -628,7 +632,7 @@ ItemTC.addResolver({
               merchant: ''
             }
           })
-  
+
           return {
             dataSourceId: parentListId,
             name: modifierListName,
@@ -636,7 +640,7 @@ ItemTC.addResolver({
             modifiers: returnedModifiers
           }
         })
-  
+
         return {
           dataSourceId: itemId,
           category: categoryName,

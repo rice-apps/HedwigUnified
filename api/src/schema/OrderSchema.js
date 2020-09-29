@@ -13,6 +13,7 @@ import {
   SortOrderInputTC,
   FindManyOrderPayloadTC
 } from '../models/OrderModel'
+import TwilioClient from '../twilio'
 
 OrderTC.addResolver({
   name: 'findOrders',
@@ -221,6 +222,40 @@ OrderTC.addResolver({
       pubsub.publish('orderUpdated', {
         orderUpdated: CDMOrder
       })
+
+      switch (first.state) {
+        case 'PREPARED':
+          TwilioClient.messages.create({
+            body:
+              'Your recent order has been prepared. Please go to the pickup location',
+            from: '',
+            to: '+14692475650'
+          })
+          break
+        case 'COMPLETED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been picked up. If you did not do this, please contact the vendor directly.',
+            from: '',
+            to: '+14692475650'
+          })
+          break
+        case 'CANCELED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
+            from: '',
+            to: '+14692475650'
+          })
+          break
+        default:
+          TwilioClient.messages.create({
+            body:
+              'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
+            from: '',
+            to: '+14692475650'
+          })
+      }
 
       return CDMOrder
     }

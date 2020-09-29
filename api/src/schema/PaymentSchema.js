@@ -128,12 +128,12 @@ PaymentTC.addResolver({
               quantity: subtotal.amount / 25
             }
           ])
-          
+
           response = {
             id: checkout.id,
             total: subtotal,
             url: checkout.webUrl,
-            source,
+            source
           }
 
           break

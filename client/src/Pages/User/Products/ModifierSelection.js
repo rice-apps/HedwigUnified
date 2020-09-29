@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import currency from "currency.js";
 
-function ModifierSelection ({ modifier }) {
-    let { question, description, multiSelect, options } = modifier;
+function ModifierSelection ({ modifierCategory }) {
+    let { modifiers: options, question, description, multiSelect} = modifierCategory;
     return (
       <div className="modifier">
         <div className="heading">
@@ -39,7 +39,7 @@ function ModifierSelection ({ modifier }) {
                 {option.price ? (
                   <p>
   
-                    {currency(option.price.amount).format({
+                    {currency(option.price.amount/100).format({
                       symbol: "$",
                       format: "USD"
   

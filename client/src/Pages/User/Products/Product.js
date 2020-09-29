@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useQuery } from '@apollo/client'
 import "./product.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { makeVar } from "@apollo/client";
 import dispatch from "./FunctionalCart";
 import { createMuiTheme } from "@material-ui/core";
@@ -8,22 +9,59 @@ import { cartItems } from "../../../apollo";
 import VariantSelection from "./VariantSelection";
 import QuantitySelector from "./QuantitySelector";
 import ModifierSelection from "./ModifierSelection";
+import {
+  GET_ITEM
+} from "../../../graphql/ProductQueries";
+import {
+  VENDOR_QUERY
+} from "../../../graphql/VendorQueries";
+
 
 function Product() {
+   const navigate = useNavigate();
+   const {state} = useLocation();
+   const {currProduct: productId, currVendor: vendorState} = state;
+
+   const { refetch, data : product_data, error : product_error, loading : product_loading } = useQuery(GET_ITEM, {
+     variables: {
+       dataSourceId: productId
+     },
+   });
+
+  const {data: vendor_data, error: vendor_error, loading: vendor_loading } = useQuery(VENDOR_QUERY, {
+    variables: {vendor: vendorState},
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  let vendor = {
-    slug: "EWT"
-  };
-  const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+
+  
+
+  if (vendor_loading){
+    return <p>Loading...</p>
+  }
+  if(vendor_error){
+    return <p>ErrorV...</p>
+  }
+
+  if (product_loading){
+    return <p>Loading...</p>
+  }
+  if(product_error){
+    return <p>ErrorP...</p>
+  }
+
+  const {getItem: product} = product_data; 
+  const {getVendor: vendor} = vendor_data; 
 
   const handleClick = () => {
     return navigate(`/eat/${vendor.slug}/cart`);
   };
-
-  const [quantity, setQuantity] = useState(1);
 
   const increase = () => {
     setQuantity(quantity + 1);
@@ -32,7 +70,8 @@ function Product() {
   const decrease = () => {
     setQuantity(quantity - 1);
   };
-
+  
+  /*
   const product = {
     name: "Milk Tea",
     description:
@@ -57,7 +96,7 @@ function Product() {
         ]
       }
     ],
-    modifiers: [
+    modifierLists: [
       {
         question: "Pick your free topping",
         description: "One included for free!",
@@ -137,8 +176,10 @@ function Product() {
       }
     ]
   };
+  */
 
   function makeCartItem() {
+
     let itemName = product.name;
     let itemID = product.squareID;
     let variant = JSON.parse(
@@ -152,10 +193,10 @@ function Product() {
     let modifierNames = [];
     var modifierCost = 0;
     var modifierList = {};
-    let modifiers = document.querySelectorAll(".modifierSelect:checked");
+    let modifierLists = document.querySelectorAll(".modifierSelect:checked");
 
-    for (var i = 0; i < modifiers.length; i++) {
-      let currentModifier = JSON.parse(modifiers[i].value);
+    for (var i = 0; i < modifierLists.length; i++) {
+      let currentModifier = JSON.parse(modifierLists[i].value);
       modifierList[i] = currentModifier.option;
       let currentModifierName = currentModifier.option.name;
       {
@@ -179,7 +220,7 @@ function Product() {
         name: itemName,
         Id: Date.now(),
         variant: variantObject,
-        modifiers: modifierList,
+        modifierLists: modifierList,
         quantity: itemQuantity,
         price: totalPrice,
         modDisplay: modifierNames
@@ -200,13 +241,11 @@ function Product() {
         <p>{product.description}</p>
       </div>
       <div className="variantsContainer">
-        {product.variants.map(variant => {
-          return <VariantSelection variant={variant} />;
-        })}
+        <VariantSelection variants={product.variants} />
       </div>
       <div className="modifiersContainer">
-        {product.modifiers.map(modifier => {
-          return <ModifierSelection modifier={modifier} />;
+        {product.modifierLists.map(modifier => {
+          return <ModifierSelection modifierCategory={modifier} />;
         })}
       </div>
       <div className="quantityContainer">

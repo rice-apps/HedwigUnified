@@ -3,23 +3,13 @@ import { useQuery, gql } from '@apollo/client'
 
 
 const VENDOR_QUERY = gql`
-  {
-    vendorOne(filter: { name: "East-West Tea" }) {
-      _id
+  query getVendorInfo($vendor: String!) {
+    getVendor(filter: { name: $vendor}) {
       name
-      phone
       hours {
         start
         end
         day
-      }
-      locations {
-        name
-      }
-      team {
-        name
-        netid
-        phone
       }
     }
   }

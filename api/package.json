@@ -42,6 +42,7 @@
     "jsonwebtoken": "^8.5.1",
     "loglevel": "^1.7.0",
     "mongoose": "^5.10.7",
+    "node-fetch": "^2.6.1",
     "shopify-buy": "^2.11.0",
     "square-connect": "4.20200826.3",
     "uuid": "^8.3.0",

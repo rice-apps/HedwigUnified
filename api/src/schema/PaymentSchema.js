@@ -120,14 +120,21 @@ PaymentTC.addResolver({
           const unitProduct = await shopifyClient.product.fetchByHandle(
             'unitproduct'
           )
-          const checkout = await shopifyClient.checkout.create()
+          let checkout = await shopifyClient.checkout.create()
 
           await shopifyClient.checkout.addLineItems(checkout.id, [
             {
-              variantId: unitProduct.selectedVariant,
-              quantity: subtotal / 0.25
+              variantId: unitProduct.variants[0].id,
+              quantity: subtotal.amount / 25
             }
           ])
+          
+          response = {
+            id: checkout.id,
+            total: subtotal,
+            url: checkout.webUrl,
+            source,
+          }
 
           break
         default:

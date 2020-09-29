@@ -4,11 +4,11 @@ import boba from '../../../images/boba.jpg'
 import './index.css'
 import { Link, animateScroll as scroll } from 'react-scroll'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { GET_CATALOG } from '../../../graphql/CatalogQueries.js'
+import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery, gql } from '@apollo/client'
 
-
+/*
 const vendor = {
   name: 'East West Tea',
   hours: 'Monday - Thursday 7:00 pm - 10:00 pm',
@@ -79,8 +79,10 @@ const vendor = {
     }
   ]
 }
-
+*/
 //<Menu currentVendor = {"East West Tea"}/>
+
+// add a proceed to checkout
 function Menu () {
   const navigate = useNavigate();
   const {state} = useLocation();
@@ -132,15 +134,29 @@ function Menu () {
 
   const categories = compileCategories(catalog_data);
 
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  
+    // These options are needed to round to whole numbers if that's what you want.
+    //minimumFractionDigits: 0,
+    //maximumFractionDigits: 0,
+  });
+  
+  formatter.format(2500);
+
   /**
    * Input: a product id
    * Output: Navigates to page with that product
    */
-  const handleClick = productID => {
+  const handleClick = product => {
     // Go to this particular vendor's detail page
-    return navigate(`${productID}`)
+    return navigate(`${product.name}`, {state: {currProduct: `${product.dataSourceId}`,currVendor: currentVendor}})
   }
-
+  
+  const current_date = new Date(); 
+  const currentDay = current_date.getDay(); 
+  console.log(vendor_data)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
@@ -150,9 +166,9 @@ function Menu () {
       {/* Vendor Info */}
       <div class='vendorinfocontainer'>
         {/* Vendor Name */}
-        <h1 class='vendortitle'> {vendor_data.name} </h1>
+        <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
         {/* Vendor Operating Hours */}
-        <p class='vendorinfo'>{vendor_data.hours}</p>
+        <p class='vendorinfo'>{vendor_data.getVendor.hours[currentDay].start}-{vendor_data.getVendor.hours[currentDay].end}</p>
         <button class='readmore'> More Info </button>
       </div>
 
@@ -186,11 +202,11 @@ function Menu () {
             {catalog_data
               .filter(item => item.category === category)
               .map(product => (
-                <div class='itemgrid' onClick={() => handleClick(product.name)}>
+                <div class='itemgrid' onClick={() => handleClick(product)}>
                   {/* Displaying the item: image, name, and price */}
                   <img src={product.image} class='itemimage' alt={product.name} />
                   <h1 class='itemname'>{product.name}</h1>
-                  <p class='itemprice'>{product.variants[0].price.amount/100}</p>
+                  <p class='itemprice'>{formatter.format(product.variants[0].price.amount/100)+"+"}</p>
                 </div>
               ))}
           </div>

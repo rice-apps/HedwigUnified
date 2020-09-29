@@ -230,7 +230,6 @@ function Product() {
     console.log(cartItems());
   }
 
-  console.log(product)
   return (
     <div className="container">
       <img

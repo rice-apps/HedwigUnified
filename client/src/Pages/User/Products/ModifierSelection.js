@@ -39,7 +39,7 @@ function ModifierSelection ({ modifierCategory }) {
                 {option.price ? (
                   <p>
   
-                    {currency(option.price.amount).format({
+                    {currency(option.price.amount/100).format({
                       symbol: "$",
                       format: "USD"
   

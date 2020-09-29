@@ -22,7 +22,7 @@ const VariantSelection = ({ variants }) => {
                 <span className="customRadio" />
                 <p>{option.name}</p>
                 <p>
-                  {currency(option.price.amount).format({
+                  {currency(option.price.amount/100).format({
                     symbol: "$",
                     format: "USD"
                   })}

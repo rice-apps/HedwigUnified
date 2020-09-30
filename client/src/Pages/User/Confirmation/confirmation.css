@@ -5,70 +5,70 @@ height: 100%;
 } */
 
 .mainDiv {
-background-color: #FAF8F8;
-margin: 0;
-position:fixed; 
-left:0px; 
-top:0px;
-height: 100vh;
-width: 100%;
+  background-color: #faf8f8;
+  margin: 0;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 100vh;
+  width: 100%;
 }
 .checkSvg {
-display: block;
+  display: block;
 
-margin-top: 8vh;
-margin-left: auto;
-margin-right: auto;
-height:auto;
-width: 200px;
+  margin-top: 8vh;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  width: 200px;
 }
 
 .orderConfirmed {
-font-size: 27pt;
-color: #5A5953;
-font-family: 'Avenir Black', 'Arial Black', sans-serif;;
-text-align: center;
-margin: 8px 16px 8px 16px;
+  font-size: 27pt;
+  color: #5a5953;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif;
+  text-align: center;
+  margin: 8px 16px 8px 16px;
 }
 
 .statusUpdate {
-font-size: 15pt;
-color: #DB6142;
-font-family: 'Avenir Book', 'Arial Book', sans-serif;;
-text-align: center;
-margin: 8px 16px 8px 16px;
+  font-size: 15pt;
+  color: #db6142;
+  font-family: 'Avenir Book', 'Arial Book', sans-serif;
+  text-align: center;
+  margin: 8px 16px 8px 16px;
 }
 
 .vendorCard {
-  background-color:white;
+  background-color: white;
   border-radius: 20pt;
   height: 180px;
   width: 290px;
   margin: 2vh auto;
-  box-shadow:  0px 3px 6px 0px #aaaaaa;
+  box-shadow: 0px 3px 6px 0px #aaaaaa;
 }
 
 .vendorHeader {
   margin: 0px 5px;
   font-size: 19pt;
-  color: #5A5953;
+  color: #5a5953;
   position: relative;
   top: -30px;
-  font-family: 'Avenir Black', 'Arial Black', sans-serif;;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif;
   text-align: center;
 }
 
 .pickupInstructions {
   margin: 0.2vh 1vw;
   font-size: 14pt;
-  color: #5A5953;
+  color: #5a5953;
   position: relative;
   top: -30px;
   text-align: center;
-  font-family: 'Avenir Book', 'Arial Book', sans-serif;;
+  font-family: 'Avenir Book', 'Arial Book', sans-serif;
 }
 .pinIcon {
-  color: #DB6142;
+  color: #db6142;
   font-size: 30pt;
   position: relative;
   left: 25px;
@@ -80,7 +80,6 @@ margin: 8px 16px 8px 16px;
   flex-direction: row;
   width: 100%;
   background-color: #faf8f8;
-  
 }
 
 .bottomButton {
@@ -94,4 +93,3 @@ margin: 8px 16px 8px 16px;
   border-radius: 20px;
   margin: 5vh auto;
 }
-

@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 const GET_CATALOG = gql`
-  query GET_CATALOG($vendor : String!) {
-    getCatalog(dataSource: SQUARE, vendor: $vendor){
+  query GET_CATALOG($vendor: String!) {
+    getCatalog(dataSource: SQUARE, vendor: $vendor) {
       name
       image
       dataSourceId
@@ -50,7 +50,4 @@ const GET_ITEM = gql`
   }
 `
 
-export {
-  GET_CATALOG,
-  GET_ITEM
-}
+export { GET_CATALOG, GET_ITEM }

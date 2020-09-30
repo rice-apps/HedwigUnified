@@ -1,10 +1,7 @@
 import React, { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
-import {
-  VENDOR_QUERY,
-  GET_ALL_VENDORS
-} from '../../../graphql/VendorQueries'
+import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
 
 const PRODUCTS_QUERY = gql`
   query Products($vendorID: MongoID!) {

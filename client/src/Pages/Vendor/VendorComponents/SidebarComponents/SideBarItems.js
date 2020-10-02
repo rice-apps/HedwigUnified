@@ -16,18 +16,6 @@ const SideBarItemsWrapper = styled.div`
 `
 
 const MainMenuItemWrapper = styled.div`
-<<<<<<< HEAD
-background-color: #ffc8ba;
-color: black;
-width: 100%;
-padding: 0.5vh 0.5vw;
-border-radius:20px;
-display: flex;
-flex-direction: row;
-text-align: center;
-align-items: center;  
-margin: 6px 0px;
-=======
   background-color: #ffc8ba;
   color: black;
   width: 100%;
@@ -37,7 +25,7 @@ margin: 6px 0px;
   flex-direction: row;
   align-items: center;
   margin: 6px 0px;
->>>>>>> 2e87d4815dba1e2fe5ca7640cb6c30cfa11881a0
+
 `
 
 function MainMenuItem (props) {

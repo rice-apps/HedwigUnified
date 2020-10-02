@@ -20,6 +20,7 @@ import produce from 'immer'
 // })
 
 function dispatch (action) {
+  const { quantity, Id } = action.item
   const oldCart = cartItems()
   
   const newCart = produce(oldCart, draft => {
@@ -28,7 +29,6 @@ function dispatch (action) {
         draft.push(action.item)
         break
       case 'UPDATE_QUANTITY':
-        let { quantity, Id } = action.item
         draft.forEach(item => {
           if (item.Id === Id) {
             item.quantity = quantity
@@ -36,9 +36,8 @@ function dispatch (action) {
         })
         break
       case 'DELETE_ITEM':
-        let { Id: id } = action.item
         draft.reduceRight((_, item, index, object) => {
-          if (item.Id === id) {
+          if (item.Id === Id) {
             object.splice(index, 1)
           }
         }, [])

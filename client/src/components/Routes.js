@@ -138,8 +138,14 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
-          { path: '/payment', element: <PrivateRoute element={<Payments />} /> },
-          { path: '/confirmation', element: <PrivateRoute element={<Confirmation />} /> }
+          {
+            path: '/payment',
+            element: <PrivateRoute element={<Payments />} />
+          },
+          {
+            path: '/confirmation',
+            element: <PrivateRoute element={<Confirmation />} />
+          }
         ]
       }
     ]
@@ -161,7 +167,6 @@ const newRoutesArray = [
     ]
 
   }
-
 ]
 
 // const routesArray = [

@@ -10,55 +10,55 @@ const Payments = () => {
     const [bgColor, setBgColor] = useState([false, false, false]);
 
     const Title = styled.text`
-        margin-top: 110px;
-        margin-bottom: 20px;
-        font-family: "adobe-clean", sans-serif;
-        font-size: 25px;
-        color: #595858;
-        font-weight: lighter;
-    `;
+            margin-top: 110px;
+            margin-bottom: 20px;
+            font-family: "adobe-clean", sans-serif;
+            font-size: 25px;
+            color: #595858;
+            font-weight: lighter;
+        `;
 
     const ButtonsCol = styled.div`
-        display: flex;
-        justify-content: space-evenly;
-    `;
+            display: flex;
+            justify-content: space-evenly;
+        `;
 
     const Button = styled.button`
-        font-family: 'Raleway', sans-serif;
-        border-radius: 20px;
-        border-width: 1px;
-        border-color: #595858;
-        padding: 20px;
-        height: 80px;
-        width: 230px;
-        font-size: 18px;
-        font-weight: 500;
-        color: #595858;
-        text-align: center;
-        background-color: ${props => (props.selected ? 'red' : 'white')};
-    `;
+            font-family: 'Raleway', sans-serif;
+            border-radius: 20px;
+            border-width: 1px;
+            border-color: #595858;
+            padding: 20px;
+            height: 80px;
+            width: 230px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #595858;
+            text-align: center;
+            background-color: ${props => (props.selected ? 'red' : 'white')};
+        `;
 
     const Grid = styled.div`
-    `;
+        `;
 
     const Row = styled.div`
-        display: flex;
-        justify-content: center;
-        margin-bottom: 40px;
-    `;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        `;
 
     const Footer = styled.footer`
-        text-align: center;
-        position:absolute;
-        left:0;
-        bottom:0;
-        right:0;
-        display:block;
-        border-style: solid;
-        border-width: 1px;
-        padding: 25px 0;
-        font-size: 25px;
-    `;
+            text-align: center;
+            position:absolute;
+            left:0;
+            bottom:0;
+            right:0;
+            display:block;
+            border-style: solid;
+            border-width: 1px;
+            padding: 25px 0;
+            font-size: 25px;
+        `;
 
 
     return (
@@ -91,4 +91,4 @@ const Payments = () => {
 };
 
 
-export default Payments
+export default Payments;

@@ -7,20 +7,13 @@ import './vendor.css'
 import '../../../fonts/style.css'
 
 //fontawesome imports
-  
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faUser
-} from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { PickupDropdown } from '../../../components/PickupDropdown'
-import {
-  VENDOR_QUERY,
-  GET_ALL_VENDORS
-} from '../../../graphql/VendorQueries'
+import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
 import VendorCard from './VendorCard'
 import BottomAppBar from './BottomAppBar'
-
-
 
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
@@ -45,9 +38,7 @@ function VendorList ({ classes }) {
   if (loading) return <p>Loading...</p>
   if (!data) return <p>No data...</p>
 
-  const {
-    getVendors
-  } = data
+  const { getVendors } = data
   /*
   const vendors = [
     {

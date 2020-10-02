@@ -1,11 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import { IconContext } from "react-icons";
-import { BsFillClockFill } from "react-icons/bs";
-import { BiFoodMenu } from "react-icons/bi";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import React from 'react'
+import styled from 'styled-components'
+import { IconContext } from 'react-icons'
+import { BsFillClockFill } from 'react-icons/bs'
+import { BiFoodMenu } from 'react-icons/bi'
+import { IoIosAddCircleOutline } from 'react-icons/io'
+
 
 const OrderCardWrapper = styled.div`
+
 
   background-color: white;
   border-radius: 20px;
@@ -13,7 +15,7 @@ const OrderCardWrapper = styled.div`
   border-color: #cacaca;
   border-style: solid;
   justify-self: center;
-  font-family: "Futura", sans-serif;
+  font-family: 'Futura', sans-serif;
   display: grid;
   width: 94%;
   height: max-content;
@@ -23,11 +25,11 @@ const OrderCardWrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 35px max-content max-content 92px;
   grid-template-areas:
-    "OrderTitleSpace"
-    "OrderTimeSpace"
-    "OrderDetailsSpace"
-    "PaymentSpace";
-`;
+    'OrderTitleSpace'
+    'OrderTimeSpace'
+    'OrderDetailsSpace'
+    'PaymentSpace';
+`
 
 const OrderTitleSpaceWrapper = styled.div`
   background-color: white;
@@ -40,20 +42,19 @@ const OrderTitleSpaceWrapper = styled.div`
   justify-content: space-around;
   padding-bottom: 0px;
 
-  overflow:hidden;
-  border-top-right-radius:20px;
-  border-top-left-radius:20px;
+  overflow: hidden;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+`
 
-`;
-
-function MakeOrderTitle(props) {
+function MakeOrderTitle (props) {
   return (
     <OrderTitleSpaceWrapper>
       <div>No.{props.orderNumber} </div>
-      <div style={{ marginRight: "35px" }}>{props.customerName}</div>
+      <div style={{ marginRight: '35px' }}>{props.customerName}</div>
       <BsFillClockFill />
     </OrderTitleSpaceWrapper>
-  );
+  )
 }
 
 const OrderTimeSpaceWrapper = styled.div`
@@ -63,9 +64,9 @@ const OrderTimeSpaceWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   font-size: 14px;
-  grid-template-areas: "ExactTimeSpace TimeLeftSpace";
+  grid-template-areas: 'ExactTimeSpace TimeLeftSpace';
   font-weight: 500;
-`;
+`
 
 const ExactTimeSpaceWrapper = styled.div`
   grid-area: ExactTimeSpace;
@@ -75,36 +76,36 @@ const ExactTimeSpaceWrapper = styled.div`
   margin-top: 7px;
   margin-left: 10px;
   line-height: 18px;
-`;
+`
 const TimeLeftSpaceWrapper = styled.div`
   grid-area: TimeLeftSpace;
   text-align: right;
   color: #9d9d9d;
-`;
+`
 
-function MakeOrderTime(props) {
+function MakeOrderTime (props) {
   return (
     <OrderTimeSpaceWrapper>
       <ExactTimeSpaceWrapper>
         <div> Pick up time: {props.pickupTime}</div>
         <div> Order Submitted: {props.submissionTime}</div>
-        <div style={{ marginTop: "4px" }}>
+        <div style={{ marginTop: '4px' }}>
           Payment: <strong>{props.paymentType}</strong>
         </div>
       </ExactTimeSpaceWrapper>
       <TimeLeftSpaceWrapper>
         <div
           style={{
-            marginTop: "8px",
-            marginRight: "20px",
-            textDecoration: "underline"
+            marginTop: '8px',
+            marginRight: '20px',
+            textDecoration: 'underline'
           }}
         >
           {props.pickupCountdown} until pickup
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
-  );
+  )
 }
 
 const OrderDetailsSpaceWrapper = styled.div`
@@ -112,7 +113,7 @@ const OrderDetailsSpaceWrapper = styled.div`
   grid-area: OrderDetailsSpace;
   display: flex;
   flex-direction: column;
-`;
+`
 const OrderDetailsItemWrapper = styled.div`
   background-color: #fafafa;
   margin: 3px 0px;
@@ -120,20 +121,20 @@ const OrderDetailsItemWrapper = styled.div`
   grid-template-columns: 1.1fr 10fr 3fr;
   grid-template-rows: 1fr;
   font-size: 14px;
-`;
+`
 const ItemDescriptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-left: 6px;
-`;
+`
 
-function MakeOrderDetails(props) {
+function MakeOrderDetails (props) {
   return (
     <OrderDetailsItemWrapper>
-      <div style={{ fontWeight: "bold" }}>{props.quantity}</div>
+      <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
       <ItemDescriptionWrapper>
-        <div style={{ textTransform: "uppercase", fontWeight: "bold" }}>
+        <div style={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
           {props.itemName}
         </div>
         <div>
@@ -143,9 +144,9 @@ function MakeOrderDetails(props) {
           <IoIosAddCircleOutline /> {props.modifiers}
         </div>
       </ItemDescriptionWrapper>
-      <div style={{ fontWeight: "bold" }}>${props.price}</div>
+      <div style={{ fontWeight: 'bold' }}>${props.price}</div>
     </OrderDetailsItemWrapper>
-  );
+  )
 }
 
 const PaymentSpaceWrapper = styled.div`
@@ -158,7 +159,7 @@ const PaymentSpaceWrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1.2fr;
   font-size: 14px;
-`;
+`
 
 const CostSpaceWrapper = styled.div`
   display: flex;
@@ -169,13 +170,13 @@ const CostSpaceWrapper = styled.div`
   margin-right: 5px;
   margin-bottom: 7px;
   margin-top: 3px;
-`;
+`
 const ButtonsSpaceWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`;
+`
 const ButtonWrapper = styled.div`
   border-radius: 20px;
   display: flex;
@@ -184,16 +185,16 @@ const ButtonWrapper = styled.div`
   padding: 5px 30px;
   margin: 0px 25px;
   margin-bottom: 15px;
-`;
+`
 
 const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
-`;
+`
 
 const CancelButton = styled(ButtonWrapper)`
   background-color: #dedede;
-`;
-function MakePaymentSpace(props) {
+`
+function MakePaymentSpace (props) {
   return (
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
@@ -209,26 +210,28 @@ function MakePaymentSpace(props) {
         <AcceptButton>Accept</AcceptButton>
       </ButtonsSpaceWrapper>
     </PaymentSpaceWrapper>
-  );
+  )
 }
 
-function OrderCard(props) {
+function OrderCard (props) {
   return (
     <IconContext.Provider
-      value={{ style: { verticalAlign: "middle", marginBottom: "2px" } }}
+      value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
+
 
       <OrderCardWrapper>
 
+
         {/* Section of Order card with customer name, order number */}
-        <MakeOrderTitle orderNumber="12" customerName="Allison Smith" />
+        <MakeOrderTitle orderNumber='12' customerName='Allison Smith' />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
-          pickupTime="4:50pm"
-          submissionTime="4:35pm"
-          paymentType="Tetra"
-          pickupCountdown="10 minutes"
+          pickupTime='4:50pm'
+          submissionTime='4:35pm'
+          paymentType='Tetra'
+          pickupCountdown='10 minutes'
         />
 
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
@@ -238,18 +241,27 @@ function OrderCard(props) {
           can be called multiple times if multiple items are in order */}
           
           <MakeOrderDetails
-            quantity="2"
-            itemName="all-american cheese burger"
-            price="16.00"
-            variant="Large Combo"
-            modifiers="Extra Lettuce, No Tomato"
+            quantity='2'
+            itemName='all-american cheese burger'
+            price='16.00'
+            variant='Large Combo'
+            modifiers='Extra Lettuce, No Tomato'
           />
           <MakeOrderDetails
-            quantity="1"
-            itemName="Soup of the Day"
-            price="8.00"
-            variant="Large"
-            modifiers="Extra cheese"
+
+            quantity='1'
+            itemName='soup of the day'
+            price='8.50'
+            variant='Small'
+            modifiers='Extra crackers'
+          />
+          <MakeOrderDetails
+            quantity='1'
+            itemName='Caesar Salad'
+            price='5.00'
+            variant='Large'
+            modifiers='Ranch dressing, No croutons'
+
           />
           
         </OrderDetailsSpaceWrapper>
@@ -257,7 +269,7 @@ function OrderCard(props) {
         <MakePaymentSpace orderCost={props.orderCost} orderTotal={props.orderTotal}/>
       </OrderCardWrapper>
     </IconContext.Provider>
-  );
+  )
 }
 
-export default OrderCard;
+export default OrderCard

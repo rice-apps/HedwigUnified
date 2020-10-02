@@ -70,6 +70,7 @@ const GET_USER_INFO = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, ...rest }) => {
+
   let token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
@@ -137,8 +138,14 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
-          { path: '/payment', element: <PrivateRoute element={<Payments />} /> },
-          { path: '/confirmation', element: <PrivateRoute element={<Confirmation />} /> }
+          {
+            path: '/payment',
+            element: <PrivateRoute element={<Payments />} />
+          },
+          {
+            path: '/confirmation',
+            element: <PrivateRoute element={<Confirmation />} />
+          }
         ]
       }
     ]
@@ -150,17 +157,16 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element:  <VendorsideTemplate/>},
-      { path: '/openorders', element:  <OpenOrdersPage/>},
-      { path: '/closedorders', element: <ClosedOrdersPage/> },
-      { path: '/items', element:  <ItemsMenuManagementPage/>},
-      { path: '/modifiers', element: <ModifiersMenuManagementPage/> },
-      { path: '/set-basic-info', element:  <SetBasicInfoPage/>},
-      { path: '/set-store-hours', element: <SetStoreHoursPage/> },
+      { path: '/', element: <VendorsideTemplate /> },
+      { path: '/openorders', element: <OpenOrdersPage /> },
+      { path: '/closedorders', element: <ClosedOrdersPage /> },
+      { path: '/items', element: <ItemsMenuManagementPage /> },
+      { path: '/modifiers', element: <ModifiersMenuManagementPage /> },
+      { path: '/set-basic-info', element: <SetBasicInfoPage /> },
+      { path: '/set-store-hours', element: <SetStoreHoursPage /> },
     ]
-    
+
   }
-  
 ]
 
 // const routesArray = [
@@ -225,7 +231,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({}) => {
+export const RoutesComponent = ({ }) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend

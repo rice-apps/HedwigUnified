@@ -6,19 +6,14 @@ import log from 'loglevel'
 
 import Schema from './schema'
 
-import { ALLOWED_ORIGINS, DEV_PORT } from './config'
+import { DEV_PORT } from './config'
 
 import './utils/db'
 
 // Initialize connection to Square with API token
 import './square'
 
-const app = express().use(
-  cors({
-    origin: ALLOWED_ORIGINS,
-    credentials: true
-  })
-)
+const app = express().use(cors())
 
 const server = new ApolloServer({
   schema: Schema,

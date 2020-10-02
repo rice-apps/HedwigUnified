@@ -1,38 +1,79 @@
-import React, { useContext, useEffect, useState } from "react";
-import "./product.css";
-import { useNavigate } from "react-router-dom";
-import { makeVar } from "@apollo/client";
-import dispatch from "./FunctionalCart";
-import { createMuiTheme } from "@material-ui/core";
-import { cartItems } from "../../../apollo";
-import VariantSelection from "./VariantSelection";
-import QuantitySelector from "./QuantitySelector";
-import ModifierSelection from "./ModifierSelection";
+import React, { useContext, useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import './product.css'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { makeVar } from '@apollo/client'
+import dispatch from './FunctionalCart'
+import { createMuiTheme } from '@material-ui/core'
+import { cartItems } from '../../../apollo'
+import VariantSelection from './VariantSelection'
+import QuantitySelector from './QuantitySelector'
+import ModifierSelection from './ModifierSelection'
+import { GET_ITEM } from '../../../graphql/ProductQueries'
+import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 
-function Product() {
+function Product () {
+  const navigate = useNavigate()
+  const { state } = useLocation()
+  const { currProduct: productId, currVendor: vendorState } = state
+
+  const {
+    refetch,
+    data: product_data,
+    error: product_error,
+    loading: product_loading
+  } = useQuery(GET_ITEM, {
+    variables: {
+      dataSourceId: productId
+    }
+  })
+
+  const {
+    data: vendor_data,
+    error: vendor_error,
+    loading: vendor_loading
+  } = useQuery(VENDOR_QUERY, {
+    variables: { vendor: vendorState },
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
+  })
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
-  let vendor = {
-    slug: "EWT"
-  };
-  const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1)
+
+  if (vendor_loading) {
+    return <p>Loading...</p>
+  }
+  if (vendor_error) {
+    return <p>ErrorV...</p>
+  }
+
+  if (product_loading) {
+    return <p>Loading...</p>
+  }
+  if (product_error) {
+    return <p>ErrorP...</p>
+  }
+
+  const { getItem: product } = product_data
+  const { getVendor: vendor } = vendor_data
 
   const handleClick = () => {
-    return navigate(`/eat/${vendor.slug}/cart`);
-  };
-
-  const [quantity, setQuantity] = useState(1);
+    return navigate(`/eat/${vendor.slug}/cart`)
+  }
 
   const increase = () => {
-    setQuantity(quantity + 1);
-  };
+    setQuantity(quantity + 1)
+  }
 
   const decrease = () => {
-    setQuantity(quantity - 1);
-  };
+    setQuantity(quantity - 1)
+  }
 
+  /*
   const product = {
     name: "Milk Tea",
     description:
@@ -57,7 +98,7 @@ function Product() {
         ]
       }
     ],
-    modifiers: [
+    modifierLists: [
       {
         question: "Pick your free topping",
         description: "One included for free!",
@@ -137,98 +178,97 @@ function Product() {
       }
     ]
   };
+  */
 
-  function makeCartItem() {
-    let itemName = product.name;
-    let itemID = product.squareID;
+  function makeCartItem () {
+    let itemName = product.name
+    let itemID = product.squareID
     let variant = JSON.parse(
-      document.querySelector(".variantSelect:checked").value
-    );
-    let variantObject = variant.option;
-    let variantCost = variant.option.price.amount;
+      document.querySelector('.variantSelect:checked').value
+    )
+    let variantObject = variant.option
+    let variantCost = variant.option.price.amount
 
-    console.log(variantCost);
+    console.log(variantCost)
 
-    let modifierNames = [];
-    var modifierCost = 0;
-    var modifierList = {};
-    let modifiers = document.querySelectorAll(".modifierSelect:checked");
+    let modifierNames = []
+    var modifierCost = 0
+    var modifierList = {}
+    let modifierLists = document.querySelectorAll('.modifierSelect:checked')
 
-    for (var i = 0; i < modifiers.length; i++) {
-      let currentModifier = JSON.parse(modifiers[i].value);
-      modifierList[i] = currentModifier.option;
-      let currentModifierName = currentModifier.option.name;
+    for (var i = 0; i < modifierLists.length; i++) {
+      let currentModifier = JSON.parse(modifierLists[i].value)
+      modifierList[i] = currentModifier.option
+      let currentModifierName = currentModifier.option.name
       {
         currentModifier.option.price
           ? (modifierCost += currentModifier.option.price.amount)
-          : (modifierCost += 0);
+          : (modifierCost += 0)
       }
-      modifierNames.push(currentModifierName);
+      modifierNames.push(currentModifierName)
     }
 
-    console.log(modifierCost);
-    console.log(modifierList);
+    console.log(modifierCost)
+    console.log(modifierList)
 
-    let itemQuantity = { quantity }.quantity;
-    console.log(itemQuantity);
-    let totalPrice = modifierCost + variantCost;
+    let itemQuantity = { quantity }.quantity
+    console.log(itemQuantity)
+    let totalPrice = modifierCost + variantCost
 
     dispatch({
-      type: "ADD_ITEM",
+      type: 'ADD_ITEM',
       item: {
         name: itemName,
         Id: Date.now(),
         variant: variantObject,
-        modifiers: modifierList,
+        modifierLists: modifierList,
         quantity: itemQuantity,
         price: totalPrice,
         modDisplay: modifierNames
       }
-    });
+    })
 
-    console.log(cartItems());
+    console.log(cartItems())
   }
 
   return (
-    <div className="container">
+    <div className='container'>
       <img
-        className="heroImage"
-        src="https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80"
+        className='heroImage'
+        src='https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
       />
-      <div className="itemHeading">
+      <div className='itemHeading'>
         <h2>{product.name}</h2>
         <p>{product.description}</p>
       </div>
-      <div className="variantsContainer">
-        {product.variants.map(variant => {
-          return <VariantSelection variant={variant} />;
+      <div className='variantsContainer'>
+        <VariantSelection variants={product.variants} />
+      </div>
+      <div className='modifiersContainer'>
+        {product.modifierLists.map(modifier => {
+          return <ModifierSelection modifierCategory={modifier} />
         })}
       </div>
-      <div className="modifiersContainer">
-        {product.modifiers.map(modifier => {
-          return <ModifierSelection modifier={modifier} />;
-        })}
-      </div>
-      <div className="quantityContainer">
+      <div className='quantityContainer'>
         <QuantitySelector
           quantity={quantity}
           increase={increase}
           decrease={decrease}
         />
       </div>
-      <div className="submitContainer">
+      <div className='submitContainer'>
         <button
-          className="submitButton"
+          className='submitButton'
           onClick={() => {
-            handleClick();
-            makeCartItem();
+            handleClick()
+            makeCartItem()
           }}
         >
           Add
         </button>
       </div>
     </div>
-  );
+  )
 }
 
-export default Product;
+export default Product

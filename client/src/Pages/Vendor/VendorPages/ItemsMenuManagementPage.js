@@ -5,6 +5,7 @@ function ItemsMenuManagementPage() {
     return (
         <VendorsideTemplate page={<ItemCatalog/>}></VendorsideTemplate>
     )
+
 }
 
 export default ItemsMenuManagementPage

@@ -2,13 +2,7 @@ import React from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { SERVICE_URL } from '../../config'
 import logo from './logo.svg'
-import {
-  MainDiv,
-  Logo,
-  Title,
-  SubTitle,
-  LoginButton
-}from './Login.styles'
+import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
 
 const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
 

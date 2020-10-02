@@ -1,3 +1,4 @@
+
 import React from "react";
 import styled from "styled-components";
 import ReactDOM from "react-dom";
@@ -11,8 +12,9 @@ import {
   AcceptedOrderSpaceWrapper,
   ReadyOrderSpaceWrapper,
   MakeDashboardTitle
-} from "./DashboardComponents.js";
-import OrderCard from "./OrderCard.js";
+} from './DashboardComponents.js'
+import OrderCard from './OrderCard.js'
+import { gql, useQuery } from '@apollo/client'
 
 const ColumnWrapper = styled.div`
   display: flex;
@@ -21,50 +23,101 @@ const ColumnWrapper = styled.div`
   overflow: scroll;
   padding-right: 30px;
   height: 100%;
-`;
 
-var OrderDummy = [
-  {
-    name: "Thai tea",
-    quantity: "1",
-    variation_name: "medium",
-    modifiers: null,
-    total_money: { amount: 350 },
-    total_tax: null
-  },
-  {
-    name: "Milk tea",
-    quantity: "Large",
-    variation_name: "medium",
-    modifiers: null,
-    total_money: { amount: 350 },
-    total_tax: null
+`
+
+const FIND_ORDERS = gql`
+  query FIND_ORDERS($location: [String!]!) {
+    findOrders(locations: $location) {
+      orders{
+        id
+        customer
+        items{
+          name
+          quantity
+          variation_name
+          modifiers{
+            name
+            base_price_money{
+              amount
+        	  }
+            total_price_money{
+  				    amount
+        	  }
+      	  }
+          total_money{
+            amount
+      	  }
+          total_tax{
+            amount
+      	  }
+    	  }
+        total{
+          amount
+    	  }
+        totalTax{
+          amount
+        }
+        totalDiscount{
+          amount
+        }
+        fulfillmentStatus
+    }
   }
-];
+}
+`
 
-function OrderDashboard() {
+
+function OrderDashboard () {
+  const vendorId = ["FMXAFFWJR95WC"]
+  const { data: allOrders, loading, error } = useQuery(FIND_ORDERS, { variables: { location: vendorId } })
+  if (loading) {
+    return <p>Loading...</p>
+  }
+  if (error) {
+    return <p>Error...</p>
+  }
+  console.log(allOrders)
+  console.log(allOrders.orders)
+  // if (!loading && orders) {
+  //     const { order } = orders.items
+  //     order.forEach(setElement => {
+  //       order_list.push(setElement)
+  //     })
+  //   }
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>
-        <MakeDashboardTitle name="New" quantity="2" />
+        <MakeDashboardTitle name='New' quantity='2' />
       </NewOrderTitleWrapper>
-      <NewOrderSpaceWrapper></NewOrderSpaceWrapper>
+
+      <NewOrderSpaceWrapper>
+        {allOrders && (
+          allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "PROPOSED").map(order => <OrderCard />))}
+      </NewOrderSpaceWrapper>
 
       <AcceptedOrderTitleWrapper>
-        <MakeDashboardTitle name="Accepted" quantity="5" />
+        <MakeDashboardTitle name='Accepted' quantity='5' />
       </AcceptedOrderTitleWrapper>
       <AcceptedOrderSpaceWrapper>
-        <OrderCard orderTax="2.50" orderTotal="25.00" />
-        <OrderCard />
-        <OrderCard />
+
+        {allOrders && (
+          allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "RESERVED").map(order => <OrderCard />))}
+
       </AcceptedOrderSpaceWrapper>
 
       <ReadyOrderTitleWrapper>
-        <MakeDashboardTitle name="Ready" quantity="7" />
+        <MakeDashboardTitle name='Ready' quantity='7' />
       </ReadyOrderTitleWrapper>
-      <ReadyOrderSpaceWrapper></ReadyOrderSpaceWrapper>
+      <ReadyOrderSpaceWrapper>
+        {allOrders && (
+          allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "COMPLETED").map(order => <OrderCard />))}
+      </ReadyOrderSpaceWrapper>
     </OrderDashboardWrapper>
-  );
+
+
+  )
 }
 
-export default OrderDashboard;
+export default OrderDashboard
+

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components";
-import Toggle from "react-toggle";
-import "./Toggle.css";
+import React, { useState } from 'react'
+import styled, { css } from 'styled-components'
+import Toggle from 'react-toggle'
+import './Toggle.css'
 
 const VendorName = styled.div`
   font-size: 2.1vw;
   margin-top: 10px;
-  
+
   text-align: center;
-`;
+`
 
 const StoreStatus = styled.div`
   font-size: 1.25vw;
@@ -18,13 +18,11 @@ const StoreStatus = styled.div`
   justify-content: center;
   align-content: center;
   margin-left: 5px;
-`;
-
-const SideBarVendorProfileWrapper = styled.div`
-
 `
 
-function SideBarVendorProfile() {
+const SideBarVendorProfileWrapper = styled.div``
+
+function SideBarVendorProfile () {
   return (
     <div>
       <VendorName>East West Tea</VendorName>
@@ -33,7 +31,7 @@ function SideBarVendorProfile() {
         <Toggle />
       </StoreStatus>
     </div>
-  );
+  )
 }
 
-export default SideBarVendorProfile;
+export default SideBarVendorProfile

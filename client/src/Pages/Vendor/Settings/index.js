@@ -1,28 +1,7 @@
 import React, { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
-const VENDOR_QUERY = gql`
-  {
-    vendorOne(filter: { name: "East-West Tea" }) {
-      _id
-      name
-      phone
-      hours {
-        start
-        end
-        day
-      }
-      locations {
-        name
-      }
-      team {
-        name
-        netid
-        phone
-      }
-    }
-  }
-`
+import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
 
 const PRODUCTS_QUERY = gql`
   query Products($vendorID: MongoID!) {

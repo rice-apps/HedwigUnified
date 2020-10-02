@@ -137,8 +137,14 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
-          { path: '/payment', element: <PrivateRoute element={<Payments />} /> },
-          { path: '/confirmation', element: <PrivateRoute element={<Confirmation />} /> }
+          {
+            path: '/payment',
+            element: <PrivateRoute element={<Payments />} />
+          },
+          {
+            path: '/confirmation',
+            element: <PrivateRoute element={<Confirmation />} />
+          }
         ]
       }
     ]
@@ -150,17 +156,15 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element:  <VendorsideTemplate/>},
-      { path: '/openorders', element:  <OpenOrdersPage/>},
-      { path: '/closedorders', element: <ClosedOrdersPage/> },
-      { path: '/items', element:  <ItemsMenuManagementPage/>},
-      { path: '/modifiers', element: <ModifiersMenuManagementPage/> },
-      { path: '/set-basic-info', element:  <SetBasicInfoPage/>},
-      { path: '/set-store-hours', element: <SetStoreHoursPage/> },
+      { path: '/', element: <VendorsideTemplate /> },
+      { path: '/openorders', element: <OpenOrdersPage /> },
+      { path: '/closedorders', element: <ClosedOrdersPage /> },
+      { path: '/items', element: <ItemsMenuManagementPage /> },
+      { path: '/modifiers', element: <ModifiersMenuManagementPage /> },
+      { path: '/set-basic-info', element: <SetBasicInfoPage /> },
+      { path: '/set-store-hours', element: <SetStoreHoursPage /> }
     ]
-    
   }
-  
 ]
 
 // const routesArray = [

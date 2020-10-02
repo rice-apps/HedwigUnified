@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
-
 const VENDOR_QUERY = gql`
   query getVendorInfo($vendor: String!) {
-    getVendor(filter: { name: $vendor}) {
+    getVendor(filter: { name: $vendor }) {
       name
       hours {
         start
@@ -22,12 +21,12 @@ const GET_ALL_VENDORS = gql`
       slug
       phone
       logoUrl
-      squareInfo{
+      squareInfo {
         merchantId
         locationIds
         loyaltyId
       }
-      hours{
+      hours {
         start
         end
         day
@@ -37,7 +36,4 @@ const GET_ALL_VENDORS = gql`
   }
 `
 
-export {
-    VENDOR_QUERY,
-    GET_ALL_VENDORS
-}
+export { VENDOR_QUERY, GET_ALL_VENDORS }

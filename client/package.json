@@ -1,7 +1,10 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "private": true,
+  "repository": {
+    "type": "git"
+  },
+  "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.2.1",
     "@apollo/link-context": "^2.0.0-beta.3",
@@ -17,14 +20,15 @@
     "@testing-library/user-event": "^7.2.1",
     "currency.js": "^2.0.3",
     "emotion": "^10.0.27",
-    "formik": "^2.1.5",
+    "formik": "^2.1.6",
     "graphql": "^15.0.0",
     "history": "^5.0.0",
-    "moment": "^2.28.0",
+    "immer": "^7.0.9",
+    "moment": "^2.29.0",
     "node-sass": "^4.14.1",
     "omit-deep-lodash": "^1.1.5",
     "react": "^16.13.1",
-    "react-collapsible": "^2.8.0",
+    "react-collapsible": "^2.8.1",
     "react-dom": "^16.13.1",
     "react-dropdown": "^1.9.0",
     "react-icons": "^3.11.0",
@@ -49,7 +53,8 @@
     "create-env": "printenv > .env",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "prettier-standard --lint"
+    "lint": "prettier-standard --lint",
+    "lint:css": "stylelint './src/**/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -68,6 +73,10 @@
   },
   "devDependencies": {
     "prettier-standard": "^16.4.1",
+    "stylelint": "^13.7.2",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.10.0",
     "typescript": "^4.0.3"
   }
 }

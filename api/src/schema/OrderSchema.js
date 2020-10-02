@@ -1,7 +1,6 @@
 import {
   OrdersApi,
   CreateOrderRequest,
-  UpdateOrderRequest,
   SearchOrdersRequest
 } from 'square-connect'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
@@ -15,7 +14,6 @@ import {
   UpdateOrderInputTC
 } from '../models/OrderModel'
 import TwilioClient from '../twilio'
-import { v4 as uuid } from 'uuid'
 
 OrderTC.addResolver({
   name: 'findOrders',
@@ -184,11 +182,6 @@ OrderTC.addResolver({
 
       const api = new OrdersApi()
 
-      await api.payOrder(orderId, {
-        idempotency_key: uuid(),
-        payment_ids: []
-      })
-
       const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
           state: orderStatus,
@@ -231,7 +224,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        fulfillmentStatus: first.state
+        fulfillmentStatus: first.state,
+        fulfillmentId: first.uid,
       }
 
       pubsub.publish('orderUpdated', {
@@ -239,12 +233,6 @@ OrderTC.addResolver({
       })
 
       switch (first.state) {
-        case 'PROPOSED':
-          TwilioClient.messages.create({
-            body: 'Your order has been placed.',
-            from: '+13466667153',
-            to: '+14692475650'
-          })
         case 'PREPARED':
           TwilioClient.messages.create({
             body:

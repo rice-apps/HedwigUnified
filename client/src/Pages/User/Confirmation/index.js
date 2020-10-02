@@ -90,45 +90,45 @@ const Confirmation = ({ classes }) => {
   function renderFailure() {
     return (
       <div className='mainDiv'>
-      <FailureSVG className='checkSvg' />
-      <div>
-        <p className='orderConfirmed'>Order Failed</p>
-        <p className='statusUpdate'>Please go back to your cart and make adjustments. Your order will <strong>not</strong> be placed at this time</p>
+        <FailureSVG className='checkSvg' />
+        <div>
+          <p className='orderConfirmed'>Order Failed</p>
+          <p className='statusUpdate'>Please go back to your cart and make adjustments. Your order will <strong>not</strong> be placed at this time</p>
+        </div>
+        <div className='buttonsContainer'>
+          <button className='bottomButton' onClick={handleCartClick}>View Cart</button>
+        </div>
       </div>
-      <div className='buttonsContainer'>
-        <button className='bottomButton' onClick={handleCartClick}>View Cart</button>
-      </div>
-    </div>
     )
   }
   function renderConfirmation() {
 
     return (
       <div className='mainDiv'>
-      <ConfirmationSVG className='checkSvg' />
-      <div>
-        <p className='orderConfirmed'>Order Confirmed!</p>
-        <p className='statusUpdate'>You will receive order status updates via <strong>text.</strong></p>
-      </div>
-      <div className='vendorCard'>
-        <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
-        <p className='vendorHeader'>{vendor.name}</p>
-        <p className='vendorHeader'>Pick Up Instruction:</p>
-        <p className='pickupInstructions'>{vendor.message}</p>
-      </div>
+        <ConfirmationSVG className='checkSvg' />
+        <div>
+          <p className='orderConfirmed'>Order Confirmed!</p>
+          <p className='statusUpdate'>You will receive order status updates via <strong>text.</strong></p>
+        </div>
+        <div className='vendorCard'>
+          <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
+          <p className='vendorHeader'>{vendor.name}</p>
+          <p className='vendorHeader'>Pick Up Instruction:</p>
+          <p className='pickupInstructions'>{vendor.message}</p>
+        </div>
 
-      <div className='buttonsContainer'>
-        <button className='bottomButton' onClick={handleMenuClick}>Main Menu</button>
-        <button className='bottomButton' onClick={handleOrdersClick}>View Orders</button>
+        <div className='buttonsContainer'>
+          <button className='bottomButton' onClick={handleMenuClick}>Main Menu</button>
+          <button className='bottomButton' onClick={handleOrdersClick}>View Orders</button>
+        </div>
       </div>
-    </div>
     )
   }
-  
+
   return (
     <div>
-    
-    {(availability === false) ? renderConfirmation(): renderFailure()}
+
+      {(availability === false) ? renderConfirmation() : renderFailure()}
 
     </div>
   )

@@ -1,6 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import ReactDOM from 'react-dom'
+
+import React from "react";
+import styled from "styled-components";
+import ReactDOM from "react-dom";
 import {
   OrderDashboardWrapper,
   GeneralTitleWrapper,
@@ -22,6 +23,7 @@ const ColumnWrapper = styled.div`
   overflow: scroll;
   padding-right: 30px;
   height: 100%;
+
 `
 
 const FIND_ORDERS = gql`
@@ -65,6 +67,7 @@ const FIND_ORDERS = gql`
 }
 `
 
+
 function OrderDashboard () {
   const vendorId = ["FMXAFFWJR95WC"]
   const { data: allOrders, loading, error } = useQuery(FIND_ORDERS, { variables: { location: vendorId } })
@@ -87,17 +90,22 @@ function OrderDashboard () {
       <NewOrderTitleWrapper>
         <MakeDashboardTitle name='New' quantity='2' />
       </NewOrderTitleWrapper>
+
       <NewOrderSpaceWrapper>
         {allOrders && (
           allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "PROPOSED").map(order => <OrderCard />))}
       </NewOrderSpaceWrapper>
+
       <AcceptedOrderTitleWrapper>
         <MakeDashboardTitle name='Accepted' quantity='5' />
       </AcceptedOrderTitleWrapper>
       <AcceptedOrderSpaceWrapper>
+
         {allOrders && (
           allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "RESERVED").map(order => <OrderCard />))}
+
       </AcceptedOrderSpaceWrapper>
+
       <ReadyOrderTitleWrapper>
         <MakeDashboardTitle name='Ready' quantity='7' />
       </ReadyOrderTitleWrapper>
@@ -106,7 +114,10 @@ function OrderDashboard () {
           allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "COMPLETED").map(order => <OrderCard />))}
       </ReadyOrderSpaceWrapper>
     </OrderDashboardWrapper>
+
+
   )
 }
 
 export default OrderDashboard
+

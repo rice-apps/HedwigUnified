@@ -67,7 +67,7 @@ function VendorHeader() {
         <FaUserCircle style={{ fontSize: "30px", marginLeft: "1vw" }} />{" "}
       </StyledUserDisplayWrapper>
       <DateTimeDisplayWrapper>
-        <div id="clockdisplay"></div>
+        <div id="clockdisplay">Loading...</div>
       </DateTimeDisplayWrapper>
     </VendorHeaderWrapper>
   );

@@ -23,6 +23,7 @@ padding: 0.5vh 0.5vw;
 border-radius:20px;
 display: flex;
 flex-direction: row;
+text-align: center;
 align-items: center;  
 margin: 6px 0px;
 `

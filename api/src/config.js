@@ -17,6 +17,7 @@ const MONGOOSE_CONFIG = {
 }
 
 export {
+  // ALLOWED_ORIGINS,
   DEV_PORT,
   MONGODB_URL,
   MONGOOSE_CONFIG,

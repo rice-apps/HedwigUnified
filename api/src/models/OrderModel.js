@@ -67,7 +67,27 @@ const OrderTC = sc.createObjectTC({
     totalDiscount: MoneyTC.getTypeNonNull().getType(),
     total: MoneyTC.getTypeNonNull().getType(),
     orderStatus: OrderStatusEnumTC.getTypeNonNull().getType(),
-    fulfillmentStatus: FulfillmentStatusEnumTC.getTypeNonNull().getType()
+    fulfillmentStatus: FulfillmentStatusEnumTC.getTypeNonNull().getType(),
+    fulfillmentId: "String!"
+  }
+})
+
+const UpdateOrderInputTC = sc.createInputTC({
+  name: 'UpdateOrderInput',
+  description: 'The common data model representation of orders',
+  fields: {
+    id: 'String',
+    merchant: 'String',
+    customer: 'String',
+    items: PreviousLineItemTC
+    .getITC()
+      .getTypePlural()
+      .getType(),
+    totalTax: MoneyTC.getITC().getType(),
+    totalDiscount: MoneyTC.getITC().getType(),
+    total: MoneyTC.getITC().getType(),
+    orderStatus: OrderStatusEnumTC.getType(),
+    fulfillmentStatus: FulfillmentStatusEnumTC.getType()
   }
 })
 
@@ -136,5 +156,6 @@ export {
   CreateOrderInputTC,
   FilterOrderInputTC,
   SortOrderInputTC,
-  FindManyOrderPayloadTC
+  FindManyOrderPayloadTC,
+  UpdateOrderInputTC,
 }

@@ -11,9 +11,11 @@ import pubsub from '../utils/pubsub'
 import {
   FilterOrderInputTC,
   SortOrderInputTC,
-  FindManyOrderPayloadTC
+  FindManyOrderPayloadTC,
+  UpdateOrderInputTC
 } from '../models/OrderModel'
 import TwilioClient from '../twilio'
+import { v4 as uuid } from 'uuid'
 
 OrderTC.addResolver({
   name: 'findOrders',
@@ -72,7 +74,8 @@ OrderTC.addResolver({
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
-      fulfillmentStatus: order.fulfillments[0].state
+      fulfillmentStatus: order.fulfillments[0].state,
+      fulfillmentId: order.fulfillments[0].uid
     }))
 
     return {
@@ -155,6 +158,12 @@ OrderTC.addResolver({
         orderCreated: CDMOrder
       })
 
+      TwilioClient.messages.create({
+        body: 'Your order has been placed.',
+        from: '+13466667153',
+        to: '+14692475650'
+      })
+
       return CDMOrder
     }
   })
@@ -162,25 +171,31 @@ OrderTC.addResolver({
     name: 'updateOrder',
     type: OrderTC,
     args: {
-      locationId: GraphQLNonNull(GraphQLString),
       orderId: GraphQLNonNull(GraphQLString),
-      record: OrderTC.getITC().getType()
+      fulfillmentId: 'String!',
+      record: UpdateOrderInputTC
     },
     resolve: async ({ args }) => {
       const {
-        locationId,
         orderId,
+        fulfillmentId,
         record: { orderStatus, fulfillmentStatus }
       } = args
 
       const api = new OrdersApi()
 
-      const updateOrderResponse = await api.updateOrder(locationId, orderId, {
-        ...new UpdateOrderRequest(),
+      await api.payOrder(orderId, {
+        idempotency_key: uuid(),
+        payment_ids: []
+      })
+
+      const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
           state: orderStatus,
+          version: 1,
           fulfillments: [
             {
+              uid: fulfillmentId,
               state: fulfillmentStatus
             }
           ]
@@ -224,11 +239,17 @@ OrderTC.addResolver({
       })
 
       switch (first.state) {
+        case 'PROPOSED':
+          TwilioClient.messages.create({
+            body: 'Your order has been placed.',
+            from: '+13466667153',
+            to: '+14692475650'
+          })
         case 'PREPARED':
           TwilioClient.messages.create({
             body:
               'Your recent order has been prepared. Please go to the pickup location',
-            from: '',
+            from: '+13466667153',
             to: '+14692475650'
           })
           break
@@ -236,7 +257,7 @@ OrderTC.addResolver({
           TwilioClient.messages.create({
             body:
               'Your order has been picked up. If you did not do this, please contact the vendor directly.',
-            from: '',
+            from: '+13466667153',
             to: '+14692475650'
           })
           break
@@ -244,7 +265,7 @@ OrderTC.addResolver({
           TwilioClient.messages.create({
             body:
               'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
-            from: '',
+            from: '+13466667153',
             to: '+14692475650'
           })
           break
@@ -252,7 +273,7 @@ OrderTC.addResolver({
           TwilioClient.messages.create({
             body:
               'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
-            from: '',
+            from: '+13466667153',
             to: '+14692475650'
           })
       }

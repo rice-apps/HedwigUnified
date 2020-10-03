@@ -5,9 +5,10 @@ import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 
-const OrderCardWrapper = styled.div.attrs(props => ({
-  className: props.className
-}))`
+
+const OrderCardWrapper = styled.div`
+
+
   background-color: white;
   border-radius: 20px;
   border-width: 2px;
@@ -198,10 +199,10 @@ function MakePaymentSpace (props) {
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
         <div>
-          Tax: <strong>$2.10</strong>
+          Tax: <strong>{props.orderTax}</strong>
         </div>
         <div>
-          Total: <strong>$31.60</strong>
+          Total: <strong>{props.orderTotal}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -217,7 +218,11 @@ function OrderCard (props) {
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
-      <OrderCardWrapper className={props.orderStatus}>
+
+
+      <OrderCardWrapper>
+
+
         {/* Section of Order card with customer name, order number */}
         <MakeOrderTitle orderNumber='12' customerName='Allison Smith' />
 
@@ -231,6 +236,10 @@ function OrderCard (props) {
 
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
+
+          {/* Call MakeOrderDetails function for each unique item in the cart, 
+          can be called multiple times if multiple items are in order */}
+          
           <MakeOrderDetails
             quantity='2'
             itemName='all-american cheese burger'
@@ -239,6 +248,7 @@ function OrderCard (props) {
             modifiers='Extra Lettuce, No Tomato'
           />
           <MakeOrderDetails
+
             quantity='1'
             itemName='soup of the day'
             price='8.50'
@@ -251,10 +261,12 @@ function OrderCard (props) {
             price='5.00'
             variant='Large'
             modifiers='Ranch dressing, No croutons'
+
           />
+          
         </OrderDetailsSpaceWrapper>
 
-        <MakePaymentSpace />
+        <MakePaymentSpace orderCost={props.orderCost} orderTotal={props.orderTotal}/>
       </OrderCardWrapper>
     </IconContext.Provider>
   )

@@ -209,10 +209,14 @@ OrderTC.addResolver({
 
       const api = new OrdersApi()
 
+      const batchRetriveOrderResponse = await api.batchRetrieveOrders({
+        order_ids: [orderId]
+      })
+
       const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
           state: orderStatus,
-          version: 4,
+          version: batchRetriveOrderResponse.orders[0].version,
           fulfillments: [
             {
               uid: fulfillment.uid,
@@ -278,7 +282,7 @@ OrderTC.addResolver({
             body:
               'Your recent order has been prepared. Please go to the pickup location',
             from: '+13466667153',
-            to: '+14692475650'
+            to: first.pickup_details.recipient.phone_number
           })
           break
         case 'COMPLETED':
@@ -286,7 +290,7 @@ OrderTC.addResolver({
             body:
               'Your order has been picked up. If you did not do this, please contact the vendor directly.',
             from: '+13466667153',
-            to: '+14692475650'
+            to: first.pickup_details.recipient.phone_number
           })
           break
         case 'CANCELED':
@@ -294,7 +298,7 @@ OrderTC.addResolver({
             body:
               'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
             from: '+13466667153',
-            to: '+14692475650'
+            to: first.pickup_details.recipient.phone_number
           })
           break
         default:
@@ -302,7 +306,7 @@ OrderTC.addResolver({
             body:
               'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
             from: '+13466667153',
-            to: '+14692475650'
+            to: first.pickup_details.recipient.phone_number
           })
       }
 

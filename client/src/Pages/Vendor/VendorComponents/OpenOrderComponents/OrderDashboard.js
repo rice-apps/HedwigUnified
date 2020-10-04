@@ -31,7 +31,11 @@ const FIND_ORDERS = gql`
     findOrders(locations: $location) {
       orders{
         id
-        customer
+        customer{
+          name
+          email
+          phone
+        }
         items{
           name
           quantity
@@ -61,7 +65,12 @@ const FIND_ORDERS = gql`
         totalDiscount{
           amount
         }
-        fulfillmentStatus
+        fulfillment{
+          state
+          pickupDetails{
+            pickupAt
+          }
+        }
     }
   }
 }
@@ -85,33 +94,63 @@ function OrderDashboard () {
   //       order_list.push(setElement)
   //     })
   //   }
+  let newOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PROPOSED")
+  let acceptedOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "RESERVED")
+  let readyOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PREPARED")
+
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>
-        <MakeDashboardTitle name='New' quantity='2' />
+        <MakeDashboardTitle name='New' quantity={newOrders.length} />
       </NewOrderTitleWrapper>
 
       <NewOrderSpaceWrapper>
         {allOrders && (
-          allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "PROPOSED").map(order => <OrderCard />))}
+          newOrders.map(order => <OrderCard 
+              customerName={order.customer.name}
+              pickupTime={order.fulfillment.pickupDetails.pickupAt}
+              items={order.items}
+              orderCost={order.total.amount / 100}
+              orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+            />
+            )
+          )
+        }
       </NewOrderSpaceWrapper>
 
       <AcceptedOrderTitleWrapper>
-        <MakeDashboardTitle name='Accepted' quantity='5' />
+        <MakeDashboardTitle name='Accepted' quantity={acceptedOrders.length} />
       </AcceptedOrderTitleWrapper>
       <AcceptedOrderSpaceWrapper>
-
         {allOrders && (
-          allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "RESERVED").map(order => <OrderCard />))}
+          acceptedOrders.map(order => <OrderCard 
+              customerName={order.customer.name}
+              pickupTime={order.fulfillment.pickupDetails.pickupAt}
+              items={order.items}
+              orderCost={order.total.amount / 100}
+              orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+            />
+            )
+          )
+        }
 
       </AcceptedOrderSpaceWrapper>
 
       <ReadyOrderTitleWrapper>
-        <MakeDashboardTitle name='Ready' quantity='7' />
+        <MakeDashboardTitle name='Ready' quantity={readyOrders.length} />
       </ReadyOrderTitleWrapper>
       <ReadyOrderSpaceWrapper>
         {allOrders && (
-          allOrders.findOrders.orders.filter(order => order.fulfillmentStatus === "COMPLETED").map(order => <OrderCard />))}
+          readyOrders.map(order => <OrderCard 
+              customerName={order.customer.name}
+              pickupTime={order.fulfillment.pickupDetails.pickupAt}
+              items={order.items}
+              orderCost={order.total.amount / 100}
+              orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+            />
+            )
+          )
+        }
       </ReadyOrderSpaceWrapper>
     </OrderDashboardWrapper>
 

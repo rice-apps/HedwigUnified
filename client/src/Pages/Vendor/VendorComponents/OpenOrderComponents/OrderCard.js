@@ -214,6 +214,13 @@ function MakePaymentSpace (props) {
 }
 
 function OrderCard (props) {
+  const {
+    customerName, 
+    pickupTime,
+    items,
+    orderCost,
+    orderTotal
+} = props
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
@@ -224,49 +231,29 @@ function OrderCard (props) {
 
 
         {/* Section of Order card with customer name, order number */}
-        <MakeOrderTitle orderNumber='12' customerName='Allison Smith' />
+        <MakeOrderTitle orderNumber='12' customerName={customerName} />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
-          pickupTime='4:50pm'
+          pickupTime={pickupTime}
           submissionTime='4:35pm'
           paymentType='Tetra'
           pickupCountdown='10 minutes'
         />
-
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
-
           {/* Call MakeOrderDetails function for each unique item in the cart, 
           can be called multiple times if multiple items are in order */}
-          
-          <MakeOrderDetails
-            quantity='2'
-            itemName='all-american cheese burger'
-            price='16.00'
-            variant='Large Combo'
-            modifiers='Extra Lettuce, No Tomato'
+          {items && (items.map(item => <MakeOrderDetails
+            quantity={item.quantity}
+            itemName={item.name}
+            price={item.total_money.amount / 100}
+            variant={item.variation_name}
+            // modifiers={[...item.modifiers.name].join(', ')}
           />
-          <MakeOrderDetails
-
-            quantity='1'
-            itemName='soup of the day'
-            price='8.50'
-            variant='Small'
-            modifiers='Extra crackers'
-          />
-          <MakeOrderDetails
-            quantity='1'
-            itemName='Caesar Salad'
-            price='5.00'
-            variant='Large'
-            modifiers='Ranch dressing, No croutons'
-
-          />
-          
+          ))}
         </OrderDetailsSpaceWrapper>
-
-        <MakePaymentSpace orderCost={props.orderCost} orderTotal={props.orderTotal}/>
+        <MakePaymentSpace orderCost={orderCost} orderTotal={orderTotal}/>
       </OrderCardWrapper>
     </IconContext.Provider>
   )

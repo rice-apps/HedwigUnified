@@ -1,6 +1,7 @@
 import React, { Component, useEffect } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { Redirect } from 'react-router'
+import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
@@ -42,16 +43,20 @@ function Auth () {
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 
-  let { token, employer } = authenticationData.authenticateUser
+  let { token, employer, netid, _id } = authenticationData.authenticateUser
+
+  console.log(authenticationData)
+  userProfile([{netid, _id}])
+  console.log(userProfile)
 
   // Set token in local storage
   localStorage.setItem('token', token)
 
   // Set recent update in client state
   if (!employer || employer === 0) {
-    return <Navigate to='/vendor' />
+    return <Navigate to='/contact' authenticationData={'place holder'}  />
   }
-  return <Navigate to='/eat' />
+  return <Navigate to='/vendor'/>
 }
 
 export default Auth

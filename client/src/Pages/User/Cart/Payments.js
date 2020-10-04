@@ -10,7 +10,6 @@ const Payments = () => {
 
     // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
     const [activeButton, setActiveButton] = useState(3);
-    const [activeFooter, setActiveFooter] = useState(0);
 
     // colors
     const bgColors = ['white', '#cf5734'];
@@ -26,24 +25,28 @@ const Payments = () => {
             font-weight: lighter;
         `;
 
-    const ButtonsCol = styled.div`
-            display: flex;
-            justify-content: space-evenly;
-        `;
+    // const ButtonsCol = styled.div`
+    //         display: flex;
+    //         justify-content: space-evenly;
+    //     `;
 
     const Button = styled.button`
             font-family: 'Raleway', sans-serif;
             border-radius: 20px;
             border-width: 1px;
             border-color: #595858;
-            padding: 20px;
             height: 80px;
             width: 230px;
             font-size: 18px;
             font-weight: 500;
             color: #595858;
-            text-align: center;
+            text-align: left;
+            padding-left: 50px;
         `;
+
+    const Text = styled.text`
+        text-align: right;
+    `;
 
     const Grid = styled.div`
         `;
@@ -87,14 +90,23 @@ const Payments = () => {
 
     // Displays the payment option buttons
     const renderButtons = () => {
-        const icons = [<BiIdCard size={40}></BiIdCard>, <FaCreditCard size={32}></FaCreditCard>, <FaBriefcase size={32}></FaBriefcase>]
-        const values = ["Tetra", "Credit Card", "Cohen Club Card"]
+        const icons = [<BiIdCard size={48}></BiIdCard>, <FaCreditCard size={37}></FaCreditCard>, <FaBriefcase size={37}></FaBriefcase>]
+        const options = ["Tetra", "Credit Card", "Cohen Club Card"]
 
         return (
             icons.map((icon, index) =>
                 <Row>
-                    <Button variant="outlined" onClick={() => activeButton !== index ? setActiveButton(index) : setActiveButton(3)} style={{ backgroundColor: renderBgColor(index), color: renderFontColor(index), fontWeight: renderFontWeight(index) }}>
-                        {icons[index]} {values[index]}
+                    <Button variant="outlined"
+                        onClick={() => activeButton !== index ? setActiveButton(index) : setActiveButton(3)}
+                        style={{
+                            backgroundColor: renderBgColor(index),
+                            color: renderFontColor(index),
+                            fontWeight: renderFontWeight(index)
+                        }}>
+                        {icons[index]}
+                        <Text style={{ marginLeft: '10px', marginBottom: '10px' }}>
+                            {options[index]}
+                        </Text>
                     </Button>
                 </Row >
 

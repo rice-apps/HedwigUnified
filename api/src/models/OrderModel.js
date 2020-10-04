@@ -1,5 +1,4 @@
 import { sc } from 'graphql-compose'
-import { Money } from 'square-connect'
 
 import {
   MoneyTC,
@@ -9,6 +8,7 @@ import {
   SortOrderTimeEnumTC,
   SortOrderEnumTC
 } from './CommonModels'
+
 
 const LineItemTC = sc.createObjectTC({
   name: 'LineItem',
@@ -53,13 +53,42 @@ const PreviousLineItemTC = sc.createObjectTC({
   }
 })
 
+const OrderFulfillmentRecipientTC = sc.createObjectTC({
+  name: 'OrderFulfillmentRecipient',
+  description: 'Contains information on the recipient of a fulfillment',
+  fields: {
+    name: 'String',
+    email: 'String',
+    phone: 'String',
+  }
+})
+
+const OrderFulfillmentPickupDetailsTC = sc.createObjectTC({
+  name: 'OrderFulfillmentPickupDetails',
+  description: 'Contains details necessary to fulfill a pickup order',
+  fields: {
+    pickupAt: 'String',
+    recipient: OrderFulfillmentRecipientTC.getType()
+  }
+})
+
+const OrderFulfillmentTC = sc.createObjectTC({
+  name: 'OrderFulfillment',
+  description: 'Contains details on how to fulfill an order',
+  fields: {
+    uid: 'String',
+    state: FulfillmentStatusEnumTC.getType(),
+    pickupDetails: OrderFulfillmentPickupDetailsTC.getType()
+  }
+})
+
 const OrderTC = sc.createObjectTC({
   name: 'Order',
   description: 'The common data model representation of orders',
   fields: {
     id: 'String!',
     merchant: 'String!',
-    customer: 'String!',
+    customer: OrderFulfillmentRecipientTC.getType(),
     items: PreviousLineItemTC.getTypeNonNull()
       .getTypePlural()
       .getType(),
@@ -67,27 +96,25 @@ const OrderTC = sc.createObjectTC({
     totalDiscount: MoneyTC.getTypeNonNull().getType(),
     total: MoneyTC.getTypeNonNull().getType(),
     orderStatus: OrderStatusEnumTC.getTypeNonNull().getType(),
-    fulfillmentStatus: FulfillmentStatusEnumTC.getTypeNonNull().getType(),
-    fulfillmentId: "String!"
+    fulfillment: OrderFulfillmentTC.getType()
   }
 })
 
-const UpdateOrderInputTC = sc.createInputTC({
+const UpdateOrderTC = sc.createInputTC({
   name: 'UpdateOrderInput',
   description: 'The common data model representation of orders',
   fields: {
     id: 'String',
     merchant: 'String',
-    customer: 'String',
-    items: PreviousLineItemTC
-    .getITC()
+    customer: OrderFulfillmentRecipientTC.getITC().getType(),
+    items: PreviousLineItemTC.getITC()
       .getTypePlural()
       .getType(),
     totalTax: MoneyTC.getITC().getType(),
     totalDiscount: MoneyTC.getITC().getType(),
     total: MoneyTC.getITC().getType(),
     orderStatus: OrderStatusEnumTC.getType(),
-    fulfillmentStatus: FulfillmentStatusEnumTC.getType()
+    fulfillment: OrderFulfillmentTC.getITC().getType()
   }
 })
 
@@ -100,7 +127,7 @@ const CreateOrderInputTC = sc.createInputTC({
       .getTypePlural()
       .getTypeNonNull()
       .getType(),
-    recipient: 'String!',
+    recipient: OrderFulfillmentRecipientTC.getITC().getType(),
     pickupTime: 'String!'
   }
 })
@@ -157,5 +184,5 @@ export {
   FilterOrderInputTC,
   SortOrderInputTC,
   FindManyOrderPayloadTC,
-  UpdateOrderInputTC,
+  UpdateOrderTC
 }

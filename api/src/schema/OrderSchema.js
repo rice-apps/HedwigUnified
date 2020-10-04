@@ -11,7 +11,7 @@ import {
   FilterOrderInputTC,
   SortOrderInputTC,
   FindManyOrderPayloadTC,
-  UpdateOrderInputTC
+  UpdateOrderTC
 } from '../models/OrderModel'
 import TwilioClient from '../twilio'
 
@@ -66,14 +66,28 @@ OrderTC.addResolver({
     const returnedOrders = orders.map(order => ({
       id: order.id,
       merchant: order.location_id,
-      customer: order.customer_id,
+      customer: {
+        name: order.fulfillments[0].pickup_details.recipient.display_name,
+        email: order.fulfillments[0].pickup_details.recipient.email_address,
+        phone: order.fulfillments[0].pickup_details.recipient.phone_number
+      },
       items: order.line_items,
       totalTax: order.total_tax_money,
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
-      fulfillmentStatus: order.fulfillments[0].state,
-      fulfillmentId: order.fulfillments[0].uid
+      fulfillment: {
+        uid: order.fulfillments[0].uid,
+        state: order.fulfillments[0].state,
+        pickupDetails: {
+          pickupAt: order.fulfillments[0].pickup_details.pickup_at,
+          recipient: {
+            name: order.fulfillments[0].pickup_details.recipient.display_name,
+            email: order.fulfillments[0].pickup_details.recipient.email_address,
+            phone: order.fulfillments[0].pickup_details.recipient.phone_number
+          }
+        }
+      }
     }))
 
     return {
@@ -103,7 +117,6 @@ OrderTC.addResolver({
         order: {
           location_id: locationId,
           line_items: lineItems,
-          customer_id: recipient,
           fulfillments: [
             {
               type: 'PICKUP',
@@ -111,7 +124,9 @@ OrderTC.addResolver({
               pickup_details: {
                 pickup_at: pickupTime,
                 recipient: {
-                  display_name: recipient
+                  display_name: recipient.name,
+                  email_address: recipient.email,
+                  phone_number: recipient.phone
                 }
               }
             }
@@ -130,7 +145,6 @@ OrderTC.addResolver({
         order: {
           id,
           location_id,
-          customer_id,
           line_items,
           total_tax_money,
           total_discount_money,
@@ -141,15 +155,30 @@ OrderTC.addResolver({
       } = orderResponse
 
       const CDMOrder = {
-        id,
+        id: id,
         merchant: location_id,
-        customer: customer_id,
+        customer: {
+          name: first.pickup_details.recipient.display_name,
+          email: first.pickup_details.recipient.email_address,
+          phone: first.pickup_details.recipient.phone_number
+        },
         items: line_items,
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        fulfillmentStatus: first.state
+        fulfillment: {
+          uid: first.uid,
+          state: first.state,
+          pickupDetails: {
+            pickupAt: first.pickup_details.pickup_at,
+            recipient: {
+              name: first.pickup_details.recipient.display_name,
+              email: first.pickup_details.recipient.email_address,
+              phone: first.pickup_details.recipient.phone_number
+            }
+          }
+        }
       }
 
       pubsub.publish('orderCreated', {
@@ -170,14 +199,12 @@ OrderTC.addResolver({
     type: OrderTC,
     args: {
       orderId: GraphQLNonNull(GraphQLString),
-      fulfillmentId: 'String!',
-      record: UpdateOrderInputTC
+      record: UpdateOrderTC.getType()
     },
     resolve: async ({ args }) => {
       const {
         orderId,
-        fulfillmentId,
-        record: { orderStatus, fulfillmentStatus }
+        record: { orderStatus, fulfillment }
       } = args
 
       const api = new OrdersApi()
@@ -185,11 +212,11 @@ OrderTC.addResolver({
       const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
           state: orderStatus,
-          version: 1,
+          version: 4,
           fulfillments: [
             {
-              uid: fulfillmentId,
-              state: fulfillmentStatus
+              uid: fulfillment.uid,
+              state: fulfillment.state
             }
           ]
         }
@@ -205,7 +232,6 @@ OrderTC.addResolver({
         order: {
           id,
           location_id,
-          customer_id,
           line_items,
           total_tax_money,
           total_discount_money,
@@ -216,16 +242,30 @@ OrderTC.addResolver({
       } = updateOrderResponse
 
       const CDMOrder = {
-        id,
+        id: id,
         merchant: location_id,
-        customer: customer_id,
+        customer: {
+          name: first.pickup_details.recipient.display_name,
+          email: first.pickup_details.recipient.email_address,
+          phone: first.pickup_details.recipient.phone_number
+        },
         items: line_items,
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        fulfillmentStatus: first.state,
-        fulfillmentId: first.uid,
+        fulfillment: {
+          uid: first.uid,
+          state: first.state,
+          pickupDetails: {
+            pickupAt: first.pickup_details.pickup_at,
+            recipient: {
+              name: first.pickup_details.recipient.display_name,
+              email: first.pickup_details.recipient.email_address,
+              phone: first.pickup_details.recipient.phone_number
+            }
+          }
+        }
       }
 
       pubsub.publish('orderUpdated', {

@@ -88,15 +88,19 @@ function OrderDashboard () {
   }
   console.log(allOrders)
   console.log(allOrders.orders)
+
+
   // if (!loading && orders) {
   //     const { order } = orders.items
   //     order.forEach(setElement => {
   //       order_list.push(setElement)
   //     })
   //   }
+
   let newOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PROPOSED")
   let acceptedOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "RESERVED")
   let readyOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PREPARED")
+
 
   return (
     <OrderDashboardWrapper>

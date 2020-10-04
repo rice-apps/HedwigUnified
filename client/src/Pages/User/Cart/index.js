@@ -2,7 +2,7 @@
 
 import { css, jsx } from '@emotion/core'
 import React, { useEffect, useState } from 'react'
-import { gql, useMutation, useApolloClient } from '@apollo/client'
+import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
 import './cart.scss'
@@ -13,18 +13,9 @@ import currency from 'currency.js'
 import { cartItems } from '../../../apollo'
 import dispatch from '../Products/FunctionalCart'
 import Select from 'react-select'
+import { TimePicker } from 'antd'
+import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
-
-let cart_menu = cartItems()
-
-const pickupTimes = [
-  { value: 'ASAP', label: 'ASAP' },
-  { value: '30 min.', label: '30 minutes' },
-  { value: '1 hr.', label: '1 hour' },
-  { value: '1 hr 30 min.', label: '1 hour 30 minutes' }
-]
-
-console.log(cart_menu)
 
 const defaultTotals = {
   subtotal: 0,
@@ -32,35 +23,117 @@ const defaultTotals = {
   discount: null
 }
 
+const GET_VENDOR = gql`
+  query {
+    getVendors {
+      name
+      hours {
+        day
+        start
+        end
+      }
+      squareInfo {
+        merchantId
+        locationIds
+      }
+    }
+  }
+`
+
+const computeAvailableHours = (startHour, endHour) => {
+  const hour = moment().hour()
+  let i = 0
+  let rtn = []
+  while (i < 24) {
+    if (i < startHour || i < hour || i > endHour) {
+      rtn.push(i)
+      i += 1
+      continue
+    }
+    i += 1
+  }
+  return rtn
+}
+
+const computeAvailableMinutes = (
+  hr,
+  startHour,
+  startMinute,
+  endHour,
+  endMinute
+) => {
+  const hour = moment().hour()
+  const minute = moment().minute()
+  let start = 0
+  let end = 0
+  if (hr == startHour) {
+    if (hr == hour) {
+      end = Math.max(minute, startMinute)
+    } else {
+      end = startMinute
+    }
+  } else if (hr == endHour) {
+    start = endMinute
+    end = 59
+  } else if (hr == hour) {
+    end = minute
+  }
+  let i = start
+  let rtn = []
+  while (i <= end) {
+    rtn.push(i)
+    i += 1
+  }
+  return rtn
+}
+
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
-
   const [pickupTime, setPickupTime] = useState({})
+  const { loading, error, data } = useQuery(GET_VENDOR)
   const navigate = useNavigate()
+  let cart_menu = cartItems()
+
   const handleConfirmClick = () => {
     return navigate(`/eat/ewtea/payment`)
   }
 
-  useEffect(() => {
+  const updateTotal = () => {
     let newSubtotal = cart_menu.reduce(
-      (total, current) => total + current.price,
+      (total, current) => total + current.price * current.quantity,
       0
     )
     setTotals({
       subtotal: newSubtotal,
       tax: newSubtotal * 0.05
     })
+  }
+
+  useEffect(() => {
+    updateTotal()
   }, [cart_menu])
 
-  const total = currency(
-    Object.values(totals).reduce((total, current) => total + current, 0)
-  )
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
   const [dummyDelete, setDummyDelete] = useState(0)
-  cartItems().map(item => console.log(item))
+  
+  if (loading) return <p>'Loading vendor's business hour ...'</p>
+  if (error) return <p>`Error! ${error.message}`</p>
 
-  console.log(cartItems())
+  const businessHour = data.getVendors.filter(
+    e => e['name'] == 'Coffeehouse'
+  )[0].hours[0]
+  const startHour = parseInt(businessHour.start.split(':')[0])
+  const endHour = parseInt(businessHour.end.split(':')[0])
+  const startMinute = parseInt(businessHour.start.split(':')[1].substring(0, 2))
+  const endMinute = parseInt(businessHour.end.split(':')[1].substring(0, 2))
+  if (businessHour.start.includes('p.m.')) {
+    startHour += 12
+  }
+  if (businessHour.end.includes('p.m.')) {
+    endHour += 12
+  }
+
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -73,20 +146,38 @@ function CartDetail () {
             </div>
           </div>
           <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
-          <Select
-            options={pickupTimes}
+          <TimePicker
+            defaultOpenValue={moment('11:11', 'HH:mm')}
             css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
-            onChange={setPickupTime}
+            format='HH:mm'
+            onChange={e => {
+              if (e != null) {
+                document.getElementsByClassName('buy-btn')[0].disabled = false
+                setPickupTime({ hour: e.hour(), minute: e.minute() })
+              }
+            }}
+            bordered={false}
+            disabledHours={() => {
+              return computeAvailableHours(startHour, endHour)
+            }}
+            disabledMinutes={hour => {
+              return computeAvailableMinutes(
+                hour,
+                startHour,
+                startMinute,
+                endHour,
+                endMinute
+              )
+            }}
           />
           {cartItems().map(item => {
-            return <CartProduct product={item} deleteItem={setDummyDelete} />
+            return <CartProduct product={item} deleteItem={setDummyDelete} updateTotal={updateTotal}/>
           })}
         </div>
 
         <div className='float-bill'>
           <h1 className='header'>Bill Details</h1>
           {Object.keys(totals).map(type => {
-            console.log(totals[type])
             if (totals[type]) {
               let formatted = currency(totals[type]).format()
               return (
@@ -101,7 +192,7 @@ function CartDetail () {
             <hr className='breakline' />
             <div className='total'>
               <p className='total__header'>Total</p>
-              <p>{total.format()}</p>
+              <p>{currency(totals.subtotal + totals.tax).format()}</p>
             </div>
             <hr className='breakline' />
           </div>

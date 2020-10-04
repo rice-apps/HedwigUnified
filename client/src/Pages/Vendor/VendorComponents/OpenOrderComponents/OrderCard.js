@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
@@ -6,6 +7,9 @@ import { BiFoodMenu } from "react-icons/bi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaIdCard } from "react-icons/fa";
 import Modal from "react-modal";
+
+import moment from "moment";
+
 
 const OrderCardWrapper = styled.div`
   background-color: white;
@@ -100,7 +104,7 @@ function MakeOrderTime(props) {
             textDecoration: "underline"
           }}
         >
-          {props.pickupCountdown} until pickup
+          Pickup time {props.pickupCountdown}
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
@@ -369,8 +373,10 @@ function MakePaymentSpace(props) {
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
+
         <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
         <AcceptButton onClick={openAcceptModal}>Accept</AcceptButton>
+
       </ButtonsSpaceWrapper>
 
       <Modal
@@ -440,57 +446,58 @@ function MakePaymentSpace(props) {
   );
 }
 
-function OrderCard(props) {
+
+function OrderCard (props) {
+  const {
+    customerName, 
+    pickupTime,
+    items,
+    orderCost,
+    orderTotal,
+    fulfillment
+} = props
+  //RFC3339
+  const pickupAt = moment(pickupTime).format('h:mm A')
+  const timeLeft = moment(pickupTime).fromNow()
+
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: "middle", marginBottom: "2px" } }}
     >
       <OrderCardWrapper>
         {/* Section of Order card with customer name, order number */}
-        <MakeOrderTitle orderNumber="12" customerName="Allison Smith" />
+
+        <MakeOrderTitle orderNumber='12' customerName={customerName} />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
-          pickupTime="4:50pm"
-          submissionTime="4:35pm"
-          paymentType={props.paymentType}
-          pickupCountdown="10 minutes"
-        />
+          pickupTime={pickupAt}
+          submissionTime='4:35pm'
+          paymentType='Tetra'
+          pickupCountdown={timeLeft}
 
+        />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
           {/* Call MakeOrderDetails function for each unique item in the cart, 
           can be called multiple times if multiple items are in order */}
 
-          <MakeOrderDetails
-            quantity="2"
-            itemName="all-american cheese burger"
-            price="16.00"
-            variant="Large Combo"
-            modifiers="Extra Lettuce, No Tomato"
+          {items && (items.map(item => <MakeOrderDetails
+            quantity={item.quantity}
+            itemName={item.name}
+            price={item.total_money.amount / 100}
+            variant={item.variation_name}
+            // modifiers={[...item.modifiers.name].join(', ')}
           />
-          <MakeOrderDetails
-            quantity="1"
-            itemName="soup of the day"
-            price="8.50"
-            variant="Small"
-            modifiers="Extra crackers"
-          />
-          <MakeOrderDetails
-            quantity="1"
-            itemName="Caesar Salad"
-            price="5.00"
-            variant="Large"
-            modifiers="Ranch dressing, No croutons"
-          />
+          ))}
         </OrderDetailsSpaceWrapper>
+        <MakePaymentSpace 
+      orderCost={orderCost} 
+orderTax={props.orderTax}
+      orderTotal={orderTotal} 
+      fulfillment={fulfillment}
+paymentType={props.paymentType}/>
 
-        <MakePaymentSpace
-          orderTax={props.orderTax}
-          orderTotal={props.orderTotal}
-          paymentType={props.paymentType}
-          orderNumber="12"
-        />
       </OrderCardWrapper>
     </IconContext.Provider>
   );

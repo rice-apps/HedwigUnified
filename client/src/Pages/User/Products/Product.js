@@ -247,7 +247,9 @@ function Product () {
         <p>{product.description}</p>
       </div>
       <div className='variantsContainer'>
-        <VariantSelection variants={product.variants} />
+        {product.variantLists.map(variant => {
+          return <VariantSelection key={variant.name} variants={variant} />
+        })}
       </div>
       <div className='modifiersContainer'>
         {product.modifierLists.map(modifier => {

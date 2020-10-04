@@ -8,6 +8,7 @@ function ModifierSelection ({ modifierCategory }) {
     description,
     multiSelect
   } = modifierCategory
+  console.log(options);
   return (
     <div className='modifier'>
       <div className='heading'>

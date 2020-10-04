@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import currency from 'currency.js'
 
-const VariantSelection = ({ variants }) => {
+const VariantSelection = ({ variant }) => {
   return (
     <div className='variant'>
       <div className='heading'>
-        <h1>{variants[0].description}</h1>
-        {variants[0].description ? <p>{variants[0].description}</p> : null}
+        <h1>{variant[0].description}</h1>
+        {variant[0].description ? <p>{variant[0].description}</p> : null}
       </div>
       <div className='options'>
-        {variants.map(option => (
+        {variant.map(option => (
           <div className='optionSet' key={option.name}>
             <label>
               <input

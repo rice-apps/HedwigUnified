@@ -22,7 +22,6 @@ const CreatePaymentITC = sc.createInputTC({
     sourceId: 'String!',
     orderId: 'String!',
     locationId: 'String!',
-    customerId: 'String!',
     subtotal: MoneyTC.getITC()
       .getTypeNonNull()
       .getType(),

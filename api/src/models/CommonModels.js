@@ -15,8 +15,8 @@ const MoneyTC = sc.createObjectTC({
   name: 'Money',
   description: 'Common data model money representation',
   fields: {
-    amount: GraphQLNonNull(GraphQLInt),
-    currency: GraphQLNonNull(GraphQLString)
+    amount: 'Int!',
+    currency: 'String!'
   }
 })
 
@@ -61,8 +61,8 @@ const PeriodTC = sc.createObjectTC({
   description:
     'Common data model representing a period which the business is operating during.',
   fields: {
-    start: GraphQLInt,
-    end: GraphQLInt,
+    start: 'Int',
+    end: 'Int',
     day: DayEnumTC.getType()
   }
 })

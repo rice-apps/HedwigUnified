@@ -4,7 +4,7 @@ import { RoutesComponent } from './components/Routes'
 import Header from './components/Header'
 import { faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 
-function App () {
+function App() {
   return (
     <React.Fragment>
       <Header />

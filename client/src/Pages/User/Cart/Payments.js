@@ -15,6 +15,7 @@ const Payments = () => {
     // colors
     const bgColors = ['white', '#cf5734'];
     const fontColors = ['#595858', 'white'];
+    const fontWeights = [500, 700];
 
     const Title = styled.text`
             margin-top: 110px;
@@ -42,7 +43,6 @@ const Payments = () => {
             font-weight: 500;
             color: #595858;
             text-align: center;
-            &:hover {background-color: 'red'}
         `;
 
     const Grid = styled.div`
@@ -65,18 +65,24 @@ const Payments = () => {
             border-width: 1px;
             padding: 25px 0;
             font-size: 25px;
-            color: ${fontColors[activeFooter]};
-            background-color: ${bgColors[activeFooter]};
+            font-weight: ${activeButton !== 3 ? fontWeights[1] : fontWeights[0]};
+            color: ${activeButton !== 3 ? fontColors[1] : fontColors[0]};
+            background-color: ${ activeButton !== 3 ? bgColors[1] : bgColors[0]};
     `;
 
     // Changes background color of a button if its selected
     const renderBgColor = (index) => {
-        return (index === activeButton ? '#cf5734' : 'white');
+        return (index === activeButton ? bgColors[1] : bgColors[0]);
     };
 
     // Changes font color of a button if its selected
     const renderFontColor = (index) => {
-        return (index === activeButton ? 'white' : '#595858');
+        return (index === activeButton ? fontColors[1] : fontColors[0]);
+    };
+
+    // Changes weight of font if button is selected
+    const renderFontWeight = (index) => {
+        return (index === activeButton ? fontWeights[1] : fontWeights[0]);
     };
 
     // Displays the payment option buttons
@@ -87,7 +93,9 @@ const Payments = () => {
         return (
             icons.map((icon, index) =>
                 <Row>
-                    <Button variant="outlined" onClick={() => activeButton !== index ? setActiveButton(index) : setActiveButton(3)} style={{ backgroundColor: renderBgColor(index), color: renderFontColor(index) }}>{icons[index]} {values[index]}</Button>
+                    <Button variant="outlined" onClick={() => activeButton !== index ? setActiveButton(index) : setActiveButton(3)} style={{ backgroundColor: renderBgColor(index), color: renderFontColor(index), fontWeight: renderFontWeight(index) }}>
+                        {icons[index]} {values[index]}
+                    </Button>
                 </Row >
 
             )
@@ -103,7 +111,7 @@ const Payments = () => {
                 </Row>
                 {renderButtons()}
             </Grid>
-            <Footer onClick={() => activeFooter === 0 ? setActiveFooter(1) : setActiveFooter(0)}>Next</Footer>
+            <Footer>Next</Footer>
         </div >
     )
 };

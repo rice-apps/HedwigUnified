@@ -89,7 +89,7 @@ const computeAvailableMinutes = (
 
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
-  const [pickupTime, setPickupTime] = useState({})
+  const [pickupTime, setPickupTime] = useState(null)
   const { loading, error, data } = useQuery(GET_VENDOR)
   const navigate = useNavigate()
   let cart_menu = cartItems()
@@ -105,7 +105,7 @@ function CartDetail () {
     )
     setTotals({
       subtotal: newSubtotal,
-      tax: newSubtotal * 0.05
+      tax: newSubtotal * 0.0825
     })
   }
 
@@ -133,7 +133,7 @@ function CartDetail () {
   if (businessHour.end.includes('p.m.')) {
     endHour += 12
   }
-
+  console.log(cartItems());
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -199,13 +199,14 @@ function CartDetail () {
         </div>
 
         <div className='float-cart__footer'>
-          <div
+          <button
+            disabled={cartItems().length == 0 || pickupTime == null}
             className='buy-btn'
             title={'Confirm'}
             onClick={handleConfirmClick}
           >
             Make Payment
-          </div>
+          </button>
         </div>
       </div>
     </div>

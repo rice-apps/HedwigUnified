@@ -217,7 +217,7 @@ function Product () {
 
     let itemQuantity = { quantity }.quantity
     console.log(itemQuantity)
-    let totalPrice = modifierCost + variantCost
+    let totalPrice = (modifierCost + variantCost) * 0.01
 
     dispatch({
       type: 'ADD_ITEM',

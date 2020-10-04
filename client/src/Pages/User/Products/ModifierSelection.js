@@ -16,7 +16,7 @@ function ModifierSelection ({ modifierCategory }) {
       </div>
       <div className='options'>
         {options.map(option => (
-          <div className='optionSet'>
+          <div className='optionSet' key={option.name}>
             <label>
               {multiSelect ? (
                 <React.Fragment>

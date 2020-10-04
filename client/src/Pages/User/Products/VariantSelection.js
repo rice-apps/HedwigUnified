@@ -10,7 +10,7 @@ const VariantSelection = ({ variants }) => {
       </div>
       <div className='options'>
         {variants.map(option => (
-          <div className='optionSet'>
+          <div className='optionSet' key={option.name}>
             <label>
               <input
                 type='radio'

@@ -204,10 +204,14 @@ OrderTC.addResolver({
 
       const api = new OrdersApi()
 
+      const batchRetriveOrderResponse = await api.batchRetrieveOrders({
+        order_ids: [orderId]
+      })
+
       const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
           state: orderStatus,
-          version: 4,
+          version: batchRetriveOrderResponse.orders[0].version,
           fulfillments: [
             {
               uid: fulfillment.uid,

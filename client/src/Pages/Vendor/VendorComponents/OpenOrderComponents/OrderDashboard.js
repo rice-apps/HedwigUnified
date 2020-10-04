@@ -79,12 +79,16 @@ function OrderDashboard () {
   }
   console.log(allOrders)
   console.log(allOrders.orders)
+
+
   // if (!loading && orders) {
   //     const { order } = orders.items
   //     order.forEach(setElement => {
   //       order_list.push(setElement)
   //     })
   //   }
+
+
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>

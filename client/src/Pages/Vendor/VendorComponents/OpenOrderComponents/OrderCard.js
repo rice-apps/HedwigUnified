@@ -1,21 +1,20 @@
-import React from 'react'
-import styled from 'styled-components'
-import { IconContext } from 'react-icons'
-import { BsFillClockFill } from 'react-icons/bs'
-import { BiFoodMenu } from 'react-icons/bi'
-import { IoIosAddCircleOutline } from 'react-icons/io'
-
+import React, { useState } from "react";
+import styled from "styled-components";
+import { IconContext } from "react-icons";
+import { BsFillClockFill } from "react-icons/bs";
+import { BiFoodMenu } from "react-icons/bi";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { FaIdCard } from "react-icons/fa";
+import Modal from "react-modal";
 
 const OrderCardWrapper = styled.div`
-
-
   background-color: white;
   border-radius: 20px;
   border-width: 2px;
   border-color: #cacaca;
   border-style: solid;
   justify-self: center;
-  font-family: 'Futura', sans-serif;
+  font-family: "Futura", sans-serif;
   display: grid;
   width: 94%;
   height: max-content;
@@ -25,11 +24,11 @@ const OrderCardWrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 35px max-content max-content 92px;
   grid-template-areas:
-    'OrderTitleSpace'
-    'OrderTimeSpace'
-    'OrderDetailsSpace'
-    'PaymentSpace';
-`
+    "OrderTitleSpace"
+    "OrderTimeSpace"
+    "OrderDetailsSpace"
+    "PaymentSpace";
+`;
 
 const OrderTitleSpaceWrapper = styled.div`
   background-color: white;
@@ -45,16 +44,16 @@ const OrderTitleSpaceWrapper = styled.div`
   overflow: hidden;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
-`
+`;
 
-function MakeOrderTitle (props) {
+function MakeOrderTitle(props) {
   return (
     <OrderTitleSpaceWrapper>
       <div>No.{props.orderNumber} </div>
-      <div style={{ marginRight: '35px' }}>{props.customerName}</div>
+      <div style={{ marginRight: "35px" }}>{props.customerName}</div>
       <BsFillClockFill />
     </OrderTitleSpaceWrapper>
-  )
+  );
 }
 
 const OrderTimeSpaceWrapper = styled.div`
@@ -64,9 +63,9 @@ const OrderTimeSpaceWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   font-size: 14px;
-  grid-template-areas: 'ExactTimeSpace TimeLeftSpace';
+  grid-template-areas: "ExactTimeSpace TimeLeftSpace";
   font-weight: 500;
-`
+`;
 
 const ExactTimeSpaceWrapper = styled.div`
   grid-area: ExactTimeSpace;
@@ -76,36 +75,36 @@ const ExactTimeSpaceWrapper = styled.div`
   margin-top: 7px;
   margin-left: 10px;
   line-height: 18px;
-`
+`;
 const TimeLeftSpaceWrapper = styled.div`
   grid-area: TimeLeftSpace;
   text-align: right;
   color: #9d9d9d;
-`
+`;
 
-function MakeOrderTime (props) {
+function MakeOrderTime(props) {
   return (
     <OrderTimeSpaceWrapper>
       <ExactTimeSpaceWrapper>
         <div> Pick up time: {props.pickupTime}</div>
         <div> Order Submitted: {props.submissionTime}</div>
-        <div style={{ marginTop: '4px' }}>
+        <div style={{ marginTop: "4px" }}>
           Payment: <strong>{props.paymentType}</strong>
         </div>
       </ExactTimeSpaceWrapper>
       <TimeLeftSpaceWrapper>
         <div
           style={{
-            marginTop: '8px',
-            marginRight: '20px',
-            textDecoration: 'underline'
+            marginTop: "8px",
+            marginRight: "20px",
+            textDecoration: "underline"
           }}
         >
           {props.pickupCountdown} until pickup
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
-  )
+  );
 }
 
 const OrderDetailsSpaceWrapper = styled.div`
@@ -113,7 +112,7 @@ const OrderDetailsSpaceWrapper = styled.div`
   grid-area: OrderDetailsSpace;
   display: flex;
   flex-direction: column;
-`
+`;
 const OrderDetailsItemWrapper = styled.div`
   background-color: #fafafa;
   margin: 3px 0px;
@@ -121,20 +120,20 @@ const OrderDetailsItemWrapper = styled.div`
   grid-template-columns: 1.1fr 10fr 3fr;
   grid-template-rows: 1fr;
   font-size: 14px;
-`
+`;
 const ItemDescriptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-left: 6px;
-`
+`;
 
-function MakeOrderDetails (props) {
+function MakeOrderDetails(props) {
   return (
     <OrderDetailsItemWrapper>
-      <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
+      <div style={{ fontWeight: "bold" }}>{props.quantity}</div>
       <ItemDescriptionWrapper>
-        <div style={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
+        <div style={{ textTransform: "uppercase", fontWeight: "bold" }}>
           {props.itemName}
         </div>
         <div>
@@ -144,9 +143,9 @@ function MakeOrderDetails (props) {
           <IoIosAddCircleOutline /> {props.modifiers}
         </div>
       </ItemDescriptionWrapper>
-      <div style={{ fontWeight: 'bold' }}>${props.price}</div>
+      <div style={{ fontWeight: "bold" }}>${props.price}</div>
     </OrderDetailsItemWrapper>
-  )
+  );
 }
 
 const PaymentSpaceWrapper = styled.div`
@@ -159,7 +158,7 @@ const PaymentSpaceWrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1.2fr;
   font-size: 14px;
-`
+`;
 
 const CostSpaceWrapper = styled.div`
   display: flex;
@@ -170,106 +169,331 @@ const CostSpaceWrapper = styled.div`
   margin-right: 5px;
   margin-bottom: 7px;
   margin-top: 3px;
-`
+`;
 const ButtonsSpaceWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`
-const ButtonWrapper = styled.div`
+`;
+const ButtonWrapper = styled.button`
+  font-family: "Futura", sans-serif;
   border-radius: 20px;
+  cursor: pointer;
+  border: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px 30px;
   margin: 0px 25px;
   margin-bottom: 15px;
-`
+`;
 
 const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
-`
+`;
 
 const CancelButton = styled(ButtonWrapper)`
   background-color: #dedede;
-`
-function MakePaymentSpace (props) {
+`;
+
+const ModalWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 2fr 4fr 5fr 3fr;
+  grid-template-areas:
+    "ModalHeader"
+    "ModalParagraph"
+    "ModalOrderDetails"
+    "ModalButtons";
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  color: black;
+`;
+
+const ModalHeaderWrapper = styled.div`
+  grid-area: ModalHeader;
+  height: 100%;
+  width: 100%;
+  font-size: 30px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+function MakeModalHeader(props) {
+  var paymentType = props.paymentType;
+  return (
+    <ModalHeaderWrapper>
+      <FaIdCard style={{ marginTop: "3px", marginRight: "12px" }} />
+      {paymentType === "Tetra" ? (
+        <div>Tetra Pay (No.{props.orderNumber})</div>
+      ) : null}
+      {paymentType === "Membership" ? (
+        <div>Cohen House Membership ID (No.{props.orderNumber})</div>
+      ) : null}
+      {paymentType === "Credit" ? (
+        <div>Credit Card (No.{props.orderNumber})</div>
+      ) : null}
+    </ModalHeaderWrapper>
+  );
+}
+
+const ModalParagraphWrapper = styled.div`
+  /* background-color: blue; */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  grid-area: ModalParagraph;
+  border-bottom: 1px solid grey;
+`;
+function MakeModalParagraph(props) {
+  const paymentType = props.paymentType;
+  const cancel = props.cancel;
+  if (paymentType === "Tetra") {
+    return (
+      <ModalParagraphWrapper>
+        <div>
+          This order is paid in <strong>Tetra</strong>. <br />
+          Please <strong>manually</strong> enter the following buyer's
+          information into the
+          <strong> Tetra Reader</strong>.
+        </div>
+      </ModalParagraphWrapper>
+    );
+  } else if (paymentType === "Membership") {
+    return (
+      <ModalParagraphWrapper>
+        <div>
+          This order is paid with Cohen House <strong>Membership ID</strong>.
+          Please <strong>manually</strong> enter the following buyer's
+          information into the system.
+        </div>
+      </ModalParagraphWrapper>
+    );
+  } else if (paymentType === "Credit") {
+    return (
+      <ModalParagraphWrapper>
+        <div>
+          This order is paid in <strong>Credit Card</strong>. <br/>
+          You can proceed to accept the order.
+        </div>
+      </ModalParagraphWrapper>
+    );
+  } else if (cancel === true) {
+    return (
+      <ModalParagraphWrapper style={{ justifyContent: "center" }}>
+        <div style={{ textAlign: "center", fontSize: "20px" }}>
+          Are you sure you want to <strong>cancel</strong> this order?
+        </div>
+      </ModalParagraphWrapper>
+    );
+  }
+}
+
+const ModalOrderDetailsWrapper = styled.div`
+  grid-area: ModalOrderDetails;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-bottom: 1px solid grey;
+`;
+
+const ModalOrderDetailRow = styled.div`
+  width: 35%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 3px 0px;
+`;
+function MakeModalOrderDetails(props) {
+  var paymentType = props.paymentType;
+  return (
+    <ModalOrderDetailsWrapper>
+      <ModalOrderDetailRow>
+        {paymentType === "Tetra" ? (
+          <div>Student ID:</div>
+        ) : paymentType === "Membership" ? (
+          <div>Membership ID:</div>
+        ) : null}
+        {(paymentType === "Tetra" || paymentType ==="Membership") ? (<div> *******</div>): null}
+      </ModalOrderDetailRow>
+      <ModalOrderDetailRow>
+        <div>Amount:</div>
+        <div>${props.orderTotal}</div>
+      </ModalOrderDetailRow>
+    </ModalOrderDetailsWrapper>
+  );
+}
+
+const ModalButtonsWrapper = styled.div`
+  grid-area: ModalButtons;
+  margin-top: 4vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+function MakePaymentSpace(props) {
+  const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false);
+  const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
+  function openAcceptModal() {
+    setAcceptModalIsOpen(true);
+  }
+  function closeAcceptModal() {
+    setAcceptModalIsOpen(false);
+  }
+  function openCancelModal() {
+    setCancelModalIsOpen(true);
+  }
+  function closeCancelModal() {
+    setCancelModalIsOpen(false);
+  }
+
   return (
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
         <div>
-          Tax: <strong>{props.orderTax}</strong>
+          Tax: <strong>${props.orderTax}</strong>
         </div>
         <div>
-          Total: <strong>{props.orderTotal}</strong>
+          Total: <strong>${props.orderTotal}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
-        <CancelButton>Cancel</CancelButton>
-        <AcceptButton>Accept</AcceptButton>
+        <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+        <AcceptButton onClick={openAcceptModal}>Accept</AcceptButton>
       </ButtonsSpaceWrapper>
+
+      <Modal
+        isOpen={acceptModalIsOpen}
+        style={{
+          content: {
+            backgroundColor: "white",
+            height: "44vh",
+            width: "44vw",
+            position: "absolute",
+            top: "28%",
+            left: "28%",
+            borderRadius: "20px",
+            fontFamily: "Futura"
+          }
+        }}
+      >
+        <ModalWrapper>
+          <MakeModalHeader
+            paymentType={props.paymentType}
+            orderNumber={props.orderNumber}
+          />
+          <MakeModalParagraph paymentType={props.paymentType} cancel={false} />
+          <MakeModalOrderDetails
+            paymentType={props.paymentType}
+            orderTotal={props.orderTotal}
+          />
+          <ModalButtonsWrapper>
+            <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
+            <AcceptButton onClick={closeAcceptModal}> Accept </AcceptButton>
+          </ModalButtonsWrapper>
+        </ModalWrapper>
+      </Modal>
+
+      <Modal
+        isOpen={cancelModalIsOpen}
+        style={{
+          content: {
+            backgroundColor: "white",
+            height: "44vh",
+            width: "44vw",
+            position: "absolute",
+            top: "28%",
+            left: "28%",
+            borderRadius: "20px",
+            fontFamily: "Futura"
+          }
+        }}
+      >
+        <ModalWrapper>
+          <MakeModalHeader
+            paymentType={props.paymentType}
+            orderNumber={props.orderNumber}
+          />
+          <MakeModalParagraph cancel={true} />
+          <MakeModalOrderDetails
+            paymentType={props.paymentType}
+            orderTotal={props.orderTotal}
+          />
+          <ModalButtonsWrapper>
+            <CancelButton onClick={closeCancelModal}>Back</CancelButton>
+            <AcceptButton onClick={closeCancelModal}>Cancel</AcceptButton>
+          </ModalButtonsWrapper>
+        </ModalWrapper>
+      </Modal>
     </PaymentSpaceWrapper>
-  )
+  );
 }
 
-function OrderCard (props) {
+function OrderCard(props) {
   return (
     <IconContext.Provider
-      value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
+      value={{ style: { verticalAlign: "middle", marginBottom: "2px" } }}
     >
-
-
       <OrderCardWrapper>
-
-
         {/* Section of Order card with customer name, order number */}
-        <MakeOrderTitle orderNumber='12' customerName='Allison Smith' />
+        <MakeOrderTitle orderNumber="12" customerName="Allison Smith" />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
-          pickupTime='4:50pm'
-          submissionTime='4:35pm'
-          paymentType='Tetra'
-          pickupCountdown='10 minutes'
+          pickupTime="4:50pm"
+          submissionTime="4:35pm"
+          paymentType={props.paymentType}
+          pickupCountdown="10 minutes"
         />
 
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
-
           {/* Call MakeOrderDetails function for each unique item in the cart, 
           can be called multiple times if multiple items are in order */}
-          
-          <MakeOrderDetails
-            quantity='2'
-            itemName='all-american cheese burger'
-            price='16.00'
-            variant='Large Combo'
-            modifiers='Extra Lettuce, No Tomato'
-          />
-          <MakeOrderDetails
 
-            quantity='1'
-            itemName='soup of the day'
-            price='8.50'
-            variant='Small'
-            modifiers='Extra crackers'
+          <MakeOrderDetails
+            quantity="2"
+            itemName="all-american cheese burger"
+            price="16.00"
+            variant="Large Combo"
+            modifiers="Extra Lettuce, No Tomato"
           />
           <MakeOrderDetails
-            quantity='1'
-            itemName='Caesar Salad'
-            price='5.00'
-            variant='Large'
-            modifiers='Ranch dressing, No croutons'
-
+            quantity="1"
+            itemName="soup of the day"
+            price="8.50"
+            variant="Small"
+            modifiers="Extra crackers"
           />
-          
+          <MakeOrderDetails
+            quantity="1"
+            itemName="Caesar Salad"
+            price="5.00"
+            variant="Large"
+            modifiers="Ranch dressing, No croutons"
+          />
         </OrderDetailsSpaceWrapper>
 
-        <MakePaymentSpace orderCost={props.orderCost} orderTotal={props.orderTotal}/>
+        <MakePaymentSpace
+          orderTax={props.orderTax}
+          orderTotal={props.orderTotal}
+          paymentType={props.paymentType}
+          orderNumber="12"
+        />
       </OrderCardWrapper>
     </IconContext.Provider>
-  )
+  );
 }
 
-export default OrderCard
+export default OrderCard;

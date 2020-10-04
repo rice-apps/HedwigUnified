@@ -112,6 +112,7 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+              fulfillment={order.fulfillment.state}
             />
             )
           )

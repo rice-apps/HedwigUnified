@@ -4,7 +4,7 @@ import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
-
+import moment from "moment";
 
 const OrderCardWrapper = styled.div`
 
@@ -101,7 +101,7 @@ function MakeOrderTime (props) {
             textDecoration: 'underline'
           }}
         >
-          {props.pickupCountdown} until pickup
+          Pickup time {props.pickupCountdown}
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
@@ -207,7 +207,7 @@ function MakePaymentSpace (props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
         <CancelButton>Cancel</CancelButton>
-        <AcceptButton>Accept</AcceptButton>
+        <AcceptButton>{props.fulfillment === "PROPOSED" ? 'Accept': 'Complete' }</AcceptButton>
       </ButtonsSpaceWrapper>
     </PaymentSpaceWrapper>
   )
@@ -219,8 +219,12 @@ function OrderCard (props) {
     pickupTime,
     items,
     orderCost,
-    orderTotal
+    orderTotal,
+    fulfillment
 } = props
+  //RFC3339
+  const pickupAt = moment(pickupTime).format('h:mm A')
+  const timeLeft = moment(pickupTime).fromNow()
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
@@ -235,10 +239,10 @@ function OrderCard (props) {
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
-          pickupTime={pickupTime}
+          pickupTime={pickupAt}
           submissionTime='4:35pm'
           paymentType='Tetra'
-          pickupCountdown='10 minutes'
+          pickupCountdown={timeLeft}
         />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
@@ -253,7 +257,10 @@ function OrderCard (props) {
           />
           ))}
         </OrderDetailsSpaceWrapper>
-        <MakePaymentSpace orderCost={orderCost} orderTotal={orderTotal}/>
+        <MakePaymentSpace 
+      orderCost={orderCost} 
+      orderTotal={orderTotal} 
+      fulfillment={fulfillment} />
       </OrderCardWrapper>
     </IconContext.Provider>
   )

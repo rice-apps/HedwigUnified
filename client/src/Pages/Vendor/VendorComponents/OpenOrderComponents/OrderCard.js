@@ -7,9 +7,21 @@ import { BiFoodMenu } from "react-icons/bi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaIdCard } from "react-icons/fa";
 import Modal from "react-modal";
-
+import { gql, useMutation } from '@apollo/client'
 import moment from "moment";
 
+const ACCEPT_ORDER = gql`
+  mutation {
+  updateOrder(
+    orderId: "Pu4mWMvZJlkb2J0QdxIWapYVt9EZY"
+    record: { fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED } }
+  ) {
+    fulfillment {
+      uid
+      state
+    }
+  }
+}`
 
 const OrderCardWrapper = styled.div`
   background-color: white;
@@ -296,6 +308,10 @@ function MakeModalParagraph(props) {
         </div>
       </ModalParagraphWrapper>
     );
+  } else {
+    return (
+      <ModalParagraphWrapper>error</ModalParagraphWrapper>
+    )
   }
 }
 

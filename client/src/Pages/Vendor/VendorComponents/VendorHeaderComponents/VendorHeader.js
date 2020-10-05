@@ -45,13 +45,13 @@ const DateTimeDisplayWrapper = styled.div`
 `
 
 function VendorHeader () {
-  function UpdateTime () {
-    const clock = document.getElementById('clockdisplay')
-    const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
-    clock.textContent = CurrentTime
-  }
+  // function UpdateTime () {
+  //   const headerclock = document.getElementById('clockdisplay')
+  //   const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
+  //   headerclock.textContent = CurrentTime
+  // }
 
-  setInterval(UpdateTime, 1000)
+  // setInterval(UpdateTime, 1000)
 
   return (
     <VendorHeaderWrapper>

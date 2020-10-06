@@ -10,11 +10,11 @@ const VariantSelection = ({ variants }) => {
       </div>
       <div className='options'>
         {variants.map(option => (
-          <div className='optionSet'>
+          <div className='optionSet' key={option.name}>
             <label>
               <input
                 type='radio'
-                name={option.name}
+                name={'variant type place holder'} //change this to the type of variant use is choosing
                 className='variantSelect'
                 value={JSON.stringify({ option })}
               />

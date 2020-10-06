@@ -79,7 +79,7 @@ function VendorList ({ classes }) {
       </div>
       <div>
         {getVendors.map(vendor => {
-          return <VendorCard vendor={vendor} />
+          return <VendorCard key={vendor.name} vendor={vendor} />
         })}
       </div>
       <div>

@@ -88,15 +88,19 @@ function OrderDashboard () {
   }
   console.log(allOrders)
   console.log(allOrders.orders)
+
+
   // if (!loading && orders) {
   //     const { order } = orders.items
   //     order.forEach(setElement => {
   //       order_list.push(setElement)
   //     })
   //   }
+
   let newOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PROPOSED")
   let acceptedOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "RESERVED")
   let readyOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PREPARED")
+
 
   return (
     <OrderDashboardWrapper>
@@ -112,6 +116,7 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+              fulfillment={order.fulfillment.state}
             />
             )
           )

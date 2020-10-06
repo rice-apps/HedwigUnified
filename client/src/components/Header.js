@@ -16,13 +16,14 @@ const HeaderDiv = styled.div`
   width: 100vw;
   height: 8vh;
   display: grid;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: 33% 66%;
   font-size: 15pt;
 `
 
 const LinksDiv = styled.div`
   display: grid;
-  grid-template-columns: 25%, 25%, 25%, 25%;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: 'Vendors Cart';
 `
 
 const Logo = styled.div`
@@ -34,14 +35,6 @@ const Logo = styled.div`
   }
 `
 
-const CartLink = styled.a`
-  grid-column: 1/2;
-  :hover {
-    color: red;
-    cursor: pointer;
-  }
-  align-self: center;
-`
 const OrdersLink = styled.a`
   grid-column: 2/3;
   :hover {
@@ -51,12 +44,23 @@ const OrdersLink = styled.a`
   align-self: center;
 `
 const VendorsLink = styled.a`
-  grid-column: 3/4;
+  grid-column: Vendors
   :hover {
     color: red;
     cursor: pointer;
   }
   align-self: center;
+  justify-self: center;
+`
+
+const CartLink = styled.a`
+  grid-area: Cart;
+  :hover {
+    color: red;
+    cursor: pointer;
+  }
+  align-self: center;
+  justify-self: center;
 `
 
 const SettingsLink = styled.a`
@@ -76,11 +80,13 @@ const Header = () => {
       <Logo onClick={() => navigate('/home')}>Hedwig</Logo>
       <LinksDiv>
         <CartLink onClick={() => navigate('/eat/ewtea/cart')}>Cart</CartLink>
-        <OrdersLink onClick={() => navigate('/eat/orders')}>Orders</OrdersLink>
+        {/*<OrdersLink onClick={() => navigate('/eat/orders')}>Orders</OrdersLink>*/}
         <VendorsLink onClick={() => navigate('/eat')}>Vendors</VendorsLink>
+        {/*
         <SettingsLink onClick={() => navigate('/user/settings')}>
           Settings
         </SettingsLink>
+        */}
       </LinksDiv>
     </HeaderDiv>
   )

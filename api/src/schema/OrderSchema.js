@@ -1,7 +1,6 @@
 import {
   OrdersApi,
   CreateOrderRequest,
-  UpdateOrderRequest,
   SearchOrdersRequest
 } from 'square-connect'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
@@ -231,7 +230,6 @@ OrderTC.addResolver({
         order: {
           id,
           location_id,
-          customer_id,
           line_items,
           total_tax_money,
           total_discount_money,

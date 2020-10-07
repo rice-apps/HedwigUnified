@@ -185,6 +185,7 @@ ItemTC.addResolver({
       } = object
 
       // Parse variation data
+      console.log(variations);
       const returnedVariants = variations.map(variant => {
         const {
           id: itemVariationId,

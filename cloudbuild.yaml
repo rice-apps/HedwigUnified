@@ -3,7 +3,7 @@ steps:
   args: ['install']
   dir: 'api/'
 - name: 'gcr.io/cloud-builders/npm'
-  args: ["run", "create-env"]
+  args: ['run', 'create-env']
   env:
     - 'MONGODB_URL=${_MONGODB_URL}'
     - 'SERVICE_URL=${_SERVICE_URL}'
@@ -11,8 +11,12 @@ steps:
     - 'DEV_PORT=${_DEV_PORT}'
     - 'SQUARE_ACCESS_TOKEN=${_SQUARE_ACCESS_TOKEN}'
   dir: 'api/'
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+  dir: 'api/'
 - name: "gcr.io/cloud-builders/gcloud"
-  args: ["app", "deploy", "api/api.yaml", "-v", "$_GAE_VERSION"]
+  args: ['app', 'deploy', 'api.yaml', '-v', '$_GAE_VERSION']
+  dir: 'api/'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
   dir: 'client'
@@ -28,9 +32,11 @@ steps:
   args: ['run', 'build']
   dir: 'client'
 - name: "gcr.io/cloud-builders/gcloud"
-  args: ["app", "deploy", "client/client.yaml", "-v", "$_GAE_VERSION"]
+  args: ['app', 'deploy', 'client.yaml', '-v', '$_GAE_VERSION']
+  dir: 'client'
 - name: "gcr.io/cloud-builders/gcloud"
-  args: ["app", "deploy", "client/dispatch.yaml", "-v", "$_GAE_VERSION"]
+  args: ['app', 'deploy', 'dispatch.yaml', '-v', '$_GAE_VERSION']
+  dir: 'client/'
 - name: "gcr.io/cloud-builders/gcloud"
-  args: ["app", "services", "--project", "$PROJECT_ID", "set-traffic", "--splits", "$_GAE_TRAFFIC"]
+  args: ['app', 'services', '--project', $PROJECT_ID', 'set-traffic', '--splits', '$_GAE_TRAFFIC']
 timeout: "1600s"

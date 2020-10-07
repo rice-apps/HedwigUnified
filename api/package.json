@@ -8,7 +8,7 @@
   "main": "src/index.js",
   "scripts": {
     "clean": "rm -rf build",
-    "compile": "babel src -d build",
+    "build": "babel src -d build",
     "lint": "prettier-standard --lint",
     "pkg": "pkg build/index.js -o build/HedwigBackend --options trace-warnings",
     "refresh": "rm -rf build node_modules && rm package-lock.json",

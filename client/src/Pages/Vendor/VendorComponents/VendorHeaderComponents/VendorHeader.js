@@ -46,22 +46,24 @@ const DateTimeDisplayWrapper = styled.div`
 
 function VendorHeader () {
   function UpdateTime () {
-    const clock = document.getElementById('clockdisplay')
-    const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
-    clock.textContent = CurrentTime
+    if (document.querySelector('#clockdisplay') !== null){
+    const headerclock = document.querySelector('#clockdisplay')
+    const CurrentDisplayTime = moment().format("dddd, MMMM Do h:mm:ss A")
+    headerclock.innerHTML = CurrentDisplayTime
+    }
   }
-
-  setInterval(UpdateTime, 1000)
+  
 
   return (
     <VendorHeaderWrapper>
       <StyledUserDisplayWrapper>
         <UserText>Newton Huynh</UserText>
-        <FaUserCircle style={{ fontSize: '30px', marginLeft: '1vw' }} />{' '}
+        <FaUserCircle style={{ fontSize: '30px', marginLeft: '1vw' }} />
       </StyledUserDisplayWrapper>
       <DateTimeDisplayWrapper>
 
-        <div id="clockdisplay">Loading...</div>
+<div id="clockdisplay">Loading...</div>
+<div hidden>{setInterval(UpdateTime, 1000)}</div>
 
       </DateTimeDisplayWrapper>
     </VendorHeaderWrapper>

@@ -21,7 +21,7 @@ const theme = createMuiTheme({
   }
 });
 const PageWrapper = styled.div`
-  background-color: #FAFAFA;
+  background-color: #F7f7f7;
   height: 100%;
   width: 100%;
   display: flex;

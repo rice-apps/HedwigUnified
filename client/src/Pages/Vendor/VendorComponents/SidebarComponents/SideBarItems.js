@@ -1,7 +1,7 @@
 import React from 'react'
 import Collapsible from 'react-collapsible'
 import styled, { css } from 'styled-components'
-import './Collapsible.css'
+import './SidebarCollapsible.css'
 import { FcCollapse, FcExpand } from 'react-icons/fc'
 import { NavLink } from 'react-router-dom'
 
@@ -77,6 +77,8 @@ function SideBarItems () {
   return (
     <SideBarItemsWrapper>
       <Collapsible
+      classParentString="MainMenuCollapsible"
+
         open='true'
         trigger={<MainMenuItem name='Order Processing' IsClosed={true} />}
         triggerWhenOpen={
@@ -94,6 +96,7 @@ function SideBarItems () {
       </Collapsible>
 
       <Collapsible
+      classParentString="MainMenuCollapsible"
         open='true'
         trigger={<MainMenuItem name='Menu Management' IsClosed={true} />}
         triggerWhenOpen={
@@ -108,6 +111,7 @@ function SideBarItems () {
       </Collapsible>
 
       <Collapsible
+      classParentString="MainMenuCollapsible"
         open='true'
         trigger={<MainMenuItem name='Store Information' IsClosed={true} />}
         triggerWhenOpen={

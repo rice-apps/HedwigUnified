@@ -51,6 +51,7 @@ const DateTimeDisplayWrapper = styled.div`
   width: 100%;
 `;
 
+
 const LogoutPopup = styled.div`
   background-color: #d0d0d0;
   height: 16vh;
@@ -99,7 +100,9 @@ function VendorHeader() {
   function toggleLogoutScreen(prevState) {
     const logoutShown = showLogout;
     setShowLogout(!logoutShown);
+
   }
+  
 
   return (
     <IconContext.Provider value={{style: {marginRight: "7px"}}}>
@@ -109,9 +112,11 @@ function VendorHeader() {
         <FaUserCircle style={{ fontSize: "30px", marginLeft: "1vw" }} />
       </StyledUserDisplayWrapper>
 
+
       <DateTimeDisplayWrapper>
         <div id="clockdisplay">Loading...</div>
         <div hidden>{setInterval(UpdateTime, 1000)}</div>
+
       </DateTimeDisplayWrapper>
       {showLogout ? <MakeLogoutPopup /> : null}
     </VendorHeaderWrapper>

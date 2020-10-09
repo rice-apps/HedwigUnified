@@ -23,6 +23,8 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
+const allowedUsers = ["byz2"];
+
 function Auth () {
   // First parse out ticket from URL href
   let ticket = parseTicket(window.location.href)
@@ -33,6 +35,7 @@ function Auth () {
     { data: authenticationData, loading, error }
   ] = useMutation(AUTHENTICATE_USER, { variables: { ticket: ticket } })
 
+  console.log(authenticationData);
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
     authenticateUser().catch(err => <Navigate to='/login' />)
@@ -47,9 +50,14 @@ function Auth () {
   // Set token in local storage
   localStorage.setItem('token', token)
 
-  // Set recent update in client state
-  if (!employer || employer === 0) {
-    return <Navigate to='/vendor' />
+  // Set recent update in client state -- currently broken with wrong navigation
+  // if (!employer || employer === 0) {
+  //   return <Navigate to='/vendor' />
+  // }
+  
+  const userNetID = authenticationData.authenticateUser.netid;
+  if (allowedUsers.includes(userNetID)){
+    return <Navigate to='/employee' />
   }
   return <Navigate to='/eat' />
 }

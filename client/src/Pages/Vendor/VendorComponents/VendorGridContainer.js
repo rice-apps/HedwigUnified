@@ -70,7 +70,7 @@ const MainDisplaySpace = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
-  background-color: #f7f7f7;
+  background-color: #e7e7e7;
   font-size: 150px;
   text-align: center;
 `

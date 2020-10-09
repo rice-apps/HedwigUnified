@@ -7,7 +7,8 @@ const ItemWrapper = styled.div`
   font-size: 14px;
   font-family: 'Avenir', sans-serif;
   color: black;
-  margin-top: 15px; 
+  margin-top: 15px;
+  background-color: #f8f8f8;
 `
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',

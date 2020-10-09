@@ -15,12 +15,11 @@ const ItemWrapper = styled.div`
 `
 
 function ItemAvailability(props){
-  const [setAvailability, {data}] = useMutation(SET_ITEM_AVAILABILITY);
+  const [setAvailability] = useMutation(SET_ITEM_AVAILABILITY);
   const {
     data: availability_info,
     error: availability_error,
     loading: availability_loading,
-    refetch: availability_refetch
   } = useQuery(GET_ITEM_AVAILABILITY, {
     variables: {
       productId: props.itemId
@@ -41,7 +40,7 @@ function ItemAvailability(props){
       <Toggle icons={false} defaultChecked={availability} onChange={
         e => {
           setAvailability({variables:{idempotencyKey:uuid(),productId:props.itemId,isItemAvailable:e.target.checked}});
-          setTimeout(availability_refetch, 1000);
+          window.location.reload();
         }
       }/>
     </ItemWrapper>

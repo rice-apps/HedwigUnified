@@ -16,6 +16,7 @@ const GridWrapper = styled.div`
   margin-left: 50px;
   align-items: start;
   grid-row-gap: 20px;
+  background-color: #f8f8f8;
 `
 
 const CategoriesWrapper = styled.div`

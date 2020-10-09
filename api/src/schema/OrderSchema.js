@@ -1,7 +1,6 @@
 import {
   OrdersApi,
   CreateOrderRequest,
-  UpdateOrderRequest,
   SearchOrdersRequest
 } from 'square-connect'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
@@ -14,6 +13,7 @@ import {
   FindManyOrderPayloadTC,
   UpdateOrderTC
 } from '../models/OrderModel'
+import TwilioClient from '../twilio'
 
 OrderTC.addResolver({
   name: 'findOrders',
@@ -185,6 +185,12 @@ OrderTC.addResolver({
         orderCreated: CDMOrder
       })
 
+      TwilioClient.messages.create({
+        body: 'Your order has been placed.',
+        from: '+13466667153',
+        to: '+14692475650'
+      })
+
       return CDMOrder
     }
   })
@@ -192,7 +198,6 @@ OrderTC.addResolver({
     name: 'updateOrder',
     type: OrderTC,
     args: {
-      locationId: GraphQLNonNull(GraphQLString),
       orderId: GraphQLNonNull(GraphQLString),
       record: UpdateOrderTC.getType()
     },
@@ -231,7 +236,6 @@ OrderTC.addResolver({
         order: {
           id,
           location_id,
-          customer_id,
           line_items,
           total_tax_money,
           total_discount_money,
@@ -271,6 +275,40 @@ OrderTC.addResolver({
       pubsub.publish('orderUpdated', {
         orderUpdated: CDMOrder
       })
+
+      switch (first.state) {
+        case 'PREPARED':
+          TwilioClient.messages.create({
+            body:
+              'Your recent order has been prepared. Please go to the pickup location',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        case 'COMPLETED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been picked up. If you did not do this, please contact the vendor directly.',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        case 'CANCELED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        default:
+          TwilioClient.messages.create({
+            body:
+              'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+      }
 
       return CDMOrder
     }

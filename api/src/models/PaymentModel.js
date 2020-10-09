@@ -1,17 +1,19 @@
 import { sc } from 'graphql-compose'
-import { MoneyTC } from './CommonModels'
+import { DataSourceEnumTC, MoneyTC, UrlTC } from './CommonModels'
 
 const PaymentTC = sc.createObjectTC({
   name: 'Payment',
   description: 'Representation of payments in common data model',
   fields: {
-    id: 'String!',
-    order: 'String!',
-    customer: 'String!',
-    subtotal: MoneyTC.getTypeNonNull(),
-    tip: MoneyTC.getTypeNonNull(),
-    total: MoneyTC.getTypeNonNull(),
-    status: 'String!'
+    id: 'String',
+    order: 'String',
+    customer: 'String',
+    subtotal: MoneyTC.getType(),
+    tip: MoneyTC.getType(),
+    total: MoneyTC.getTypeNonNull().getType(),
+    status: 'String',
+    url: UrlTC.getType(),
+    source: DataSourceEnumTC.getTypeNonNull()
   }
 })
 
@@ -25,7 +27,8 @@ const CreatePaymentITC = sc.createInputTC({
     subtotal: MoneyTC.getITC()
       .getTypeNonNull()
       .getType(),
-    tip: MoneyTC.getITC().getType()
+    tip: MoneyTC.getITC().getType(),
+    source: DataSourceEnumTC.getTypeNonNull()
   }
 })
 

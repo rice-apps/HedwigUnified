@@ -183,7 +183,11 @@ function Product() {
   function makeCartItem() {
     let itemName = product.name
     let itemID = product.squareID
-    let variant = JSON.parse(
+    let variant = undefined
+    if (document.querySelector('.variantSelect:checked') == null) {
+      return false;
+    }
+    variant = JSON.parse(
       document.querySelector('.variantSelect:checked').value
     )
     let variantObject = variant.option
@@ -213,7 +217,7 @@ function Product() {
 
     let itemQuantity = { quantity }.quantity
     console.log(itemQuantity)
-    let totalPrice = modifierCost + variantCost
+    let totalPrice = (modifierCost + variantCost) * 0.01
 
     dispatch({
       type: 'ADD_ITEM',
@@ -229,6 +233,7 @@ function Product() {
     })
 
     console.log(cartItems())
+    return true;
   }
 
   return (
@@ -246,7 +251,7 @@ function Product() {
       </div>
       <div className='modifiersContainer'>
         {product.modifierLists.map(modifier => {
-          return <ModifierSelection modifierCategory={modifier} />
+          return <ModifierSelection key={modifier.name} modifierCategory={modifier} />
         })}
       </div>
       <div className='quantityContainer'>
@@ -260,8 +265,7 @@ function Product() {
         <button
           className='submitButton'
           onClick={() => {
-            handleClick()
-            makeCartItem()
+            makeCartItem();
           }}
         >
           Add

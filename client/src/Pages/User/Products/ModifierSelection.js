@@ -11,12 +11,13 @@ function ModifierSelection ({ modifierCategory }) {
   return (
     <div className='modifier'>
       <div className='heading'>
-        <h1>{question}</h1>
+        {/* <h1>{question}</h1> */}
+        <h1>Select your modifiers/add-ons:</h1>
         {description ? <p>{description}</p> : null}
       </div>
       <div className='options'>
         {options.map(option => (
-          <div className='optionSet'>
+          <div className='optionSet' key={option.name}>
             <label>
               {multiSelect ? (
                 <React.Fragment>

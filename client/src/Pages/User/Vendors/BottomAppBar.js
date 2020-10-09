@@ -26,9 +26,9 @@ function BottomAppBar () {
               <FontAwesomeIcon
                 className='barIconCart'
                 icon={faShoppingCart}
-                flexItem
+                flexitem
               />
-              <p class='iconText'>Cart</p>
+              <p className='iconText'>Cart</p>
             </div>
             <Divider orientation='vertical' flexItem />
             <div>
@@ -37,7 +37,7 @@ function BottomAppBar () {
                 icon={faReceipt}
                 flexItem
               />
-              <p class='iconText'>Orders</p>
+              <p className='iconText'>Orders</p>
             </div>
           </Toolbar>
         </Grid>

@@ -9,7 +9,6 @@ function ModifierSelection ({ modifierCategory }) {
     selectionType,
     name
   } = modifierCategory
-  console.log(modifierCategory);
   return (
     <div className='modifier'>
       <div className='heading'>

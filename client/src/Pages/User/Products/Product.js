@@ -193,8 +193,6 @@ function Product () {
     let variantObject = variant.option
     let variantCost = variant.option.price.amount
 
-    console.log(variantCost)
-
     let modifierNames = []
     var modifierCost = 0
     var modifierList = {}
@@ -212,11 +210,7 @@ function Product () {
       modifierNames.push(currentModifierName)
     }
 
-    console.log(modifierCost)
-    console.log(modifierList)
-
     let itemQuantity = { quantity }.quantity
-    console.log(itemQuantity)
     let totalPrice = (modifierCost + variantCost) * 0.01
 
     dispatch({
@@ -231,8 +225,6 @@ function Product () {
         modDisplay: modifierNames
       }
     })
-
-    console.log(cartItems())
     return true;
   }
 

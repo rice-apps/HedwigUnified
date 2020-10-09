@@ -12,7 +12,7 @@ import ModifierSelection from './ModifierSelection'
 import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 
-function Product () {
+function Product() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currProduct: productId, currVendor: vendorState } = state
@@ -180,7 +180,7 @@ function Product () {
   };
   */
 
-  function makeCartItem () {
+  function makeCartItem() {
     let itemName = product.name
     let itemID = product.squareID
     let variant = JSON.parse(

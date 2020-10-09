@@ -60,7 +60,6 @@ function Product() {
 
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
-
   const handleClick = () => {
     return navigate(`/eat/${vendor.slug}/cart`)
   }
@@ -240,7 +239,8 @@ function Product() {
     <div className='container'>
       <img
         className='heroImage'
-        src='https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
+        src={product.image}
+        alt={product.name}
       />
       <div className='itemHeading'>
         <h2>{product.name}</h2>

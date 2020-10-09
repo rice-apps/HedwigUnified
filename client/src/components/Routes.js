@@ -157,7 +157,7 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <VendorsideTemplate /> },
+      { path: '/', element: <OpenOrdersPage /> },
       { path: '/openorders', element: <OpenOrdersPage /> },
       { path: '/closedorders', element: <ClosedOrdersPage /> },
       { path: '/items', element: <ItemsMenuManagementPage /> },

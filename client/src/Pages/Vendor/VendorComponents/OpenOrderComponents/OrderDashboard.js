@@ -104,7 +104,8 @@ function OrderDashboard () {
   console.log(allOrders.orders)
 
   const handleOrderClick = (order, orderState) => {
-    updateOrder({ variables: { uid: order.fulfillment.uid, state: orderState } })
+    //updateOrder({ variables: { orderId: order.id, uid: order.fulfillment.uid, state: orderState } })
+    console.log("im here")
   }
   // if (!loading && orders) {
   //     const { order } = orders.items
@@ -132,7 +133,7 @@ function OrderDashboard () {
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               fulfillment={order.fulfillment.state}
-              buttonOnClick={handleOrderClick(order, "RESERVED")}
+              handleClick={() => (handleOrderClick(order, "RESERVED"))}
             />
             )
           )
@@ -150,7 +151,7 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
-              buttonOnClick={handleOrderClick(order, "PREPARED")}
+              handleClick={() => (handleOrderClick(order, "PREPARED"))}
             />
             )
           )
@@ -169,7 +170,7 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
-              buttonOnClick={handleOrderClick(order, "COMPLETED")}
+              handleClick={() => (handleOrderClick(order, "COMPLETED"))}
             />
             )
           )

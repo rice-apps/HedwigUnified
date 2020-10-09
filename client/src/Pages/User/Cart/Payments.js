@@ -41,12 +41,19 @@ const Payments = () => {
             font-weight: 500;
             color: #595858;
             text-align: left;
-            padding-left: 50px;
+            /* padding-left: 50px; */
+            padding: 20px;
+            padding-left: 30px;
+            align-items: center;
+            justify-content: center;
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            grid-template-rows: 1fr;
         `;
 
-    const Text = styled.text`
-        text-align: right;
-    `;
+    // const Text = styled.text`
+    //     text-align: right;
+    // `;
 
     const Grid = styled.div`
         `;
@@ -104,9 +111,9 @@ const Payments = () => {
                             fontWeight: renderFontWeight(index)
                         }}>
                         {icons[index]}
-                        <Text style={{ marginLeft: '10px', marginBottom: '10px' }}>
-                            {options[index]}
-                        </Text>
+                        {/* <Text> */}
+                        {options[index]}
+                        {/* </Text> */}
                     </Button>
                 </Row >
 
@@ -114,6 +121,10 @@ const Payments = () => {
         )
     }
 
+    // handle when the user clicks on credit card option and next
+    // const handleCreditNext = () {
+    //     return navigate()
+    // }
 
     return (
         < div >
@@ -128,5 +139,9 @@ const Payments = () => {
     )
 };
 
+// should check whether current merchant supports square payments <- assume this is automatic
+// make create payments call with shopify as payment option
+// object u get back has url field
+// payment page should take url to be embedded
 
 export default Payments;

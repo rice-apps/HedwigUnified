@@ -46,11 +46,13 @@ const DateTimeDisplayWrapper = styled.div`
 
 function VendorHeader () {
   function UpdateTime () {
-    const headerclock = document.getElementById('clockdisplay')
+    if (document.querySelector('#clockdisplay') !== null){
+    const headerclock = document.querySelector('#clockdisplay')
     const CurrentDisplayTime = moment().format("dddd, MMMM Do h:mm:ss A")
-    headerclock.textContent = CurrentDisplayTime
-
+    headerclock.innerHTML = CurrentDisplayTime
+    }
   }
+  
 
   return (
     <VendorHeaderWrapper>
@@ -62,6 +64,7 @@ function VendorHeader () {
 
 <div id="clockdisplay">Loading...</div>
 <div hidden>{setInterval(UpdateTime, 1000)}</div>
+
       </DateTimeDisplayWrapper>
     </VendorHeaderWrapper>
   )

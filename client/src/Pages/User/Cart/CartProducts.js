@@ -63,6 +63,11 @@ const CartProduct = ({ product, deleteItem }) => {
 
   const options = ['ASAP', '30 Minutes', '1 Hour']
   const defaultOption = options[0]
+
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
   return (
     <div
       className={
@@ -82,7 +87,7 @@ const CartProduct = ({ product, deleteItem }) => {
         decrease={decrease}
       />
       <div className='shelf-item__price'>
-        <p>${product.price * quantity}</p>
+        <p>{formatter.format(product.price * quantity)}</p>
       </div>
       <div
         className='shelf-item__del'

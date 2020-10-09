@@ -5,7 +5,8 @@ const VariantSelection = ({ variants }) => {
   return (
     <div className='variant'>
       <div className='heading'>
-        <h1>{variants[0].description}</h1>
+        {/* <h1>{variants[0].description}</h1> */}
+        <h1> Select your variant: </h1>
         {variants[0].description ? <p>{variants[0].description}</p> : null}
       </div>
       <div className='options'>

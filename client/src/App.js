@@ -7,7 +7,7 @@ import { faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 function App() {
   return (
     <React.Fragment>
-      {/* <Header /> */}
+      <Header />
       <RoutesComponent />
     </React.Fragment>
   )

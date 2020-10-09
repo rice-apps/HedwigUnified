@@ -104,8 +104,7 @@ function OrderDashboard () {
   console.log(allOrders.orders)
 
   const handleOrderClick = (order, orderState) => {
-    //updateOrder({ variables: { orderId: order.id, uid: order.fulfillment.uid, state: orderState } })
-    console.log("im here")
+    updateOrder({ variables: { orderId: order.id, uid: order.fulfillment.uid, state: orderState } })
   }
   // if (!loading && orders) {
   //     const { order } = orders.items

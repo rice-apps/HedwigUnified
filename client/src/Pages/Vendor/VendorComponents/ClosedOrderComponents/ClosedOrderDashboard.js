@@ -1,4 +1,5 @@
 import React from "react";
+import { gql, useQuery } from "@apollo/client"
 import {
   DashboardWrapper,
   TitleWrapper,
@@ -8,7 +9,53 @@ import {
 } from "./ClosedDashboardComponents.js";
 import { IconContext } from "react-icons";
 
+const GET_COMPLETED_ORDERS = gql`
+    query FIND_COMPLETED_ORDERS($location: [String!]!, $filter: FilterOrderInput!) {
+    findOrders(locations: $location, filter: $filter) {
+      orders{
+        id
+        customer{
+          name
+          email
+          phone
+        }
+        items{
+          name
+          quantity
+          variation_name
+          modifiers{
+            name
+      	  }
+          total_money{
+            amount
+      	  }
+    	  }
+        total{
+          amount
+    	  }
+        totalTax{
+          amount
+        }
+        totalDiscount{
+          amount
+        }
+        fulfillment{
+          pickupDetails{
+            pickupAt
+          }
+        }
+    }
+  }
+}
+`
 function ClosedOrderDashboard() {
+  const vendorId = ["FMXAFFWJR95WC"]
+  const filter = {"fulfillment_filter": {"fulfillment_states": "COMPLETED"}}
+  const {data, loading, error} = useQuery(GET_COMPLETED_ORDERS, { variables: { location: vendorId, filter: filter } })
+  if (error) return <p>Error!</p>
+  if (loading) return <p>Waiting...</p>
+  if (!data) return <p> No closed orders </p>
+
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: "middle", marginBottom: "2px", } }}
@@ -17,36 +64,18 @@ function ClosedOrderDashboard() {
         <TitleWrapper>Closed Orders</TitleWrapper>
         <MakeClosedDashboardLabels />
         <ClosedOrdersSpaceWrapper>
+          {data.findOrders.orders.map((order) => 
           <MakeIndividualClosedOrder
-            customerName="Allison Smith"
-            orderTime="October 6th at 4:45PM"
-            orderStatus="Completed"
-            paymentMethod="Tetra"
-            price="$3.50"
-            phoneNumber="(832)-123-7446"
-            email="nth8@rice.edu"
-            pickupTime="October 6th at 4:50PM"
-          />
-          <MakeIndividualClosedOrder
-            customerName="Rick Gomez"
-            orderTime="October 6th at 3:45PM"
-            orderStatus="Cancelled"
-            paymentMethod="Membership"
-            price="$8.50"
-            phoneNumber="(713)-123-7446"
-            email="asd3@rice.edu"
-            pickupTime="October 6th at 4:00PM"
-          />
-          <MakeIndividualClosedOrder
-            customerName="Scott Rixner"
+            customerName={order.customer.name}
             orderTime="October 5th at 6:45PM"
             orderStatus="Completed"
             paymentMethod="Membership"
-            price="$5.50"
-            phoneNumber="(281)-134-7126"
-            email="rsi23@rice.edu"
-            pickupTime="October 5th at 7:00PM"
-          />
+            price={`$${order.total.amount / 100}`}
+            phoneNumber={order.customer.phone}
+            email={order.customer.email}
+            pickupTime={order.fulfillment.pickupDetails.pickupAt}
+            items={order.items}
+          />)}
           
         </ClosedOrdersSpaceWrapper>
       </DashboardWrapper>

@@ -10,6 +10,7 @@
     "@apollo/link-context": "^2.0.0-beta.3",
     "@apollo/link-ws": "^2.0.0-beta.3",
     "@emotion/core": "^10.0.35",
+    "@fortawesome/fontawesome-free": "^5.15.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.31",
     "@fortawesome/free-regular-svg-icons": "^5.15.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.0",

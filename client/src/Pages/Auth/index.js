@@ -3,13 +3,6 @@ import { gql, useQuery, useMutation } from '@apollo/client'
 import { Redirect } from 'react-router'
 import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
-import { SERVICE_URL } from "../../config";
-
-// This import loads the firebase namespace along with all its type information.
-import * as firebase from "firebase/app";
-
-// These imports load individual services into the firebase namespace.
-import "firebase/auth";
 
 const AUTHENTICATE_USER = gql`
   mutation AuthenticateMutation($ticket: String!) {

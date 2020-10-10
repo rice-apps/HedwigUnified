@@ -19,6 +19,7 @@ import { ApolloProvider } from '@apollo/client'
 import App from './App'
 
 import './fonts/style.css'
+import './firebase'
 
 // export const history = createBrowserHistory();
 

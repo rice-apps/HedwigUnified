@@ -11,6 +11,8 @@ const AUTHENTICATE_USER = gql`
       netid
       token
       recentUpdate
+      phone
+      name
     }
   }
 `
@@ -43,18 +45,18 @@ function Auth () {
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 
-  let { token, employer, netid, _id } = authenticationData.authenticateUser
+  let { token, employer, netid, _id, phone} = authenticationData.authenticateUser
 
-  console.log(authenticationData)
-  userProfile([{netid, _id}])
-  console.log(userProfile)
+  console.log(authenticationData.authenticateUser)
 
   // Set token in local storage
   localStorage.setItem('token', token)
 
+  userProfile({netid, _id, phone, ticket});
+
   // Set recent update in client state
   if (!employer || employer === 0) {
-    return <Navigate to='/contact' authenticationData={'place holder'}  />
+    return <Navigate to='/contact'/>
   }
   return <Navigate to='/vendor'/>
 }

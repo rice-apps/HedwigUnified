@@ -6,7 +6,7 @@ import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
 import './cart.scss'
-import { centerCenter, row, column } from '../../../Styles/flex'
+import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import Payments from './Payments.js'
 import currency from 'currency.js'
@@ -47,8 +47,6 @@ const computeAvailableHours = (startHour, endHour) => {
   while (i < 24) {
     if (i < startHour || i < hour || i > endHour) {
       rtn.push(i)
-      i += 1
-      continue
     }
     i += 1
   }
@@ -65,7 +63,7 @@ const computeAvailableMinutes = (
   const hour = moment().hour()
   const minute = moment().minute()
   let start = 0
-  let end = 0
+  let end = -1
   if (hr == startHour) {
     if (hr == hour) {
       end = Math.max(minute, startMinute)
@@ -116,24 +114,28 @@ function CartDetail () {
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
   const [dummyDelete, setDummyDelete] = useState(0)
-  
+
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
 
   const businessHour = data.getVendors.filter(
     e => e['name'] == 'Coffeehouse'
   )[0].hours[0]
-  const startHour = parseInt(businessHour.start.split(':')[0])
-  const endHour = parseInt(businessHour.end.split(':')[0])
-  const startMinute = parseInt(businessHour.start.split(':')[1].substring(0, 2))
-  const endMinute = parseInt(businessHour.end.split(':')[1].substring(0, 2))
+  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+  let startHour = parseInt(businessHour.start.split(':')[0])
+  let endHour = parseInt(businessHour.end.split(':')[0])
   if (businessHour.start.includes('p.m.')) {
     startHour += 12
   }
   if (businessHour.end.includes('p.m.')) {
     endHour += 12
   }
-  console.log(cartItems());
+  const startMinute = parseInt(businessHour.start.split(':')[1].substring(0, 2))
+  const endMinute = parseInt(businessHour.end.split(':')[1].substring(0, 2))
+
+  const disabled = () =>
+    moment().hour() > endHour ||
+    (moment().hour() == endHour && moment().minute() >= endMinute)
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -147,16 +149,19 @@ function CartDetail () {
           </div>
           <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
           <TimePicker
-            defaultOpenValue={moment('11:11', 'HH:mm')}
+            disabled={disabled()}
+            defaultValue={moment()}
             css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
             format='HH:mm'
             onChange={e => {
-              if (e != null) {
+              if (e) {
                 document.getElementsByClassName('buy-btn')[0].disabled = false
                 setPickupTime({ hour: e.hour(), minute: e.minute() })
               }
             }}
+            showNow={false}
             bordered={false}
+            inputReadOnly={true}
             disabledHours={() => {
               return computeAvailableHours(startHour, endHour)
             }}
@@ -170,8 +175,20 @@ function CartDetail () {
               )
             }}
           />
+          {disabled() && (
+            <p css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              No pickup time available today.{' '}
+            </p>
+          )}
           {cartItems().map(item => {
-            return <CartProduct product={item} deleteItem={setDummyDelete} updateTotal={updateTotal}/>
+            return (
+              <CartProduct
+                product={item}
+                forceUpdate={setDummyDelete}
+                updateTotal={updateTotal}
+              />
+            )
           })}
         </div>
 
@@ -192,7 +209,7 @@ function CartDetail () {
             <hr className='breakline' />
             <div className='total'>
               <p className='total__header'>Total</p>
-              <p>{currency(totals.subtotal + totals.tax).format()}</p>
+              <p>{currency((totals.subtotal + totals.tax) * 0.01).format()}</p>
             </div>
             <hr className='breakline' />
           </div>

@@ -41,7 +41,8 @@ function Auth () {
     authenticateUser().catch(err => <Navigate to='/login' />)
   }, [authenticateUser])
 
-  if (error) return <Navigate to='/login' />
+  // if (error) return <Navigate to='/login' />
+  if (error) return <p>{error.message}</p>
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 

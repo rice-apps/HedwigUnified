@@ -77,7 +77,7 @@ function Login() {
 				console.log(result.additionalUserInfo);
 				console.log(result.user);
 				// redirect to auth page carrying state from IDP
-				// navigate('/auth', { state: { user: result.user } });
+				navigate('/auth', { user: result.user } );
 			}
 		})
 		.catch((error) => {

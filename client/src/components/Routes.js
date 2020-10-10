@@ -32,6 +32,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import Payments from '../Pages/User/Cart/Payments'
+import CohenPayment from '../Pages/User/Payment/CohenPayment'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -145,6 +146,10 @@ const newRoutesArray = [
           {
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
+          },
+          {
+            path: '/cohen',
+            element: <PrivateRoute element={<CohenPayment />} />
           }
         ]
       }
@@ -157,7 +162,7 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <VendorsideTemplate /> },
+      { path: '/', element: <OpenOrdersPage /> },
       { path: '/openorders', element: <OpenOrdersPage /> },
       { path: '/closedorders', element: <ClosedOrdersPage /> },
       { path: '/items', element: <ItemsMenuManagementPage /> },

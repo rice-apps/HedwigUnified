@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa";
 import { IconContext } from "react-icons";
-
+import moment from 'moment'
 import Collapsible from "react-collapsible";
 import "./ClosedOrderCollapsible.css";
 import {MakeOrderTimeDetails,MakeCustomerDetails, ClosedOrderDetailsWrapper, MakeOrderItem, ItemDetailsWrapper} from './ClosedOrderDetailsComponents.js'
@@ -144,12 +144,12 @@ function MakeIndividualClosedOrder(props) {
           phoneNumber={props.phoneNumber}
           email={props.email}
         />
-        <MakeOrderTimeDetails pickupTime={props.pickupTime}/>
+        <MakeOrderTimeDetails pickupTime={moment(props.pickupTime).format('MMMM Do, h:mm A')}/>
         <ItemDetailsWrapper>
           <strong>Items</strong>
           {/* This is dummy data, the idea is to iterate over each item in an order and call the MakeOrderItem function with each item */}
-          <MakeOrderItem quantity="1" itemName="All-American Cheese Burger" variant="Small" modifiers="Add bacon" itemPrice="$7.00"/>
-          <MakeOrderItem quantity="2" itemName="Chicken Noodle Soup" variant="Pint" modifiers="Extra chicken" itemPrice="$3.00"/>
+          {props.items.map((item) => <MakeOrderItem quanity={item.quantity} itemName={item.name} variant={item.variation_name} modifiers={item.modifiers} itemPrice={`$${item.total_money.amount / 100}`} />)}
+          
         </ItemDetailsWrapper>
       </ClosedOrderDetailsWrapper>
     </Collapsible>

@@ -96,7 +96,9 @@ const OrderTC = sc.createObjectTC({
     totalDiscount: MoneyTC.getTypeNonNull().getType(),
     total: MoneyTC.getTypeNonNull().getType(),
     orderStatus: OrderStatusEnumTC.getTypeNonNull().getType(),
-    fulfillment: OrderFulfillmentTC.getType()
+    fulfillment: OrderFulfillmentTC.getType(),
+    cohenId: 'String',
+    studentId: 'String'
   }
 })
 
@@ -128,7 +130,9 @@ const CreateOrderInputTC = sc.createInputTC({
       .getTypeNonNull()
       .getType(),
     recipient: OrderFulfillmentRecipientTC.getITC().getType(),
-    pickupTime: 'String!'
+    pickupTime: 'String!',
+    cohenId: 'String',
+    studentId: 'String'
   }
 })
 

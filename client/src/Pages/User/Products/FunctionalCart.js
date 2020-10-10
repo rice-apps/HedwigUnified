@@ -22,7 +22,7 @@ import produce from 'immer'
 function dispatch (action) {
   const { quantity, Id } = action.item
   const oldCart = cartItems()
-  
+
   const newCart = produce(oldCart, draft => {
     switch (action.type) {
       case 'ADD_ITEM':

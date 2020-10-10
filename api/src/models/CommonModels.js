@@ -1,5 +1,4 @@
 import { sc } from 'graphql-compose'
-import { GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql'
 
 const DataSourceEnumTC = sc.createEnumTC({
   name: 'DataSourceEnum',
@@ -105,6 +104,19 @@ const SortOrderEnumTC = sc.createEnumTC({
   }
 })
 
+const UrlTC = sc.createScalarTC({
+  name: 'URL',
+  description: 'Represents a URL as specified in RFC 3986',
+  serialize: value => (value ? new URL(value.toString()).toString() : null),
+  parseValue: value => (value ? new URL(value.toString()) : null),
+  parseLiteral: ast => {
+    if (ast.kind === Kind.STRING) {
+      return new URL(ast.value.toString())
+    }
+    return null
+  }
+})
+
 export {
   DataSourceEnumTC,
   MoneyTC,
@@ -113,5 +125,6 @@ export {
   PeriodTC,
   FindOrdersDateTimeFilterTC,
   SortOrderEnumTC,
-  SortOrderTimeEnumTC
+  SortOrderTimeEnumTC,
+  UrlTC
 }

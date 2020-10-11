@@ -25,7 +25,7 @@ function ModifierSelection ({ modifierCategory }) {
                 <React.Fragment>
                   <input
                     type='checkbox'
-                    name={question}
+                    name={name}
                     className='modifierSelect'
                     value={JSON.stringify({ option })}
                   />
@@ -35,7 +35,7 @@ function ModifierSelection ({ modifierCategory }) {
                 <React.Fragment>
                   <input
                     type='radio'
-                    name={question}
+                    name={name}
                     className='modifierSelect'
                     value={JSON.stringify({ option })}
                   />

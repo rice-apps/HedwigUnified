@@ -17,7 +17,7 @@ const VariantSelection = ({ variants }) => {
             <label>
               <input
                 type='radio'
-                name={'variant type place holder'} //change this to the type of variant use is choosing
+                name={'place holder'} //change this to the type of variant user is choosing
                 className='variantSelect'
                 value={JSON.stringify({ option })}
               />

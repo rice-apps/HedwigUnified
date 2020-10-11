@@ -125,7 +125,7 @@ PaymentTC.addResolver({
           await shopifyClient.checkout.addLineItems(checkout.id, [
             {
               variantId: unitProduct.variants[0].id,
-              quantity: subtotal.amount / 25
+              quantity: total_money.amount / 25
             }
           ])
 

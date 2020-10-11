@@ -39,8 +39,8 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-    const startTime = convertTimeToNum(dayObj.start)
-    const endTime = convertTimeToNum(dayObj.end)
+    const startTime = convertTimeToNum(dayObj.start[0])
+    const endTime = convertTimeToNum(dayObj.end[0])
     return currentTime <= startTime || currentTime >= endTime
   }
 
@@ -54,7 +54,9 @@ function VendorCard ({ vendor }) {
             <h3 className='vendorName'>{name}</h3>
             {dayObj && (
               <p>
-                Hours Open: {dayObj.start}-{dayObj.end}{' '}
+                Hours Open: {dayObj.start[0]}-{dayObj.end[0]}{' '} {dayObj.start.length > 1 && (
+                  ',' + dayObj.start[1]-dayObj.end[1]
+                )}
               </p>
             )}
           </div>

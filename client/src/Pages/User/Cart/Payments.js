@@ -5,8 +5,12 @@ import styled, { css } from 'styled-components';
 import { FaCreditCard, FaBriefcase } from 'react-icons/fa';
 import { BiIdCard } from 'react-icons/bi';
 import zIndex from "@material-ui/core/styles/zIndex";
+import { useNavigate } from 'react-router-dom';
 
+// payment options page, coehn club or credit card or tetra
 const Payments = () => {
+
+    const navigate = useNavigate();
 
     // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
     const [activeButton, setActiveButton] = useState(3);
@@ -121,6 +125,16 @@ const Payments = () => {
         )
     }
 
+    const handleClickCohen = () => {
+        // Go to the cohen checkout page
+        return navigate(`/cohen`)
+    }
+
+    const handleClickCredit = () => {
+        // Go to the cohen checkout page
+        return navigate(`/payment`)
+    }
+
     // handle when the user clicks on credit card option and next
     // const handleCreditNext = () {
     //     return navigate()
@@ -134,7 +148,7 @@ const Payments = () => {
                 </Row>
                 {renderButtons()}
             </Grid>
-            <Footer>Next</Footer>
+            <Footer onClick={() => activeButton == 2 ? handleClickCohen() : handleClickCredit()}>Next</Footer>
         </div >
     )
 };

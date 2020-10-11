@@ -140,6 +140,7 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
+          // payment options
           {
             path: '/payment',
             element: <PrivateRoute element={<Payments />} />
@@ -148,32 +149,35 @@ const newRoutesArray = [
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
           },
-          {
-            path: '/cohen',
-            element: <PrivateRoute element={<CohenPayment />} />
-          }
         ]
       }
     ]
   },
+  // This is to credit card payment:
   {
     path: '/payment',
     element: <PaymentPage />
   },
+
   { 
     path: '/contact',
     element: <ContactForm />
   },
+  // Cohen house payment page:
+  {
+    path: '/cohen',
+    element: <PrivateRoute element={<CohenPayment />} />
+  },
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <OpenOrdersPage /> },
-      { path: '/openorders', element: <OpenOrdersPage /> },
-      { path: '/closedorders', element: <ClosedOrdersPage /> },
-      { path: '/items', element: <ItemsMenuManagementPage /> },
-      { path: '/modifiers', element: <ModifiersMenuManagementPage /> },
-      { path: '/set-basic-info', element: <SetBasicInfoPage /> },
-      { path: '/set-store-hours', element: <SetStoreHoursPage /> },
+      { path: '/', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
+    { path: '/openorders', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
+      { path: '/closedorders', element: <PrivateRoute element={<ClosedOrdersPage /> }/>},
+      { path: '/items', element: <PrivateRoute element={<ItemsMenuManagementPage /> }/>},
+      { path: '/modifiers', element: <PrivateRoute element={<ModifiersMenuManagementPage /> }/>},
+      { path: '/set-basic-info', element: <PrivateRoute element={<SetBasicInfoPage /> }/>},
+      { path: '/set-store-hours', element: <PrivateRoute element={<SetStoreHoursPage /> }/>},
     ]
 
   }

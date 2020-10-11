@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa";
 import { IconContext } from "react-icons";
-
+import moment from 'moment'
 import Collapsible from "react-collapsible";
 import "./ClosedOrderCollapsible.css";
 import {MakeOrderTimeDetails,MakeCustomerDetails, ClosedOrderDetailsWrapper, MakeOrderItem, ItemDetailsWrapper} from './ClosedOrderDetailsComponents.js'
@@ -84,10 +84,10 @@ const IndividualClosedOrder = styled.div`
   grid-template-columns: 0.45fr 1.8fr 2fr 1.5fr 2fr 1.5fr;
   font-size: 2.4vh;
   background-color: white;
-  border-top-right-radius: 15px;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: ${props => (props.IsClosed ? "15px" : "0px")};
-  border-bottom-right-radius: ${props => (props.IsClosed ? "15px" : "0px")};
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: ${props => (props.IsClosed ? "20px" : "0px")};
+  border-bottom-right-radius: ${props => (props.IsClosed ? "20px" : "0px")};
   cursor: pointer;
   box-shadow: 1px 1px 5px  rgba(0, 0, 0, .2);
 `;
@@ -144,12 +144,12 @@ function MakeIndividualClosedOrder(props) {
           phoneNumber={props.phoneNumber}
           email={props.email}
         />
-        <MakeOrderTimeDetails pickupTime={props.pickupTime}/>
+        <MakeOrderTimeDetails pickupTime={moment(props.pickupTime).format('MMMM Do, h:mm A')}/>
         <ItemDetailsWrapper>
           <strong>Items</strong>
           {/* This is dummy data, the idea is to iterate over each item in an order and call the MakeOrderItem function with each item */}
-          <MakeOrderItem quantity="1" itemName="All-American Cheese Burger" variant="Small" modifiers="Add bacon" itemPrice="$7.00"/>
-          <MakeOrderItem quantity="2" itemName="Chicken Noodle Soup" variant="Pint" modifiers="Extra chicken" itemPrice="$3.00"/>
+          {props.items.map((item) => <MakeOrderItem quanity={item.quantity} itemName={item.name} variant={item.variation_name} modifiers={item.modifiers} itemPrice={`$${item.total_money.amount / 100}`} />)}
+          
         </ItemDetailsWrapper>
       </ClosedOrderDetailsWrapper>
     </Collapsible>

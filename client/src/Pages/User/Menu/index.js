@@ -183,7 +183,7 @@ function Menu () {
         <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
         {/* Vendor Operating Hours */}
         <p class='vendorinfo'>
-          {vendor_data.getVendor.hours[currentDay].start}-
+          {vendor_data.getVendor.hours[currentDay].start}-  
           {vendor_data.getVendor.hours[currentDay].end}
         </p>
         <button class='readmore'> More Info </button>
@@ -219,7 +219,7 @@ function Menu () {
             {catalog_data
               .filter(item => item.category === category)
               .map(product => (
-                <div class='itemgrid' onClick={() => handleClick(product)}>
+                <div class='itemgrid' onClick={product.isAvailable ? () => handleClick(product): null}>
                   {/* Displaying the item: image, name, and price */}
                   <img
                     src={product.image}
@@ -228,8 +228,7 @@ function Menu () {
                   />
                   <h1 class='itemname'>{product.name}</h1>
                   <p class='itemprice'>
-                    {formatter.format(product.variants[0].price.amount / 100) +
-                      '+'}
+                    {product.isAvailable ? (formatter.format(product.variants[0].price.amount / 100) +'+') : "Unavailable"}
                   </p>
                 </div>
               ))}

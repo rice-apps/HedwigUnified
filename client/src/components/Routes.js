@@ -32,6 +32,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import Payments from '../Pages/User/Cart/Payments'
+import CohenPayment from '../Pages/User/Payment/CohenPayment'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -138,6 +139,7 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
+          // payment options
           {
             path: '/payment',
             element: <PrivateRoute element={<Payments />} />
@@ -145,19 +147,25 @@ const newRoutesArray = [
           {
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
-          }
+          },
         ]
       }
     ]
   },
+  // This is to credit card payment:
   {
     path: '/payment',
     element: <PaymentPage />
   },
+  // Cohen house payment page:
+  {
+    path: '/cohen',
+    element: <PrivateRoute element={<CohenPayment />} />
+  },
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <VendorsideTemplate /> },
+      { path: '/', element: <OpenOrdersPage /> },
       { path: '/openorders', element: <OpenOrdersPage /> },
       { path: '/closedorders', element: <ClosedOrdersPage /> },
       { path: '/items', element: <ItemsMenuManagementPage /> },

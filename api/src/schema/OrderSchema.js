@@ -74,7 +74,7 @@ OrderTC.addResolver({
       items: order.line_items.map(lineItem => ({
         quantity: lineItem.quantity,
         catalog_object_id: lineItem.catalog_object_id,
-        modifiers: lineItem.modifiers.map(modifier => ({
+        modifiers: lineItem.modifiers?.map(modifier => ({
           uid: modifier.uid,
           catalog_object_id: modifier.catalog_object_id,
           name: modifier.name,
@@ -86,8 +86,8 @@ OrderTC.addResolver({
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
-      cohenId: order.metadata.cohenId,
-      studentId: order.metadata.studentId,
+      cohenId: order.metadata?.cohenId,
+      studentId: order.metadata?.studentId,
       fulfillment: {
         uid: order.fulfillments[0].uid,
         state: order.fulfillments[0].state,

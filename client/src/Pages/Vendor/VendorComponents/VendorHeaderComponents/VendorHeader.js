@@ -52,8 +52,6 @@ const DateTimeDisplayWrapper = styled.div`
   height: 100%;
   width: 100%;
 `;
-
-
 const LogoutPopup = styled.div`
   background-color: #d0d0d0;
   height: 16vh;
@@ -81,6 +79,15 @@ const LogoutItem = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+
+function VendorHeader () {
+  function UpdateTime () {
+    const clock = document.getElementById('clockdisplay');
+    const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A');
+    if(clock){
+        clock.textContent = CurrentTime;
+    }
 function MakeLogoutPopup() {
   const client = useApolloClient()
     const handleLogout = () => {
@@ -99,22 +106,9 @@ function MakeLogoutPopup() {
     </LogoutPopup>
   );
 }
-function UpdateTime() {
-  if (document.querySelector("#clockdisplay") !== null) {
-    const headerclock = document.querySelector("#clockdisplay");
-    const CurrentDisplayTime = moment().format("dddd, MMMM Do h:mm:ss A");
-    headerclock.innerHTML = CurrentDisplayTime;
-  }
 }
 
-function VendorHeader() {
-  const [showLogout, setShowLogout] = useState(false);
-  function toggleLogoutScreen(prevState) {
-    const logoutShown = showLogout;
-    setShowLogout(!logoutShown);
-
-  }
-  
+  setInterval(UpdateTime, 1000);
 
   return (
     <IconContext.Provider value={{style: {marginRight: "7px"}}}>

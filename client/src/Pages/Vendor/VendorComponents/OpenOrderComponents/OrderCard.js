@@ -376,6 +376,8 @@ const ModalButtonsWrapper = styled.div`
   align-items: center;
 `;
 
+
+
 function MakePaymentSpace(props) {
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false);
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
@@ -392,7 +394,9 @@ function MakePaymentSpace(props) {
     setCancelModalIsOpen(false);
   }
   function MakePaymentButtons(props) {
+
     var buttonStatus = props.buttonStatus;
+
     return (
       <div>
         {buttonStatus === "NEW" ? (
@@ -400,6 +404,7 @@ function MakePaymentSpace(props) {
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
             <AcceptButton onClick={openAcceptModal}>Accept</AcceptButton>
           </ButtonsSpaceWrapper>
+
         ) : buttonStatus === "ACCEPTED" ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
@@ -415,6 +420,7 @@ function MakePaymentSpace(props) {
             "error"
           ))
         )}
+
       </div>
     );
   }
@@ -430,7 +436,9 @@ function MakePaymentSpace(props) {
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
-        <MakePaymentButtons buttonStatus={props.buttonStatus} />
+
+        <MakePaymentButtons buttonStatus={props.buttonStatus}/>
+
       </ButtonsSpaceWrapper>
 
       <Modal
@@ -557,7 +565,9 @@ function OrderCard(props) {
           fulfillment={fulfillment}
           paymentType={props.paymentType}
           handleClick={handleClick}
+
           customerName={customerName}
+
         />
       </OrderCardWrapper>
     </IconContext.Provider>

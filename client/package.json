@@ -43,6 +43,7 @@
     "react-square-payment-form": "^0.6.3",
     "react-toast-notifications": "^2.4.0",
     "react-toggle": "^4.1.1",
+    "react-uuid": "^1.0.2",
     "serve": "^11.3.2",
     "styled-components": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",

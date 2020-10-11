@@ -6,6 +6,7 @@ import { FaCreditCard, FaBriefcase } from 'react-icons/fa';
 import { BiIdCard } from 'react-icons/bi';
 import zIndex from "@material-ui/core/styles/zIndex";
 
+// payment options page, coehn club or credit card or tetra
 const Payments = () => {
 
     // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3

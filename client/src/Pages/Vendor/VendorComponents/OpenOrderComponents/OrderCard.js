@@ -8,6 +8,7 @@ import { FaIdCard } from "react-icons/fa";
 import Modal from "react-modal";
 import { gql, useMutation } from "@apollo/client";
 import moment from "moment";
+import { GrRestaurant } from "react-icons/gr";
 
 const ACCEPT_ORDER = gql`
   mutation {
@@ -52,13 +53,14 @@ const OrderTitleSpaceWrapper = styled.div`
   background-color: white;
   font-weight: bolder;
   grid-area: OrderTitleSpace;
-  display: flex;
-  flex-direction: row;
-  font-size: 21px;
-  align-items: flex-end;
-  justify-content: space-around;
-  padding-bottom: 0px;
-
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr;
+  font-size: 22px;
+  justify-content: center;
+  justify-items: center;
+  padding-top: 8px;
+  align-items: center;
   overflow: hidden;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
@@ -67,8 +69,8 @@ const OrderTitleSpaceWrapper = styled.div`
 function MakeOrderTitle(props) {
   return (
     <OrderTitleSpaceWrapper>
-      <div>No.{props.orderNumber} </div>
-      <div style={{ marginRight: "35px" }}>{props.customerName}</div>
+      <GrRestaurant />
+      <div>{props.customerName}</div>
       <BsFillClockFill />
     </OrderTitleSpaceWrapper>
   );
@@ -338,12 +340,15 @@ const ModalOrderDetailRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 3px 0px;
+  margin: 1.2px 0px;
 `;
 function MakeModalOrderDetails(props) {
   var paymentType = props.paymentType;
   return (
     <ModalOrderDetailsWrapper>
+      <ModalOrderDetailRow>
+      <div>Customer:</div><div>{props.customerName}</div>
+      </ModalOrderDetailRow>
       <ModalOrderDetailRow>
         {paymentType === "Tetra" ? (
           <div>Student ID:</div>
@@ -389,7 +394,9 @@ function MakePaymentSpace(props) {
     setCancelModalIsOpen(false);
   }
   function MakePaymentButtons(props) {
-    var buttonStatus = props.buttonStatus
+
+    var buttonStatus = props.buttonStatus;
+
     return (
       <div>
         {buttonStatus === "NEW" ? (
@@ -397,14 +404,23 @@ function MakePaymentSpace(props) {
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
             <AcceptButton onClick={openAcceptModal}>Accept</AcceptButton>
           </ButtonsSpaceWrapper>
-        ) : buttonStatus === "ACCEPTED" ? (<ButtonsSpaceWrapper>
-          <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-          <ReadyButton>Ready</ReadyButton>
-        </ButtonsSpaceWrapper>): buttonStatus = "READY" ? (<ButtonsSpaceWrapper>
-          <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-          <PickedUpButton>Picked Up</PickedUpButton>
-        </ButtonsSpaceWrapper>):
-        "error"}
+
+        ) : buttonStatus === "ACCEPTED" ? (
+          <ButtonsSpaceWrapper>
+            <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+            <ReadyButton>Ready</ReadyButton>
+          </ButtonsSpaceWrapper>
+        ) : (
+          (buttonStatus = "READY" ? (
+            <ButtonsSpaceWrapper>
+              <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+              <PickedUpButton>Picked Up</PickedUpButton>
+            </ButtonsSpaceWrapper>
+          ) : (
+            "error"
+          ))
+        )}
+
       </div>
     );
   }
@@ -420,7 +436,9 @@ function MakePaymentSpace(props) {
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
+
         <MakePaymentButtons buttonStatus={props.buttonStatus}/>
+
       </ButtonsSpaceWrapper>
 
       <Modal
@@ -447,6 +465,7 @@ function MakePaymentSpace(props) {
           <MakeModalOrderDetails
             paymentType={props.paymentType}
             orderTotal={props.orderTotal}
+            customerName={props.customerName}
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
@@ -479,6 +498,7 @@ function MakePaymentSpace(props) {
           <MakeModalOrderDetails
             paymentType={props.paymentType}
             orderTotal={props.orderTotal}
+            customerName={props.customerName}
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
@@ -545,6 +565,9 @@ function OrderCard(props) {
           fulfillment={fulfillment}
           paymentType={props.paymentType}
           handleClick={handleClick}
+
+          customerName={customerName}
+
         />
       </OrderCardWrapper>
     </IconContext.Provider>

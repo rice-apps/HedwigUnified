@@ -30,6 +30,16 @@ const LineItemTC = sc.createObjectTC({
   }
 })
 
+const OrderLineItemModifierTC = sc.createObjectTC(`
+  type OrderLineItemModifier {
+    uid: String
+    catalog_object_id: String,
+    name: String
+    base_price_money: Money
+    total_price_money: Money
+  }
+`)
+
 const PreviousLineItemTC = sc.createObjectTC({
   name: 'PreviousLineItem',
   description: 'A line item in a past order',
@@ -38,15 +48,7 @@ const PreviousLineItemTC = sc.createObjectTC({
     quantity: 'String',
     catalog_object_id: 'String',
     variation_name: 'String',
-    modifiers: `
-      type OrderLineItemModifier {
-        uid: String
-        catalog_object_id: String,
-        name: String
-        base_price_money: Money
-        total_price_money: Money
-      }
-    `,
+    modifiers: [OrderLineItemModifierTC],
     total_money: MoneyTC,
     total_tax: MoneyTC
   }

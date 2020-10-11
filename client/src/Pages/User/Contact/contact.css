@@ -18,7 +18,8 @@
 }
 
 .tel-container {
-
+  margin: auto;
+  width: 30%;
 }
 
 #tel {

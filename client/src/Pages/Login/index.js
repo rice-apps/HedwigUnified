@@ -2,8 +2,9 @@ import React from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { SERVICE_URL } from '../../config'
 import logo from './logo.svg'
-import { useNavigate } from 'react-router-dom'
+import { userProfile } from '../../apollo'
 import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
+import { useNavigate } from 'react-router-dom'
 
 // This import loads the firebase namespace along with all its type information.
 import * as firebase from "firebase/app";
@@ -12,6 +13,8 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 
 const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
+
+const sStorage = window.sessionStorage;
 
 // const GET_SERVICE_LOCAL = gql`
 //     query GetService {
@@ -41,6 +44,7 @@ const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
 // }
 
 // export default Login
+
 
 function Login() {
 	const navigate = useNavigate();
@@ -75,9 +79,11 @@ function Login() {
 		.then((result) => {
 			if (result.user) {
 				console.log(result.additionalUserInfo);
-				console.log(result.user);
-				// redirect to auth page carrying state from IDP
-				navigate('/auth', { user: result.user } );
+        console.log(result.user);
+        // redirect to auth page carrying state from IDP
+        sStorage.setItem('last name', result.additionalUserInfo.profile['urn:oid:2.5.4.4'])
+        sStorage.setItem('first name', result.additionalUserInfo.profile['urn:oid:2.5.4.42'])
+				handleClick();
 			}
 		})
 		.catch((error) => {

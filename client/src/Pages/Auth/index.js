@@ -29,7 +29,6 @@ const parseTicket = url => {
 function Auth () {
   // First parse out ticket from URL href
   let ticket = parseTicket(window.location.href)
-
   // Run query against backend to authenticate user
   const [
     authenticateUser,
@@ -38,7 +37,7 @@ function Auth () {
 
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
-    authenticateUser().catch(err => <Navigate to='/login' />)
+    authenticateUser().catch(err => <p>{err.message}</p>)
   }, [authenticateUser])
 
   // if (error) return <Navigate to='/login' />
@@ -46,14 +45,11 @@ function Auth () {
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 
-  let { token, employer, netid, _id, phone} = authenticationData.authenticateUser
-
-  console.log(authenticationData.authenticateUser)
+  let { token, employer, netid, _id, phone, isAdmin, vendor, recentUpdate, type} = authenticationData.authenticateUser
+  userProfile({netid, phone, _id, isAdmin, vendor, recentUpdate, type, token});
 
   // Set token in local storage
   localStorage.setItem('token', token)
-
-  userProfile({netid, _id, phone, ticket});
 
   // Set recent update in client state
   if (!employer || employer === 0) {

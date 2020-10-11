@@ -71,13 +71,23 @@ OrderTC.addResolver({
         email: order.fulfillments[0].pickup_details.recipient.email_address,
         phone: order.fulfillments[0].pickup_details.recipient.phone_number
       },
-      items: order.line_items,
+      items: order.line_items.map(lineItem => ({
+        quantity: lineItem.quantity,
+        catalog_object_id: lineItem.catalog_object_id,
+        modifiers: lineItem.modifiers.map(modifier => ({
+          uid: modifier.uid,
+          catalog_object_id: modifier.catalog_object_id,
+          name: modifier.name,
+          base_price_money: modifier.base_price_money,
+          total_price_money: modifier.total_price_money
+        }))
+      })),
       totalTax: order.total_tax_money,
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
-      cohenId: order.cohenId,
-      studentId: order.studentId,
+      cohenId: order.metadata.cohenId,
+      studentId: order.metadata.studentId,
       fulfillment: {
         uid: order.fulfillments[0].uid,
         state: order.fulfillments[0].state,
@@ -168,7 +178,7 @@ OrderTC.addResolver({
         }
       } = orderResponse
 
-      console.log(first)
+      console.log(line_items[0].modifiers)
 
       const CDMOrder = {
         id: id,
@@ -178,7 +188,21 @@ OrderTC.addResolver({
           email: first.pickup_details.recipient.email_address,
           phone: first.pickup_details.recipient.phone_number
         },
-        items: line_items,
+        items: line_items.map(lineItem => ({
+          name: lineItem.name,
+          quantity: lineItem.quantity,
+          catalog_object_id: lineItem.catalog_object_id,
+          variation_name: lineItem.variation_name,
+          total_money: lineItem.total_money,
+          total_tax: lineItem.total_tax,
+          modifiers: lineItem.modifiers.map(modifier => ({
+            uid: modifier.uid,
+            catalog_object_id: modifier.catalog_object_id,
+            name: modifier.name,
+            base_price_money: modifier.base_price_money,
+            total_price_money: modifier.total_price_money
+          }))
+        })),
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
@@ -207,7 +231,7 @@ OrderTC.addResolver({
       TwilioClient.messages.create({
         body: 'Your order has been placed.',
         from: '+13466667153',
-        to: '+14692475650'
+        to: first.pickup_details.recipient.phone_number
       })
 
       return CDMOrder
@@ -272,7 +296,17 @@ OrderTC.addResolver({
           email: first.pickup_details.recipient.email_address,
           phone: first.pickup_details.recipient.phone_number
         },
-        items: line_items,
+        items: line_items.map(lineItem => ({
+          quantity: lineItem.quantity,
+          catalog_object_id: lineItem.catalog_object_id,
+          modifiers: lineItem.modifiers.map(modifier => ({
+            uid: modifier.uid,
+            catalog_object_id: modifier.catalog_object_id,
+            name: modifier.name,
+            base_price_money: modifier.base_price_money,
+            total_price_money: modifier.total_price_money
+          }))
+        })),
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
@@ -297,6 +331,8 @@ OrderTC.addResolver({
       pubsub.publish('orderUpdated', {
         orderUpdated: CDMOrder
       })
+
+      console.log(first.pickup_details.recipient.phone_number)
 
       switch (first.state) {
         case 'PREPARED':

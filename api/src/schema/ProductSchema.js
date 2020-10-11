@@ -8,6 +8,7 @@ import { ApolloError } from 'apollo-server-express'
 import { v4 as uuid } from 'uuid'
 import { ItemTC } from '../models'
 import { DataSourceEnumTC } from '../models/CommonModels'
+import pubsub from '../utils/pubsub'
 
 ItemTC.addResolver({
   name: 'getCatalog',
@@ -440,7 +441,7 @@ ItemTC.addResolver({
       })
 
       // Step 3: Return product in common data model format
-      return {
+      const CDMProduct = {
         dataSourceId: productId,
         variants: returnedVariants,
         modifierLists: returnedModifierLists,
@@ -453,6 +454,12 @@ ItemTC.addResolver({
           upsertCatalogItemResponse.catalog_object.custom_attribute_values
             .is_available.boolean_value
       }
+
+      pubsub.publish('availabilityChanged', {
+        availabilityChanged: CDMProduct
+      })
+
+      return CDMProduct
     }
   })
   .addResolver({
@@ -670,4 +677,12 @@ const ItemMutations = {
   batchAddAvailability: ItemTC.getResolver('batchAddAvailability')
 }
 
-export { ItemQueries, ItemMutations }
+const ItemSubscriptions = {
+  availabilityChanged: {
+    type: ItemTC,
+
+    subscribe: () => pubsub.asyncIterator('availabilityChanged')
+  }
+}
+
+export { ItemQueries, ItemMutations, ItemSubscriptions }

@@ -14,7 +14,7 @@ import {
   MakeDashboardTitle
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useQuery, useMutation } from '@apollo/client'
 
 const ColumnWrapper = styled.div`
   display: flex;
@@ -66,6 +66,7 @@ const FIND_ORDERS = gql`
           amount
         }
         fulfillment{
+          uid
           state
           pickupDetails{
             pickupAt
@@ -75,11 +76,24 @@ const FIND_ORDERS = gql`
   }
 }
 `
-
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($orderId: String!, $uid: String!, $state: FulFillmentStatusEnum!){
+  updateOrder(
+    orderId: $orderId
+    record: { fulfillment: { uid: $uid, state: $state } }
+  ) {
+    fulfillment{
+      state
+    }
+  }
+}
+`
 
 function OrderDashboard () {
   const vendorId = ["FMXAFFWJR95WC"]
   const { data: allOrders, loading, error } = useQuery(FIND_ORDERS, { variables: { location: vendorId } })
+  const [updateOrder] = useMutation(UPDATE_ORDER)
+  
   if (loading) {
     return <p>Loading...</p>
   }
@@ -89,7 +103,9 @@ function OrderDashboard () {
   console.log(allOrders)
   console.log(allOrders.orders)
 
-
+  const handleOrderClick = (order, orderState) => {
+    updateOrder({ variables: { orderId: order.id, uid: order.fulfillment.uid, state: orderState } })
+  }
   // if (!loading && orders) {
   //     const { order } = orders.items
   //     order.forEach(setElement => {
@@ -99,8 +115,7 @@ function OrderDashboard () {
 
   let newOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PROPOSED")
   let acceptedOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "RESERVED")
-  let readyOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PREPARED")
-
+  let readyOrders = allOrders.findOrders.orders.filter(order => order.fulfillment.state === "PREPARED") 
 
   return (
     <OrderDashboardWrapper>
@@ -117,6 +132,8 @@ function OrderDashboard () {
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               fulfillment={order.fulfillment.state}
+              handleClick={() => (handleOrderClick(order, "RESERVED"))}
+              buttonStatus="NEW"
             />
             )
           )
@@ -134,10 +151,13 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+              handleClick={() => (handleOrderClick(order, "PREPARED"))}
+              buttonStatus="ACCEPTED"
             />
             )
           )
         }
+        <OrderCard  buttonStatus="ACCEPTED"/>
 
       </AcceptedOrderSpaceWrapper>
 
@@ -152,10 +172,13 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+              handleClick={() => (handleOrderClick(order, "COMPLETED"))}
+              buttonStatus = "READY"
             />
             )
           )
         }
+        <OrderCard buttonStatus ="READY"/>
       </ReadyOrderSpaceWrapper>
     </OrderDashboardWrapper>
 

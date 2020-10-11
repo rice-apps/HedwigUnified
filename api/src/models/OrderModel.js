@@ -1,5 +1,4 @@
 import { sc } from 'graphql-compose'
-import { Money } from 'square-connect'
 
 import {
   MoneyTC,
@@ -53,13 +52,43 @@ const PreviousLineItemTC = sc.createObjectTC({
   }
 })
 
+const OrderFulfillmentRecipientTC = sc.createObjectTC({
+  name: 'OrderFulfillmentRecipient',
+  description: 'Contains information on the recipient of a fulfillment',
+  fields: {
+    name: 'String',
+    email: 'String',
+    phone: 'String'
+  }
+})
+
+const OrderFulfillmentPickupDetailsTC = sc.createObjectTC({
+  name: 'OrderFulfillmentPickupDetails',
+  description: 'Contains details necessary to fulfill a pickup order',
+  fields: {
+    pickupAt: 'String',
+    placedAt: 'String',
+    recipient: OrderFulfillmentRecipientTC.getType()
+  }
+})
+
+const OrderFulfillmentTC = sc.createObjectTC({
+  name: 'OrderFulfillment',
+  description: 'Contains details on how to fulfill an order',
+  fields: {
+    uid: 'String',
+    state: FulfillmentStatusEnumTC.getType(),
+    pickupDetails: OrderFulfillmentPickupDetailsTC.getType()
+  }
+})
+
 const OrderTC = sc.createObjectTC({
   name: 'Order',
   description: 'The common data model representation of orders',
   fields: {
     id: 'String!',
     merchant: 'String!',
-    customer: 'String!',
+    customer: OrderFulfillmentRecipientTC.getType(),
     items: PreviousLineItemTC.getTypeNonNull()
       .getTypePlural()
       .getType(),
@@ -67,7 +96,27 @@ const OrderTC = sc.createObjectTC({
     totalDiscount: MoneyTC.getTypeNonNull().getType(),
     total: MoneyTC.getTypeNonNull().getType(),
     orderStatus: OrderStatusEnumTC.getTypeNonNull().getType(),
-    fulfillmentStatus: FulfillmentStatusEnumTC.getTypeNonNull().getType()
+    fulfillment: OrderFulfillmentTC.getType(),
+    cohenId: 'String',
+    studentId: 'String'
+  }
+})
+
+const UpdateOrderTC = sc.createInputTC({
+  name: 'UpdateOrderInput',
+  description: 'The common data model representation of orders',
+  fields: {
+    id: 'String',
+    merchant: 'String',
+    customer: OrderFulfillmentRecipientTC.getITC().getType(),
+    items: PreviousLineItemTC.getITC()
+      .getTypePlural()
+      .getType(),
+    totalTax: MoneyTC.getITC().getType(),
+    totalDiscount: MoneyTC.getITC().getType(),
+    total: MoneyTC.getITC().getType(),
+    orderStatus: OrderStatusEnumTC.getType(),
+    fulfillment: OrderFulfillmentTC.getITC().getType()
   }
 })
 
@@ -80,8 +129,10 @@ const CreateOrderInputTC = sc.createInputTC({
       .getTypePlural()
       .getTypeNonNull()
       .getType(),
-    recipient: 'String!',
-    pickupTime: 'String!'
+    recipient: OrderFulfillmentRecipientTC.getITC().getType(),
+    pickupTime: 'String!',
+    cohenId: 'String',
+    studentId: 'String'
   }
 })
 
@@ -136,5 +187,6 @@ export {
   CreateOrderInputTC,
   FilterOrderInputTC,
   SortOrderInputTC,
-  FindManyOrderPayloadTC
+  FindManyOrderPayloadTC,
+  UpdateOrderTC
 }

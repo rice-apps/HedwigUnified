@@ -1,9 +1,10 @@
 import React from 'react'
 import Collapsible from 'react-collapsible'
 import styled, { css } from 'styled-components'
-import './Collapsible.css'
+import './SidebarCollapsible.css'
 import { FcCollapse, FcExpand } from 'react-icons/fc'
 import { NavLink } from 'react-router-dom'
+import { IconContext } from 'react-icons'
 
 const SideBarItemsWrapper = styled.div`
   display: flex;
@@ -25,11 +26,13 @@ const MainMenuItemWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   margin: 6px 0px;
+
 `
 
 function MainMenuItem (props) {
   // Make IsExpanded prop true when the menu item is expanded by the user
   return (
+  
     <MainMenuItemWrapper>
       {props.name}
       {props.IsClosed ? (
@@ -42,6 +45,7 @@ function MainMenuItem (props) {
         />
       )}
     </MainMenuItemWrapper>
+
   )
 }
 
@@ -74,8 +78,11 @@ function SubMenuItem (props) {
 
 function SideBarItems () {
   return (
+
     <SideBarItemsWrapper>
       <Collapsible
+      classParentString="MainMenuCollapsible"
+
         open='true'
         trigger={<MainMenuItem name='Order Processing' IsClosed={true} />}
         triggerWhenOpen={
@@ -93,6 +100,7 @@ function SideBarItems () {
       </Collapsible>
 
       <Collapsible
+      classParentString="MainMenuCollapsible"
         open='true'
         trigger={<MainMenuItem name='Menu Management' IsClosed={true} />}
         triggerWhenOpen={
@@ -107,6 +115,7 @@ function SideBarItems () {
       </Collapsible>
 
       <Collapsible
+      classParentString="MainMenuCollapsible"
         open='true'
         trigger={<MainMenuItem name='Store Information' IsClosed={true} />}
         triggerWhenOpen={

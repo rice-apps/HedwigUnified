@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
 import { CreatePaymentITC, PaymentTC, SortOrderEnumTC } from '../models'
 import { FetchPaymentPayloadTC } from '../models/PaymentModel'
+import shopifyClient from '../shopify'
 
 PaymentTC.addResolver({
   name: 'fetchPayments',
@@ -55,52 +56,94 @@ PaymentTC.addResolver({
     type: PaymentTC,
     resolve: async ({ args }) => {
       const {
-        record: { sourceId, subtotal, tip, orderId, customerId, locationId }
+        record: {
+          sourceId,
+          subtotal,
+          tip,
+          orderId,
+          customerId,
+          locationId,
+          source
+        }
       } = args
 
-      // TODO: Add shopify payment flow
-      const api = new PaymentsApi()
-      const paymentBody = new CreatePaymentRequest()
+      let response
 
-      const paymentResponse = await api.createPayment({
-        ...paymentBody,
-        location_id: locationId,
-        source_id: sourceId,
-        idempotency_key: uuid(),
-        amount_money: subtotal,
-        tip_money: tip,
-        order_id: orderId,
-        customer_id: customerId,
-        autocomplete: false
-      })
+      switch (source) {
+        case 'SQUARE':
+          const api = new PaymentsApi()
+          const paymentBody = new CreatePaymentRequest()
 
-      if (paymentResponse.errors) {
-        return new ApolloError(
-          `Encounter the following errors while create payment: ${paymentResponse.errors}`
-        )
+          const paymentResponse = await api.createPayment({
+            ...paymentBody,
+            location_id: locationId,
+            source_id: sourceId,
+            idempotency_key: uuid(),
+            amount_money: subtotal,
+            tip_money: tip,
+            order_id: orderId,
+            customer_id: customerId,
+            autocomplete: false
+          })
+
+          if (paymentResponse.errors) {
+            return new ApolloError(
+              `Encounter the following errors while create payment: ${paymentResponse.errors}`
+            )
+          }
+
+          const {
+            payment: {
+              id,
+              order_id,
+              customer_id,
+              amount_money,
+              tip_money,
+              total_money,
+              status
+            }
+          } = paymentResponse
+
+          response = {
+            id,
+            order: order_id,
+            customer: customer_id,
+            subtotal: amount_money,
+            tip: tip_money,
+            total: total_money,
+            status
+          }
+
+          break
+
+        case 'SHOPIFY':
+          const unitProduct = await shopifyClient.product.fetchByHandle(
+            'unitproduct'
+          )
+          let checkout = await shopifyClient.checkout.create()
+
+          await shopifyClient.checkout.addLineItems(checkout.id, [
+            {
+              variantId: unitProduct.variants[0].id,
+              quantity: total_money.amount / 25
+            }
+          ])
+
+          response = {
+            id: checkout.id,
+            total: subtotal,
+            url: checkout.webUrl,
+            source
+          }
+
+          break
+        default:
+          response = new ApolloError(
+            'Payment method did not match any specified!'
+          )
       }
 
-      const {
-        payment: {
-          id,
-          order_id,
-          customer_id,
-          amount_money,
-          tip_money,
-          total_money,
-          status
-        }
-      } = paymentResponse
-
-      return {
-        id,
-        order: order_id,
-        customer: customer_id,
-        subtotal: amount_money,
-        tip: tip_money,
-        total: total_money,
-        status
-      }
+      return response
     }
   })
   .addResolver({

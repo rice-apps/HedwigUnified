@@ -12,7 +12,7 @@ import ModifierSelection from './ModifierSelection'
 import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 
-function Product () {
+function Product() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currProduct: productId, currVendor: vendorState } = state
@@ -180,16 +180,18 @@ function Product () {
   };
   */
 
-  function makeCartItem () {
+  function makeCartItem() {
     let itemName = product.name
     let itemID = product.squareID
-    let variant = JSON.parse(
+    let variant = undefined
+    if (document.querySelector('.variantSelect:checked') == null) {
+      return false;
+    }
+    variant = JSON.parse(
       document.querySelector('.variantSelect:checked').value
     )
     let variantObject = variant.option
     let variantCost = variant.option.price.amount
-
-    console.log(variantCost)
 
     let modifierNames = []
     var modifierCost = 0
@@ -207,13 +209,8 @@ function Product () {
       }
       modifierNames.push(currentModifierName)
     }
-
-    console.log(modifierCost)
-    console.log(modifierList)
-
     let itemQuantity = { quantity }.quantity
-    console.log(itemQuantity)
-    let totalPrice = modifierCost + variantCost
+    let totalPrice = (modifierCost + variantCost) * 0.01
 
     dispatch({
       type: 'ADD_ITEM',
@@ -227,9 +224,9 @@ function Product () {
         modDisplay: modifierNames
       }
     })
-
-    console.log(cartItems())
+    return true;
   }
+
 
   return (
     <div className='container'>
@@ -246,7 +243,7 @@ function Product () {
       </div>
       <div className='modifiersContainer'>
         {product.modifierLists.map(modifier => {
-          return <ModifierSelection modifierCategory={modifier} />
+          return <ModifierSelection key={modifier.name} modifierCategory={modifier} />
         })}
       </div>
       <div className='quantityContainer'>
@@ -260,8 +257,7 @@ function Product () {
         <button
           className='submitButton'
           onClick={() => {
-            handleClick()
-            makeCartItem()
+            makeCartItem();
           }}
         >
           Add

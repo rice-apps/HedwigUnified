@@ -64,7 +64,10 @@ const VendorHeaderSpace = styled.div`
 
 const MainDisplaySpace = styled.div`
   grid-area: maindisplay;
-  background-color: #f8f8f8;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e7e7e7;
   font-size: 150px;
   text-align: center;
 `

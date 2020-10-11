@@ -1,7 +1,6 @@
 import {
   OrdersApi,
   CreateOrderRequest,
-  UpdateOrderRequest,
   SearchOrdersRequest
 } from 'square-connect'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
@@ -11,8 +10,10 @@ import pubsub from '../utils/pubsub'
 import {
   FilterOrderInputTC,
   SortOrderInputTC,
-  FindManyOrderPayloadTC
+  FindManyOrderPayloadTC,
+  UpdateOrderTC
 } from '../models/OrderModel'
+import TwilioClient from '../twilio'
 
 OrderTC.addResolver({
   name: 'findOrders',
@@ -65,13 +66,31 @@ OrderTC.addResolver({
     const returnedOrders = orders.map(order => ({
       id: order.id,
       merchant: order.location_id,
-      customer: order.customer_id,
+      customer: {
+        name: order.fulfillments[0].pickup_details.recipient.display_name,
+        email: order.fulfillments[0].pickup_details.recipient.email_address,
+        phone: order.fulfillments[0].pickup_details.recipient.phone_number
+      },
       items: order.line_items,
       totalTax: order.total_tax_money,
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
-      fulfillmentStatus: order.fulfillments[0].state
+      cohenId: order.fulfillments[0].metadata.cohenId,
+      studentId: order.fulfillments[0].metadata.studentId,
+      fulfillment: {
+        uid: order.fulfillments[0].uid,
+        state: order.fulfillments[0].state,
+        pickupDetails: {
+          pickupAt: order.fulfillments[0].pickup_details.pickup_at,
+          placedAt: order.fulfillments[0].pickup_details.placed_at,
+          recipient: {
+            name: order.fulfillments[0].pickup_details.recipient.display_name,
+            email: order.fulfillments[0].pickup_details.recipient.email_address,
+            phone: order.fulfillments[0].pickup_details.recipient.phone_number
+          }
+        }
+      }
     }))
 
     return {
@@ -90,7 +109,14 @@ OrderTC.addResolver({
     resolve: async ({ args }) => {
       const {
         locationId,
-        record: { idempotencyKey, lineItems, recipient, pickupTime }
+        record: {
+          idempotencyKey,
+          lineItems,
+          recipient,
+          pickupTime,
+          cohenId,
+          studentId
+        }
       } = args
 
       const api = new OrdersApi()
@@ -101,15 +127,20 @@ OrderTC.addResolver({
         order: {
           location_id: locationId,
           line_items: lineItems,
-          customer_id: recipient,
           fulfillments: [
             {
               type: 'PICKUP',
               state: 'PROPOSED',
+              metadata: {
+                cohenId: cohenId ? cohenId : null,
+                studentId: studentId ? studentId : null
+              },
               pickup_details: {
                 pickup_at: pickupTime,
                 recipient: {
-                  display_name: recipient
+                  display_name: recipient.name,
+                  email_address: recipient.email,
+                  phone_number: recipient.phone
                 }
               }
             }
@@ -128,7 +159,6 @@ OrderTC.addResolver({
         order: {
           id,
           location_id,
-          customer_id,
           line_items,
           total_tax_money,
           total_discount_money,
@@ -139,19 +169,43 @@ OrderTC.addResolver({
       } = orderResponse
 
       const CDMOrder = {
-        id,
+        id: id,
         merchant: location_id,
-        customer: customer_id,
+        customer: {
+          name: first.pickup_details.recipient.display_name,
+          email: first.pickup_details.recipient.email_address,
+          phone: first.pickup_details.recipient.phone_number
+        },
         items: line_items,
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        fulfillmentStatus: first.state
+        cohenId: first.metadata.cohenId,
+        studentId: first.metadata.studentId,
+        fulfillment: {
+          uid: first.uid,
+          state: first.state,
+          pickupDetails: {
+            pickupAt: first.pickup_details.pickup_at,
+            placedAt: first.pickup_details.placed_at,
+            recipient: {
+              name: first.pickup_details.recipient.display_name,
+              email: first.pickup_details.recipient.email_address,
+              phone: first.pickup_details.recipient.phone_number
+            }
+          }
+        }
       }
 
       pubsub.publish('orderCreated', {
         orderCreated: CDMOrder
+      })
+
+      TwilioClient.messages.create({
+        body: 'Your order has been placed.',
+        from: '+13466667153',
+        to: '+14692475650'
       })
 
       return CDMOrder
@@ -161,26 +215,29 @@ OrderTC.addResolver({
     name: 'updateOrder',
     type: OrderTC,
     args: {
-      locationId: GraphQLNonNull(GraphQLString),
       orderId: GraphQLNonNull(GraphQLString),
-      record: OrderTC.getITC().getType()
+      record: UpdateOrderTC.getType()
     },
     resolve: async ({ args }) => {
       const {
-        locationId,
         orderId,
-        record: { orderStatus, fulfillmentStatus }
+        record: { orderStatus, fulfillment }
       } = args
 
       const api = new OrdersApi()
 
-      const updateOrderResponse = await api.updateOrder(locationId, orderId, {
-        ...new UpdateOrderRequest(),
+      const batchRetriveOrderResponse = await api.batchRetrieveOrders({
+        order_ids: [orderId]
+      })
+
+      const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
           state: orderStatus,
+          version: batchRetriveOrderResponse.orders[0].version,
           fulfillments: [
             {
-              state: fulfillmentStatus
+              uid: fulfillment.uid,
+              state: fulfillment.state
             }
           ]
         }
@@ -196,7 +253,6 @@ OrderTC.addResolver({
         order: {
           id,
           location_id,
-          customer_id,
           line_items,
           total_tax_money,
           total_discount_money,
@@ -207,20 +263,72 @@ OrderTC.addResolver({
       } = updateOrderResponse
 
       const CDMOrder = {
-        id,
+        id: id,
         merchant: location_id,
-        customer: customer_id,
+        customer: {
+          name: first.pickup_details.recipient.display_name,
+          email: first.pickup_details.recipient.email_address,
+          phone: first.pickup_details.recipient.phone_number
+        },
         items: line_items,
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        fulfillmentStatus: first.state
+        cohenId: first.metadata.cohenId,
+        studentId: first.metadata.studentId,
+        fulfillment: {
+          uid: first.uid,
+          state: first.state,
+          pickupDetails: {
+            pickupAt: first.pickup_details.pickup_at,
+            placedAt: first.pickup_details.placed_at,
+            recipient: {
+              name: first.pickup_details.recipient.display_name,
+              email: first.pickup_details.recipient.email_address,
+              phone: first.pickup_details.recipient.phone_number
+            }
+          }
+        }
       }
 
       pubsub.publish('orderUpdated', {
         orderUpdated: CDMOrder
       })
+
+      switch (first.state) {
+        case 'PREPARED':
+          TwilioClient.messages.create({
+            body:
+              'Your recent order has been prepared. Please go to the pickup location',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        case 'COMPLETED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been picked up. If you did not do this, please contact the vendor directly.',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        case 'CANCELED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        default:
+          TwilioClient.messages.create({
+            body:
+              'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+      }
 
       return CDMOrder
     }

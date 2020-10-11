@@ -18,6 +18,15 @@
   margin-top: 40px;
   cursor: pointer;
   border-radius: 10px;
+  border-width: 0;
+  width: 40%;
+  left: 30%;
+  position: relative;
+}
+
+
+.buy-btn:disabled {
+  background-color: #666666;
 }
 
 .float-cart {

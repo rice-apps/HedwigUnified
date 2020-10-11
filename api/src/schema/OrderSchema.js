@@ -76,11 +76,14 @@ OrderTC.addResolver({
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
+      cohenId: order.fulfillments[0].metadata.cohenId,
+      studentId: order.fulfillments[0].metadata.studentId,
       fulfillment: {
         uid: order.fulfillments[0].uid,
         state: order.fulfillments[0].state,
         pickupDetails: {
           pickupAt: order.fulfillments[0].pickup_details.pickup_at,
+          placedAt: order.fulfillments[0].pickup_details.placed_at,
           recipient: {
             name: order.fulfillments[0].pickup_details.recipient.display_name,
             email: order.fulfillments[0].pickup_details.recipient.email_address,
@@ -106,7 +109,14 @@ OrderTC.addResolver({
     resolve: async ({ args }) => {
       const {
         locationId,
-        record: { idempotencyKey, lineItems, recipient, pickupTime }
+        record: {
+          idempotencyKey,
+          lineItems,
+          recipient,
+          pickupTime,
+          cohenId,
+          studentId
+        }
       } = args
 
       const api = new OrdersApi()
@@ -121,6 +131,10 @@ OrderTC.addResolver({
             {
               type: 'PICKUP',
               state: 'PROPOSED',
+              metadata: {
+                cohenId: cohenId ? cohenId : null,
+                studentId: studentId ? studentId : null
+              },
               pickup_details: {
                 pickup_at: pickupTime,
                 recipient: {
@@ -167,11 +181,14 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
+        cohenId: first.metadata.cohenId,
+        studentId: first.metadata.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,
           pickupDetails: {
             pickupAt: first.pickup_details.pickup_at,
+            placedAt: first.pickup_details.placed_at,
             recipient: {
               name: first.pickup_details.recipient.display_name,
               email: first.pickup_details.recipient.email_address,
@@ -258,11 +275,14 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
+        cohenId: first.metadata.cohenId,
+        studentId: first.metadata.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,
           pickupDetails: {
             pickupAt: first.pickup_details.pickup_at,
+            placedAt: first.pickup_details.placed_at,
             recipient: {
               name: first.pickup_details.recipient.display_name,
               email: first.pickup_details.recipient.email_address,

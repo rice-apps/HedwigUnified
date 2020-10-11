@@ -165,13 +165,13 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <OpenOrdersPage /> },
-      { path: '/openorders', element: <OpenOrdersPage /> },
-      { path: '/closedorders', element: <ClosedOrdersPage /> },
-      { path: '/items', element: <ItemsMenuManagementPage /> },
-      { path: '/modifiers', element: <ModifiersMenuManagementPage /> },
-      { path: '/set-basic-info', element: <SetBasicInfoPage /> },
-      { path: '/set-store-hours', element: <SetStoreHoursPage /> },
+      { path: '/', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
+    { path: '/openorders', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
+      { path: '/closedorders', element: <PrivateRoute element={<ClosedOrdersPage /> }/>},
+      { path: '/items', element: <PrivateRoute element={<ItemsMenuManagementPage /> }/>},
+      { path: '/modifiers', element: <PrivateRoute element={<ModifiersMenuManagementPage /> }/>},
+      { path: '/set-basic-info', element: <PrivateRoute element={<SetBasicInfoPage /> }/>},
+      { path: '/set-store-hours', element: <PrivateRoute element={<SetStoreHoursPage /> }/>},
     ]
 
   }

@@ -78,7 +78,7 @@ OrderTC.addResolver({
         variation_name: lineItem.variation_name,
         total_money: lineItem.total_money,
         total_tax: lineItem.total_tax,
-        modifiers: lineItem.modifiers.map(modifier => ({
+        modifiers: lineItem.modifiers?.map(modifier => ({
           uid: modifier.uid,
           catalog_object_id: modifier.catalog_object_id,
           name: modifier.name,
@@ -199,7 +199,7 @@ OrderTC.addResolver({
           variation_name: lineItem.variation_name,
           total_money: lineItem.total_money,
           total_tax: lineItem.total_tax,
-          modifiers: lineItem.modifiers.map(modifier => ({
+          modifiers: lineItem.modifiers?.map(modifier => ({
             uid: modifier.uid,
             catalog_object_id: modifier.catalog_object_id,
             name: modifier.name,
@@ -211,8 +211,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        cohenId: orderResponse.order.metadata.cohenId,
-        studentId: orderResponse.order.metadata.studentId,
+        cohenId: orderResponse.order.metadata?.cohenId,
+        studentId: orderResponse.order.metadata?.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,
@@ -307,7 +307,7 @@ OrderTC.addResolver({
           variation_name: lineItem.variation_name,
           total_money: lineItem.total_money,
           total_tax: lineItem.total_tax,
-          modifiers: lineItem.modifiers.map(modifier => ({
+          modifiers: lineItem.modifiers?.map(modifier => ({
             uid: modifier.uid,
             catalog_object_id: modifier.catalog_object_id,
             name: modifier.name,
@@ -319,8 +319,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        cohenId: updateOrderResponse.order.metadata.cohenId,
-        studentId: updateOrderResponse.order.metadata.studentId,
+        cohenId: updateOrderResponse.order.metadata?.cohenId,
+        studentId: updateOrderResponse.order.metadata?.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,

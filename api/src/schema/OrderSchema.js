@@ -72,9 +72,13 @@ OrderTC.addResolver({
         phone: order.fulfillments[0].pickup_details.recipient.phone_number
       },
       items: order.line_items.map(lineItem => ({
+        name: lineItem.name,
         quantity: lineItem.quantity,
         catalog_object_id: lineItem.catalog_object_id,
-        modifiers: lineItem.modifiers?.map(modifier => ({
+        variation_name: lineItem.variation_name,
+        total_money: lineItem.total_money,
+        total_tax: lineItem.total_tax,
+        modifiers: lineItem.modifiers.map(modifier => ({
           uid: modifier.uid,
           catalog_object_id: modifier.catalog_object_id,
           name: modifier.name,
@@ -297,8 +301,12 @@ OrderTC.addResolver({
           phone: first.pickup_details.recipient.phone_number
         },
         items: line_items.map(lineItem => ({
+          name: lineItem.name,
           quantity: lineItem.quantity,
           catalog_object_id: lineItem.catalog_object_id,
+          variation_name: lineItem.variation_name,
+          total_money: lineItem.total_money,
+          total_tax: lineItem.total_tax,
           modifiers: lineItem.modifiers.map(modifier => ({
             uid: modifier.uid,
             catalog_object_id: modifier.catalog_object_id,

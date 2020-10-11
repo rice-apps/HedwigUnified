@@ -38,25 +38,12 @@ function ContactForm() {
     vendor: user.vendor,
     isAdmin: user.isAdmin
   }
-  console.log(record)
   const [addPhone, {loading, error, data},] = useMutation(ADD_PHONE);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error.message}</p>;
-  console.log(user);
 
   if (confirmed) {
-    // const record = {
-    //   name: userName,
-    //   netid: user.netid,
-    //   phone: phone,
-    //   token: user.token,
-    //   recentUpdate: user.recentUpdate,
-    //   type: user.type,
-    //   vendor: user.vendor,
-    //   isAdmin: user.isAdmin
-    // }
-    // console.log(record)
     addPhone({variables: {name : userName, phone, netid: user.netid}})
     return <Navigate to='/' />
   }

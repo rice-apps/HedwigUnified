@@ -170,6 +170,8 @@ function Menu () {
 
   const current_date = new Date()
   const currentDay = current_date.getDay()
+  const startTimes = vendor_data.getVendor.hours[currentDay].start
+  const endTimes = vendor_data.getVendor.hours[currentDay].end
   console.log(vendor_data)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
@@ -186,6 +188,11 @@ function Menu () {
           {vendor_data.getVendor.hours[currentDay].start}-  
           {vendor_data.getVendor.hours[currentDay].end}
         </p>
+        {startTimes.length > 1 && (
+          <p class='vendorinfo'>
+          {startTimes[1]} - {endTimes[1]}
+          </p>
+        )}
         <button class='readmore'> More Info </button>
       </div>
 

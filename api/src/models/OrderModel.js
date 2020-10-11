@@ -9,7 +9,6 @@ import {
   SortOrderEnumTC
 } from './CommonModels'
 
-
 const LineItemTC = sc.createObjectTC({
   name: 'LineItem',
   description:
@@ -59,7 +58,7 @@ const OrderFulfillmentRecipientTC = sc.createObjectTC({
   fields: {
     name: 'String',
     email: 'String',
-    phone: 'String',
+    phone: 'String'
   }
 })
 
@@ -68,6 +67,7 @@ const OrderFulfillmentPickupDetailsTC = sc.createObjectTC({
   description: 'Contains details necessary to fulfill a pickup order',
   fields: {
     pickupAt: 'String',
+    placedAt: 'String',
     recipient: OrderFulfillmentRecipientTC.getType()
   }
 })

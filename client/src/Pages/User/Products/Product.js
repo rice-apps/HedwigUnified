@@ -60,7 +60,6 @@ function Product() {
 
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
-
   const handleClick = () => {
     return navigate(`/eat/${vendor.slug}/cart`)
   }
@@ -193,8 +192,6 @@ function Product() {
     let variantObject = variant.option
     let variantCost = variant.option.price.amount
 
-    console.log(variantCost)
-
     let modifierNames = []
     var modifierCost = 0
     var modifierList = {}
@@ -211,12 +208,7 @@ function Product() {
       }
       modifierNames.push(currentModifierName)
     }
-
-    console.log(modifierCost)
-    console.log(modifierList)
-
     let itemQuantity = { quantity }.quantity
-    console.log(itemQuantity)
     let totalPrice = (modifierCost + variantCost) * 0.01
 
     dispatch({
@@ -231,16 +223,16 @@ function Product() {
         modDisplay: modifierNames
       }
     })
-
-    console.log(cartItems())
     return true;
   }
+
 
   return (
     <div className='container'>
       <img
         className='heroImage'
-        src='https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
+        src={product.image}
+        alt={product.name}
       />
       <div className='itemHeading'>
         <h2>{product.name}</h2>

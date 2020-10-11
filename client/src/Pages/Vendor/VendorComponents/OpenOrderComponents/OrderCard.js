@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
@@ -7,21 +6,24 @@ import { BiFoodMenu } from "react-icons/bi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaIdCard } from "react-icons/fa";
 import Modal from "react-modal";
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from "@apollo/client";
 import moment from "moment";
 
 const ACCEPT_ORDER = gql`
   mutation {
-  updateOrder(
-    orderId: "Pu4mWMvZJlkb2J0QdxIWapYVt9EZY"
-    record: { fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED } }
-  ) {
-    fulfillment {
-      uid
-      state
+    updateOrder(
+      orderId: "Pu4mWMvZJlkb2J0QdxIWapYVt9EZY"
+      record: {
+        fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED }
+      }
+    ) {
+      fulfillment {
+        uid
+        state
+      }
     }
   }
-}`
+`;
 
 const OrderCardWrapper = styled.div`
   background-color: white;
@@ -32,7 +34,7 @@ const OrderCardWrapper = styled.div`
   justify-self: center;
   font-family: "Futura", sans-serif;
   display: grid;
-  width: 94%;
+  width: 26vw;
   height: max-content;
   margin: 10px;
   margin-right: 14px;
@@ -213,6 +215,13 @@ const CancelButton = styled(ButtonWrapper)`
   background-color: #dedede;
 `;
 
+const ReadyButton = styled(ButtonWrapper)`
+  background-color: #fadfbe;
+`;
+const PickedUpButton = styled(ButtonWrapper)`
+  background-color: #deeee7;
+`;
+
 const ModalWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -295,7 +304,7 @@ function MakeModalParagraph(props) {
     return (
       <ModalParagraphWrapper>
         <div>
-          This order is paid in <strong>Credit Card</strong>. <br/>
+          This order is paid in <strong>Credit Card</strong>. <br />
           You can proceed to accept the order.
         </div>
       </ModalParagraphWrapper>
@@ -309,9 +318,7 @@ function MakeModalParagraph(props) {
       </ModalParagraphWrapper>
     );
   } else {
-    return (
-      <ModalParagraphWrapper>error</ModalParagraphWrapper>
-    )
+    return <ModalParagraphWrapper>error</ModalParagraphWrapper>;
   }
 }
 
@@ -343,7 +350,9 @@ function MakeModalOrderDetails(props) {
         ) : paymentType === "Membership" ? (
           <div>Membership ID:</div>
         ) : null}
-        {(paymentType === "Tetra" || paymentType ==="Membership") ? (<div> *******</div>): null}
+        {paymentType === "Tetra" || paymentType === "Membership" ? (
+          <div> *******</div>
+        ) : null}
       </ModalOrderDetailRow>
       <ModalOrderDetailRow>
         <div>Amount:</div>
@@ -362,6 +371,8 @@ const ModalButtonsWrapper = styled.div`
   align-items: center;
 `;
 
+
+
 function MakePaymentSpace(props) {
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false);
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
@@ -377,6 +388,26 @@ function MakePaymentSpace(props) {
   function closeCancelModal() {
     setCancelModalIsOpen(false);
   }
+  function MakePaymentButtons(props) {
+    var buttonStatus = props.buttonStatus
+    return (
+      <div>
+        {buttonStatus === "NEW" ? (
+          <ButtonsSpaceWrapper>
+            <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+            <AcceptButton onClick={openAcceptModal}>Accept</AcceptButton>
+          </ButtonsSpaceWrapper>
+        ) : buttonStatus === "ACCEPTED" ? (<ButtonsSpaceWrapper>
+          <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+          <ReadyButton>Ready</ReadyButton>
+        </ButtonsSpaceWrapper>): buttonStatus = "READY" ? (<ButtonsSpaceWrapper>
+          <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+          <PickedUpButton>Picked Up</PickedUpButton>
+        </ButtonsSpaceWrapper>):
+        "error"}
+      </div>
+    );
+  }
 
   return (
     <PaymentSpaceWrapper>
@@ -389,10 +420,7 @@ function MakePaymentSpace(props) {
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
-
-        <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-        <AcceptButton onClick={props.handleClick}>Accept</AcceptButton>
-
+        <MakePaymentButtons buttonStatus={props.buttonStatus}/>
       </ButtonsSpaceWrapper>
 
       <Modal
@@ -462,20 +490,20 @@ function MakePaymentSpace(props) {
   );
 }
 
-
-function OrderCard (props) {
+function OrderCard(props) {
   const {
-    customerName, 
+    customerName,
     pickupTime,
     items,
     orderCost,
     orderTotal,
     fulfillment,
-    handleClick
-} = props
+    handleClick,
+    buttonStatus
+  } = props;
   //RFC3339
-  const pickupAt = moment(pickupTime).format('h:mm A')
-  const timeLeft = moment(pickupTime).fromNow()
+  const pickupAt = moment(pickupTime).format("h:mm A");
+  const timeLeft = moment(pickupTime).fromNow();
 
   return (
     <IconContext.Provider
@@ -484,39 +512,40 @@ function OrderCard (props) {
       <OrderCardWrapper>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle orderNumber='12' customerName={customerName} />
+        <MakeOrderTitle orderNumber="12" customerName={customerName} />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
           pickupTime={pickupAt}
-          submissionTime='4:35pm'
-          paymentType='Tetra'
+          submissionTime="4:35pm"
+          paymentType="Tetra"
           pickupCountdown={timeLeft}
-
         />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
           {/* Call MakeOrderDetails function for each unique item in the cart, 
           can be called multiple times if multiple items are in order */}
 
-          {items && (items.map(item => <MakeOrderDetails
-            quantity={item.quantity}
-            itemName={item.name}
-            price={item.total_money.amount / 100}
-            variant={item.variation_name}
-            // modifiers={[...item.modifiers.name].join(', ')}
-          />
-          ))}
+          {items &&
+            items.map(item => (
+              <MakeOrderDetails
+                quantity={item.quantity}
+                itemName={item.name}
+                price={item.total_money.amount / 100}
+                variant={item.variation_name}
+                // modifiers={[...item.modifiers.name].join(', ')}
+              />
+            ))}
         </OrderDetailsSpaceWrapper>
-        <MakePaymentSpace 
-      orderCost={orderCost} 
-      orderTax={props.orderTax}
-      orderTotal={orderTotal} 
-      fulfillment={fulfillment}
-      paymentType={props.paymentType}
-      handleClick={handleClick}
-      />
-
+        <MakePaymentSpace
+          buttonStatus={buttonStatus}
+          orderCost={orderCost}
+          orderTax={props.orderTax}
+          orderTotal={orderTotal}
+          fulfillment={fulfillment}
+          paymentType={props.paymentType}
+          handleClick={handleClick}
+        />
       </OrderCardWrapper>
     </IconContext.Provider>
   );

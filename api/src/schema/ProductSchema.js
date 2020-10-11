@@ -676,7 +676,7 @@ const ItemMutations = {
   batchAddAvailability: ItemTC.getResolver('batchAddAvailability')
 }
 
-const ItemMutations = {
+const ItemSubscriptions = {
   availabilityChanged: {
     type: ItemTC,
 
@@ -684,4 +684,4 @@ const ItemMutations = {
   }
 }
 
-export { ItemQueries, ItemMutations }
+export { ItemQueries, ItemMutations, ItemSubscriptions }

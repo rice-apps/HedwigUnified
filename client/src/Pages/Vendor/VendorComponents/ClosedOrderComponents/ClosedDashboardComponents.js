@@ -84,10 +84,10 @@ const IndividualClosedOrder = styled.div`
   grid-template-columns: 0.45fr 1.8fr 2fr 1.5fr 2fr 1.5fr;
   font-size: 2.4vh;
   background-color: white;
-  border-top-right-radius: 15px;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: ${props => (props.IsClosed ? "15px" : "0px")};
-  border-bottom-right-radius: ${props => (props.IsClosed ? "15px" : "0px")};
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: ${props => (props.IsClosed ? "20px" : "0px")};
+  border-bottom-right-radius: ${props => (props.IsClosed ? "20px" : "0px")};
   cursor: pointer;
   box-shadow: 1px 1px 5px  rgba(0, 0, 0, .2);
 `;

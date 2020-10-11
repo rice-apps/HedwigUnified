@@ -469,7 +469,7 @@ function MakePaymentSpace(props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            <AcceptButton onClick={closeAcceptModal}> Accept </AcceptButton>
+            <AcceptButton onClick={props.handleClick}> Accept </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>

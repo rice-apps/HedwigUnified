@@ -76,8 +76,8 @@ OrderTC.addResolver({
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
-      cohenId: order.fulfillments[0].metadata.cohenId,
-      studentId: order.fulfillments[0].metadata.studentId,
+      cohenId: order.cohenId,
+      studentId: order.studentId,
       fulfillment: {
         uid: order.fulfillments[0].uid,
         state: order.fulfillments[0].state,
@@ -127,14 +127,14 @@ OrderTC.addResolver({
         order: {
           location_id: locationId,
           line_items: lineItems,
+          metadata: {
+            cohenId: cohenId ? cohenId : null,
+            studentId: studentId ? studentId : null
+          },
           fulfillments: [
             {
               type: 'PICKUP',
               state: 'PROPOSED',
-              metadata: {
-                cohenId: cohenId ? cohenId : null,
-                studentId: studentId ? studentId : null
-              },
               pickup_details: {
                 pickup_at: pickupTime,
                 recipient: {
@@ -168,6 +168,8 @@ OrderTC.addResolver({
         }
       } = orderResponse
 
+      console.log(first)
+
       const CDMOrder = {
         id: id,
         merchant: location_id,
@@ -181,8 +183,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        cohenId: first.metadata.cohenId,
-        studentId: first.metadata.studentId,
+        cohenId: orderResponse.order.metadata.cohenId,
+        studentId: orderResponse.order.metadata.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,
@@ -275,8 +277,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        cohenId: first.metadata.cohenId,
-        studentId: first.metadata.studentId,
+        cohenId: updateOrderResponse.order.metadata.cohenId,
+        studentId: updateOrderResponse.order.metadata.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,

@@ -204,8 +204,8 @@ const ButtonWrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 30px;
-  margin: 0px 25px;
+  padding: 5px 20px;
+  margin: 0px 15px;
   margin-bottom: 15px;
 `;
 

@@ -24,7 +24,7 @@ const LineItemTC = sc.createObjectTC({
       description: 'The ID of the variant of this item'
     },
     modifiers: {
-      type: '[String]',
+      type: '[OrderLineItemModifier]',
       description: 'A list of modifier IDs to apply to this line item'
     }
   }

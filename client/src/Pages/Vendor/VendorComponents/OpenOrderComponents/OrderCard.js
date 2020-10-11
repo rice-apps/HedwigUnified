@@ -391,7 +391,7 @@ function MakePaymentSpace(props) {
       <ButtonsSpaceWrapper>
 
         <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-        <AcceptButton onClick={openAcceptModal}>Accept</AcceptButton>
+        <AcceptButton onClick={props.handleClick}>Accept</AcceptButton>
 
       </ButtonsSpaceWrapper>
 
@@ -470,7 +470,8 @@ function OrderCard (props) {
     items,
     orderCost,
     orderTotal,
-    fulfillment
+    fulfillment,
+    handleClick
 } = props
   //RFC3339
   const pickupAt = moment(pickupTime).format('h:mm A')
@@ -509,10 +510,12 @@ function OrderCard (props) {
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace 
       orderCost={orderCost} 
-orderTax={props.orderTax}
+      orderTax={props.orderTax}
       orderTotal={orderTotal} 
       fulfillment={fulfillment}
-paymentType={props.paymentType}/>
+      paymentType={props.paymentType}
+      handleClick={handleClick}
+      />
 
       </OrderCardWrapper>
     </IconContext.Provider>

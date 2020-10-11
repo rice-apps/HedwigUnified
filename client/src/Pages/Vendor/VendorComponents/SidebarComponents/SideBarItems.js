@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import './SidebarCollapsible.css'
 import { FcCollapse, FcExpand } from 'react-icons/fc'
 import { NavLink } from 'react-router-dom'
+import { IconContext } from 'react-icons'
 
 const SideBarItemsWrapper = styled.div`
   display: flex;
@@ -31,6 +32,7 @@ const MainMenuItemWrapper = styled.div`
 function MainMenuItem (props) {
   // Make IsExpanded prop true when the menu item is expanded by the user
   return (
+  
     <MainMenuItemWrapper>
       {props.name}
       {props.IsClosed ? (
@@ -43,6 +45,7 @@ function MainMenuItem (props) {
         />
       )}
     </MainMenuItemWrapper>
+
   )
 }
 
@@ -75,6 +78,7 @@ function SubMenuItem (props) {
 
 function SideBarItems () {
   return (
+
     <SideBarItemsWrapper>
       <Collapsible
       classParentString="MainMenuCollapsible"

@@ -6,6 +6,8 @@ import Collapsible from "react-collapsible";
 import {BiLogOut} from 'react-icons/bi';
 import {AiOutlineUserSwitch} from 'react-icons/ai'
 import { IconContext } from "react-icons";
+import {useApolloClient} from '@apollo/client';
+
 
 
 const VendorHeaderWrapper = styled.div`
@@ -80,9 +82,19 @@ const LogoutItem = styled.div`
   justify-content: center;
 `;
 function MakeLogoutPopup() {
+  const client = useApolloClient()
+    const handleLogout = () => {
+        window.localStorage.clear()
+        client
+          .clearStore()
+          .then(() =>
+              window.open('https://idp.rice.edu/idp/profile/cas/logout', '_self')
+          )
+   }
+
   return (
     <LogoutPopup>
-      <LogoutItem> <BiLogOut/>  Logout of Account</LogoutItem>
+      <LogoutItem onClick={handleLogout}> <BiLogOut/>  Logout of Account</LogoutItem>
       <LogoutItem> <AiOutlineUserSwitch/>Switch to Buyer</LogoutItem>
     </LogoutPopup>
   );

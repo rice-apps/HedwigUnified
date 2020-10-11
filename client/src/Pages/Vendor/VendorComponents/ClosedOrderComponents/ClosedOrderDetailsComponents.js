@@ -20,8 +20,8 @@ const ClosedOrderDetailsWrapper = styled.div`
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   padding-bottom: 7px;
   border-top: 1px darkgrey solid;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 `;
 
 const DetailsCustomerNameWrapper = styled.div`

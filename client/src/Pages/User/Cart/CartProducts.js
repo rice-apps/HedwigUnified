@@ -19,7 +19,7 @@ function QuantitySelector ({ quantity, decrease, increase }) {
   )
 }
 
-const CartProduct = ({ product, deleteItem }) => {
+const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   const [isMouseOver, setIsMouseOver] = useState(false)
   const [quantity, setQuantity] = useState(product.quantity)
   const handleMouseOver = () => {
@@ -28,12 +28,17 @@ const CartProduct = ({ product, deleteItem }) => {
   const handleMouseOut = () => {
     setIsMouseOver(false)
   }
+
   const increase = () => {
     setQuantity(quantity + 1)
+    updateQuantity(quantity + 1)
+    forceUpdate(date.getTime())
   }
 
   const decrease = () => {
     setQuantity(quantity - 1)
+    updateQuantity(quantity - 1)
+    forceUpdate(date.getTime())
   }
 
   function getVarMod () {
@@ -59,8 +64,19 @@ const CartProduct = ({ product, deleteItem }) => {
     })
   }
 
-  const date = new Date()
+  function updateQuantity (num) {
+    let newProd = Object.assign({}, product)
+    newProd.quantity = num
+    dispatch({
+      type: 'UPDATE_QUANTITY',
+      item: {
+        ...newProd
+      }
+    })
+    updateTotal()
+  }
 
+  const date = new Date()
   const options = ['ASAP', '30 Minutes', '1 Hour']
   const defaultOption = options[0]
 
@@ -95,8 +111,7 @@ const CartProduct = ({ product, deleteItem }) => {
         onMouseOut={() => handleMouseOut()}
         onClick={() => {
           deleteCartItem()
-          console.log(cartItems())
-          deleteItem(date.getTime())
+          forceUpdate(date.getTime())
         }}
       />
     </div>

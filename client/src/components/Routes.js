@@ -139,6 +139,7 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
+          // payment options
           {
             path: '/payment',
             element: <PrivateRoute element={<Payments />} />
@@ -147,17 +148,19 @@ const newRoutesArray = [
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
           },
-          {
-            path: '/cohen',
-            element: <PrivateRoute element={<CohenPayment />} />
-          }
         ]
       }
     ]
   },
+  // This is to credit card payment:
   {
     path: '/payment',
     element: <PaymentPage />
+  },
+  // Cohen house payment page:
+  {
+    path: '/cohen',
+    element: <PrivateRoute element={<CohenPayment />} />
   },
   {
     path: '/employee/*',

@@ -214,7 +214,6 @@ function Product() {
 
     console.log(modifierCost)
     console.log(modifierList)
-
     let itemQuantity = { quantity }.quantity
     console.log(itemQuantity)
     let totalPrice = (modifierCost + variantCost) * 0.01
@@ -235,6 +234,7 @@ function Product() {
     console.log(cartItems())
     return true;
   }
+
 
   return (
     <div className='container'>

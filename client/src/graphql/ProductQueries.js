@@ -23,6 +23,8 @@ const GET_CATALOG = gql`
 const GET_ITEM = gql`
   query GET_ITEM($dataSourceId: String!) {
     getItem(dataSource: SQUARE, dataSourceId: $dataSourceId) {
+      name
+      description
       variants {
         price {
           amount

@@ -1,6 +1,6 @@
 import React from 'react'
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
-import MenuCatalog from '../VendorComponents/MenuItemsComponents/MenuCatalog.js'
+import ItemCatalog from '../VendorComponents/ItemsComponents/ItemCatalog.js'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'
 import ItemCatalog from './../VendorComponents/ItemsComponents/ItemCatalog.js'
@@ -36,8 +36,9 @@ function ItemsMenuManagementPage () {
 
   // const categories = compileCategories(catalog);
 
-  // return <VendorsideTemplate page={<MenuCatalog catalog={catalog} categories = {categories} category={categories[0]}/>}></VendorsideTemplate>
-  return <VendorsideTemplate page={<ItemCatalog/>}></VendorsideTemplate>
+
+  return <VendorsideTemplate page={<ItemCatalog catalog={catalog} categories = {categories} category={categories[0]}/>}></VendorsideTemplate>
+
 }
 
 export default ItemsMenuManagementPage

@@ -121,7 +121,7 @@ function MakeLogoutPopup() {
   return (
     <IconContext.Provider value={{style: {marginRight: "7px"}}}>
     <VendorHeaderWrapper>
-      <StyledUserDisplayWrapper onClick={toggleLogoutScreen}>
+      <StyledUserDisplayWrapper>
         <UserText>Newton Huynh</UserText>
         <FaUserCircle style={{ fontSize: "30px", marginLeft: "1vw" }} />
       </StyledUserDisplayWrapper>
@@ -132,7 +132,6 @@ function MakeLogoutPopup() {
         <div hidden>{setInterval(UpdateTime, 1000)}</div>
 
       </DateTimeDisplayWrapper>
-      {showLogout ? <MakeLogoutPopup /> : null}
     </VendorHeaderWrapper>
     </IconContext.Provider>
   );

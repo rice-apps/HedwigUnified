@@ -51,6 +51,7 @@ const GET_COMPLETED_ORDERS = gql`
 function ClosedOrderDashboard() {
   const vendorId = ["FMXAFFWJR95WC"]
   const filter = {"fulfillment_filter": {"fulfillment_states": "COMPLETED"}}
+  
   const {data, loading, error} = useQuery(GET_COMPLETED_ORDERS, { variables: { location: vendorId, filter: filter } })
   if (error) return <p>Error!</p>
   if (loading) return <p>Waiting...</p>

@@ -82,12 +82,20 @@ const LogoutItem = styled.div`
 
 
 function VendorHeader () {
+  const [showLogout, setShowLogout] = useState(false);
+  function toggleLogoutScreen(){
+    var logoutOpen = showLogout;
+    setShowLogout(!logoutOpen);
+  }
+
+
   function UpdateTime () {
     const clock = document.getElementById('clockdisplay');
     const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A');
     if(clock){
         clock.textContent = CurrentTime;
-    }
+    }}
+
 function MakeLogoutPopup() {
   const client = useApolloClient()
     const handleLogout = () => {
@@ -106,7 +114,7 @@ function MakeLogoutPopup() {
     </LogoutPopup>
   );
 }
-}
+
 
   setInterval(UpdateTime, 1000);
 

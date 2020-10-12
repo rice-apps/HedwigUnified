@@ -123,6 +123,7 @@ function Menu () {
     return <p>Loading...</p>
   }
   if (catalog_error) {
+    console.log(catalog_error)
     return <p>ErrorC...</p>
   }
 

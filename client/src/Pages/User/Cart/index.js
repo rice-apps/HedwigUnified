@@ -117,25 +117,34 @@ function CartDetail () {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
-
+  console.log(moment('8:30 a.m.', 'H HH:mm a A'))
+  console.log(data)
   const businessHour = data.getVendors.filter(
-    e => e['name'] == 'Coffeehouse'
+    e => e['name'] == 'Cohen House'
   )[0].hours[0]
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
-  let startHour = parseInt(businessHour.start.split(':')[0])
-  let endHour = parseInt(businessHour.end.split(':')[0])
-  if (businessHour.start.includes('p.m.')) {
-    startHour += 12
+  let startHour1 = parseInt(businessHour.start[0].split(':')[0])
+  let endHour1 = parseInt(businessHour.end[0].split(':')[0])
+  let startHour2 = parseInt(businessHour.start[0].split(':')[1])
+  let endHour2 = parseInt(businessHour.end[0].split(':')[1])
+  if (businessHour.start[0].includes('p.m.')) {
+    startHour1 += 12
   }
-  if (businessHour.end.includes('p.m.')) {
-    endHour += 12
+  if (businessHour.end[0].includes('p.m.')) {
+    endHour1 += 12
   }
-  const startMinute = parseInt(businessHour.start.split(':')[1].substring(0, 2))
-  const endMinute = parseInt(businessHour.end.split(':')[1].substring(0, 2))
+  if (businessHour.start[1].includes('p.m.')) {
+    startHour2 += 12
+  }
+  if (businessHour.end[1].includes('p.m.')) {
+    endHour2 += 12
+  }
+  const startMinute1 = parseInt(businessHour.start[0].split(':')[1].substring(0, 2))
+  const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
 
   const disabled = () =>
-    moment().hour() > endHour ||
-    (moment().hour() == endHour && moment().minute() >= endMinute)
+    moment().hour() > endHour1 ||
+    (moment().hour() == endHour1 && moment().minute() >= endMinute1)
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -163,15 +172,15 @@ function CartDetail () {
             bordered={false}
             inputReadOnly={true}
             disabledHours={() => {
-              return computeAvailableHours(startHour, endHour)
+              return computeAvailableHours(startHour1, endHour1)
             }}
             disabledMinutes={hour => {
               return computeAvailableMinutes(
                 hour,
-                startHour,
-                startMinute,
-                endHour,
-                endMinute
+                startHour1,
+                startMinute1,
+                endHour1,
+                endMinute1
               )
             }}
           />

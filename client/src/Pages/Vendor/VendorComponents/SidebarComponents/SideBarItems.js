@@ -83,7 +83,7 @@ function SideBarItems () {
       <Collapsible
       classParentString="MainMenuCollapsible"
 
-        open='true'
+        open={true}
         trigger={<MainMenuItem name='Order Processing' IsClosed={true} />}
         triggerWhenOpen={
           <MainMenuItem name='Order Processing' isClosed={false} />
@@ -101,7 +101,7 @@ function SideBarItems () {
 
       <Collapsible
       classParentString="MainMenuCollapsible"
-        open='true'
+        open={true}
         trigger={<MainMenuItem name='Menu Management' IsClosed={true} />}
         triggerWhenOpen={
           <MainMenuItem name='Menu Management' isClosed={false} />
@@ -116,7 +116,7 @@ function SideBarItems () {
 
       <Collapsible
       classParentString="MainMenuCollapsible"
-        open='true'
+        open={true}
         trigger={<MainMenuItem name='Store Information' IsClosed={true} />}
         triggerWhenOpen={
           <MainMenuItem name='Store Information' isClosed={false} />

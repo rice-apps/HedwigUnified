@@ -134,6 +134,7 @@ function OrderDashboard () {
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               fulfillment={order.fulfillment.state}
               handleClick={() => (handleOrderClick(order, "RESERVED"))}
+              cancelClick={() => (handleOrderClick(order, "CANCELED"))}
               buttonStatus="NEW"
             />
             )

@@ -408,13 +408,13 @@ function MakePaymentSpace(props) {
         ) : buttonStatus === "ACCEPTED" ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <ReadyButton>Ready</ReadyButton>
+            <ReadyButton onClick={props.handleClick}>Ready</ReadyButton>
           </ButtonsSpaceWrapper>
         ) : (
           (buttonStatus = "READY" ? (
             <ButtonsSpaceWrapper>
               <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-              <PickedUpButton>Picked Up</PickedUpButton>
+              <PickedUpButton onClick={props.handleClick}>Picked Up</PickedUpButton>
             </ButtonsSpaceWrapper>
           ) : (
             "error"
@@ -437,7 +437,7 @@ function MakePaymentSpace(props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
 
-        <MakePaymentButtons buttonStatus={props.buttonStatus}/>
+        <MakePaymentButtons handleClick={props.handleClick} buttonStatus={props.buttonStatus}/>
 
       </ButtonsSpaceWrapper>
 
@@ -469,7 +469,7 @@ function MakePaymentSpace(props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            <AcceptButton onClick={closeAcceptModal}> Accept </AcceptButton>
+            <AcceptButton onClick={props.handleClick}> Accept </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>
@@ -565,7 +565,6 @@ function OrderCard(props) {
           fulfillment={fulfillment}
           paymentType={props.paymentType}
           handleClick={handleClick}
-
           customerName={customerName}
 
         />

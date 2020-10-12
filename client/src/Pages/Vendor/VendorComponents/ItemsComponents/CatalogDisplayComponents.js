@@ -70,7 +70,7 @@ function MakeCatalogItems(props) {
   if (availability_loading) {
     return (
       <ClipLoader
-          size={150}
+          size={100}
           color={"#0f0f0f"}
           loading={true}
         />

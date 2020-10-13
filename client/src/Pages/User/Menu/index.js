@@ -180,6 +180,7 @@ function Menu () {
 
   const startTimes = vendor_data.getVendor.hours[currentDay].start
   const endTimes = vendor_data.getVendor.hours[currentDay].end
+<<<<<<< HEAD
 
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
@@ -187,6 +188,8 @@ function Menu () {
   }
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
 
+=======
+>>>>>>> places order
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>

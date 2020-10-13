@@ -70,6 +70,7 @@ const computeAvailableMinutes = (
 }
 
 function CartDetail () {
+  console.log(moment().format())
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
   const { loading, error, data } = useQuery(GET_VENDOR)

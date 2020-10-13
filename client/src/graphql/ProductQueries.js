@@ -25,6 +25,7 @@ const GET_ITEM = gql`
     getItem(dataSource: SQUARE, dataSourceId: $dataSourceId) {
       name
       description
+      dataSourceId
       variants {
         price {
           amount

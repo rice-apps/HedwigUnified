@@ -117,8 +117,6 @@ function CartDetail () {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
-  console.log(moment('8:30 a.m.', 'H HH:mm a A'))
-  console.log(data)
   const businessHour = data.getVendors.filter(
     e => e['name'] == 'Cohen House'
   )[0].hours[0]

@@ -17,7 +17,7 @@ const CREATE_ORDER = gql`mutation {
   createOrder(
     locationId: "FMXAFFWJR95WC"
     record: {
-      studentId: "S01325598"
+      studentId: "S01278961"
       idempotencyKey: "ABCDe"
       lineItems: [
         {
@@ -30,9 +30,9 @@ const CREATE_ORDER = gql`mutation {
         }
       ]
       recipient: {
-        name: "Newton Test"
-        phone: "8324334741"
-        email: "nth8@rice.edu"
+        name: "Lorraine Lyu"
+        phone: "1111111111"
+        email: "111@rice.edu"
       }
       pickupTime: "2020-10-30T01:24:42.000Z"
     }
@@ -56,14 +56,14 @@ const CREATE_ORDER = gql`mutation {
     }
   }
 }`
-
+const sStorage = localStorage;
 const getRecipient = () => {
-  const sStorage = localStorage;
-  console.log( {
+  
+  return {
     name: sStorage.getItem('first name') + ' ' + sStorage.getItem('last name'),
     phone: sStorage.getItem('phone'),
     email: sStorage.getItem('email')
-  })
+  }
 }
 
 const getLineItems = (items) => {
@@ -71,32 +71,71 @@ const getLineItems = (items) => {
   let item = null;
   for (item of items) {
     let modifierList = []
-    let m = null;
-    for (m of item.modifiers) {
-      console.log({
+    for (const [k, m] of Object.entries(item.modifierLists)) {
+      modifierList.push({
         name: m.name,
-        id: m.dataSourceId
+        catalog_object_id: m.dataSourceId
       })
     }
-    console.log({
-      id: item.Id,
+    rtn = {
+      modifierLists: modifierList,
+      catalog_object_id: item.dataSourceId,
+      quantity: item.quantity,
       variation_name: item.variant.name,
-    })
+    }
   }
+  return rtn
+}
+
+const createRecord = (items) => {
+  return {
+    studentId: sStorage.getItem('id'),
+    idempotencyKey: "ABCDe",
+    lineItems: getLineItems(items),
+    recipient: getRecipient(),
+    pickupTime: orderSummary().time.format()
+  }
+}
+
+const createMutation = (items) => {
+  return gql`mutation {
+    createOrder(
+      locationId: "FMXAFFWJR95WC"
+      record: ${JSON.toString(createRecord(items))} ){
+      id
+      total{
+        amount
+      }
+      totalTax{
+        amount
+      }
+      customer {
+        name
+      }
+      items {
+        name
+        quantity
+        modifiers {
+          catalog_object_id
+        }
+      }
+    }
+  }`
 }
 
 function Submit () {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
   let cart_menu = cartItems()
-  console.log(cart_menu);
   const pickupTime = orderSummary().time;
+  const [createOrder, {loading, error, data},] = useMutation(cart_menu);
   // const user = userProfile();
 
   const handleSubmitClick = () => {
-    getRecipient()
-    getLineItems()
-    return navigate(`/eat/confirmation`)
+    const q = createMutation(cart_menu)
+    createOrder(q)
+    // The path is hard coded temporarily. 
+    return navigate(`/eat/cohen/confirmation`)
   }
 
   const calculateTotal = () => {
@@ -114,6 +153,11 @@ function Submit () {
     calculateTotal()
   }, [cart_menu])
 
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error.message}</p>;
+
+
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -125,7 +169,7 @@ function Submit () {
               <p css={{ margin: '0 0 0 10px', color: 'grey' }}>Houston, TX</p>
             </div>
           </div>
-          <p css={{ alignSelf: 'center' }}> Pickup Time: {}</p>
+          <p css={{ alignSelf: 'center' }}> Pickup Time: {orderSummary().time.format()}</p>
           {cartItems().map(item => {
             return (
               <CartItem

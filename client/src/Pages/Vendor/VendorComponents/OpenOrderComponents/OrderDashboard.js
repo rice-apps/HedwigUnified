@@ -105,6 +105,7 @@ function OrderDashboard () {
 
   const handleOrderClick = (order, orderState) => {
     updateOrder({ variables: { orderId: order.id, uid: order.fulfillment.uid, state: orderState } })
+    console.log("button was pressed")
   }
   // if (!loading && orders) {
   //     const { order } = orders.items
@@ -133,6 +134,7 @@ function OrderDashboard () {
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               fulfillment={order.fulfillment.state}
               handleClick={() => (handleOrderClick(order, "RESERVED"))}
+              cancelClick={() => (handleOrderClick(order, "CANCELED"))}
               buttonStatus="NEW"
             />
             )

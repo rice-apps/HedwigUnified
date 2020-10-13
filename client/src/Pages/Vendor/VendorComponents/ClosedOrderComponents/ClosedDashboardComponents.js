@@ -114,6 +114,8 @@ function ClosedOrderTrigger(props) {
 // function for each past order in the vendor's square account for the day 
 
 function MakeIndividualClosedOrder(props) {
+
+  
   return (
     <Collapsible
       classParentString="ClosedOrderCollapsible"
@@ -148,7 +150,7 @@ function MakeIndividualClosedOrder(props) {
         <ItemDetailsWrapper>
           <strong>Items</strong>
           {/* This is dummy data, the idea is to iterate over each item in an order and call the MakeOrderItem function with each item */}
-          {props.items.map((item) => <MakeOrderItem quanity={item.quantity} itemName={item.name} variant={item.variation_name} modifiers={item.modifiers} itemPrice={`$${item.total_money.amount / 100}`} />)}
+          {/* {props.items.map((item) => <MakeOrderItem quanity={item.quantity} itemName={item.name} variant={item.variation_name} modifiers={item.modifiers} itemPrice={`$${item.total_money.amount / 100}`} />)} */}
           
         </ItemDetailsWrapper>
       </ClosedOrderDetailsWrapper>

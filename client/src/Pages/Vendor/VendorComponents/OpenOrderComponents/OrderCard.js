@@ -379,6 +379,7 @@ const ModalButtonsWrapper = styled.div`
 
 
 function MakePaymentSpace(props) {
+  
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false);
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
   function openAcceptModal() {
@@ -393,6 +394,9 @@ function MakePaymentSpace(props) {
   function closeCancelModal() {
     setCancelModalIsOpen(false);
   }
+ 
+  const cancelOrder= props.cancelClick
+
   function MakePaymentButtons(props) {
 
     var buttonStatus = props.buttonStatus;
@@ -408,13 +412,13 @@ function MakePaymentSpace(props) {
         ) : buttonStatus === "ACCEPTED" ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <ReadyButton>Ready</ReadyButton>
+            <ReadyButton onClick={props.handleClick}>Ready</ReadyButton>
           </ButtonsSpaceWrapper>
         ) : (
           (buttonStatus = "READY" ? (
             <ButtonsSpaceWrapper>
               <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-              <PickedUpButton>Picked Up</PickedUpButton>
+              <PickedUpButton onClick={props.handleClick}>Picked Up</PickedUpButton>
             </ButtonsSpaceWrapper>
           ) : (
             "error"
@@ -437,7 +441,7 @@ function MakePaymentSpace(props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
 
-        <MakePaymentButtons buttonStatus={props.buttonStatus}/>
+        <MakePaymentButtons handleClick={props.handleClick} buttonStatus={props.buttonStatus}/>
 
       </ButtonsSpaceWrapper>
 
@@ -469,7 +473,7 @@ function MakePaymentSpace(props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            <AcceptButton onClick={closeAcceptModal}> Accept </AcceptButton>
+            <AcceptButton onClick={props.handleClick}> Accept </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>
@@ -502,7 +506,7 @@ function MakePaymentSpace(props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={closeCancelModal}>Cancel</AcceptButton>
+            <AcceptButton onClick={closeCancelModal, cancelOrder}>Cancel</AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>
@@ -519,7 +523,8 @@ function OrderCard(props) {
     orderTotal,
     fulfillment,
     handleClick,
-    buttonStatus
+    buttonStatus,
+    cancelClick
   } = props;
   //RFC3339
   const pickupAt = moment(pickupTime).format("h:mm A");
@@ -565,8 +570,8 @@ function OrderCard(props) {
           fulfillment={fulfillment}
           paymentType={props.paymentType}
           handleClick={handleClick}
-
           customerName={customerName}
+          cancelClick={cancelClick}
 
         />
       </OrderCardWrapper>

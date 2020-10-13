@@ -189,7 +189,7 @@ function Menu () {
         </p>
         {startTimes.length > 1 && (
           <p class='vendorinfo'>
-          {startTimes[1]} - {endTimes[1]}
+            {startTimes[1]} - {endTimes[1]}
           </p>
         )}
         <button class='readmore'> More Info </button>
@@ -225,7 +225,12 @@ function Menu () {
             {catalog_data
               .filter(item => item.category === category)
               .map(product => (
-                <div class='itemgrid' onClick={product.isAvailable ? () => handleClick(product): null}>
+                <div
+                  class='itemgrid'
+                  onClick={
+                    product.isAvailable ? () => handleClick(product) : null
+                  }
+                >
                   {/* Displaying the item: image, name, and price */}
                   <img
                     src={product.image}
@@ -234,7 +239,11 @@ function Menu () {
                   />
                   <h1 class='itemname'>{product.name}</h1>
                   <p class='itemprice'>
-                    {product.isAvailable ? (formatter.format(product.variants[0].price.amount / 100) +'+') : "Unavailable"}
+                    {product.isAvailable
+                      ? formatter.format(
+                          product.variants[0].price.amount / 100
+                        ) + '+'
+                      : 'Unavailable'}
                   </p>
                 </div>
               ))}

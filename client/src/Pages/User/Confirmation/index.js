@@ -100,7 +100,7 @@ const Confirmation = ({ classes }) => {
   console.log(cartItems())
   // how do we get the current item in cart?
   // right now we hard coded vendor id and item
-  function renderFailure() {
+  function renderFailure () {
     return (
       <div className='mainDiv'>
         <FailureSVG className='checkSvg' />
@@ -119,7 +119,7 @@ const Confirmation = ({ classes }) => {
       </div>
     )
   }
-  function renderConfirmation() {
+  function renderConfirmation () {
     return (
       <div className='mainDiv'>
         <ConfirmationSVG className='checkSvg' />

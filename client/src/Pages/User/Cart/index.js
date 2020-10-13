@@ -139,7 +139,9 @@ function CartDetail () {
   if (businessHour.end[1].includes('p.m.')) {
     endHour2 += 12
   }
-  const startMinute1 = parseInt(businessHour.start[0].split(':')[1].substring(0, 2))
+  const startMinute1 = parseInt(
+    businessHour.start[0].split(':')[1].substring(0, 2)
+  )
   const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
 
   const disabled = () =>

@@ -72,7 +72,6 @@ const GET_USER_INFO = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, ...rest }) => {
-
   let token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
@@ -148,7 +147,7 @@ const newRoutesArray = [
           {
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
-          },
+          }
         ]
       }
     ]
@@ -159,7 +158,7 @@ const newRoutesArray = [
     element: <PaymentPage />
   },
 
-  { 
+  {
     path: '/contact',
     element: <ContactForm />
   },
@@ -171,15 +170,32 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
-    { path: '/openorders', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
-      { path: '/closedorders', element: <PrivateRoute element={<ClosedOrdersPage /> }/>},
-      { path: '/items', element: <PrivateRoute element={<ItemsMenuManagementPage /> }/>},
-      { path: '/modifiers', element: <PrivateRoute element={<ModifiersMenuManagementPage /> }/>},
-      { path: '/set-basic-info', element: <PrivateRoute element={<SetBasicInfoPage /> }/>},
-      { path: '/set-store-hours', element: <PrivateRoute element={<SetStoreHoursPage /> }/>},
+      { path: '/', element: <PrivateRoute element={<OpenOrdersPage />} /> },
+      {
+        path: '/openorders',
+        element: <PrivateRoute element={<OpenOrdersPage />} />
+      },
+      {
+        path: '/closedorders',
+        element: <PrivateRoute element={<ClosedOrdersPage />} />
+      },
+      {
+        path: '/items',
+        element: <PrivateRoute element={<ItemsMenuManagementPage />} />
+      },
+      {
+        path: '/modifiers',
+        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />
+      },
+      {
+        path: '/set-basic-info',
+        element: <PrivateRoute element={<SetBasicInfoPage />} />
+      },
+      {
+        path: '/set-store-hours',
+        element: <PrivateRoute element={<SetStoreHoursPage />} />
+      }
     ]
-
   }
 ]
 
@@ -245,7 +261,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({ }) => {
+export const RoutesComponent = ({}) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend

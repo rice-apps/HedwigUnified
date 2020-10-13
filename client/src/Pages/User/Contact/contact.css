@@ -1,5 +1,4 @@
 #header-container {
-  
 }
 
 #greeting-container {
@@ -13,7 +12,7 @@
 
 .texts {
   text-align: center;
-  font-family: "Raleway";
+  font-family: 'Raleway';
   color: rgb(205, 104, 75);
 }
 
@@ -33,7 +32,7 @@
 }
 
 .confirm-btn {
-  font-family: "Raleway";
+  font-family: 'Raleway';
   color: rgb(205, 104, 75);
   border-color: rgb(205, 104, 75);
   border: solid;

@@ -16,6 +16,9 @@ steps:
     - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
     - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
   dir: 'api/'
+- name: 'gcr.io/cloud-builders/npm',
+  args: ['run', 'build']
+  dir: 'api/'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'api/api.yaml', '-v', '$_GAE_VERSION']
 - name: 'gcr.io/cloud-builders/npm'

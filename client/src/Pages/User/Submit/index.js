@@ -36,7 +36,6 @@ function Submit () {
   useEffect(() => {
     calculateTotal()
   }, [cart_menu])
-
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -61,7 +60,7 @@ function Submit () {
           <h1 className='header'>Bill Details</h1>
           {Object.keys(totals).map(type => {
             if (totals[type]) {
-              const formatted = currency(totals[type]).format()
+              let formatted = currency(totals[type]).format()
               return (
                 <div className='subtotal-container'>
                   <p className='subheader'>{type}</p>

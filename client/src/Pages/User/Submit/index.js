@@ -7,7 +7,7 @@ import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import currency from 'currency.js'
-import { cartItems, orderSummary} from '../../../apollo'
+import { cartItems, orderSummary, userProfile} from '../../../apollo'
 import dispatch from '../Products/FunctionalCart'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
@@ -58,11 +58,12 @@ const CREATE_ORDER = gql`mutation {
 }`
 
 const getRecipient = () => {
-  return {
-    name: 'Yun Lyu',
-    phone: '4137689449',
-    email: 'yl191@rice.edu'
-  }
+  const sStorage = localStorage;
+  console.log( {
+    name: sStorage.getItem('first name') + ' ' + sStorage.getItem('last name'),
+    phone: sStorage.getItem('phone'),
+    email: sStorage.getItem('email')
+  })
 }
 
 const getLineItems = (items) => {
@@ -72,7 +73,10 @@ const getLineItems = (items) => {
     let modifierList = []
     let m = null;
     for (m of item.modifiers) {
-
+      console.log({
+        name: m.name,
+        id: m.dataSourceId
+      })
     }
     console.log({
       id: item.Id,
@@ -90,6 +94,8 @@ function Submit () {
   // const user = userProfile();
 
   const handleSubmitClick = () => {
+    getRecipient()
+    getLineItems()
     return navigate(`/eat/confirmation`)
   }
 

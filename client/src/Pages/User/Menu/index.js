@@ -186,8 +186,7 @@ function Menu () {
         <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
         {/* Vendor Operating Hours */}
         <p class='vendorinfo'>
-          {vendor_data.getVendor.hours[currentDay].start}-  
-          {vendor_data.getVendor.hours[currentDay].end}
+          {startTimes[0]} - {endTimes[0]}
         </p>
         {startTimes.length > 1 && (
           <p class='vendorinfo'>

@@ -52,13 +52,20 @@ function VendorCard ({ vendor }) {
         <div className='vendorHeading'>
           <div className='vendorHeadingText'>
             <h3 className='vendorName'>{name}</h3>
-            {dayObj && (
+            {/* Case for two start/end times */}
+            {dayObj && dayObj.start.length > 1 && (
               <p>
-                Hours Open: {dayObj.start[0]}-{dayObj.end[0]}{' '} {dayObj.start.length > 1 && (
-                  ',' + dayObj.start[1]-dayObj.end[1]
-                )}
+                Hours Open: <br />
+                {dayObj.start[0]}{' - '}{dayObj.end[0]}{', '}{dayObj.start[1]}{' - '}{dayObj.end[1]}
               </p>
             )}
+            {/* Case for one start/end time */}
+            {dayObj && dayObj.start.length == 1 && (
+              <p>
+                Hours Open: {dayObj.start[0]}{' - '}{dayObj.end[0]}{' '}
+              </p>
+            )}
+            
           </div>
           <div className='vendorHoursIcon'>
             {closed ? (

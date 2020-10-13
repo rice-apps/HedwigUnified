@@ -20,6 +20,7 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from '../Pages/User/Cart'
+import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import Product from '../Pages/User/Products/Product'
@@ -158,6 +159,11 @@ const newRoutesArray = [
   {
     path: '/payment',
     element: <PaymentPage />
+  },
+
+  { 
+    path: '/contact',
+    element: <ContactForm />
   },
   // Cohen house payment page:
   {

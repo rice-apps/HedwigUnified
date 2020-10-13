@@ -36,6 +36,7 @@ function Submit () {
   useEffect(() => {
     calculateTotal()
   }, [cart_menu])
+
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>

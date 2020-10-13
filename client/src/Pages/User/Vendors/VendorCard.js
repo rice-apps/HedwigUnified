@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BottomAppBar from './BottomAppBar.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorOpen, faDoorClosed } from '@fortawesome/free-solid-svg-icons'
@@ -56,7 +57,7 @@ function VendorCard ({ vendor }) {
             {dayObj && dayObj.start.length > 1 && (
               <p>
                 Hours Open: <br />
-                {dayObj.start[0]}{' - '}{dayObj.end[0]}{', '}{dayObj.start[1]}{' - '}{dayObj.end[1]}
+                {dayObj.start[0]}{' - '}{dayObj.end[0]}{', '}<br/>{dayObj.start[1]}{' - '}{dayObj.end[1]}
               </p>
             )}
             {/* Case for one start/end time */}

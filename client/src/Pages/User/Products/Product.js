@@ -11,6 +11,8 @@ import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
 import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
+import BuyerHeader from './../Vendors/BuyerHeader.js'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
 
 function Product() {
   const navigate = useNavigate()
@@ -227,8 +229,9 @@ function Product() {
   }
 
 
-  return (
-    <div className='container'>
+  return (<div>
+    <BuyerHeader/>
+    <div className='container' >
       <img
         className='heroImage'
         src={product.image}
@@ -258,11 +261,14 @@ function Product() {
           className='submitButton'
           onClick={() => {
             makeCartItem();
+            navigate('/eat/cohen/cart' )
           }}
         >
           Add
         </button>
       </div>
+    </div>
+    <BottomAppBar/>
     </div>
   )
 }

@@ -59,9 +59,7 @@ function Product () {
   if (product_error) {
     return <p>ErrorP...</p>
   }
-
-  console.log(product_data)
-
+  
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
   const handleClick = () => {
@@ -183,12 +181,20 @@ function Product () {
   };
   */
 
+<<<<<<< HEAD
   function makeCartItem () {
     const itemName = product.name
     const itemID = product.squareID
     const itemDataSourceId = product.dataSourceId
     let variant
 
+=======
+  function makeCartItem() {
+    let itemName = product.name
+    let itemID = product.squareID
+    let itemDataSourceId = product.dataSourceId
+    let variant = undefined
+>>>>>>> feature/submit-2
     if (document.querySelector('.variantSelect:checked') == null) {
       return false
     }

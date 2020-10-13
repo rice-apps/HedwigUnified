@@ -130,6 +130,7 @@ function CartDetail () {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
+<<<<<<< HEAD
 
   if (order_loading) return <p>Loading...</p>
   if (order_error) {
@@ -144,6 +145,12 @@ function CartDetail () {
     .hours[0]
 
   const businessHour = {start: ['8:30 a.m.', '2:30 p.m.'], end:['11:00 a.m.', '5:00 p.m.']}
+=======
+  const businessHour = data.getVendors.filter(
+    e => e['name'] == 'Cohen House'
+  )[0].hours[0]
+  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+>>>>>>> feature/submit-2
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])

@@ -12,29 +12,24 @@ import dispatch from '../Products/FunctionalCart'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
+import { v4 as uuidv4 } from 'uuid';
 
-const CREATE_ORDER = gql`mutation {
+const CREATE_ORDER = gql`mutation ($studentId: String!, $name: String!,
+  $phone: String!, $email: String!, $time:String!, $key: String!,
+  $lineItems: [LineItemInput]!
+  ){
   createOrder(
     locationId: "FMXAFFWJR95WC"
     record: {
-      studentId: "S01278961"
-      idempotencyKey: "ABCDe"
-      lineItems: [
-        {
-          catalog_object_id: "MCYMC2QEPJG4D3U46TM4RIOS"
-          quantity: "2"
-          modifiers: [
-            { catalog_object_id: "5FV6ICILLCCVYZPCDG3FV6YJ" }
-            { catalog_object_id: "O64CT2AHAS7RSDFHO6CRFMXC" }
-          ]
-        }
-      ]
+      studentId: $studentId
+      idempotencyKey: $key
+      lineItems: $lineItems
       recipient: {
-        name: "Lorraine Lyu"
-        phone: "1111111111"
-        email: "111@rice.edu"
+        name: $name
+        phone: $phone
+        email: $email
       }
-      pickupTime: "2020-10-30T01:24:42.000Z"
+      pickupTime: $time
     }
   ) {
     id
@@ -69,70 +64,51 @@ const getRecipient = () => {
 const getLineItems = (items) => {
   let rtn = []
   let item = null;
-  for (item of items) {
+  for (const [v, item] of Object.entries(items)) {
     let modifierList = []
     for (const [k, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
-        name: m.name,
         catalog_object_id: m.dataSourceId
       })
     }
-    rtn = {
-      modifierLists: modifierList,
+    let i = {
+      modifiers: modifierList,
       catalog_object_id: item.dataSourceId,
       quantity: item.quantity,
       variation_name: item.variant.name,
     }
+    rtn.push(i);
   }
   return rtn
 }
 
 const createRecord = (items) => {
+  const recipient =  getRecipient()
   return {
     studentId: sStorage.getItem('id'),
-    idempotencyKey: "ABCDe",
+    key: uuidv4(),
     lineItems: getLineItems(items),
-    recipient: getRecipient(),
-    pickupTime: orderSummary().time.format()
+    name: recipient.name,
+    phone: recipient.phone,
+    email:recipient.email,
+    time: orderSummary().time.format()
   }
 }
 
-const createMutation = (items) => {
-  return gql`mutation {
-    createOrder(
-      locationId: "FMXAFFWJR95WC"
-      record: ${JSON.toString(createRecord(items))} ){
-      id
-      total{
-        amount
-      }
-      totalTax{
-        amount
-      }
-      customer {
-        name
-      }
-      items {
-        name
-        quantity
-        modifiers {
-          catalog_object_id
-        }
-      }
-    }
-  }`
-}
 
 function Submit () {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
   let cart_menu = cartItems()
   const pickupTime = orderSummary().time;
-  const [createOrder, {loading, error, data},] = useMutation(cart_menu);
+  const [createOrder, {loading, error, data},] = useMutation(CREATE_ORDER);
   // const user = userProfile();
 
   const handleSubmitClick = () => {
-    const q = createMutation(cart_menu)
+    const q = {
+      variables: createRecord(cart_menu)
+    }
+    console.log(q)
     createOrder(q)
     // The path is hard coded temporarily. 
     return navigate(`/eat/cohen/confirmation`)
@@ -155,7 +131,7 @@ function Submit () {
 
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error.message}</p>;
+if (error) {console.log(error); return <p>error</p>};
 
 
   return (

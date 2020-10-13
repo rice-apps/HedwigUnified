@@ -106,6 +106,8 @@ function CohenPayment(props) {
         border-bottom-width: 1px;
     `;
 
+    const navigate = useNavigate();
+
     return (
         < div >
             <Grid onClick={() => setActivePass(0)}>
@@ -122,7 +124,7 @@ function CohenPayment(props) {
             <Row>
                 < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} />
             </Row>
-            <Footer>Next</Footer>
+            <Footer onClick={() => {navigate(`eat/submit`)}}>Next</Footer>
         </div >
     )
 }

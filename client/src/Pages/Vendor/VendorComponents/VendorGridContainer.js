@@ -45,8 +45,10 @@ const Primary = css`
 const VendorGridContainer = styled.div`
   ${Primary}
   display: grid;
+  height:100vh;
+  width:100vw;
   grid-template-columns: 16vw 84vw;
-  grid-template-rows: 7% 93%;
+  grid-template-rows: 7vh 93vh;
   grid-template-areas:
     'sidebar vendor-header'
     'sidebar maindisplay';

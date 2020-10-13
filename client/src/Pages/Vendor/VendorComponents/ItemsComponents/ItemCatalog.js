@@ -113,15 +113,20 @@ function TabPanel(props) {
       role="tabpanel"
       hidden={value !== category}
       id={`vertical-tabpanel-${category}`}
-      {...other}
     >
       {value === category && <div>{children}</div>}
     </div>
   );
 }
 
-function ItemCatalog() {
-  const [value, setValue] = useState("soup");
+function ItemCatalog(props) {
+  const [value, setValue] = useState(props.category);
+
+  const items = props.catalog.filter((item)=>{
+    if (item.category === value){
+      return item;
+    }
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -140,80 +145,26 @@ function ItemCatalog() {
               value={value}
               indicatorColor="primary"
             >
-              <StyledTab label="Daily Soup" value="soup" />
-              <StyledTab label="Grill" value="grill" />
-              <StyledTab label="Salads" value="salads" />
-              <StyledTab label="Cold Sandwiches" value="cold-sandwiches" />
-              <StyledTab label="Taco" value="taco" />
-              <StyledTab label="Curbside Coffee" value="curbside-coffee" />
-              <StyledTab label="Beverages" value="beverages" />
-              <StyledTab label="Desserts" value="desserts" />
+              {props.categories.map((category)=>{
+                return <StyledTab label={category} value={category} />
+              })}
             </StyledTabs>
           </TabWrapper>
           <ItemDisplayWrapper>
-            <TabPanel value={value} category={"soup"}>
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Creamy Tomato Bisque"
-                itemPrice="3.50"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Chicken Noodle Soup"
-                itemPrice="4.50"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Black Bean Soup (with Pico, Crema and Cilantro)"
-                itemPrice="3.50"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Hearty Beef and Rice"
-                itemPrice="3.50"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="French Onion Soup"
-                itemPrice="4.00"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Egg Drop Soup"
-                itemPrice="3.25"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Seafood Gumbo"
-                itemPrice="3.50"
-              />
-              <MakeCatalogItems
-                itemImage={souppic}
-                itemName="Broccoli Cheddar Soup"
-                itemPrice="3.50"
-              />
-            </TabPanel>
-            <TabPanel value={value} category={"grill"}>
-              Grill
-            </TabPanel>
-            <TabPanel value={value} category={"salads"}>
-              Salads
-            </TabPanel>
-            <TabPanel value={value} category={"cold-sandwiches"}>
-              Cold Sandwiches
-            </TabPanel>
-            <TabPanel value={value} category={"taco"}>
-              Taco
-            </TabPanel>
-            <TabPanel value={value} category={"curbside-coffee"}>
-              Curbside Coffee
-            </TabPanel>
-            <TabPanel value={value} category={"beverages"}>
-              Beverages
-            </TabPanel>
-            <TabPanel value={value} category={"desserts"}>
-              Desserts
-            </TabPanel>
+            {props.categories.map((category)=>{
+              return (
+                <React.Fragment>
+                  <TabPanel value={value} category={category}>
+                    {items.map((item)=>{
+                      return (
+                        <MakeCatalogItems itemId={item.dataSourceId} itemImage={item.image} itemName={item.name} itemPrice={item.variants[0].price.amount}/>
+                      )
+                    })}
+                  </TabPanel>
+                </React.Fragment>
+              )
+              })
+            }
           </ItemDisplayWrapper>
         </CatalogWrapper>
       </PageWrapper>

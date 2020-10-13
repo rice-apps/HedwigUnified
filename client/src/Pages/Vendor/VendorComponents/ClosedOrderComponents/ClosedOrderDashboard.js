@@ -51,10 +51,12 @@ const GET_COMPLETED_ORDERS = gql`
 function ClosedOrderDashboard() {
   const vendorId = ["FMXAFFWJR95WC"]
   const filter = {"fulfillment_filter": {"fulfillment_states": "COMPLETED"}}
+  
   const {data, loading, error} = useQuery(GET_COMPLETED_ORDERS, { variables: { location: vendorId, filter: filter } })
   if (error) return <p>Error!</p>
   if (loading) return <p>Waiting...</p>
   if (!data) return <p> No closed orders </p>
+  console.log(data)
 
   return (
     <IconContext.Provider
@@ -76,7 +78,8 @@ function ClosedOrderDashboard() {
             pickupTime={order.fulfillment.pickupDetails.pickupAt}
             items={order.items}
           />)}
-          
+          <MakeIndividualClosedOrder customerName="Sally"/>
+        
         </ClosedOrdersSpaceWrapper>
       </DashboardWrapper>
     </IconContext.Provider>

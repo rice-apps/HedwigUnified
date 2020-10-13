@@ -45,17 +45,27 @@ function Auth () {
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 
-  let { token, employer, netid, _id, phone, isAdmin, vendor, recentUpdate, type} = authenticationData.authenticateUser
-  userProfile({netid, phone, _id, isAdmin, vendor, recentUpdate, type, token});
+  let {
+    token,
+    employer,
+    netid,
+    _id,
+    phone,
+    isAdmin,
+    vendor,
+    recentUpdate,
+    type
+  } = authenticationData.authenticateUser
+  userProfile({ netid, phone, _id, isAdmin, vendor, recentUpdate, type, token })
 
   // Set token in local storage
   localStorage.setItem('token', token)
 
   // Set recent update in client state
   if (!employer || employer === 0) {
-    return <Navigate to='/contact'/>
+    return <Navigate to='/contact' />
   }
-  return <Navigate to='/vendor'/>
+  return <Navigate to='/vendor' />
 }
 
 export default Auth

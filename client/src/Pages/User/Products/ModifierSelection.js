@@ -8,7 +8,7 @@ function ModifierSelection ({ modifierCategory }) {
     description,
     selectionType,
     name
-  } = modifierCategory; 
+  } = modifierCategory
   return (
     <div className='modifier'>
       <div className='heading'>
@@ -21,7 +21,7 @@ function ModifierSelection ({ modifierCategory }) {
         {options.map(option => (
           <div className='optionSet' key={option.name}>
             <label>
-              {selectionType==="MULTIPLE" ? (
+              {selectionType === 'MULTIPLE' ? (
                 <React.Fragment>
                   <input
                     type='checkbox'

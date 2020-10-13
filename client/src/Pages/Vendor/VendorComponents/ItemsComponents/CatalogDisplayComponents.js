@@ -1,13 +1,16 @@
-import React from "react";
-import styled from "styled-components";
-import Toggle from "react-toggle";
-import {GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY} from '../../../../graphql/ProductQueries.js'
-import { useQuery, useMutation } from '@apollo/client';
+import React from 'react'
+import styled from 'styled-components'
+import Toggle from 'react-toggle'
+import {
+  GET_ITEM_AVAILABILITY,
+  SET_ITEM_AVAILABILITY
+} from '../../../../graphql/ProductQueries.js'
+import { useQuery, useMutation } from '@apollo/client'
 import uuid from 'react-uuid'
-import ClipLoader from "react-spinners/ClipLoader"
+import ClipLoader from 'react-spinners/ClipLoader'
 
 const DisplayWrapper = styled.div`
-  font-size:25px;
+  font-size: 25px;
   color: #0f0f0f;
   height: 70px;
   width: 56vw;
@@ -17,11 +20,11 @@ const DisplayWrapper = styled.div`
   justify-content: center;
   grid-template-columns: 1.75fr 5.25fr 2.25fr 2.75fr;
   grid-template-rows: 1fr;
-  padding-bottom:5px;
+  padding-bottom: 5px;
   padding-top: 5px;
-  grid-template-areas: "ItemPictureSpace ItemNameSpace ItemAvailabilitySpace ItemPriceSpace";
-  border-bottom: 2px #D3D3D3 solid;
-`;
+  grid-template-areas: 'ItemPictureSpace ItemNameSpace ItemAvailabilitySpace ItemPriceSpace';
+  border-bottom: 2px #d3d3d3 solid;
+`
 
 const ItemPicture = styled.img`
   border-radius: 50%;
@@ -29,37 +32,37 @@ const ItemPicture = styled.img`
   width: 60px;
   grid-area: ItemPictureSpace;
   background-color: blue;
-`;
+`
 
 const ItemName = styled.div`
   grid-area: ItemNameSpace;
   line-height: 25px;
-  font-size:20px;
+  font-size: 20px;
   text-align: left;
   justify-self: left;
-`;
+`
 
 const ItemAvailability = styled.div`
-grid-area: ItemAvailabilitySpace;
-padding-top: 15px;
+  grid-area: ItemAvailabilitySpace;
+  padding-top: 15px;
 `
 const ItemPrice = styled.div`
-margin-left:2.5vw;
-grid-area: ItemPriceSpace;
-font-weight:100;
+  margin-left: 2.5vw;
+  grid-area: ItemPriceSpace;
+  font-weight: 100;
 `
 
-function MakeCatalogItems(props) {
+function MakeCatalogItems (props) {
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   })
 
-  const [setAvailability] = useMutation(SET_ITEM_AVAILABILITY);
+  const [setAvailability] = useMutation(SET_ITEM_AVAILABILITY)
   const {
     data: availability_info,
     error: availability_error,
-    loading: availability_loading,
+    loading: availability_loading
   } = useQuery(GET_ITEM_AVAILABILITY, {
     variables: {
       productId: props.itemId
@@ -68,32 +71,36 @@ function MakeCatalogItems(props) {
   })
 
   if (availability_loading) {
-    return (
-      <ClipLoader
-          size={100}
-          color={"#0f0f0f"}
-          loading={true}
-        />
-      )
+    return <ClipLoader size={100} color={'#0f0f0f'} loading={true} />
   }
   if (availability_error) {
     return <p>Error...</p>
   }
-  const {getAvailability: availability} = availability_info;
+  const { getAvailability: availability } = availability_info
 
   return (
     <DisplayWrapper>
       <ItemPicture src={props.itemImage} />
       <ItemName>{props.itemName}</ItemName>
-      <ItemAvailability><Toggle icons={false} defaultChecked={availability} onChange={
-        e => {
-          setAvailability({variables:{idempotencyKey:uuid(),productId:props.itemId,isItemAvailable:e.target.checked}});
-          setTimeout(500, window.location.reload());
-        }
-      }/></ItemAvailability>
-      <ItemPrice>{formatter.format(props.itemPrice/100)}</ItemPrice>
+      <ItemAvailability>
+        <Toggle
+          icons={false}
+          defaultChecked={availability}
+          onChange={e => {
+            setAvailability({
+              variables: {
+                idempotencyKey: uuid(),
+                productId: props.itemId,
+                isItemAvailable: e.target.checked
+              }
+            })
+            setTimeout(500, window.location.reload())
+          }}
+        />
+      </ItemAvailability>
+      <ItemPrice>{formatter.format(props.itemPrice / 100)}</ItemPrice>
     </DisplayWrapper>
-  );
+  )
 }
 
-export default MakeCatalogItems;
+export default MakeCatalogItems

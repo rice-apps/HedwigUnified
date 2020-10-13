@@ -14,7 +14,7 @@ import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 
-function Product() {
+function Product () {
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currProduct: productId, currVendor: vendorState } = state
@@ -181,16 +181,14 @@ function Product() {
   };
   */
 
-  function makeCartItem() {
+  function makeCartItem () {
     let itemName = product.name
     let itemID = product.squareID
     let variant = undefined
     if (document.querySelector('.variantSelect:checked') == null) {
-      return false;
+      return false
     }
-    variant = JSON.parse(
-      document.querySelector('.variantSelect:checked').value
-    )
+    variant = JSON.parse(document.querySelector('.variantSelect:checked').value)
     let variantObject = variant.option
     let variantCost = variant.option.price.amount
 
@@ -225,8 +223,9 @@ function Product() {
         modDisplay: modifierNames
       }
     })
-    return true;
+    return true
   }
+
 
 
   return (<div>
@@ -237,6 +236,7 @@ function Product() {
         src={product.image}
         alt={product.name}
       />
+
       <div className='itemHeading'>
         <h2>{product.name}</h2>
         <p>{product.description}</p>
@@ -246,7 +246,12 @@ function Product() {
       </div>
       <div className='modifiersContainer'>
         {product.modifierLists.map(modifier => {
-          return <ModifierSelection key={modifier.name} modifierCategory={modifier} />
+          return (
+            <ModifierSelection
+              key={modifier.name}
+              modifierCategory={modifier}
+            />
+          )
         })}
       </div>
       <div className='quantityContainer'>
@@ -262,6 +267,7 @@ function Product() {
           onClick={() => {
             makeCartItem();
             navigate('/eat/cohen/cart' )
+
           }}
         >
           Add

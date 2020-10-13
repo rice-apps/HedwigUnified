@@ -21,6 +21,7 @@ console.log(SERVICE_URL)
 
 export const cartItems = makeVar([])
 
+
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
 const authLink = setContext((_, { headers }) => {
@@ -34,6 +35,7 @@ const authLink = setContext((_, { headers }) => {
     }
   }
 })
+
 
 // HTTP Backend Link
 const httpLink = new HttpLink({

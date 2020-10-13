@@ -30,19 +30,26 @@ const getLinks = user => {
 
     { icon: 'phone', content: user.phone, path: '' },
 
+    /*
     { icon: 'receipt', content: 'Past Orders', path: 'user/orders' },
 
     { icon: 'star-and-crescent', content: 'Loyalty Programs', path: '' },
 
     { icon: 'hands-helping', content: 'Help', path: '' },
-
+    */
     {
       icon: 'question-circle',
-      content: 'About',
+      content: 'FAQ',
+      path: ''
+    },
+
+    {
+      icon: '',
+      content: 'About Us',
       path: 'https://riceapps.org/'
     },
 
-    { icon: 'paper-plane', content: 'Feedback', path: '' }
+    // { icon: 'paper-plane', content: 'Feedback', path: '' }
   ]
 
   return links
@@ -57,6 +64,8 @@ function Profile () {
 
   let { user } = data
   const links = getLinks(user)
+
+  console.log(user)
 
   return (
     <div class='background'>

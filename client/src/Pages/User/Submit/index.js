@@ -7,24 +7,93 @@ import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import currency from 'currency.js'
-import { cartItems } from '../../../apollo'
+import { cartItems, orderSummary} from '../../../apollo'
 import dispatch from '../Products/FunctionalCart'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
 
+const CREATE_ORDER = gql`mutation {
+  createOrder(
+    locationId: "FMXAFFWJR95WC"
+    record: {
+      studentId: "S01325598"
+      idempotencyKey: "ABCDe"
+      lineItems: [
+        {
+          catalog_object_id: "MCYMC2QEPJG4D3U46TM4RIOS"
+          quantity: "2"
+          modifiers: [
+            { catalog_object_id: "5FV6ICILLCCVYZPCDG3FV6YJ" }
+            { catalog_object_id: "O64CT2AHAS7RSDFHO6CRFMXC" }
+          ]
+        }
+      ]
+      recipient: {
+        name: "Newton Test"
+        phone: "8324334741"
+        email: "nth8@rice.edu"
+      }
+      pickupTime: "2020-10-30T01:24:42.000Z"
+    }
+  ) {
+    id
+    total{
+			amount
+    }
+    totalTax{
+      amount
+    }
+    customer {
+      name
+    }
+    items {
+      name
+      quantity
+      modifiers {
+        catalog_object_id
+      }
+    }
+  }
+}`
+
+const getRecipient = () => {
+  return {
+    name: 'Yun Lyu',
+    phone: '4137689449',
+    email: 'yl191@rice.edu'
+  }
+}
+
+const getLineItems = (items) => {
+  let rtn = []
+  let item = null;
+  for (item of items) {
+    let modifierList = []
+    let m = null;
+    for (m of item.modifiers) {
+
+    }
+    console.log({
+      id: item.Id,
+      variation_name: item.variant.name,
+    })
+  }
+}
 
 function Submit () {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
   let cart_menu = cartItems()
-  const pickupTime = null;
+  console.log(cart_menu);
+  const pickupTime = orderSummary().time;
+  // const user = userProfile();
 
   const handleSubmitClick = () => {
     return navigate(`/eat/confirmation`)
   }
 
-  const updateTotal = () => {
+  const calculateTotal = () => {
     let newSubtotal = cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
@@ -34,6 +103,10 @@ function Submit () {
       tax: newSubtotal * 0.0825
     })
   }
+
+  useEffect(() => {
+    calculateTotal()
+  }, [cart_menu])
 
   return (
     <div className='float-cart'>

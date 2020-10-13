@@ -124,7 +124,7 @@ function CohenPayment(props) {
             <Row>
                 < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} />
             </Row>
-            <Footer onClick={() => {navigate(`eat/submit`)}}>Next</Footer>
+            <Footer onClick={() => {navigate(`/eat/submit`)}}>Next</Footer>
         </div >
     )
 }

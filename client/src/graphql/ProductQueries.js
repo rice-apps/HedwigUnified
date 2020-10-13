@@ -33,15 +33,20 @@ const GET_ITEM = gql`
         name
         description
         image
+        dataSourceId
+        parentItemId
       }
       modifierLists {
         name
         selectionType
+        dataSourceId
         modifiers {
           price {
             amount
             currency
           }
+          dataSourceId
+          parentListId
           name
           description
           image

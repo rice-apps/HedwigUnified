@@ -10,7 +10,7 @@ import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import Payments from './Payments.js'
 import currency from 'currency.js'
-import { cartItems } from '../../../apollo'
+import { cartItems, orderSummary } from '../../../apollo'
 import dispatch from '../Products/FunctionalCart'
 import Select from 'react-select'
 import { TimePicker } from 'antd'
@@ -142,9 +142,9 @@ function CartDetail () {
   const startMinute1 = parseInt(businessHour.start[0].split(':')[1].substring(0, 2))
   const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
 
-  const disabled = () =>
-    moment().hour() > endHour1 ||
-    (moment().hour() == endHour1 && moment().minute() >= endMinute1)
+  const disabled = () => false
+    // moment().hour() > endHour1 ||
+    // (moment().hour() == endHour1 && moment().minute() >= endMinute1)
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>
@@ -166,6 +166,7 @@ function CartDetail () {
               if (e) {
                 document.getElementsByClassName('buy-btn')[0].disabled = false
                 setPickupTime({ hour: e.hour(), minute: e.minute() })
+                orderSummary({time: e})
               }
             }}
             showNow={false}

@@ -154,12 +154,13 @@ function OrderDashboard () {
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               handleClick={() => (handleOrderClick(order, "PREPARED"))}
+              cancelClick={() => (handleOrderClick(order, "CANCELED"))}
               buttonStatus="ACCEPTED"
             />
             )
           )
         }
-        <OrderCard  buttonStatus="ACCEPTED"/>
+       
 
       </AcceptedOrderSpaceWrapper>
 
@@ -175,12 +176,13 @@ function OrderDashboard () {
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               handleClick={() => (handleOrderClick(order, "COMPLETED"))}
+              cancelClick={() => (handleOrderClick(order, "CANCELED"))}
               buttonStatus = "READY"
             />
             )
           )
         }
-        <OrderCard buttonStatus ="READY"/>
+        
       </ReadyOrderSpaceWrapper>
     </OrderDashboardWrapper>
 

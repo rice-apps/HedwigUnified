@@ -107,6 +107,15 @@ function CartDetail () {
     })
   }
 
+  const getTotal = () => {
+    const total = cart_menu.reduce(
+      (total, current) => {
+        return total + current.quantity
+      }, 0
+    )
+    return parseInt(total)
+  }
+
   useEffect(() => {
     updateTotal()
   }, [cart_menu])
@@ -149,11 +158,11 @@ function CartDetail () {
     <div className='float-cart'>
       <div className='float-cart__content'>
         <div className='float-cart__shelf-container'>
+          <p className='cart-title'>My Cart {getTotal()>0 ? "("+getTotal().toString()+")":""}</p>
           <div css={[centerCenter, row]}>
             <img src={logo} className='logo' alt='Logo' />
             <div>
-              <p css={{ margin: '16px 0 0 10px' }}>East West Tea</p>
-              <p css={{ margin: '0 0 0 10px', color: 'grey' }}>Houston, TX</p>
+              <p className='vendor-title'>Cohen House</p>
             </div>
           </div>
           <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
@@ -190,19 +199,22 @@ function CartDetail () {
               No pickup time available today.{' '}
             </p>
           )}
+          <hr className='breakline'/>
           {cartItems().map(item => {
             return (
-              <CartProduct
-                product={item}
-                forceUpdate={setDummyDelete}
-                updateTotal={updateTotal}
-              />
+              <React.Fragment>
+                <CartProduct
+                  product={item}
+                  forceUpdate={setDummyDelete}
+                  updateTotal={updateTotal}
+                />
+                <hr className='breakline'/>
+              </React.Fragment>
             )
           })}
         </div>
 
         <div className='float-bill'>
-          <h1 className='header'>Bill Details</h1>
           {Object.keys(totals).map(type => {
             if (totals[type]) {
               let formatted = currency(totals[type]).format()
@@ -218,9 +230,8 @@ function CartDetail () {
             <hr className='breakline' />
             <div className='total'>
               <p className='total__header'>Total</p>
-              <p>{currency((totals.subtotal + totals.tax) * 0.01).format()}</p>
+              <p>{currency(totals.subtotal + totals.tax).format()}</p>
             </div>
-            <hr className='breakline' />
           </div>
         </div>
 
@@ -231,7 +242,9 @@ function CartDetail () {
             title={'Confirm'}
             onClick={handleConfirmClick}
           >
-            Make Payment
+            Next: Payment
+            <div>
+            </div>
           </button>
         </div>
       </div>

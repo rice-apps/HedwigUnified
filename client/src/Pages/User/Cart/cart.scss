@@ -9,21 +9,6 @@
   height: 80px;
 }
 
-.buy-btn {
-  color: #ececec;
-  text-transform: uppercase;
-  background-color: #00cb2c;
-  text-align: center;
-  padding: 15px 0;
-  margin-top: 40px;
-  cursor: pointer;
-  border-radius: 10px;
-  border-width: 0;
-  width: 40%;
-  left: 30%;
-  position: relative;
-}
-
 
 .buy-btn:disabled {
   background-color: #666666;
@@ -65,6 +50,19 @@
     flex-direction: column;
     min-height: 100px;
 
+    .cart-title {
+      font-family: 'Futura', sans-serif;
+      font-size: 14px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .vendor-title {
+      margin-left: 10px;
+      font-weight: bold;
+      font-family: 'Futura', sans-serif;
+    }
+
     .shelf-empty {
       color: #ececec;
       text-align: center;
@@ -73,27 +71,37 @@
 
     .shelf-item {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 25px;
+      grid-template-columns: 1fr 2fr 0.5fr 1fr;
       align-items: center;
       width: 100%;
       font-family: Poppins;
-
+      background-color: #F8F8F8;
       box-sizing: border-box;
       padding: 5%;
-
       transition: background-color 0.2s, opacity 0.2s;
 
+      #image {
+        width: 80px;
+        height: 80px;
+        word-break: break-all;
+      }
+
       &__title {
-        padding-left: 32px;
+        padding-right: 5px;
         #title {
-          font-size: 14px;
+          font-size: 16px;
           margin-bottom: 0px;
+          font-family: 'Futura', sans-serif;
+          font-weight: bold;
+          word-break: break-word;
+          text-align: left;
         }
 
         #options {
           font-size: 12px;
           margin-top: 4px;
           opacity: 0.5;
+          text-align: left;
         }
       }
 
@@ -107,30 +115,44 @@
         align-items: center;
         height: 28px;
         width: 5rem;
-        color: #00cb2c;
-
-        border: 1px solid #00cb2c;
-        border-radius: 6px;
         opacity: 1;
 
         p {
-          font-size: 14px;
+          font-family: 'Futura', sans-serif;
+          font-size: 16px;
+          font-weight: bold;
+          margin-left: 0px;
         }
 
         button {
-          font-size: 24px;
-          font-weight: 500;
-          color: inherit;
-          border: 0px;
-          background-color: inherit;
+          font-size: 10px;
+          font-weight: 800;
+          height: 15px;
+          width: 15px;
+          border: 2px solid #606060;
+          background-color: #606060;
+          border-radius: 100px;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0px;
+        }
+
+        button:disabled {
+          background-color: #D8D8D8;
+          border: 2px solid #D8D8D8;
         }
       }
 
       &__price {
-        justify-self: flex-end;
-        padding-right: 26px;
-
-        font-weight: 500;
+        justify-content: flex-end;
+        align-items: flex-end;
+        text-align: right;
+        p {
+          font-family: 'Futura', sans-serif;
+          font-weight: bold;
+        }
       }
 
       &--mouseover {
@@ -152,15 +174,13 @@
       }
 
       &__del {
-        align-self: flex-start;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background-size: auto 100%;
-        background-image: url('https://rawcdn.githack.com/jeffersonRibeiro/react-shopping-cart/ccf64841ddfdfedfce9821b2b7ff2c8075afb17c/src/static/sprite_delete-icon.png');
-        background-repeat: no-repeat;
+        font-size: 13px;
+        font-family: 'Avenir', sans-serif;
+        color: gray;
         z-index: 2;
         cursor: pointer;
+        text-align: right;
+        text-decoration: underline;
 
         &:hover {
           background-position-x: -17px;
@@ -186,39 +206,24 @@
   &__footer {
     justify-self: flex-end;
     box-sizing: border-box;
-    padding: 5%;
-    padding-top: 0;
     width: 100%;
     z-index: 2;
-    background-color: white;
-    border-radius: 10px 10px 0px 0px;
-    box-shadow: 0 0 15px;
-    margin-top: 15px;
-
-    &::before {
-      content: '';
-      width: 100%;
-      height: 20px;
-      display: block;
-      position: absolute;
-      top: -20px;
-      left: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
-    }
+    background-color: #D5573E;
+    text-align: center;
 
     .buy-btn {
       color: white;
-      text-transform: uppercase;
-      background-color: #00cb2c;
+      background-color: #D5573E;
       text-align: center;
-      // padding: 15px 0;
       cursor: pointer;
-
+      font-family: 'Futura', sans-serif;
+      font-weight: bold;
+      font-size: 20px;
       transition: background-color 0.2s;
-
-      &:hover {
-        background-color: #01831d;
-      }
+      height: 100px;
+      width: 100%; 
+      outline: none;
+      border: none;
     }
   }
 }
@@ -243,45 +248,44 @@
 }
 
 .float-bill {
-  padding-left: 16px;
-  padding-right: 16px;
   display: flex;
   flex-direction: column;
 
-  font-family: Poppins-Medium;
-  .header {
-    font-family: Poppins-SemiBold;
-    font-size: 20px;
+  padding: 5%;
+  background-color: #F8F8F8;
+
+  p {
+    font-family: 'Futura', sans-serif;
+    font-weight: bold;
   }
 
   .subtotal-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: inline-flex;
+    text-align: right;
+    justify-content: flex-end;
   }
 
   .subheader {
-    font-size: 14px;
+    display: inline;
+    font-family: 'Avenir', sans-serif;
+    font-weight: normal;
     opacity: 0.5;
     text-transform: capitalize;
   }
 
   .total-container {
     display: block;
-    .breakline {
-      border: 1px solid var(--unnamed-color-909090);
-      border: 1px solid #909090;
-      opacity: 0.2;
-    }
+    padding-left: 60%;
 
     .total {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-end;
 
       &__header {
         font-size: 16px;
-        font-family: Poppins-SemiBold;
+        font-family: 'Futura', sans-serif;
+        font-weight: bold;
       }
     }
   }
@@ -297,4 +301,13 @@
 
 .dd-wrapper {
   display: flex;
+}
+
+.breakline {
+  border-bottom: 2px solid #D8D8D8;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin: 0px;
+  width: 100%;
 }

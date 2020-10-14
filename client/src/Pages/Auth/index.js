@@ -11,12 +11,9 @@ const AUTHENTICATE_USER = gql`
       netid
       token
       recentUpdate
-<<<<<<< HEAD
       vendor
-=======
       phone
       name
->>>>>>> 852afc9d54a1295dea3161653535cd2cbb82be34
     }
   }
 `
@@ -30,7 +27,7 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
-const allowedUsers = ["by3z2"];
+const allowedUsers = ["byz2"];
 
 function Auth () {
   // First parse out ticket from URL href
@@ -68,7 +65,6 @@ function Auth () {
   // Set token in local storage
   localStorage.setItem('token', token)
 
-<<<<<<< HEAD
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {
   //   return <Navigate to='/vendor' />
@@ -87,15 +83,12 @@ function Auth () {
   // else, if employee is a buyer, then we redirect them automatically to /eat and restrict
   // their access to /employee  
 
-  const userNetID = authenticationData.authenticateUser.netid;
-  const vendor = authenticationData.authenticateUser.vendor;
-  if (allowedUsers.includes(userNetID) || vendor){
+  if (allowedUsers.includes(netid) || vendor){
     return <Navigate to='/vendor_choice' />
-=======
+  }
   // Set recent update in client state
   if (!employer || employer === 0) {
     return <Navigate to='/contact' />
->>>>>>> 852afc9d54a1295dea3161653535cd2cbb82be34
   }
   return <Navigate to='/vendor' />
 }

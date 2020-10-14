@@ -2,13 +2,10 @@ import React, { useState } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 import logo from './logo.svg'
-<<<<<<< HEAD
 import { SERVICE_URL } from '../../config'
 import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
 // import './Transitions.css';
-=======
 import { userProfile } from '../../apollo'
-import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
 
 // This import loads the firebase namespace along with all its type information.
@@ -18,7 +15,6 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 
 const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
->>>>>>> 852afc9d54a1295dea3161653535cd2cbb82be34
 
 const sStorage = window.sessionStorage
 
@@ -96,7 +92,7 @@ function Login () {
           'first name',
           result.additionalUserInfo.profile['urn:oid:2.5.4.42']
         )
-        handleClick()
+        login()
       }
     })
     .catch(error => {
@@ -108,11 +104,7 @@ function Login () {
       <Logo src={logo} />
       <Title>HEDWIG</Title>
       <SubTitle>brought to you by riceapps</SubTitle>
-<<<<<<< HEAD
-      <LoginButton onClick={login}>Login with NetID</LoginButton>
-=======
       <LoginButton onClick={signInSAML}>Login with NetID</LoginButton>
->>>>>>> 852afc9d54a1295dea3161653535cd2cbb82be34
     </MainDiv>
   )
 }

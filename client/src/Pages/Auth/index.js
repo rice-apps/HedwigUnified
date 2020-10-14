@@ -60,7 +60,7 @@ function Auth () {
     recentUpdate,
     type
   } = authenticationData.authenticateUser
-  userProfile({ netid, phone, _id, isAdmin, vendor, recentUpdate, type, token })
+  userProfile({ netid, name, phone, _id, isAdmin, vendor, recentUpdate, type, token })
 
   // Set token in local storage
   localStorage.setItem('token', token)

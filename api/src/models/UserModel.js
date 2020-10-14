@@ -16,8 +16,7 @@ const UserSchema = new Schema({
     default: 'Undergraduate'
   },
   isAdmin: { type: Boolean, default: false },
-  vendor: { type: String, required: false },
-  loginOrigin: { type: String, required: false}
+  vendor: { type: String, required: false }
 })
 
 const User = model('Users', UserSchema)

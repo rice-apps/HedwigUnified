@@ -53,6 +53,7 @@ function Auth () {
     token,
     netid,
     _id,
+    name,
     phone,
     isAdmin,
     vendor,

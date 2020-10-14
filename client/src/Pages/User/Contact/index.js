@@ -49,7 +49,7 @@ function ContactForm () {
 
   if (confirmed) {
     addPhone({ variables: { name: userName, phone, netid: user.netid } })
-    return <Navigate to='/' />
+    return <Navigate to='/eat' />
   }
 
   return (

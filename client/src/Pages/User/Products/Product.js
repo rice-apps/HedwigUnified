@@ -226,8 +226,6 @@ function Product () {
     return true
   }
 
-
-
   return (<div>
     <BuyerHeader/>
     <div className='container' >
@@ -244,6 +242,7 @@ function Product () {
       <div className='variantsContainer'>
         <VariantSelection variants={product.variants} />
       </div>
+      {product.modifierLists.length == 0 && <p>Sorry! no modifiers in the database</p>}
       <div className='modifiersContainer'>
         {product.modifierLists.map(modifier => {
           return (

@@ -44,52 +44,12 @@ const LoginButton = styled.button`
 `
 
 const BackgroundCover = styled.div`
-  //hopefully position this in the center
-  font-family: 'Raleway', sans-serif;
-  position: relative;
-  width: 30vw;
-  height: 40vh;
-  //have to make it responsive
-  transform: translate(0, -150%);
+  height: 100vh;
+  width: 100vw;
+  display: grid;
   background-color: #f49f86;
-  border: 1px solid #331a00;
-  border-radius: 25pt;
-
-  margin: 0 auto;
-  padding: 10px;
-  z-index: 40;
-
-  // transitions
-    animation: fadeIn ease 0.8s;
-  -webkit-animation: fadeIn ease 0.8s;
-  -moz-animation: fadeIn ease 0.8s;
-  -o-animation: fadeIn ease 0.8s;
-  -ms-animation: fadeIn ease 0.8s;
-
-@keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
-  }
-  
-  @-moz-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
-  }
-  
-  @-webkit-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
-  }
-  
-  @-o-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
-  }
-  
-  @-ms-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
-  }
+  max-width: 100%;
+  font-family: 'Raleway', sans-serif;
 
   // for the internal components of this div
   display: flex;
@@ -116,8 +76,8 @@ const BackgroundCover = styled.div`
   const VendorButton = styled.button`
     grid-row: 4/5;
     border-radius: 25pt;
-    height: 160pt;
-    width: 112pt;
+    height: 40vh;
+    width: 30vw;
     border: none;
     font-size: 17pt;
     font-weight: bold;
@@ -135,8 +95,8 @@ const BackgroundCover = styled.div`
 const ClientButton = styled.button`
 grid-row: 4/5;
 border-radius: 25pt;
-height: 160pt;
-width: 112pt;
+height: 40vh;
+width: 30vw;
 border: none;
 font-size: 17pt;
 font-weight: bold;
@@ -166,8 +126,17 @@ cursor: pointer;
 }
 `
 
+const LoginQuestion = styled.p`
+  position: relative;
+  font-weight: bold;
+  color: white;
+  font-size: 25pt;
+  text-align: center;
+  padding: 1em;
+`
+
 
 export { MainDiv, Logo, Title, SubTitle, LoginButton, 
   BackgroundCover, ButtonPane,
-  VendorButton, ClientButton, ExitButton
+  VendorButton, ClientButton, ExitButton, LoginQuestion
 }

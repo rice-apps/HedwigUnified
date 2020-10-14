@@ -32,6 +32,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import Payments from '../Pages/User/Cart/Payments'
+import VendorSelect from '../Pages/Login/VendorCheck';
 /**
  * Requests to verify the user's token on the backend
  */
@@ -124,6 +125,10 @@ const newRoutesArray = [
     element: <PrivateRoute element={<SignUp />} />
   },
   {
+    path: '/vendor_choice',
+    element: <PrivateRoute element={ <VendorSelect /> } /> 
+  },
+  {
     path: '/eat/*',
     children: [
       { path: '/', element: <PrivateRoute element={<VendorList />} /> },
@@ -157,7 +162,7 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <VendorsideTemplate /> },
+      { path: '/', element: <PrivateRoute element = {<VendorsideTemplate />}/> },
       { path: '/openorders', element: <OpenOrdersPage /> },
       { path: '/closedorders', element: <ClosedOrdersPage /> },
       { path: '/items', element: <ItemsMenuManagementPage /> },

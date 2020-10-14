@@ -1,6 +1,7 @@
 import React, { Component, useEffect } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { Redirect } from 'react-router'
+import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
@@ -10,7 +11,12 @@ const AUTHENTICATE_USER = gql`
       netid
       token
       recentUpdate
+<<<<<<< HEAD
       vendor
+=======
+      phone
+      name
+>>>>>>> 852afc9d54a1295dea3161653535cd2cbb82be34
     }
   }
 `
@@ -29,7 +35,6 @@ const allowedUsers = ["by3z2"];
 function Auth () {
   // First parse out ticket from URL href
   let ticket = parseTicket(window.location.href)
-
   // Run query against backend to authenticate user
   const [
     authenticateUser,
@@ -39,18 +44,31 @@ function Auth () {
   console.log(authenticationData);
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
-    authenticateUser().catch(err => <Navigate to='/login' />)
+    authenticateUser().catch(err => <p>{err.message}</p>)
   }, [authenticateUser])
 
-  if (error) return <Navigate to='/login' />
+  // if (error) return <Navigate to='/login' />
+  if (error) return <p>{error.message}</p>
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 
-  let { token, employer } = authenticationData.authenticateUser
+  let {
+    token,
+    employer,
+    netid,
+    _id,
+    phone,
+    isAdmin,
+    vendor,
+    recentUpdate,
+    type
+  } = authenticationData.authenticateUser
+  userProfile({ netid, phone, _id, isAdmin, vendor, recentUpdate, type, token })
 
   // Set token in local storage
   localStorage.setItem('token', token)
 
+<<<<<<< HEAD
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {
   //   return <Navigate to='/vendor' />
@@ -73,8 +91,13 @@ function Auth () {
   const vendor = authenticationData.authenticateUser.vendor;
   if (allowedUsers.includes(userNetID) || vendor){
     return <Navigate to='/vendor_choice' />
+=======
+  // Set recent update in client state
+  if (!employer || employer === 0) {
+    return <Navigate to='/contact' />
+>>>>>>> 852afc9d54a1295dea3161653535cd2cbb82be34
   }
-  return <Navigate to='/eat' />
+  return <Navigate to='/vendor' />
 }
 
 export default Auth

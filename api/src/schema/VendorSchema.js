@@ -7,7 +7,8 @@ const VendorQueries = {
 
 const VendorMutations = {
   createVendor: VendorTC.getResolver('createOne'),
-  updateVendor: VendorTC.getResolver('updateOne')
+  updateVendor: VendorTC.getResolver('updateOne'),
+  removeVendor: VendorTC.getResolver('removeOne')
 }
 
 export { VendorQueries, VendorMutations }

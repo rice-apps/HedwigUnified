@@ -11,6 +11,8 @@ import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
 import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
+import BuyerHeader from './../Vendors/BuyerHeader.js'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
 
 function Product () {
   const navigate = useNavigate()
@@ -60,7 +62,6 @@ function Product () {
 
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
-
   const handleClick = () => {
     return navigate(`/eat/${vendor.slug}/cart`)
   }
@@ -185,15 +186,11 @@ function Product () {
     let itemID = product.squareID
     let variant = undefined
     if (document.querySelector('.variantSelect:checked') == null) {
-      return false;
+      return false
     }
-    variant = JSON.parse(
-      document.querySelector('.variantSelect:checked').value
-    )
+    variant = JSON.parse(document.querySelector('.variantSelect:checked').value)
     let variantObject = variant.option
     let variantCost = variant.option.price.amount
-
-    console.log(variantCost)
 
     let modifierNames = []
     var modifierCost = 0
@@ -211,12 +208,7 @@ function Product () {
       }
       modifierNames.push(currentModifierName)
     }
-
-    console.log(modifierCost)
-    console.log(modifierList)
-
     let itemQuantity = { quantity }.quantity
-    console.log(itemQuantity)
     let totalPrice = (modifierCost + variantCost) * 0.01
 
     dispatch({
@@ -231,17 +223,20 @@ function Product () {
         modDisplay: modifierNames
       }
     })
-
-    console.log(cartItems())
-    return true;
+    return true
   }
 
-  return (
-    <div className='container'>
+
+
+  return (<div>
+    <BuyerHeader/>
+    <div className='container' >
       <img
         className='heroImage'
-        src='https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
+        src={product.image}
+        alt={product.name}
       />
+
       <div className='itemHeading'>
         <h2>{product.name}</h2>
         <p>{product.description}</p>
@@ -251,7 +246,12 @@ function Product () {
       </div>
       <div className='modifiersContainer'>
         {product.modifierLists.map(modifier => {
-          return <ModifierSelection key={modifier.name} modifierCategory={modifier} />
+          return (
+            <ModifierSelection
+              key={modifier.name}
+              modifierCategory={modifier}
+            />
+          )
         })}
       </div>
       <div className='quantityContainer'>
@@ -266,11 +266,15 @@ function Product () {
           className='submitButton'
           onClick={() => {
             makeCartItem();
+            navigate('/eat/cohen/cart' )
+
           }}
         >
           Add
         </button>
       </div>
+    </div>
+    <BottomAppBar/>
     </div>
   )
 }

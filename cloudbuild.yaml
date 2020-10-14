@@ -10,18 +10,23 @@ steps:
     - 'SECRET=${_SECRET}'
     - 'DEV_PORT=${_DEV_PORT}'
     - 'SQUARE_ACCESS_TOKEN=${_SQUARE_ACCESS_TOKEN}'
+    - 'SHOPIFY_DOMAIN=${_SHOPIFY_DOMAIN}'
+    - 'SHOPIFY_API_KEY=${_SHOPIFY_API_KEY}'
+    - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
+    - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
+    - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
   dir: 'api/'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   dir: 'api/'
-- name: "gcr.io/cloud-builders/gcloud"
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'api.yaml', '-v', '$_GAE_VERSION']
   dir: 'api/'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
   dir: 'client'
 - name: 'gcr.io/cloud-builders/npm'
-  args: ["run", "create-env"]
+  args: ['run', 'create-env']
   env:
     - 'REACT_APP_SERVICE_URL=${_REACT_APP_SERVICE_URL}'
     - 'REACT_APP_BACKEND_URL=${_REACT_APP_BACKEND_URL}'
@@ -31,12 +36,12 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   dir: 'client'
-- name: "gcr.io/cloud-builders/gcloud"
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'client.yaml', '-v', '$_GAE_VERSION']
   dir: 'client'
-- name: "gcr.io/cloud-builders/gcloud"
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'dispatch.yaml', '-v', '$_GAE_VERSION']
-  dir: 'client/'
-- name: "gcr.io/cloud-builders/gcloud"
-  args: ['app', 'services', '--project', $PROJECT_ID', 'set-traffic', '--splits', '$_GAE_TRAFFIC']
-timeout: "1600s"
+  dir: 'client'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'services', '--project', '$PROJECT_ID', 'set-traffic', '--splits', '$_GAE_TRAFFIC']
+timeout: '1600s'

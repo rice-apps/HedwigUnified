@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import currency from 'currency.js'
 
 const VariantSelection = ({ variants }) => {
+  console.log('VARIANT', variants)
+
   return (
     <div className='variant'>
       <div className='heading'>
-        <h1>{variants[0].description}</h1>
+        {/* <h1>{variants[0].description}</h1> */}
+        <h1> Select your variant: </h1>
         {variants[0].description ? <p>{variants[0].description}</p> : null}
       </div>
       <div className='options'>
@@ -14,7 +17,7 @@ const VariantSelection = ({ variants }) => {
             <label>
               <input
                 type='radio'
-                name={'variant type place holder'} //change this to the type of variant use is choosing
+                name={'place holder'} //change this to the type of variant user is choosing
                 className='variantSelect'
                 value={JSON.stringify({ option })}
               />

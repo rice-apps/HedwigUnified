@@ -1,9 +1,10 @@
 import React from 'react'
 import Collapsible from 'react-collapsible'
 import styled, { css } from 'styled-components'
-import './Collapsible.css'
+import './SidebarCollapsible.css'
 import { FcCollapse, FcExpand } from 'react-icons/fc'
 import { NavLink } from 'react-router-dom'
+import { IconContext } from 'react-icons'
 
 const SideBarItemsWrapper = styled.div`
   display: flex;
@@ -25,7 +26,6 @@ const MainMenuItemWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   margin: 6px 0px;
-
 `
 
 function MainMenuItem (props) {
@@ -77,7 +77,8 @@ function SideBarItems () {
   return (
     <SideBarItemsWrapper>
       <Collapsible
-        open='true'
+        classParentString='MainMenuCollapsible'
+        open={true}
         trigger={<MainMenuItem name='Order Processing' IsClosed={true} />}
         triggerWhenOpen={
           <MainMenuItem name='Order Processing' isClosed={false} />
@@ -94,7 +95,8 @@ function SideBarItems () {
       </Collapsible>
 
       <Collapsible
-        open='true'
+        classParentString='MainMenuCollapsible'
+        open={true}
         trigger={<MainMenuItem name='Menu Management' IsClosed={true} />}
         triggerWhenOpen={
           <MainMenuItem name='Menu Management' isClosed={false} />
@@ -108,7 +110,8 @@ function SideBarItems () {
       </Collapsible>
 
       <Collapsible
-        open='true'
+        classParentString='MainMenuCollapsible'
+        open={true}
         trigger={<MainMenuItem name='Store Information' IsClosed={true} />}
         triggerWhenOpen={
           <MainMenuItem name='Store Information' isClosed={false} />

@@ -11,8 +11,8 @@ const SquareInfo = new Schema({
 })
 
 const BusinessHours = new Schema({
-  start: { type: String, required: true },
-  end: { type: String, required: true },
+  start: { type: [String], required: true },
+  end: { type: [String], required: true },
   day: {
     type: String,
     enum: [

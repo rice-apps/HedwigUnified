@@ -45,9 +45,8 @@ const Primary = css`
 const VendorGridContainer = styled.div`
   ${Primary}
   display: grid;
-  width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  width: 100vw;
   grid-template-columns: 16vw 84vw;
   grid-template-rows: 7vh 93vh;
   grid-template-areas:
@@ -67,7 +66,10 @@ const VendorHeaderSpace = styled.div`
 
 const MainDisplaySpace = styled.div`
   grid-area: maindisplay;
-  background-color: #dfdfdf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e7e7e7;
   font-size: 150px;
   text-align: center;
 `

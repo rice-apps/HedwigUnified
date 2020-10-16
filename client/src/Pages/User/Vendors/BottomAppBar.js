@@ -24,6 +24,7 @@ const BottomNavigationWrapper = styled.div`
 const BottomNavigationItem = styled.div`
   height: 100%;
   width: 100%;
+  color: #3d3d3d;
   background-color: white;
   display: flex;
   flex-direction: column;

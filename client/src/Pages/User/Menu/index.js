@@ -172,8 +172,12 @@ function Menu () {
   }
 
   const current_date = new Date()
-  const currentDay = current_date.getDay()
+  console.log(current_date)
+  const currentDay = current_date.getDay() - 1
+  console.log(currentDay)
+  console.log(vendor_data.getVendor.hours)
   const startTimes = vendor_data.getVendor.hours[currentDay].start
+  console.log(startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
   console.log(vendor_data)
   // we have to change these returns because vendor.name is outdated - brandon

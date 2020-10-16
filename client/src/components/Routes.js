@@ -33,6 +33,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import Payments from '../Pages/User/Cart/Payments'
+import VendorSelect from '../Pages/Login/VendorCheck';
 import CohenPayment from '../Pages/User/Payment/CohenPayment'
 /**
  * Requests to verify the user's token on the backend
@@ -123,6 +124,10 @@ const newRoutesArray = [
   {
     path: '/signup',
     element: <PrivateRoute element={<SignUp />} />
+  },
+  {
+    path: '/vendor_choice',
+    element: <PrivateRoute element={ <VendorSelect /> } /> 
   },
   {
     path: '/eat/*',

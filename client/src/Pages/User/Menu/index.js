@@ -7,6 +7,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery, gql } from '@apollo/client'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
+import { Hidden } from '@material-ui/core'
+import BuyerHeader from'./../Vendors/BuyerHeader.js'
 
 /*
 const vendor = {
@@ -169,15 +172,21 @@ function Menu () {
   }
 
   const current_date = new Date()
-  const currentDay = current_date.getDay()
+  console.log(current_date)
+  const currentDay = current_date.getDay() - 1
+  console.log(currentDay)
+  console.log(vendor_data.getVendor.hours)
   const startTimes = vendor_data.getVendor.hours[currentDay].start
+  console.log(startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
   console.log(vendor_data)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
+      <BuyerHeader/>
+    <div style={{paddingBottom:"10vh"}}>
       {/* Hero Image */}
-      <img src={hero} class='hero' alt='hero' />
+      <img  style={{filter: "blur(2.5px)" }}src={hero} class='hero' alt='hero' />
 
       {/* Vendor Info */}
       <div class='vendorinfocontainer'>
@@ -250,6 +259,9 @@ function Menu () {
           </div>
         ))}
       </div>
+      
+    </div>
+    <BottomAppBar/>
     </div>
   )
 }

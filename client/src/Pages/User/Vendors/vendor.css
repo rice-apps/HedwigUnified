@@ -128,10 +128,10 @@ li {
 } */
 
 .vendorName {
-  font-size: 20px;
+  font-size: 25px;
   font-family: 'Santana-Bold';
   color: #5a5953;
-  margin-top: 10px;
+  margin-top: 12px;
   margin-bottom: 0px;
   margin-right: 3.5px;
   padding-left: 1rem;
@@ -140,7 +140,7 @@ li {
 .vendorHours {
   font-size: 13px;
   color: #5a5953;
-  margin-top: 5px;
+  margin-top: 0px;
   margin-bottom: 5px;
   padding-left: 1rem;
 }

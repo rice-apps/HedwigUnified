@@ -34,7 +34,8 @@ const VendorSchema = new Schema({
   phone: String,
   logoUrl: String,
   squareInfo: SquareInfo,
-  hours: { type: [BusinessHours], required: true }
+  hours: { type: [BusinessHours], required: true },
+  isOpen: { type: Boolean, required: false }
 })
 
 const Vendor = model('Vendors', VendorSchema)

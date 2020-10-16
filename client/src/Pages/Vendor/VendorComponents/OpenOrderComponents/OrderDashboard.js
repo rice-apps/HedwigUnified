@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import ReactDOM from 'react-dom'
 import {
@@ -91,12 +91,74 @@ const UPDATE_ORDER = gql`
   }
 `
 
+const ORDER_CREATED = gql`
+  subscription {
+    orderCreated {
+      id
+      customer {
+        name
+        email
+        phone
+      }
+      items {
+        name
+        quantity
+        variation_name
+        modifiers {
+          name
+          base_price_money {
+            amount
+          }
+          total_price_money {
+            amount
+          }
+        }
+        total_money {
+          amount
+        }
+        total_tax {
+          amount
+        }
+      }
+      total {
+        amount
+      }
+      totalTax {
+        amount
+      }
+      totalDiscount {
+        amount
+      }
+      fulfillment {
+        uid
+        state
+        pickupDetails {
+          pickupAt
+        }
+      }
+    }
+  }
+`
+
 function OrderDashboard () {
   const vendorId = ['FMXAFFWJR95WC']
-  const { data: allOrders, loading, error } = useQuery(FIND_ORDERS, {
-    variables: { location: vendorId }
-  })
+  const { data: allOrders, loading, error, subscribeToMore } = useQuery(
+    FIND_ORDERS,
+    {
+      variables: { location: vendorId }
+    }
+  )
   const [updateOrder] = useMutation(UPDATE_ORDER)
+
+  useEffect(() => {
+    const unsubscribeToNewOrders = subscribeToMore({
+      document: ORDER_CREATED
+    })
+
+    return () => {
+      unsubscribeToNewOrders()
+    }
+  })
 
   if (loading) {
     return <p>Loading...</p>

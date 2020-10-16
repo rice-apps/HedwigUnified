@@ -71,16 +71,33 @@ OrderTC.addResolver({
         email: order.fulfillments[0].pickup_details.recipient.email_address,
         phone: order.fulfillments[0].pickup_details.recipient.phone_number
       },
-      items: order.line_items,
+      items: order.line_items.map(lineItem => ({
+        name: lineItem.name,
+        quantity: lineItem.quantity,
+        catalog_object_id: lineItem.catalog_object_id,
+        variation_name: lineItem.variation_name,
+        total_money: lineItem.total_money,
+        total_tax: lineItem.total_tax,
+        modifiers: lineItem.modifiers?.map(modifier => ({
+          uid: modifier.uid,
+          catalog_object_id: modifier.catalog_object_id,
+          name: modifier.name,
+          base_price_money: modifier.base_price_money,
+          total_price_money: modifier.total_price_money
+        }))
+      })),
       totalTax: order.total_tax_money,
       totalDiscount: order.total_discount_money,
       total: order.total_money,
       orderStatus: order.state,
+      cohenId: order.metadata?.cohenId,
+      studentId: order.metadata?.studentId,
       fulfillment: {
         uid: order.fulfillments[0].uid,
         state: order.fulfillments[0].state,
         pickupDetails: {
           pickupAt: order.fulfillments[0].pickup_details.pickup_at,
+          placedAt: order.fulfillments[0].pickup_details.placed_at,
           recipient: {
             name: order.fulfillments[0].pickup_details.recipient.display_name,
             email: order.fulfillments[0].pickup_details.recipient.email_address,
@@ -106,7 +123,14 @@ OrderTC.addResolver({
     resolve: async ({ args }) => {
       const {
         locationId,
-        record: { idempotencyKey, lineItems, recipient, pickupTime }
+        record: {
+          idempotencyKey,
+          lineItems,
+          recipient,
+          pickupTime,
+          cohenId,
+          studentId
+        }
       } = args
 
       const api = new OrdersApi()
@@ -117,6 +141,10 @@ OrderTC.addResolver({
         order: {
           location_id: locationId,
           line_items: lineItems,
+          metadata: {
+            cohenId: cohenId ? cohenId : null,
+            studentId: studentId ? studentId : null
+          },
           fulfillments: [
             {
               type: 'PICKUP',
@@ -154,6 +182,8 @@ OrderTC.addResolver({
         }
       } = orderResponse
 
+      console.log(line_items[0].modifiers)
+
       const CDMOrder = {
         id: id,
         merchant: location_id,
@@ -162,16 +192,33 @@ OrderTC.addResolver({
           email: first.pickup_details.recipient.email_address,
           phone: first.pickup_details.recipient.phone_number
         },
-        items: line_items,
+        items: line_items.map(lineItem => ({
+          name: lineItem.name,
+          quantity: lineItem.quantity,
+          catalog_object_id: lineItem.catalog_object_id,
+          variation_name: lineItem.variation_name,
+          total_money: lineItem.total_money,
+          total_tax: lineItem.total_tax,
+          modifiers: lineItem.modifiers?.map(modifier => ({
+            uid: modifier.uid,
+            catalog_object_id: modifier.catalog_object_id,
+            name: modifier.name,
+            base_price_money: modifier.base_price_money,
+            total_price_money: modifier.total_price_money
+          }))
+        })),
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
+        cohenId: orderResponse.order.metadata?.cohenId,
+        studentId: orderResponse.order.metadata?.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,
           pickupDetails: {
             pickupAt: first.pickup_details.pickup_at,
+            placedAt: first.pickup_details.placed_at,
             recipient: {
               name: first.pickup_details.recipient.display_name,
               email: first.pickup_details.recipient.email_address,
@@ -188,7 +235,7 @@ OrderTC.addResolver({
       TwilioClient.messages.create({
         body: 'Your order has been placed.',
         from: '+13466667153',
-        to: '+14692475650'
+        to: first.pickup_details.recipient.phone_number
       })
 
       return CDMOrder
@@ -253,16 +300,33 @@ OrderTC.addResolver({
           email: first.pickup_details.recipient.email_address,
           phone: first.pickup_details.recipient.phone_number
         },
-        items: line_items,
+        items: line_items.map(lineItem => ({
+          name: lineItem.name,
+          quantity: lineItem.quantity,
+          catalog_object_id: lineItem.catalog_object_id,
+          variation_name: lineItem.variation_name,
+          total_money: lineItem.total_money,
+          total_tax: lineItem.total_tax,
+          modifiers: lineItem.modifiers?.map(modifier => ({
+            uid: modifier.uid,
+            catalog_object_id: modifier.catalog_object_id,
+            name: modifier.name,
+            base_price_money: modifier.base_price_money,
+            total_price_money: modifier.total_price_money
+          }))
+        })),
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
+        cohenId: updateOrderResponse.order.metadata?.cohenId,
+        studentId: updateOrderResponse.order.metadata?.studentId,
         fulfillment: {
           uid: first.uid,
           state: first.state,
           pickupDetails: {
             pickupAt: first.pickup_details.pickup_at,
+            placedAt: first.pickup_details.placed_at,
             recipient: {
               name: first.pickup_details.recipient.display_name,
               email: first.pickup_details.recipient.email_address,
@@ -275,6 +339,8 @@ OrderTC.addResolver({
       pubsub.publish('orderUpdated', {
         orderUpdated: CDMOrder
       })
+
+      console.log(first.pickup_details.recipient.phone_number)
 
       switch (first.state) {
         case 'PREPARED':

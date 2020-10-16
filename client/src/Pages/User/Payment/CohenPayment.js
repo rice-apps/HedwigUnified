@@ -1,119 +1,126 @@
-import React, { Component, useState } from "react";
-import Button from '@material-ui/core/Button';
-import styled, { css } from 'styled-components';
+import React, { Component, useState } from 'react'
+import Button from '@material-ui/core/Button'
+import styled, { css } from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 import {
-    SquarePaymentForm,
-    CreditCardNumberInput,
-    CreditCardExpirationDateInput,
-    CreditCardPostalCodeInput,
-    CreditCardCVVInput,
-    CreditCardSubmitButton
+  SquarePaymentForm,
+  CreditCardNumberInput,
+  CreditCardExpirationDateInput,
+  CreditCardPostalCodeInput,
+  CreditCardCVVInput,
+  CreditCardSubmitButton
 } from 'react-square-payment-form'
 import 'react-square-payment-form/lib/default.css'
 
 // This is credit card payment! screen
 
-function CohenPayment(props) {
+function CohenPayment (props) {
+  // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
+  const [activePass, setActivePass] = useState(0)
 
-    // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
-    const [activeButton, setActiveButton] = useState(3);
+  // colors
+  const bgColors = ['white', '#cf5734']
+  const fontColors = ['#595858', 'white']
+  const fontWeights = [500, 700]
 
-    // colors
-    const bgColors = ['white', '#cf5734'];
-    const fontColors = ['#595858', 'white'];
-    const fontWeights = [500, 700];
+  const Title = styled.text`
+    margin-top: 10px;
+    font-family: 'adobe-clean', sans-serif;
+    font-size: 25px;
+    color: #595858;
+    font-weight: lighter;
+    justify-content: center;
+    display: flex;
+  `
 
-    const Title = styled.text`
-            margin-top: 110px;
-            margin-bottom: 20px;
-            font-family: "adobe-clean", sans-serif;
-            font-size: 25px;
-            color: #595858; 
-            font-weight: lighter;
-        `;
+  const CohenTitle = styled.text`
+    margin-bottom: 80px;
+    font-family: 'adobe-clean', sans-serif;
+    font-size: 23px;
+    color: #cf5734;
+    font-weight: bold;
+    justify-content: center;
+    display: flex;
+  `
 
-    // const ButtonsCol = styled.div`
-    //         display: flex;
-    //         justify-content: space-evenly;
-    //     `;
+  const MembershipTitle = styled.text`
+    margin-left: 50px;
+    font-family: 'adobe-clean', sans-serif;
+    font-size: 23px;
+    color: #595858;
+    font-weight: bold;
+    justify-content: left;
+  `
 
-    const Button = styled.button`
-            font-family: 'Raleway', sans-serif;
-            border-radius: 20px;
-            border-width: 1px;
-            border-color: #595858;
-            height: 80px;
-            width: 230px;
-            font-size: 18px;
-            font-weight: 500;
-            color: #595858;
-            text-align: left;
-            padding-left: 50px;
-        `;
+  const Button = styled.button`
+    font-family: 'Raleway', sans-serif;
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: #595858;
+    height: 80px;
+    width: 230px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #595858;
+    text-align: left;
+    padding-left: 50px;
+  `
 
-    const Text = styled.text`
-        text-align: right;
-    `;
+  const Grid = styled.div``
 
-    const Grid = styled.div`
-        `;
+  const Row = styled.div``
 
-    const Row = styled.div`
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-        `;
-
-    const Footer = styled.footer`
-            text-align: center;
-            position:absolute;
-            left:0;
-            bottom:0;
-            right:0;
-            display:block;
-            border-style: solid;
-            border-width: 1px;
-            padding: 25px 0;
-            font-size: 25px;
-            font-weight: ${activeButton !== 3 ? fontWeights[1] : fontWeights[0]};
-            color: ${activeButton !== 3 ? fontColors[1] : fontColors[0]};
-            background-color: ${ activeButton !== 3 ? bgColors[1] : bgColors[0]};
-    `;
-
-    const Input = styled.input.attrs({
-        type: 'submit',
-        value: 'Submit'
-    })`
-    background: #00aec9;
-    color: #fff;
-    cursor: pointer;
-    margin-bottom: 0;
-    text-transform: uppercase;
-    width: 100%;
-    border-radius: 5px;
-    height: 35px;
-    border-color: transparent;
-    box-shadow: 0px;
-    outline: none;
-    transition: 0.15s;
+  const Footer = styled.footer`
     text-align: center;
-    &:active {
-      background-color: #f1ac15;
-    }
-  `;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    padding: 25px 0;
+    font-size: 25px;
+    font-weight: ${activePass == 0 ? fontWeights[0] : fontWeights[0]};
+    color: ${activePass == 0 ? fontColors[0] : fontColors[1]};
+    background-color: ${activePass == 0 ? bgColors[0] : bgColors[1]};
+  `
 
-    return (
-        < div >
-            <Grid>
-                <Row>
-                    <Title>Payment Method</Title>
-                    <Title>Cohen Club Card</Title>
-                </Row>
-                <Input />
-            </Grid>
-            <Footer>Next</Footer>
-        </div >
-    )
+  const PasswordInput = styled.input.attrs(props => ({
+    // Every <PasswordInput /> should be type="password"
+    type: 'password'
+  }))`
+    justify-content: center;
+    display: flex;
+    margin-left: 50px;
+    margin-top: 20px;
+    width: 300px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-color: gray;
+    border-bottom-width: 1px;
+  `
+
+  return (
+    <div>
+      <Grid onClick={() => setActivePass(0)}>
+        <Row>
+          <Title>Payment Method</Title>
+        </Row>
+        <Row>
+          <CohenTitle>Cohen Club Card</CohenTitle>
+        </Row>
+        <Row>
+          <MembershipTitle>Membership ID:</MembershipTitle>
+        </Row>
+      </Grid>
+      <Row>
+        <PasswordInput aria-hidden='true' onClick={() => setActivePass(1)} />
+      </Row>
+      <Footer>Next</Footer>
+    </div>
+  )
 }
 
 export default CohenPayment

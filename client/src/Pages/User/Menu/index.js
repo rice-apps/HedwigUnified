@@ -7,6 +7,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery, gql } from '@apollo/client'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
+import { Hidden } from '@material-ui/core'
+import BuyerHeader from'./../Vendors/BuyerHeader.js'
 
 /*
 const vendor = {
@@ -170,12 +173,16 @@ function Menu () {
 
   const current_date = new Date()
   const currentDay = current_date.getDay()
+  const startTimes = vendor_data.getVendor.hours[currentDay].start
+  const endTimes = vendor_data.getVendor.hours[currentDay].end
   console.log(vendor_data)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
+      <BuyerHeader/>
+    <div style={{paddingBottom:"10vh"}}>
       {/* Hero Image */}
-      <img src={hero} class='hero' alt='hero' />
+      <img  style={{filter: "blur(2.5px)" }}src={hero} class='hero' alt='hero' />
 
       {/* Vendor Info */}
       <div class='vendorinfocontainer'>
@@ -183,9 +190,13 @@ function Menu () {
         <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
         {/* Vendor Operating Hours */}
         <p class='vendorinfo'>
-          {vendor_data.getVendor.hours[currentDay].start}-
-          {vendor_data.getVendor.hours[currentDay].end}
+          {startTimes[0]} - {endTimes[0]}
         </p>
+        {startTimes.length > 1 && (
+          <p class='vendorinfo'>
+            {startTimes[1]} - {endTimes[1]}
+          </p>
+        )}
         <button class='readmore'> More Info </button>
       </div>
 
@@ -219,7 +230,12 @@ function Menu () {
             {catalog_data
               .filter(item => item.category === category)
               .map(product => (
-                <div class='itemgrid' onClick={() => handleClick(product)}>
+                <div
+                  class='itemgrid'
+                  onClick={
+                    product.isAvailable ? () => handleClick(product) : null
+                  }
+                >
                   {/* Displaying the item: image, name, and price */}
                   <img
                     src={product.image}
@@ -228,14 +244,20 @@ function Menu () {
                   />
                   <h1 class='itemname'>{product.name}</h1>
                   <p class='itemprice'>
-                    {formatter.format(product.variants[0].price.amount / 100) +
-                      '+'}
+                    {product.isAvailable
+                      ? formatter.format(
+                          product.variants[0].price.amount / 100
+                        ) + '+'
+                      : 'Unavailable'}
                   </p>
                 </div>
               ))}
           </div>
         ))}
       </div>
+      
+    </div>
+    <BottomAppBar/>
     </div>
   )
 }

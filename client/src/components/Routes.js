@@ -20,6 +20,7 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from '../Pages/User/Cart'
+import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import Product from '../Pages/User/Products/Product'
@@ -71,7 +72,6 @@ const GET_USER_INFO = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, ...rest }) => {
-
   let token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
@@ -139,6 +139,7 @@ const newRoutesArray = [
             element: <PrivateRoute element={<Product />} />
           },
           { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
+          // payment options
           {
             path: '/payment',
             element: <PrivateRoute element={<Payments />} />
@@ -146,31 +147,55 @@ const newRoutesArray = [
           {
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
-          },
-          {
-            path: '/cohen',
-            element: <PrivateRoute element={<CohenPayment />} />
           }
         ]
       }
     ]
   },
+  // This is to credit card payment:
   {
     path: '/payment',
     element: <PaymentPage />
   },
+
+  {
+    path: '/contact',
+    element: <ContactForm />
+  },
+  // Cohen house payment page:
+  {
+    path: '/cohen',
+    element: <PrivateRoute element={<CohenPayment />} />
+  },
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <OpenOrdersPage /> },
-      { path: '/openorders', element: <OpenOrdersPage /> },
-      { path: '/closedorders', element: <ClosedOrdersPage /> },
-      { path: '/items', element: <ItemsMenuManagementPage /> },
-      { path: '/modifiers', element: <ModifiersMenuManagementPage /> },
-      { path: '/set-basic-info', element: <SetBasicInfoPage /> },
-      { path: '/set-store-hours', element: <SetStoreHoursPage /> },
+      { path: '/', element: <PrivateRoute element={<OpenOrdersPage />} /> },
+      {
+        path: '/openorders',
+        element: <PrivateRoute element={<OpenOrdersPage />} />
+      },
+      {
+        path: '/closedorders',
+        element: <PrivateRoute element={<ClosedOrdersPage />} />
+      },
+      {
+        path: '/items',
+        element: <PrivateRoute element={<ItemsMenuManagementPage />} />
+      },
+      {
+        path: '/modifiers',
+        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />
+      },
+      {
+        path: '/set-basic-info',
+        element: <PrivateRoute element={<SetBasicInfoPage />} />
+      },
+      {
+        path: '/set-store-hours',
+        element: <PrivateRoute element={<SetStoreHoursPage />} />
+      }
     ]
-
   }
 ]
 
@@ -236,7 +261,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({ }) => {
+export const RoutesComponent = ({}) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend

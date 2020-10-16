@@ -1,4 +1,5 @@
 import './index.css'
+import './Styles/antd.css'
 
 import React, { Component } from 'react'
 import { render } from 'react-dom'
@@ -19,6 +20,7 @@ import { ApolloProvider } from '@apollo/client'
 import App from './App'
 
 import './fonts/style.css'
+import './firebase'
 
 // export const history = createBrowserHistory();
 

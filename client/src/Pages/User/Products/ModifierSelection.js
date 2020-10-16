@@ -6,7 +6,8 @@ function ModifierSelection ({ modifierCategory }) {
     modifiers: options,
     question,
     description,
-    multiSelect
+    selectionType,
+    name
   } = modifierCategory
   return (
     <div className='modifier'>
@@ -14,16 +15,17 @@ function ModifierSelection ({ modifierCategory }) {
         {/* <h1>{question}</h1> */}
         <h1>Select your modifiers/add-ons:</h1>
         {description ? <p>{description}</p> : null}
+        <h1>{name}</h1>
       </div>
       <div className='options'>
         {options.map(option => (
           <div className='optionSet' key={option.name}>
             <label>
-              {multiSelect ? (
+              {selectionType === 'MULTIPLE' ? (
                 <React.Fragment>
                   <input
                     type='checkbox'
-                    name={question}
+                    name={name}
                     className='modifierSelect'
                     value={JSON.stringify({ option })}
                   />
@@ -33,7 +35,7 @@ function ModifierSelection ({ modifierCategory }) {
                 <React.Fragment>
                   <input
                     type='radio'
-                    name={question}
+                    name={name}
                     className='modifierSelect'
                     value={JSON.stringify({ option })}
                   />

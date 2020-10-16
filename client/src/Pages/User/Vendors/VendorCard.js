@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BottomAppBar from './BottomAppBar.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorOpen, faDoorClosed } from '@fortawesome/free-solid-svg-icons'
@@ -39,8 +40,8 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-    const startTime = convertTimeToNum(dayObj.start)
-    const endTime = convertTimeToNum(dayObj.end)
+    const startTime = convertTimeToNum(dayObj.start[0])
+    const endTime = convertTimeToNum(dayObj.end[0])
     return currentTime <= startTime || currentTime >= endTime
   }
 
@@ -52,9 +53,21 @@ function VendorCard ({ vendor }) {
         <div className='vendorHeading'>
           <div className='vendorHeadingText'>
             <h3 className='vendorName'>{name}</h3>
-            {dayObj && (
+            {/* Case for two start/end times */}
+            {dayObj && dayObj.start.length > 1 && (
               <p>
-                Hours Open: {dayObj.start}-{dayObj.end}{' '}
+                Hours Open: <br />
+
+                {dayObj.start[0]}{' - '}{dayObj.end[0]}{', '}<br/>{dayObj.start[1]}{' - '}{dayObj.end[1]}
+
+              </p>
+            )}
+            {/* Case for one start/end time */}
+            {dayObj && dayObj.start.length == 1 && (
+              <p>
+                Hours Open: {dayObj.start[0]}
+                {' - '}
+                {dayObj.end[0]}{' '}
               </p>
             )}
           </div>

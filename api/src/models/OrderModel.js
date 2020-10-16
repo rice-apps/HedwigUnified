@@ -9,7 +9,6 @@ import {
   SortOrderEnumTC
 } from './CommonModels'
 
-
 const LineItemTC = sc.createObjectTC({
   name: 'LineItem',
   description:
@@ -25,11 +24,21 @@ const LineItemTC = sc.createObjectTC({
       description: 'The ID of the variant of this item'
     },
     modifiers: {
-      type: '[String]',
+      type: '[OrderLineItemModifier]',
       description: 'A list of modifier IDs to apply to this line item'
     }
   }
 })
+
+const OrderLineItemModifierTC = sc.createObjectTC(`
+  type OrderLineItemModifier {
+    uid: String
+    catalog_object_id: String,
+    name: String
+    base_price_money: Money
+    total_price_money: Money
+  }
+`)
 
 const PreviousLineItemTC = sc.createObjectTC({
   name: 'PreviousLineItem',
@@ -39,15 +48,7 @@ const PreviousLineItemTC = sc.createObjectTC({
     quantity: 'String',
     catalog_object_id: 'String',
     variation_name: 'String',
-    modifiers: `
-      type OrderLineItemModifier {
-        uid: String
-        catalog_object_id: String,
-        name: String
-        base_price_money: Money
-        total_price_money: Money
-      }
-    `,
+    modifiers: [OrderLineItemModifierTC],
     total_money: MoneyTC,
     total_tax: MoneyTC
   }
@@ -59,7 +60,7 @@ const OrderFulfillmentRecipientTC = sc.createObjectTC({
   fields: {
     name: 'String',
     email: 'String',
-    phone: 'String',
+    phone: 'String'
   }
 })
 
@@ -68,6 +69,7 @@ const OrderFulfillmentPickupDetailsTC = sc.createObjectTC({
   description: 'Contains details necessary to fulfill a pickup order',
   fields: {
     pickupAt: 'String',
+    placedAt: 'String',
     recipient: OrderFulfillmentRecipientTC.getType()
   }
 })

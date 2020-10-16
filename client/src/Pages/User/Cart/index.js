@@ -109,6 +109,15 @@ function CartDetail() {
     });
   };
 
+  const getTotal = () => {
+    const total = cart_menu.reduce(
+      (total, current) => {
+        return total + current.quantity
+      }, 0
+    )
+    return parseInt(total)
+  }
+
   useEffect(() => {
     updateTotal();
   }, [cart_menu]);
@@ -154,17 +163,16 @@ function CartDetail() {
     moment().hour() > endHour1 ||
     (moment().hour() == endHour1 && moment().minute() >= endMinute1);
   return (
-    <div>
-      <BuyerHeader />
-      <div className="float-cart">
-        <div className="float-cart__content">
-          <div className="float-cart__shelf-container">
-            <div css={[centerCenter, row]}>
-              <img src={logo} className="logo" alt="Logo" />
-              <div>
-                <p css={{ margin: "16px 0 0 10px" }}>Cohen House</p>
-                <p css={{ margin: "0 0 0 10px", color: "grey" }}>Houston, TX</p>
-              </div>
+
+    <div className='float-cart'>
+      <div className='float-cart__content'>
+        <div className='float-cart__shelf-container'>
+          <p className='cart-title'>My Cart {getTotal()>0 ? "("+getTotal().toString()+")":""}</p>
+          <div css={[centerCenter, row]}>
+            <img src={logo} className='logo' alt='Logo' />
+            <div>
+              <p className='vendor-title'>Cohen House</p>
+
             </div>
             <p css={{ alignSelf: "center" }}> Pickup Time:</p>
             <TimePicker
@@ -213,41 +221,88 @@ function CartDetail() {
             })}
           </div>
 
-          <div className="float-bill">
-            <h1 className="header">Bill Details</h1>
-            {Object.keys(totals).map(type => {
-              if (totals[type]) {
-                let formatted = currency(totals[type]).format();
-                return (
-                  <div className="subtotal-container">
-                    <p className="subheader">{type}</p>
-                    <p>{formatted}</p>
-                  </div>
-                );
+          <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
+          <TimePicker
+            disabled={disabled()}
+            defaultValue={moment()}
+            css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
+            format='HH:mm'
+            onChange={e => {
+              if (e) {
+                document.getElementsByClassName('buy-btn')[0].disabled = false
+                setPickupTime({ hour: e.hour(), minute: e.minute() })
               }
-            })}
-            <div className="total-container">
-              <hr className="breakline" />
-              <div className="total">
-                <p className="total__header">Total</p>
-                <p>
-                  {currency((totals.subtotal + totals.tax) * 0.01).format()}
-                </p>
-              </div>
-              <hr className="breakline" />
+            }}
+            showNow={false}
+            bordered={false}
+            inputReadOnly={true}
+            disabledHours={() => {
+              return computeAvailableHours(startHour1, endHour1)
+            }}
+            disabledMinutes={hour => {
+              return computeAvailableMinutes(
+                hour,
+                startHour1,
+                startMinute1,
+                endHour1,
+                endMinute1
+              )
+            }}
+          />
+          {disabled() && (
+            <p css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              No pickup time available today.{' '}
+            </p>
+          )}
+          <hr className='breakline'/>
+          {cartItems().map(item => {
+            return (
+              <React.Fragment>
+                <CartProduct
+                  product={item}
+                  forceUpdate={setDummyDelete}
+                  updateTotal={updateTotal}
+                />
+                <hr className='breakline'/>
+              </React.Fragment>
+            )
+          })}
+        </div>
+
+        <div className='float-bill'>
+          {Object.keys(totals).map(type => {
+            if (totals[type]) {
+              let formatted = currency(totals[type]).format()
+              return (
+                <div className='subtotal-container'>
+                  <p className='subheader'>{type}</p>
+                  <p>{formatted}</p>
+                </div>
+              )
+            }
+          })}
+          <div className='total-container'>
+            <hr className='breakline' />
+            <div className='total'>
+              <p className='total__header'>Total</p>
+              <p>{currency(totals.subtotal + totals.tax).format()}</p>
             </div>
           </div>
-          {console.log(cartItems())}
-          <div className="float-cart__footer">
-            <button
-              disabled={cartItems().length == 0 || pickupTime == null}
-              className="buy-btn"
-              title={"Confirm"}
-              onClick={handleConfirmClick}
-            >
-              Make Payment
-            </button>
-          </div>
+        </div>
+
+        <div className='float-cart__footer'>
+          <button
+            disabled={cartItems().length == 0 || pickupTime == null}
+            className='buy-btn'
+            title={'Confirm'}
+            onClick={handleConfirmClick}
+          >
+            Next: Payment
+            <div>
+            </div>
+          </button>
+
         </div>
       </div>
       <BottomAppBar />

@@ -18,6 +18,11 @@ const Logo = styled.img`
   max-height: 100%;
   width: 80%;
 `
+
+const HedwigLogo = styled.img`
+  max-height: 40%;
+  max-width: 40%;
+`
 const Title = styled.h1`
   color: white;
   grid-row: 1/2;
@@ -77,9 +82,9 @@ const BackgroundCover = styled.div`
     grid-row: 4/5;
     border-radius: 25pt;
     height: 40vh;
-    width: 30vw;
+    width: 40%;
     border: none;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: bold;
     border: 3px solid blue;
     background-color: white;
@@ -96,9 +101,15 @@ const ClientButton = styled.button`
 grid-row: 4/5;
 border-radius: 25pt;
 height: 40vh;
-width: 30vw;
+width: 40%;
 border: none;
-font-size: 17pt;
+font-size: 14pt;
+
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+align-items: center;
+
 font-weight: bold;
 color: #f49f86;
 border: 3px solid orange;
@@ -138,5 +149,6 @@ const LoginQuestion = styled.p`
 
 export { MainDiv, Logo, Title, SubTitle, LoginButton, 
   BackgroundCover, ButtonPane,
-  VendorButton, ClientButton, ExitButton, LoginQuestion
+  VendorButton, ClientButton, ExitButton, LoginQuestion,
+  HedwigLogo
 }

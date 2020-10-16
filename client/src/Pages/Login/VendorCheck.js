@@ -1,7 +1,9 @@
 import React from 'react';
 
+import hedwigLogo from './HedwigLogoFinal.svg'
 import { MainDiv, Logo, Title, SubTitle, LoginButton, 
-    BackgroundCover, ButtonPane, VendorButton, ClientButton, ExitButton, LoginQuestion } from './Login.styles'
+    BackgroundCover, ButtonPane, VendorButton, ClientButton, ExitButton, 
+    LoginQuestion, HedwigLogo } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -26,6 +28,7 @@ const VendorSelect = () => {
                 </VendorButton>
                 <ClientButton onClick={clientLogin}>
                     Login as Client
+                    <HedwigLogo src={hedwigLogo} />
                 </ClientButton>
             </ButtonPane>
         </BackgroundCover>

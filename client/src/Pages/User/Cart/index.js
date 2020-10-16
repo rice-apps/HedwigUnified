@@ -163,7 +163,9 @@ function CartDetail() {
     moment().hour() > endHour1 ||
     (moment().hour() == endHour1 && moment().minute() >= endMinute1);
   return (
+<div>
 
+<BuyerHeader showBackButton={true} backLink="/eat"/>
     <div className='float-cart'>
       <div className='float-cart__content'>
         <div className='float-cart__shelf-container'>
@@ -174,54 +176,9 @@ function CartDetail() {
               <p className='vendor-title'>Cohen House</p>
 
             </div>
-            <p css={{ alignSelf: "center" }}> Pickup Time:</p>
-            <TimePicker
-              disabled={disabled()}
-              defaultValue={moment()}
-              css={{ marginTop: "-10px", width: "200px", alignSelf: "center" }}
-              format="HH:mm"
-              onChange={e => {
-                if (e) {
-                  document.getElementsByClassName(
-                    "buy-btn"
-                  )[0].disabled = false;
-                  setPickupTime({ hour: e.hour(), minute: e.minute() });
-                }
-              }}
-              showNow={false}
-              bordered={false}
-              inputReadOnly={true}
-              disabledHours={() => {
-                return computeAvailableHours(startHour1, endHour1);
-              }}
-              disabledMinutes={hour => {
-                return computeAvailableMinutes(
-                  hour,
-                  startHour1,
-                  startMinute1,
-                  endHour1,
-                  endMinute1
-                );
-              }}
-            />
-            {disabled() && (
-              <p css={{ alignSelf: "center", color: "red" }}>
-                {" "}
-                No pickup time available today.{" "}
-              </p>
-            )}
-            {cartItems().map(item => {
-              return (
-                <CartProduct
-                  product={item}
-                  forceUpdate={setDummyDelete}
-                  updateTotal={updateTotal}
-                />
-              );
-            })}
           </div>
 
-          <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
+          <p css={{ alignSelf: 'center', marginTop: '2px' }}> Pickup Time:</p>
           <TimePicker
             disabled={disabled()}
             defaultValue={moment()}
@@ -305,7 +262,8 @@ function CartDetail() {
 
         </div>
       </div>
-      <BottomAppBar />
+    </div>
+
     </div>
   );
 }

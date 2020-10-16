@@ -86,8 +86,8 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
 
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
-  });
+    currency: 'USD'
+  })
   return (
     <div
       className={

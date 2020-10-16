@@ -1,6 +1,7 @@
 .logo {
   height: 60px;
   width: 60px;
+  border-radius:50%;
 }
 
 .imageParent {
@@ -10,11 +11,14 @@
 }
 
 
+
 .buy-btn:disabled {
   background-color: #666666;
 }
 
 .float-cart {
+  padding-top:10vh;
+  padding-bottom:10vh;
   display: flex;
   flex-direction: column;
   width: 100%;

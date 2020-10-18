@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import currency from 'currency.js'
 
 const VariantSelection = ({ variants }) => {
-  console.log("VARIANT", variants);
+  console.log('VARIANT', variants)
 
   return (
     <div className='variant'>

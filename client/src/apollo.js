@@ -20,6 +20,7 @@ console.log(GRAPHQL_WS_URL)
 console.log(SERVICE_URL)
 
 export const cartItems = makeVar([])
+export const userProfile = makeVar([])
 
 
 // Wraps our requests with a token if one exists
@@ -75,6 +76,15 @@ export const client = new ApolloClient({
           cartItems: {
             read () {
               return cartItems()
+            }
+          }
+        }
+      },
+      Subscription: {
+        fields: {
+          orderCreated: {
+            merge (existing, incoming) {
+              return [incoming, ...existing]
             }
           }
         }

@@ -1,0 +1,47 @@
+#header-container {
+}
+
+#greeting-container {
+  text-align: center;
+  font-size: larger;
+}
+
+#text-containeer {
+  margin: 20%;
+}
+
+.texts {
+  text-align: center;
+  font-family: 'Raleway';
+  color: rgb(205, 104, 75);
+}
+
+.tel-container {
+  margin: auto;
+  width: 30%;
+}
+
+#tel {
+  margin: auto;
+}
+
+.center-header {
+  font-size: 400%;
+  color: rgb(205, 104, 75);
+  padding: 5%;
+}
+
+.confirm-btn {
+  font-family: 'Raleway';
+  color: rgb(205, 104, 75);
+  border-color: rgb(205, 104, 75);
+  border: solid;
+  border-width: 1px;
+  border-radius: 15px;
+  font-size: 150%;
+  text-align: center;
+  margin: auto;
+  margin-top: 60px;
+  padding: 10px 25px;
+  width: 20%;
+}

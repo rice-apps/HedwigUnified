@@ -1,33 +1,33 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import { Tab, Box, Tabs, Typography, AppBar } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import MakeCatalogItems from "./CatalogDisplayComponents.js";
-import souppic from "./../../../../images/soup.jpg";
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
+import { Tab, Box, Tabs, Typography, AppBar } from '@material-ui/core'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import MakeCatalogItems from './CatalogDisplayComponents.js'
+import souppic from './../../../../images/soup.jpg'
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#EA907A"
+      main: '#EA907A'
     },
     secondary: {
-      main: "#F3DAC2"
+      main: '#F3DAC2'
     }
   },
   typography: {
-    fontFamily: "Futura"
+    fontFamily: 'Futura'
   }
-});
+})
 const PageWrapper = styled.div`
-  background-color: #F7f7f7;
+  background-color: #f7f7f7;
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 const CatalogWrapper = styled.div`
   display: grid;
@@ -40,9 +40,9 @@ const CatalogWrapper = styled.div`
   grid-template-columns: 3fr 12fr;
   grid-template-rows: 45px auto;
   grid-template-areas:
-    "LabelSpace LabelSpace"
-    "TabSpace ItemDisplaySpace";
-`;
+    'LabelSpace LabelSpace'
+    'TabSpace ItemDisplaySpace';
+`
 
 const LabelWrapper = styled.div`
   background-color: #6b6b6b;
@@ -52,18 +52,18 @@ const LabelWrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 7fr 2.25fr 3fr;
   grid-template-rows: 1fr;
-  grid-template-areas: "CategoryLabelSpace ItemLabelSpace AvailablityLabelSpace PriceLabelSpace";
+  grid-template-areas: 'CategoryLabelSpace ItemLabelSpace AvailablityLabelSpace PriceLabelSpace';
   font-size: 23px;
   color: white;
   align-items: center;
-`;
+`
 
 const TabWrapper = styled.div`
   background-color: #d7d7d7;
   width: 100%;
   height: 100%;
   grid-area: TabSpace;
-`;
+`
 
 const ItemDisplayWrapper = styled.div`
   background-color: white;
@@ -76,9 +76,9 @@ const ItemDisplayWrapper = styled.div`
   padding-top: 5px;
   overflow-y: auto;
   overflow-x: hidden;
-`;
+`
 
-function MakeLabelWrapper() {
+function MakeLabelWrapper () {
   return (
     <LabelWrapper>
       <div>Category</div>
@@ -86,7 +86,7 @@ function MakeLabelWrapper() {
       <div>Availability</div>
       <div>Price</div>
     </LabelWrapper>
-  );
+  )
 }
 
 const StyledTabs = styled(Tabs)`
@@ -95,7 +95,7 @@ const StyledTabs = styled(Tabs)`
     width: 100%;
     color: black;
   }
-`;
+`
 
 const StyledTab = styled(Tab)`
   && {
@@ -103,35 +103,35 @@ const StyledTab = styled(Tab)`
     font-weight: 700;
     width: 100%;
   }
-`;
+`
 
-function TabPanel(props) {
-  const { children, value, category, ...other } = props;
+function TabPanel (props) {
+  const { children, value, category, ...other } = props
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== category}
       id={`vertical-tabpanel-${category}`}
     >
       {value === category && <div>{children}</div>}
     </div>
-  );
+  )
 }
 
-function ItemCatalog(props) {
-  const [value, setValue] = useState(props.category);
+function ItemCatalog (props) {
+  const [value, setValue] = useState(props.category)
 
-  const items = props.catalog.filter((item)=>{
-    if (item.category === value){
-      return item;
+  const items = props.catalog.filter(item => {
+    if (item.category === value) {
+      return item
     }
-  });
+  })
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    console.log(value);
-  };
+    setValue(newValue)
+    console.log(value)
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -140,36 +140,40 @@ function ItemCatalog(props) {
           <MakeLabelWrapper />
           <TabWrapper>
             <StyledTabs
-              orientation="vertical"
+              orientation='vertical'
               onChange={handleChange}
               value={value}
-              indicatorColor="primary"
+              indicatorColor='primary'
             >
-              {props.categories.map((category)=>{
+              {props.categories.map(category => {
                 return <StyledTab label={category} value={category} />
               })}
             </StyledTabs>
           </TabWrapper>
           <ItemDisplayWrapper>
-            {props.categories.map((category)=>{
+            {props.categories.map(category => {
               return (
                 <React.Fragment>
                   <TabPanel value={value} category={category}>
-                    {items.map((item)=>{
+                    {items.map(item => {
                       return (
-                        <MakeCatalogItems itemId={item.dataSourceId} itemImage={item.image} itemName={item.name} itemPrice={item.variants[0].price.amount}/>
+                        <MakeCatalogItems
+                          itemId={item.dataSourceId}
+                          itemImage={item.image}
+                          itemName={item.name}
+                          itemPrice={item.variants[0].price.amount}
+                        />
                       )
                     })}
                   </TabPanel>
                 </React.Fragment>
               )
-              })
-            }
+            })}
           </ItemDisplayWrapper>
         </CatalogWrapper>
       </PageWrapper>
     </ThemeProvider>
-  );
+  )
 }
 
-export default ItemCatalog;
+export default ItemCatalog

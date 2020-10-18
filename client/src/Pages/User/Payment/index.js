@@ -11,7 +11,7 @@ import 'react-square-payment-form/lib/default.css'
 
 // This is credit card payment! screen
 
-function PaymentPage(props) {
+function PaymentPage (props) {
   return (
     <React.Fragment>
       <h1>Credit Card Payment</h1>

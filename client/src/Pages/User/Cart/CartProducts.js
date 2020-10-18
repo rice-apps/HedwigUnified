@@ -3,6 +3,7 @@ import Thumb from './Thumb.js'
 import logo from '../../../images/headphones.jpg'
 import dispatch from '../Products/FunctionalCart'
 import { cartItems } from '../../../apollo'
+import './cart.scss'
 
 // import Dropdown from "react-dropdown";
 // import "react-dropdown/style.css";
@@ -43,11 +44,14 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
 
   function getVarMod () {
     let VarModList = ' '
-    VarModList += product.variant.name + ', '
-
-    for (var i = 0; i < product.modDisplay.length; i++) {
-      {
-        i < product.modDisplay.length - 1
+    const numModifiers = product.modDisplay.length;
+    if(numModifiers === 0){
+      VarModList += product.variant.name;
+    }
+    else {
+      VarModList += product.variant.name + ', ';
+      for (var i = 0; i < numModifiers; i++) {
+        i < numModifiers - 1
           ? (VarModList += product.modDisplay[i] + ', ')
           : (VarModList += product.modDisplay[i])
       }
@@ -82,8 +86,8 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
 
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
-  });
+    currency: 'USD'
+  })
   return (
     <div
       className={
@@ -92,9 +96,9 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     >
       {/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
       {/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}
-
+      <img id='image' src={product.image} alt={product.name}/>
       <div className='shelf-item__title'>
-        <p id='title'>{product.name}</p>
+        <p id='title'>{product.name.toUpperCase()}</p>
         <p id='options'> {getVarMod()}</p>
       </div>
       <QuantitySelector
@@ -105,6 +109,9 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
       <div className='shelf-item__price'>
         <p>{formatter.format(product.price * quantity)}</p>
       </div>
+      <div></div>
+      <div></div>
+      <div></div>
       <div
         className='shelf-item__del'
         onMouseOver={() => handleMouseOver()}
@@ -113,7 +120,9 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
           deleteCartItem()
           forceUpdate(date.getTime())
         }}
-      />
+      >
+      Remove
+      </div>
     </div>
   )
 }

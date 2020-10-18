@@ -27,6 +27,7 @@
   color: #5a5953;
   margin: auto;
   flex-wrap: wrap;
+  line-height: 0.001;
 }
 
 .readmore {
@@ -50,7 +51,7 @@
   text-indent: 0;
 
   position: sticky;
-  top: 0px;
+  top: 7.9vh;
 
   background: white;
   border-bottom: solid 1px #5a5953;

@@ -20,6 +20,7 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from '../Pages/User/Cart'
+import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import Product from '../Pages/User/Products/Product'
@@ -32,6 +33,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import Payments from '../Pages/User/Cart/Payments'
+import VendorSelect from '../Pages/Login/VendorCheck';
 import CohenPayment from '../Pages/User/Payment/CohenPayment'
 /**
  * Requests to verify the user's token on the backend
@@ -71,7 +73,6 @@ const GET_USER_INFO = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, ...rest }) => {
-
   let token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
@@ -125,6 +126,10 @@ const newRoutesArray = [
     element: <PrivateRoute element={<SignUp />} />
   },
   {
+    path: '/vendor_choice',
+    element: <PrivateRoute element={ <VendorSelect /> } /> 
+  },
+  {
     path: '/eat/*',
     children: [
       { path: '/', element: <PrivateRoute element={<VendorList />} /> },
@@ -147,7 +152,7 @@ const newRoutesArray = [
           {
             path: '/confirmation',
             element: <PrivateRoute element={<Confirmation />} />
-          },
+          }
         ]
       }
     ]
@@ -157,6 +162,11 @@ const newRoutesArray = [
     path: '/payment',
     element: <PaymentPage />
   },
+
+  {
+    path: '/contact',
+    element: <ContactForm />
+  },
   // Cohen house payment page:
   {
     path: '/cohen',
@@ -165,15 +175,32 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
-    { path: '/openorders', element: <PrivateRoute element={<OpenOrdersPage /> }/>},
-      { path: '/closedorders', element: <PrivateRoute element={<ClosedOrdersPage /> }/>},
-      { path: '/items', element: <PrivateRoute element={<ItemsMenuManagementPage /> }/>},
-      { path: '/modifiers', element: <PrivateRoute element={<ModifiersMenuManagementPage /> }/>},
-      { path: '/set-basic-info', element: <PrivateRoute element={<SetBasicInfoPage /> }/>},
-      { path: '/set-store-hours', element: <PrivateRoute element={<SetStoreHoursPage /> }/>},
+      { path: '/', element: <PrivateRoute element={<OpenOrdersPage />} /> },
+      {
+        path: '/openorders',
+        element: <PrivateRoute element={<OpenOrdersPage />} />
+      },
+      {
+        path: '/closedorders',
+        element: <PrivateRoute element={<ClosedOrdersPage />} />
+      },
+      {
+        path: '/items',
+        element: <PrivateRoute element={<ItemsMenuManagementPage />} />
+      },
+      {
+        path: '/modifiers',
+        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />
+      },
+      {
+        path: '/set-basic-info',
+        element: <PrivateRoute element={<SetBasicInfoPage />} />
+      },
+      {
+        path: '/set-store-hours',
+        element: <PrivateRoute element={<SetStoreHoursPage />} />
+      }
     ]
-
   }
 ]
 
@@ -239,7 +266,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({ }) => {
+export const RoutesComponent = ({}) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend

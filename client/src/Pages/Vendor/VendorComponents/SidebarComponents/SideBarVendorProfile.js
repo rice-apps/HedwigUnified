@@ -40,11 +40,12 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
 `;
 const SideBarVendorProfileWrapper = styled.div``;
 const merchantId = "5f836204280dd576b7e828ad";
-const vendorAvailability = useMutation(UPDATE_VENDOR_AVAILABILITY);
-const { data, loading, error } = useQuery(GET_AVAILABILITY, {
-  variables: { merchantId: merchantId },
-});
+
 function SideBarVendorProfile() {
+  const vendorAvailability = useMutation(UPDATE_VENDOR_AVAILABILITY);
+  const { data, loading, error } = useQuery(GET_AVAILABILITY, {
+    variables: { merchantId: merchantId },
+  });
   if (error) {
     return <p>{error.message}</p>;
   }

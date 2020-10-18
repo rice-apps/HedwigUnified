@@ -42,8 +42,10 @@ const SideBarVendorProfileWrapper = styled.div``;
 const merchantId = "5f836204280dd576b7e828ad";
 
 function SideBarVendorProfile() {
-  const vendorAvailability = useMutation(UPDATE_VENDOR_AVAILABILITY);
-  const { data, loading, error } = useQuery(GET_AVAILABILITY, {
+  const [vendorAvailability, { error }] = useMutation(
+    UPDATE_VENDOR_AVAILABILITY
+  );
+  const { data, loading, error: queryError } = useQuery(GET_AVAILABILITY, {
     variables: { merchantId: merchantId },
   });
   if (error) {
@@ -56,12 +58,12 @@ function SideBarVendorProfile() {
       <StoreStatus>
         Store Status:
         <Toggle
-          checked={data.isOpen}
-          onChange={function (e) {
+          // checked={data.isOpen}
+          onChange={(e) =>
             vendorAvailability({
               variables: { isOpen: e.target.checked, merchantId: merchantId },
-            });
-          }}
+            })
+          }
         />
       </StoreStatus>
     </div>

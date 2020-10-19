@@ -40,11 +40,14 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
 `;
 const SideBarVendorProfileWrapper = styled.div``;
 const merchantId = "5f836204280dd576b7e828ad";
-const vendorAvailability = useMutation(UPDATE_VENDOR_AVAILABILITY);
-const { data, loading, error } = useQuery(GET_AVAILABILITY, {
-  variables: { merchantId: merchantId },
-});
+
 function SideBarVendorProfile() {
+  const [vendorAvailability, { error }] = useMutation(
+    UPDATE_VENDOR_AVAILABILITY
+  );
+  const { data, loading, error: queryError } = useQuery(GET_AVAILABILITY, {
+    variables: { merchantId: merchantId },
+  });
   if (error) {
     return <p>{error.message}</p>;
   }
@@ -55,12 +58,12 @@ function SideBarVendorProfile() {
       <StoreStatus>
         Store Status:
         <Toggle
-          checked={data.isOpen}
-          onChange={function (e) {
+          // checked={data.isOpen}
+          onChange={(e) =>
             vendorAvailability({
               variables: { isOpen: e.target.checked, merchantId: merchantId },
-            });
-          }}
+            })
+          }
         />
       </StoreStatus>
     </div>

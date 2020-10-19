@@ -78,13 +78,8 @@ const LogoutItem = styled.div`
   justify-content: center;
 `
 
-<<<<<<< HEAD
-const toggleLogoutScreen = false;
-const showLogout = false;
-=======
 const toggleLogoutScreen = false
 const showLogout = false
->>>>>>> 6fcd3ba1cf7b07bceb0a6fab94b779ba02e2a342
 
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)

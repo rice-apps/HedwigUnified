@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './BottomAppBar.js'
+import curbsidelogo from '../../../images/curbsidelogo.jpg'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorOpen, faDoorClosed } from '@fortawesome/free-solid-svg-icons'
@@ -95,7 +96,9 @@ function VendorCard ({ vendor }) {
           {
             <img
               className={closed ? `vendorImage closed` : `vendorImage`}
-              src={logoUrl}
+              src={curbsidelogo}
+              width="100%"
+              height="100%"
             />
           }
         </div>

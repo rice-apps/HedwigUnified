@@ -11,6 +11,7 @@ const GET_CATALOG = gql`
       category
       variants {
         name
+        dataSourceId
         price {
           amount
           currency

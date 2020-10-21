@@ -11,7 +11,7 @@ function ItemsMenuManagementPage () {
     loading: catalog_loading
   } = useQuery(GET_CATALOG, {
     variables: {
-      vendor: "East West Tea"
+      vendor: 'East West Tea'
     }
   })
 
@@ -25,19 +25,27 @@ function ItemsMenuManagementPage () {
   const { getCatalog: catalog } = catalog_info
 
   const compileCategories = data => {
-        let categories = []
-        data.forEach(product => {
-          categories.push(product.category)
-        })
-        categories = new Set(categories)
-        return [...categories]
+    let categories = []
+    data.forEach(product => {
+      categories.push(product.category)
+    })
+    categories = new Set(categories)
+    return [...categories]
+  }
+
+  const categories = compileCategories(catalog)
+
+  return (
+    <VendorsideTemplate
+      page={
+        <ItemCatalog
+          catalog={catalog}
+          categories={categories}
+          category={categories[0]}
+        />
       }
-
-  const categories = compileCategories(catalog);
-
-
-  return <VendorsideTemplate page={<ItemCatalog catalog={catalog} categories = {categories} category={categories[0]}/>}></VendorsideTemplate>
-
+    ></VendorsideTemplate>
+  )
 }
 
 export default ItemsMenuManagementPage

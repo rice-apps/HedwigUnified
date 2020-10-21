@@ -73,9 +73,9 @@ const getLineItems = (items) => {
     }
     let i = {
       modifiers: modifierList,
-      catalog_object_id: item.dataSourceId,
-      quantity: item.quantity,
-      variation_name: item.variant.name,
+      catalog_object_id: item.variant.dataSourceId,
+      quantity: item.quantity.toString(),
+      // variation_name: item.variant.name,
     }
     rtn.push(i);
   }

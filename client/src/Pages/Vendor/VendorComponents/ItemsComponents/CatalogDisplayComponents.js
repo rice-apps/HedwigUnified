@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import React from 'react'
+>>>>>>> create order working
 import styled from 'styled-components'
 import Toggle from 'react-toggle'
 import {
@@ -52,7 +56,11 @@ const ItemPrice = styled.div`
 `
 
 function MakeCatalogItems (props) {
+<<<<<<< HEAD
   const formatter = new Intl.NumberFormat('en-US', {
+=======
+  var formatter = new Intl.NumberFormat('en-US', {
+>>>>>>> create order working
     style: 'currency',
     currency: 'USD'
   })
@@ -70,7 +78,11 @@ function MakeCatalogItems (props) {
   })
 
   if (availability_loading) {
+<<<<<<< HEAD
     return <ClipLoader size={100} color='#0f0f0f' loading />
+=======
+    return <ClipLoader size={100} color={'#0f0f0f'} loading={true} />
+>>>>>>> create order working
   }
   if (availability_error) {
     return <p>Error...</p>

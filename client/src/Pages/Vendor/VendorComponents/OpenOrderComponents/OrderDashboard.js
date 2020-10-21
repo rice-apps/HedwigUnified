@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import { useEffect } from 'react'
 import styled from 'styled-components'
+=======
+import React, { useEffect } from 'react'
+import styled from 'styled-components'
+import ReactDOM from 'react-dom'
+>>>>>>> create order working
 import {
   OrderDashboardWrapper,
   NewOrderTitleWrapper,
@@ -13,6 +19,18 @@ import {
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
 
+<<<<<<< HEAD
+=======
+const ColumnWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  overflow: scroll;
+  padding-right: 30px;
+  height: 100%;
+`
+
+>>>>>>> create order working
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
     findOrders(locations: $location) {
@@ -30,11 +48,19 @@ const FIND_ORDERS = gql`
           modifiers {
             name
             base_price_money {
+<<<<<<< HEAD
               amount
             }
             total_price_money {
               amount
             }
+=======
+              amount
+            }
+            total_price_money {
+              amount
+            }
+>>>>>>> create order working
           }
           total_money {
             amount
@@ -141,6 +167,7 @@ function OrderDashboard () {
 
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
+<<<<<<< HEAD
       document: ORDER_CREATED,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
@@ -166,6 +193,9 @@ function OrderDashboard () {
 
         return newData
       }
+=======
+      document: ORDER_CREATED
+>>>>>>> create order working
     })
 
     return () => {
@@ -199,6 +229,7 @@ function OrderDashboard () {
   //     })
   //   }
 
+<<<<<<< HEAD
   const newOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PROPOSED'
   )
@@ -206,6 +237,15 @@ function OrderDashboard () {
     order => order.fulfillment.state === 'RESERVED'
   )
   const readyOrders = allOrders.findOrders.orders.filter(
+=======
+  let newOrders = allOrders.findOrders.orders.filter(
+    order => order.fulfillment.state === 'PROPOSED'
+  )
+  let acceptedOrders = allOrders.findOrders.orders.filter(
+    order => order.fulfillment.state === 'RESERVED'
+  )
+  let readyOrders = allOrders.findOrders.orders.filter(
+>>>>>>> create order working
     order => order.fulfillment.state === 'PREPARED'
   )
 

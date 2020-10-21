@@ -77,8 +77,13 @@ function SideBarItems () {
     <SideBarItemsWrapper>
       <Collapsible
         classParentString='MainMenuCollapsible'
+<<<<<<< HEAD
         open
         trigger={<MainMenuItem name='Order Processing' IsClosed />}
+=======
+        open={true}
+        trigger={<MainMenuItem name='Order Processing' IsClosed={true} />}
+>>>>>>> create order working
         triggerWhenOpen={
           <MainMenuItem name='Order Processing' isClosed={false} />
         }
@@ -89,8 +94,13 @@ function SideBarItems () {
 
       <Collapsible
         classParentString='MainMenuCollapsible'
+<<<<<<< HEAD
         open
         trigger={<MainMenuItem name='Menu Management' IsClosed />}
+=======
+        open={true}
+        trigger={<MainMenuItem name='Menu Management' IsClosed={true} />}
+>>>>>>> create order working
         triggerWhenOpen={
           <MainMenuItem name='Menu Management' isClosed={false} />
         }
@@ -101,8 +111,13 @@ function SideBarItems () {
 
       <Collapsible
         classParentString='MainMenuCollapsible'
+<<<<<<< HEAD
         open
         trigger={<MainMenuItem name='Store Information' IsClosed />}
+=======
+        open={true}
+        trigger={<MainMenuItem name='Store Information' IsClosed={true} />}
+>>>>>>> create order working
         triggerWhenOpen={
           <MainMenuItem name='Store Information' isClosed={false} />
         }

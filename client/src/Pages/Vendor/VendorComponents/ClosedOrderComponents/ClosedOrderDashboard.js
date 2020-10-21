@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import React from 'react'
+>>>>>>> create order working
 import { gql, useQuery } from '@apollo/client'
 import {
   DashboardWrapper,

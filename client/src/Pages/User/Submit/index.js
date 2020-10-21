@@ -7,53 +7,76 @@ import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import currency from 'currency.js'
-import { cartItems, orderSummary, userProfile} from '../../../apollo'
+import { cartItems, orderSummary, userProfile } from '../../../apollo'
 import dispatch from '../Products/FunctionalCart'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
-const CREATE_ORDER = gql`mutation ($studentId: String!, $name: String!,
-  $phone: String!, $email: String!, $time:String!, $key: String!,
-  $lineItems: [LineItemInput]!
-  ){
-  createOrder(
-    locationId: "FMXAFFWJR95WC"
-    record: {
-      studentId: $studentId
-      idempotencyKey: $key
-      lineItems: $lineItems
-      recipient: {
-        name: $name
-        phone: $phone
-        email: $email
-      }
-      pickupTime: $time
-    }
+const CREATE_ORDER = gql`
+  mutation(
+    $studentId: String!
+    $name: String!
+    $phone: String!
+    $email: String!
+    $time: String!
+    $key: String!
+    $lineItems: [LineItemInput]!
   ) {
-    id
-    total{
-			amount
-    }
-    totalTax{
-      amount
-    }
-    customer {
-      name
-    }
-    items {
-      name
-      quantity
-      modifiers {
-        catalog_object_id
+    createOrder(
+      locationId: "FMXAFFWJR95WC"
+      record: {
+        studentId: $studentId
+        idempotencyKey: $key
+        lineItems: $lineItems
+        recipient: { name: $name, phone: $phone, email: $email }
+        pickupTime: $time
+      }
+    ) {
+      id
+      total {
+        amount
+      }
+      totalTax {
+        amount
+      }
+      customer {
+        name
+      }
+      items {
+        name
+        quantity
+        modifiers {
+          catalog_object_id
+        }
       }
     }
   }
-}`
-const sStorage = localStorage;
+`
+
+const CREATE_PAYMENT = gql`
+  mutation($orderId: String!, $subtotal: Int!, $currency: String!) {
+    createPayment(
+      record: {
+        source: SQUARE
+        sourceId: "cnon:card-nonce-ok"
+        orderId: $orderId
+        locationId: "FMXAFFWJR95WC"
+        subtotal: { amount: $subtotal, currency: $currency }
+      }
+    ) {
+      id
+      total {
+        amount
+        currency
+      }
+    }
+  }
+`
+
+const sStorage = localStorage
 const getRecipient = () => {
-  
   return {
     name: sStorage.getItem('first name') + ' ' + sStorage.getItem('last name'),
     phone: sStorage.getItem('phone'),
@@ -61,9 +84,9 @@ const getRecipient = () => {
   }
 }
 
-const getLineItems = (items) => {
+const getLineItems = items => {
   let rtn = []
-  let item = null;
+  let item = null
   for (const [v, item] of Object.entries(items)) {
     let modifierList = []
     for (const [k, m] of Object.entries(item.modifierLists)) {
@@ -74,43 +97,56 @@ const getLineItems = (items) => {
     let i = {
       modifiers: modifierList,
       catalog_object_id: item.variant.dataSourceId,
-      quantity: item.quantity.toString(),
+      quantity: item.quantity.toString()
       // variation_name: item.variant.name,
     }
-    rtn.push(i);
+    rtn.push(i)
   }
   return rtn
 }
 
-const createRecord = (items) => {
-  const recipient =  getRecipient()
+const createRecord = items => {
+  const recipient = getRecipient()
   return {
     studentId: sStorage.getItem('id'),
     key: uuidv4(),
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
-    email:recipient.email,
+    email: recipient.email,
     time: orderSummary().time.format()
   }
 }
-
 
 function Submit () {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
   let cart_menu = cartItems()
-  const pickupTime = orderSummary().time;
-  const [createOrder, {loading, error, data},] = useMutation(CREATE_ORDER);
+  const pickupTime = orderSummary().time
+  const [
+    createOrder,
+    { loading: order_loading, error: order_error, data: order_data }
+  ] = useMutation(CREATE_ORDER)
+  const [
+    createPayment,
+    { loading: payment_loading, error: payment_error, data: payment_data }
+  ] = useMutation(CREATE_PAYMENT)
   // const user = userProfile();
 
-  const handleSubmitClick = () => {
+  const handleSubmitClick = async () => {
     const q = {
       variables: createRecord(cart_menu)
     }
-    console.log(q)
-    createOrder(q)
-    // The path is hard coded temporarily. 
+    const orderResponse = await createOrder(q)
+    const orderJson = orderResponse.data.createOrder
+    createPayment({
+      variables: {
+        orderId: orderJson.id,
+        subtotal: totals.subtotal,
+        currency: 'USD'
+      }
+    })
+    // The path is hard coded temporarily.
     return navigate(`/eat/cohen/confirmation`)
   }
 
@@ -129,10 +165,16 @@ function Submit () {
     calculateTotal()
   }, [cart_menu])
 
-
-  if (loading) return <p>Loading...</p>;
-if (error) {console.log(error); return <p>error</p>};
-
+  if (order_loading) return <p>Loading...</p>
+  if (order_error) {
+    console.log(order_error)
+    return <p>error</p>
+  }
+  if (payment_loading) return <p>Loading...</p>
+  if (payment_error) {
+    console.log(payment_error)
+    return <p>error</p>
+  }
 
   return (
     <div className='float-cart'>
@@ -145,13 +187,12 @@ if (error) {console.log(error); return <p>error</p>};
               <p css={{ margin: '0 0 0 10px', color: 'grey' }}>Houston, TX</p>
             </div>
           </div>
-          <p css={{ alignSelf: 'center' }}> Pickup Time: {orderSummary().time.format()}</p>
+          <p css={{ alignSelf: 'center' }}>
+            {' '}
+            Pickup Time: {orderSummary().time.format()}
+          </p>
           {cartItems().map(item => {
-            return (
-              <CartItem
-                product={item}
-              />
-            )
+            return <CartItem product={item} />
           })}
         </div>
 

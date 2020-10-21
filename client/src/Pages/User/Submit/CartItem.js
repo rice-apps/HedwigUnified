@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react'
 
-
-const CartItem = ({ product}) => {
+const CartItem = ({ product }) => {
   const [isMouseOver, setIsMouseOver] = useState(false)
 
   function getVarMod () {
@@ -20,17 +19,18 @@ const CartItem = ({ product}) => {
 
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
-  });
+    currency: 'USD'
+  })
   return (
     <div
       className={
         isMouseOver ? 'shelf-item shelf-item--mouseover' : 'shelf-item'
-      }>
+      }
+    >
       <div className='shelf-item__title'>
         <p id='title'>{product.name}</p>
         <p id='options'> {getVarMod()}</p>
-        </div>
+      </div>
       <div className='shelf-item__price'>
         <p>{formatter.format(product.price * product.quantity)}</p>
       </div>

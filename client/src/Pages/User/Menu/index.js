@@ -130,10 +130,16 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
+  
+
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
+<<<<<<< HEAD
   console.log(catalog_data)
+=======
+  console.log(catalog_data);
+>>>>>>> update mutation
   // sampleFunction
   // input: a number
   // output: number * 3

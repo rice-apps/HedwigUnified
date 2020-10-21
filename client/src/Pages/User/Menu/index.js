@@ -127,9 +127,12 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
+  
+
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
+  console.log(catalog_data);
   // sampleFunction
   // input: a number
   // output: number * 3

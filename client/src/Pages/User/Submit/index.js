@@ -151,7 +151,7 @@ function Submit () {
     createPayment({
       variables: {
         orderId: orderJson.id,
-        subtotal: totals.subtotal,
+        subtotal: totals.subtotal * 100,
         currency: 'USD'
       }
     })

@@ -6,6 +6,7 @@ input[type='checkbox'] {
 }
 
 .container {
+  padding-top: 8vh;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -186,6 +187,7 @@ h2 {
   flex-direction: row;
   text-align: center;
   justify-content: center;
+  text-align: center;
   align-items: baseline;
   width: 100%;
 }
@@ -206,23 +208,24 @@ h2 {
 
 .quantityContainer > p {
   font-size: 25px;
+  text-align: center;
   line-height: 35px;
   color: #5a5953;
-  padding: 10px;
+  padding: 0px 10px;
 }
 
 .submitContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 12vh;
 }
 
 .submitButton {
   font-size: 20px;
   line-height: 27px;
   color: #f49f86;
-
+text-align: center;
   height: 5vh;
   width: 30vw;
   background-color: #ffffff;

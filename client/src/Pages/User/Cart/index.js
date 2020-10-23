@@ -155,9 +155,9 @@ function CartDetail() {
     businessHour.end[0].split(":")[1].substring(0, 2)
   );
 
-  const disabled = () =>
-    moment().hour() > endHour1 ||
-    (moment().hour() == endHour1 && moment().minute() >= endMinute1);
+  const disabled = () => false //uncomment the codde below for prod mode.
+    // moment().hour() > endHour1 ||
+    // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
   return (
 <div>
 

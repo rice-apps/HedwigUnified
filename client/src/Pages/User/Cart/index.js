@@ -70,7 +70,6 @@ const computeAvailableMinutes = (
 }
 
 function CartDetail () {
-  console.log(moment().format())
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
   const { loading, error, data } = useQuery(GET_VENDOR)
@@ -131,7 +130,6 @@ function CartDetail () {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
-<<<<<<< HEAD
 
   if (order_loading) return <p>Loading...</p>
   if (order_error) {
@@ -146,12 +144,6 @@ function CartDetail () {
     .hours[0]
 
   const businessHour = {start: ['8:30 a.m.', '2:30 p.m.'], end:['11:00 a.m.', '5:00 p.m.']}
-=======
-  const businessHour = data.getVendors.filter(
-    e => e['name'] == 'Cohen House'
-  )[0].hours[0]
-  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
->>>>>>> feature/submit-2
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])
@@ -173,53 +165,17 @@ function CartDetail () {
   )
   const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
 
-  const disabled = () => false
-    // moment().hour() > endHour1 ||
-    // (moment().hour() == endHour1 && moment().minute() >= endMinute1)
+  const disabled = () => false // uncomment the codde below for prod mode.
+  // moment().hour() > endHour1 ||
+  // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
   return (
-    <div className='float-cart'>
-      <div className='float-cart__content'>
-        <div className='float-cart__shelf-container'>
-          <div css={[centerCenter, row]}>
-            <img src={logo} className='logo' alt='Logo' />
-            <div>
-              <p css={{ margin: '16px 0 0 10px' }}>East West Tea</p>
-              <p css={{ margin: '0 0 0 10px', color: 'grey' }}>Houston, TX</p>
-            </div>
-          </div>
-          <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
-          <TimePicker
-            disabled={disabled()}
-            defaultValue={moment()}
-            css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
-            format='HH:mm'
-            onChange={e => {
-              if (e) {
-                document.getElementsByClassName('buy-btn')[0].disabled = false
-                setPickupTime({ hour: e.hour(), minute: e.minute() })
-                orderSummary({time: e})
-              }
-            }}
-            showNow={false}
-            bordered={false}
-            inputReadOnly={true}
-            disabledHours={() => {
-              return computeAvailableHours(startHour1, endHour1)
-            }}
-            disabledMinutes={hour => {
-              return computeAvailableMinutes(
-                hour,
-                startHour1,
-                startMinute1,
-                endHour1,
-                endMinute1
-              )
-            }}
-          />
-          {disabled() && (
-            <p css={{ alignSelf: 'center', color: 'red' }}>
-              {' '}
-              No pickup time available today.{' '}
+    <div>
+      <BuyerHeader showBackButton backLink='/eat' />
+      <div className='float-cart'>
+        <div className='float-cart__content'>
+          <div className='float-cart__shelf-container'>
+            <p className='cart-title'>
+              My Cart {getTotal() > 0 ? '(' + getTotal().toString() + ')' : ''}
             </p>
             <div css={[centerCenter, row]}>
               <img src={logo} className='logo' alt='Logo' />

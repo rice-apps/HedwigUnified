@@ -21,10 +21,7 @@ console.log(SERVICE_URL)
 
 export const cartItems = makeVar([])
 export const orderSummary = makeVar([])
-<<<<<<< HEAD
 export const userProfile = makeVar([])
-=======
->>>>>>> adds id to query
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/

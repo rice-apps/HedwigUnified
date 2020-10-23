@@ -76,6 +76,18 @@ const CREATE_PAYMENT = gql`
   }
 `
 
+const COMPLETE_PAYMENT = gql`mutation ($id: String!){
+  completePayment(
+    paymentId: $id
+  ){
+    id
+    total {
+      amount
+      currency
+    }
+  }
+}`
+
 const sStorage = localStorage
 const getRecipient = () => {
   return {
@@ -140,6 +152,10 @@ function Submit () {
     createPayment,
     { loading: payment_loading, error: payment_error, data: payment_data }
   ] = useMutation(CREATE_PAYMENT)
+  const [
+    completePayment,
+    { loading: pay_loading, error: pay_error, data: pay_data }
+  ] = useMutation(COMPLETE_PAYMENT)
   // const user = userProfile();
 
   const handleSubmitClick = async () => {
@@ -148,13 +164,15 @@ function Submit () {
     }
     const orderResponse = await createOrder(q)
     const orderJson = orderResponse.data.createOrder
-    createPayment({
+    const createPaymentResponse = await createPayment({
       variables: {
         orderId: orderJson.id,
         subtotal: totals.subtotal * 100,
         currency: 'USD'
       }
     })
+    const paymentId = createPaymentResponse.data.createPayment.id
+    completePayment({variables: {id: paymentId}})
     // The path is hard coded temporarily.
     return navigate(`/eat/cohen/confirmation`)
 >>>>>>> adds payment mutation
@@ -183,13 +201,15 @@ function Submit () {
 =======
   if (order_loading) return <p>Loading...</p>
   if (order_error) {
-    console.log(order_error)
-    return <p>error</p>
+    return <p>{order_error.message}</p>
   }
   if (payment_loading) return <p>Loading...</p>
   if (payment_error) {
-    console.log(payment_error)
-    return <p>error</p>
+    return <p>{payment_error.message}</p>
+  }
+  if (pay_loading) return <p>Loading...</p>
+  if (pay_error) {
+    return <p>{pay_error.message}</p>
   }
 >>>>>>> adds payment mutation
 

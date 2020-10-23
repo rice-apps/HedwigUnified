@@ -130,7 +130,7 @@ const createRecord = items => {
   }
 }
 
-function Submit () {
+function Submit() {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
   let cart_menu = cartItems()
@@ -163,7 +163,7 @@ function Submit () {
       }
     })
     const paymentId = createPaymentResponse.data.createPayment.id
-    completePayment({variables: {id: paymentId}})
+    completePayment({ variables: { id: paymentId } })
     // The path is hard coded temporarily.
     return navigate(`/eat/cohen/confirmation`)
   }

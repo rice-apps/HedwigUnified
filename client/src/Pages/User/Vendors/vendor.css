@@ -161,7 +161,7 @@ p {
 
 .vendorImage {
   position: relative;
-  height: 15vh;
+  height: auto;
   align-content: left;
   width: 100%;
   object-fit: cover;

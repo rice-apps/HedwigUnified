@@ -44,7 +44,7 @@ const getLinks = user => {
     },
 
     {
-      icon: 'info-circle',
+      icon: 'question-circle',
       content: 'About Us',
       path: 'https://riceapps.org/'
     },

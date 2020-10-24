@@ -97,8 +97,6 @@ function VendorCard ({ vendor }) {
             <img
               className={closed ? `vendorImage closed` : `vendorImage`}
               src={curbsidelogo}
-              width="100%"
-              height="100%"
             />
           }
         </div>

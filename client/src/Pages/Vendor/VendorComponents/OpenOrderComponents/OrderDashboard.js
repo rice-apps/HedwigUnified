@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import ReactDOM from 'react-dom'
 import {
   OrderDashboardWrapper,
-  GeneralTitleWrapper,
   NewOrderTitleWrapper,
   AcceptedOrderTitleWrapper,
   ReadyOrderTitleWrapper,
@@ -15,14 +13,6 @@ import {
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
 
-const ColumnWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  overflow: scroll;
-  padding-right: 30px;
-  height: 100%;
-`
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -186,13 +176,13 @@ function OrderDashboard () {
   //     })
   //   }
 
-  let newOrders = allOrders.findOrders.orders.filter(
+  const newOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PROPOSED'
   )
-  let acceptedOrders = allOrders.findOrders.orders.filter(
+  const acceptedOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'RESERVED'
   )
-  let readyOrders = allOrders.findOrders.orders.filter(
+  const readyOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PREPARED'
   )
 

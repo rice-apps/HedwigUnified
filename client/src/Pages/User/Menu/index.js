@@ -9,7 +9,7 @@ import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery, gql } from '@apollo/client'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import { Hidden } from '@material-ui/core'
-import BuyerHeader from'./../Vendors/BuyerHeader.js'
+import BuyerHeader from './../Vendors/BuyerHeader.js'
 
 /*
 const vendor = {
@@ -83,7 +83,7 @@ const vendor = {
   ]
 }
 */
-//<Menu currentVendor = {"East West Tea"}/>
+// <Menu currentVendor = {"East West Tea"}/>
 
 // add a proceed to checkout
 function Menu () {
@@ -98,12 +98,12 @@ function Menu () {
     loading: catalog_loading
   } = useQuery(GET_CATALOG, {
     variables: {
-      //dataSource: 'SQUARE',
+      // dataSource: 'SQUARE',
       vendor: currentVendor
     }
   })
 
-  //const catalog_data = vendor;
+  // const catalog_data = vendor;
 
   const {
     data: vendor_data,
@@ -121,7 +121,7 @@ function Menu () {
   if (vendor_error) {
     return <p>ErrorV...</p>
   }
-  //const vendor_data = vendor_info.getVendor;
+  // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
     return <p>Loading...</p>
   }
@@ -151,8 +151,8 @@ function Menu () {
     currency: 'USD'
 
     // These options are needed to round to whole numbers if that's what you want.
-    //minimumFractionDigits: 0,
-    //maximumFractionDigits: 0,
+    // minimumFractionDigits: 0,
+    // maximumFractionDigits: 0,
   })
 
   formatter.format(2500)
@@ -183,85 +183,89 @@ function Menu () {
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
-      <BuyerHeader/>
-    <div style={{paddingBottom:"10vh"}}>
-      {/* Hero Image */}
-      <img  style={{filter: "blur(2.5px)" }}src={hero} class='hero' alt='hero' />
+      <BuyerHeader />
+      <div style={{ paddingBottom: '10vh' }}>
+        {/* Hero Image */}
+        <img
+          style={{ filter: 'blur(2.5px)' }}
+          src={hero}
+          class='hero'
+          alt='hero'
+        />
 
-      {/* Vendor Info */}
-      <div class='vendorinfocontainer'>
-        {/* Vendor Name */}
-        <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
-        {/* Vendor Operating Hours */}
-        <p class='vendorinfo'>
-          {startTimes[0]} - {endTimes[0]}
-        </p>
-        {startTimes.length > 1 && (
+        {/* Vendor Info */}
+        <div class='vendorinfocontainer'>
+          {/* Vendor Name */}
+          <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
+          {/* Vendor Operating Hours */}
           <p class='vendorinfo'>
-            {startTimes[1]} - {endTimes[1]}
+            {startTimes[0]} - {endTimes[0]}
           </p>
-        )}
-        <button class='readmore'> More Info </button>
-      </div>
+          {startTimes.length > 1 && (
+            <p class='vendorinfo'>
+              {startTimes[1]} - {endTimes[1]}
+            </p>
+          )}
+          <button class='readmore'> More Info </button>
+        </div>
 
-      {/* Category Select Bar */}
-      <div class='categoryselect'>
-        {categories.map(category => (
-          // smooth scrolling feature
-          <h1 class='categoryname'>
-            <Link
-              activeClass='categoryactive'
-              to={category}
-              smooth={true}
-              spy={true}
-              duration={500}
-              offset={-20}
-            >
-              {category}
-            </Link>
-          </h1>
-        ))}
-      </div>
+        {/* Category Select Bar */}
+        <div class='categoryselect'>
+          {categories.map(category => (
+            // smooth scrolling feature
+            <h1 class='categoryname'>
+              <Link
+                activeClass='categoryactive'
+                to={category}
+                smooth
+                spy
+                duration={500}
+                offset={-20}
+              >
+                {category}
+              </Link>
+            </h1>
+          ))}
+        </div>
 
-      {/* Products */}
-      <div class='itemlist'>
-        {/* Appending each category to the list */}
-        {categories.map(category => (
-          <div id={category}>
-            {/* Giving each category a header */}
-            <h3 class='categoryheader'>{category}</h3>
-            {/*  Filtering out all items that fall under the category */}
-            {catalog_data
-              .filter(item => item.category === category)
-              .map(product => (
-                <div
-                  class='itemgrid'
-                  onClick={
-                    product.isAvailable ? () => handleClick(product) : null
-                  }
-                >
-                  {/* Displaying the item: image, name, and price */}
-                  <img
-                    src={product.image}
-                    class='itemimage'
-                    alt={product.name}
-                  />
-                  <h1 class='itemname'>{product.name}</h1>
-                  <p class='itemprice'>
-                    {product.isAvailable
-                      ? formatter.format(
-                          product.variants[0].price.amount / 100
-                        ) + '+'
-                      : 'Unavailable'}
-                  </p>
-                </div>
-              ))}
-          </div>
-        ))}
+        {/* Products */}
+        <div class='itemlist'>
+          {/* Appending each category to the list */}
+          {categories.map(category => (
+            <div id={category}>
+              {/* Giving each category a header */}
+              <h3 class='categoryheader'>{category}</h3>
+              {/*  Filtering out all items that fall under the category */}
+              {catalog_data
+                .filter(item => item.category === category)
+                .map(product => (
+                  <div
+                    class='itemgrid'
+                    onClick={
+                      product.isAvailable ? () => handleClick(product) : null
+                    }
+                  >
+                    {/* Displaying the item: image, name, and price */}
+                    <img
+                      src={product.image}
+                      class='itemimage'
+                      alt={product.name}
+                    />
+                    <h1 class='itemname'>{product.name}</h1>
+                    <p class='itemprice'>
+                      {product.isAvailable
+                        ? formatter.format(
+                            product.variants[0].price.amount / 100
+                          ) + '+'
+                        : 'Unavailable'}
+                    </p>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
       </div>
-      
-    </div>
-    <BottomAppBar/>
+      <BottomAppBar />
     </div>
   )
 }

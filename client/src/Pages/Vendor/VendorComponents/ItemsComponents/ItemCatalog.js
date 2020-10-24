@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  ThemeProvider,
+  createMuiTheme
+} from '@material-ui/core/styles'
 import { Tab, Box, Tabs, Typography, AppBar } from '@material-ui/core'
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+
 import MakeCatalogItems from './CatalogDisplayComponents.js'
 import souppic from './../../../../images/soup.jpg'
 
@@ -153,7 +157,7 @@ function ItemCatalog (props) {
           <ItemDisplayWrapper>
             {props.categories.map(category => {
               return (
-                <React.Fragment>
+                <>
                   <TabPanel value={value} category={category}>
                     {items.map(item => {
                       return (
@@ -166,7 +170,7 @@ function ItemCatalog (props) {
                       )
                     })}
                   </TabPanel>
-                </React.Fragment>
+                </>
               )
             })}
           </ItemDisplayWrapper>

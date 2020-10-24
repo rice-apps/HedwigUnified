@@ -20,25 +20,25 @@ const AUTHENTICATE_USER = gql`
 const parseTicket = url => {
   // Ex: http://example.com/auth?ticket=ST-1590205338989-7y7ojqvDfvGIFDLyjahEqIp2F
   // Get the ticket query param
-  let ticketParamName = 'ticket='
+  const ticketParamName = 'ticket='
   // We're searching for the part of the string AFTER ticket=
-  let ticketStartIndex = url.indexOf(ticketParamName) + ticketParamName.length
+  const ticketStartIndex = url.indexOf(ticketParamName) + ticketParamName.length
   // Only returns the ticket portion
   return url.substring(ticketStartIndex)
 }
 
-const allowedUsers = ["byz2"];
+const allowedUsers = ['byz2']
 
 function Auth () {
   // First parse out ticket from URL href
-  let ticket = parseTicket(window.location.href)
+  const ticket = parseTicket(window.location.href)
   // Run query against backend to authenticate user
   const [
     authenticateUser,
     { data: authenticationData, loading, error }
   ] = useMutation(AUTHENTICATE_USER, { variables: { ticket: ticket } })
 
-  console.log(authenticationData);
+  console.log(authenticationData)
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
     authenticateUser().catch(err => <p>{err.message}</p>)
@@ -49,7 +49,7 @@ function Auth () {
   if (loading) return <p>Loading...</p>
   if (!authenticationData) return <p>Bad.</p>
 
-  let {
+  const {
     token,
     netid,
     _id,
@@ -60,7 +60,17 @@ function Auth () {
     recentUpdate,
     type
   } = authenticationData.authenticateUser
-  userProfile({ netid, name, phone, _id, isAdmin, vendor, recentUpdate, type, token })
+  userProfile({
+    netid,
+    name,
+    phone,
+    _id,
+    isAdmin,
+    vendor,
+    recentUpdate,
+    type,
+    token
+  })
 
   // Set token in local storage
   localStorage.setItem('token', token)
@@ -69,21 +79,20 @@ function Auth () {
   // if (!employer || employer === 0) {
   //   return <Navigate to='/vendor' />
   // }
-  
-  
+
   // login page should appear after IDP sign in
   // we check if user is employee, if they are, we get to show the vendor/client button page
   // and they can select to view a page as employee or client and redirect them properly
-  // if the vendor chooses client, they can't access /employee. they can only access the 
+  // if the vendor chooses client, they can't access /employee. they can only access the
   // normal catalog and menu via /eat.  We're going to also set some kinda of local storage
   // data that informs Hedwig that this employee is acting like a client.
   // we can't send a mutation and change backend b/c that'll permanently make the vendor
   // a client
 
   // else, if employee is a buyer, then we redirect them automatically to /eat and restrict
-  // their access to /employee  
+  // their access to /employee
 
-  if (allowedUsers.includes(netid) || vendor.length > 0){
+  if (allowedUsers.includes(netid) || vendor.length > 0) {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients

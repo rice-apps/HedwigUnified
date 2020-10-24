@@ -100,9 +100,9 @@ const Payments = () => {
   // Displays the payment option buttons
   const renderButtons = () => {
     const icons = [
-      <BiIdCard size={48}></BiIdCard>,
-      <FaCreditCard size={37}></FaCreditCard>,
-      <FaBriefcase size={37}></FaBriefcase>
+      <BiIdCard size={48} />,
+      <FaCreditCard size={37} />,
+      <FaBriefcase size={37} />
     ]
     const options = ['Tetra', 'Credit Card', 'Cohen Club Card']
 
@@ -130,12 +130,12 @@ const Payments = () => {
 
   const handleClickCohen = () => {
     // Go to the cohen checkout page
-    return navigate(`/cohen`)
+    return navigate('/cohen')
   }
 
   const handleClickCredit = () => {
     // Go to the cohen checkout page
-    return navigate(`/payment`)
+    return navigate('/payment')
   }
 
   // handle when the user clicks on credit card option and next

@@ -59,7 +59,7 @@ const LabelWrapper = styled.div`
 function MakeClosedDashboardLabels () {
   return (
     <LabelWrapper>
-      <div></div>
+      <div />
       <div>Customer</div>
       <div>Order Time</div>
       <div>Status</div>
@@ -124,7 +124,7 @@ function MakeIndividualClosedOrder (props) {
       open={false}
       trigger={
         <ClosedOrderTrigger
-          IsClosed={true}
+          IsClosed
           customerName={props.customerName}
           orderTime={props.orderTime}
           orderStatus={props.orderStatus}

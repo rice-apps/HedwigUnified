@@ -40,7 +40,7 @@ input[type='checkbox'] {
   font-size: 15px;
   line-height: 20px;
   margin-top: 0px;
-  margin-left: 0px; 
+  margin-left: 0px;
   margin-bottom: 28px;
 }
 
@@ -225,7 +225,7 @@ h2 {
   font-size: 20px;
   line-height: 27px;
   color: #f49f86;
-text-align: center;
+  text-align: center;
   height: 5vh;
   width: 30vw;
   background-color: #ffffff;

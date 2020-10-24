@@ -78,53 +78,38 @@ function SideBarItems () {
     <SideBarItemsWrapper>
       <Collapsible
         classParentString='MainMenuCollapsible'
-        open={true}
-        trigger={<MainMenuItem name='Order Processing' IsClosed={true} />}
+        open
+        trigger={<MainMenuItem name='Order Processing' IsClosed />}
         triggerWhenOpen={
           <MainMenuItem name='Order Processing' isClosed={false} />
         }
       >
-        <SubMenuItem
-          path='/employee/openorders'
-          label='Open Orders'
-        ></SubMenuItem>
-        <SubMenuItem
-          path='/employee/closedorders'
-          label='Closed Orders'
-        ></SubMenuItem>
+        <SubMenuItem path='/employee/openorders' label='Open Orders' />
+        <SubMenuItem path='/employee/closedorders' label='Closed Orders' />
       </Collapsible>
 
       <Collapsible
         classParentString='MainMenuCollapsible'
-        open={true}
-        trigger={<MainMenuItem name='Menu Management' IsClosed={true} />}
+        open
+        trigger={<MainMenuItem name='Menu Management' IsClosed />}
         triggerWhenOpen={
           <MainMenuItem name='Menu Management' isClosed={false} />
         }
       >
-        <SubMenuItem path='/employee/items' label='Edit Items'></SubMenuItem>
-        <SubMenuItem
-          path='/employee/modifiers'
-          label='Edit Modifiers'
-        ></SubMenuItem>
+        <SubMenuItem path='/employee/items' label='Edit Items' />
+        <SubMenuItem path='/employee/modifiers' label='Edit Modifiers' />
       </Collapsible>
 
       <Collapsible
         classParentString='MainMenuCollapsible'
-        open={true}
-        trigger={<MainMenuItem name='Store Information' IsClosed={true} />}
+        open
+        trigger={<MainMenuItem name='Store Information' IsClosed />}
         triggerWhenOpen={
           <MainMenuItem name='Store Information' isClosed={false} />
         }
       >
-        <SubMenuItem
-          path='/employee/set-basic-info'
-          label='Set Basic Info'
-        ></SubMenuItem>
-        <SubMenuItem
-          path='/employee/set-store-hours'
-          label='Set Store Hours'
-        ></SubMenuItem>
+        <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
+        <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
     </SideBarItemsWrapper>
   )

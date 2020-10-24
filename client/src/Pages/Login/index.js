@@ -25,14 +25,14 @@ function Login () {
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
   // Fetch service from cache since it depends on where this app is deployed
   // const { data } = useQuery(GET_SERVICE_LOCAL);
-  
+
   const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
 
   // Handles click of login button
   const login = () => {
-      // Redirects user to the CAS login page
-      let redirectURL = casLoginURL + '?service=' + SERVICE_URL
-      window.open(redirectURL, '_self')
+    // Redirects user to the CAS login page
+    const redirectURL = casLoginURL + '?service=' + SERVICE_URL
+    window.open(redirectURL, '_self')
   }
 
   const signInSAML = () => {

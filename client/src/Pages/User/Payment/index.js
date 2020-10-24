@@ -13,7 +13,7 @@ import 'react-square-payment-form/lib/default.css'
 
 function PaymentPage (props) {
   return (
-    <React.Fragment>
+    <>
       <h1>Credit Card Payment</h1>
 
       <SquarePaymentForm
@@ -21,8 +21,8 @@ function PaymentPage (props) {
           process.env.NODE_ENV === 'development' ||
           process.env.NODE_ENV === 'test'
         }
-        applicationId={'sandbox-sq0idb-uulHV5znTofKYc-U1nJBuQ'}
-        locationId={'ZETW20E2NB4EG'}
+        applicationId='sandbox-sq0idb-uulHV5znTofKYc-U1nJBuQ'
+        locationId='ZETW20E2NB4EG'
         cardNonceResponseReceived={(
           errors,
           nonce,
@@ -61,7 +61,7 @@ function PaymentPage (props) {
 
         <CreditCardSubmitButton>Pay $28.00</CreditCardSubmitButton>
       </SquarePaymentForm>
-    </React.Fragment>
+    </>
   )
 }
 

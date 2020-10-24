@@ -1,4 +1,4 @@
-import {createGlobalStyle} from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import RalewayRegular from './Raleway-Regular.ttf'
 import RalewayBold from './Raleway-Bold.ttf'
 import RalewayLight from './Raleway-Light.ttf'

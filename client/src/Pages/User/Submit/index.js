@@ -15,14 +15,13 @@ import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
 
 
-function Submit () {
+function Submit() {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
   let cart_menu = cartItems()
   const pickupTime = orderSummary().time
 
   const handleSubmitClick = () => {
-    // The path is hard coded temporarily.
     return navigate(`/eat/cohen/confirmation`)
   }
 

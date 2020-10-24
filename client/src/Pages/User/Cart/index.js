@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/core";
 import React, { useEffect, useState } from "react";
 import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
+import {createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR} from "./util"
 import logo from "../../../images/cohenhouse.png";
 import "./cart.scss";
 import { centerCenter, row, column, endStart } from "../../../Styles/flex";
@@ -24,22 +25,7 @@ const defaultTotals = {
   discount: null
 };
 
-const GET_VENDOR = gql`
-  query {
-    getVendors {
-      name
-      hours {
-        day
-        start
-        end
-      }
-      squareInfo {
-        merchantId
-        locationIds
-      }
-    }
-  }
-`;
+
 
 const computeAvailableHours = (startHour, endHour) => {
   const hour = moment().hour();
@@ -90,10 +76,32 @@ function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
   const [pickupTime, setPickupTime] = useState(null);
   const { loading, error, data } = useQuery(GET_VENDOR);
+  const [
+    createOrder,
+    { loading: order_loading, error: order_error, data: order_data }
+  ] = useMutation(CREATE_ORDER)
+  const [
+    createPayment,
+    { loading: payment_loading, error: payment_error, data: payment_data }
+  ] = useMutation(CREATE_PAYMENT)
+
   const navigate = useNavigate();
   let cart_menu = cartItems();
 
-  const handleConfirmClick = () => {
+  const handleConfirmClick = async () => {
+    const q = {
+      variables: createRecord(cart_menu)
+    }
+    const orderResponse = await createOrder(q)
+    const orderJson = orderResponse.data.createOrder
+    const createPaymentResponse = await createPayment({
+      variables: {
+        orderId: orderJson.id,
+        subtotal: totals.subtotal * 100,
+        currency: 'USD'
+      }
+    })
+
     return navigate(`/eat/cohen/payment`);
   };
 
@@ -127,6 +135,16 @@ function CartDetail() {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
+
+  if (order_loading) return <p>Loading...</p>
+  if (order_error) {
+    return <p>{order_error.message}</p>
+  }
+  if (payment_loading) return <p>Loading...</p>
+  if (payment_error) {
+    return <p>{payment_error.message}</p>
+  }
+
   const businessHour = data.getVendors.filter(
     e => e["name"] == "Cohen House"
   )[0].hours[0];

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { css, jsx } from '@emotion/react'
 import { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
@@ -17,12 +18,40 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
+=======
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import React, { useEffect, useState } from "react";
+import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
+import { useParams, useHistory } from "react-router";
+import {createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR} from "./util"
+import logo from "../../../images/cohenhouse.png";
+import "./cart.scss";
+import { centerCenter, row, column, endStart } from "../../../Styles/flex";
+import CartProduct from "./CartProducts";
+import Payments from "./Payments.js";
+import currency from "currency.js";
+import { cartItems, orderSummary } from "../../../apollo";
+import dispatch from "../Products/FunctionalCart";
+import Select from "react-select";
+import { TimePicker } from "antd";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import BottomAppBar from "./../Vendors/BottomAppBar.js";
+import BuyerHeader from "./../Vendors/BuyerHeader.js";
+>>>>>>> moved createOrder to cart
 
 const defaultTotals = {
   subtotal: 0,
   tax: 0,
   discount: null
+<<<<<<< HEAD
 }
+=======
+};
+
+
+>>>>>>> moved createOrder to cart
 
 const computeAvailableHours = (startHour, endHour) => {
   const hour = moment().hour()
@@ -85,6 +114,7 @@ function CartDetail () {
   const navigate = useNavigate()
   const cart_menu = cartItems()
 
+<<<<<<< HEAD
   const handleConfirmClick = async () => {
     const q = {
       variables: createRecord(cart_menu)
@@ -101,6 +131,40 @@ function CartDetail () {
 
     return navigate('/eat/cohen/payment')
   }
+=======
+function CartDetail() {
+  const [totals, setTotals] = useState(defaultTotals);
+  const [pickupTime, setPickupTime] = useState(null);
+  const { loading, error, data } = useQuery(GET_VENDOR);
+  const [
+    createOrder,
+    { loading: order_loading, error: order_error, data: order_data }
+  ] = useMutation(CREATE_ORDER)
+  const [
+    createPayment,
+    { loading: payment_loading, error: payment_error, data: payment_data }
+  ] = useMutation(CREATE_PAYMENT)
+
+  const navigate = useNavigate();
+  let cart_menu = cartItems();
+
+  const handleConfirmClick = async () => {
+    const q = {
+      variables: createRecord(cart_menu)
+    }
+    const orderResponse = await createOrder(q)
+    const orderJson = orderResponse.data.createOrder
+    const createPaymentResponse = await createPayment({
+      variables: {
+        orderId: orderJson.id,
+        subtotal: totals.subtotal * 100,
+        currency: 'USD'
+      }
+    })
+
+    return navigate(`/eat/cohen/payment`);
+  };
+>>>>>>> moved createOrder to cart
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -140,6 +204,7 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
+<<<<<<< HEAD
   const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
     .hours[0]
 
@@ -150,6 +215,18 @@ function CartDetail () {
   let endHour2 = parseInt(businessHour.end[0].split(':')[1])
   if (businessHour.start[0].includes('p.m.')) {
     startHour1 += 12
+=======
+  const businessHour = data.getVendors.filter(
+    e => e["name"] == "Cohen House"
+  )[0].hours[0];
+  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+  let startHour1 = parseInt(businessHour.start[0].split(":")[0]);
+  let endHour1 = parseInt(businessHour.end[0].split(":")[0]);
+  let startHour2 = parseInt(businessHour.start[0].split(":")[1]);
+  let endHour2 = parseInt(businessHour.end[0].split(":")[1]);
+  if (businessHour.start[0].includes("p.m.")) {
+    startHour1 += 12;
+>>>>>>> moved createOrder to cart
   }
   if (businessHour.end[0].includes('p.m.')) {
     endHour1 += 12

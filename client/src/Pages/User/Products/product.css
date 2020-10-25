@@ -7,8 +7,8 @@ input[type='checkbox'] {
 
 .container {
   padding-top: 8vh;
-  height: 100vh;
-  width: 100vw;
+  height: auto;
+  width: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -327,4 +327,8 @@ h2 {
   background: #fff;
   border-radius: 4px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.variantSelect {
+  line-height: 5vh;
 }

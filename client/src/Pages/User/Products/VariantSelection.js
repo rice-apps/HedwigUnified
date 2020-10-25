@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import "./product.css"
 import currency from 'currency.js'
 
 const VariantSelection = ({ variants }) => {

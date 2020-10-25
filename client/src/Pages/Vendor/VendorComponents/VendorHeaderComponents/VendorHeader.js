@@ -6,7 +6,9 @@ import Collapsible from 'react-collapsible'
 import { BiLogOut } from 'react-icons/bi'
 import { AiOutlineUserSwitch } from 'react-icons/ai'
 import { IconContext } from 'react-icons'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
+import { userProfile } from '../../../../apollo'
+import { GET_USER } from '../../../../graphql/VendorQueries';
 
 const VendorHeaderWrapper = styled.div`
   font-family: 'Futura', sans-serif;
@@ -83,6 +85,16 @@ const showLogout = false
 
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
+  // const { data : userData, error, loading } = useQuery(GET_USER, {
+  //   variables: {
+  //     token: localStorage.getItem("token")
+  //   }
+  // });
+
+  // console.log("USER", userProfile());
+  // if (error) return <h1>Name not retrievable</h1>;
+  // if (loading) return <h1>Getting your name...</h1>;
+
   function toggleLogoutScreen () {
     var logoutOpen = showLogout
     setShowLogout(!logoutOpen)
@@ -128,7 +140,7 @@ function VendorHeader () {
     <IconContext.Provider value={{ style: { marginRight: '7px' } }}>
       <VendorHeaderWrapper>
         <StyledUserDisplayWrapper onClick={toggleLogoutScreen}>
-          <UserText>Newton Huynh</UserText>
+          <UserText>{localStorage.getItem("hedwig_name")}</UserText>
           <FaUserCircle style={{ fontSize: '30px', marginLeft: '1vw' }} />
         </StyledUserDisplayWrapper>
 

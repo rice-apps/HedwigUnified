@@ -60,6 +60,7 @@ function Auth () {
     recentUpdate,
     type
   } = authenticationData.authenticateUser
+
   userProfile({
     netid,
     name,
@@ -74,6 +75,7 @@ function Auth () {
 
   // Set token in local storage
   localStorage.setItem('token', token)
+  localStorage.setItem('hedwig_name', name);
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

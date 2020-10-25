@@ -1,6 +1,14 @@
 import React, { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
+const GET_USER = gql`
+  query getUser($token: String!){
+    userOne(filter: { token: $token }){
+      name
+    }
+  }
+`
+
 const VENDOR_QUERY = gql`
   query getVendorInfo($vendor: String!) {
     getVendor(filter: { name: $vendor }) {
@@ -36,4 +44,4 @@ const GET_ALL_VENDORS = gql`
   }
 `
 
-export { VENDOR_QUERY, GET_ALL_VENDORS }
+export { VENDOR_QUERY, GET_ALL_VENDORS, GET_USER }

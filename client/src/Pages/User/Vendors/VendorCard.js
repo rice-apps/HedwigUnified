@@ -65,13 +65,13 @@ function VendorCard ({ vendor }) {
               <p> Hours Open: {
               times.map(time =>{
                 return (
-                    <p>
+                    <span>
                       <br />
                       {time[0]}
                       {' - '}
                       {time[1]}
-                      {', '}
-                    </p>
+                      {''}
+                    </span>
                   )
                 })}
               </p>

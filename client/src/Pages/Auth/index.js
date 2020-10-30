@@ -60,6 +60,7 @@ function Auth () {
     recentUpdate,
     type
   } = authenticationData.authenticateUser
+
   userProfile({
     netid,
     name,
@@ -92,7 +93,7 @@ function Auth () {
   // else, if employee is a buyer, then we redirect them automatically to /eat and restrict
   // their access to /employee
 
-  if (allowedUsers.includes(netid) || vendor.length > 0) {
+  if (allowedUsers.includes(netid)) {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients

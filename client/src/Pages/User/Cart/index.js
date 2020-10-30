@@ -95,7 +95,16 @@ function CartDetail() {
   let cart_menu = cartItems();
 
   const handleConfirmClick = () => {
-    return navigate(`/eat/cohen/payment`);
+    let allAvailable = true;
+    cart_menu.map(item => {
+      if (!item.isAvailable) {
+        alert("An item in your cart has become unavailable");
+        allAvailable = false;
+      }
+    })
+    if (allAvailable) {
+      return navigate(`/eat/cohen/payment`);
+    }
   };
 
   const updateTotal = () => {
@@ -250,7 +259,8 @@ function CartDetail() {
 
         <div className='float-cart__footer'>
           <button
-            disabled={cartItems().length == 0 || pickupTime == null}
+            // disabled={cartItems().length == 0 || pickupTime == null}
+            disabled={false}
             className='buy-btn'
             title={'Confirm'}
             onClick={handleConfirmClick}

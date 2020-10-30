@@ -28,7 +28,7 @@ const getLinks = user => {
   let links = [
     { icon: 'envelope', content: user.netid, path: '' },
 
-    { icon: 'phone', content: user.phone, path: '' },
+    { icon: 'phone', content: user.phone, path: '/contact' },
 
     /*
     { icon: 'receipt', content: 'Past Orders', path: 'user/orders' },

@@ -16,7 +16,8 @@ import 'firebase/auth'
 
 const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
 
-const sStorage = window.sessionStorage
+// const sStorage = window.sessionStorage
+const sStorage = window.localStorage
 
 function Login () {
   const navigate = useNavigate()

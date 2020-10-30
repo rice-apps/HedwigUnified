@@ -42,12 +42,29 @@ const GET_VENDOR = gql`
   }
 `
 
-const computeAvailableHours = (startHour, endHour) => {
+const parseStoreHour = (hours) => {
+  const start1 = moment(hours.start[0], 'HH:mm a A')
+  const end1 = moment(hours.end[0], 'HH:mm a A')
+  const start2 = moment(hours.start[1], 'HH:mm a A')
+  const end2 = moment(hours.end[1], 'HH:mm a A')
+  return {
+    start1,
+    end1,
+    start2,
+    end2
+  }
+}
+
+const computeAvailableHours = (hours) => {
+  const {start1, end1, start2, end2} = hours
   const hour = moment().hour()
   let i = 0
   const rtn = []
   while (i < 24) {
-    if (i < startHour || i < hour || i > endHour) {
+    if (i < start1.hour() 
+        || i < hour 
+        || (i > end1.hour() && i < start2.hour()) 
+        || i > end2.hour()) {
       rtn.push(i)
     }
     i += 1
@@ -57,31 +74,21 @@ const computeAvailableHours = (startHour, endHour) => {
 
 const computeAvailableMinutes = (
   hr,
-  startHour,
-  startMinute,
-  endHour,
-  endMinute
+  hours
 ) => {
-  const hour = moment().hour()
-  const minute = moment().minute()
-  let start = 0
-  let end = -1
-  if (hr == startHour) {
-    if (hr == hour) {
-      end = Math.max(minute, startMinute)
-    } else {
-      end = startMinute
+  const now = moment().minute()
+  const {start1, end1, start2, end2} = hours
+  let i = 0
+  let rtn = []
+  // console.log(end1.minute())
+  while (i <= 59) {
+    let test = moment(hr + ':' + i, 'HH:mm')
+    if (test.isBefore(start1) 
+        || test.isBefore(now) 
+        || (end1.isBefore(test) && test.isBefore(start2)) 
+        || end2.isBefore(test)) {
+      rtn.push(i)
     }
-  } else if (hr == endHour) {
-    start = endMinute
-    end = 59
-  } else if (hr == hour) {
-    end = minute
-  }
-  let i = start
-  const rtn = []
-  while (i <= end) {
-    rtn.push(i)
     i += 1
   }
   return rtn
@@ -126,43 +133,60 @@ function CartDetail () {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
-  console.log(moment('8:30 a.m.', 'H HH:mm a A'))
-  console.log(data)
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
-  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
-  let startHour1 = parseInt(businessHour.start[0].split(':')[0])
-  let endHour1 = parseInt(businessHour.end[0].split(':')[0])
-  let startHour2 = parseInt(businessHour.start[0].split(':')[1])
-  let endHour2 = parseInt(businessHour.end[0].split(':')[1])
-  if (businessHour.start[0].includes('p.m.')) {
-    startHour1 += 12
-  }
-  if (businessHour.end[0].includes('p.m.')) {
-    endHour1 += 12
-  }
-  if (businessHour.start[1].includes('p.m.')) {
-    startHour2 += 12
-  }
-  if (businessHour.end[1].includes('p.m.')) {
-    endHour2 += 12
-  }
-  const startMinute1 = parseInt(
-    businessHour.start[0].split(':')[1].substring(0, 2)
-  )
-  const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
 
-  const disabled = () =>
-    moment().hour() > endHour1 ||
-    (moment().hour() == endHour1 && moment().minute() >= endMinute1)
+  const businessHour = parseStoreHour(data.getVendors.filter(
+    e => e['name'] == 'Cohen House'
+  )[0].hours[0])
+
+  const disabled = () => {
+    let now = moment()
+    const {start1, end1, start2, end2} = businessHour
+    if (now.isBefore(start1) || (now.isBefore(start2) && now.isAfter(end1)) || now.isAfter(end2) || now.isoWeekday() > 5) {
+      return true;
+    }
+    return false;
+  }
+
   return (
-    <div>
-      <BuyerHeader showBackButton backLink='/eat' />
-      <div className='float-cart'>
-        <div className='float-cart__content'>
-          <div className='float-cart__shelf-container'>
-            <p className='cart-title'>
-              My Cart {getTotal() > 0 ? '(' + getTotal().toString() + ')' : ''}
+    <div className='float-cart'>
+      <div className='float-cart__content'>
+        <div className='float-cart__shelf-container'>
+          <div css={[centerCenter, row]}>
+            <img src={logo} className='logo' alt='Logo' />
+            <div>
+              <p css={{ margin: '16px 0 0 10px' }}>East West Tea</p>
+              <p css={{ margin: '0 0 0 10px', color: 'grey' }}>Houston, TX</p>
+            </div>
+          </div>
+          <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
+          <TimePicker
+            disabled={disabled()}
+            defaultValue={moment()}
+            css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
+            format='HH:mm'
+            onChange={e => {
+              if (e) {
+                document.getElementsByClassName('buy-btn')[0].disabled = false
+                setPickupTime({ hour: e.hour(), minute: e.minute() })
+              }
+            }}
+            showNow={false}
+            bordered={false}
+            inputReadOnly={true}
+            disabledHours={() => {
+              return computeAvailableHours(businessHour)
+            }}
+            disabledMinutes={hour => {
+              return computeAvailableMinutes(
+                hour,
+                businessHour
+              )
+            }}
+          />
+          {disabled() && (
+            <p css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              No pickup time available today.{' '}
             </p>
             <div css={[centerCenter, row]}>
               <img src={logo} className='logo' alt='Logo' />

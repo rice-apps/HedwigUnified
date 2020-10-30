@@ -76,9 +76,9 @@ function Auth () {
   localStorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
-  // if (!employer || employer === 0) {
-  //   return <Navigate to='/vendor' />
-  // }
+  if (!employer || employer === 0) {
+    return <Navigate to='/vendor' />
+  }
 
   // login page should appear after IDP sign in
   // we check if user is employee, if they are, we get to show the vendor/client button page

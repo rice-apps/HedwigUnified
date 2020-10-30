@@ -138,7 +138,6 @@ function CartDetail () {
   )[0].hours[0])
 
   const disabled = () => {
-    return false;
     let now = moment()
     const {start1, end1, start2, end2} = businessHour
     if (now.isAfter(end2) || now.isoWeekday() > 5) {

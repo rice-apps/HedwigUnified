@@ -17,6 +17,8 @@ import 'react-square-payment-form/lib/default.css'
 
 // This is credit card payment! screen
 
+const [inputCohenId, setInputCohenId] = useState('');
+
 const ACCEPT_ORDER = gql`
   mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!){
     updateOrder(
@@ -152,7 +154,7 @@ function CohenPayment(props) {
         </Row>
       </Grid>
       <Row>
-        < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} onChange />
+        < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} onChange={event => setInputCohenId(event.target.value)} />
       </Row>
       <Footer onClick={() => {
         handleClickNext()

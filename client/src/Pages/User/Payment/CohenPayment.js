@@ -131,7 +131,7 @@ function CohenPayment(props) {
     { data: data, loading, error }
   ] = useMutation(ACCEPT_ORDER)
 
-  const handleClickNext = (inputCohenId) => {
+  const handleClickNext = () => {
     updateOrder({
       variables: {
         orderId: /*order()[0]*/ "Ha6zGEo32PyBOlcnbkSuJGxjOuOZY",

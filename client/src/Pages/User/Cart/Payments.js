@@ -53,7 +53,6 @@ function Payments () {
   const fontWeights = [500, 700];
 
   const Title = styled.text`
-<<<<<<< HEAD
     margin-top: 110px;
     margin-bottom: 20px;
     font-family: 'adobe-clean', sans-serif;
@@ -84,39 +83,6 @@ function Payments () {
   `
 
   const Grid = styled.div``
-=======
-            margin-top: 110px;
-            margin-bottom: 20px;
-            font-family: "adobe-clean", sans-serif;
-            font-size: 25px;
-            color: #595858; 
-            font-weight: lighter;
-        `;
-
-  const Button = styled.button`
-            font-family: 'Raleway', sans-serif;
-            border-radius: 20px;
-            border-width: 1px;
-            border-color: #595858;
-            height: 80px;
-            width: 230px;
-            font-size: 18px;
-            font-weight: 500;
-            color: #595858;
-            text-align: left;
-            /* padding-left: 50px; */
-            padding: 20px;
-            padding-left: 30px;
-            align-items: center;
-            justify-content: center;
-            display: grid;
-            grid-template-columns: 2fr 3fr;
-            grid-template-rows: 1fr;
-        `;
-
-  const Grid = styled.div`
-        `;
->>>>>>> added embedding shopify url to payment options page
 
   const Row = styled.div`
             display: flex;

@@ -2,6 +2,7 @@ import { Component, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
+import { gql, useMutation } from '@apollo/client'
 import {
   SquarePaymentForm,
   CreditCardNumberInput,
@@ -12,9 +13,28 @@ import {
 } from 'react-square-payment-form'
 import 'react-square-payment-form/lib/default.css'
 
+// import { ACCEPT_ORDER } from "/Users/Ananya/hedwig/client/src/Pages/Vendor/VendorComponents/OpenOrderComponents/OrderCard.js"
+
 // This is credit card payment! screen
 
-function CohenPayment (props) {
+const ACCEPT_ORDER = gql`
+  mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!){
+    updateOrder(
+      orderId: $orderId
+      record: {
+        fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED }
+        cohenId: $cohenId
+      }
+    ) {
+      fulfillment {
+        uid
+        state
+      }
+    }
+  }
+`
+
+function CohenPayment(props) {
   // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
   const [activePass, setActivePass] = useState(0)
 
@@ -49,7 +69,7 @@ function CohenPayment (props) {
     font-size: 23px;
     color: #595858;
     font-weight: bold;
-    justify-content: left;
+    justify-content: center;
   `
 
   const Button = styled.button`
@@ -102,10 +122,24 @@ function CohenPayment (props) {
     border-bottom-width: 1px;
   `
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const [
+    updateOrder,
+    { data: data, loading, error }
+  ] = useMutation(ACCEPT_ORDER)
+
+  const handleClickNext = (inputCohenId) => {
+    updateOrder({
+      variables: {
+        orderId: /*order()[0]*/ "Ha6zGEo32PyBOlcnbkSuJGxjOuOZY",
+        cohenId: inputCohenId
+      }
+    }).then(navigate(`/eat/submit`).catch(err => console.log("Could not update order")))
+  }
 
   return (
-    <div>
+    < div >
       <Grid onClick={() => setActivePass(0)}>
         <Row>
           <Title>Payment Method</Title>
@@ -118,16 +152,12 @@ function CohenPayment (props) {
         </Row>
       </Grid>
       <Row>
-        <PasswordInput aria-hidden='true' onClick={() => setActivePass(1)} />
+        < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} onChange />
       </Row>
-      <Footer
-        onClick={() => {
-          navigate('/eat/submit')
-        }}
-      >
-        Next
-      </Footer>
-    </div>
+      <Footer onClick={() => {
+        handleClickNext()
+      }}>Next</Footer>
+    </div >
   )
 }
 

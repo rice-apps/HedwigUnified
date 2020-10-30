@@ -74,11 +74,7 @@ const GET_USER_INFO = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, ...rest }) => {
-<<<<<<< HEAD
   const token =
-=======
-  let token =
->>>>>>> adds styled files
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
   const client = useApolloClient()

@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client'
 import { useHistory, useLocation } from 'react-router'
 import './confirmation.css'
 // import '../../fonts/style.css'
-//fontawesome imports
+// fontawesome imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
@@ -35,7 +35,7 @@ const Confirmation = ({ classes }) => {
     return navigate(`/eat/${vendor.slug}`)
   }
   const handleOrdersClick = () => {
-    return navigate(`/eat/orders`)
+    return navigate('/eat/orders')
   }
   const handleCartClick = () => {
     return navigate(`/eat/${vendor.slug}/cart`)
@@ -100,7 +100,7 @@ const Confirmation = ({ classes }) => {
   console.log(cartItems())
   // how do we get the current item in cart?
   // right now we hard coded vendor id and item
-  function renderFailure() {
+  function renderFailure () {
     return (
       <div className='mainDiv'>
         <FailureSVG className='checkSvg' />
@@ -119,7 +119,7 @@ const Confirmation = ({ classes }) => {
       </div>
     )
   }
-  function renderConfirmation() {
+  function renderConfirmation () {
     return (
       <div className='mainDiv'>
         <ConfirmationSVG className='checkSvg' />

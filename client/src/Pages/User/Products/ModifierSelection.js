@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import currency from 'currency.js'
 
 function ModifierSelection ({ modifierCategory }) {
-  let {
+  const {
     modifiers: options,
     question,
     description,
     selectionType,
     name
-  } = modifierCategory; 
+  } = modifierCategory
   return (
     <div className='modifier'>
       <div className='heading'>
@@ -21,8 +21,8 @@ function ModifierSelection ({ modifierCategory }) {
         {options.map(option => (
           <div className='optionSet' key={option.name}>
             <label>
-              {selectionType==="MULTIPLE" ? (
-                <React.Fragment>
+              {selectionType === 'MULTIPLE' ? (
+                <>
                   <input
                     type='checkbox'
                     name={name}
@@ -30,9 +30,9 @@ function ModifierSelection ({ modifierCategory }) {
                     value={JSON.stringify({ option })}
                   />
                   <span className='customCheck' />
-                </React.Fragment>
+                </>
               ) : (
-                <React.Fragment>
+                <>
                   <input
                     type='radio'
                     name={name}
@@ -40,7 +40,7 @@ function ModifierSelection ({ modifierCategory }) {
                     value={JSON.stringify({ option })}
                   />
                   <span className='customRadio' />
-                </React.Fragment>
+                </>
               )}
               <p>{option.name}</p>
               {option.price ? (
@@ -51,7 +51,7 @@ function ModifierSelection ({ modifierCategory }) {
                   })}
                 </p>
               ) : (
-                <p></p>
+                <p />
               )}
             </label>
           </div>

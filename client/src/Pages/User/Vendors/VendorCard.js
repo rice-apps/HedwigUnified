@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BottomAppBar from './BottomAppBar.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorOpen, faDoorClosed } from '@fortawesome/free-solid-svg-icons'
@@ -23,6 +24,7 @@ function VendorCard ({ vendor }) {
   const current_date = new Date()
   const currentDay = current_date.getDay()
   const dayObj = hours[0]
+  console.log(dayObj)
 
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
@@ -47,16 +49,31 @@ function VendorCard ({ vendor }) {
   const closed = determineIfClosed(current_date, dayObj)
 
   return (
-    <Fragment>
+    <>
       <div className='vendorContainer' onClick={() => handleClick()}>
         <div className='vendorHeading'>
           <div className='vendorHeadingText'>
             <h3 className='vendorName'>{name}</h3>
-            {dayObj && (
+            {/* Case for two start/end times */}
+            {dayObj && dayObj.start.length > 1 && (
               <p>
-                Hours Open: {dayObj.start[0]}-{dayObj.end[0]}{' '} {dayObj.start.length > 1 && (
-                  ',' + dayObj.start[1]-dayObj.end[1]
-                )}
+                Hours Open: <br />
+                {dayObj.start[0]}
+                {' - '}
+                {dayObj.end[0]}
+                {', '}
+                <br />
+                {dayObj.start[1]}
+                {' - '}
+                {dayObj.end[1]}
+              </p>
+            )}
+            {/* Case for one start/end time */}
+            {dayObj && dayObj.start.length == 1 && (
+              <p>
+                Hours Open: {dayObj.start[0]}
+                {' - '}
+                {dayObj.end[0]}{' '}
               </p>
             )}
           </div>
@@ -76,7 +93,7 @@ function VendorCard ({ vendor }) {
           ) : null}
           {
             <img
-              className={closed ? `vendorImage closed` : `vendorImage`}
+              className={closed ? 'vendorImage closed' : 'vendorImage'}
               src={logoUrl}
             />
           }
@@ -92,7 +109,7 @@ function VendorCard ({ vendor }) {
                   <li>Coffee</li>
               </ul>
           </div> */}
-    </Fragment>
+    </>
   )
 }
 

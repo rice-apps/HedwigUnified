@@ -167,8 +167,8 @@ function ProductDetail () {
   const [count, setCount] = useState(1)
   const history = useHistory()
 
-  let userID = ''
-  let vendorID = '5ecf473841ccf22523280c3b'
+  const userID = ''
+  const vendorID = '5ecf473841ccf22523280c3b'
 
   // We'll use this hook to initialize our cart when we want to create an order
   const [
@@ -191,8 +191,9 @@ function ProductDetail () {
     findOrCreateCart()
   }, [])
 
-  if (productError || cartError)
+  if (productError || cartError) {
     return <ErrorPage errMessage='Bogus Product ID!' />
+  }
   if (productLoading || cartLoading) return <p>Loading...</p>
   if (!productData || !cartData) return <p>No data...</p>
 
@@ -208,7 +209,7 @@ function ProductDetail () {
 
   // Check if this product is already in the cart
   let item
-  let _filteredItems = items.filter(item => item.product._id == productID)
+  const _filteredItems = items.filter(item => item.product._id == productID)
   if (_filteredItems.length > 0) {
     item = _filteredItems[0]
     // Flatten product field
@@ -223,12 +224,12 @@ function ProductDetail () {
 
   const handleAddToCart = () => {
     // This is necessary because __typename cannot be a field on the item when it is passed to the backend
-    let itemForMutation = omitDeep(item, '__typename')
+    const itemForMutation = omitDeep(item, '__typename')
     addItemToCart({ variables: { _id: cartID, item: itemForMutation } })
   }
 
   const handleRemoveFromCart = () => {
-    let itemForMutation = omitDeep(item, '__typename')
+    const itemForMutation = omitDeep(item, '__typename')
     removeItemFromCart({ variables: { _id: cartID, item: itemForMutation } })
   }
   function increment () {

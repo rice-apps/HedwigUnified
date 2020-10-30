@@ -6,13 +6,14 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
 import '../../../fonts/style.css'
 
-//fontawesome imports
+// fontawesome imports
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { PickupDropdown } from '../../../components/PickupDropdown'
 import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
 import VendorCard from './VendorCard'
+import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
 
 // const GET_VENDORS_QUERY = gql`
@@ -69,14 +70,11 @@ function VendorList ({ classes }) {
   */
 
   return (
-    <div className='vendorPage'>
-      <div className='topBar'>
-        <FontAwesomeIcon
-          icon={faUser}
-          className='userIcon'
-          iconlarge
-        ></FontAwesomeIcon>
-      </div>
+    <div
+      style={{ paddingTop: '8vh', paddingBottom: '10vh' }}
+      className='vendorPage'
+    >
+      <BuyerHeader />
       <div>
         {getVendors.map(vendor => {
           return <VendorCard key={vendor.name} vendor={vendor} />

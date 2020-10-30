@@ -80,7 +80,7 @@ const Header = () => {
       <Logo onClick={() => navigate('/home')}>Hedwig</Logo>
       <LinksDiv>
         <CartLink onClick={() => navigate('/eat/ewtea/cart')}>Cart</CartLink>
-        {/*<OrdersLink onClick={() => navigate('/eat/orders')}>Orders</OrdersLink>*/}
+        {/* <OrdersLink onClick={() => navigate('/eat/orders')}>Orders</OrdersLink> */}
         <VendorsLink onClick={() => navigate('/eat')}>Vendors</VendorsLink>
         {/*
         <SettingsLink onClick={() => navigate('/user/settings')}>

@@ -120,7 +120,7 @@ PaymentTC.addResolver({
           const unitProduct = await shopifyClient.product.fetchByHandle(
             'unitproduct'
           )
-          let checkout = await shopifyClient.checkout.create()
+          const checkout = await shopifyClient.checkout.create()
 
           await shopifyClient.checkout.addLineItems(checkout.id, [
             {

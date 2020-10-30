@@ -4,7 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React, { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
-import logo from '../../../images/tealogo.png'
+import logo from '../../../images/cohenhouse.png'
 import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
@@ -16,6 +16,8 @@ import Select from 'react-select'
 import { TimePicker } from 'antd'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
+import BuyerHeader from './../Vendors/BuyerHeader.js'
 
 const defaultTotals = {
   subtotal: 0,
@@ -57,7 +59,7 @@ const computeAvailableHours = (hours) => {
   const {start1, end1, start2, end2} = hours
   const hour = moment().hour()
   let i = 0
-  let rtn = []
+  const rtn = []
   while (i < 24) {
     if (i < start1.hour() 
         || i < hour 
@@ -97,14 +99,14 @@ function CartDetail () {
   const [pickupTime, setPickupTime] = useState(null)
   const { loading, error, data } = useQuery(GET_VENDOR)
   const navigate = useNavigate()
-  let cart_menu = cartItems()
+  const cart_menu = cartItems()
 
   const handleConfirmClick = () => {
-    return navigate(`/eat/ewtea/payment`)
+    return navigate('/eat/cohen/payment')
   }
 
   const updateTotal = () => {
-    let newSubtotal = cart_menu.reduce(
+    const newSubtotal = cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
     )
@@ -112,6 +114,13 @@ function CartDetail () {
       subtotal: newSubtotal,
       tax: newSubtotal * 0.0825
     })
+  }
+
+  const getTotal = () => {
+    const total = cart_menu.reduce((total, current) => {
+      return total + current.quantity
+    }, 0)
+    return parseInt(total)
   }
 
   useEffect(() => {
@@ -179,50 +188,94 @@ function CartDetail () {
               {' '}
               No pickup time available today.{' '}
             </p>
-          )}
-          {cartItems().map(item => {
-            return (
-              <CartProduct
-                product={item}
-                forceUpdate={setDummyDelete}
-                updateTotal={updateTotal}
-              />
-            )
-          })}
-        </div>
-
-        <div className='float-bill'>
-          <h1 className='header'>Bill Details</h1>
-          {Object.keys(totals).map(type => {
-            if (totals[type]) {
-              let formatted = currency(totals[type]).format()
-              return (
-                <div className='subtotal-container'>
-                  <p className='subheader'>{type}</p>
-                  <p>{formatted}</p>
-                </div>
-              )
-            }
-          })}
-          <div className='total-container'>
-            <hr className='breakline' />
-            <div className='total'>
-              <p className='total__header'>Total</p>
-              <p>{currency((totals.subtotal + totals.tax) * 0.01).format()}</p>
+            <div css={[centerCenter, row]}>
+              <img src={logo} className='logo' alt='Logo' />
+              <div>
+                <p className='vendor-title'>Cohen House</p>
+              </div>
             </div>
-            <hr className='breakline' />
-          </div>
-        </div>
 
-        <div className='float-cart__footer'>
-          <button
-            disabled={cartItems().length == 0 || pickupTime == null}
-            className='buy-btn'
-            title={'Confirm'}
-            onClick={handleConfirmClick}
-          >
-            Make Payment
-          </button>
+            <p css={{ alignSelf: 'center', marginTop: '2px' }}> Pickup Time:</p>
+            <TimePicker
+              disabled={disabled()}
+              defaultValue={moment()}
+              css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
+              format='HH:mm'
+              onChange={e => {
+                if (e) {
+                  document.getElementsByClassName('buy-btn')[0].disabled = false
+                  setPickupTime({ hour: e.hour(), minute: e.minute() })
+                }
+              }}
+              showNow={false}
+              bordered={false}
+              inputReadOnly
+              disabledHours={() => {
+                return computeAvailableHours(startHour1, endHour1)
+              }}
+              disabledMinutes={hour => {
+                return computeAvailableMinutes(
+                  hour,
+                  startHour1,
+                  startMinute1,
+                  endHour1,
+                  endMinute1
+                )
+              }}
+            />
+            {disabled() && (
+              <p css={{ alignSelf: 'center', color: 'red' }}>
+                {' '}
+                No pickup time available today.{' '}
+              </p>
+            )}
+            <hr className='breakline' />
+            {cartItems().map(item => {
+              return (
+                <React.Fragment>
+                  <CartProduct
+                    product={item}
+                    forceUpdate={setDummyDelete}
+                    updateTotal={updateTotal}
+                  />
+                  <hr className='breakline' />
+                </React.Fragment>
+              )
+            })}
+          </div>
+
+          <div className='float-bill'>
+            {Object.keys(totals).map(type => {
+              if (totals[type]) {
+                const formatted = currency(totals[type]).format()
+                return (
+                  <div className='subtotal-container'>
+                    <p className='subheader'>{type}</p>
+                    <p>{formatted}</p>
+                  </div>
+                )
+              }
+            })}
+            <div className='total-container'>
+              <hr className='breakline' />
+              <div className='total'>
+                <p className='total__header'>Total</p>
+                <p>{currency(totals.subtotal + totals.tax).format()}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className='float-cart__footer'>
+            <button
+              disabled={cartItems().length == 0 || pickupTime == null}
+              className='buy-btn'
+              title='Confirm'
+              onClick={handleConfirmClick}
+            >
+              Next: Payment
+              <div />
+            </button>
+          </div>
         </div>
       </div>
     </div>

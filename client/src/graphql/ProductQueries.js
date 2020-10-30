@@ -53,14 +53,23 @@ const GET_ITEM = gql`
 `
 
 const GET_ITEM_AVAILABILITY = gql`
-  query GET_ITEM_AVAILABILITY($productId:String!){
-    getAvailability(productId:$productId)
+  query GET_ITEM_AVAILABILITY($productId: String!) {
+    getAvailability(productId: $productId)
   }
 `
 
 const SET_ITEM_AVAILABILITY = gql`
-  mutation SET_ITEM_AVAILABILITY($idempotencyKey:String!, $productId:String!, $isItemAvailable:Boolean!){
-    setAvailability(idempotencyKey:$idempotencyKey,productId:$productId,isItemAvailable:$isItemAvailable,dataSource:SQUARE){
+  mutation SET_ITEM_AVAILABILITY(
+    $idempotencyKey: String!
+    $productId: String!
+    $isItemAvailable: Boolean!
+  ) {
+    setAvailability(
+      idempotencyKey: $idempotencyKey
+      productId: $productId
+      isItemAvailable: $isItemAvailable
+      dataSource: SQUARE
+    ) {
       isAvailable
     }
   }

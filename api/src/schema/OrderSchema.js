@@ -142,8 +142,8 @@ OrderTC.addResolver({
           location_id: locationId,
           line_items: lineItems,
           metadata: {
-            cohenId: cohenId ? cohenId : null,
-            studentId: studentId ? studentId : null
+            cohenId: cohenId || null,
+            studentId: studentId || null
           },
           fulfillments: [
             {

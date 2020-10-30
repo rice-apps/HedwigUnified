@@ -59,7 +59,7 @@ const OrderItemList = ({ items }) => {
           <p>${parseFloat(item.product.price).toFixed(2)}</p>
         </span>
       ))}
-      <hr class='solid'></hr>
+      <hr class='solid' />
     </div>
   )
 }
@@ -141,8 +141,8 @@ function OrderDetail ({ order }) {
     if (name == 'East West Tea') {
       return '//static1.squarespace.com/static/58559451725e25a3d8206027/t/58559539f5e2315e3ef1127c/1593500228704/?format=1500w'
     }
-    //CoffeeHouse
-    //Grillosophy
+    // CoffeeHouse
+    // Grillosophy
   }
   return (
     <div className='ordercard'>
@@ -170,7 +170,7 @@ function OrderDetail ({ order }) {
       </div>
 
       <div>
-        <hr class='solid'></hr>
+        <hr class='solid' />
         <p>
           {detailOpen ? (
             <strong>
@@ -186,7 +186,7 @@ function OrderDetail ({ order }) {
         </p>
       </span>
 
-      <hr class='solid'></hr>
+      <hr class='solid' />
 
       <span className='order_card_buttons'>
         <button className='order_card_button'>Reorder</button>

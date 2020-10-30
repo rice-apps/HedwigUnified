@@ -4,7 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React, { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
-import logo from '../../../images/tealogo.png'
+import logo from '../../../images/cohenhouse.png'
 import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
@@ -16,6 +16,8 @@ import Select from 'react-select'
 import { TimePicker } from 'antd'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
+import BuyerHeader from './../Vendors/BuyerHeader.js'
 
 const defaultTotals = {
   subtotal: 0,
@@ -57,7 +59,7 @@ const computeAvailableHours = (hours) => {
   const {start1, end1, start2, end2} = hours
   const hour = moment().hour()
   let i = 0
-  let rtn = []
+  const rtn = []
   while (i < 24) {
     if (i < start1.hour() 
         || i < hour 
@@ -78,7 +80,6 @@ const computeAvailableMinutes = (
   const {start1, end1, start2, end2} = hours
   let i = 0
   let rtn = []
-  // console.log(end1.minute())
   while (i <= 59) {
     let test = moment(hr + ':' + i, 'HH:mm')
     if (test.isBefore(start1) 
@@ -97,14 +98,14 @@ function CartDetail () {
   const [pickupTime, setPickupTime] = useState(null)
   const { loading, error, data } = useQuery(GET_VENDOR)
   const navigate = useNavigate()
-  let cart_menu = cartItems()
+  const cart_menu = cartItems()
 
   const handleConfirmClick = () => {
-    return navigate(`/eat/ewtea/payment`)
+    return navigate('/eat/cohen/payment')
   }
 
   const updateTotal = () => {
-    let newSubtotal = cart_menu.reduce(
+    const newSubtotal = cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
     )
@@ -112,6 +113,13 @@ function CartDetail () {
       subtotal: newSubtotal,
       tax: newSubtotal * 0.0825
     })
+  }
+
+  const getTotal = () => {
+    const total = cart_menu.reduce((total, current) => {
+      return total + current.quantity
+    }, 0)
+    return parseInt(total)
   }
 
   useEffect(() => {
@@ -130,27 +138,33 @@ function CartDetail () {
   )[0].hours[0])
 
   const disabled = () => {
+    return false;
     let now = moment()
     const {start1, end1, start2, end2} = businessHour
-    if (now.isBefore(start1) || (now.isBefore(start2) && now.isAfter(end1)) || now.isAfter(end2) || now.isoWeekday() > 5) {
+    if (now.isAfter(end2) || now.isoWeekday() > 5) {
       return true;
     }
     return false;
   }
 
   return (
-    <div className='float-cart'>
-      <div className='float-cart__content'>
-        <div className='float-cart__shelf-container'>
-          <div css={[centerCenter, row]}>
-            <img src={logo} className='logo' alt='Logo' />
-            <div>
-              <p css={{ margin: '16px 0 0 10px' }}>East West Tea</p>
-              <p css={{ margin: '0 0 0 10px', color: 'grey' }}>Houston, TX</p>
+    <div>
+      <BuyerHeader showBackButton backLink='/eat' />
+      <div className='float-cart'>
+        <div className='float-cart__content'>
+          <div className='float-cart__shelf-container'>
+            <p className='cart-title'>
+              My Cart {getTotal() > 0 ? '(' + getTotal().toString() + ')' : ''}
+            </p>
+            <div css={[centerCenter, row]}>
+              <img src={logo} className='logo' alt='Logo' />
+              <div>
+                <p className='vendor-title'>Cohen House</p>
+              </div>
             </div>
-          </div>
-          <p css={{ alignSelf: 'center' }}> Pickup Time:</p>
-          <TimePicker
+
+            <p css={{ alignSelf: 'center', marginTop: '2px' }}> Pickup Time:</p>
+            <TimePicker
             disabled={disabled()}
             defaultValue={moment()}
             css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
@@ -174,55 +188,59 @@ function CartDetail () {
               )
             }}
           />
-          {disabled() && (
-            <p css={{ alignSelf: 'center', color: 'red' }}>
-              {' '}
-              No pickup time available today.{' '}
-            </p>
-          )}
-          {cartItems().map(item => {
-            return (
-              <CartProduct
-                product={item}
-                forceUpdate={setDummyDelete}
-                updateTotal={updateTotal}
-              />
-            )
-          })}
-        </div>
-
-        <div className='float-bill'>
-          <h1 className='header'>Bill Details</h1>
-          {Object.keys(totals).map(type => {
-            if (totals[type]) {
-              let formatted = currency(totals[type]).format()
+            {disabled() && (
+              <p css={{ alignSelf: 'center', color: 'red' }}>
+                {' '}
+                No pickup time available today.{' '}
+              </p>
+            )}
+            <hr className='breakline' />
+            {cartItems().map(item => {
               return (
-                <div className='subtotal-container'>
-                  <p className='subheader'>{type}</p>
-                  <p>{formatted}</p>
-                </div>
+                <React.Fragment>
+                  <CartProduct
+                    product={item}
+                    forceUpdate={setDummyDelete}
+                    updateTotal={updateTotal}
+                  />
+                  <hr className='breakline' />
+                </React.Fragment>
               )
-            }
-          })}
-          <div className='total-container'>
-            <hr className='breakline' />
-            <div className='total'>
-              <p className='total__header'>Total</p>
-              <p>{currency((totals.subtotal + totals.tax) * 0.01).format()}</p>
-            </div>
-            <hr className='breakline' />
+            })}
           </div>
-        </div>
 
-        <div className='float-cart__footer'>
-          <button
-            disabled={cartItems().length == 0 || pickupTime == null}
-            className='buy-btn'
-            title={'Confirm'}
-            onClick={handleConfirmClick}
-          >
-            Make Payment
-          </button>
+          <div className='float-bill'>
+            {Object.keys(totals).map(type => {
+              if (totals[type]) {
+                const formatted = currency(totals[type]).format()
+                return (
+                  <div className='subtotal-container'>
+                    <p className='subheader'>{type}</p>
+                    <p>{formatted}</p>
+                  </div>
+                )
+              }
+            })}
+            <div className='total-container'>
+              <hr className='breakline' />
+              <div className='total'>
+                <p className='total__header'>Total</p>
+                <p>{currency(totals.subtotal + totals.tax).format()}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className='float-cart__footer'>
+            <button
+              disabled={cartItems().length == 0 || pickupTime == null}
+              className='buy-btn'
+              title='Confirm'
+              onClick={handleConfirmClick}
+            >
+              Next: Payment
+              <div />
+            </button>
+          </div>
         </div>
       </div>
     </div>

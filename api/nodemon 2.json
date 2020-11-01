@@ -1,0 +1,5 @@
+{
+  "watch": ["src"],
+  "exec": "babel-node --trace-warnings src/index.js",
+  "ext": "js"
+}

@@ -27,7 +27,12 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
+<<<<<<< HEAD
 const allowedUsers = ['byz2']
+=======
+const allowedUsers = ["byz2"];
+const lstorage = localStorage;
+>>>>>>> deletes duplicate flies
 
 function Auth () {
   // First parse out ticket from URL href
@@ -73,8 +78,13 @@ function Auth () {
     token
   })
 
+  userProfile(Object.assign(userProfile(), 
+    {name: lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
+     studentId: lstorage.getItem('id')}))
   // Set token in local storage
-  localStorage.setItem('token', token)
+
+  console.log(userProfile());
+  lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

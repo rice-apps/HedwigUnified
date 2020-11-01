@@ -98,9 +98,15 @@ function CartDetail () {
         currency: 'USD'
       }
     })
+<<<<<<< HEAD
 
     return navigate('/eat/cohen/payment')
   }
+=======
+    orderSummary(Object.assign(orderSummary(), {'orderId': orderJson.id}))
+    return navigate(`/eat/cohen/payment`);
+  };
+>>>>>>> deletes duplicate flies
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(

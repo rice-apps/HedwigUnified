@@ -1,7 +1,13 @@
 import { Component, useState } from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
+<<<<<<< HEAD
 import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
+=======
+import {orderSummary} from "../../../apollo"
+import Button from '@material-ui/core/Button';
+import styled, { css } from 'styled-components';
+>>>>>>> deletes duplicate flies
 // import visa from 'payment-icons/min/flat/visa.svg';
 import { FaCreditCard, FaBriefcase } from 'react-icons/fa'
 import { BiIdCard } from 'react-icons/bi'
@@ -172,7 +178,7 @@ function Payments () {
     // Get url and embed that url
     createPayment({
       variables: {
-        sourceId: "cnon:card-nonce-ok", orderId: /*order()[0]*/ "Ha6zGEo32PyBOlcnbkSuJGxjOuOZY",
+        sourceId: "cnon:card-nonce-ok", orderId: orderSummary['orderId'],
         locationId: "FMXAFFWJR95WC", amount: 900, currency: "USD"
       }
     }).then(renderIFrame(data.url)).catch(err => <Navigate to='/payment' />)

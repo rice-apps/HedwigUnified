@@ -15,13 +15,9 @@ import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 
 import { makeVar } from '@apollo/client'
 
-console.log(GRAPHQL_URL)
-console.log(GRAPHQL_WS_URL)
-console.log(SERVICE_URL)
-
 export const cartItems = makeVar([])
 export const orderSummary = makeVar([])
-export const userProfile = makeVar([])
+export const userProfile = makeVar({})
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
@@ -64,7 +60,40 @@ const splitLink = split(
 )
 
 // Setup cache
-const cache = new InMemoryCache()
+export const cache = new InMemoryCache({
+  typePolicies: { // Type policy map
+    User: {
+      fields: { // Field policy map for the Product type
+        studentId: { // Field policy for the isInCart field
+          read() { // The read function for the isInCart field
+            return userProfile().studentId
+          }
+        },
+        name: {
+          read() {
+            return userProfile().name
+          }
+        },
+        phone: {
+          read() {
+            return userProfile().phone
+          }
+        },
+        email: {
+          read() {
+            return userProfile().email
+          }
+        },
+        netid: {
+          read() {
+            return userProfile().netid
+          }
+        }
+      }
+    }
+  }
+});
+
 
 // Initialize Client
 export const client = new ApolloClient({
@@ -89,7 +118,12 @@ const initialState = {
   service: SERVICE_URL,
   user: {
     recentUpdate: false,
-    _id: ''
+    _id: '',
+    name: '',
+    netid: '',
+    phone: '',
+    email: '',
+    studentId: ''
   }
 }
 
@@ -101,6 +135,11 @@ cache.writeQuery({
       user {
         recentUpdate
         _id
+        name @client
+        netid @client
+        phone @client
+        email @client
+        studentid @client
       }
     }
   `,

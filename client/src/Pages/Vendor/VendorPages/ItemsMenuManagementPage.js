@@ -44,7 +44,7 @@ function ItemsMenuManagementPage () {
           category={categories[0]}
         />
       }
-    ></VendorsideTemplate>
+    />
   )
 }
 

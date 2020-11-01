@@ -496,7 +496,7 @@ function MakePaymentSpace (props) {
             paymentType={props.paymentType}
             orderNumber={props.orderNumber}
           />
-          <MakeModalParagraph cancel={true} />
+          <MakeModalParagraph cancel />
           <MakeModalOrderDetails
             paymentType={props.paymentType}
             orderTotal={props.orderTotal}
@@ -526,7 +526,7 @@ function OrderCard (props) {
     buttonStatus,
     cancelClick
   } = props
-  //RFC3339
+  // RFC3339
   const pickupAt = moment(pickupTime).format('h:mm A')
   const timeLeft = moment(pickupTime).fromNow()
 
@@ -548,7 +548,7 @@ function OrderCard (props) {
         />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
         <OrderDetailsSpaceWrapper>
-          {/* Call MakeOrderDetails function for each unique item in the cart, 
+          {/* Call MakeOrderDetails function for each unique item in the cart,
           can be called multiple times if multiple items are in order */}
 
           {items &&

@@ -118,7 +118,9 @@ const UpdateOrderTC = sc.createInputTC({
     totalDiscount: MoneyTC.getITC().getType(),
     total: MoneyTC.getITC().getType(),
     orderStatus: OrderStatusEnumTC.getType(),
-    fulfillment: OrderFulfillmentTC.getITC().getType()
+    fulfillment: OrderFulfillmentTC.getITC().getType(),
+    cohenId: 'String',
+    studentId: 'String'
   }
 })
 

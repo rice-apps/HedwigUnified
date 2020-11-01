@@ -77,7 +77,7 @@ const Order = ({ order }) => {
   // Deconstructing elements from the order object
   // EVERYTHING HERE IS FROM THE GRAPHQL QUERY
   const { _id, user, items, createdAt, fulfillment } = order
-  let vendor = '5ecf473841ccf22523280c3b'
+  const vendor = '5ecf473841ccf22523280c3b'
 
   // Helper function to update local list of orders without having to refetch orders, depending on fulfillment type
   const localUpdateOrders = (cache, updatedOrder) => {
@@ -97,7 +97,7 @@ const Order = ({ order }) => {
         // Deep copy of orders so that we can pass in an updated version to the writeQuery
         newOrders = _.cloneDeep(orders)
         // Find index of order marked preparing
-        let updatedOrderIndex = newOrders.findIndex(
+        const updatedOrderIndex = newOrders.findIndex(
           order => order._id == updatedOrder.recordId
         )
         // Update the fulfillment property of the corresponding local order to update
@@ -155,7 +155,7 @@ const Order = ({ order }) => {
 }
 
 const Orders = () => {
-  let vendor = '5ecf473841ccf22523280c3b'
+  const vendor = '5ecf473841ccf22523280c3b'
   // Following this: https://www.apollographql.com/docs/react/v3.0-beta/data/subscriptions/#subscribing-to-updates-for-a-query
   // First query the data we want (active orders) and then subscribe for more as they roll in
   const { loading, error, data, subscribeToMore } = useQuery(ORDERS_QUERY, {
@@ -179,7 +179,7 @@ const Orders = () => {
         )
         if (orderIndex > -1) {
           // Found, replace that index with new order
-          let newOrderMany = [...prev.orderMany]
+          const newOrderMany = [...prev.orderMany]
           newOrderMany[orderIndex] = newFeedOrder
           return Object.assign({}, prev, { orderMany: newOrderMany })
         } else {

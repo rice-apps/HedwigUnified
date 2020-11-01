@@ -4,7 +4,7 @@ import { gql, useQuery, useApolloClient } from '@apollo/client'
 import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-let logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
+const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
 function handleLogoutClick () {
   localStorage.removeItem('token')
@@ -25,7 +25,7 @@ const GET_USER_INFO = gql`
 
 const getLinks = user => {
   // Missing help path, feedback form, and edit phone number page
-  let links = [
+  const links = [
     { icon: 'envelope', content: user.netid, path: '' },
 
     { icon: 'phone', content: user.phone, path: '/contact' },
@@ -62,7 +62,7 @@ function Profile () {
   if (loading) return <p>Waiting...</p>
   if (!data) return <p> work pls </p>
 
-  let { user } = data
+  const { user } = data
   const links = getLinks(user)
 
   console.log(user)

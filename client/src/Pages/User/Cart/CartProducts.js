@@ -44,12 +44,11 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
 
   function getVarMod () {
     let VarModList = ' '
-    const numModifiers = product.modDisplay.length;
-    if(numModifiers === 0){
-      VarModList += product.variant.name;
-    }
-    else {
-      VarModList += product.variant.name + ', ';
+    const numModifiers = product.modDisplay.length
+    if (numModifiers === 0) {
+      VarModList += product.variant.name
+    } else {
+      VarModList += product.variant.name + ', '
       for (var i = 0; i < numModifiers; i++) {
         i < numModifiers - 1
           ? (VarModList += product.modDisplay[i] + ', ')
@@ -69,7 +68,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   }
 
   function updateQuantity (num) {
-    let newProd = Object.assign({}, product)
+    const newProd = Object.assign({}, product)
     newProd.quantity = num
     dispatch({
       type: 'UPDATE_QUANTITY',
@@ -96,7 +95,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     >
       {/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
       {/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}
-      <img id='image' src={product.image} alt={product.name}/>
+      <img id='image' src={product.image} alt={product.name} />
       <div className='shelf-item__title'>
         <p id='title'>{product.name.toUpperCase()}</p>
         <p id='options'> {getVarMod()}</p>
@@ -109,9 +108,9 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
       <div className='shelf-item__price'>
         <p>{formatter.format(product.price * quantity)}</p>
       </div>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div />
+      <div />
+      <div />
       <div
         className='shelf-item__del'
         onMouseOver={() => handleMouseOver()}
@@ -121,7 +120,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
           forceUpdate(date.getTime())
         }}
       >
-      Remove
+        Remove
       </div>
     </div>
   )

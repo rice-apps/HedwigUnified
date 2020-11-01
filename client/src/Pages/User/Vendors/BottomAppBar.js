@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { FaShoppingCart } from "react-icons/fa";
-import { MdReceipt } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-import { AiFillHome } from "react-icons/ai";
-import RalewayFont from "./../../../fonts/Raleway/RalewayFont.js";
+import React from 'react'
+import styled from 'styled-components'
+import { FaShoppingCart } from 'react-icons/fa'
+import { MdReceipt } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
+import { AiFillHome } from 'react-icons/ai'
+import RalewayFont from './../../../fonts/Raleway/RalewayFont.js'
 
 const BottomNavigationWrapper = styled.div`
   position: fixed;
@@ -19,7 +19,7 @@ const BottomNavigationWrapper = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 2;
-`;
+`
 
 const BottomNavigationItem = styled.div`
   height: 100%;
@@ -31,37 +31,36 @@ const BottomNavigationItem = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-family: "Raleway";
-  font-weight:500;
+  font-family: 'Raleway';
+  font-weight: 500;
   &&:active {
     transform: scale(1.001);
     background-color: #fac8bb;
   }
-`;
+`
 
 const BottomNavigationText = styled.div`
-  font-family: "Raleway";
- 
-`;
+  font-family: 'Raleway';
+`
 
-function BottomAppBar() {
-  const navigate = useNavigate();
+function BottomAppBar () {
+  const navigate = useNavigate()
   return (
     <BottomNavigationWrapper>
-      <RalewayFont/>
+      <RalewayFont />
       <BottomNavigationItem
-        style={{ borderRight: "0.1px solid #D0D0D0" }}
-        onClick={() => navigate("/eat")}
+        style={{ borderRight: '0.1px solid #D0D0D0' }}
+        onClick={() => navigate('/eat')}
       >
         <AiFillHome />
         <BottomNavigationText>Home</BottomNavigationText>
       </BottomNavigationItem>
-      <BottomNavigationItem onClick={() => navigate("/eat/cohen/cart")}>
+      <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <FaShoppingCart />
         <BottomNavigationText>Cart</BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>
-  );
+  )
 }
 
-export default BottomAppBar;
+export default BottomAppBar

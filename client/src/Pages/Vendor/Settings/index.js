@@ -52,7 +52,7 @@ const REMOVE_VENDOR_HOURS = gql`
 `
 
 const VendorSettings = () => {
-  let vendorID = '5ebcc4a6a55cea938d503174'
+  const vendorID = '5ebcc4a6a55cea938d503174'
   const { loading, error, data } = useQuery(VENDOR_QUERY)
   // const { loading, error, data } = useQuery(PRODUCTS_QUERY);
 
@@ -63,10 +63,10 @@ const VendorSettings = () => {
   console.log(data)
 
   return (
-    <Fragment>
+    <>
       Vendor: {data.vendorOne.name}
       <h3>Product List</h3>
-    </Fragment>
+    </>
   )
 }
 

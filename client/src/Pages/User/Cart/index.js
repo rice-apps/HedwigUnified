@@ -95,7 +95,6 @@ function CartDetail () {
   const cart_menu = cartItems()
 
   const handleConfirmClick = () => {
-<<<<<<< HEAD
     let allAvailable = true;
     cart_menu.map(item => {
       if (!item.isAvailable) {
@@ -107,10 +106,6 @@ function CartDetail () {
       return navigate(`/eat/cohen/payment`);
     }
   };
-=======
-    return navigate('/eat/cohen/payment')
-  }
->>>>>>> 74fffe95b0e5569be1ca8f2a1e93100c1f695251
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -234,18 +229,6 @@ function CartDetail () {
             })}
           </div>
 
-<<<<<<< HEAD
-        <div className='float-cart__footer'>
-          <button
-            // disabled={cartItems().length == 0 || pickupTime == null}
-            disabled={false}
-            className='buy-btn'
-            title={'Confirm'}
-            onClick={handleConfirmClick}
-          >
-            Next: Payment
-            <div>
-=======
           <div className='float-bill'>
             {Object.keys(totals).map(type => {
               if (totals[type]) {
@@ -264,7 +247,6 @@ function CartDetail () {
                 <p className='total__header'>Total</p>
                 <p>{currency(totals.subtotal + totals.tax).format()}</p>
               </div>
->>>>>>> 74fffe95b0e5569be1ca8f2a1e93100c1f695251
             </div>
           </div>
 

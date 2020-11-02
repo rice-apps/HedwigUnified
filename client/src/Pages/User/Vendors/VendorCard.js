@@ -101,13 +101,8 @@ function VendorCard ({ vendor }) {
           ) : null}
           {
             <img
-<<<<<<< HEAD
               className={closed ? `vendorImage closed` : `vendorImage`}
               src={curbsidelogo}
-=======
-              className={closed ? 'vendorImage closed' : 'vendorImage'}
-              src={logoUrl}
->>>>>>> 74fffe95b0e5569be1ca8f2a1e93100c1f695251
             />
           }
         </div>

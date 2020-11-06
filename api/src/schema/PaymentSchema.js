@@ -2,9 +2,14 @@ import { PaymentsApi, CreatePaymentRequest } from 'square-connect'
 import { GraphQLString, GraphQLNonNull } from 'graphql'
 import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
-import { CreatePaymentITC, PaymentTC, SortOrderEnumTC } from '../models'
+import {
+  CreatePaymentITC,
+  MoneyTC,
+  PaymentTC,
+  SortOrderEnumTC
+} from '../models'
 import { FetchPaymentPayloadTC } from '../models/PaymentModel'
-import shopifyClient from '../shopify'
+import { shopifyClient, shopifyAdminClient } from '../shopify'
 
 PaymentTC.addResolver({
   name: 'fetchPayments',
@@ -149,42 +154,101 @@ PaymentTC.addResolver({
   .addResolver({
     name: 'completePayment',
     args: {
-      // TODO: add fields for Shopify
-      paymentId: GraphQLNonNull(GraphQLString)
+      paymentId: 'String!',
+      source: 'String!',
+      money: MoneyTC.getITC()
     },
     type: PaymentTC,
     resolve: async ({ args }) => {
-      const api = new PaymentsApi()
+      let response
 
-      const paymentResponse = await api.completePayment(args.paymentId)
+      switch (args.source) {
+        case 'SQUARE':
+          const api = new PaymentsApi()
 
-      if (paymentResponse.errors) {
-        return new ApolloError(
-          `Encounter the following errors while complete payment: ${paymentResponse.errors}`
-        )
+          const paymentResponse = await api.completePayment(args.paymentId)
+
+          if (paymentResponse.errors) {
+            return new ApolloError(
+              `Encounter the following errors while complete payment: ${paymentResponse.errors}`
+            )
+          }
+
+          const {
+            payment: {
+              id,
+              order_id,
+              customer_id,
+              amount_money,
+              tip_money,
+              total_money,
+              status
+            }
+          } = paymentResponse
+
+          response = {
+            id,
+            order: order_id,
+            customer: customer_id,
+            subtotal: amount_money,
+            tip: tip_money,
+            total: total_money,
+            status
+          }
+
+          break
+        case 'SHOPIFY':
+          const transactionQuery = `
+            query GetOrder(id: ID!) {
+              node(id: $id) {
+                ...on Order {
+                  transactions {
+                    id
+                  }
+                }
+              }
+            }
+          `
+
+          const checkout = await shopifyAdminClient.checkout.get(paymentId)
+
+          const transactions = await shopifyAdminClient.graphql(
+            transactionQuery,
+            {
+              id: checkout.order.id
+            }
+          )
+
+          const completePayment = `
+            mutation CompletePayment($input: OrderCaptureInput!) {
+              orderCapture(input: $input) {
+                transaction {
+                  id
+                }
+                userErrors {
+                  field
+                  message
+                }
+              }
+            }
+          `
+
+          shopifyAdminClient.graphql(completePayment, {
+            input: {
+              amount: args.money.amount,
+              currency: args.money.currency,
+              id: checkout.order.id,
+              parentTransactionId: transactions[0].id
+            }
+          })
+
+          response = {
+            id: checkout.id,
+            order: checkout.order.id
+          }
       }
 
-      const {
-        payment: {
-          id,
-          order_id,
-          customer_id,
-          amount_money,
-          tip_money,
-          total_money,
-          status
-        }
-      } = paymentResponse
-
-      return {
-        id,
-        order: order_id,
-        customer: customer_id,
-        subtotal: amount_money,
-        tip: tip_money,
-        total: total_money,
-        status
-      }
+      return response
     }
   })
   .addResolver({

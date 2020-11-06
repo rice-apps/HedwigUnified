@@ -28,22 +28,7 @@ const defaultTotals = {
 }
 
 
-const GET_VENDOR = gql`
-  query {
-    getVendors {
-      name
-      hours {
-        day
-        start
-        end
-      }
-      squareInfo {
-        merchantId
-        locationIds
-      }
-    }
-  }
-`
+
 
 
 const computeAvailableHours = (startHour, endHour) => {
@@ -246,48 +231,7 @@ function CartDetail() {
               {' '}
               No pickup time available today.{' '}
 
-            </p>
-            <div css={[centerCenter, row]}>
-              <img src={logo} className='logo' alt='Logo' />
-              <div>
-                <p className='vendor-title'>Cohen House</p>
-              </div>
-            </div>
-
-            <p css={{ alignSelf: 'center', marginTop: '2px' }}> Pickup Time:</p>
-            <TimePicker
-              disabled={disabled()}
-              defaultValue={moment()}
-              css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
-              format='HH:mm'
-              onChange={e => {
-                if (e) {
-                  document.getElementsByClassName('buy-btn')[0].disabled = false
-                  setPickupTime({ hour: e.hour(), minute: e.minute() })
-                }
-              }}
-              showNow={false}
-              bordered={false}
-              inputReadOnly
-              disabledHours={() => {
-                return computeAvailableHours(startHour1, endHour1)
-              }}
-              disabledMinutes={hour => {
-                return computeAvailableMinutes(
-                  hour,
-                  startHour1,
-                  startMinute1,
-                  endHour1,
-                  endMinute1
-                )
-              }}
-            />
-            {disabled() && (
-              <p css={{ alignSelf: 'center', color: 'red' }}>
-                {' '}
-                No pickup time available today.{' '}
-              </p>
-            )}
+            </p>)}
             <hr className='breakline' />
             {cartItems().map(item => {
               return (
@@ -317,7 +261,7 @@ function CartDetail() {
             })}
             <div className='total-container'>
               <hr className='breakline' />
-              <div className='total'>
+              <div className='total' style={{marginBottom: "9vh"}}>
                 <p className='total__header'>Total</p>
                 <p>{currency(totals.subtotal + totals.tax).format()}</p>
               </div>

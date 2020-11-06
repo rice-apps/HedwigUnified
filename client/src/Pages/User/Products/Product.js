@@ -188,10 +188,6 @@ function Product () {
     let itemDataSourceId = product.dataSourceId
     let variant = undefined
 
-    const itemName = product.name
-    const itemID = product.squareID
-    let variant
-
     if (document.querySelector('.variantSelect:checked') == null) {
       return false
     }

@@ -29,6 +29,7 @@ const ORDERS_QUERY = gql`
       }
       createdAt
       fulfillment
+      paymentType
     }
   }
 `

@@ -45,6 +45,7 @@
     "loglevel": "^1.7.0",
     "mongoose": "^5.10.7",
     "node-fetch": "^2.6.1",
+    "shopify-api-node": "^3.5.2",
     "shopify-buy": "^2.11.0",
     "square-connect": "4.20200826.3",
     "twilio": "^3.49.4",

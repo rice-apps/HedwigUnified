@@ -147,11 +147,12 @@ function Payments() {
   const handleClickTetra = () => {
     // To be implemented: Tetra payment should be automatic 
     return null
+
   }
 
   const handleClickCohen = () => {
     // Go to the cohen checkout page
-    return navigate(`/cohen`)
+    return navigate('/cohen')
   }
 
   // Credit card payment mutation:
@@ -161,6 +162,7 @@ function Payments() {
   ] = useMutation(CREATE_PAYMENT)
 
   const handleClickCredit = () => {
+
     // Get url and embed that url
     createPayment({
       variables: {
@@ -168,6 +170,7 @@ function Payments() {
         locationId: "FMXAFFWJR95WC", amount: 900, currency: "USD"
       }
     }).then(renderIFrame(data.url)).catch(err => <Navigate to='/payment' />)
+
   }
 
   const renderIFrame = (urlInput) => {

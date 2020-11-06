@@ -39,7 +39,7 @@ export const FIND_CATEGORIES = catalog => {
   return catagories
 }
 
-//GraphQL Query
+// GraphQL Query
 export const ALL_MENU_ITEMS = gql`
   query ALL_MENU_ITEMS($item: String!) {
     getItem(dataSourceId: { _eq: $item }) {
@@ -51,15 +51,15 @@ export const ALL_MENU_ITEMS = gql`
   }
 `
 
-//Use useQuery to create a query response
+// Use useQuery to create a query response
 const catalogResponse = useQuery(ALL_MENU_ITEMS, {
   variables: {
     vendor:
-      'TODO' /*TODO Add vendor name based on page here (Ask Will For Help)*/
+      'TODO' /* TODO Add vendor name based on page here (Ask Will For Help) */
   }
 })
 
-//Creates a Catalog with a useQuery response passed in
+// Creates a Catalog with a useQuery response passed in
 export const getCatalog = response => {
   const catalog = []
 
@@ -73,7 +73,7 @@ export const getCatalog = response => {
   return catalog
 }
 
-//Final catalog object
+// Final catalog object
 export const catalog = getCatalog(catalogResponse)
 
-//catalog.map... Done by Alexis
+// catalog.map... Done by Alexis

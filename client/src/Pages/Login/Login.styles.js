@@ -68,73 +68,73 @@ const BackgroundCover = styled.div`
     top: 11vh;
     left: 25vw;
     // background-color: #ffffff;
-  }`
-
-  const ButtonPane = styled.div`
-    background-color: #f49f86;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-  `
-
-  const VendorButton = styled.button`
-    grid-row: 4/5;
-    border-radius: 25pt;
-    height: 40vh;
-    width: 40%;
-    border: none;
-    font-size: 14pt;
-    font-weight: bold;
-    border: 3px solid blue;
-    background-color: white;
-    cursor: pointer;
-    color: #f49f86;
-    :hover {
-      text-decoration: underline;
-      box-shadow: 2px 8px 5px -5px #9d7a96;
-    }
+  }
 `
 
+const ButtonPane = styled.div`
+  background-color: #f49f86;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+`
+
+const VendorButton = styled.button`
+  grid-row: 4/5;
+  border-radius: 25pt;
+  height: 40vh;
+  width: 40%;
+  border: none;
+  font-size: 14pt;
+  font-weight: bold;
+  border: 3px solid blue;
+  background-color: white;
+  cursor: pointer;
+  color: #f49f86;
+  :hover {
+    text-decoration: underline;
+    box-shadow: 2px 8px 5px -5px #9d7a96;
+  }
+`
 
 const ClientButton = styled.button`
-grid-row: 4/5;
-border-radius: 25pt;
-height: 40vh;
-width: 40%;
-border: none;
-font-size: 14pt;
+  grid-row: 4/5;
+  border-radius: 25pt;
+  height: 40vh;
+  width: 40%;
+  border: none;
+  font-size: 14pt;
 
-display: flex;
-flex-direction: column;
-justify-content: space-evenly;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 
-font-weight: bold;
-color: #f49f86;
-border: 3px solid orange;
-background-color: white;
-cursor: pointer;
-:hover {
-  text-decoration: underline;
-  box-shadow: 2px 8px 5px -5px #9d7a96;
-}
+  font-weight: bold;
+  color: #f49f86;
+  border: 3px solid orange;
+  background-color: white;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+    box-shadow: 2px 8px 5px -5px #9d7a96;
+  }
 `
 
 const ExitButton = styled.button`
-position: relative;
-background-color: white;
-bottom: 5pt;
-border: 1px solid red;
-font-weight: bold;
+  position: relative;
+  background-color: white;
+  bottom: 5pt;
+  border: 1px solid red;
+  font-weight: bold;
 
-text-align: center;
-cursor: pointer;
-:hover {
-  background-color: #ffe6e6;
-  text-decoration: underline;
-  box-shadow: 2px 8px 5px -5px #9d7a96;
-}
+  text-align: center;
+  cursor: pointer;
+  :hover {
+    background-color: #ffe6e6;
+    text-decoration: underline;
+    box-shadow: 2px 8px 5px -5px #9d7a96;
+  }
 `
 
 const LoginQuestion = styled.p`
@@ -146,9 +146,17 @@ const LoginQuestion = styled.p`
   padding: 1em;
 `
 
-
-export { MainDiv, Logo, Title, SubTitle, LoginButton, 
-  BackgroundCover, ButtonPane,
-  VendorButton, ClientButton, ExitButton, LoginQuestion,
+export {
+  MainDiv,
+  Logo,
+  Title,
+  SubTitle,
+  LoginButton,
+  BackgroundCover,
+  ButtonPane,
+  VendorButton,
+  ClientButton,
+  ExitButton,
+  LoginQuestion,
   HedwigLogo
 }

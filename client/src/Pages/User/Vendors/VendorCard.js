@@ -24,6 +24,7 @@ function VendorCard ({ vendor }) {
   const current_date = new Date()
   const currentDay = current_date.getDay()
   const dayObj = hours[0]
+  console.log(dayObj)
 
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
@@ -48,7 +49,7 @@ function VendorCard ({ vendor }) {
   const closed = determineIfClosed(current_date, dayObj)
 
   return (
-    <Fragment>
+    <>
       <div className='vendorContainer' onClick={() => handleClick()}>
         <div className='vendorHeading'>
           <div className='vendorHeadingText'>
@@ -57,9 +58,14 @@ function VendorCard ({ vendor }) {
             {dayObj && dayObj.start.length > 1 && (
               <p>
                 Hours Open: <br />
-
-                {dayObj.start[0]}{' - '}{dayObj.end[0]}{', '}<br/>{dayObj.start[1]}{' - '}{dayObj.end[1]}
-
+                {dayObj.start[0]}
+                {' - '}
+                {dayObj.end[0]}
+                {', '}
+                <br />
+                {dayObj.start[1]}
+                {' - '}
+                {dayObj.end[1]}
               </p>
             )}
             {/* Case for one start/end time */}
@@ -87,7 +93,7 @@ function VendorCard ({ vendor }) {
           ) : null}
           {
             <img
-              className={closed ? `vendorImage closed` : `vendorImage`}
+              className={closed ? 'vendorImage closed' : 'vendorImage'}
               src={logoUrl}
             />
           }
@@ -103,7 +109,7 @@ function VendorCard ({ vendor }) {
                   <li>Coffee</li>
               </ul>
           </div> */}
-    </Fragment>
+    </>
   )
 }
 

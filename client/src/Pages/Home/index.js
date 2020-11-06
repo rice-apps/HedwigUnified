@@ -28,18 +28,18 @@ const SEEN_RECENT_UPDATE = gql`
 
 function Home () {
   // Check for recent update from cache
-  let { data: storeData } = useQuery(GET_RECENT_UPDATE)
-  let { recentUpdate } = storeData.user
+  const { data: storeData } = useQuery(GET_RECENT_UPDATE)
+  const { recentUpdate } = storeData.user
 
   // Need to be able to update recentUpdate field on the user when they dismiss
-  let [seenRecentUpdate] = useMutation(SEEN_RECENT_UPDATE)
+  const [seenRecentUpdate] = useMutation(SEEN_RECENT_UPDATE)
 
   // Add toast
-  let { addToast } = useToasts()
+  const { addToast } = useToasts()
 
   useEffect(() => {
     if (recentUpdate) {
-      let message = 'Recent Update Message.'
+      const message = 'Recent Update Message.'
       addToast(message, {
         appearance: 'info',
         onDismiss: () => seenRecentUpdate()

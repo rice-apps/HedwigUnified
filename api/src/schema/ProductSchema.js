@@ -31,17 +31,17 @@ ItemTC.addResolver({
     const { objects } = catalogResponse
 
     // Step 1.5: Filter objects into distinct sets
-    const categories = objects.filter(object => object.type == 'CATEGORY')
+    const categories = objects.filter(object => object.type === 'CATEGORY')
     const modifierLists = objects.filter(
-      object => object.type == 'MODIFIER_LIST'
+      object => object.type === 'MODIFIER_LIST'
     )
-    const items = objects.filter(object => object.type == 'ITEM')
+    const items = objects.filter(object => object.type === 'ITEM')
 
     // Step 1.7: Extract category names from categories
     const categoryId2Name = id =>
-      categories.find(category => category.id == id).category_data.name
+      categories.find(category => category.id === id).category_data.name
     const modifierListId2Data = id =>
-      modifierLists.find(modifierList => modifierList.id == id)
+      modifierLists.find(modifierList => modifierList.id === id)
 
     // Step 2: Transform data into CMD
     return items.map(item => {
@@ -201,7 +201,7 @@ ItemTC.addResolver({
           parentItemId,
           price: {
             amount: price_money ? price_money.amount : -1,
-            currency: price_money ? price_money.currency : -1,
+            currency: price_money ? price_money.currency : -1
           },
           // From interface
           name: itemVariationName,
@@ -212,10 +212,10 @@ ItemTC.addResolver({
 
       // Get all modifier list IDs that correspond to this item
       // this mapping below is breaking because the modifier_list_info is null
-      console.log("modifier_list_info is null", modifier_list_info);
-      let returnedModifierLists;
-      if (modifier_list_info){
-        console.log("Actually fired?");
+      console.log('modifier_list_info is null', modifier_list_info)
+      let returnedModifierLists
+      if (modifier_list_info) {
+        console.log('Actually fired?')
         const modifier_list_ids = modifier_list_info.map(
           info => info.modifier_list_id
         )
@@ -243,7 +243,11 @@ ItemTC.addResolver({
           const returnedModifiers = modifiers.map(modifier => {
             const {
               id,
-              modifier_data: { name: modifierName, modifier_list_id, price_money }
+              modifier_data: {
+                name: modifierName,
+                modifier_list_id,
+                price_money
+              }
             } = modifier
 
             return {
@@ -274,7 +278,7 @@ ItemTC.addResolver({
       return {
         dataSourceId,
         variants: returnedVariants,
-        modifierLists: returnedModifierLists ? returnedModifierLists : [],
+        modifierLists: returnedModifierLists || [],
         // From interface
         dataSource,
         name: baseItemName,
@@ -549,17 +553,17 @@ ItemTC.addResolver({
       const { objects } = batchUpsertCatalogObjectsResponse
 
       // Step 1.5: Filter objects into distinct sets
-      const categories = objects.filter(object => object.type == 'CATEGORY')
+      const categories = objects.filter(object => object.type === 'CATEGORY')
       const modifierLists = objects.filter(
-        object => object.type == 'MODIFIER_LIST'
+        object => object.type === 'MODIFIER_LIST'
       )
-      const items = objects.filter(object => object.type == 'ITEM')
+      const items = objects.filter(object => object.type === 'ITEM')
 
       // Step 1.7: Extract category names from categories
       const categoryId2Name = id =>
-        categories.find(category => category.id == id).category_data.name
+        categories.find(category => category.id === id).category_data.name
       const modifierListId2Data = id =>
-        modifierLists.find(modifierList => modifierList.id == id)
+        modifierLists.find(modifierList => modifierList.id === id)
 
       // Step 2: Transform data into CMD
       return items.map(item => {

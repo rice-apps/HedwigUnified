@@ -8,10 +8,10 @@ function PortalCard () {
   const history = useHistory()
 
   const handleVendorClick = () => {
-    return history.push(`/vendor/orders`)
+    return history.push('/vendor/orders')
   }
   const handleClientClick = () => {
-    return history.push(`/user/vendors`)
+    return history.push('/user/vendors')
   }
 
   return (

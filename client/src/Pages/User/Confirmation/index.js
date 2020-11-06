@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client'
 import { useHistory, useLocation } from 'react-router'
 import './confirmation.css'
 // import '../../fonts/style.css'
-//fontawesome imports
+// fontawesome imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
@@ -35,7 +35,7 @@ const Confirmation = ({ classes }) => {
     return navigate(`/eat/${vendor.slug}`)
   }
   const handleOrdersClick = () => {
-    return navigate(`/eat/orders`)
+    return navigate('/eat/orders')
   }
   const handleCartClick = () => {
     return navigate(`/eat/${vendor.slug}/cart`)

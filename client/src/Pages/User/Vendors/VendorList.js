@@ -6,7 +6,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
 import '../../../fonts/style.css'
 
-//fontawesome imports
+// fontawesome imports
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
@@ -70,8 +70,11 @@ function VendorList ({ classes }) {
   */
 
   return (
-    <div style={{paddingTop:"8vh", paddingBottom:"10vh" }} className='vendorPage'>
-      <BuyerHeader/>
+    <div
+      style={{ paddingTop: '8vh', paddingBottom: '10vh' }}
+      className='vendorPage'
+    >
+      <BuyerHeader />
       <div>
         {getVendors.map(vendor => {
           return <VendorCard key={vendor.name} vendor={vendor} />

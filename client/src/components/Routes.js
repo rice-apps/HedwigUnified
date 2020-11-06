@@ -33,7 +33,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import Payments from '../Pages/User/Cart/Payments'
-import VendorSelect from '../Pages/Login/VendorCheck';
+import VendorSelect from '../Pages/Login/VendorCheck'
 import CohenPayment from '../Pages/User/Payment/CohenPayment'
 import Submit from '../Pages/User/Submit'
 /**
@@ -74,13 +74,13 @@ const GET_USER_INFO = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, ...rest }) => {
-  let token =
+  const token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
-  let client = useApolloClient()
+  const client = useApolloClient()
 
   // Verify that the token is valid on the backend
-  let { data, loading, error } = useQuery(VERIFY_USER, {
+  const { data, loading, error } = useQuery(VERIFY_USER, {
     variables: { token: token },
     errorPolicy: 'none'
   })
@@ -128,7 +128,7 @@ const newRoutesArray = [
   },
   {
     path: '/vendor_choice',
-    element: <PrivateRoute element={ <VendorSelect /> } /> 
+    element: <PrivateRoute element={<VendorSelect />} />
   },
   {
     path: '/eat/*',

@@ -1,4 +1,5 @@
 import { sc } from 'graphql-compose'
+import { Kind } from 'graphql'
 
 const DataSourceEnumTC = sc.createEnumTC({
   name: 'DataSourceEnum',

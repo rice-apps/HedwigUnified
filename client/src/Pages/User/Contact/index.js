@@ -74,7 +74,7 @@ function ContactForm () {
           id='tel'
           margin='dense'
           onChange={e => setPhone(e.target.value)}
-        ></TextField>
+        />
       </div>
       <div
         variant='outlined'

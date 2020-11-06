@@ -59,7 +59,7 @@ function Product () {
   if (product_error) {
     return <p>ErrorP...</p>
   }
-
+  
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
   const handleClick = () => {
@@ -182,9 +182,16 @@ function Product () {
   */
 
   function makeCartItem () {
+
+    let itemName = product.name
+    let itemID = product.squareID
+    let itemDataSourceId = product.dataSourceId
+    let variant = undefined
+
     const itemName = product.name
     const itemID = product.squareID
     let variant
+
     if (document.querySelector('.variantSelect:checked') == null) {
       return false
     }
@@ -220,7 +227,8 @@ function Product () {
         modifierLists: modifierList,
         quantity: itemQuantity,
         price: totalPrice,
-        modDisplay: modifierNames
+        modDisplay: modifierNames,
+        dataSourceId: itemDataSourceId
       }
     })
     return true

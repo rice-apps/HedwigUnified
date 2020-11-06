@@ -102,25 +102,27 @@ function CohenPayment (props) {
     border-bottom-width: 1px;
   `
 
-  return (
-    <div>
-      <Grid onClick={() => setActivePass(0)}>
-        <Row>
-          <Title>Payment Method</Title>
-        </Row>
-        <Row>
-          <CohenTitle>Cohen Club Card</CohenTitle>
-        </Row>
-        <Row>
-          <MembershipTitle>Membership ID:</MembershipTitle>
-        </Row>
-      </Grid>
-      <Row>
-        <PasswordInput aria-hidden='true' onClick={() => setActivePass(1)} />
-      </Row>
-      <Footer>Next</Footer>
-    </div>
-  )
+    const navigate = useNavigate();
+
+    return (
+        < div >
+            <Grid onClick={() => setActivePass(0)}>
+                <Row>
+                    <Title>Payment Method</Title>
+                </Row>
+                <Row >
+                    <CohenTitle>Cohen Club Card</CohenTitle>
+                </Row>
+                <Row >
+                    <MembershipTitle>Membership ID:</MembershipTitle>
+                </Row>
+            </Grid>
+            <Row>
+                < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} />
+            </Row>
+            <Footer onClick={() => {navigate(`/eat/submit`)}}>Next</Footer>
+        </div >
+    )
 }
 
 export default CohenPayment

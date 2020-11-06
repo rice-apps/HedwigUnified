@@ -1,29 +1,32 @@
 /** @jsx jsx */
 
-import { css, jsx } from '@emotion/core'
-import React, { useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
-import { useParams, useHistory } from 'react-router'
-import logo from '../../../images/cohenhouse.png'
-import './cart.scss'
-import { centerCenter, row, column, endStart } from '../../../Styles/flex'
-import CartProduct from './CartProducts'
-import Payments from './Payments.js'
-import currency from 'currency.js'
-import { cartItems } from '../../../apollo'
-import dispatch from '../Products/FunctionalCart'
-import Select from 'react-select'
-import { TimePicker } from 'antd'
-import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
-import BottomAppBar from './../Vendors/BottomAppBar.js'
-import BuyerHeader from './../Vendors/BuyerHeader.js'
+import { css, jsx } from "@emotion/core";
+import React, { useEffect, useState } from "react";
+import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
+import { useParams, useHistory } from "react-router";
+import {createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR} from "./util"
+import logo from "../../../images/cohenhouse.png";
+import "./cart.scss";
+import { centerCenter, row, column, endStart } from "../../../Styles/flex";
+import CartProduct from "./CartProducts";
+import Payments from "./Payments.js";
+import currency from "currency.js";
+import { cartItems, orderSummary } from "../../../apollo";
+import dispatch from "../Products/FunctionalCart";
+import Select from "react-select";
+import { TimePicker } from "antd";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import BottomAppBar from "./../Vendors/BottomAppBar.js";
+import BuyerHeader from "./../Vendors/BuyerHeader.js";
+
 
 const defaultTotals = {
   subtotal: 0,
   tax: 0,
   discount: null
 }
+
 
 const GET_VENDOR = gql`
   query {
@@ -41,6 +44,7 @@ const GET_VENDOR = gql`
     }
   }
 `
+
 
 const computeAvailableHours = (startHour, endHour) => {
   const hour = moment().hour()
@@ -87,16 +91,40 @@ const computeAvailableMinutes = (
   return rtn
 }
 
-function CartDetail () {
-  const [totals, setTotals] = useState(defaultTotals)
-  const [pickupTime, setPickupTime] = useState(null)
-  const { loading, error, data } = useQuery(GET_VENDOR)
-  const navigate = useNavigate()
-  const cart_menu = cartItems()
 
-  const handleConfirmClick = () => {
-    return navigate('/eat/cohen/payment')
-  }
+function CartDetail() {
+  const [totals, setTotals] = useState(defaultTotals);
+  const [pickupTime, setPickupTime] = useState(null);
+  const { loading, error, data } = useQuery(GET_VENDOR);
+  const [
+    createOrder,
+    { loading: order_loading, error: order_error, data: order_data }
+  ] = useMutation(CREATE_ORDER)
+  const [
+    createPayment,
+    { loading: payment_loading, error: payment_error, data: payment_data }
+  ] = useMutation(CREATE_PAYMENT)
+
+  const navigate = useNavigate();
+  let cart_menu = cartItems();
+
+  const handleConfirmClick = async () => {
+    const q = {
+      variables: createRecord(cart_menu)
+    }
+    const orderResponse = await createOrder(q)
+    const orderJson = orderResponse.data.createOrder
+    const createPaymentResponse = await createPayment({
+      variables: {
+        orderId: orderJson.id,
+        subtotal: totals.subtotal * 100,
+        currency: 'USD'
+      }
+    })
+
+    return navigate(`/eat/cohen/payment`);
+  };
+
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -126,10 +154,21 @@ function CartDetail () {
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
-  console.log(moment('8:30 a.m.', 'H HH:mm a A'))
-  console.log(data)
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
+
+
+  if (order_loading) return <p>Loading...</p>
+  if (order_error) {
+    return <p>{order_error.message}</p>
+  }
+  if (payment_loading) return <p>Loading...</p>
+  if (payment_error) {
+    return <p>{payment_error.message}</p>
+  }
+
+  const businessHour = data.getVendors.filter(
+    e => e["name"] == "Cohen House"
+  )[0].hours[0];
+
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
@@ -148,21 +187,65 @@ function CartDetail () {
     endHour2 += 12
   }
   const startMinute1 = parseInt(
-    businessHour.start[0].split(':')[1].substring(0, 2)
-  )
-  const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
+    businessHour.start[0].split(":")[1].substring(0, 2)
+  );
+  const endMinute1 = parseInt(
+    businessHour.end[0].split(":")[1].substring(0, 2)
+  );
 
-  const disabled = () =>
-    moment().hour() > endHour1 ||
-    (moment().hour() == endHour1 && moment().minute() >= endMinute1)
+  const disabled = () => false //uncomment the codde below for prod mode.
+    // moment().hour() > endHour1 ||
+    // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
   return (
-    <div>
-      <BuyerHeader showBackButton backLink='/eat' />
-      <div className='float-cart'>
-        <div className='float-cart__content'>
-          <div className='float-cart__shelf-container'>
-            <p className='cart-title'>
-              My Cart {getTotal() > 0 ? '(' + getTotal().toString() + ')' : ''}
+<div>
+
+<BuyerHeader showBackButton={true} backLink="/eat"/>
+    <div className='float-cart'>
+      <div className='float-cart__content'>
+        <div className='float-cart__shelf-container'>
+          <p className='cart-title'>My Cart {getTotal()>0 ? "("+getTotal().toString()+")":""}</p>
+          <div css={[centerCenter, row]}>
+            <img src={logo} className='logo' alt='Logo' />
+            <div>
+              <p className='vendor-title'>Cohen House</p>
+
+            </div>
+          </div>
+
+          <p css={{ alignSelf: 'center', marginTop: '2px' }}> Pickup Time:</p>
+          <TimePicker
+            disabled={disabled()}
+            defaultValue={moment()}
+            css={{ marginTop: '-10px', width: '200px', alignSelf: 'center' }}
+            format='HH:mm'
+            onChange={e => {
+              if (e) {
+                document.getElementsByClassName('buy-btn')[0].disabled = false
+                setPickupTime({ hour: e.hour(), minute: e.minute() })
+                orderSummary({time: e})
+              }
+            }}
+            showNow={false}
+            bordered={false}
+            inputReadOnly={true}
+            disabledHours={() => {
+              return computeAvailableHours(startHour1, endHour1)
+            }}
+            disabledMinutes={hour => {
+              return computeAvailableMinutes(
+                hour,
+                startHour1,
+                startMinute1,
+                endHour1,
+                endMinute1
+              )
+            }}
+          />
+          {disabled() && (
+            <p css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              No pickup time available today.{' '}
+
             </p>
             <div css={[centerCenter, row]}>
               <img src={logo} className='logo' alt='Logo' />

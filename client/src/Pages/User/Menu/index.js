@@ -126,12 +126,16 @@ function Menu () {
     return <p>Loading...</p>
   }
   if (catalog_error) {
+    console.log(catalog_error)
     return <p>ErrorC...</p>
   }
+
+  
 
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
+  console.log(catalog_data);
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -179,7 +183,6 @@ function Menu () {
   const startTimes = vendor_data.getVendor.hours[currentDay].start
   console.log(startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
-  console.log(vendor_data)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>

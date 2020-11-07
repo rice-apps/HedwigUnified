@@ -173,7 +173,10 @@ function Menu () {
 
   const current_date = new Date()
   console.log(current_date.getDay())
-  const currentDay = current_date.getDay() 
+  // const currentDay = current_date.getDay() 
+  // temporary measure:
+  const currentDay = 1
+
   console.log(currentDay)
   console.log(vendor_data.getVendor.hours)
   const startTimes = vendor_data.getVendor.hours[currentDay].start

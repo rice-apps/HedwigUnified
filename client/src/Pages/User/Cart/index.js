@@ -42,6 +42,12 @@ const GET_VENDOR = gql`
   }
 `
 
+const GET_AVAILABILITIES = gql`
+  query GET_AVAILABILITIES($productIds: [String!]) {
+    getAvailabilities(productIds: $productIds)
+  }
+`
+
 const computeAvailableHours = (startHour, endHour) => {
   const hour = moment().hour()
   let i = 0
@@ -94,7 +100,24 @@ function CartDetail () {
   const navigate = useNavigate()
   const cart_menu = cartItems()
 
+  const product_ids = cart_menu.map(item => {
+    return item.Id
+  })
+
+  const { availLoading, availError, availData } = useQuery(GET_AVAILABILITIES, {
+    variables: { productIds: product_ids }})
+
   const handleConfirmClick = () => {
+    console.log("Cart Menu: ", cart_menu)
+    
+    if (availData === false) {
+      alert("An item in your cart has become unavailable");
+    }
+    else {
+      return navigate(`/eat/cohen/payment`)
+    }
+
+    /*
     let allAvailable = true;
     cart_menu.map(item => {
       if (!item.isAvailable) {
@@ -105,6 +128,7 @@ function CartDetail () {
     if (allAvailable) {
       return navigate(`/eat/cohen/payment`);
     }
+    */
   };
 
   const updateTotal = () => {
@@ -129,12 +153,18 @@ function CartDetail () {
     updateTotal()
   }, [cart_menu])
 
+  
+
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
   const [dummyDelete, setDummyDelete] = useState(0)
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
+
+  if (availLoading) return <p>'Loading availabilities...'</p>
+  if (availError) return <p>`Error! ${availError.message}`</p>
+
   console.log(moment('8:30 a.m.', 'H HH:mm a A'))
   console.log(data)
   const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
@@ -252,13 +282,12 @@ function CartDetail () {
 
           <div className='float-cart__footer'>
             <button
-              disabled={cartItems().length == 0 || pickupTime == null}
+              // disabled={cartItems().length == 0 || pickupTime == null}
               className='buy-btn'
               title='Confirm'
               onClick={handleConfirmClick}
             >
               Next: Payment
-              <div />
             </button>
           </div>
         </div>

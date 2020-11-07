@@ -11,6 +11,7 @@ const GET_CATALOG = gql`
       category
       variants {
         name
+        dataSourceId
         price {
           amount
           currency
@@ -25,6 +26,7 @@ const GET_ITEM = gql`
     getItem(dataSource: SQUARE, dataSourceId: $dataSourceId) {
       name
       description
+      dataSourceId
       variants {
         price {
           amount
@@ -33,15 +35,20 @@ const GET_ITEM = gql`
         name
         description
         image
+        dataSourceId
+        parentItemId
       }
       modifierLists {
         name
         selectionType
+        dataSourceId
         modifiers {
           price {
             amount
             currency
           }
+          dataSourceId
+          parentListId
           name
           description
           image

@@ -1,13 +1,8 @@
 import { Component, useState } from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
-<<<<<<< HEAD
-import Button from '@material-ui/core/Button'
-import styled, { css } from 'styled-components'
-=======
 import {orderSummary} from "../../../apollo"
 import Button from '@material-ui/core/Button';
 import styled, { css } from 'styled-components';
->>>>>>> deletes duplicate flies
 // import visa from 'payment-icons/min/flat/visa.svg';
 import { FaCreditCard, FaBriefcase } from 'react-icons/fa'
 import { BiIdCard } from 'react-icons/bi'
@@ -20,33 +15,6 @@ import Iframe from 'react-iframe'
 // Payment Options page + embedding Shopify url
 
 const CREATE_PAYMENT = gql`
-<<<<<<< HEAD
-  mutation CREATE_PAYMENT(
-    $sourceId: String!
-    $orderId: String!
-    $locationId: String!
-    $amount: Int!
-    $currency: String!
-  ) {
-    createPayment(
-      record: {
-        source: SQUARE
-        sourceId: $sourceId
-        orderId: $orderId
-        locationId: $locationId
-        subtotal: { amount: $amount, currency: $currency }
-      }
-    ) {
-      id
-      total {
-        amount
-        currency
-      }
-      url
-    }
-  }
-`
-=======
         mutation CREATE_PAYMENT($sourceId: String!, $orderId: String!, $locationId: String!, $amount: Int!, $currency: String!){
             createPayment(
                 record: {
@@ -68,7 +36,6 @@ const CREATE_PAYMENT = gql`
 
         }
     `
->>>>>>> createPayment working on playground
 
 // payment options page, coehn club or credit card or tetra
 function Payments () {

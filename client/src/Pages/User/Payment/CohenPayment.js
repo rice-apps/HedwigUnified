@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { gql, useMutation } from '@apollo/client'
+import { orderSummary } from "../../../apollo"
 import {
   SquarePaymentForm,
   CreditCardNumberInput,
@@ -16,8 +17,6 @@ import 'react-square-payment-form/lib/default.css'
 // import { ACCEPT_ORDER } from "/Users/Ananya/hedwig/client/src/Pages/Vendor/VendorComponents/OpenOrderComponents/OrderCard.js"
 
 // This is credit card payment! screen
-
-const [inputCohenId, setInputCohenId] = useState('');
 
 const ACCEPT_ORDER = gql`
   mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!){
@@ -37,6 +36,7 @@ const ACCEPT_ORDER = gql`
 `
 
 function CohenPayment(props) {
+  const [inputCohenId, setInputCohenId] = useState('');
   // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
   const [activePass, setActivePass] = useState(0)
 

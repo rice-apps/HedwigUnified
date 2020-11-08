@@ -134,8 +134,10 @@ function CohenPayment(props) {
   const handleClickNext = () => {
     updateOrder({
       variables: {
-        orderId: orderSummary['orderId'],
-        cohenId: inputCohenId
+        orderId: order['orderId'],
+        cohenId: inputCohenId,
+        uid: order.fulfillment.uid,
+        state: order.fulfillment.state
       }
     }).then(navigate(`/eat/submit`).catch(err => console.log("Could not update order")))
   }

@@ -20,6 +20,7 @@ import Iframe from 'react-iframe'
 // Payment Options page + embedding Shopify url
 
 const CREATE_PAYMENT = gql`
+<<<<<<< HEAD
   mutation CREATE_PAYMENT(
     $sourceId: String!
     $orderId: String!
@@ -45,6 +46,29 @@ const CREATE_PAYMENT = gql`
     }
   }
 `
+=======
+        mutation CREATE_PAYMENT($sourceId: String!, $orderId: String!, $locationId: String!, $amount: Int!, $currency: String!){
+            createPayment(
+                record: {
+                  source: SHOPIFY
+                  sourceId: $sourceId
+                  orderId: $orderId
+                  locationId: $locationId
+                  subtotal: { amount: $amount, currency: $currency }
+                  tip: {amount: 0, currency: $currency}
+                }
+              ) {
+                id
+                total {
+                  amount
+                  currency
+                }
+                url
+              }
+
+        }
+    `
+>>>>>>> createPayment working on playground
 
 // payment options page, coehn club or credit card or tetra
 function Payments () {

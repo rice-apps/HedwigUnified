@@ -126,6 +126,7 @@ PaymentTC.addResolver({
             'unit-product'
           )
 
+<<<<<<< HEAD
           const createCheckoutMutation = shopifyClient.graphQLClient.mutation(
             root => {
               root.add(
@@ -151,6 +152,12 @@ PaymentTC.addResolver({
                   })
                 }
               )
+=======
+          await shopifyClient.checkout.addLineItems(checkout.id, [
+            {
+              variantId: unitProduct.variants[0].id,
+              quantity: subtotal.amount / 25
+>>>>>>> createPayment working on playground
             }
           )
 

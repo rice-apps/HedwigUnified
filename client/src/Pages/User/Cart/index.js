@@ -83,38 +83,7 @@ const computeAvailableMinutes = (
 }
 
 
-<<<<<<< HEAD
-  const product_ids = cart_menu.map(item => {
-    return item.Id
-  })
 
-  const { availLoading, availError, availData } = useQuery(GET_AVAILABILITIES, {
-    variables: { productIds: product_ids }})
-
-  const handleConfirmClick = () => {
-    console.log("Cart Menu: ", cart_menu)
-    
-    if (availData === false) {
-      alert("An item in your cart has become unavailable");
-    }
-    else {
-      return navigate(`/eat/cohen/payment`)
-    }
-
-    /*
-    let allAvailable = true;
-    cart_menu.map(item => {
-      if (!item.isAvailable) {
-        alert("An item in your cart has become unavailable");
-        allAvailable = false;
-      }
-    })
-    if (allAvailable) {
-      return navigate(`/eat/cohen/payment`);
-    }
-    */
-  };
-=======
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
   const [pickupTime, setPickupTime] = useState(null);
@@ -129,26 +98,42 @@ function CartDetail() {
   ] = useMutation(CREATE_PAYMENT)
 
   const navigate = useNavigate();
+  
   let cart_menu = cartItems();
+  console.log("cart_menu: " + cart_menu)
+  
+
+  const product_ids = cart_menu.map(item => {
+    return item.Id
+  })
+  
+  const { availLoading, availError, availData } = useQuery(GET_AVAILABILITIES, {
+    variables: { productIds: product_ids }})
 
   const handleConfirmClick = async () => {
-    const q = {
-      variables: createRecord(cart_menu)
+    console.log("cart_menu: " + cart_menu)
+    if (availData === false) {
+      alert("An item in your cart has become unavailable");
     }
-    const orderResponse = await createOrder(q)
-    const orderJson = orderResponse.data.createOrder
-    const createPaymentResponse = await createPayment({
-      variables: {
-        orderId: orderJson.id,
-        subtotal: totals.subtotal * 100,
-        currency: 'USD'
+    else {
+      const q = {
+        variables: createRecord(cart_menu)
       }
-    })
-
-    return navigate(`/eat/cohen/payment`);
+      const orderResponse = await createOrder(q)
+      const orderJson = orderResponse.data.createOrder
+      const createPaymentResponse = await createPayment({
+        variables: {
+          orderId: orderJson.id,
+          subtotal: totals.subtotal * 100,
+          currency: 'USD'
+        }
+      })
+  
+      return navigate(`/eat/cohen/payment`);
+    }
+    
   };
 
->>>>>>> a9628205018325be8d98fe7f3c17fdc461cca10d
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -181,15 +166,15 @@ function CartDetail() {
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
 
-<<<<<<< HEAD
   if (availLoading) return <p>'Loading availabilities...'</p>
   if (availError) return <p>`Error! ${availError.message}`</p>
 
+  /*
   console.log(moment('8:30 a.m.', 'H HH:mm a A'))
   console.log(data)
   const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
     .hours[0]
-=======
+  */
 
   if (order_loading) return <p>Loading...</p>
   if (order_error) {
@@ -204,7 +189,6 @@ function CartDetail() {
     e => e["name"] == "Cohen House"
   )[0].hours[0];
 
->>>>>>> a9628205018325be8d98fe7f3c17fdc461cca10d
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])

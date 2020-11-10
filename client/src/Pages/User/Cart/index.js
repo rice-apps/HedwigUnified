@@ -20,6 +20,11 @@ import { useNavigate } from "react-router-dom";
 import BottomAppBar from "./../Vendors/BottomAppBar.js";
 import BuyerHeader from "./../Vendors/BuyerHeader.js";
 
+const GET_AVAILABILITIES = gql`
+  query GET_AVAILABILITIES($productIds: [String!]) {
+    getAvailabilities(productIds: $productIds)
+  }
+`
 
 const defaultTotals = {
   subtotal: 0,
@@ -93,21 +98,36 @@ function CartDetail() {
   const navigate = useNavigate();
   let cart_menu = cartItems();
 
-  const handleConfirmClick = async () => {
-    const q = {
-      variables: createRecord(cart_menu)
-    }
-    const orderResponse = await createOrder(q)
-    const orderJson = orderResponse.data.createOrder
-    const createPaymentResponse = await createPayment({
-      variables: {
-        orderId: orderJson.id,
-        subtotal: totals.subtotal * 100,
-        currency: 'USD'
-      }
-    })
+  const product_ids = cart_menu.map(item => {
+    return item.dataSourceId
+  })
+  console.log("Product IDs", product_ids)
+  const { avail_loading, avail_error, avail_data } = useQuery(GET_AVAILABILITIES, {
+    variables: { productIds: product_ids }})
 
-    return navigate(`/eat/cohen/payment`);
+  const handleConfirmClick = async () => {
+    console.log('cart_menu:', cart_menu)
+    console.log("availability", avail_data)
+    if (avail_data === false) {
+      alert("An item in your cart has become unavailable");
+    }
+    else {
+      const q = {
+        variables: createRecord(cart_menu)
+      }
+      const orderResponse = await createOrder(q)
+      const orderJson = orderResponse.data.createOrder
+      const createPaymentResponse = await createPayment({
+        variables: {
+          orderId: orderJson.id,
+          subtotal: totals.subtotal * 100,
+          currency: 'USD'
+        }
+      })
+  
+      return navigate(`/eat/cohen/payment`);
+    }
+    
   };
 
 
@@ -149,6 +169,9 @@ function CartDetail() {
   if (payment_error) {
     return <p>{payment_error.message}</p>
   }
+
+  if (avail_loading) return <p>'Loading availabilities...'</p>
+  if (avail_error) return <p>`Error! ${avail_error.message}`</p>
 
   const businessHour = data.getVendors.filter(
     e => e["name"] == "Cohen House"

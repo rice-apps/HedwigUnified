@@ -2,7 +2,7 @@
 
 import { css, jsx } from "@emotion/core";
 import React, { useEffect, useState } from "react";
-import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
+import { gql, useQuery, useMutation, useApolloClient, useLazyQuery } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
 import {createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR} from "./util"
 import logo from "../../../images/cohenhouse.png";
@@ -95,6 +95,7 @@ function CartDetail() {
     { loading: payment_loading, error: payment_error, data: payment_data }
   ] = useMutation(CREATE_PAYMENT)
 
+  
   const navigate = useNavigate();
   let cart_menu = cartItems();
 
@@ -102,13 +103,16 @@ function CartDetail() {
     return item.dataSourceId
   })
   console.log("Product IDs", product_ids)
-  const { avail_loading, avail_error, avail_data } = useQuery(GET_AVAILABILITIES, {
+
+  const [getAvailabilities, { loading: avail_loading, error: avail_error, data: avail_data }] = useLazyQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids }})
 
+
   const handleConfirmClick = async () => {
+    getAvailabilities()
     console.log('cart_menu:', cart_menu)
     console.log("availability", avail_data)
-    if (avail_data === false) {
+    if (avail_data.getAvailabilities === false) {
       alert("An item in your cart has become unavailable");
     }
     else {

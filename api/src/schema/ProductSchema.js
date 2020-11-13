@@ -329,7 +329,7 @@ ItemTC.addResolver({
           const retrieveCatalogObjectResponse = await api.retrieveCatalogObject(
             productId
           )
-          //console.log(retrieveCatalogObjectResponse.object.custom_attribute_values.is_available.boolean_value)
+
           if (retrieveCatalogObjectResponse.errors) {
             return new ApolloError(
               `Updating availability failed: ${retrieveCatalogObjectResponse.errors}`
@@ -340,23 +340,6 @@ ItemTC.addResolver({
             .is_available.boolean_value
         }))
       }
-
-      /*
-      const availabilities = await productIds.map(async (productId)=>{
-        const retrieveCatalogObjectResponse = await api.retrieveCatalogObject(
-          productId
-        )
-        //console.log(retrieveCatalogObjectResponse.object.custom_attribute_values.is_available.boolean_value)
-        if (retrieveCatalogObjectResponse.errors) {
-          return new ApolloError(
-            `Updating availability failed: ${retrieveCatalogObjectResponse.errors}`
-          )
-        }
-
-        return retrieveCatalogObjectResponse.object.custom_attribute_values
-          .is_available.boolean_value
-      })
-      */
 
       let allAvailable = true
 
@@ -380,8 +363,6 @@ ItemTC.addResolver({
           return true
         }
       })
-
-      //return allAvailable
 
     }
   })

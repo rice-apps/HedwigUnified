@@ -23,8 +23,7 @@ function VendorCard ({ vendor }) {
   // includes time
   const current_date = new Date()
   const currentDay = current_date.getDay()
-  const dayObj = hours[0]
-  console.log(dayObj)
+  const dayObj = hours[currentDay];
 
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
@@ -36,6 +35,13 @@ function VendorCard ({ vendor }) {
     } else if (halfOfDay === 'p.m.') {
       return 12 + hours + minutes
     }
+  }
+
+  const startTimes = hours[currentDay].start
+  const endTimes = hours[currentDay].end
+  const times = []
+  for(let i=0; i<startTimes.length; i++){
+    times.push([startTimes[i],endTimes[i]])
   }
 
   const determineIfClosed = (current_date, dayObj) => {
@@ -56,24 +62,18 @@ function VendorCard ({ vendor }) {
             <h3 className='vendorName'>{name}</h3>
             {/* Case for two start/end times */}
             {dayObj && dayObj.start.length > 1 && (
-              <p>
-                Hours Open: <br />
-                {dayObj.start[0]}
-                {' - '}
-                {dayObj.end[0]}
-                {', '}
-                <br />
-                {dayObj.start[1]}
-                {' - '}
-                {dayObj.end[1]}
-              </p>
-            )}
-            {/* Case for one start/end time */}
-            {dayObj && dayObj.start.length == 1 && (
-              <p>
-                Hours Open: {dayObj.start[0]}
-                {' - '}
-                {dayObj.end[0]}{' '}
+              <p> Hours Open: {
+              times.map(time =>{
+                return (
+                    <span>
+                      <br />
+                      {time[0]}
+                      {' - '}
+                      {time[1]}
+                      {''}
+                    </span>
+                  )
+                })}
               </p>
             )}
           </div>

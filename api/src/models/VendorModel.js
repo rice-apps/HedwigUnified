@@ -10,22 +10,24 @@ const SquareInfo = new Schema({
   loyaltyId: { type: String, unique: true }
 })
 
+
 const BusinessHours = new Schema({
   start: { type: [String], required: true },
   end: { type: [String], required: true },
   day: {
     type: String,
     enum: [
+      'Sunday',
       'Monday',
       'Tuesday',
       'Wednesday',
       'Thursday',
       'Friday',
-      'Saturday',
-      'Sunday'
+      'Saturday'
     ],
     required: true
-  }
+  },
+  isClosed: {type: [Boolean], required: true}
 })
 
 const VendorSchema = new Schema({

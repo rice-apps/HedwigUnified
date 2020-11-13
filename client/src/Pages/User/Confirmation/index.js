@@ -145,7 +145,8 @@ const Confirmation = ({ classes }) => {
     )
   }
   if (catalogLoading) return <p>Loading...</p>
-  return <div>{availability ? renderConfirmation() : renderFailure()}</div>
+  // return <div>{availability ? renderConfirmation() : renderFailure()}</div>
+  return <div> {renderFailure()} </div>
 }
 
 export default Confirmation

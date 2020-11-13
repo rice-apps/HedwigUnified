@@ -323,11 +323,30 @@ ItemTC.addResolver({
       const { productIds } = args
 
       const api = new CatalogApi()
-      const availabilities = productIds.map(async (productId)=>{
+
+      const getAvailabilities = async () => {
+        return Promise.all(productIds.map(async (productId)=>{
+          const retrieveCatalogObjectResponse = await api.retrieveCatalogObject(
+            productId
+          )
+          //console.log(retrieveCatalogObjectResponse.object.custom_attribute_values.is_available.boolean_value)
+          if (retrieveCatalogObjectResponse.errors) {
+            return new ApolloError(
+              `Updating availability failed: ${retrieveCatalogObjectResponse.errors}`
+            )
+          }
+  
+          return retrieveCatalogObjectResponse.object.custom_attribute_values
+            .is_available.boolean_value
+        }))
+      }
+
+      /*
+      const availabilities = await productIds.map(async (productId)=>{
         const retrieveCatalogObjectResponse = await api.retrieveCatalogObject(
           productId
         )
-
+        //console.log(retrieveCatalogObjectResponse.object.custom_attribute_values.is_available.boolean_value)
         if (retrieveCatalogObjectResponse.errors) {
           return new ApolloError(
             `Updating availability failed: ${retrieveCatalogObjectResponse.errors}`
@@ -337,17 +356,32 @@ ItemTC.addResolver({
         return retrieveCatalogObjectResponse.object.custom_attribute_values
           .is_available.boolean_value
       })
+      */
 
-      availabilities.forEach(availability => {
-        if (typeof availability != 'boolean') {
+      let allAvailable = true
+
+      return getAvailabilities().then(availabilities => {
+        let batchedAvailabilities = availabilities.map(availability => {
+          console.log(availability)
+          if (typeof availability != 'boolean') {
+            return false
+          }
+          else if (availability === false) {
+            return false
+          }
+          else {
+            return true
+          }
+        })
+        if (batchedAvailabilities.includes(false)) {
           return false
         }
-        else if (availability === false) {
-          return false
+        else {
+          return true
         }
       })
 
-      return true
+      //return allAvailable
 
     }
   })

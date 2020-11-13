@@ -126,12 +126,16 @@ function Menu () {
     return <p>Loading...</p>
   }
   if (catalog_error) {
+    console.log(catalog_error)
     return <p>ErrorC...</p>
   }
+
+  
 
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
+  console.log(catalog_data);
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -172,15 +176,19 @@ function Menu () {
   }
 
   const current_date = new Date()
+
   const currentDay = current_date.getDay() 
   // current day is an integer
+
   const startTimes = vendor_data.getVendor.hours[currentDay].start
   const endTimes = vendor_data.getVendor.hours[currentDay].end
+
   const times = []
   for(let i=0; i<startTimes.length; i++){
     times.push([startTimes[i],endTimes[i]])
   }
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
+
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>

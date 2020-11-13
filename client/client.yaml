@@ -2,9 +2,12 @@ runtime: nodejs
 env: flex
 service: default
 
+automatic_scaling:
+  min_num_instances: 1
+
 resources:
-  cpu: 2
-  memory_gb: 1.5
+  cpu: 1
+  memory_gb: 1.0
   disk_size_gb: 10
 
 handlers:

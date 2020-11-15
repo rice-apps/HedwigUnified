@@ -263,14 +263,14 @@ OrderTC.addResolver({
     resolve: async ({ args }) => {
       const {
         orderId,
-        record: { orderStatus, fulfillment }
+        record: { orderStatus, cohenId, studentId, fulfillment }
       } = args
 
       const updatedOrderTracker = await OrderTracker.findOne({
         orderId: orderId
       })
 
-      updatedOrderTracker.status = fulfillment
+      updatedOrderTracker.status = fulfillment.state
 
       await updatedOrderTracker.save()
 
@@ -324,8 +324,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        cohenId: updateOrderResponse.order.metadata?.cohenId,
-        studentId: updateOrderResponse.order.metadata?.studentId,
+        cohenId: cohenId,
+        studentId: studentId,
         fulfillment: {
           uid: first.uid,
           state: updatedOrderTracker.status,

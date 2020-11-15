@@ -19,11 +19,11 @@ import 'react-square-payment-form/lib/default.css'
 // This is credit card payment! screen
 
 const ACCEPT_ORDER = gql`
-  mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!){
+  mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!, $uid: String!, $state: FulFillmentStatusEnum!){
     updateOrder(
       orderId: $orderId
       record: {
-        fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED }
+        fulfillment: { uid: $uid, state: RESERVED }
         cohenId: $cohenId
       }
     ) {
@@ -131,15 +131,23 @@ function CohenPayment(props) {
     { data: data, loading, error }
   ] = useMutation(ACCEPT_ORDER)
 
-  const handleClickNext = () => {
-    updateOrder({
+  const handleClickNext = async () => {
+    console.log({
+      orderId: order['orderId'],
+      cohenId: '09098098',
+      uid: order.fulfillment.uid,
+      state: order.fulfillment.state
+    });
+    console.log(activePass)
+    await updateOrder({
       variables: {
         orderId: order['orderId'],
-        cohenId: inputCohenId,
+        cohenId: '09098098',
         uid: order.fulfillment.uid,
         state: order.fulfillment.state
       }
-    }).then(navigate(`/eat/submit`).catch(err => console.log("Could not update order")))
+    })
+    navigate(`/eat/submit`)
   }
 
   return (
@@ -156,7 +164,9 @@ function CohenPayment(props) {
         </Row>
       </Grid>
       <Row>
-        < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} onChange={event => setInputCohenId(event.target.value)} />
+        <form>
+          < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} onChange={event => setInputCohenId(event.target.value)} />
+        </form>
       </Row>
       <Footer onClick={() => {
         handleClickNext()

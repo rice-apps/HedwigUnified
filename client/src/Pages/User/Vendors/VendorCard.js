@@ -37,8 +37,10 @@ function VendorCard ({ vendor }) {
     }
   }
 
-  const startTimes = hours[currentDay].start
-  const endTimes = hours[currentDay].end
+  // const startTimes = hours[currentDay].start
+  // const endTimes = hours[currentDay].end
+  const startTimes = 0
+  const endTimes = 0
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])

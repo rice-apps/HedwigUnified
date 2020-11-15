@@ -107,9 +107,9 @@ function Auth () {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients
-  if (phone) {
-    return <Navigate to='/eat' />
-  }
+  // if (phone) {
+  //   return <Navigate to='/eat' />
+  // }
   return <Navigate to='/contact' />
 }
 

@@ -60,39 +60,7 @@ const splitLink = split(
 )
 
 // Setup cache
-export const cache = new InMemoryCache({
-  typePolicies: { // Type policy map
-    User: {
-      fields: { // Field policy map for the Product type
-        studentId: { // Field policy for the isInCart field
-          read() { // The read function for the isInCart field
-            return userProfile().studentId
-          }
-        },
-        name: {
-          read() {
-            return userProfile().name
-          }
-        },
-        phone: {
-          read() {
-            return userProfile().phone
-          }
-        },
-        email: {
-          read() {
-            return userProfile().email
-          }
-        },
-        netid: {
-          read() {
-            return userProfile().netid
-          }
-        }
-      }
-    }
-  }
-});
+export const cache = new InMemoryCache();
 
 
 // Initialize Client
@@ -119,11 +87,6 @@ const initialState = {
   user: {
     recentUpdate: false,
     _id: '',
-    name: '',
-    netid: '',
-    phone: '',
-    email: '',
-    studentId: ''
   }
 }
 
@@ -135,11 +98,6 @@ cache.writeQuery({
       user {
         recentUpdate
         _id
-        name @client
-        netid @client
-        phone @client
-        email @client
-        studentid @client
       }
     }
   `,

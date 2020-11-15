@@ -1,5 +1,5 @@
-import { Component, useState } from 'react'
-import Button from '@material-ui/core/Button'
+import React, { Component, useState } from 'react'
+// import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { gql, useMutation } from '@apollo/client'
@@ -17,35 +17,7 @@ import 'react-square-payment-form/lib/default.css'
 // import { ACCEPT_ORDER } from "/Users/Ananya/hedwig/client/src/Pages/Vendor/VendorComponents/OpenOrderComponents/OrderCard.js"
 
 // This is credit card payment! screen
-
-const ACCEPT_ORDER = gql`
-  mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!, $uid: String!, $state: FulFillmentStatusEnum!){
-    updateOrder(
-      orderId: $orderId
-      record: {
-        fulfillment: { uid: $uid, state: RESERVED }
-        cohenId: $cohenId
-      }
-    ) {
-      fulfillment {
-        uid
-        state
-      }
-    }
-  }
-`
-
-function CohenPayment(props) {
-  const [inputCohenId, setInputCohenId] = useState('');
-  // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
-  const [activePass, setActivePass] = useState(0)
-
-  // colors
-  const bgColors = ['white', '#cf5734']
-  const fontColors = ['#595858', 'white']
-  const fontWeights = [500, 700]
-
-  const Title = styled.text`
+const Title = styled.text`
     margin-top: 10px;
     font-family: 'adobe-clean', sans-serif;
     font-size: 25px;
@@ -92,21 +64,6 @@ function CohenPayment(props) {
 
   const Row = styled.div``
 
-  const Footer = styled.footer`
-    text-align: center;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    display: block;
-    border-style: solid;
-    border-width: 1px;
-    padding: 25px 0;
-    font-size: 25px;
-    font-weight: ${activePass == 0 ? fontWeights[0] : fontWeights[0]};
-    color: ${activePass == 0 ? fontColors[0] : fontColors[1]};
-    background-color: ${activePass == 0 ? bgColors[0] : bgColors[1]};
-  `
 
   const PasswordInput = styled.input.attrs(props => ({
     // Every <PasswordInput /> should be type="password"
@@ -123,6 +80,54 @@ function CohenPayment(props) {
     border-bottom-color: gray;
     border-bottom-width: 1px;
   `
+
+
+const ACCEPT_ORDER = gql`
+  mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!, $uid: String!, $state: FulFillmentStatusEnum!){
+    updateOrder(
+      orderId: $orderId
+      record: {
+        fulfillment: { uid: $uid, state: $state }
+        cohenId: $cohenId
+      }
+    ) {
+      fulfillment {
+        uid
+        state
+      }
+    }
+  }
+`
+
+
+function CohenPayment(props) {
+  const [inputCohenId, setInputCohenId] = useState('');
+  // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
+  const [activePass, setActivePass] = useState(0)
+
+  // colors
+  const bgColors = ['white', '#cf5734']
+  const fontColors = ['#595858', 'white']
+  const fontWeights = [500, 700]
+  const order = orderSummary()
+
+  
+  const Footer = styled.footer`
+    text-align: center;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    padding: 25px 0;
+    font-size: 25px;
+    font-weight: ${activePass == 0 ? fontWeights[0] : fontWeights[0]};
+    color: ${activePass == 0 ? fontColors[0] : fontColors[1]};
+    background-color: ${activePass == 0 ? bgColors[0] : bgColors[1]};
+  `
+
 
   const navigate = useNavigate();
 
@@ -165,7 +170,8 @@ function CohenPayment(props) {
       </Grid>
       <Row>
         <form>
-          < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} onChange={event => setInputCohenId(event.target.value)} />
+          < PasswordInput aria-hidden="true" value={inputCohenId} onClick={() => setActivePass(1)} 
+          onChange={event => {setInputCohenId(event.target.value)}} />
         </form>
       </Row>
       <Footer onClick={() => {

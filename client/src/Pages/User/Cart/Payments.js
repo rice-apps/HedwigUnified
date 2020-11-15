@@ -167,12 +167,50 @@ function Payments () {
 
   const handleClickCredit = () => {
     // Get url and embed that url
-    createPayment({
+    const order = orderSummary();
+    const payment = await createPayment({
       variables: {
-        sourceId: "cnon:card-nonce-ok", orderId: orderSummary['orderId'],
+        sourceId: "cnon:card-nonce-ok",
+        orderId: order['orderId'],
+        // hard coded right now:
+        // orderId: "DQI6ReqW4BEWFkHG2KuZ3y3LHucZY",
+        // For testing:
+        // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
         locationId: "FMXAFFWJR95WC", amount: 900, currency: "USD"
       }
-    }).then(renderIFrame(data.url)).catch(err => <Navigate to='/payment' />)
+    })
+
+    // 11/8: Save this url to local storage for now, later want to pass it in as a prop to
+    // CreditPayment.fa-js
+
+    localStorage.setItem("url", payment.data.createPayment.url)
+    orderSummary(Object.assign(orderSummary(),
+      {
+        'url': payment.data.createPayment.url
+      }
+    )
+    )
+
+    // 11/14: iframe url not working correctly
+    // return navigate('/credit', { state: payment.data.createPayment.url });
+    return orderSummary()['url']
+    // Previously used to call this function:
+    // renderIFrame(data.createPayment.url)
+  }
+
+  const handleClickTetra = () => {
+    // To be implemented: Tetra payment should be automatic 
+    updateOrder({
+      variables: {
+        orderId: order['orderId'],
+        // For testing:
+        // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
+        studentId: userProfile().studentId,
+        uid: order.fulfillment.uid,
+        state: order.fulfillment.state
+      }
+    })
+    return navigate('/confirmation')
   }
 
   const renderIFrame = (urlInput) => {
@@ -193,8 +231,9 @@ function Payments () {
         {renderButtons()}
       </Grid>
       {/* when next is clicked, render the appropriate payment option process*/}
-      <Footer onClick={() => activeButton == 0 ? handleClickTetra() :
-        activeButton == 1 ? handleClickCredit() :
+      <Footer onClick={async () => activeButton == 0 ? handleClickTetra() :
+        // open url in new window:
+        activeButton == 1 ? window.open(await handleClickCredit(), "_blank") :
           activeButton == 2 ? handleClickCohen() : { undefined }
       }>Next</Footer>
     </div >

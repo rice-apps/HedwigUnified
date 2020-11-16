@@ -2,9 +2,14 @@ import { PaymentsApi, CreatePaymentRequest } from 'square-connect'
 import { GraphQLString, GraphQLNonNull } from 'graphql'
 import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
-import { CreatePaymentITC, PaymentTC, SortOrderEnumTC } from '../models'
+import {
+  CreatePaymentITC,
+  MoneyTC,
+  PaymentTC,
+  SortOrderEnumTC
+} from '../models'
 import { FetchPaymentPayloadTC } from '../models/PaymentModel'
-import shopifyClient from '../shopify'
+import { shopifyClient, shopifyAdminClient } from '../shopify'
 
 PaymentTC.addResolver({
   name: 'fetchPayments',
@@ -118,21 +123,45 @@ PaymentTC.addResolver({
 
         case 'SHOPIFY':
           const unitProduct = await shopifyClient.product.fetchByHandle(
-            'unitproduct'
+            'unit-product'
           )
-          const checkout = await shopifyClient.checkout.create()
 
-          await shopifyClient.checkout.addLineItems(checkout.id, [
-            {
-              variantId: unitProduct.variants[0].id,
-              quantity: total_money.amount / 25
+          const createCheckoutMutation = shopifyClient.graphQLClient.mutation(
+            root => {
+              root.add(
+                'checkoutCreate',
+                {
+                  args: {
+                    input: {
+                      lineItems: {
+                        quantity: subtotal.amount / 25,
+                        variantId: unitProduct.variants[0].id
+                      }
+                    }
+                  }
+                },
+                checkoutCreate => {
+                  checkoutCreate.add('checkout', checkout => {
+                    checkout.add('id')
+                    checkout.add('webUrl')
+                    checkout.add('paymentDueV2', payment => {
+                      payment.add('amount')
+                      payment.add('currencyCode')
+                    })
+                  })
+                }
+              )
             }
-          ])
+          )
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            createCheckoutMutation
+          )
 
           response = {
-            id: checkout.id,
+            id: checkout.data.checkoutCreate.checkout.id,
             total: subtotal,
-            url: checkout.webUrl,
+            url: checkout.data.checkoutCreate.checkout.webUrl,
             source
           }
 
@@ -149,42 +178,119 @@ PaymentTC.addResolver({
   .addResolver({
     name: 'completePayment',
     args: {
-      // TODO: add fields for Shopify
-      paymentId: GraphQLNonNull(GraphQLString)
+      paymentId: 'String!',
+      source: 'String!',
+      money: MoneyTC.getITC()
     },
     type: PaymentTC,
     resolve: async ({ args }) => {
-      const api = new PaymentsApi()
+      let response
 
-      const paymentResponse = await api.completePayment(args.paymentId)
+      switch (args.source) {
+        case 'SQUARE':
+          const api = new PaymentsApi()
 
-      if (paymentResponse.errors) {
-        return new ApolloError(
-          `Encounter the following errors while complete payment: ${paymentResponse.errors}`
-        )
+          const paymentResponse = await api.completePayment(args.paymentId)
+
+          if (paymentResponse.errors) {
+            return new ApolloError(
+              `Encounter the following errors while complete payment: ${paymentResponse.errors}`
+            )
+          }
+
+          const {
+            payment: {
+              id,
+              order_id,
+              customer_id,
+              amount_money,
+              tip_money,
+              total_money,
+              status
+            }
+          } = paymentResponse
+
+          response = {
+            id,
+            order: order_id,
+            customer: customer_id,
+            subtotal: amount_money,
+            tip: tip_money,
+            total: total_money,
+            status
+          }
+
+          break
+        case 'SHOPIFY':
+          const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
+            root.add('node', { args: { id: args.paymentId } }, node => {
+              node.addInlineFragmentOn('Checkout', checkout => {
+                checkout.add('id')
+                checkout.add('order', order => {
+                  order.add('id')
+                })
+              })
+            })
+          })
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            checkoutOrderQuery
+          )
+
+          const transactionQuery = `
+            query GetOrder($id: ID!) {
+              node(id: $id) {
+                ...on Order {
+                  transactions {
+                    id
+                  }
+                }
+              }
+            }
+          `
+
+          const transactions = await shopifyAdminClient.graphql(
+            transactionQuery,
+            {
+              id: checkout.data.node.order.id
+            }
+          )
+
+          const completePayment = `
+            mutation CompletePayment($input: OrderCaptureInput!) {
+              orderCapture(input: $input) {
+                transaction {
+                  id
+                }
+                userErrors {
+                  field
+                  message
+                }
+              }
+            }
+          `
+
+          const completeResponse = await shopifyAdminClient.graphql(
+            completePayment,
+            {
+              input: {
+                amount: args.money.amount / 25,
+                currency: args.money.currency,
+                id: checkout.data.node.order.id,
+                parentTransactionId: transactions.node.transactions[0].id
+              }
+            }
+          )
+
+          console.log(completeResponse.orderCapture)
+
+          response = {
+            id: checkout.data.node.id,
+            order: checkout.data.node.order.id
+          }
       }
 
-      const {
-        payment: {
-          id,
-          order_id,
-          customer_id,
-          amount_money,
-          tip_money,
-          total_money,
-          status
-        }
-      } = paymentResponse
-
-      return {
-        id,
-        order: order_id,
-        customer: customer_id,
-        subtotal: amount_money,
-        tip: tip_money,
-        total: total_money,
-        status
-      }
+      return response
     }
   })
   .addResolver({

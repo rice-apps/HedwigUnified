@@ -265,7 +265,7 @@ OrderTC.addResolver({
         orderId,
         record: { orderStatus, fulfillment }
       } = args
-
+      
       const updatedOrderTracker = await OrderTracker.findOne({
         orderId: orderId
       })

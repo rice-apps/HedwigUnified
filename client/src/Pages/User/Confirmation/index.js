@@ -70,7 +70,6 @@ const Confirmation = ({ classes }) => {
   if (catalogError) {
     return <p>Error.</p>
   }
-  console.log(catalog)
   // const FETCH_AVAILABILITY = gql`
   //   query FETCH_AVAILśBILITY($productId: String!){
   //     getAvailability(productId: $productId)
@@ -96,8 +95,6 @@ const Confirmation = ({ classes }) => {
     })
   })
 
-  cartItems().map(item => console.log(item))
-  console.log(cartItems())
   // how do we get the current item in cart?
   // right now we hard coded vendor id and item
   function renderFailure () {

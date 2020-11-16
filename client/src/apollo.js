@@ -20,6 +20,7 @@ console.log(GRAPHQL_WS_URL)
 console.log(SERVICE_URL)
 
 export const cartItems = makeVar([])
+export const orderSummary = makeVar([])
 export const userProfile = makeVar([])
 
 // Wraps our requests with a token if one exists

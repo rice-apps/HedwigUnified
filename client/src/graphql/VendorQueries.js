@@ -9,6 +9,7 @@ const VENDOR_QUERY = gql`
         start
         end
         day
+        isClosed
       }
     }
   }

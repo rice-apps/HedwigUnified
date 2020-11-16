@@ -23,7 +23,7 @@ const ADD_PHONE = gql`
   }
 `
 
-const sStorage = window.sessionStorage
+const sStorage = window.localStorage
 
 function ContactForm () {
   const user = userProfile()
@@ -48,7 +48,8 @@ function ContactForm () {
   if (error) return <p>{error.message}</p>
 
   if (confirmed) {
-    addPhone({ variables: { name: userName, phone, netid: user.netid } })
+    localStorage.setItem('phone', phone)
+    addPhone({variables: {name : userName, phone: phone, netid: user.netid}})
     return <Navigate to='/eat' />
   }
 

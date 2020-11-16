@@ -1,4 +1,4 @@
-import { composeWithMongoose } from 'graphql-compose-mongoose'
+import { composeMongoose } from 'graphql-compose-mongoose'
 
 import '../utils/db'
 
@@ -20,6 +20,6 @@ const UserSchema = new Schema({
 })
 
 const User = model('Users', UserSchema)
-const UserTC = composeWithMongoose(User)
+const UserTC = composeMongoose(User)
 
 export { User, UserTC }

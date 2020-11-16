@@ -5,7 +5,7 @@ import {
 } from 'square-connect'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { ApolloError } from 'apollo-server-express'
-import { CreateOrderInputTC, OrderTC } from '../models'
+import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
 import pubsub from '../utils/pubsub'
 import {
   FilterOrderInputTC,
@@ -63,49 +63,54 @@ OrderTC.addResolver({
 
     const { cursor: newCursor, orders } = searchOrderResponse
 
-    const returnedOrders = orders.map(order => ({
-      id: order.id,
-      merchant: order.location_id,
-      customer: {
-        name: order.fulfillments[0].pickup_details.recipient.display_name,
-        email: order.fulfillments[0].pickup_details.recipient.email_address,
-        phone: order.fulfillments[0].pickup_details.recipient.phone_number
-      },
-      items: order.line_items?.map(lineItem => ({
-        name: lineItem.name,
-        quantity: lineItem.quantity,
-        catalog_object_id: lineItem.catalog_object_id,
-        variation_name: lineItem.variation_name,
-        total_money: lineItem.total_money,
-        total_tax: lineItem.total_tax,
-        modifiers: lineItem.modifiers?.map(modifier => ({
-          uid: modifier.uid,
-          catalog_object_id: modifier.catalog_object_id,
-          name: modifier.name,
-          base_price_money: modifier.base_price_money,
-          total_price_money: modifier.total_price_money
-        }))
-      })),
-      totalTax: order.total_tax_money,
-      totalDiscount: order.total_discount_money,
-      total: order.total_money,
-      orderStatus: order.state,
-      cohenId: order.metadata?.cohenId,
-      studentId: order.metadata?.studentId,
-      fulfillment: {
-        uid: order.fulfillments[0].uid,
-        state: order.fulfillments[0].state,
-        pickupDetails: {
-          pickupAt: order.fulfillments[0].pickup_details.pickup_at,
-          placedAt: order.fulfillments[0].pickup_details.placed_at,
-          recipient: {
-            name: order.fulfillments[0].pickup_details.recipient.display_name,
-            email: order.fulfillments[0].pickup_details.recipient.email_address,
-            phone: order.fulfillments[0].pickup_details.recipient.phone_number
+    const returnedOrders = orders.map(async order => {
+      const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+
+      return {
+        id: order.id,
+        merchant: order.location_id,
+        customer: {
+          name: order.fulfillments[0].pickup_details.recipient.display_name,
+          email: order.fulfillments[0].pickup_details.recipient.email_address,
+          phone: order.fulfillments[0].pickup_details.recipient.phone_number
+        },
+        items: order.line_items?.map(lineItem => ({
+          name: lineItem.name,
+          quantity: lineItem.quantity,
+          catalog_object_id: lineItem.catalog_object_id,
+          variation_name: lineItem.variation_name,
+          total_money: lineItem.total_money,
+          total_tax: lineItem.total_tax,
+          modifiers: lineItem.modifiers?.map(modifier => ({
+            uid: modifier.uid,
+            catalog_object_id: modifier.catalog_object_id,
+            name: modifier.name,
+            base_price_money: modifier.base_price_money,
+            total_price_money: modifier.total_price_money
+          }))
+        })),
+        totalTax: order.total_tax_money,
+        totalDiscount: order.total_discount_money,
+        total: order.total_money,
+        orderStatus: order.state,
+        cohenId: order.metadata?.cohenId,
+        studentId: order.metadata?.studentId,
+        fulfillment: {
+          uid: order.fulfillments[0].uid,
+          state: orderTracker.status,
+          pickupDetails: {
+            pickupAt: order.fulfillments[0].pickup_details.pickup_at,
+            placedAt: order.fulfillments[0].pickup_details.placed_at,
+            recipient: {
+              name: order.fulfillments[0].pickup_details.recipient.display_name,
+              email:
+                order.fulfillments[0].pickup_details.recipient.email_address,
+              phone: order.fulfillments[0].pickup_details.recipient.phone_number
+            }
           }
         }
       }
-    }))
+    })
 
     return {
       cursor: newCursor,
@@ -168,6 +173,13 @@ OrderTC.addResolver({
           `New order couldn't be created due to reason: ${orderResponse.errors}`
         )
       }
+
+      OrderTracker.create({
+        status: 'PROPOSED',
+        pickupTime: pickupTime,
+        locationId: locationId,
+        orderId: orderResponse.order.id
+      })
 
       const {
         order: {
@@ -253,6 +265,14 @@ OrderTC.addResolver({
         orderId,
         record: { orderStatus, fulfillment }
       } = args
+      
+      const updatedOrderTracker = await OrderTracker.findOne({
+        orderId: orderId
+      })
+
+      updatedOrderTracker.status = fulfillment
+
+      await updatedOrderTracker.save()
 
       const api = new OrdersApi()
 
@@ -260,37 +280,22 @@ OrderTC.addResolver({
         order_ids: [orderId]
       })
 
-      const updateOrderResponse = await api.updateOrder(orderId, {
-        order: {
-          state: orderStatus,
-          version: batchRetriveOrderResponse.orders[0].version,
-          fulfillments: [
-            {
-              uid: fulfillment.uid,
-              state: fulfillment.state
-            }
-          ]
-        }
-      })
-
-      if (updateOrderResponse.errors) {
+      if (batchRetriveOrderResponse.errors) {
         return new ApolloError(
-          `Order couldn't be updated due to reason: ${updateOrderResponse.errors}`
+          `Order couldn't be updated due to reason: ${batchRetriveOrderResponse.errors}`
         )
       }
 
       const {
-        order: {
-          id,
-          location_id,
-          line_items,
-          total_tax_money,
-          total_discount_money,
-          total_money,
-          state,
-          fulfillments: [first]
-        }
-      } = updateOrderResponse
+        id,
+        location_id,
+        line_items,
+        total_tax_money,
+        total_discount_money,
+        total_money,
+        state,
+        fulfillments: [first]
+      } = batchRetriveOrderResponse.orders[0]
 
       const CDMOrder = {
         id: id,
@@ -323,7 +328,7 @@ OrderTC.addResolver({
         studentId: updateOrderResponse.order.metadata?.studentId,
         fulfillment: {
           uid: first.uid,
-          state: first.state,
+          state: updatedOrderTracker.status,
           pickupDetails: {
             pickupAt: first.pickup_details.pickup_at,
             placedAt: first.pickup_details.placed_at,
@@ -340,9 +345,7 @@ OrderTC.addResolver({
         orderUpdated: CDMOrder
       })
 
-      console.log(first.pickup_details.recipient.phone_number)
-
-      switch (first.state) {
+      switch (updatedOrderTracker.status) {
         case 'PREPARED':
           TwilioClient.messages.create({
             body:

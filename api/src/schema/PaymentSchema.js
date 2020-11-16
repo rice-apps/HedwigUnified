@@ -75,7 +75,7 @@ PaymentTC.addResolver({
       let response
 
       switch (source) {
-        case 'SQUARE':
+        case 'SQUARE': {
           const api = new PaymentsApi()
           const paymentBody = new CreatePaymentRequest()
 
@@ -120,8 +120,8 @@ PaymentTC.addResolver({
           }
 
           break
-
-        case 'SHOPIFY':
+        }
+        case 'SHOPIFY': {
           const unitProduct = await shopifyClient.product.fetchByHandle(
             'unit-product'
           )
@@ -166,10 +166,13 @@ PaymentTC.addResolver({
           }
 
           break
-        default:
+        }
+
+        default: {
           response = new ApolloError(
             'Payment method did not match any specified!'
           )
+        }
       }
 
       return response
@@ -187,7 +190,7 @@ PaymentTC.addResolver({
       let response
 
       switch (args.source) {
-        case 'SQUARE':
+        case 'SQUARE': {
           const api = new PaymentsApi()
 
           const paymentResponse = await api.completePayment(args.paymentId)
@@ -221,7 +224,9 @@ PaymentTC.addResolver({
           }
 
           break
-        case 'SHOPIFY':
+        }
+
+        case 'SHOPIFY': {
           const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
             root.add('node', { args: { id: args.paymentId } }, node => {
               node.addInlineFragmentOn('Checkout', checkout => {
@@ -288,6 +293,13 @@ PaymentTC.addResolver({
             id: checkout.data.node.id,
             order: checkout.data.node.order.id
           }
+        }
+
+        default: {
+          response = new ApolloError(
+            'Payment method did not match any specified!'
+          )
+        }
       }
 
       return response

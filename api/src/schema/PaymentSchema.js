@@ -123,21 +123,45 @@ PaymentTC.addResolver({
 
         case 'SHOPIFY':
           const unitProduct = await shopifyClient.product.fetchByHandle(
-            'unitproduct'
+            'unit-product'
           )
-          const checkout = await shopifyClient.checkout.create()
 
-          await shopifyClient.checkout.addLineItems(checkout.id, [
-            {
-              variantId: unitProduct.variants[0].id,
-              quantity: total_money.amount / 25
+          const createCheckoutMutation = shopifyClient.graphQLClient.mutation(
+            root => {
+              root.add(
+                'checkoutCreate',
+                {
+                  args: {
+                    input: {
+                      lineItems: {
+                        quantity: subtotal.amount / 25,
+                        variantId: unitProduct.variants[0].id
+                      }
+                    }
+                  }
+                },
+                checkoutCreate => {
+                  checkoutCreate.add('checkout', checkout => {
+                    checkout.add('id')
+                    checkout.add('webUrl')
+                    checkout.add('paymentDueV2', payment => {
+                      payment.add('amount')
+                      payment.add('currencyCode')
+                    })
+                  })
+                }
+              )
             }
-          ])
+          )
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            createCheckoutMutation
+          )
 
           response = {
-            id: checkout.id,
+            id: checkout.data.checkoutCreate.checkout.id,
             total: subtotal,
-            url: checkout.webUrl,
+            url: checkout.data.checkoutCreate.checkout.webUrl,
             source
           }
 
@@ -198,8 +222,23 @@ PaymentTC.addResolver({
 
           break
         case 'SHOPIFY':
+          const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
+            root.add('node', { args: { id: args.paymentId } }, node => {
+              node.addInlineFragmentOn('Checkout', checkout => {
+                checkout.add('id')
+                checkout.add('order', order => {
+                  order.add('id')
+                })
+              })
+            })
+          })
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            checkoutOrderQuery
+          )
+
           const transactionQuery = `
-            query GetOrder(id: ID!) {
+            query GetOrder($id: ID!) {
               node(id: $id) {
                 ...on Order {
                   transactions {
@@ -210,12 +249,10 @@ PaymentTC.addResolver({
             }
           `
 
-          const checkout = await shopifyAdminClient.checkout.get(paymentId)
-
           const transactions = await shopifyAdminClient.graphql(
             transactionQuery,
             {
-              id: checkout.order.id
+              id: checkout.data.node.order.id
             }
           )
 
@@ -233,18 +270,23 @@ PaymentTC.addResolver({
             }
           `
 
-          shopifyAdminClient.graphql(completePayment, {
-            input: {
-              amount: args.money.amount,
-              currency: args.money.currency,
-              id: checkout.order.id,
-              parentTransactionId: transactions[0].id
+          const completeResponse = await shopifyAdminClient.graphql(
+            completePayment,
+            {
+              input: {
+                amount: args.money.amount / 25,
+                currency: args.money.currency,
+                id: checkout.data.node.order.id,
+                parentTransactionId: transactions.node.transactions[0].id
+              }
             }
-          })
+          )
+
+          console.log(completeResponse.orderCapture)
 
           response = {
-            id: checkout.id,
-            order: checkout.order.id
+            id: checkout.data.node.id,
+            order: checkout.data.node.order.id
           }
       }
 

@@ -26,6 +26,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
+    "@types/shopify-buy": "^2.10.3",
     "nodemon": "^2.0.4",
     "pkg": "^4.4.9",
     "prettier-standard": "^16.4.1",

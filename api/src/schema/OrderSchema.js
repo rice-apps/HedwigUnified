@@ -1,49 +1,49 @@
 import {
   OrdersApi,
   CreateOrderRequest,
-  SearchOrdersRequest,
-} from "square-connect";
-import { GraphQLNonNull, GraphQLString } from "graphql";
-import { ApolloError } from "apollo-server-express";
-import { CreateOrderInputTC, OrderTC } from "../models";
-import pubsub from "../utils/pubsub";
+  SearchOrdersRequest
+} from 'square-connect'
+import { GraphQLNonNull, GraphQLString } from 'graphql'
+import { ApolloError } from 'apollo-server-express'
+import { CreateOrderInputTC, OrderTC } from '../models'
+import pubsub from '../utils/pubsub'
 import {
   FilterOrderInputTC,
   SortOrderInputTC,
   FindManyOrderPayloadTC,
-  UpdateOrderTC,
-} from "../models/OrderModel";
-import TwilioClient from "../twilio";
+  UpdateOrderTC
+} from '../models/OrderModel'
+import TwilioClient from '../twilio'
 
 OrderTC.addResolver({
-  name: "findOrders",
+  name: 'findOrders',
   type: FindManyOrderPayloadTC,
   args: {
-    locations: "[String!]!",
+    locations: '[String!]!',
     filter: FilterOrderInputTC,
     sort: SortOrderInputTC,
     limit: {
-      type: "Int",
-      defaultValue: 1000,
+      type: 'Int',
+      defaultValue: 1000
     },
     cursor: {
-      type: "String",
-      defaultValue: "",
-    },
+      type: 'String',
+      defaultValue: ''
+    }
   },
   resolve: async ({ args }) => {
-    const { locations, cursor, limit, filter, sort } = args;
+    const { locations, cursor, limit, filter, sort } = args
 
-    const api = new OrdersApi();
+    const api = new OrdersApi()
 
-    const query = {};
+    const query = {}
 
     if (filter) {
-      query.filter = filter;
+      query.filter = filter
     }
 
     if (sort) {
-      query.sort = sort;
+      query.sort = sort
     }
 
     const searchOrderResponse = await api.searchOrders({
@@ -52,39 +52,39 @@ OrderTC.addResolver({
       cursor,
       limit,
       query,
-      return_entries: false,
-    });
+      return_entries: false
+    })
 
     if (searchOrderResponse.errors) {
       return new ApolloError(
         `Finding orders failed with errors: ${searchOrderResponse.errors}`
-      );
+      )
     }
 
-    const { cursor: newCursor, orders } = searchOrderResponse;
+    const { cursor: newCursor, orders } = searchOrderResponse
 
-    const returnedOrders = orders.map((order) => ({
+    const returnedOrders = orders.map(order => ({
       id: order.id,
       merchant: order.location_id,
       customer: {
         name: order.fulfillments[0].pickup_details.recipient.display_name,
         email: order.fulfillments[0].pickup_details.recipient.email_address,
-        phone: order.fulfillments[0].pickup_details.recipient.phone_number,
+        phone: order.fulfillments[0].pickup_details.recipient.phone_number
       },
-      items: order.line_items?.map((lineItem) => ({
+      items: order.line_items?.map(lineItem => ({
         name: lineItem.name,
         quantity: lineItem.quantity,
         catalog_object_id: lineItem.catalog_object_id,
         variation_name: lineItem.variation_name,
         total_money: lineItem.total_money,
         total_tax: lineItem.total_tax,
-        modifiers: lineItem.modifiers?.map((modifier) => ({
+        modifiers: lineItem.modifiers?.map(modifier => ({
           uid: modifier.uid,
           catalog_object_id: modifier.catalog_object_id,
           name: modifier.name,
           base_price_money: modifier.base_price_money,
-          total_price_money: modifier.total_price_money,
-        })),
+          total_price_money: modifier.total_price_money
+        }))
       })),
       totalTax: order.total_tax_money,
       totalDiscount: order.total_discount_money,
@@ -101,24 +101,24 @@ OrderTC.addResolver({
           recipient: {
             name: order.fulfillments[0].pickup_details.recipient.display_name,
             email: order.fulfillments[0].pickup_details.recipient.email_address,
-            phone: order.fulfillments[0].pickup_details.recipient.phone_number,
-          },
-        },
-      },
-    }));
+            phone: order.fulfillments[0].pickup_details.recipient.phone_number
+          }
+        }
+      }
+    }))
 
     return {
       cursor: newCursor,
-      orders: returnedOrders,
-    };
-  },
+      orders: returnedOrders
+    }
+  }
 })
   .addResolver({
-    name: "createOrder",
+    name: 'createOrder',
     type: OrderTC,
     args: {
       locationId: GraphQLNonNull(GraphQLString),
-      record: CreateOrderInputTC.getTypeNonNull().getType(),
+      record: CreateOrderInputTC.getTypeNonNull().getType()
     },
     resolve: async ({ args }) => {
       const {
@@ -129,11 +129,11 @@ OrderTC.addResolver({
           recipient,
           pickupTime,
           cohenId,
-          studentId,
-        },
-      } = args;
+          studentId
+        }
+      } = args
 
-      const api = new OrdersApi();
+      const api = new OrdersApi()
 
       const orderResponse = await api.createOrder({
         ...new CreateOrderRequest(),
@@ -143,30 +143,30 @@ OrderTC.addResolver({
           line_items: lineItems,
           metadata: {
             cohenId: cohenId || null,
-            studentId: studentId || null,
+            studentId: studentId || null
           },
           fulfillments: [
             {
-              type: "PICKUP",
-              state: "PROPOSED",
+              type: 'PICKUP',
+              state: 'PROPOSED',
               pickup_details: {
                 pickup_at: pickupTime,
                 recipient: {
                   display_name: recipient.name,
                   email_address: recipient.email,
-                  phone_number: recipient.phone,
-                },
-              },
-            },
+                  phone_number: recipient.phone
+                }
+              }
+            }
           ],
-          state: "OPEN",
-        },
-      });
+          state: 'OPEN'
+        }
+      })
 
       if (orderResponse.errors) {
         return new ApolloError(
           `New order couldn't be created due to reason: ${orderResponse.errors}`
-        );
+        )
       }
 
       const {
@@ -178,11 +178,11 @@ OrderTC.addResolver({
           total_discount_money,
           total_money,
           state,
-          fulfillments: [first],
-        },
-      } = orderResponse;
+          fulfillments: [first]
+        }
+      } = orderResponse
 
-      console.log(line_items[0].modifiers);
+      console.log(line_items[0].modifiers)
 
       const CDMOrder = {
         id: id,
@@ -190,22 +190,22 @@ OrderTC.addResolver({
         customer: {
           name: first.pickup_details.recipient.display_name,
           email: first.pickup_details.recipient.email_address,
-          phone: first.pickup_details.recipient.phone_number,
+          phone: first.pickup_details.recipient.phone_number
         },
-        items: line_items.map((lineItem) => ({
+        items: line_items.map(lineItem => ({
           name: lineItem.name,
           quantity: lineItem.quantity,
           catalog_object_id: lineItem.catalog_object_id,
           variation_name: lineItem.variation_name,
           total_money: lineItem.total_money,
           total_tax: lineItem.total_tax,
-          modifiers: lineItem.modifiers?.map((modifier) => ({
+          modifiers: lineItem.modifiers?.map(modifier => ({
             uid: modifier.uid,
             catalog_object_id: modifier.catalog_object_id,
             name: modifier.name,
             base_price_money: modifier.base_price_money,
-            total_price_money: modifier.total_price_money,
-          })),
+            total_price_money: modifier.total_price_money
+          }))
         })),
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
@@ -222,43 +222,43 @@ OrderTC.addResolver({
             recipient: {
               name: first.pickup_details.recipient.display_name,
               email: first.pickup_details.recipient.email_address,
-              phone: first.pickup_details.recipient.phone_number,
-            },
-          },
-        },
-      };
+              phone: first.pickup_details.recipient.phone_number
+            }
+          }
+        }
+      }
 
-      pubsub.publish("orderCreated", {
-        orderCreated: CDMOrder,
-      });
+      pubsub.publish('orderCreated', {
+        orderCreated: CDMOrder
+      })
 
       TwilioClient.messages.create({
-        body: "Your order has been placed.",
-        from: "+13466667153",
-        to: first.pickup_details.recipient.phone_number,
-      });
+        body: 'Your order has been placed.',
+        from: '+13466667153',
+        to: first.pickup_details.recipient.phone_number
+      })
 
-      return CDMOrder;
-    },
+      return CDMOrder
+    }
   })
   .addResolver({
-    name: "updateOrder",
+    name: 'updateOrder',
     type: OrderTC,
     args: {
       orderId: GraphQLNonNull(GraphQLString),
-      record: UpdateOrderTC.getType(),
+      record: UpdateOrderTC.getType()
     },
     resolve: async ({ args }) => {
       const {
         orderId,
-        record: { orderStatus, fulfillment },
-      } = args;
+        record: { orderStatus, fulfillment }
+      } = args
 
-      const api = new OrdersApi();
+      const api = new OrdersApi()
 
       const batchRetriveOrderResponse = await api.batchRetrieveOrders({
-        order_ids: [orderId],
-      });
+        order_ids: [orderId]
+      })
 
       const updateOrderResponse = await api.updateOrder(orderId, {
         order: {
@@ -267,16 +267,16 @@ OrderTC.addResolver({
           fulfillments: [
             {
               uid: fulfillment.uid,
-              state: fulfillment.state,
-            },
-          ],
-        },
-      });
+              state: fulfillment.state
+            }
+          ]
+        }
+      })
 
       if (updateOrderResponse.errors) {
         return new ApolloError(
           `Order couldn't be updated due to reason: ${updateOrderResponse.errors}`
-        );
+        )
       }
 
       const {
@@ -288,9 +288,9 @@ OrderTC.addResolver({
           total_discount_money,
           total_money,
           state,
-          fulfillments: [first],
-        },
-      } = updateOrderResponse;
+          fulfillments: [first]
+        }
+      } = updateOrderResponse
 
       const CDMOrder = {
         id: id,
@@ -298,22 +298,22 @@ OrderTC.addResolver({
         customer: {
           name: first.pickup_details.recipient.display_name,
           email: first.pickup_details.recipient.email_address,
-          phone: first.pickup_details.recipient.phone_number,
+          phone: first.pickup_details.recipient.phone_number
         },
-        items: line_items.map((lineItem) => ({
+        items: line_items.map(lineItem => ({
           name: lineItem.name,
           quantity: lineItem.quantity,
           catalog_object_id: lineItem.catalog_object_id,
           variation_name: lineItem.variation_name,
           total_money: lineItem.total_money,
           total_tax: lineItem.total_tax,
-          modifiers: lineItem.modifiers?.map((modifier) => ({
+          modifiers: lineItem.modifiers?.map(modifier => ({
             uid: modifier.uid,
             catalog_object_id: modifier.catalog_object_id,
             name: modifier.name,
             base_price_money: modifier.base_price_money,
-            total_price_money: modifier.total_price_money,
-          })),
+            total_price_money: modifier.total_price_money
+          }))
         })),
         totalTax: total_tax_money,
         totalDiscount: total_discount_money,
@@ -330,77 +330,77 @@ OrderTC.addResolver({
             recipient: {
               name: first.pickup_details.recipient.display_name,
               email: first.pickup_details.recipient.email_address,
-              phone: first.pickup_details.recipient.phone_number,
-            },
-          },
-        },
-      };
+              phone: first.pickup_details.recipient.phone_number
+            }
+          }
+        }
+      }
 
-      pubsub.publish("orderUpdated", {
-        orderUpdated: CDMOrder,
-      });
+      pubsub.publish('orderUpdated', {
+        orderUpdated: CDMOrder
+      })
 
-      console.log(first.pickup_details.recipient.phone_number);
+      console.log(first.pickup_details.recipient.phone_number)
 
       switch (first.state) {
-        case "PREPARED":
+        case 'PREPARED':
           TwilioClient.messages.create({
             body:
-              "Your recent order has been prepared. Please go to the pickup location",
-            from: "+13466667153",
-            to: first.pickup_details.recipient.phone_number,
-          });
-          break;
-        case "COMPLETED":
+              'Your recent order has been prepared. Please go to the pickup location',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        case 'COMPLETED':
           TwilioClient.messages.create({
             body:
-              "Your order has been picked up. If you did not do this, please contact the vendor directly.",
-            from: "+13466667153",
-            to: first.pickup_details.recipient.phone_number,
-          });
-          break;
-        case "CANCELED":
+              'Your order has been picked up. If you did not do this, please contact the vendor directly.',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
+        case 'CANCELED':
           TwilioClient.messages.create({
             body:
-              "Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/",
-            from: "+13466667153",
-            to: first.pickup_details.recipient.phone_number,
-          });
-          break;
+              'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
+          break
         default:
           TwilioClient.messages.create({
             body:
-              "Your order has been updated. Please check https://hedwig.riceapps.org/ for more details",
-            from: "+13466667153",
-            to: first.pickup_details.recipient.phone_number,
-          });
+              'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
+            from: '+13466667153',
+            to: first.pickup_details.recipient.phone_number
+          })
       }
 
-      return CDMOrder;
-    },
-  });
+      return CDMOrder
+    }
+  })
 
 const OrderQueries = {
-  findOrders: OrderTC.getResolver("findOrders"),
-};
+  findOrders: OrderTC.getResolver('findOrders')
+}
 
 const OrderMutations = {
-  createOrder: OrderTC.getResolver("createOrder"),
-  updateOrder: OrderTC.getResolver("updateOrder"),
-};
+  createOrder: OrderTC.getResolver('createOrder'),
+  updateOrder: OrderTC.getResolver('updateOrder')
+}
 
 const OrderSubscriptions = {
   orderCreated: {
     type: OrderTC,
 
-    subscribe: () => pubsub.asyncIterator("orderCreated"),
+    subscribe: () => pubsub.asyncIterator('orderCreated')
   },
 
   orderUpdated: {
     type: OrderTC,
 
-    subscribe: () => pubsub.asyncIterator("orderUpdated"),
-  },
-};
+    subscribe: () => pubsub.asyncIterator('orderUpdated')
+  }
+}
 
-export { OrderQueries, OrderMutations, OrderSubscriptions };
+export { OrderQueries, OrderMutations, OrderSubscriptions }

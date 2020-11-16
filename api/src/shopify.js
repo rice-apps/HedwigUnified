@@ -1,4 +1,4 @@
-import Client from 'shopify-buy'
+import Client from 'shopify-buy/index.unoptimized.umd'
 import fetch from 'node-fetch'
 
 import Shopify from 'shopify-api-node'

@@ -324,46 +324,13 @@ ItemTC.addResolver({
 
       const api = new CatalogApi()
 
-      const getAvailabilities = async () => {
-        return Promise.all(productIds.map(async (productId)=>{
-          const retrieveCatalogObjectResponse = await api.retrieveCatalogObject(
-            productId
-          )
+      const batchRetrieveResponse = await api.batchRetrieveCatalogObjects({ object_ids: productIds })
 
-          if (retrieveCatalogObjectResponse.errors) {
-            return new ApolloError(
-              `Updating availability failed: ${retrieveCatalogObjectResponse.errors}`
-            )
-          }
-  
-          return retrieveCatalogObjectResponse.object.custom_attribute_values
-            .is_available.boolean_value
-        }))
+      if (batchRetrieveResponse.errors) {
+        return new ApolloError(`Batch retrieving availabilities failed: ${batchRetrieveResponse.errors}`)
       }
 
-      let allAvailable = true
-
-      return getAvailabilities().then(availabilities => {
-        let batchedAvailabilities = availabilities.map(availability => {
-          console.log(availability)
-          if (typeof availability != 'boolean') {
-            return false
-          }
-          else if (availability === false) {
-            return false
-          }
-          else {
-            return true
-          }
-        })
-        if (batchedAvailabilities.includes(false)) {
-          return false
-        }
-        else {
-          return true
-        }
-      })
-
+      return batchRetrieveResponse.objects.every(value => value.custom_attribute_values.is_available.boolean_value)
     }
   })
   .addResolver({

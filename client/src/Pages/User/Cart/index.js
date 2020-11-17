@@ -104,12 +104,12 @@ function CartDetail() {
   })
   console.log("Product IDs", product_ids)
 
-  const [getAvailabilities, { called: avail_called, loading: avail_loading, error: avail_error, 
-                              data: avail_data, refetch: avail_refetch }] = useLazyQuery(GET_AVAILABILITIES, {
+  const { loading: avail_loading, error: avail_error, 
+                              data: avail_data, refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids }, 
     fetchPolicy: "network-only"})
 
-
+  /*
   useEffect(() => {
     if(avail_called){
       avail_refetch()
@@ -118,13 +118,16 @@ function CartDetail() {
       getAvailabilities()
     }
   }, [cart_menu])
+  */
 
 
   const handleConfirmClick = async () => {
-    getAvailabilities()
+    const newRes = await avail_refetch()
+    while (newRes.loading) {}
+    console.log('errors: ', avail_error)
     console.log('cart_menu:', cart_menu)
-    console.log("availability", avail_data)
-    if (await avail_data.getAvailabilities === false) {
+    console.log("availability", newRes.data)
+    if (newRes.data.getAvailabilities === false) {
       alert("An item in your cart has become unavailable");
     }
     else {

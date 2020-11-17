@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import styled, { css } from 'styled-components'
 import { FaUserCircle, FaClock } from 'react-icons/fa'
 import moment from 'moment'

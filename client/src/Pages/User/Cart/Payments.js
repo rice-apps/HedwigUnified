@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import { Component, useState } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client'
 import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'

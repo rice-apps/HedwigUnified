@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react'
+import { Component, useEffect } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { Redirect } from 'react-router'
 import { userProfile } from '../../apollo'

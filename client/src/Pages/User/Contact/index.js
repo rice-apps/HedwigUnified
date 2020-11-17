@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import './contact.css'
 import { css, jsx } from '@emotion/core'
 import { userProfile } from '../../../apollo'

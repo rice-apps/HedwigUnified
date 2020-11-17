@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react';
 import { useQuery, gql, useMutation, ApolloError } from '@apollo/client'
 import { useParams, useHistory, useLocation } from 'react-router'
 import ErrorPage from '../../../components/ErrorPage'

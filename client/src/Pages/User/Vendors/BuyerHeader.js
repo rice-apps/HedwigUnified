@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { FaUserCircle } from 'react-icons/fa'
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'

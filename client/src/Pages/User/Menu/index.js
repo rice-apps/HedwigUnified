@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
 import './index.css'

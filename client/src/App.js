@@ -1,4 +1,3 @@
-import React from 'react'
 import './App.css'
 import { RoutesComponent } from './components/Routes'
 import Header from './components/Header'

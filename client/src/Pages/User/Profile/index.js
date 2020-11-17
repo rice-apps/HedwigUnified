@@ -1,4 +1,3 @@
-import React from 'react'
 import './index.css'
 import { gql, useQuery, useApolloClient } from '@apollo/client'
 import './fontawesome'

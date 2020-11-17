@@ -1,4 +1,3 @@
-import React from 'react'
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 
 function SetBasicInfoPage () {

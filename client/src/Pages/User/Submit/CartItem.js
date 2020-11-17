@@ -1,4 +1,4 @@
-import { Component, useState } from 'react';
+import { Component, useState } from 'react'
 
 const CartItem = ({ product }) => {
   const [isMouseOver, setIsMouseOver] = useState(false)

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 const GET_CATALOG = gql`

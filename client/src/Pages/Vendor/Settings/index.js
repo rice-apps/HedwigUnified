@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'

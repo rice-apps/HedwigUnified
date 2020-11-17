@@ -1,7 +1,7 @@
 import './index.css'
 import 'antd/dist/antd.css'
 
-import { Component } from 'react';
+import { Component } from 'react'
 import { render } from 'react-dom'
 
 // import { Router } from 'react-router';

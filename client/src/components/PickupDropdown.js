@@ -1,4 +1,4 @@
-import Dropdown from 'react-dropdown';
+import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 import './components.css'
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import styled from 'styled-components'
 import { FaAngleRight, FaAngleDown } from 'react-icons/fa'
 import { IconContext } from 'react-icons'

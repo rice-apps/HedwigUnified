@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { css, jsx } from '@emotion/core'
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from './util'
@@ -224,15 +224,15 @@ function CartDetail () {
             <hr className='breakline' />
             {cartItems().map(item => {
               return (
-                <Fragment>
+                <>
                   <CartProduct
                     product={item}
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
                   <hr className='breakline' />
-                </Fragment>
-              );
+                </>
+              )
             })}
           </div>
 
@@ -271,7 +271,7 @@ function CartDetail () {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default CartDetail

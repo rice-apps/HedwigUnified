@@ -1,4 +1,4 @@
-import { Component, useState } from 'react';
+import { Component, useState } from 'react'
 import Thumb from './Thumb.js'
 import logo from '../../../images/headphones.jpg'
 import dispatch from '../Products/FunctionalCart'

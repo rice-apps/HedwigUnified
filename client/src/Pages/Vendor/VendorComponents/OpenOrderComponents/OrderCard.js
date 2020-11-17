@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'

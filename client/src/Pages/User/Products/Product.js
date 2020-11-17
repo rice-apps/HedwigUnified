@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react'
 import { useQuery, makeVar } from '@apollo/client'
 import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'

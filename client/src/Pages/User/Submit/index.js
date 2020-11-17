@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
-import "../Cart/cart.scss";
+import '../Cart/cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import currency from 'currency.js'
 import { cartItems, orderSummary, userProfile } from '../../../apollo'
@@ -14,19 +14,18 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
 
-
-function Submit() {
+function Submit () {
   const navigate = useNavigate()
   const [totals, setTotals] = useState({})
-  let cart_menu = cartItems()
+  const cart_menu = cartItems()
   const pickupTime = orderSummary().time
 
   const handleSubmitClick = () => {
-    return navigate(`/eat/cohen/confirmation`)
+    return navigate('/eat/cohen/confirmation')
   }
 
   const calculateTotal = () => {
-    let newSubtotal = cart_menu.reduce(
+    const newSubtotal = cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
     )
@@ -64,7 +63,7 @@ function Submit() {
           <h1 className='header'>Bill Details</h1>
           {Object.keys(totals).map(type => {
             if (totals[type]) {
-              let formatted = currency(totals[type]).format()
+              const formatted = currency(totals[type]).format()
               return (
                 <div className='subtotal-container'>
                   <p className='subheader'>{type}</p>
@@ -87,7 +86,7 @@ function Submit() {
           <button
             disabled={cartItems().length == 0 || pickupTime == null}
             className='buy-btn'
-            title={'Submit'}
+            title='Submit'
             onClick={handleSubmitClick}
           >
             submit

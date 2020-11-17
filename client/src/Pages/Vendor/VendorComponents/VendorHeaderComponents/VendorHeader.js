@@ -84,7 +84,7 @@ const showLogout = false
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
   function toggleLogoutScreen () {
-    var logoutOpen = showLogout
+    const logoutOpen = showLogout
     setShowLogout(!logoutOpen)
   }
 

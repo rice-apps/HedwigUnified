@@ -251,7 +251,7 @@ const ModalHeaderWrapper = styled.div`
 `
 
 function MakeModalHeader (props) {
-  var paymentType = props.paymentType
+  const paymentType = props.paymentType
   return (
     <ModalHeaderWrapper>
       <FaIdCard style={{ marginTop: '3px', marginRight: '12px' }} />
@@ -343,7 +343,7 @@ const ModalOrderDetailRow = styled.div`
   margin: 1.2px 0px;
 `
 function MakeModalOrderDetails (props) {
-  var paymentType = props.paymentType
+  const paymentType = props.paymentType
   return (
     <ModalOrderDetailsWrapper>
       <ModalOrderDetailRow>
@@ -396,7 +396,7 @@ function MakePaymentSpace (props) {
   const cancelOrder = props.cancelClick
 
   function MakePaymentButtons (props) {
-    var buttonStatus = props.buttonStatus
+    let buttonStatus = props.buttonStatus
 
     return (
       <div>

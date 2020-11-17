@@ -13,7 +13,6 @@ import {
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
 
-
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
     findOrders(locations: $location) {

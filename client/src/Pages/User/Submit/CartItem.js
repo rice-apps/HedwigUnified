@@ -7,7 +7,7 @@ const CartItem = ({ product }) => {
     let VarModList = ' '
     VarModList += product.variant.name + ', '
 
-    for (var i = 0; i < product.modDisplay.length; i++) {
+    for (let i = 0; i < product.modDisplay.length; i++) {
       {
         i < product.modDisplay.length - 1
           ? (VarModList += product.modDisplay[i] + ', ')
@@ -17,7 +17,7 @@ const CartItem = ({ product }) => {
     return VarModList
   }
 
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   })

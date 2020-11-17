@@ -1,5 +1,5 @@
 import './index.css'
-import './Styles/antd.css'
+import 'antd/dist/antd.css'
 
 import React, { Component } from 'react'
 import { render } from 'react-dom'

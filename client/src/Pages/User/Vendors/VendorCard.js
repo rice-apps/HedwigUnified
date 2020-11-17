@@ -23,7 +23,7 @@ function VendorCard ({ vendor }) {
   // includes time
   const current_date = new Date()
   const currentDay = current_date.getDay()
-  const dayObj = hours[currentDay];
+  const dayObj = hours[currentDay]
 
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
@@ -40,8 +40,8 @@ function VendorCard ({ vendor }) {
   const startTimes = hours[currentDay].start
   const endTimes = hours[currentDay].end
   const times = []
-  for(let i=0; i<startTimes.length; i++){
-    times.push([startTimes[i],endTimes[i]])
+  for (let i = 0; i < startTimes.length; i++) {
+    times.push([startTimes[i], endTimes[i]])
   }
 
   const determineIfClosed = (current_date, dayObj) => {
@@ -62,15 +62,16 @@ function VendorCard ({ vendor }) {
             <h3 className='vendorName'>{name}</h3>
             {/* Case for two start/end times */}
             {dayObj && dayObj.start.length > 1 && (
-              <p> Hours Open: {
-              times.map(time =>{
-                return (
+              <p>
+                {' '}
+                Hours Open:{' '}
+                {times.map(time => {
+                  return (
                     <span>
                       <br />
                       {time[0]}
                       {' - '}
                       {time[1]}
-                      {''}
                     </span>
                   )
                 })}
@@ -91,12 +92,10 @@ function VendorCard ({ vendor }) {
               <p className='closedText'>Closed</p>
             </span>
           ) : null}
-          {
-            <img
-              className={closed ? 'vendorImage closed' : 'vendorImage'}
-              src={logoUrl}
-            />
-          }
+          <img
+            className={closed ? 'vendorImage closed' : 'vendorImage'}
+            src={logoUrl}
+          />
         </div>
       </div>
       {/* <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>

@@ -53,7 +53,7 @@ const ItemPrice = styled.div`
 `
 
 function MakeCatalogItems (props) {
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   })

@@ -10,7 +10,6 @@ const SquareInfo = new Schema({
   loyaltyId: { type: String, unique: true }
 })
 
-
 const BusinessHours = new Schema({
   start: { type: [String], required: true },
   end: { type: [String], required: true },
@@ -27,7 +26,7 @@ const BusinessHours = new Schema({
     ],
     required: true
   },
-  isClosed: {type: [Boolean], required: true}
+  isClosed: { type: [Boolean], required: true }
 })
 
 const VendorSchema = new Schema({

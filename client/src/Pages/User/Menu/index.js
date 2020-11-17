@@ -130,12 +130,10 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
-  
-
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
-  console.log(catalog_data);
+  console.log(catalog_data)
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -150,7 +148,7 @@ function Menu () {
 
   const categories = compileCategories(catalog_data)
 
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
 
@@ -177,15 +175,15 @@ function Menu () {
 
   const current_date = new Date()
 
-  const currentDay = current_date.getDay() 
+  const currentDay = current_date.getDay()
   // current day is an integer
 
   const startTimes = vendor_data.getVendor.hours[currentDay].start
   const endTimes = vendor_data.getVendor.hours[currentDay].end
 
   const times = []
-  for(let i=0; i<startTimes.length; i++){
-    times.push([startTimes[i],endTimes[i]])
+  for (let i = 0; i < startTimes.length; i++) {
+    times.push([startTimes[i], endTimes[i]])
   }
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
 
@@ -207,13 +205,13 @@ function Menu () {
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
           {/* Vendor Operating Hours */}
-          {isClosed? <p class='vendorinfo'>Closed for the Day</p> : 
-            times.map(time =>{
-              return (
-                <p class='vendorinfo'>time[0] - time[1]</p>
-              )
+          {isClosed ? (
+            <p class='vendorinfo'>Closed for the Day</p>
+          ) : (
+            times.map(time => {
+              return <p class='vendorinfo'>time[0] - time[1]</p>
             })
-          }
+          )}
           <p class='vendorinfo'>
             {startTimes[0]} - {endTimes[0]}
           </p>

@@ -49,7 +49,7 @@ function ContactForm () {
 
   if (confirmed) {
     localStorage.setItem('phone', phone)
-    addPhone({variables: {name : userName, phone: phone, netid: user.netid}})
+    addPhone({ variables: { name: userName, phone: phone, netid: user.netid } })
     return <Navigate to='/eat' />
   }
 

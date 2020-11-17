@@ -1,5 +1,5 @@
-import { gql} from "@apollo/client";
-import { orderSummary } from "../../../apollo";
+import { gql } from '@apollo/client'
+import { orderSummary } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -18,8 +18,7 @@ export const GET_VENDOR = gql`
       }
     }
   }
-`;
-
+`
 
 export const CREATE_ORDER = gql`
   mutation(
@@ -83,7 +82,6 @@ export const CREATE_PAYMENT = gql`
   }
 `
 
-
 const sStorage = localStorage
 const getRecipient = () => {
   return {
@@ -94,16 +92,16 @@ const getRecipient = () => {
 }
 
 const getLineItems = items => {
-  let rtn = []
-  let item = null
+  const rtn = []
+  const item = null
   for (const [v, item] of Object.entries(items)) {
-    let modifierList = []
+    const modifierList = []
     for (const [k, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
         catalog_object_id: m.dataSourceId
       })
     }
-    let i = {
+    const i = {
       modifiers: modifierList,
       catalog_object_id: item.variant.dataSourceId,
       quantity: item.quantity.toString()

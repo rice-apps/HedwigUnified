@@ -48,6 +48,7 @@ function VendorCard({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     const currentTime = current_date.getHours() + current_date.getMinutes() / 60
+    console.log("dayObj.start[0]", dayObj.start[0])
     const startTime = convertTimeToNum(dayObj.start[0])
     const endTime = convertTimeToNum(dayObj.end[0])
     return currentTime <= startTime || currentTime >= endTime

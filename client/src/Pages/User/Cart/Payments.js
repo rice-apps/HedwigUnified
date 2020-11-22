@@ -8,6 +8,8 @@ import { FaCreditCard, FaBriefcase } from 'react-icons/fa'
 import { BiIdCard } from 'react-icons/bi'
 import zIndex from '@material-ui/core/styles/zIndex'
 import { useNavigate, Navigate } from 'react-router-dom'
+// new:
+import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 
 // import { order } from '../../../apollo'
 import Iframe from 'react-iframe'
@@ -165,14 +167,25 @@ function Payments() {
 
   // Credit card payment mutation:
   const [createPayment, { data, loading, error }] = useMutation(CREATE_PAYMENT)
+  const [getVendor, { data: vendor_data, loading: vendor_loading, error: vendor_error }] = useMutation(VENDOR_QUERY)
 
   const handleClickCredit = () => {
+
+    // Get locationId:
+    getVendor({
+      variables: {
+        vendor: 'Cohen House'
+      }
+    })
+    const locationId = vendor_data.getVendor.squareInfo.locationIds[0]
+
     // Get url and embed that url
     createPayment({
       variables: {
         sourceId: 'cnon:card-nonce-ok',
         orderId: /* order()[0] */ 'Ha6zGEo32PyBOlcnbkSuJGxjOuOZY',
-        locationId: 'FMXAFFWJR95WC',
+        // locationId: 'FMXAFFWJR95WC',
+        locationId: locationId,
         amount: 900,
         currency: 'USD'
       }

@@ -100,7 +100,7 @@ const UserMutations = {
   authenticateUser: UserTC.getResolver('authenticate')
 }
 
-async function authMiddleware (resolve, source, args, context, info) {
+async function authMiddleware(resolve, source, args, context, info) {
   // Without header, throw error
   if (!context.decodedJWT) {
     throw new Error('You need to be logged in.')

@@ -143,8 +143,9 @@ function CartDetail() {
     return <p>{payment_error.message}</p>
   }
 
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
+
+  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0].hours[0]
+  // This is where to get vendor name
 
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])

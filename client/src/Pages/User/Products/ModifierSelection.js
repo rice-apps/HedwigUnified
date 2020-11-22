@@ -1,7 +1,8 @@
+import React, { Component } from 'react';
 import { useContext, useEffect, useState } from 'react'
 import currency from 'currency.js'
 
-function ModifierSelection ({ modifierCategory }) {
+function ModifierSelection({ modifierCategory }) {
   const {
     modifiers: options,
     question,
@@ -32,16 +33,16 @@ function ModifierSelection ({ modifierCategory }) {
                   <span className='customCheck' />
                 </>
               ) : (
-                <>
-                  <input
-                    type='radio'
-                    name={name}
-                    className='modifierSelect'
-                    value={JSON.stringify({ option })}
-                  />
-                  <span className='customRadio' />
-                </>
-              )}
+                  <>
+                    <input
+                      type='radio'
+                      name={name}
+                      className='modifierSelect'
+                      value={JSON.stringify({ option })}
+                    />
+                    <span className='customRadio' />
+                  </>
+                )}
               <p>{option.name}</p>
               {option.price ? (
                 <p>
@@ -51,8 +52,8 @@ function ModifierSelection ({ modifierCategory }) {
                   })}
                 </p>
               ) : (
-                <p />
-              )}
+                  <p />
+                )}
             </label>
           </div>
         ))}

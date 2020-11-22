@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { FaUserCircle, FaClock } from 'react-icons/fa'
@@ -81,14 +82,14 @@ const LogoutItem = styled.div`
 const toggleLogoutScreen = false
 const showLogout = false
 
-function VendorHeader () {
+function VendorHeader() {
   const [showLogout, setShowLogout] = useState(false)
-  function toggleLogoutScreen () {
+  function toggleLogoutScreen() {
     const logoutOpen = showLogout
     setShowLogout(!logoutOpen)
   }
 
-  function UpdateTime () {
+  function UpdateTime() {
     const clock = document.getElementById('clockdisplay')
     const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
     if (clock) {
@@ -96,7 +97,7 @@ function VendorHeader () {
     }
   }
 
-  function MakeLogoutPopup () {
+  function MakeLogoutPopup() {
     const client = useApolloClient()
     const handleLogout = () => {
       window.localStorage.clear()

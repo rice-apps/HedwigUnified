@@ -1,3 +1,5 @@
+import React from 'react';
+
 import * as Yup from 'yup'
 import styled from 'styled-components'
 import { Formik, Form, Field } from 'formik'
@@ -34,7 +36,7 @@ const EditProfileSchema = Yup.object().shape({
   phone: Yup.string().required('Required!')
 })
 
-function SignUp () {
+function SignUp() {
   // Notice that we have to initialize ALL of fields with values. These
   // could come from props, but since we don't want to prefill this form,
   // we just use an empty string. If you don't do this, React will yell

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styled from 'styled-components'
 import { FaShoppingCart } from 'react-icons/fa'
 import { MdReceipt } from 'react-icons/md'
@@ -42,7 +44,7 @@ const BottomNavigationText = styled.div`
   font-family: 'Raleway';
 `
 
-function BottomAppBar () {
+function BottomAppBar() {
   const navigate = useNavigate()
   return (
     <BottomNavigationWrapper>

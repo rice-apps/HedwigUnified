@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styled from 'styled-components'
 import { FaUserCircle } from 'react-icons/fa'
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
@@ -36,7 +38,7 @@ const HedwigWrapper = styled.div`
   color: #db6142;
 `
 
-function BuyerHeader (props) {
+function BuyerHeader(props) {
   const navigate = useNavigate()
 
   return (

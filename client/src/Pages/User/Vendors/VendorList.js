@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery, gql } from '@apollo/client'
 import { useHistory, useLocation } from 'react-router'
 
@@ -31,7 +32,7 @@ import BottomAppBar from './BottomAppBar'
 //     }
 // `
 
-function VendorList ({ classes }) {
+function VendorList({ classes }) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
   if (error) return <p>Error...</p>

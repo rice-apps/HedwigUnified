@@ -1,6 +1,7 @@
+import React from 'react';
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 
-function SetBasicInfoPage () {
+function SetBasicInfoPage() {
   return <VendorsideTemplate page='Set Basic Info' />
 }
 

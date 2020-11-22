@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useState } from 'react'
 import styled from 'styled-components'
 import { FaAngleRight, FaAngleDown } from 'react-icons/fa'
@@ -56,7 +58,7 @@ const LabelWrapper = styled.div`
   border-radius: 20px;
 `
 
-function MakeClosedDashboardLabels () {
+function MakeClosedDashboardLabels() {
   return (
     <LabelWrapper>
       <div />
@@ -97,14 +99,14 @@ const IndividualClosedOrder = styled.div`
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 `
 
-function ClosedOrderTrigger (props) {
+function ClosedOrderTrigger(props) {
   return (
     <IndividualClosedOrder IsClosed={props.IsClosed}>
       {props.IsClosed === true ? (
         <FaAngleRight style={{ marginLeft: '25px', color: '#EA907A' }} />
       ) : (
-        <FaAngleDown style={{ marginLeft: '25px', color: '#EA907A' }} />
-      )}
+          <FaAngleDown style={{ marginLeft: '25px', color: '#EA907A' }} />
+        )}
       <div>{props.customerName}</div>
       <div>{props.orderTime}</div>
       <div>{props.orderStatus}</div>
@@ -117,7 +119,7 @@ function ClosedOrderTrigger (props) {
 // We should iterate over each closed order and call the MakeIndividualClosedOrder
 // function for each past order in the vendor's square account for the day
 
-function MakeIndividualClosedOrder (props) {
+function MakeIndividualClosedOrder(props) {
   return (
     <Collapsible
       classParentString='ClosedOrderCollapsible'

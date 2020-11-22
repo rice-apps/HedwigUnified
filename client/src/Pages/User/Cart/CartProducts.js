@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Component, useState } from 'react'
 import Thumb from './Thumb.js'
 import logo from '../../../images/headphones.jpg'
@@ -8,7 +10,7 @@ import './cart.scss'
 // import Dropdown from "react-dropdown";
 // import "react-dropdown/style.css";
 
-function QuantitySelector ({ quantity, decrease, increase }) {
+function QuantitySelector({ quantity, decrease, increase }) {
   return (
     <div className='shelf-item__quantity'>
       <button onClick={decrease} disabled={quantity === 1}>
@@ -42,7 +44,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     forceUpdate(date.getTime())
   }
 
-  function getVarMod () {
+  function getVarMod() {
     let VarModList = ' '
     const numModifiers = product.modDisplay.length
     if (numModifiers === 0) {
@@ -58,7 +60,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     return VarModList
   }
 
-  function deleteCartItem () {
+  function deleteCartItem() {
     dispatch({
       type: 'DELETE_ITEM',
       item: {
@@ -67,7 +69,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     })
   }
 
-  function updateQuantity (num) {
+  function updateQuantity(num) {
     const newProd = Object.assign({}, product)
     newProd.quantity = num
     dispatch({

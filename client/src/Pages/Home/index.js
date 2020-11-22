@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect } from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
@@ -26,7 +27,7 @@ const SEEN_RECENT_UPDATE = gql`
   }
 `
 
-function Home () {
+function Home() {
   // Check for recent update from cache
   const { data: storeData } = useQuery(GET_RECENT_UPDATE)
   const { recentUpdate } = storeData.user

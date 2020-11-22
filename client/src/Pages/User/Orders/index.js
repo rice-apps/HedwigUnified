@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react'
 import Modal from 'react-modal'
 import { useQuery, gql, useMutation } from '@apollo/client'
@@ -91,7 +92,7 @@ const TotalAndTax = ({ items }) => {
   )
 }
 
-function OrderDetail ({ order }) {
+function OrderDetail({ order }) {
   const { _id, items, vendor, user, createdAt } = order
   const [modalOpen, setModalOpen] = useState(false)
   const [detailOpen, setDetailOpen] = useState(false)
@@ -105,7 +106,7 @@ function OrderDetail ({ order }) {
     cancelOrder({ variables: { _id: _id } })
   }
 
-  function detailsClick () {
+  function detailsClick() {
     if (detailOpen) {
       setDetailOpen(false)
     } else {
@@ -113,7 +114,7 @@ function OrderDetail ({ order }) {
     }
   }
 
-  function DateFormatter ({ date }) {
+  function DateFormatter({ date }) {
     const formattedDate = String(date).split('-')
     const months = [
       'January',
@@ -137,7 +138,7 @@ function OrderDetail ({ order }) {
     )
   }
 
-  function vendorLogo (name) {
+  function vendorLogo(name) {
     if (name == 'East West Tea') {
       return '//static1.squarespace.com/static/58559451725e25a3d8206027/t/58559539f5e2315e3ef1127c/1593500228704/?format=1500w'
     }
@@ -200,7 +201,7 @@ function OrderDetail ({ order }) {
   )
 }
 
-function OrderList () {
+function OrderList() {
   const history = useHistory()
 
   const {

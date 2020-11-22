@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { useState } from 'react'
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
@@ -86,7 +87,7 @@ const vendor = {
 // <Menu currentVendor = {"East West Tea"}/>
 
 // add a proceed to checkout
-function Menu () {
+function Menu() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currentVendor } = state
@@ -208,10 +209,10 @@ function Menu () {
           {isClosed ? (
             <p class='vendorinfo'>Closed for the Day</p>
           ) : (
-            times.map(time => {
-              return <p class='vendorinfo'>time[0] - time[1]</p>
-            })
-          )}
+              times.map(time => {
+                return <p class='vendorinfo'>time[0] - time[1]</p>
+              })
+            )}
           <p class='vendorinfo'>
             {startTimes[0]} - {endTimes[0]}
           </p>
@@ -269,8 +270,8 @@ function Menu () {
                     <p class='itemprice'>
                       {product.isAvailable
                         ? formatter.format(
-                            product.variants[0].price.amount / 100
-                          ) + '+'
+                          product.variants[0].price.amount / 100
+                        ) + '+'
                         : 'Unavailable'}
                     </p>
                   </div>

@@ -1,3 +1,4 @@
+import React from 'react';
 import Collapsible from 'react-collapsible'
 import styled, { css } from 'styled-components'
 import './SidebarCollapsible.css'
@@ -27,7 +28,7 @@ const MainMenuItemWrapper = styled.div`
   margin: 6px 0px;
 `
 
-function MainMenuItem (props) {
+function MainMenuItem(props) {
   // Make IsExpanded prop true when the menu item is expanded by the user
   return (
     <MainMenuItemWrapper>
@@ -37,10 +38,10 @@ function MainMenuItem (props) {
           style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
         />
       ) : (
-        <FcCollapse
-          style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
-        />
-      )}
+          <FcCollapse
+            style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
+          />
+        )}
     </MainMenuItemWrapper>
   )
 }
@@ -58,7 +59,7 @@ const StyledNavLink = styled(NavLink)`
   color: black;
 `
 
-function SubMenuItem (props) {
+function SubMenuItem(props) {
   return (
     <SubMenuItemWrapper>
       <StyledNavLink
@@ -72,7 +73,7 @@ function SubMenuItem (props) {
   )
 }
 
-function SideBarItems () {
+function SideBarItems() {
   return (
     <SideBarItemsWrapper>
       <Collapsible

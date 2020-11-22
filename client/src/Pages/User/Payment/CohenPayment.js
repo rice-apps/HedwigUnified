@@ -1,4 +1,4 @@
-import { Component, useState } from 'react'
+import { React, Component, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +14,7 @@ import 'react-square-payment-form/lib/default.css'
 
 // This is credit card payment! screen
 
-function CohenPayment (props) {
+function CohenPayment(props) {
   // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
   const [activePass, setActivePass] = useState(0)
 

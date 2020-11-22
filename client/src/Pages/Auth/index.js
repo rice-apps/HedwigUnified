@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Component, useEffect } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { Redirect } from 'react-router'
@@ -29,7 +31,7 @@ const parseTicket = url => {
 
 const allowedUsers = ['byz2']
 
-function Auth () {
+function Auth() {
   // First parse out ticket from URL href
   const ticket = parseTicket(window.location.href)
   // Run query against backend to authenticate user

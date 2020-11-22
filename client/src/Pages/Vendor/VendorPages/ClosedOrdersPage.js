@@ -1,7 +1,8 @@
+import React from 'react';
 import ClosedOrderDashboard from './../VendorComponents/ClosedOrderComponents/ClosedOrderDashboard.js'
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 
-function ClosedOrdersPage () {
+function ClosedOrdersPage() {
   return <VendorsideTemplate page={<ClosedOrderDashboard />} />
 }
 

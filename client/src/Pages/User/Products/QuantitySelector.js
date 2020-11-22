@@ -1,6 +1,8 @@
+import React from 'react';
+
 import { useContext, useEffect, useState } from 'react'
 
-function QuantitySelector ({ quantity, decrease, increase }) {
+function QuantitySelector({ quantity, decrease, increase }) {
   return (
     <div className='quantityContainer'>
       <button onClick={decrease} disabled={quantity === 1}>

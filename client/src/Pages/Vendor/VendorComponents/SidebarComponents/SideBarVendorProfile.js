@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import Toggle from 'react-toggle'
@@ -41,7 +42,7 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
 const SideBarVendorProfileWrapper = styled.div``
 const merchantId = '5f836204280dd576b7e828ad'
 
-function SideBarVendorProfile () {
+function SideBarVendorProfile() {
   const [vendorAvailability, { error }] = useMutation(
     UPDATE_VENDOR_AVAILABILITY
   )

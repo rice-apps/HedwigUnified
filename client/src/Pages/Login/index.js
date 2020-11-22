@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useState } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
@@ -18,7 +20,7 @@ const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
 
 const sStorage = window.localStorage
 
-function Login () {
+function Login() {
   const navigate = useNavigate()
 
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");

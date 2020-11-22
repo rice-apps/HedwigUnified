@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useHistory } from 'react-router'
@@ -18,7 +19,7 @@ const VendorPicture = styled.img`
   margin-top: 60px;
 `
 
-function SideNavBar () {
+function SideNavBar() {
   return (
     <SideBarWrapper>
       <VendorPicture src={logo} />

@@ -1,3 +1,4 @@
+import React from 'react';
 import hedwigLogo from './HedwigLogoFinal.svg'
 import {
   MainDiv,

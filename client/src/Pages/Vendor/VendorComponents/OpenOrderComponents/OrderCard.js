@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useState } from 'react'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
@@ -66,7 +68,7 @@ const OrderTitleSpaceWrapper = styled.div`
   border-top-left-radius: 20px;
 `
 
-function MakeOrderTitle (props) {
+function MakeOrderTitle(props) {
   return (
     <OrderTitleSpaceWrapper>
       <GrRestaurant />
@@ -102,7 +104,7 @@ const TimeLeftSpaceWrapper = styled.div`
   color: #9d9d9d;
 `
 
-function MakeOrderTime (props) {
+function MakeOrderTime(props) {
   return (
     <OrderTimeSpaceWrapper>
       <ExactTimeSpaceWrapper>
@@ -148,7 +150,7 @@ const ItemDescriptionWrapper = styled.div`
   margin-left: 6px;
 `
 
-function MakeOrderDetails (props) {
+function MakeOrderDetails(props) {
   return (
     <OrderDetailsItemWrapper>
       <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
@@ -250,7 +252,7 @@ const ModalHeaderWrapper = styled.div`
   justify-content: center;
 `
 
-function MakeModalHeader (props) {
+function MakeModalHeader(props) {
   const paymentType = props.paymentType
   return (
     <ModalHeaderWrapper>
@@ -278,7 +280,7 @@ const ModalParagraphWrapper = styled.div`
   grid-area: ModalParagraph;
   border-bottom: 1px solid grey;
 `
-function MakeModalParagraph (props) {
+function MakeModalParagraph(props) {
   const paymentType = props.paymentType
   const cancel = props.cancel
   if (paymentType === 'Tetra') {
@@ -342,7 +344,7 @@ const ModalOrderDetailRow = styled.div`
   justify-content: space-between;
   margin: 1.2px 0px;
 `
-function MakeModalOrderDetails (props) {
+function MakeModalOrderDetails(props) {
   const paymentType = props.paymentType
   return (
     <ModalOrderDetailsWrapper>
@@ -377,25 +379,25 @@ const ModalButtonsWrapper = styled.div`
   align-items: center;
 `
 
-function MakePaymentSpace (props) {
+function MakePaymentSpace(props) {
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false)
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false)
-  function openAcceptModal () {
+  function openAcceptModal() {
     setAcceptModalIsOpen(true)
   }
-  function closeAcceptModal () {
+  function closeAcceptModal() {
     setAcceptModalIsOpen(false)
   }
-  function openCancelModal () {
+  function openCancelModal() {
     setCancelModalIsOpen(true)
   }
-  function closeCancelModal () {
+  function closeCancelModal() {
     setCancelModalIsOpen(false)
   }
 
   const cancelOrder = props.cancelClick
 
-  function MakePaymentButtons (props) {
+  function MakePaymentButtons(props) {
     let buttonStatus = props.buttonStatus
 
     return (
@@ -411,17 +413,17 @@ function MakePaymentSpace (props) {
             <ReadyButton onClick={props.handleClick}>Ready</ReadyButton>
           </ButtonsSpaceWrapper>
         ) : (
-          (buttonStatus = 'READY' ? (
-            <ButtonsSpaceWrapper>
-              <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-              <PickedUpButton onClick={props.handleClick}>
-                Picked Up
+              (buttonStatus = 'READY' ? (
+                <ButtonsSpaceWrapper>
+                  <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
+                  <PickedUpButton onClick={props.handleClick}>
+                    Picked Up
               </PickedUpButton>
-            </ButtonsSpaceWrapper>
-          ) : (
-            'error'
-          ))
-        )}
+                </ButtonsSpaceWrapper>
+              ) : (
+                  'error'
+                ))
+            )}
       </div>
     )
   }
@@ -514,7 +516,7 @@ function MakePaymentSpace (props) {
   )
 }
 
-function OrderCard (props) {
+function OrderCard(props) {
   const {
     customerName,
     pickupTime,
@@ -558,7 +560,7 @@ function OrderCard (props) {
                 itemName={item.name}
                 price={item.total_money.amount / 100}
                 variant={item.variation_name}
-                // modifiers={[...item.modifiers.name].join(', ')}
+              // modifiers={[...item.modifiers.name].join(', ')}
               />
             ))}
         </OrderDetailsSpaceWrapper>

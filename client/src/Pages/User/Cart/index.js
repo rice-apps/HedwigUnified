@@ -1,5 +1,6 @@
+/** @jsxFrag React.Fragment */
 /** @jsx jsx */
-
+import React from 'react';
 import { css, jsx } from '@emotion/core'
 import { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
@@ -71,7 +72,7 @@ const computeAvailableMinutes = (
   return rtn
 }
 
-function CartDetail () {
+function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
   const { loading, error, data } = useQuery(GET_VENDOR)

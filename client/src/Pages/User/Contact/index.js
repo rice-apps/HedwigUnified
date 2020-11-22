@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useState } from 'react'
 import './contact.css'
 import { css, jsx } from '@emotion/core'
@@ -25,7 +27,7 @@ const ADD_PHONE = gql`
 
 const sStorage = window.localStorage
 
-function ContactForm () {
+function ContactForm() {
   const user = userProfile()
   const userName =
     sStorage.getItem('first name') + ' ' + sStorage.getItem('last name')

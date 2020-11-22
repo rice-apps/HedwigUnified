@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component, useEffect, Profiler } from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
 import { Routes, Route, useRoutes, Navigate } from 'react-router-dom'
@@ -268,7 +269,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({}) => {
+export const RoutesComponent = ({ }) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend

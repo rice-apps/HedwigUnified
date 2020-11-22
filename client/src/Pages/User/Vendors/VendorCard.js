@@ -1,3 +1,4 @@
+import React from 'react';
 import { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './BottomAppBar.js'
@@ -5,7 +6,7 @@ import BottomAppBar from './BottomAppBar.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorOpen, faDoorClosed } from '@fortawesome/free-solid-svg-icons'
 
-function VendorCard ({ vendor }) {
+function VendorCard({ vendor }) {
   const { name, hours, logoUrl } = vendor
 
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
@@ -82,8 +83,8 @@ function VendorCard ({ vendor }) {
             {closed ? (
               <FontAwesomeIcon className='door' icon={faDoorClosed} />
             ) : (
-              <FontAwesomeIcon className='door' icon={faDoorOpen} />
-            )}
+                <FontAwesomeIcon className='door' icon={faDoorOpen} />
+              )}
           </div>
         </div>
         <div className='vendorImageContainer'>

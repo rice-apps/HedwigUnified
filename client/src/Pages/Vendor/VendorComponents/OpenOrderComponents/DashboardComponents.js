@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styled from 'styled-components'
 
 const OrderDashboardWrapper = styled.div`
@@ -74,7 +76,7 @@ const TitleTextWrapper = styled.div`
   color: white;
 `
 
-function MakeDashboardTitle (props) {
+function MakeDashboardTitle(props) {
   return (
     <TitleTextWrapper>
       {props.name} ({props.quantity})

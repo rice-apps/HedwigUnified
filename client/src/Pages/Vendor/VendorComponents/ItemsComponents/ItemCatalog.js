@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -82,7 +84,7 @@ const ItemDisplayWrapper = styled.div`
   overflow-x: hidden;
 `
 
-function MakeLabelWrapper () {
+function MakeLabelWrapper() {
   return (
     <LabelWrapper>
       <div>Category</div>
@@ -109,7 +111,7 @@ const StyledTab = styled(Tab)`
   }
 `
 
-function TabPanel (props) {
+function TabPanel(props) {
   const { children, value, category, ...other } = props
 
   return (
@@ -123,7 +125,7 @@ function TabPanel (props) {
   )
 }
 
-function ItemCatalog (props) {
+function ItemCatalog(props) {
   const [value, setValue] = useState(props.category)
 
   const items = props.catalog.filter(item => {

@@ -1,9 +1,10 @@
+import React, { Component } from 'react';
 import { useHistory } from 'react-router'
 import VendorImage from '../../images/vendorImage.jpg'
 import UserImage from '../../images/userImage.jpeg'
 import './portal.css'
 
-function PortalCard () {
+function PortalCard() {
   const history = useHistory()
 
   const handleVendorClick = () => {

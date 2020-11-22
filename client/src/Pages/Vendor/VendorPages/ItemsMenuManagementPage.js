@@ -1,9 +1,10 @@
+import React from 'react';
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'
 import ItemCatalog from './../VendorComponents/ItemsComponents/ItemCatalog.js'
 
-function ItemsMenuManagementPage () {
+function ItemsMenuManagementPage() {
   const {
     data: catalog_info,
     error: catalog_error,

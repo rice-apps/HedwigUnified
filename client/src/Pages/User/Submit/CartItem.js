@@ -1,9 +1,10 @@
+import React from 'react';
 import { Component, useState } from 'react'
 
 const CartItem = ({ product }) => {
   const [isMouseOver, setIsMouseOver] = useState(false)
 
-  function getVarMod () {
+  function getVarMod() {
     let VarModList = ' '
     VarModList += product.variant.name + ', '
 

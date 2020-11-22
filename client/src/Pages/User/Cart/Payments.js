@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component, useState } from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
 import Button from '@material-ui/core/Button'
@@ -41,7 +42,7 @@ const CREATE_PAYMENT = gql`
 `
 
 // payment options page, coehn club or credit card or tetra
-function Payments () {
+function Payments() {
   const navigate = useNavigate()
 
   // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
@@ -207,10 +208,10 @@ function Payments () {
           activeButton == 0
             ? handleClickTetra()
             : activeButton == 1
-            ? handleClickCredit()
-            : activeButton == 2
-            ? handleClickCohen()
-            : { undefined }
+              ? handleClickCredit()
+              : activeButton == 2
+                ? handleClickCohen()
+                : { undefined }
         }
       >
         Next

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useContext, useEffect, useState } from 'react'
 import { useQuery, makeVar } from '@apollo/client'
 import './product.css'
@@ -14,7 +15,7 @@ import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 
-function Product () {
+function Product() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currProduct: productId, currVendor: vendorState } = state
@@ -181,7 +182,7 @@ function Product () {
   };
   */
 
-  function makeCartItem () {
+  function makeCartItem() {
     const itemName = product.name
     const itemID = product.squareID
     const itemDataSourceId = product.dataSourceId

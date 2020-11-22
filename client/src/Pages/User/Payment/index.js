@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 import {
   SquarePaymentForm,
   CreditCardNumberInput,
@@ -10,7 +12,7 @@ import 'react-square-payment-form/lib/default.css'
 
 // This is credit card payment! screen
 
-function PaymentPage (props) {
+function PaymentPage(props) {
   return (
     <>
       <h1>Credit Card Payment</h1>

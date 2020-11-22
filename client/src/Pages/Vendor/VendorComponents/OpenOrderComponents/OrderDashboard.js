@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import {
@@ -129,7 +130,7 @@ const ORDER_CREATED = gql`
   }
 `
 
-function OrderDashboard () {
+function OrderDashboard() {
   const vendorId = ['FMXAFFWJR95WC']
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,

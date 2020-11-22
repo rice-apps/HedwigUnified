@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { gql, useQuery } from '@apollo/client'
 import {
   DashboardWrapper,
@@ -50,7 +52,7 @@ const GET_COMPLETED_ORDERS = gql`
     }
   }
 `
-function ClosedOrderDashboard () {
+function ClosedOrderDashboard() {
   const vendorId = ['FMXAFFWJR95WC']
   const filter = { fulfillment_filter: { fulfillment_states: 'COMPLETED' } }
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components'
 import { AiFillPhone } from 'react-icons/ai'
 import { MdEmail } from 'react-icons/md'
@@ -33,7 +34,7 @@ const DetailsCustomerNameWrapper = styled.div`
   height: 100%;
 `
 
-function MakeCustomerDetails (props) {
+function MakeCustomerDetails(props) {
   return (
     <DetailsCustomerNameWrapper>
       <strong>Contact Info</strong>
@@ -58,7 +59,7 @@ const OrderTimeWrapper = styled.div`
   height: 100%;
 `
 
-function MakeOrderTimeDetails (props) {
+function MakeOrderTimeDetails(props) {
   return (
     <OrderTimeWrapper>
       <strong>Pickup Time</strong>
@@ -95,7 +96,7 @@ const ItemDetailWrapper = styled.div`
   text-align: left;
 `
 
-function MakeOrderItem (props) {
+function MakeOrderItem(props) {
   return (
     <IndividualItemWrapper>
       <strong>{props.quantity}</strong>

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import './index.css'
 import { gql, useQuery, useApolloClient } from '@apollo/client'
 import './fontawesome'
@@ -5,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
-function handleLogoutClick () {
+function handleLogoutClick() {
   localStorage.removeItem('token')
   window.open(logoutURL, '_self')
 }
@@ -47,7 +49,7 @@ const getLinks = user => {
   return links
 }
 
-function Profile () {
+function Profile() {
   const { data, loading, error } = useQuery(GET_USER_INFO)
 
   if (error) return <p>Error!</p>

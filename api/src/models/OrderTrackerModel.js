@@ -6,7 +6,7 @@ const OrderTrackerSchema = new Schema({
   locationId: { type: String, required: false },
   orderId: { type: String, required: false },
   paymentId: { type: String, required: false },
-  paymentType: { type: String, required: false, enum: ['SHOPIFY', 'SQUARE'] },
+  paymentType: { type: String, required: false },
   pickupTime: { type: Date, required: false },
   status: {
     type: String,

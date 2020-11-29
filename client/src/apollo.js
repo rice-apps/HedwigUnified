@@ -79,21 +79,6 @@ export const client = new ApolloClient({
           }
         }
       },
-      Subscription: {
-        fields: {
-          orderCreated: {
-            merge (existing, incoming) {
-              console.log(incoming, existing);
-              return [incoming, ...existing]
-            }
-          },
-          orderUpdated: {
-            merge(existing, incoming){
-              return [incoming, ...existing]
-            }
-          }
-        }
-      }
     }
   }),
   link: authLink.concat(splitLink)

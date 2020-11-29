@@ -83,6 +83,12 @@ export const client = new ApolloClient({
         fields: {
           orderCreated: {
             merge (existing, incoming) {
+              console.log(incoming, existing);
+              return [incoming, ...existing]
+            }
+          },
+          orderUpdated: {
+            merge(existing, incoming){
               return [incoming, ...existing]
             }
           }

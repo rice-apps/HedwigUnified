@@ -97,7 +97,7 @@ OrderTC.addResolver({
         studentId: order.metadata?.studentId,
         fulfillment: {
           uid: order.fulfillments[0].uid,
-          state: orderTracker.status,
+          state: orderTracker?.status || order.fulfillments[0].state,
           pickupDetails: {
             pickupAt: order.fulfillments[0].pickup_details.pickup_at,
             placedAt: order.fulfillments[0].pickup_details.placed_at,

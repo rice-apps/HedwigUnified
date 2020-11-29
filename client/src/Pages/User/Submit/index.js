@@ -1,6 +1,4 @@
-/** @jsx jsx */
-
-import { css, jsx } from '@emotion/core'
+import { css, jsx } from '@emotion/react'
 import { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'

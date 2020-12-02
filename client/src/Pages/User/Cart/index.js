@@ -140,10 +140,10 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
+  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
+  //   .hours[0]
 
-  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+  const businessHour = {start: ['8:30 a.m.', '12:30 p.m.'], end:['11:00 p.m.', '3:30p.m.']}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])

@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 import dispatch from './FunctionalCart'
 import { createMuiTheme } from '@material-ui/core'
-import { cartItems } from '../../../apollo'
+import { cartItems, orderSummary } from '../../../apollo'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
@@ -182,6 +182,18 @@ function Product () {
   */
 
   function makeCartItem () {
+    const vendor = vendor_data.getVendor
+    orderSummary(Object.assign(orderSummary(), 
+      {
+        vendor: {
+          name: vendor.name,
+          merchantId: vendor.squareInfo.merchantId,
+          locationIds: vendor.squareInfo.locationIds
+        }
+      }
+      )
+    );
+    console.log(orderSummary())
     const itemName = product.name
     const itemID = product.squareID
     const itemDataSourceId = product.dataSourceId

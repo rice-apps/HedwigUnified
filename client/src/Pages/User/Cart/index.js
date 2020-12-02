@@ -2,7 +2,7 @@ import { css, jsx } from '@emotion/react'
 import { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
-import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from './util'
+import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR, UPDATE_ORDER_TRACKER } from './util'
 import logo from '../../../images/cohenhouse.png'
 import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
@@ -81,6 +81,10 @@ function CartDetail () {
     createPayment,
     { loading: payment_loading, error: payment_error, data: payment_data }
   ] = useMutation(CREATE_PAYMENT)
+  const [
+    updateTracker,
+    { loading: tracker_loading, error: tracker_error, data: tracker_data }
+  ] = useMutation(UPDATE_ORDER_TRACKER)
 
   const navigate = useNavigate()
   const cart_menu = cartItems()
@@ -98,7 +102,17 @@ function CartDetail () {
         currency: 'USD'
       }
     })
-
+    console.log({
+      orderId: orderJson.id,
+      paymentId: createPaymentResponse.data.createPayment.id
+    });
+    const updateTrackerResponse = await updateTracker({
+      variables: {
+        orderId: orderJson.id,
+        paymentId: createPaymentResponse.data.createPayment.id
+      }
+    })
+    
     return navigate('/eat/cohen/payment')
   }
 
@@ -133,17 +147,21 @@ function CartDetail () {
 
   if (order_loading) return <p>Loading...</p>
   if (order_error) {
-    return <p>{order_error.message}</p>
+    return <p>Cannot create order</p>
   }
   if (payment_loading) return <p>Loading...</p>
   if (payment_error) {
-    return <p>{payment_error.message}</p>
+    return <p>Cannot create payment</p>
+  }
+  if (tracker_loading) return <p>Loading...</p>
+  if (tracker_error) {
+    return <p>Cannot load tracker</p>
   }
 
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
-
-  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
+  //   .hours[0]
+  // console.log(businessHour)
+  const businessHour = {start: ['8:30 a.m.', '12:30 p.m.'], end:['11:00 p.m.', '3:30 p.m.']}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])

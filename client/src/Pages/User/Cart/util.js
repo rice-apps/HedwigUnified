@@ -81,6 +81,27 @@ export const CREATE_PAYMENT = gql`
     }
   }
 `
+export const UPDATE_ORDER_TRACKER = gql`
+  mutation ($orderId: String!, $paymentId: String!) {
+    updateOrderTracker(
+      record : {
+      orderId: $orderId
+      paymentId: $paymentId
+      }
+      filter : {
+        orderId: $orderId
+      }
+    ) {
+    record {
+      status
+      merchantId
+      orderId
+      locationId
+      }
+    }
+  }
+`
+
 
 const sStorage = localStorage
 const getRecipient = () => {

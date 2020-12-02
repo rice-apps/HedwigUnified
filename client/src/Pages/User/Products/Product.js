@@ -183,6 +183,10 @@ function Product () {
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
+    const order = orderSummary()
+    if (order.vendor && vendor.name != order.vendor.name) {
+      return; // todo: add warning window.
+    }
     orderSummary(Object.assign(orderSummary(), 
       {
         vendor: {

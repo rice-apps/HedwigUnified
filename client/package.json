@@ -23,13 +23,13 @@
     "antd": "^4.8.4",
     "currency.js": "^2.0.3",
     "emotion": "^11.0.0",
+    "eslint": "^7.13.0",
     "firebase": "^8.0.2",
     "formik": "^2.2.5",
     "graphql": "^15.4.0",
     "history": "^5.0.0",
     "immer": "^7.0.14",
     "moment": "^2.29.1",
-    "node-sass": "^4.0.0",
     "omit-deep-lodash": "^1.1.5",
     "passport": "^0.4.1",
     "rc-tabs": "^11.7.1",
@@ -55,6 +55,7 @@
     "serve": "^11.3.2",
     "styled-components": "^5.2.1",
     "subscriptions-transport-ws": "^0.9.18",
+    "yocto-queue": "^0.1.0",
     "yup": "^0.29.3"
   },
   "scripts": {
@@ -83,7 +84,9 @@
     ]
   },
   "devDependencies": {
+    "node-sass": "^5.0.0",
     "prettier-standard": "^16.4.1",
+    "sass": "^1.29.0",
     "stylelint": "^13.7.2",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-styled-components": "^0.1.1",

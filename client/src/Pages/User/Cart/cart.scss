@@ -1,0 +1,318 @@
+.logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+
+.imageParent {
+  display: flex;
+  width: 100%;
+  height: 80px;
+}
+
+.buy-btn:disabled {
+  background-color: #666666;
+}
+
+.float-cart {
+  padding-top: 7vh;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  box-sizing: border-box;
+
+  transition: right 0.2s;
+
+  &--open {
+    right: 0;
+  }
+
+  &__close-btn {
+    width: 50px;
+    height: 50px;
+    color: #ececec;
+    background-color: #1b1a20;
+    text-align: center;
+    line-height: 50px;
+    position: absolute;
+    top: 0;
+    left: -50px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #212027;
+    }
+  }
+
+  &__shelf-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+
+    .cart-title {
+      font-family: "Futura", sans-serif;
+      font-size: 14px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .vendor-title {
+      margin-left: 10px;
+      font-weight: bold;
+      font-family: "Futura", sans-serif;
+    }
+
+    .shelf-empty {
+      color: #ececec;
+      text-align: center;
+      line-height: 40px;
+    }
+
+    .shelf-item {
+      display: grid;
+      grid-template-columns: 1fr 2fr 0.5fr 1fr;
+      align-items: center;
+      width: 100%;
+      font-family: Poppins;
+      background-color: #f8f8f8;
+      box-sizing: border-box;
+      padding: 5%;
+      transition: background-color 0.2s, opacity 0.2s;
+
+      #image {
+        width: 80px;
+        height: 80px;
+        word-break: break-all;
+      }
+
+      &__title {
+        padding-right: 5px;
+        #title {
+          font-size: 16px;
+          margin-bottom: 0px;
+          font-family: "Futura", sans-serif;
+          font-weight: bold;
+          word-break: break-word;
+          text-align: left;
+        }
+
+        #options {
+          font-size: 12px;
+          margin-top: 4px;
+          opacity: 0.5;
+          text-align: left;
+        }
+      }
+
+      &__quantity {
+        justify-self: flex-end;
+        align-self: center;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 28px;
+        width: 5rem;
+        opacity: 1;
+
+        p {
+          font-family: "Futura", sans-serif;
+          font-size: 16px;
+          font-weight: bold;
+          margin-left: 0px;
+        }
+
+        button {
+          font-size: 10px;
+          font-weight: 800;
+          height: 15px;
+          width: 15px;
+          border: 2px solid #606060;
+          background-color: #606060;
+          border-radius: 100px;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0px;
+        }
+
+        button:disabled {
+          background-color: #d8d8d8;
+          border: 2px solid #d8d8d8;
+        }
+      }
+
+      &__price {
+        justify-content: flex-end;
+        align-items: flex-end;
+        text-align: right;
+        p {
+          font-family: "Futura", sans-serif;
+          font-weight: bold;
+        }
+      }
+
+      &--mouseover {
+        background: #818085;
+
+        .shelf-item__details {
+          .title,
+          .desc {
+            text-decoration: line-through;
+            opacity: 0.6;
+          }
+        }
+
+        .shelf-item__price,
+        .shelf-item__title {
+          text-decoration: line-through;
+          opacity: 0.6;
+        }
+      }
+
+      &__del {
+        font-size: 13px;
+        font-family: "Avenir", sans-serif;
+        color: gray;
+        z-index: 2;
+        cursor: pointer;
+        text-align: right;
+        text-decoration: underline;
+
+        &:hover {
+          background-position-x: -17px;
+        }
+      }
+
+      &__thumb {
+        display: inline-block;
+        vertical-align: middle;
+        width: 100px;
+        margin-right: 3%;
+
+        img {
+          align: middle;
+          border-radius: 50%;
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+
+  &__footer {
+    justify-self: flex-end;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 2;
+    background-color: #d5573e;
+    text-align: center;
+
+    .buy-btn {
+      color: white;
+      background-color: #d5573e;
+      text-align: center;
+      cursor: pointer;
+      font-family: "Futura", sans-serif;
+      font-weight: bold;
+      font-size: 20px;
+      transition: background-color 0.2s;
+      height: 10vh;
+      position: fixed;
+      bottom: 0px;
+      left: 0px;
+      width: 100vw;
+      outline: none;
+      border: none;
+    }
+  }
+}
+
+/* MAC scrollbar para desktop*/
+@media screen and (min-width: 640px) {
+  .float-cart__content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+  }
+}
+
+.float-cart__content {
+  flex-grow: 1;
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.float-bill {
+  display: flex;
+  flex-direction: column;
+
+  padding: 5%;
+  background-color: #f8f8f8;
+
+  p {
+    font-family: "Futura", sans-serif;
+    font-weight: bold;
+  }
+
+  .subtotal-container {
+    display: inline-flex;
+    text-align: right;
+    justify-content: flex-end;
+  }
+
+  .subheader {
+    display: inline;
+    font-family: "Avenir", sans-serif;
+    font-weight: normal;
+    opacity: 0.5;
+    text-transform: capitalize;
+  }
+
+  .total-container {
+    display: block;
+    padding-left: 60%;
+
+    .total {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+
+      &__header {
+        font-size: 16px;
+        font-family: "Futura", sans-serif;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.dropdowncontainer {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+
+.dd-wrapper {
+  display: flex;
+}
+
+.breakline {
+  border-bottom: 2px solid #d8d8d8;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin: 0px;
+  width: 100%;
+}

@@ -16,6 +16,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import BottomAppBar from "./../Vendors/BottomAppBar.js";
 import BuyerHeader from "./../Vendors/BuyerHeader.js";
+import "./cart.scss";
 
 const defaultTotals = {
   subtotal: 0,

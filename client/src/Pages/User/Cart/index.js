@@ -128,7 +128,7 @@ function CartDetail() {
     console.log('cart_menu:', cart_menu)
     console.log("availability", newRes.data)
     if (newRes.data.getAvailabilities === false) {
-      alert("An item in your cart has become unavailable");
+      return navigate('/eat/cohen/confirmation')
     }
     else {
       const q = {

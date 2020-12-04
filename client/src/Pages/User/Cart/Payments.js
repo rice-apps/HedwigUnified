@@ -169,18 +169,20 @@ function Payments() {
 
   const handleClickCredit = () => {
     // Get url and embed that url
-    createPayment({
+    const payment = createPayment({
       variables: {
         sourceId: "cnon:card-nonce-ok",
-        orderId: /* order()[0] */ "Ha6zGEo32PyBOlcnbkSuJGxjOuOZY",
+        // in pr #82 orderId was changed to be included in orderSummary():
+        orderId: "Ha6zGEo32PyBOlcnbkSuJGxjOuOZY",
         // locationId: "FMXAFFWJR95WC",
+        // in this pr, location id was changed from being hard coded:
         locationId: orderSummary().vendor.locationIds[0],
         amount: 900,
         currency: "USD",
       },
-    })
-      .then(renderIFrame(data.url))
-      .catch((err) => <Navigate to="/payment" />);
+    });
+    // for the future, url should not be rendered
+    // renderIFrame(payment.url);
   };
 
   const renderIFrame = (urlInput) => {

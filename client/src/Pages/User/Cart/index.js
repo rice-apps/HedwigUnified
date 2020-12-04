@@ -89,7 +89,7 @@ function CartDetail() {
     const q = {
       variables: createRecord(cart_menu),
     };
-    // not working:
+    console.log("q", q);
     const orderResponse = await createOrder(q);
     const orderJson = orderResponse.data.createOrder;
     const createPaymentResponse = await createPayment({

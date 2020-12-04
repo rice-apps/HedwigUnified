@@ -31,6 +31,7 @@ const GET_ALL_VENDORS = gql`
         start
         end
         day
+        isClosed
       }
       _id
     }

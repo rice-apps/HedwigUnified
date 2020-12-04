@@ -27,7 +27,7 @@ const BusinessHours = new Schema({
     ],
     required: true
   },
-  isClosed: {type: [Boolean], required: true}
+  isClosed: {type: Boolean, required: true}
 })
 
 const VendorSchema = new Schema({

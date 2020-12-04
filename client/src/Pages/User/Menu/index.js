@@ -130,7 +130,7 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
-  
+
 
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
@@ -154,9 +154,6 @@ function Menu () {
     style: 'currency',
     currency: 'USD'
 
-    // These options are needed to round to whole numbers if that's what you want.
-    // minimumFractionDigits: 0,
-    // maximumFractionDigits: 0,
   })
 
   formatter.format(2500)
@@ -177,7 +174,7 @@ function Menu () {
 
   const current_date = new Date()
 
-  const currentDay = current_date.getDay() 
+  const currentDay = current_date.getDay()
   // current day is an integer
 
   const startTimes = vendor_data.getVendor.hours[currentDay].start
@@ -207,7 +204,7 @@ function Menu () {
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
           {/* Vendor Operating Hours */}
-          {isClosed? <p class='vendorinfo'>Closed for the Day</p> : 
+          {isClosed? <p class='vendorinfo'>Closed for the Day</p> :
             times.map(time =>{
               return (
                 <p class='vendorinfo'>time[0] - time[1]</p>

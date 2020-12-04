@@ -22,8 +22,9 @@ function VendorCard ({ vendor }) {
 
   // includes time
   const current_date = new Date()
-  const currentDay = current_date.getDay()
-  const dayObj = hours[currentDay];
+  //const currentDay = current_date.getDay()
+  const currentDay = 1
+  const dayObj = hours[currentDay]
 
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
@@ -46,17 +47,33 @@ function VendorCard ({ vendor }) {
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
-    const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-    const startTime = convertTimeToNum(dayObj.start[0])
-    const endTime = convertTimeToNum(dayObj.end[0])
-    return currentTime <= startTime || currentTime >= endTime
+    else if(dayObj.isClosed === true){
+      return true
+    }
+    else{
+      // const currentTime = current_date.getHours() + current_date.getMinutes() / 60
+      const currentTime = 11
+      const startTimes = dayObj.start.map((startTime) => {
+        return convertTimeToNum(startTime)
+      })
+      const endTimes = dayObj.end.map((endTime) => {
+        return convertTimeToNum(endTime)
+      })
+      let isClosedHours = true
+      for(let i = 0; i<startTimes.length; i++){
+        if(currentTime >= startTimes[i] && currentTime < endTimes[i]) {
+          isClosedHours = false
+        }
+      }
+      return isClosedHours
+    }
   }
 
   const closed = determineIfClosed(current_date, dayObj)
 
   return (
     <>
-      <div className='vendorContainer' onClick={() => handleClick()}>
+      <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
         <div className='vendorHeading'>
           <div className='vendorHeadingText'>
             <h3 className='vendorName'>{name}</h3>

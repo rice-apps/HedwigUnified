@@ -18,13 +18,17 @@ import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
 
+// new dropdown imports:
+import Dropdown from 'react-dropdown';
+// import 'react-dropdown/style.css';
+
 const defaultTotals = {
   subtotal: 0,
   tax: 0,
   discount: null
 }
 
-const computeAvailableHours = (startHour, endHour) => {
+const computeUnavailableHours = (startHour, endHour) => {
   const hour = moment().hour()
   let i = 0
   const rtn = []
@@ -37,7 +41,7 @@ const computeAvailableHours = (startHour, endHour) => {
   return rtn
 }
 
-const computeAvailableMinutes = (
+const computeUnavailableMinutes = (
   hr,
   startHour,
   startMinute,
@@ -72,7 +76,13 @@ const computeAvailableMinutes = (
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
-  const { loading, error, data } = useQuery(GET_VENDOR)
+
+  // Add payment method picker:
+  const [paymentMethod, setPaymentMethod] = useState('Credit Card')
+  const options = ['Credit Card', 'Tetra', 'Cohen House'];
+  // const defaultPaymentOption = options[0];
+
+  const { loading, error, data } = useQuery(GET_VENDOR, {variables: {filter: {name: "Cohen House"}}})
   const [
     createOrder,
     { loading: order_loading, error: order_error, data: order_data }
@@ -140,34 +150,47 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
-
+  const currDay = new Date().getDay()
+  const {getVendor: {hours: businessHours}} = data
+  const businessHour = businessHours[currDay]
+  console.log(businessHour)
+  
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
-  let startHour1 = parseInt(businessHour.start[0].split(':')[0])
-  let endHour1 = parseInt(businessHour.end[0].split(':')[0])
-  let startHour2 = parseInt(businessHour.start[0].split(':')[1])
-  let endHour2 = parseInt(businessHour.end[0].split(':')[1])
-  if (businessHour.start[0].includes('p.m.')) {
-    startHour1 += 12
-  }
-  if (businessHour.end[0].includes('p.m.')) {
-    endHour1 += 12
-  }
-  if (businessHour.start[1].includes('p.m.')) {
-    startHour2 += 12
-  }
-  if (businessHour.end[1].includes('p.m.')) {
-    endHour2 += 12
-  }
-  const startMinute1 = parseInt(
-    businessHour.start[0].split(':')[1].substring(0, 2)
-  )
-  const endMinute1 = parseInt(businessHour.end[0].split(':')[1].substring(0, 2))
+  const startHours = businessHour.start.map((startHour)=>{
+    let hour = startHour.split(':')[0]
+    if(startHour.includes('p.m.')){
+      return parseInt(hour)+12
+    }
+    else{
+      return parseInt(hour)
+    }
+  })
+  const endHours = businessHour.end.map((endHour)=>{
+    let hour = endHour.split(':')[0]
+    if(endHour.includes('p.m.')){
+      return parseInt(hour)+12
+    }
+    else{
+      return parseInt(hour)
+    }
+  })
+
+  const startMinutes = businessHour.start.map((startHour)=>{
+     return startHour.split(':')[1].substring(0, 2)
+  })
+  const endMinutes = businessHour.end.map((endHour)=>{
+    return endHour.split(':')[1].substring(0, 2)
+ })
 
   const disabled = () => false // uncomment the codde below for prod mode.
   // moment().hour() > endHour1 ||
   // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
+
+  const onChangeDropdown = e => {
+    setPaymentMethod(e.value);
+    console.log("payment method: ", paymentMethod);
+  }
+
   return (
     <div>
       <BuyerHeader showBackButton backLink='/eat' />
@@ -178,9 +201,8 @@ function CartDetail () {
               My Cart {getTotal() > 0 ? '(' + getTotal().toString() + ')' : ''}
             </p>
             <div css={[centerCenter, row]}>
-              <img src={logo} className='logo' alt='Logo' />
               <div>
-                <p className='vendor-title'>Cohen House</p>
+                <p className='vendor-title'>Order Summary: </p>
               </div>
             </div>
 
@@ -201,18 +223,26 @@ function CartDetail () {
               bordered={false}
               inputReadOnly
               disabledHours={() => {
-                return computeAvailableHours(startHour1, endHour1)
+                return computeUnavailableHours(startHours[0], endHours[0])
               }}
               disabledMinutes={hour => {
-                return computeAvailableMinutes(
+                return computeUnavailableMinutes(
                   hour,
-                  startHour1,
-                  startMinute1,
-                  endHour1,
-                  endMinute1
+                  startHours[0],
+                  startMinutes[0],
+                  endHours[0],
+                  endMinutes[0]
                 )
               }}
             />
+            <div>
+              <Dropdown 
+                options={options} 
+                onChange={e => onChangeDropdown(e)} 
+                value={paymentMethod} 
+                placeholder="Select a Payment method" 
+              />;
+            </div>
             {disabled() && (
               <p css={{ alignSelf: 'center', color: 'red' }}>
                 {' '}
@@ -254,7 +284,7 @@ function CartDetail () {
               </div>
             </div>
           </div>
-
+          
           <div className='float-cart__footer'>
             <button
               disabled={cartItems().length == 0 || pickupTime == null}

@@ -531,7 +531,7 @@ ItemTC.addResolver({
       availabilityId: 'String'
     },
     resolve: async ({ args }) => {
-      const { products } = args
+      const { products, availabilityId } = args
 
       const api = new CatalogApi()
 
@@ -551,7 +551,7 @@ ItemTC.addResolver({
             is_available: {
               name: 'Is it available?',
               key: 'is_available',
-              custom_attribute_definition_id: 'EHK5UB5AKQWHK3PRSPTWAP7B',
+              custom_attribute_definition_id: availabilityId,
               type: 'BOOLEAN',
               boolean_value: true
             }

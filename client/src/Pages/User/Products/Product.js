@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useQuery, makeVar } from '@apollo/client'
 import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -59,7 +59,7 @@ function Product () {
   if (product_error) {
     return <p>ErrorP...</p>
   }
-  
+
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
   const handleClick = () => {
@@ -182,11 +182,10 @@ function Product () {
   */
 
   function makeCartItem () {
-
-    let itemName = product.name
-    let itemID = product.squareID
-    let itemDataSourceId = product.dataSourceId
-    let variant = undefined
+    const itemName = product.name
+    const itemID = product.squareID
+    const itemDataSourceId = product.dataSourceId
+    let variant
 
     if (document.querySelector('.variantSelect:checked') == null) {
       return false
@@ -196,11 +195,11 @@ function Product () {
     const variantCost = variant.option.price.amount
 
     const modifierNames = []
-    var modifierCost = 0
-    var modifierList = {}
+    let modifierCost = 0
+    const modifierList = {}
     const modifierLists = document.querySelectorAll('.modifierSelect:checked')
 
-    for (var i = 0; i < modifierLists.length; i++) {
+    for (let i = 0; i < modifierLists.length; i++) {
       const currentModifier = JSON.parse(modifierLists[i].value)
       modifierList[i] = currentModifier.option
       const currentModifierName = currentModifier.option.name

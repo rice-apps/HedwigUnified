@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { AiFillPhone } from 'react-icons/ai'
 import { MdEmail } from 'react-icons/md'

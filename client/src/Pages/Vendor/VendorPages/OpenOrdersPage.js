@@ -1,4 +1,3 @@
-import React from 'react'
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 import OrderDashboard from './../VendorComponents/OpenOrderComponents/OrderDashboard.js'
 

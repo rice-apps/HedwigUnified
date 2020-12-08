@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import Toggle from 'react-toggle'
 import {
@@ -53,7 +52,7 @@ const ItemPrice = styled.div`
 `
 
 function MakeCatalogItems (props) {
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   })

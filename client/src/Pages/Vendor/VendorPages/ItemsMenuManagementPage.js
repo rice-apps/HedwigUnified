@@ -1,4 +1,3 @@
-import React from 'react'
 import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'

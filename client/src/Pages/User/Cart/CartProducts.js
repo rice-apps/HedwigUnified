@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import { Component, useState } from 'react'
 import Thumb from './Thumb.js'
 import logo from '../../../images/headphones.jpg'
 import dispatch from '../Products/FunctionalCart'
@@ -49,7 +49,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
       VarModList += product.variant.name
     } else {
       VarModList += product.variant.name + ', '
-      for (var i = 0; i < numModifiers; i++) {
+      for (let i = 0; i < numModifiers; i++) {
         i < numModifiers - 1
           ? (VarModList += product.modDisplay[i] + ', ')
           : (VarModList += product.modDisplay[i])
@@ -83,7 +83,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   const options = ['ASAP', '30 Minutes', '1 Hour']
   const defaultOption = options[0]
 
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   })

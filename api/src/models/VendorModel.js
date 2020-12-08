@@ -16,16 +16,17 @@ const BusinessHours = new Schema({
   day: {
     type: String,
     enum: [
+      'Sunday',
       'Monday',
       'Tuesday',
       'Wednesday',
       'Thursday',
       'Friday',
-      'Saturday',
-      'Sunday'
+      'Saturday'
     ],
     required: true
-  }
+  },
+  isClosed: { type: [Boolean], required: true }
 })
 
 const VendorSchema = new Schema({

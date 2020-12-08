@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 import logo from './logo.svg'
@@ -9,13 +9,12 @@ import { userProfile } from '../../apollo'
 import { useNavigate } from 'react-router-dom'
 
 // This import loads the firebase namespace along with all its type information.
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
 
 // These imports load individual services into the firebase namespace.
 import 'firebase/auth'
 
 const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
-
 
 const sStorage = window.localStorage
 
@@ -55,21 +54,10 @@ function Login () {
       if (result.user) {
         const profile = result.additionalUserInfo.profile
         // redirect to auth page carrying state from IDP
-        sStorage.setItem(
-          'last name',
-          profile['urn:oid:2.5.4.4']
-        )
-        sStorage.setItem(
-          'first name',
-          profile['urn:oid:2.5.4.42']
-        )
-        sStorage.setItem(
-          'email', 
-          profile['urn:oid:0.9.2342.19200300.100.1.3']
-        )
-		    sStorage.setItem(
-          'id', 
-          profile['urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'])
+        sStorage.setItem('last name', profile['urn:oid:2.5.4.4'])
+        sStorage.setItem('first name', profile['urn:oid:2.5.4.42'])
+        sStorage.setItem('email', profile['urn:oid:0.9.2342.19200300.100.1.3'])
+        sStorage.setItem('id', profile['urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'])
         login()
       }
     })

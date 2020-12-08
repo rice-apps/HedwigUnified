@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useQuery, useMutation, gql } from '@apollo/client'
 import _ from 'lodash'
 
@@ -35,7 +35,7 @@ const ORDERS_QUERY = gql`
 
 const ORDER_SUBSCRIPTION = gql`
   subscription($vendor: ID!) {
-    orderChanged(vendor: $vendor) {
+    orderUpdated(vendor: $vendor) {
       _id
       __typename
       user {

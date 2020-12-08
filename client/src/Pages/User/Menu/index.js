@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
 import './index.css'
@@ -130,12 +130,10 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
-  
-
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
-  console.log(catalog_data);
+  console.log(catalog_data)
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -150,7 +148,7 @@ function Menu () {
 
   const categories = compileCategories(catalog_data)
 
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
 
@@ -176,13 +174,19 @@ function Menu () {
   }
 
   const current_date = new Date()
-  console.log(current_date.getDay())
-  const currentDay = current_date.getDay() - 1
-  console.log(currentDay)
-  console.log(vendor_data.getVendor.hours)
+
+  const currentDay = current_date.getDay()
+  // current day is an integer
+
   const startTimes = vendor_data.getVendor.hours[currentDay].start
-  console.log(startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
+
+  const times = []
+  for (let i = 0; i < startTimes.length; i++) {
+    times.push([startTimes[i], endTimes[i]])
+  }
+  const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
+
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
@@ -201,6 +205,13 @@ function Menu () {
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
           {/* Vendor Operating Hours */}
+          {isClosed ? (
+            <p class='vendorinfo'>Closed for the Day</p>
+          ) : (
+            times.map(time => {
+              return <p class='vendorinfo'>time[0] - time[1]</p>
+            })
+          )}
           <p class='vendorinfo'>
             {startTimes[0]} - {endTimes[0]}
           </p>

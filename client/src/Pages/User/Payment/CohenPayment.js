@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import { Component, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
@@ -102,27 +102,33 @@ function CohenPayment (props) {
     border-bottom-width: 1px;
   `
 
-    const navigate = useNavigate();
+  const navigate = useNavigate()
 
-    return (
-        < div >
-            <Grid onClick={() => setActivePass(0)}>
-                <Row>
-                    <Title>Payment Method</Title>
-                </Row>
-                <Row >
-                    <CohenTitle>Cohen Club Card</CohenTitle>
-                </Row>
-                <Row >
-                    <MembershipTitle>Membership ID:</MembershipTitle>
-                </Row>
-            </Grid>
-            <Row>
-                < PasswordInput aria-hidden="true" onClick={() => setActivePass(1)} />
-            </Row>
-            <Footer onClick={() => {navigate(`/eat/submit`)}}>Next</Footer>
-        </div >
-    )
+  return (
+    <div>
+      <Grid onClick={() => setActivePass(0)}>
+        <Row>
+          <Title>Payment Method</Title>
+        </Row>
+        <Row>
+          <CohenTitle>Cohen Club Card</CohenTitle>
+        </Row>
+        <Row>
+          <MembershipTitle>Membership ID:</MembershipTitle>
+        </Row>
+      </Grid>
+      <Row>
+        <PasswordInput aria-hidden='true' onClick={() => setActivePass(1)} />
+      </Row>
+      <Footer
+        onClick={() => {
+          navigate('/eat/submit')
+        }}
+      >
+        Next
+      </Footer>
+    </div>
+  )
 }
 
 export default CohenPayment

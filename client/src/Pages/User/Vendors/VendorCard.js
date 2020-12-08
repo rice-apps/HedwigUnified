@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './BottomAppBar.js'
 
@@ -26,7 +26,6 @@ function VendorCard ({ vendor }) {
   // temporary fix:
   // const currentDay = 1
   const dayObj = hours[currentDay]
-  console.log(dayObj)
 
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
@@ -38,6 +37,13 @@ function VendorCard ({ vendor }) {
     } else if (halfOfDay === 'p.m.') {
       return 12 + hours + minutes
     }
+  }
+
+  const startTimes = hours[currentDay].start
+  const endTimes = hours[currentDay].end
+  const times = []
+  for (let i = 0; i < startTimes.length; i++) {
+    times.push([startTimes[i], endTimes[i]])
   }
 
   const determineIfClosed = (current_date, dayObj) => {
@@ -59,23 +65,18 @@ function VendorCard ({ vendor }) {
             {/* Case for two start/end times */}
             {dayObj && dayObj.start.length > 1 && (
               <p>
-                Hours Open: <br />
-                {dayObj.start[0]}
-                {' - '}
-                {dayObj.end[0]}
-                {', '}
-                <br />
-                {dayObj.start[1]}
-                {' - '}
-                {dayObj.end[1]}
-              </p>
-            )}
-            {/* Case for one start/end time */}
-            {dayObj && dayObj.start.length == 1 && (
-              <p>
-                Hours Open: {dayObj.start[0]}
-                {' - '}
-                {dayObj.end[0]}{' '}
+                {' '}
+                Hours Open:{' '}
+                {times.map(time => {
+                  return (
+                    <span>
+                      <br />
+                      {time[0]}
+                      {' - '}
+                      {time[1]}
+                    </span>
+                  )
+                })}
               </p>
             )}
           </div>
@@ -93,12 +94,10 @@ function VendorCard ({ vendor }) {
               <p className='closedText'>Closed</p>
             </span>
           ) : null}
-          {
-            <img
-              className={closed ? 'vendorImage closed' : 'vendorImage'}
-              src={logoUrl}
-            />
-          }
+          <img
+            className={closed ? 'vendorImage closed' : 'vendorImage'}
+            src={logoUrl}
+          />
         </div>
       </div>
       {/* <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>

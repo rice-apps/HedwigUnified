@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import { Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 const VENDOR_QUERY = gql`
@@ -9,6 +9,7 @@ const VENDOR_QUERY = gql`
         start
         end
         day
+        isClosed
       }
     }
   }

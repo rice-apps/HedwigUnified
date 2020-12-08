@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import {
   OrderDashboardWrapper,
@@ -12,7 +12,6 @@ import {
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
-
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -142,7 +141,31 @@ function OrderDashboard () {
 
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
-      document: ORDER_CREATED
+      document: ORDER_CREATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        console.log(prev)
+        console.log(subscriptionData)
+
+        const newOrderItem = subscriptionData.data.orderCreated
+
+        const newData = Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: [
+              { __typename: 'Order', ...newOrderItem },
+              ...prev.findOrders.orders
+            ]
+          }
+        })
+
+        console.log(newData)
+
+        return newData
+      }
     })
 
     return () => {

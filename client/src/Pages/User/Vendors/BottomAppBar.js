@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { FaShoppingCart } from 'react-icons/fa'
 import { MdReceipt } from 'react-icons/md'

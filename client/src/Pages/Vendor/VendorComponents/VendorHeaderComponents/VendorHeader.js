@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { FaUserCircle, FaClock } from 'react-icons/fa'
 import moment from 'moment'
@@ -84,7 +84,7 @@ const showLogout = false
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
   function toggleLogoutScreen () {
-    var logoutOpen = showLogout
+    const logoutOpen = showLogout
     setShowLogout(!logoutOpen)
   }
 

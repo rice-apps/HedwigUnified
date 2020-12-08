@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import React from 'react'
->>>>>>> create order working
 import styled from 'styled-components'
 import { AiFillPhone } from 'react-icons/ai'
 import { MdEmail } from 'react-icons/md'

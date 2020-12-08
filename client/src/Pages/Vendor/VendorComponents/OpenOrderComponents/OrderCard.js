@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useState } from 'react'
-=======
-import React, { useState } from 'react'
->>>>>>> create order working
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
@@ -255,11 +251,7 @@ const ModalHeaderWrapper = styled.div`
 `
 
 function MakeModalHeader (props) {
-<<<<<<< HEAD
   const paymentType = props.paymentType
-=======
-  var paymentType = props.paymentType
->>>>>>> create order working
   return (
     <ModalHeaderWrapper>
       <FaIdCard style={{ marginTop: '3px', marginRight: '12px' }} />
@@ -351,11 +343,7 @@ const ModalOrderDetailRow = styled.div`
   margin: 1.2px 0px;
 `
 function MakeModalOrderDetails (props) {
-<<<<<<< HEAD
   const paymentType = props.paymentType
-=======
-  var paymentType = props.paymentType
->>>>>>> create order working
   return (
     <ModalOrderDetailsWrapper>
       <ModalOrderDetailRow>
@@ -408,11 +396,7 @@ function MakePaymentSpace (props) {
   const cancelOrder = props.cancelClick
 
   function MakePaymentButtons (props) {
-<<<<<<< HEAD
     let buttonStatus = props.buttonStatus
-=======
-    var buttonStatus = props.buttonStatus
->>>>>>> create order working
 
     return (
       <div>
@@ -542,11 +526,7 @@ function OrderCard (props) {
     buttonStatus,
     cancelClick
   } = props
-<<<<<<< HEAD
   // RFC3339
-=======
-  //RFC3339
->>>>>>> create order working
   const pickupAt = moment(pickupTime).format('h:mm A')
   const timeLeft = moment(pickupTime).fromNow()
 

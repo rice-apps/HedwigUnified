@@ -1,6 +1,6 @@
 import { Component, useState } from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
-import {orderSummary} from "../../../apollo"
+import {orderSummary, userProfile} from "../../../apollo"
 import Button from '@material-ui/core/Button';
 import styled, { css } from 'styled-components';
 // import visa from 'payment-icons/min/flat/visa.svg';
@@ -36,6 +36,25 @@ const CREATE_PAYMENT = gql`
 
         }
     `
+
+const UPDATE_ORDER = gql`
+    mutation ($studentId: String!, $orderId: String!, $uid: String!, $state: FulFillmentStatusEnum!) {
+      updateOrder(
+        orderId: $orderId
+        record: {
+        studentId: $studentId
+        fulfillment: {
+          uid: $uid
+          state: $state
+        }
+      }
+      ){
+        fulfillment{
+          state
+        }
+      }
+    }`
+
 
 // payment options page, coehn club or credit card or tetra
 function Payments () {
@@ -149,11 +168,6 @@ function Payments () {
     ))
   }
 
-  const handleClickTetra = () => {
-    // To be implemented: Tetra payment should be automatic
-    return null
-  }
-
   const handleClickCohen = () => {
     // Go to the cohen checkout page
     return navigate('/cohen')
@@ -165,9 +179,24 @@ function Payments () {
     { data: data, loading, error }
   ] = useMutation(CREATE_PAYMENT)
 
-  const handleClickCredit = () => {
+  const [
+    updateOrder,
+    { data: orderData, loading: orderLoading, error: orderError }
+  ] = useMutation(UPDATE_ORDER)
+
+  if (loading) return <p>'Loading vendor's business hour ...'</p>
+  if (error) return <p>`Error! ${error.message}`</p>
+
+
+
+  if (orderLoading) return <p>Loading...</p>
+  if (orderError) {
+    return <p>{orderError.message}</p>
+  }
+  const order = orderSummary();
+
+  const handleClickCredit = async () => {
     // Get url and embed that url
-    const order = orderSummary();
     const payment = await createPayment({
       variables: {
         sourceId: "cnon:card-nonce-ok",
@@ -197,29 +226,28 @@ function Payments () {
     // Previously used to call this function:
     // renderIFrame(data.createPayment.url)
   }
-
   const handleClickTetra = () => {
     // To be implemented: Tetra payment should be automatic 
+    console.log(userProfile());
+    console.log({
+      orderId: order['orderId'],
+      // For testing:
+      // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
+      studentId: userProfile()['studentId'],
+      uid: order.fulfillment.uid,
+      state: order.fulfillment.state
+    })
     updateOrder({
       variables: {
         orderId: order['orderId'],
         // For testing:
         // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
-        studentId: userProfile().studentId,
+        studentId: userProfile()['studentId'],
         uid: order.fulfillment.uid,
         state: order.fulfillment.state
       }
     })
-    return navigate('/confirmation')
-  }
-
-  const renderIFrame = (urlInput) => {
-    console.log(urlInput)
-    return <Iframe url={urlInput}
-      position="absolute"
-      width="100%"
-      height="100%"
-      styles={{ height: "25px" }} />
+    return navigate('/eat/submit')
   }
 
   return (

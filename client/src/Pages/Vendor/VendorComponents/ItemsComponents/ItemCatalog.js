@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -9,14 +8,6 @@ import {
 } from '@material-ui/core/styles'
 import { Tab, Box, Tabs, Typography, AppBar } from '@material-ui/core'
 
-=======
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import { Tab, Box, Tabs, Typography, AppBar } from '@material-ui/core'
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
->>>>>>> create order working
 import MakeCatalogItems from './CatalogDisplayComponents.js'
 import souppic from './../../../../images/soup.jpg'
 

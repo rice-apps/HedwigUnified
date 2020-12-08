@@ -37,11 +37,6 @@ function Submit () {
     calculateTotal()
   }, [cart_menu])
 
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error.message}</p>;
-
-
   return (
     <div className='float-cart'>
       <div className='float-cart__content'>

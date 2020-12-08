@@ -27,12 +27,8 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
-<<<<<<< HEAD
-const allowedUsers = ['byz2']
-=======
 const allowedUsers = ["byz2"];
 const lstorage = localStorage;
->>>>>>> deletes duplicate flies
 
 function Auth () {
   // First parse out ticket from URL href

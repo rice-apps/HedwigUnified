@@ -43,11 +43,7 @@ function ItemsMenuManagementPage () {
           category={categories[0]}
         />
       }
-<<<<<<< HEAD
     />
-=======
-    ></VendorsideTemplate>
->>>>>>> create order working
   )
 }
 

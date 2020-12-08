@@ -23,7 +23,9 @@ function VendorCard ({ vendor }) {
   // includes time
   const current_date = new Date()
   const currentDay = current_date.getDay()
-  const dayObj = hours[0]
+  // temporary fix:
+  // const currentDay = 1
+  const dayObj = hours[currentDay]
   console.log(dayObj)
 
   const convertTimeToNum = time => {

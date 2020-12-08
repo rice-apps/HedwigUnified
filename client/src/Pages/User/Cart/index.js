@@ -192,11 +192,14 @@ function CartDetail() {
   if (avail_loading) return <p>'Loading availabilities...'</p>
   if (avail_error) return <p>`Error! ${avail_error.message}`</p>
 
+  
   const businessHour = data.getVendors.filter(
     e => e["name"] == "Cohen House"
   )[0].hours[0];
+  
 
-  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+  // temporary fix:
+  // const businessHour = {start: ['7:00 a.m.', '11:00 a.m.'], end: ['9:30 a.m.', '2:00 p.m.']}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])

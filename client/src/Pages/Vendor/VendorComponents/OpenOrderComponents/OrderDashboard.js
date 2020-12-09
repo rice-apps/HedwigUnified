@@ -129,6 +129,55 @@ const ORDER_CREATED = gql`
   }
 `
 
+const ORDER_UPDATED = gql`
+  subscription {
+    orderUpdated {
+      id
+      customer {
+        name
+        email
+        phone
+      }
+      items {
+        name
+        quantity
+        variation_name
+        modifiers {
+          name
+          base_price_money {
+            amount
+          }
+          total_price_money {
+            amount
+          }
+        }
+        total_money {
+          amount
+        }
+        total_tax {
+          amount
+        }
+      }
+      total {
+        amount
+      }
+      totalTax {
+        amount
+      }
+      totalDiscount {
+        amount
+      }
+      fulfillment {
+        uid
+        state
+        pickupDetails {
+          pickupAt
+        }
+      }
+    }
+  }
+`
+
 function OrderDashboard () {
   const vendorId = ['FMXAFFWJR95WC']
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
@@ -151,8 +200,7 @@ function OrderDashboard () {
         console.log(subscriptionData)
 
         const newOrderItem = subscriptionData.data.orderCreated
-
-        const newData = Object.assign({}, prev, {
+        return Object.assign({}, prev, {
           findOrders: {
             __typename: 'FindManyOrderPayload',
             orders: [
@@ -161,15 +209,35 @@ function OrderDashboard () {
             ]
           }
         })
+       }
+    })
 
-        console.log(newData)
+    const unsubscribeToUpdatedOrders = subscribeToMore({
+      document: ORDER_UPDATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
 
-        return newData
-      }
+        console.log(prev)
+        console.log(subscriptionData)
+
+        const newOrderItem = subscriptionData.data.orderCreated
+        return Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: [
+              { __typename: 'Order', ...newOrderItem },
+              ...prev.findOrders.orders
+            ]
+          }
+        })
+       }
     })
 
     return () => {
       unsubscribeToNewOrders()
+      unsubscribeToUpdatedOrders()
     }
   })
 

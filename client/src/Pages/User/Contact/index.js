@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './contact.css'
-import { css, jsx } from '@emotion/core'
+import { css, jsx } from '@emotion/react'
 import { userProfile } from '../../../apollo'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'

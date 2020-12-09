@@ -24,7 +24,6 @@ function VendorCard ({ vendor }) {
   const current_date = new Date()
   const currentDay = current_date.getDay()
   const dayObj = hours[currentDay]
-
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
     let [hours, minutes] = timeNum.split(':')
@@ -39,6 +38,7 @@ function VendorCard ({ vendor }) {
 
   const startTimes = hours[currentDay].start
   const endTimes = hours[currentDay].end
+
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])

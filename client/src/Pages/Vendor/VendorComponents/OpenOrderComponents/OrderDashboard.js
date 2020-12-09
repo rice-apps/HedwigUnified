@@ -141,7 +141,31 @@ function OrderDashboard () {
 
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
-      document: ORDER_CREATED
+      document: ORDER_CREATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        console.log(prev)
+        console.log(subscriptionData)
+
+        const newOrderItem = subscriptionData.data.orderCreated
+
+        const newData = Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: [
+              { __typename: 'Order', ...newOrderItem },
+              ...prev.findOrders.orders
+            ]
+          }
+        })
+
+        console.log(newData)
+
+        return newData
+      }
     })
 
     return () => {

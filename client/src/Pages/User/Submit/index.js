@@ -1,6 +1,4 @@
-/** @jsx jsx */
-
-import { css, jsx } from '@emotion/core'
+import { css, jsx } from '@emotion/react'
 import { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
@@ -63,7 +61,7 @@ function Submit () {
           <h1 className='header'>Bill Details</h1>
           {Object.keys(totals).map(type => {
             if (totals[type]) {
-              const formatted = currency(totals[type]).format()
+              let formatted = currency(totals[type]).format()
               return (
                 <div className='subtotal-container'>
                   <p className='subheader'>{type}</p>

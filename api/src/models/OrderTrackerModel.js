@@ -5,6 +5,8 @@ const OrderTrackerSchema = new Schema({
   merchantId: { type: String, required: false },
   locationId: { type: String, required: false },
   orderId: { type: String, required: false },
+  paymentId: { type: String, required: false },
+  paymentType: { type: String, required: false },
   pickupTime: { type: Date, required: false },
   status: {
     type: String,

@@ -1,6 +1,9 @@
+
 /** @jsx jsx */
 
 import { css, jsx } from '@emotion/core'
+
+
 import React, { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
@@ -88,6 +91,7 @@ function CartDetail () {
 
   const navigate = useNavigate()
   const cart_menu = cartItems()
+
   const handleConfirmClick = async () => {
     const q = {
       variables: createRecord(cart_menu)
@@ -101,9 +105,19 @@ function CartDetail () {
         currency: 'USD'
       }
     })
-
-    return navigate('/eat/cohen/payment')
-  }
+    orderSummary(Object.assign(orderSummary(), 
+      {
+        'orderId': orderJson.id, 
+        'fulfillment': {
+          'uid' : orderJson.fulfillment.uid,
+          'state': orderJson.fulfillment.state
+          }
+        }
+      )
+    )
+    console.log(orderSummary());
+    return navigate(`/eat/cohen/payment`);
+  };
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -143,10 +157,12 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
+  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
+  //   .hours[0]
+
 
   // const businessHour = {start: ['8:30 a.m.', '3:00 p.m.'], end:['11:00 a.m.', '5:00 p.m.']} // only for dev mode
+
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])

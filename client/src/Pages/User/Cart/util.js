@@ -50,6 +50,10 @@ export const CREATE_ORDER = gql`
       customer {
         name
       }
+      fulfillment {
+        uid
+        state
+      }
       items {
         name
         quantity

@@ -35,7 +35,7 @@ const ORDERS_QUERY = gql`
 
 const ORDER_SUBSCRIPTION = gql`
   subscription($vendor: ID!) {
-    orderChanged(vendor: $vendor) {
+    orderUpdated(vendor: $vendor) {
       _id
       __typename
       user {

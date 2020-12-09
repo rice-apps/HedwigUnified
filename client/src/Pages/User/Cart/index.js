@@ -84,7 +84,7 @@ function CartDetail () {
 
   const navigate = useNavigate()
   const cart_menu = cartItems()
-
+console.log(cartItems())
   const handleConfirmClick = async () => {
     const q = {
       variables: createRecord(cart_menu)

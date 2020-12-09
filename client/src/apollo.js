@@ -60,8 +60,7 @@ const splitLink = split(
 )
 
 // Setup cache
-export const cache = new InMemoryCache();
-
+export const cache = new InMemoryCache()
 
 // Initialize Client
 export const client = new ApolloClient({
@@ -75,7 +74,7 @@ export const client = new ApolloClient({
             }
           }
         }
-      },
+      }
     }
   }),
   link: authLink.concat(splitLink)
@@ -86,7 +85,7 @@ const initialState = {
   service: SERVICE_URL,
   user: {
     recentUpdate: false,
-    _id: '',
+    _id: ''
   }
 }
 

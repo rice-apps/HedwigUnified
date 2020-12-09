@@ -59,7 +59,7 @@ function Product () {
   if (product_error) {
     return <p>ErrorP...</p>
   }
-  
+
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
   const handleClick = () => {

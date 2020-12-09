@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { gql, useMutation } from '@apollo/client'
-import { orderSummary } from "../../../apollo"
+import { orderSummary } from '../../../apollo'
 import {
   SquarePaymentForm,
   CreditCardNumberInput,
@@ -18,78 +18,78 @@ import 'react-square-payment-form/lib/default.css'
 
 // This is credit card payment! screen
 const Title = styled.text`
-    margin-top: 10px;
-    font-family: 'adobe-clean', sans-serif;
-    font-size: 25px;
-    color: #595858;
-    font-weight: lighter;
-    justify-content: center;
-    display: flex;
-  `
+  margin-top: 10px;
+  font-family: 'adobe-clean', sans-serif;
+  font-size: 25px;
+  color: #595858;
+  font-weight: lighter;
+  justify-content: center;
+  display: flex;
+`
 
-  const CohenTitle = styled.text`
-    margin-bottom: 80px;
-    font-family: 'adobe-clean', sans-serif;
-    font-size: 23px;
-    color: #cf5734;
-    font-weight: bold;
-    justify-content: center;
-    display: flex;
-  `
+const CohenTitle = styled.text`
+  margin-bottom: 80px;
+  font-family: 'adobe-clean', sans-serif;
+  font-size: 23px;
+  color: #cf5734;
+  font-weight: bold;
+  justify-content: center;
+  display: flex;
+`
 
-  const MembershipTitle = styled.text`
-    margin-left: 50px;
-    font-family: 'adobe-clean', sans-serif;
-    font-size: 23px;
-    color: #595858;
-    font-weight: bold;
-    justify-content: center;
-  `
+const MembershipTitle = styled.text`
+  margin-left: 50px;
+  font-family: 'adobe-clean', sans-serif;
+  font-size: 23px;
+  color: #595858;
+  font-weight: bold;
+  justify-content: center;
+`
 
-  const Button = styled.button`
-    font-family: 'Raleway', sans-serif;
-    border-radius: 20px;
-    border-width: 1px;
-    border-color: #595858;
-    height: 80px;
-    width: 230px;
-    font-size: 18px;
-    font-weight: 500;
-    color: #595858;
-    text-align: left;
-    padding-left: 50px;
-  `
+const Button = styled.button`
+  font-family: 'Raleway', sans-serif;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: #595858;
+  height: 80px;
+  width: 230px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #595858;
+  text-align: left;
+  padding-left: 50px;
+`
 
-  const Grid = styled.div``
+const Grid = styled.div``
 
-  const Row = styled.div``
+const Row = styled.div``
 
-
-  const PasswordInput = styled.input.attrs(props => ({
-    // Every <PasswordInput /> should be type="password"
-    type: 'password'
-  }))`
-    justify-content: center;
-    display: flex;
-    margin-left: 50px;
-    margin-top: 20px;
-    width: 300px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom-color: gray;
-    border-bottom-width: 1px;
-  `
-
+const PasswordInput = styled.input.attrs(props => ({
+  // Every <PasswordInput /> should be type="password"
+  type: 'password'
+}))`
+  justify-content: center;
+  display: flex;
+  margin-left: 50px;
+  margin-top: 20px;
+  width: 300px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom-color: gray;
+  border-bottom-width: 1px;
+`
 
 const ACCEPT_ORDER = gql`
-  mutation ACCEPT_ORDER($orderId: String!, $cohenId: String!, $uid: String!, $state: FulFillmentStatusEnum!){
+  mutation ACCEPT_ORDER(
+    $orderId: String!
+    $cohenId: String!
+    $uid: String!
+    $state: FulFillmentStatusEnum!
+  ) {
     updateOrder(
       orderId: $orderId
-      record: {
-        fulfillment: { uid: $uid, state: $state }
-        cohenId: $cohenId
-      }
+      record: { fulfillment: { uid: $uid, state: $state }, cohenId: $cohenId }
     ) {
       fulfillment {
         uid
@@ -99,9 +99,8 @@ const ACCEPT_ORDER = gql`
   }
 `
 
-
-function CohenPayment(props) {
-  const [inputCohenId, setInputCohenId] = useState('');
+function CohenPayment (props) {
+  const [inputCohenId, setInputCohenId] = useState('')
   // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
   const [activePass, setActivePass] = useState(0)
 
@@ -111,7 +110,6 @@ function CohenPayment(props) {
   const fontWeights = [500, 700]
   const order = orderSummary()
 
-  
   const Footer = styled.footer`
     text-align: center;
     position: absolute;
@@ -128,13 +126,11 @@ function CohenPayment(props) {
     background-color: ${activePass == 0 ? bgColors[0] : bgColors[1]};
   `
 
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
-
-  const [
-    updateOrder,
-    { data: data, loading, error }
-  ] = useMutation(ACCEPT_ORDER)
+  const [updateOrder, { data: data, loading, error }] = useMutation(
+    ACCEPT_ORDER
+  )
 
   const handleClickNext = async () => {
     console.log({
@@ -142,7 +138,7 @@ function CohenPayment(props) {
       cohenId: '09098098',
       uid: order.fulfillment.uid,
       state: order.fulfillment.state
-    });
+    })
     console.log(activePass)
     await updateOrder({
       variables: {
@@ -156,7 +152,7 @@ function CohenPayment(props) {
   }
 
   return (
-    < div >
+    <div>
       <Grid onClick={() => setActivePass(0)}>
         <Row>
           <Title>Payment Method</Title>
@@ -170,14 +166,24 @@ function CohenPayment(props) {
       </Grid>
       <Row>
         <form>
-          < PasswordInput aria-hidden="true" value={inputCohenId} onClick={() => setActivePass(1)} 
-          onChange={event => {setInputCohenId(event.target.value)}} />
+          <PasswordInput
+            aria-hidden='true'
+            value={inputCohenId}
+            onClick={() => setActivePass(1)}
+            onChange={event => {
+              setInputCohenId(event.target.value)
+            }}
+          />
         </form>
       </Row>
-      <Footer onClick={() => {
-        handleClickNext()
-      }}>Next</Footer>
-    </div >
+      <Footer
+        onClick={() => {
+          handleClickNext()
+        }}
+      >
+        Next
+      </Footer>
+    </div>
   )
 }
 

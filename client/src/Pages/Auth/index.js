@@ -27,8 +27,8 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
-const allowedUsers = ["byz2"];
-const lstorage = localStorage;
+const allowedUsers = ['byz2']
+const lstorage = localStorage
 
 function Auth () {
   // First parse out ticket from URL href
@@ -74,12 +74,16 @@ function Auth () {
     token
   })
 
-  userProfile(Object.assign(userProfile(), 
-    {name: lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
-     studentId: lstorage.getItem('id')}))
+  userProfile(
+    Object.assign(userProfile(), {
+      name:
+        lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
+      studentId: lstorage.getItem('id')
+    })
+  )
   // Set token in local storage
 
-  console.log(userProfile());
+  console.log(userProfile())
   lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation

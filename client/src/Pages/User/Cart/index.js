@@ -1,5 +1,5 @@
 import { css, jsx } from '@emotion/react'
-import { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from './util'
@@ -98,9 +98,19 @@ function CartDetail () {
         currency: 'USD'
       }
     })
-
-    return navigate('/eat/cohen/payment')
-  }
+    orderSummary(Object.assign(orderSummary(), 
+      {
+        'orderId': orderJson.id, 
+        'fulfillment': {
+          'uid' : orderJson.fulfillment.uid,
+          'state': orderJson.fulfillment.state
+          }
+        }
+      )
+    )
+    console.log(orderSummary());
+    return navigate(`/eat/cohen/payment`);
+  };
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -140,10 +150,10 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-  const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-    .hours[0]
+  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
+  //   .hours[0]
 
-  // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
+  const businessHour = {start: ['8:30 a.m.', '2:30 p.m.'], end:['11:00 a.m.', '5:00 p.m.']}
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])
@@ -222,14 +232,14 @@ function CartDetail () {
             <hr className='breakline' />
             {cartItems().map(item => {
               return (
-                <>
+                <React.Fragment>
                   <CartProduct
                     product={item}
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
                   <hr className='breakline' />
-                </>
+                </React.Fragment>
               )
             })}
           </div>

@@ -178,15 +178,17 @@ function Menu () {
   const currentDay = current_date.getDay()
   // current day is an integer
 
-  const startTimes = vendor_data.getVendor.hours[currentDay].start
-  const endTimes = vendor_data.getVendor.hours[currentDay].end
+  // const startTimes = vendor_data.getVendor.hours[currentDay].start
+  // const endTimes = vendor_data.getVendor.hours[currentDay].end
 
+  const startTimes = 0
+  const endTimes = 0
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])
   }
-  const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
-
+  // const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
+  const isClosed = false
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>

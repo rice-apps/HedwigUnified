@@ -1,8 +1,13 @@
-import { css, jsx } from '@emotion/react'
+
+/** @jsx jsx */
+
+import { css, jsx } from '@emotion/core'
+
+
 import React, { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
-import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from './util'
+import { createRecord, checkNullFields ,CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from './util'
 import logo from '../../../images/cohenhouse.png'
 import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
@@ -72,6 +77,8 @@ const computeAvailableMinutes = (
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
+  const [nullError, setNullError] = useState(checkNullFields()) 
+  // eval to a field string if user's name, student id, or phone number is null
   const { loading, error, data } = useQuery(GET_VENDOR)
   const [
     createOrder,
@@ -84,7 +91,7 @@ function CartDetail () {
 
   const navigate = useNavigate()
   const cart_menu = cartItems()
-console.log(cartItems())
+
   const handleConfirmClick = async () => {
     const q = {
       variables: createRecord(cart_menu)
@@ -153,7 +160,9 @@ console.log(cartItems())
   // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
   //   .hours[0]
 
-  const businessHour = {start: ['8:30 a.m.', '2:30 p.m.'], end:['11:00 a.m.', '5:00 p.m.']}
+
+  // const businessHour = {start: ['8:30 a.m.', '3:00 p.m.'], end:['11:00 a.m.', '5:00 p.m.']} // only for dev mode
+
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])
@@ -264,10 +273,16 @@ console.log(cartItems())
               </div>
             </div>
           </div>
-
+          {nullError != null && (
+              <p css={{ alignSelf: 'center', color: 'red' }}>
+                {' '}
+                Error! Submission form contains null value for {nullError}. 
+                Please update your profile.{' '}
+              </p>
+            )}
           <div className='float-cart__footer'>
             <button
-              disabled={cartItems().length == 0 || pickupTime == null}
+              disabled={cartItems().length == 0 || pickupTime == null || nullError != null}
               className='buy-btn'
               title='Confirm'
               onClick={handleConfirmClick}

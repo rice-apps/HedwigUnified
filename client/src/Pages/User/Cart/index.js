@@ -1,9 +1,3 @@
-
-/** @jsx jsx */
-
-import { css, jsx } from '@emotion/core'
-
-
 import React, { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
@@ -161,7 +155,7 @@ function CartDetail () {
   //   .hours[0]
 
 
-  // const businessHour = {start: ['8:30 a.m.', '3:00 p.m.'], end:['11:00 a.m.', '5:00 p.m.']} // only for dev mode
+  const businessHour = {start: ['8:30 a.m.', '3:00 p.m.'], end:['11:00 a.m.', '5:00 p.m.']} // only for dev mode
 
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])

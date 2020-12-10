@@ -17,7 +17,7 @@
 .vendortitle {
   font-size: 4vh;
   font-family: 'santana';
-  color: #f49f86;
+  /* color: #f49f86; */
   margin: auto;
 }
 
@@ -141,3 +141,71 @@
 
   align-self: start;
 }
+.storeHourBox{
+  flex-direction: column;
+  display:flex;
+  text-align: center;
+  font-size: 0.8em;
+  background: white;
+  z-index: 100;
+}
+.dayHourRow{
+  display:grid;
+  grid-template-columns: 15% 85%;
+  justify-content:center;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0px;
+}
+.dayInitial{
+  margin: 10px;
+  font-weight: bold;
+}
+.openStatus{
+  font-weight: bold;
+  color: #f49f86;
+}
+.btn{
+  background-color: white;
+  border: none !important;
+}
+.fa-angle-down{
+  color: black;
+}
+.dropdown-menu.show{
+  display:block;
+}
+.dropdown-menu{
+    /* margin: 0px; */
+    left: 7px;
+    float: center;
+    min-width: 10rem;
+    padding: .7rem .3rem;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: .25rem;
+    z-index: 1000; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.dropdown-header{
+  display: block;
+    padding: .5rem 1.2srem;
+    margin-bottom: 0;
+    font-size: .5rem;
+    color: #6c757d;
+    white-space: nowrap;
+    
+
+}
+.dropdown-toggle{
+  background-color: white;
+  outline: none;
+}
+.arrowIcon{
+  margin-left: 10px;
+}
+

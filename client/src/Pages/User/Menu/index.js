@@ -10,6 +10,10 @@ import { useQuery, gql } from '@apollo/client'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import { Hidden } from '@material-ui/core'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
+import { Dropdown, DropdownButton } from 'react-bootstrap';
+// import 'bootstrap/dist/css/bootstrap.min.css'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 /*
 const vendor = {
@@ -87,10 +91,10 @@ const vendor = {
 
 // add a proceed to checkout
 function Menu () {
+  const [arrowState, setArrowState] = useState(false);
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currentVendor } = state
-
   const {
     refetch,
     data: catalog_info,
@@ -133,7 +137,6 @@ function Menu () {
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
-  console.log(catalog_data)
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -187,6 +190,50 @@ function Menu () {
   }
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
 
+  // splash the hours
+
+  // display start - end time of a specific day
+  function dayDisplay(dayItem){
+    let start = dayItem.start;
+    let end = dayItem.end;
+    let time = start.map(function(e, i) {return [e, end[i]];});
+    if(dayItem.start.length === 0){
+      return(<div className="dayHourRow"><span className="dayInitial">{dayItem.day.charAt(0)} </span><span>Closed</span>  </div>)
+    }else{
+      return(
+        <div className="dayHourRow" > <span className="dayInitial"> {dayItem.day.charAt(0)} </span>
+          <span className="hoursColumn">{time.map(startend => {
+        return(<div><span>{startend[0].replace(".","").replace(".","")} - {startend[1].replace(".","").replace(".","")}</span></div>)})}</span>
+        </div>
+      )
+    }
+  }
+  // toggle arrow to display
+  function handleClickArrow(){
+    setArrowState(!arrowState);
+  }
+
+  // display day name and its hours
+  function hourDisplay(){
+    let hourItems = vendor_data.getVendor.hours;
+    return(
+      <div >
+        {hourItems.map(dayItem => {
+        return(
+          <div >
+          {dayDisplay(dayItem)}</div>)}
+        )}
+      </div>
+      )}
+  let dropdownTitle = isClosed ? (<div><span className='openStatus'>Closed </span>{times[0][0].replace(".","").replace(".","")} - {times[1][0].replace(".","").replace(".","")} 
+  <FontAwesomeIcon className="arrowIcon" icon={arrowState? faAngleDown:faAngleUp} /></div>) : (
+    (<span ><span className='openStatus'>Open</span>{times[0][0].replace(".","").replace(".","")} - {times[1][0].replace(".","").replace(".","")} 
+  <FontAwesomeIcon className="arrowIcon"  icon={arrowState? faAngleDown:faAngleUp} /></span>)
+  )
+
+
+
+
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
@@ -205,21 +252,14 @@ function Menu () {
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
           {/* Vendor Operating Hours */}
-          {isClosed ? (
-            <p class='vendorinfo'>Closed for the Day</p>
-          ) : (
-            times.map(time => {
-              return <p class='vendorinfo'>time[0] - time[1]</p>
-            })
-          )}
-          <p class='vendorinfo'>
-            {startTimes[0]} - {endTimes[0]}
-          </p>
-          {startTimes.length > 1 && (
-            <p class='vendorinfo'>
-              {startTimes[1]} - {endTimes[1]}
-            </p>
-          )}
+          <DropdownButton size="sm" title={dropdownTitle}  onClick={handleClickArrow} >
+          <Dropdown.Header>
+            <div className="storeHourBox">
+              <div style={{fontWeight:"bold"}}>Hours</div>
+              {hourDisplay()}</div>
+            </Dropdown.Header>
+          </DropdownButton>
+
           <button class='readmore'> More Info </button>
         </div>
 

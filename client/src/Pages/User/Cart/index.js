@@ -199,7 +199,7 @@ function CartDetail () {
   }
 
   if (avail_loading) return <p>'Loading availabilities...'</p>
-  if (avail_error) return <p>`Error! ${avail_error.message}`</p>
+  if (avail_error & (cart_menu.length != 0)) return <p>`Error! ${avail_error.message}`</p>
 
   // temporary fix:
   const businessHour = {

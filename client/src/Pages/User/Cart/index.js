@@ -22,6 +22,11 @@ import CartHeader from "./CartHeader";
 import Dropdown from "react-dropdown";
 // import 'react-dropdown/style.css';
 
+const styles = {
+  fontSize: 14,
+  color: "blue",
+};
+
 const defaultTotals = {
   subtotal: 0,
   tax: 0,
@@ -79,7 +84,12 @@ function CartDetail() {
 
   // Add payment method picker:
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
-  const options = ["Credit Card", "Tetra", "Cohen House"];
+  // const options = ["Credit Card", "Tetra", "Cohen House"];
+  const options = [
+    { value: "Credit Card", label: "Credit Card" },
+    { value: "Tetra", label: "Tetra" },
+    { value: "Cohen House", label: "Cohen House" },
+  ];
   // const defaultPaymentOption = options[0];
 
   const { loading, error, data } = useQuery(GET_VENDOR, {
@@ -188,10 +198,14 @@ function CartDetail() {
   // moment().hour() > endHour1 ||
   // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
 
-  const onChangeDropdown = (e) => {
-    setPaymentMethod(e.value);
+  // const onChangeDropdown = (e) => {
+  //   setPaymentMethod(e.value);
+  //   console.log("payment method: ", paymentMethod);
+  // };
+  function onChangeDropdown(newPayment) {
+    setPaymentMethod(newPayment);
     console.log("payment method: ", paymentMethod);
-  };
+  }
 
   return (
     <div>
@@ -279,18 +293,27 @@ function CartDetail() {
 
           <div css={[centerCenter, row]}></div>
           <hr className="breakline" />
-          <p css={{ alignSelf: "center", marginTop: "10px" }}>
-            Payment Method:
-          </p>
-          <div>
-            <Dropdown
-              options={options}
-              onChange={(e) => onChangeDropdown(e)}
-              value={paymentMethod}
-              placeholder="Select a Payment method"
-              style={{ color: "red" }}
-            />
-            ;
+          <div style={{ position: "relative", float: "left" }}>
+            <div>
+              <p css={{ marginTop: "10px" }}>Payment Method:</p>
+            </div>
+            <div>
+              {/* <Dropdown
+                options={options}
+                onChange={(e) => onChangeDropdown(e)}
+                value={paymentMethod}
+                placeholder="Select a Payment method"
+                style={{ color: "red" }}
+              /> */}
+              <Select
+                options={options}
+                // onChange={(e) => onChangeDropdown(e)}
+                onChange={onChangeDropdown}
+                placeholder={"Select a payment method"}
+                clearable={false}
+                style={styles.select}
+              />
+            </div>
           </div>
           <div>
             <p>Please enter payment details on the following screen.</p>

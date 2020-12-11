@@ -103,8 +103,10 @@ const Confirmation = ({ classes }) => {
         <FailureSVG className='checkSvg' />
         <div>
           <p className='orderConfirmed'>Oops!</p>
-          <p className='orderConfirmed'>An item you ordered is not available.</p>
-          
+          <p className='orderConfirmed'>
+            An item you ordered is not available.
+          </p>
+
           <p className='statusUpdate'>
             Please go back to your cart and make adjustments. Your order will{' '}
             <strong>not</strong> be placed at this time

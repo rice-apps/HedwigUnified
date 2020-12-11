@@ -306,6 +306,68 @@ PaymentTC.addResolver({
     }
   })
   .addResolver({
+    name: 'verifyPayment',
+    type: 'Boolean',
+    args: {
+      vendor: 'String!',
+      source: 'String!',
+      paymentId: 'String',
+      orderId: 'String'
+    },
+    resolve: async ({ args }) => {
+      const { source, paymentId, orderId } = args
+
+      let response
+
+      switch (source) {
+        case 'SQUARE': {
+          const api = new PaymentsApi()
+
+          const getPaymentResponse = await api.getPayment(paymentId)
+
+          if (getPaymentResponse.errors) {
+            return new ApolloError(
+              `Couldn't verify payment because ${getPaymentResponse.errors}`
+            )
+          }
+
+          response =
+            getPaymentResponse.payment.status != 'CANCELED' &&
+            getPaymentResponse.payment.status != 'FAILED'
+        }
+
+        case 'SHOPIFY': {
+          const orderQuery = `
+            query GetOrder($id: ID!) {
+              node(id: $id) {
+                ...on Order {
+                  fullyPaid
+                  transactions {
+                    id
+                  }
+                }
+              }
+            }
+          `
+
+          const order = await shopifyAdminClient.graphql(orderQuery, {
+            id: orderId
+          })
+
+          response = order.data.node.order.fullPaid
+        }
+
+        default: {
+          response = new ApolloError(
+            'Payment source should be Shopify or Square!'
+          )
+        }
+      }
+
+      return response
+    }
+  })
+  .addResolver({
     name: 'cancelPayment',
     type: PaymentTC,
     args: {

@@ -324,13 +324,19 @@ ItemTC.addResolver({
 
       const api = new CatalogApi()
 
-      const batchRetrieveResponse = await api.batchRetrieveCatalogObjects({ object_ids: productIds })
+      const batchRetrieveResponse = await api.batchRetrieveCatalogObjects({
+        object_ids: productIds
+      })
 
       if (batchRetrieveResponse.errors) {
-        return new ApolloError(`Batch retrieving availabilities failed: ${batchRetrieveResponse.errors}`)
+        return new ApolloError(
+          `Batch retrieving availabilities failed: ${batchRetrieveResponse.errors}`
+        )
       }
 
-      return batchRetrieveResponse.objects.every(value => value.custom_attribute_values.is_available.boolean_value)
+      return batchRetrieveResponse.objects.every(
+        value => value.custom_attribute_values.is_available.boolean_value
+      )
     }
   })
   .addResolver({

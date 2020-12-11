@@ -101,12 +101,17 @@ function CartDetail () {
   const product_ids = cart_menu.map(item => {
     return item.dataSourceId
   })
-  console.log("Product IDs", product_ids)
+  console.log('Product IDs', product_ids)
 
-  const { loading: avail_loading, error: avail_error, 
-                              data: avail_data, refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
-    variables: { productIds: product_ids }, 
-    fetchPolicy: "network-only"})
+  const {
+    loading: avail_loading,
+    error: avail_error,
+    data: avail_data,
+    refetch: avail_refetch
+  } = useQuery(GET_AVAILABILITIES, {
+    variables: { productIds: product_ids },
+    fetchPolicy: 'network-only'
+  })
 
   /*
   useEffect(() => {
@@ -119,17 +124,15 @@ function CartDetail () {
   }, [cart_menu])
   */
 
-
   const handleConfirmClick = async () => {
     const newRes = await avail_refetch()
     while (newRes.loading) {}
     console.log('errors: ', avail_error)
     console.log('cart_menu:', cart_menu)
-    console.log("availability", newRes.data)
+    console.log('availability', newRes.data)
     if (newRes.data.getAvailabilities === false) {
       return navigate('/eat/cohen/confirmation')
-    }
-    else {
+    } else {
       const q = {
         variables: createRecord(cart_menu)
       }
@@ -143,22 +146,19 @@ function CartDetail () {
           currency: 'USD'
         }
       })
-  orderSummary(
-      Object.assign(orderSummary(), {
-        orderId: orderJson.id,
-        fulfillment: {
-          uid: orderJson.fulfillment.uid,
-          state: orderJson.fulfillment.state
-        }
-      })
-    )
-    console.log(orderSummary())
-      return navigate(`/eat/cohen/payment`);
+      orderSummary(
+        Object.assign(orderSummary(), {
+          orderId: orderJson.id,
+          fulfillment: {
+            uid: orderJson.fulfillment.uid,
+            state: orderJson.fulfillment.state
+          }
+        })
+      )
+      console.log(orderSummary())
+      return navigate(`/eat/cohen/payment`)
     }
-    
-  };
-
-
+  }
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -198,14 +198,14 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-
   if (avail_loading) return <p>'Loading availabilities...'</p>
   if (avail_error) return <p>`Error! ${avail_error.message}`</p>
 
-
-
   // temporary fix:
-   const businessHour = {start: ['7:00 a.m.', '11:00 a.m.'], end: ['9:30 a.m.', '2:00 p.m.']}
+  const businessHour = {
+    start: ['7:00 a.m.', '11:00 a.m.'],
+    end: ['9:30 a.m.', '2:00 p.m.']
+  }
 
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])

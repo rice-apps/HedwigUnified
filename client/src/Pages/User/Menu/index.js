@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
 import './index.css'
@@ -8,13 +8,16 @@ import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery, gql } from '@apollo/client'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
-import { Hidden } from '@material-ui/core'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
-import { Dropdown, DropdownButton } from 'react-bootstrap';
-// import 'bootstrap/dist/css/bootstrap.min.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 /*
 const vendor = {
   name: 'East West Tea',
@@ -91,6 +94,9 @@ const vendor = {
 
 // add a proceed to checkout
 function Menu () {
+  const [open, setOpen] = React.useState(false);
+  const prevOpen = React.useRef(open);
+  const anchorRef = useRef(null);
   const [arrowState, setArrowState] = useState(false);
   const navigate = useNavigate()
   const { state } = useLocation()
@@ -106,7 +112,6 @@ function Menu () {
       vendor: currentVendor
     }
   })
-
   // const catalog_data = vendor;
 
   const {
@@ -118,6 +123,12 @@ function Menu () {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
   })
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+    prevOpen.current = open;
+  }, [open]);
 
   if (vendor_loading) {
     return <p>Loading...</p>
@@ -189,8 +200,26 @@ function Menu () {
     times.push([startTimes[i], endTimes[i]])
   }
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
-
+  
   // splash the hours
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
 
   // display start - end time of a specific day
   function dayDisplay(dayItem){
@@ -208,16 +237,12 @@ function Menu () {
       )
     }
   }
-  // toggle arrow to display
-  function handleClickArrow(){
-    setArrowState(!arrowState);
-  }
 
   // display day name and its hours
   function hourDisplay(){
     let hourItems = vendor_data.getVendor.hours;
     return(
-      <div >
+      <div>
         {hourItems.map(dayItem => {
         return(
           <div >
@@ -226,12 +251,10 @@ function Menu () {
       </div>
       )}
   let dropdownTitle = isClosed ? (<div><span className='openStatus'>Closed </span>{times[0][0].replace(".","").replace(".","")} - {times[1][0].replace(".","").replace(".","")} 
-  <FontAwesomeIcon className="arrowIcon" icon={arrowState? faAngleDown:faAngleUp} /></div>) : (
+  <FontAwesomeIcon className="arrowIcon" icon={open? faAngleUp:faAngleDown} /></div>) : (
     (<span ><span className='openStatus'>Open</span>{times[0][0].replace(".","").replace(".","")} - {times[1][0].replace(".","").replace(".","")} 
-  <FontAwesomeIcon className="arrowIcon"  icon={arrowState? faAngleDown:faAngleUp} /></span>)
+  <FontAwesomeIcon className="arrowIcon"  icon={open? faAngleUp:faAngleDown} /></span>)
   )
-
-
 
 
   // we have to change these returns because vendor.name is outdated - brandon
@@ -251,14 +274,32 @@ function Menu () {
         <div class='vendorinfocontainer'>
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
-          {/* Vendor Operating Hours */}
-          <DropdownButton size="sm" title={dropdownTitle}  onClick={handleClickArrow} >
-          <Dropdown.Header>
-            <div className="storeHourBox">
-              <div style={{fontWeight:"bold"}}>Hours</div>
-              {hourDisplay()}</div>
-            </Dropdown.Header>
-          </DropdownButton>
+          
+        {/* Vendor Operating Hours */}
+        <Button
+          ref={anchorRef}
+          aria-controls={open ? 'menu-list-grow' : undefined}
+          aria-haspopup="true"
+          style={{backgroundColor:"white" }} 
+          onClick={handleToggle} disableRipple
+        >
+          {dropdownTitle}
+        </Button>
+        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition >
+          {({ TransitionProps, placement }) => (
+            <Grow {...TransitionProps} >
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} className="hourDisplay" >
+                    <MenuItem className = "menuItem"
+                    onClick={handleClose} disableGutters>
+                    <div className="storeHourBox"> <div style={{fontWeight:"bold"}}>Hours</div>{hourDisplay()}</div>
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+            </Grow>
+          )}
+        </Popper>
+          
 
           <button class='readmore'> More Info </button>
         </div>

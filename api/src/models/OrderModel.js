@@ -100,9 +100,9 @@ const OrderTC = sc.createObjectTC({
     total: MoneyTC.getTypeNonNull().getType(),
     orderStatus: OrderStatusEnumTC.getTypeNonNull().getType(),
     fulfillment: OrderFulfillmentTC.getType(),
-    cohenId: 'String',  
-    studentId: 'String', 
-    paymentType: PaymentSourceEnumTC.getType(),
+    cohenId: 'String',
+    studentId: 'String',
+    paymentType: PaymentSourceEnumTC.getType()
   }
 })
 

@@ -64,12 +64,16 @@ const FIND_ORDERS = gql`
   }
 `
 const UPDATE_ORDER = gql`
-  mutation UPDATE_ORDER($orderId: String!, $uid: String!, $state: FulFillmentStatusEnum!){
+  mutation UPDATE_ORDER(
+    $orderId: String!
+    $uid: String!
+    $state: FulFillmentStatusEnum!
+  ) {
     updateOrder(
       orderId: $orderId
       record: { fulfillment: { uid: $uid, state: $state } }
     ) {
-      fulfillment{
+      fulfillment {
         uid
         state
       }
@@ -206,7 +210,7 @@ function OrderDashboard () {
             ]
           }
         })
-       }
+      }
     })
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
@@ -229,7 +233,7 @@ function OrderDashboard () {
             ]
           }
         })
-       }
+      }
     })
 
     return () => {

@@ -130,7 +130,7 @@ const UrlTC = sc.createScalarTC({
 
 export {
   DataSourceEnumTC,
-  PaymentSourceEnumTC, 
+  PaymentSourceEnumTC,
   MoneyTC,
   OrderStatusEnumTC,
   FulfillmentStatusEnumTC,

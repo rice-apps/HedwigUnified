@@ -23,6 +23,8 @@ function VendorCard ({ vendor }) {
   // includes time
   const current_date = new Date()
   const currentDay = current_date.getDay()
+  // temporary fix:
+  // const currentDay = 1
   const dayObj = hours[currentDay]
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')

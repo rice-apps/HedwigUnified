@@ -33,50 +33,64 @@ const defaultTotals = {
   discount: null,
 };
 
-const computeUnavailableHours = (startHour, endHour) => {
-  const hour = moment().hour();
-  let i = 0;
-  const rtn = [];
-  while (i < 24) {
-    if (i < startHour || i < hour || i > endHour) {
-      rtn.push(i);
+function generatePickupTimes(currHour, currMinute, endHour, endMinute){
+  console.log(currHour, currMinute, endHour, endMinute)
+  let pickupTimes = []
+  let pickupMinute = Math.ceil(currMinute/15)*15
+  let pickupHour = currHour;
+  while(pickupHour <= endHour){
+    while(pickupMinute<45 && !(pickupHour === endHour && pickupMinute >= endMinute)){
+      pickupMinute += 15
+      const strPickupMinute = (pickupMinute===0 ? "00" : pickupMinute.toString())
+      const strPickupHour = pickupHour===12 ? "12" : (pickupHour-Math.floor(pickupHour/12)*12).toString()
+      const pickupTime = strPickupHour+":"+strPickupMinute
+      pickupTimes.push(pickupTime)
     }
-    i += 1;
+    pickupMinute = 0
+    pickupHour += 1
   }
-  return rtn;
-};
+  const pickupObjs = pickupTimes.map(time => {
+    return {value: time, label: time}
+  })
+  return pickupObjs
+}
 
-const computeUnavailableMinutes = (
-  hr,
-  startHour,
-  startMinute,
-  endHour,
-  endMinute
-) => {
-  const hour = moment().hour();
-  const minute = moment().minute();
-  let start = 0;
-  let end = -1;
-  if (hr == startHour) {
-    if (hr == hour) {
-      end = Math.max(minute, startMinute);
-    } else {
-      end = startMinute;
-    }
-  } else if (hr == endHour) {
-    start = endMinute;
-    end = 59;
-  } else if (hr == hour) {
-    end = minute;
+function calculateNextHours(currHour, currMinute, startHours, startMinutes, endHours, endMinutes){
+  const currTime = currHour+currMinute/60
+  const endTimes = []
+  for(let i=0; i<endHours.length; i++){
+    endTimes.push(endHours[i]+endMinutes[i]/60)
   }
-  let i = start;
-  const rtn = [];
-  while (i <= end) {
-    rtn.push(i);
-    i += 1;
+  const startTimes = []
+  for(let i=0; i<startHours.length; i++){
+    startTimes.push(startHours[i]+startMinutes[i]/60)
   }
-  return rtn;
-};
+  let idx=0
+  while(currTime >= startTimes[idx]){
+    idx+=1
+  }
+  let timeIntervals = []
+  let newIdx = 0
+  //When restaurant is closed for the day
+  if(idx===endTimes.length && currTime >= endTimes[idx-1]){
+    return [[0, 0, 0, 0]]
+  }
+  //When restaurant is not open currently for orders, but open later in the day
+  else if(idx===0 || (idx > 0 && currTime >= endTimes[idx-1]) || (currTime >= endTimes[idx-1]-0.25)){
+    timeIntervals.push([startHours[idx], startMinutes[idx], endHours[idx], endMinutes[idx]])
+    newIdx = idx+1
+  }
+  //When the restaurant is currently open for orders
+  else{
+    timeIntervals.push([currHour, currMinute, endHours[idx-1], endMinutes[idx-1]])
+    newIdx=idx
+  }
+  while(newIdx<endTimes.length){
+    timeIntervals.push([startHours[newIdx], startMinutes[newIdx], endHours[newIdx], endMinutes[newIdx]])
+    newIdx+=1
+  }
+  return timeIntervals
+}
 
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
@@ -162,7 +176,10 @@ function CartDetail() {
     return <p>{payment_error.message}</p>;
   }
 
-  const currDay = new Date().getDay();
+  const currDate = new Date()
+  const currDay = currDate.getDay()
+  const currHour = currDate.getHours()
+  const currMinute = currDate.getMinutes()
   const {
     getVendor: { hours: businessHours },
   } = data;
@@ -188,11 +205,19 @@ function CartDetail() {
   });
 
   const startMinutes = businessHour.start.map((startHour) => {
-    return startHour.split(":")[1].substring(0, 2);
+    return parseInt(startHour.split(":")[1]);
   });
   const endMinutes = businessHour.end.map((endHour) => {
-    return endHour.split(":")[1].substring(0, 2);
+    return parseInt(endHour.split(":")[1]);
   });
+
+  const timeIntervals = calculateNextHours(currHour, currMinute, startHours, startMinutes, endHours, endMinutes)
+  let pickupTimes = []
+  for(let i=0; i<timeIntervals.length; i++){
+    const interval = timeIntervals[i]
+    pickupTimes = [...pickupTimes, ...generatePickupTimes(interval[0], interval[1], interval[2], interval[3], interval[4])]
+  }
+  console.log(pickupTimes)
 
   const disabled = () => false; // uncomment the codde below for prod mode.
   // moment().hour() > endHour1 ||
@@ -256,41 +281,13 @@ function CartDetail() {
           <hr className="breakline" />
 
           <p css={{ alignSelf: "center", marginTop: "10px" }}> Pickup Time:</p>
-          <TimePicker
-            disabled={disabled()}
-            defaultValue={moment()}
-            css={{ marginTop: "-10px", width: "200px", alignSelf: "center" }}
-            format="HH:mm"
-            onChange={(e) => {
-              if (e) {
-                document.getElementsByClassName("buy-btn")[0].disabled = false;
-                setPickupTime({ hour: e.hour(), minute: e.minute() });
-                orderSummary({ time: e });
-              }
-            }}
-            showNow={false}
-            bordered={false}
-            inputReadOnly
-            disabledHours={() => {
-              return computeUnavailableHours(startHours[0], endHours[0]);
-            }}
-            disabledMinutes={(hour) => {
-              return computeUnavailableMinutes(
-                hour,
-                startHours[0],
-                startMinutes[0],
-                endHours[0],
-                endMinutes[0]
-              );
-            }}
+          <Select
+            options={pickupTimes}
+            placeholder={"Select a pickup time"}
+            onChange={onChangeDropdown}
+            clearable={false}
+            style={styles.select}
           />
-          {disabled() && (
-            <p css={{ alignSelf: "center", color: "red" }}>
-              {" "}
-              No pickup time available today.{" "}
-            </p>
-          )}
-
           <div css={[centerCenter, row]}></div>
           <hr className="breakline" />
           <div style={{ position: "relative", float: "left" }}>

@@ -354,7 +354,7 @@ PaymentTC.addResolver({
             id: orderId
           })
 
-          response = order.data.node.order.fullPaid
+          response = order.data.node.order.fullyPaid
         }
 
         default: {

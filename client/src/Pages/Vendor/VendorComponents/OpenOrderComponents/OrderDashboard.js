@@ -74,6 +74,7 @@ const UPDATE_ORDER = gql`
       record: { fulfillment: { uid: $uid, state: $state } }
     ) {
       fulfillment {
+        uid
         state
       }
     }
@@ -83,6 +84,55 @@ const UPDATE_ORDER = gql`
 const ORDER_CREATED = gql`
   subscription {
     orderCreated {
+      id
+      customer {
+        name
+        email
+        phone
+      }
+      items {
+        name
+        quantity
+        variation_name
+        modifiers {
+          name
+          base_price_money {
+            amount
+          }
+          total_price_money {
+            amount
+          }
+        }
+        total_money {
+          amount
+        }
+        total_tax {
+          amount
+        }
+      }
+      total {
+        amount
+      }
+      totalTax {
+        amount
+      }
+      totalDiscount {
+        amount
+      }
+      fulfillment {
+        uid
+        state
+        pickupDetails {
+          pickupAt
+        }
+      }
+    }
+  }
+`
+
+const ORDER_UPDATED = gql`
+  subscription {
+    orderUpdated {
       id
       customer {
         name
@@ -151,8 +201,7 @@ function OrderDashboard () {
         console.log(subscriptionData)
 
         const newOrderItem = subscriptionData.data.orderCreated
-
-        const newData = Object.assign({}, prev, {
+        return Object.assign({}, prev, {
           findOrders: {
             __typename: 'FindManyOrderPayload',
             orders: [
@@ -161,15 +210,35 @@ function OrderDashboard () {
             ]
           }
         })
+      }
+    })
 
-        console.log(newData)
+    const unsubscribeToUpdatedOrders = subscribeToMore({
+      document: ORDER_UPDATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
 
-        return newData
+        console.log(prev)
+        console.log(subscriptionData)
+
+        const newOrderItem = subscriptionData.data.orderCreated
+        return Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: [
+              { __typename: 'Order', ...newOrderItem },
+              ...prev.findOrders.orders
+            ]
+          }
+        })
       }
     })
 
     return () => {
       unsubscribeToNewOrders()
+      unsubscribeToUpdatedOrders()
     }
   })
 
@@ -190,7 +259,7 @@ function OrderDashboard () {
         state: orderState
       }
     })
-    console.log('button was pressed')
+    console.log(order.name, order.id)
   }
   // if (!loading && orders) {
   //     const { order } = orders.items

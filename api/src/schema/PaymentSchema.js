@@ -1,5 +1,4 @@
 import { PaymentsApi, CreatePaymentRequest } from 'square-connect'
-import { GraphQLString, GraphQLNonNull } from 'graphql'
 import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
 import {

@@ -33,63 +33,96 @@ const defaultTotals = {
   discount: null,
 };
 
-function generatePickupTimes(currHour, currMinute, endHour, endMinute){
-  console.log(currHour, currMinute, endHour, endMinute)
-  let pickupTimes = []
-  let pickupMinute = Math.ceil(currMinute/15)*15
+function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
+  console.log(currHour, currMinute, endHour, endMinute);
+  let pickupTimes = [];
+  let pickupMinute = Math.ceil(currMinute / 15) * 15;
   let pickupHour = currHour;
-  while(pickupHour <= endHour){
-    while(pickupMinute<45 && !(pickupHour === endHour && pickupMinute >= endMinute)){
-      pickupMinute += 15
-      const strPickupMinute = (pickupMinute===0 ? "00" : pickupMinute.toString())
-      const strPickupHour = pickupHour===12 ? "12" : (pickupHour-Math.floor(pickupHour/12)*12).toString()
-      const pickupTime = strPickupHour+":"+strPickupMinute
-      pickupTimes.push(pickupTime)
+  while (pickupHour <= endHour) {
+    while (
+      pickupMinute < 45 &&
+      !(pickupHour === endHour && pickupMinute >= endMinute)
+    ) {
+      pickupMinute += 15;
+      const strPickupMinute =
+        pickupMinute === 0 ? "00" : pickupMinute.toString();
+      const strPickupHour =
+        pickupHour === 12
+          ? "12"
+          : (pickupHour - Math.floor(pickupHour / 12) * 12).toString();
+      const pickupTime = strPickupHour + ":" + strPickupMinute;
+      pickupTimes.push(pickupTime);
     }
-    pickupMinute = 0
-    pickupHour += 1
+    pickupMinute = 0;
+    pickupHour += 1;
   }
-  const pickupObjs = pickupTimes.map(time => {
-    return {value: time, label: time}
-  })
-  return pickupObjs
+  const pickupObjs = pickupTimes.map((time) => {
+    return { value: time, label: time };
+  });
+  return pickupObjs;
 }
 
-function calculateNextHours(currHour, currMinute, startHours, startMinutes, endHours, endMinutes){
-  const currTime = currHour+currMinute/60
-  const endTimes = []
-  for(let i=0; i<endHours.length; i++){
-    endTimes.push(endHours[i]+endMinutes[i]/60)
+function calculateNextHours(
+  currHour,
+  currMinute,
+  startHours,
+  startMinutes,
+  endHours,
+  endMinutes
+) {
+  const currTime = currHour + currMinute / 60;
+  const endTimes = [];
+  for (let i = 0; i < endHours.length; i++) {
+    endTimes.push(endHours[i] + endMinutes[i] / 60);
   }
-  const startTimes = []
-  for(let i=0; i<startHours.length; i++){
-    startTimes.push(startHours[i]+startMinutes[i]/60)
+  const startTimes = [];
+  for (let i = 0; i < startHours.length; i++) {
+    startTimes.push(startHours[i] + startMinutes[i] / 60);
   }
-  let idx=0
-  while(currTime >= startTimes[idx]){
-    idx+=1
+  let idx = 0;
+  while (currTime >= startTimes[idx]) {
+    idx += 1;
   }
-  let timeIntervals = []
-  let newIdx = 0
+  let timeIntervals = [];
+  let newIdx = 0;
   //When restaurant is closed for the day
-  if(idx===endTimes.length && currTime >= endTimes[idx-1]){
-    return [[0, 0, 0, 0]]
+  if (idx === endTimes.length && currTime >= endTimes[idx - 1]) {
+    return [[0, 0, 0, 0]];
   }
   //When restaurant is not open currently for orders, but open later in the day
-  else if(idx===0 || (idx > 0 && currTime >= endTimes[idx-1]) || (currTime >= endTimes[idx-1]-0.25)){
-    timeIntervals.push([startHours[idx], startMinutes[idx], endHours[idx], endMinutes[idx]])
-    newIdx = idx+1
+  else if (
+    idx === 0 ||
+    (idx > 0 && currTime >= endTimes[idx - 1]) ||
+    currTime >= endTimes[idx - 1] - 0.25
+  ) {
+    timeIntervals.push([
+      startHours[idx],
+      startMinutes[idx],
+      endHours[idx],
+      endMinutes[idx],
+    ]);
+    newIdx = idx + 1;
   }
   //When the restaurant is currently open for orders
-  else{
-    timeIntervals.push([currHour, currMinute, endHours[idx-1], endMinutes[idx-1]])
-    newIdx=idx
+  else {
+    timeIntervals.push([
+      currHour,
+      currMinute,
+      endHours[idx - 1],
+      endMinutes[idx - 1],
+    ]);
+    newIdx = idx;
   }
-  while(newIdx<endTimes.length){
-    timeIntervals.push([startHours[newIdx], startMinutes[newIdx], endHours[newIdx], endMinutes[newIdx]])
-    newIdx+=1
+  while (newIdx < endTimes.length) {
+    timeIntervals.push([
+      startHours[newIdx],
+      startMinutes[newIdx],
+      endHours[newIdx],
+      endMinutes[newIdx],
+    ]);
+    newIdx += 1;
   }
-  return timeIntervals
+  return timeIntervals;
 }
 
 function CartDetail() {
@@ -129,11 +162,30 @@ function CartDetail() {
     const orderJson = orderResponse.data.createOrder;
     const createPaymentResponse = await createPayment({
       variables: {
+        // new:
+        sourceId: "cnon:card-nonce-ok",
         orderId: orderJson.id,
+        // new: (locationId is not hardcoded on another branch)
+        locationId: "FMXAFFWJR95WC",
         subtotal: totals.subtotal * 100,
         currency: "USD",
       },
     });
+
+    if (paymentMethod === "Credit") {
+      // navigate to Almost there page
+      console.log("The payment type is credit card.");
+    }
+    if (paymentMethod === "Cohen House") {
+      // get cohen id from order summary
+      // navigate to order confirmation page
+      console.log("The payment type is through Cohen House.");
+    }
+    if (paymentMethod === "Tetra") {
+      // store student id?
+      // navigate to order confirmation page
+      console.log("The payment type is through Tetra.");
+    }
 
     return navigate("/eat/cohen/payment");
   };
@@ -176,10 +228,10 @@ function CartDetail() {
     return <p>{payment_error.message}</p>;
   }
 
-  const currDate = new Date()
-  const currDay = currDate.getDay()
-  const currHour = currDate.getHours()
-  const currMinute = currDate.getMinutes()
+  const currDate = new Date();
+  const currDay = currDate.getDay();
+  const currHour = currDate.getHours();
+  const currMinute = currDate.getMinutes();
   const {
     getVendor: { hours: businessHours },
   } = data;
@@ -211,25 +263,36 @@ function CartDetail() {
     return parseInt(endHour.split(":")[1]);
   });
 
-  const timeIntervals = calculateNextHours(currHour, currMinute, startHours, startMinutes, endHours, endMinutes)
-  let pickupTimes = []
-  for(let i=0; i<timeIntervals.length; i++){
-    const interval = timeIntervals[i]
-    pickupTimes = [...pickupTimes, ...generatePickupTimes(interval[0], interval[1], interval[2], interval[3], interval[4])]
+  const timeIntervals = calculateNextHours(
+    currHour,
+    currMinute,
+    startHours,
+    startMinutes,
+    endHours,
+    endMinutes
+  );
+  let pickupTimes = [];
+  for (let i = 0; i < timeIntervals.length; i++) {
+    const interval = timeIntervals[i];
+    pickupTimes = [
+      ...pickupTimes,
+      ...generatePickupTimes(
+        interval[0],
+        interval[1],
+        interval[2],
+        interval[3],
+        interval[4]
+      ),
+    ];
   }
-  console.log(pickupTimes)
+  console.log(pickupTimes);
 
   const disabled = () => false; // uncomment the codde below for prod mode.
   // moment().hour() > endHour1 ||
   // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
 
-  // const onChangeDropdown = (e) => {
-  //   setPaymentMethod(e.value);
-  //   console.log("payment method: ", paymentMethod);
-  // };
   function onChangeDropdown(newPayment) {
     setPaymentMethod(newPayment);
-    console.log("payment method: ", paymentMethod);
   }
 
   return (
@@ -295,13 +358,6 @@ function CartDetail() {
               <p css={{ marginTop: "10px" }}>Payment Method:</p>
             </div>
             <div>
-              {/* <Dropdown
-                options={options}
-                onChange={(e) => onChangeDropdown(e)}
-                value={paymentMethod}
-                placeholder="Select a Payment method"
-                style={{ color: "red" }}
-              /> */}
               <Select
                 options={options}
                 // onChange={(e) => onChangeDropdown(e)}

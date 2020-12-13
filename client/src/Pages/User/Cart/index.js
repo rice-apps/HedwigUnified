@@ -229,9 +229,13 @@ function CartDetail() {
   }
 
   const currDate = new Date();
-  const currDay = currDate.getDay();
-  const currHour = currDate.getHours();
-  const currMinute = currDate.getMinutes();
+  // const currDay = currDate.getDay();
+  // const currHour = currDate.getHours();
+  // const currMinute = currDate.getMinutes();
+  const currDay = 1;
+  const currHour = 7;
+  const currMinute = 30;
+
   const {
     getVendor: { hours: businessHours },
   } = data;
@@ -285,7 +289,6 @@ function CartDetail() {
       ),
     ];
   }
-  console.log(pickupTimes);
 
   const disabled = () => false; // uncomment the codde below for prod mode.
   // moment().hour() > endHour1 ||
@@ -305,7 +308,6 @@ function CartDetail() {
               Order Summary:
             </p>
             <div css={[centerCenter, row]}></div>
-            <hr className="breakline" />
             {cartItems().map((item) => {
               return (
                 <>
@@ -314,7 +316,6 @@ function CartDetail() {
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
-                  <hr className="breakline" />
                 </>
               );
             })}
@@ -343,43 +344,38 @@ function CartDetail() {
           <div css={[centerCenter, row]}></div>
           <hr className="breakline" />
 
-          <p css={{ alignSelf: "center", marginTop: "10px" }}> Pickup Time:</p>
+          <p className="float-cart__dropdown-title"> Pickup Time:</p>
           <Select
             options={pickupTimes}
             placeholder={"Select a pickup time"}
-            onChange={onChangeDropdown}
+            onChange={(e)=>{setPickupTime(e.value)}}
             clearable={false}
             style={styles.select}
+            className="float-cart__dropdown"
           />
           <div css={[centerCenter, row]}></div>
           <hr className="breakline" />
-          <div style={{ position: "relative", float: "left" }}>
-            <div>
-              <p css={{ marginTop: "10px" }}>Payment Method:</p>
-            </div>
-            <div>
-              <Select
-                options={options}
-                // onChange={(e) => onChangeDropdown(e)}
-                onChange={onChangeDropdown}
-                placeholder={"Select a payment method"}
-                clearable={false}
-                style={styles.select}
-              />
-            </div>
-          </div>
+          <p className="float-cart__dropdown-title">Payment Method:</p>
+          <Select
+            options={options}
+            onChange={onChangeDropdown}
+            placeholder={"Select a payment method"}
+            clearable={false}
+            style={styles.select}
+            className="float-cart__dropdown"
+          />
           <div>
-            <p>Please enter payment details on the following screen.</p>
+            <p className="float-cart__payment-message">Please enter payment details on the following screen.</p>
           </div>
 
           <div className="float-cart__footer">
             <button
-              disabled={cartItems().length == 0 || pickupTime == null}
+              disabled={cartItems().length === 0 || pickupTime === null}
               className="buy-btn"
               title="Confirm"
               onClick={handleConfirmClick}
             >
-              Next: Payment
+              Submit Order
               <div />
             </button>
           </div>

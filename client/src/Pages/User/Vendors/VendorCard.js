@@ -62,8 +62,8 @@ function VendorCard ({ vendor }) {
     return false
   }
 
-  const closed = determineIfClosed(current_date, dayObj)
-
+  //const closed = determineIfClosed(current_date, dayObj)
+  const closed = false
   return (
     <>
       <div className='vendorContainer' onClick={() => handleClick()}>

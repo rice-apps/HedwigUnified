@@ -20,6 +20,7 @@ import CartHeader from "./CartHeader";
 
 // new dropdown imports:
 import Dropdown from "react-dropdown";
+import createActivityDetector from 'activity-detector';
 // import 'react-dropdown/style.css';
 
 const styles = {
@@ -34,7 +35,6 @@ const defaultTotals = {
 };
 
 function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
-  console.log(currHour, currMinute, endHour, endMinute);
   let pickupTimes = [];
   let pickupMinute = Math.ceil(currMinute / 15) * 15;
   let pickupHour = currHour;
@@ -125,6 +125,17 @@ function calculateNextHours(
   return timeIntervals;
 }
 
+function useIdle(options){
+  const [isIdle, setIsIdle] = useState(false);
+  useEffect(()=>{
+    const activityDetector = createActivityDetector();
+    activityDetector.on('idle', ()=>{setIsIdle(true)});
+    // activityDetector.on('active', ()=>{setIsIdle(false)});
+    return ()=>{activityDetector.stop()}
+  }, [])
+  return isIdle;
+}
+
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
   const [pickupTime, setPickupTime] = useState(null);
@@ -153,6 +164,8 @@ function CartDetail() {
 
   const navigate = useNavigate();
   const cart_menu = cartItems();
+
+  const isIdle = useIdle({timeToIdle:30000});
 
   const handleConfirmClick = async () => {
     const q = {
@@ -234,13 +247,12 @@ function CartDetail() {
   // const currMinute = currDate.getMinutes();
   const currDay = 1;
   const currHour = 7;
-  const currMinute = 30;
+  const currMinute = 36;
 
   const {
     getVendor: { hours: businessHours },
   } = data;
   const businessHour = businessHours[currDay];
-  console.log(businessHour);
 
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
   const startHours = businessHour.start.map((startHour) => {
@@ -301,7 +313,7 @@ function CartDetail() {
   return (
     <div>
       <CartHeader showBackButton backLink="/eat" />
-      <div className="float-cart">
+      <div className={isIdle ? "float-cart__disabled": "float-cart"}>
         <div className="float-cart__content">
           <div className="float-cart__shelf-container">
             <p className="cart-title" style={{ marginTop: "30px" }}>

@@ -4,6 +4,7 @@ import { ApolloError } from 'apollo-server-express'
 import {
   CreatePaymentITC,
   MoneyTC,
+  OrderTracker,
   PaymentTC,
   SortOrderEnumTC
 } from '../models'
@@ -143,6 +144,9 @@ PaymentTC.addResolver({
                   checkoutCreate.add('checkout', checkout => {
                     checkout.add('id')
                     checkout.add('webUrl')
+                    checkout.add('order', order => {
+                      order.add('id')
+                    })
                     checkout.add('paymentDueV2', payment => {
                       payment.add('amount')
                       payment.add('currencyCode')
@@ -163,6 +167,11 @@ PaymentTC.addResolver({
             url: checkout.data.checkoutCreate.checkout.webUrl,
             source
           }
+
+          OrderTracker.findOneAndUpdate(
+            { orderId: orderId },
+            { shopifyOrderId: checkout.data.checkoutCreate.checkout.order.id }
+          )
 
           break
         }

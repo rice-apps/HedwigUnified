@@ -6,7 +6,11 @@ const OrderTrackerSchema = new Schema({
   locationId: { type: String, required: false },
   orderId: { type: String, required: false },
   paymentId: { type: String, required: false },
-  paymentType: { type: String, required: false },
+  paymentType: {
+    type: String, 
+    required: false,
+    enum: ['COHEN', 'TETRA', 'CREDIT']
+  },
   pickupTime: { type: Date, required: false },
   status: {
     type: String,
@@ -17,6 +21,11 @@ const OrderTrackerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Users',
     required: false
+  },
+  dataSource: {
+    type: String,
+    required: false,
+    enum: ['SQUARE', 'SHOPIFY', 'EXCEL']
   }
 })
 

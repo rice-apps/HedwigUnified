@@ -31,7 +31,7 @@
   }
 
   &__disabled {
-    pointer-events: none; 
+    pointer-events: none;
   }
 
   &__close-btn {
@@ -333,4 +333,12 @@
   border-right: none;
   margin: 0px;
   width: 100%;
+}
+
+.modal-btn {
+  background-color: white;
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: red; 
 }

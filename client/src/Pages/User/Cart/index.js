@@ -21,6 +21,9 @@ import CartHeader from "./CartHeader";
 // new dropdown imports:
 import Dropdown from "react-dropdown";
 import createActivityDetector from 'activity-detector';
+import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 // import 'react-dropdown/style.css';
 
 const styles = {
@@ -128,7 +131,7 @@ function calculateNextHours(
 function useIdle(options){
   const [isIdle, setIsIdle] = useState(false);
   useEffect(()=>{
-    const activityDetector = createActivityDetector();
+    const activityDetector = createActivityDetector(options);
     activityDetector.on('idle', ()=>{setIsIdle(true)});
     // activityDetector.on('active', ()=>{setIsIdle(false)});
     return ()=>{activityDetector.stop()}
@@ -165,7 +168,7 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({timeToIdle:30000});
+  const isIdle = useIdle({timeToIdle:300000, inactivityEvents:[]});
 
   const handleConfirmClick = async () => {
     const q = {
@@ -242,12 +245,9 @@ function CartDetail() {
   }
 
   const currDate = new Date();
-  // const currDay = currDate.getDay();
-  // const currHour = currDate.getHours();
-  // const currMinute = currDate.getMinutes();
-  const currDay = 1;
-  const currHour = 7;
-  const currMinute = 36;
+  const currDay = currDate.getDay();
+  const currHour = currDate.getHours();
+  const currMinute = currDate.getMinutes();
 
   const {
     getVendor: { hours: businessHours },
@@ -393,6 +393,32 @@ function CartDetail() {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isIdle}
+        style={{
+          content: {
+            backgroundColor: 'white',
+            height: '44vh',
+            width: '44vw',
+            position: 'absolute',
+            top: '28%',
+            left: '28%',
+            borderRadius: '20px',
+            fontFamily: 'Futura',
+            textAlign: 'center'
+          },
+          overlay: {
+            zIndex: '10'
+          }
+        }}
+      >
+      <FontAwesomeIcon class="fal" icon={faExclamationCircle} size='5x'/>
+      <div style={{textAlign: 'left'}}>
+        <p>You have been inactive for too long. Please <button className="modal-btn" onClick={()=>{navigate("/eat")}}>restart</button>
+          your order
+        </p>
+      </div>
+      </Modal>
     </div>
   );
 }

@@ -19,6 +19,7 @@ import Orders from '../Pages/Vendor/Orders'
 import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
+import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
@@ -37,6 +38,7 @@ import VendorSelect from '../Pages/Login/VendorCheck'
 import CohenPayment from '../Pages/User/Payment/CohenPayment'
 import Submit from '../Pages/User/Submit'
 import CreditPayment from '../Pages/User/Cart/CreditPayment.js'
+
 /**
  * Requests to verify the user's token on the backend
  */
@@ -138,6 +140,7 @@ const newRoutesArray = [
       { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
       { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
       { path: '/submit', element: <Submit /> },
+      { path: '/almostThere', element: <AlmostThere /> },
       {
         path: '/:vendor/*',
         children: [

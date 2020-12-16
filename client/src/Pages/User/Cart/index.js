@@ -156,7 +156,7 @@ function CartDetail () {
         })
       )
       console.log(orderSummary())
-      return navigate(`/eat/cohen/payment`)
+      return navigate(`/eat/almostThere`)
     }
   }
 

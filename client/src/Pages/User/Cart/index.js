@@ -19,11 +19,10 @@ import BottomAppBar from "./../Vendors/BottomAppBar.js";
 import CartHeader from "./CartHeader";
 
 // new dropdown imports:
-import Dropdown from "react-dropdown";
 import createActivityDetector from 'activity-detector';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { AiOutlineExclamationCircle } from 'react-icons/ai'
 // import 'react-dropdown/style.css';
 
 const styles = {
@@ -168,7 +167,7 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({timeToIdle:300000, inactivityEvents:[]});
+  const isIdle = useIdle({timeToIdle:3000, inactivityEvents:[]});
 
   const handleConfirmClick = async () => {
     const q = {
@@ -399,10 +398,10 @@ function CartDetail() {
           content: {
             backgroundColor: 'white',
             height: '44vh',
-            width: '44vw',
+            width: '50vw',
             position: 'absolute',
             top: '28%',
-            left: '28%',
+            left: '26%',
             borderRadius: '20px',
             fontFamily: 'Futura',
             textAlign: 'center'
@@ -412,12 +411,10 @@ function CartDetail() {
           }
         }}
       >
-      <FontAwesomeIcon class="fal" icon={faExclamationCircle} size='5x'/>
-      <div style={{textAlign: 'left'}}>
-        <p>You have been inactive for too long. Please <button className="modal-btn" onClick={()=>{navigate("/eat")}}>restart</button>
-          your order
-        </p>
-      </div>
+      <AiOutlineExclamationCircle style={{fontSize:'100px'}}/>
+      <p style={{marginLeft:'0px'}}>Your session has expired due to inactivity.</p>
+      <button className="modal-btn" onClick={()=>{window.location.reload(false)}}>Refresh Page</button>
+      <button className="modal-btn" onClick={()=>{navigate("/eat")}}>Home Page</button>
       </Modal>
     </div>
   );

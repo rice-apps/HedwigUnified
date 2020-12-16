@@ -9,7 +9,6 @@ import {
   GET_VENDOR
 } from './util'
 import logo from '../../../images/cohenhouse.png'
-import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import Payments from './Payments.js'
@@ -22,6 +21,7 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
+import './cart.scss'
 
 const GET_AVAILABILITIES = gql`
   query GET_AVAILABILITIES($productIds: [String!]) {
@@ -121,6 +121,7 @@ function CartDetail () {
     else {
       getAvailabilities()
     }
+<<<<<<< HEAD
   }, [cart_menu])
   */
 
@@ -158,6 +159,19 @@ function CartDetail () {
       console.log(orderSummary())
       return navigate(`/eat/cohen/payment`)
     }
+=======
+    console.log('q', q)
+    const orderResponse = await createOrder(q)
+    const orderJson = orderResponse.data.createOrder
+    const createPaymentResponse = await createPayment({
+      variables: {
+        orderId: orderJson.id,
+        subtotal: totals.subtotal * 100,
+        currency: 'USD'
+      }
+    })
+    return navigate('/eat/cohen/payment')
+>>>>>>> feature/buyer-dynamic-vendor
   }
 
   const updateTotal = () => {
@@ -198,6 +212,7 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
+<<<<<<< HEAD
   if (avail_loading) return <p>'Loading availabilities...'</p>
   if (avail_error & (cart_menu.length != 0))
     return <p>`Error! ${avail_error.message}`</p>
@@ -208,6 +223,15 @@ function CartDetail () {
     end: ['9:30 a.m.', '2:00 p.m.']
   }
 
+=======
+  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
+  //   .hours[0]
+
+  const businessHour = {
+    start: ['8:30 a.m.', '12:30 p.m.'],
+    end: ['11:00 p.m.', '3:30p.m.']
+  }
+>>>>>>> feature/buyer-dynamic-vendor
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])
@@ -258,7 +282,10 @@ function CartDetail () {
                 if (e) {
                   document.getElementsByClassName('buy-btn')[0].disabled = false
                   setPickupTime({ hour: e.hour(), minute: e.minute() })
-                  orderSummary({ time: e })
+                  // orderSummary({ time: e });
+                  Object.assign(orderSummary(), {
+                    time: e
+                  })
                 }
               }}
               showNow={false}

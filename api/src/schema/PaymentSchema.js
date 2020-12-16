@@ -420,7 +420,8 @@ PaymentTC.addResolver({
   })
 
 const PaymentQueries = {
-  fetchPayments: PaymentTC.getResolver('fetchPayments')
+  fetchPayments: PaymentTC.getResolver('fetchPayments'),
+  verifyPayment: PaymentTC.getResolver('verifyPayment')
 }
 
 const PaymentMutations = {

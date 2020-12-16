@@ -1,5 +1,5 @@
-import { Component, useEffect } from 'react'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { Component, useEffect, useState } from 'react'
+import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
 import { Redirect } from 'react-router'
 import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
@@ -27,7 +27,7 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
-const allowedUsers = ['byz2']
+// const allowedUsers = ['byz2']
 const lstorage = localStorage
 
 function Auth () {
@@ -51,8 +51,8 @@ function Auth () {
   if (!authenticationData) return <p>Bad.</p>
 
   const {
-    token,
     netid,
+    token,
     _id,
     name,
     phone,
@@ -103,7 +103,8 @@ function Auth () {
   // else, if employee is a buyer, then we redirect them automatically to /eat and restrict
   // their access to /employee
 
-  if (allowedUsers.includes(netid) || vendor) {
+
+  if (vendor) {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients

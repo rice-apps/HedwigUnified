@@ -121,7 +121,6 @@ function CartDetail () {
     else {
       getAvailabilities()
     }
-<<<<<<< HEAD
   }, [cart_menu])
   */
 
@@ -159,19 +158,6 @@ function CartDetail () {
       console.log(orderSummary())
       return navigate(`/eat/cohen/payment`)
     }
-=======
-    console.log('q', q)
-    const orderResponse = await createOrder(q)
-    const orderJson = orderResponse.data.createOrder
-    const createPaymentResponse = await createPayment({
-      variables: {
-        orderId: orderJson.id,
-        subtotal: totals.subtotal * 100,
-        currency: 'USD'
-      }
-    })
-    return navigate('/eat/cohen/payment')
->>>>>>> feature/buyer-dynamic-vendor
   }
 
   const updateTotal = () => {
@@ -212,7 +198,6 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-<<<<<<< HEAD
   if (avail_loading) return <p>'Loading availabilities...'</p>
   if (avail_error & (cart_menu.length != 0))
     return <p>`Error! ${avail_error.message}`</p>
@@ -223,15 +208,6 @@ function CartDetail () {
     end: ['9:30 a.m.', '2:00 p.m.']
   }
 
-=======
-  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-  //   .hours[0]
-
-  const businessHour = {
-    start: ['8:30 a.m.', '12:30 p.m.'],
-    end: ['11:00 p.m.', '3:30p.m.']
-  }
->>>>>>> feature/buyer-dynamic-vendor
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
   let startHour2 = parseInt(businessHour.start[0].split(':')[1])

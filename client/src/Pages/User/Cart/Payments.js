@@ -8,7 +8,6 @@ import { FaCreditCard, FaBriefcase } from 'react-icons/fa'
 import { BiIdCard } from 'react-icons/bi'
 import zIndex from '@material-ui/core/styles/zIndex'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { orderSummary } from '../../../apollo'
 
 // import { order } from '../../../apollo'
 import Iframe from 'react-iframe'
@@ -176,15 +175,6 @@ function Payments () {
     ))
   }
 
-<<<<<<< HEAD
-=======
-  const handleClickTetra = () => {
-    // To be implemented: Tetra payment should be automatic
-    console.log(orderSummary())
-    return null
-  }
-
->>>>>>> feature/buyer-dynamic-vendor
   const handleClickCohen = () => {
     // Go to the cohen checkout page
     return navigate('/cohen')
@@ -211,36 +201,18 @@ function Payments () {
 
   const handleClickCredit = async () => {
     // Get url and embed that url
-<<<<<<< HEAD
-    const payment = await createPayment({
-      variables: {
-        sourceId: 'cnon:card-nonce-ok',
-        orderId: order['orderId'],
-        // hard coded right now:
-        // orderId: "DQI6ReqW4BEWFkHG2KuZ3y3LHucZY",
-        // For testing:
-        // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
-        locationId: 'FMXAFFWJR95WC',
-=======
     const payment = createPayment({
       variables: {
         sourceId: 'cnon:card-nonce-ok',
         // in pr #82 orderId was changed to be included in orderSummary():
-        orderId: 'Ha6zGEo32PyBOlcnbkSuJGxjOuOZY',
+        orderId: order['orderId'],
         // locationId: "FMXAFFWJR95WC",
         // in this pr, location id was changed from being hard coded:
         locationId: orderSummary().vendor.locationIds[0],
->>>>>>> feature/buyer-dynamic-vendor
         amount: 900,
         currency: 'USD'
       }
     })
-<<<<<<< HEAD
-=======
-    // for the future, url should not be rendered
-    // renderIFrame(payment.url);
-  }
->>>>>>> feature/buyer-dynamic-vendor
 
     // 11/8: Save this url to local storage for now, later want to pass it in as a prop to
     // CreditPayment.fa-js

@@ -25,10 +25,10 @@ const Confirmation = ({ classes }) => {
   const [availability, setAvailability] = useState(true)
 
   const vendor = {
-    name: 'East West Tea',
+    name: 'Cohen House',
     message:
       '“When your order is ready, wait in the tables in Sammy’s, and we will bring your order out to you”',
-    slug: 'ewtea'
+    slug: 'cohen'
   }
   const navigate = useNavigate()
   const handleMenuClick = () => {
@@ -102,7 +102,11 @@ const Confirmation = ({ classes }) => {
       <div className='mainDiv'>
         <FailureSVG className='checkSvg' />
         <div>
-          <p className='orderConfirmed'>Order Failed</p>
+          <p className='orderConfirmed'>Oops!</p>
+          <p className='orderConfirmed'>
+            An item you ordered is not available.
+          </p>
+
           <p className='statusUpdate'>
             Please go back to your cart and make adjustments. Your order will{' '}
             <strong>not</strong> be placed at this time
@@ -145,7 +149,8 @@ const Confirmation = ({ classes }) => {
     )
   }
   if (catalogLoading) return <p>Loading...</p>
-  return <div>{availability ? renderConfirmation() : renderFailure()}</div>
+  // return <div>{availability ? renderConfirmation() : renderFailure()}</div>
+  return <div> {renderFailure()} </div>
 }
 
 export default Confirmation

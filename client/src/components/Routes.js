@@ -36,6 +36,7 @@ import Payments from '../Pages/User/Cart/Payments'
 import VendorSelect from '../Pages/Login/VendorCheck'
 import CohenPayment from '../Pages/User/Payment/CohenPayment'
 import Submit from '../Pages/User/Submit'
+import CreditPayment from '../Pages/User/Cart/CreditPayment.js'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -163,6 +164,11 @@ const newRoutesArray = [
   {
     path: '/payment',
     element: <PaymentPage />
+  },
+  // embedding url page:
+  {
+    path: '/credit',
+    element: <CreditPayment />
   },
 
   {

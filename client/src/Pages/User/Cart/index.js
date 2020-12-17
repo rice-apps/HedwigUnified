@@ -19,16 +19,24 @@ import BottomAppBar from "./../Vendors/BottomAppBar.js";
 import CartHeader from "./CartHeader";
 
 // new dropdown imports:
-import createActivityDetector from 'activity-detector';
-import Modal from 'react-modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AiOutlineExclamationCircle } from 'react-icons/ai'
+import createActivityDetector from "activity-detector";
+import Modal from "react-modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 // import 'react-dropdown/style.css';
 
 const styles = {
   fontSize: 14,
   color: "blue",
 };
+
+import BuyerHeader from "./../Vendors/BuyerHeader.js";
+
+const GET_AVAILABILITIES = gql`
+  query GET_AVAILABILITIES($productIds: [String!]) {
+    getAvailabilities(productIds: $productIds)
+  }
+`;
 
 const defaultTotals = {
   subtotal: 0,
@@ -127,14 +135,18 @@ function calculateNextHours(
   return timeIntervals;
 }
 
-function useIdle(options){
+function useIdle(options) {
   const [isIdle, setIsIdle] = useState(false);
-  useEffect(()=>{
+  useEffect(() => {
     const activityDetector = createActivityDetector(options);
-    activityDetector.on('idle', ()=>{setIsIdle(true)});
+    activityDetector.on("idle", () => {
+      setIsIdle(true);
+    });
     // activityDetector.on('active', ()=>{setIsIdle(false)});
-    return ()=>{activityDetector.stop()}
-  }, [])
+    return () => {
+      activityDetector.stop();
+    };
+  }, []);
   return isIdle;
 }
 
@@ -144,6 +156,11 @@ function CartDetail() {
 
   // Add payment method picker:
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
+  // from master:
+  const [nullError, setNullError] = useState(checkNullFields());
+  // eval to a field string if user's name, student id, or phone number is null
+  const { loading, error, data } = useQuery(GET_VENDOR);
+
   // const options = ["Credit Card", "Tetra", "Cohen House"];
   const options = [
     { value: "Credit Card", label: "Credit Card" },
@@ -167,42 +184,86 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({timeToIdle:3000, inactivityEvents:[]});
+  const isIdle = useIdle({ timeToIdle: 3000, inactivityEvents: [] });
+
+  const product_ids = cart_menu.map((item) => {
+    return item.dataSourceId;
+  });
+  console.log("Product IDs", product_ids);
+
+  const {
+    loading: avail_loading,
+    error: avail_error,
+    data: avail_data,
+    refetch: avail_refetch,
+  } = useQuery(GET_AVAILABILITIES, {
+    variables: { productIds: product_ids },
+    fetchPolicy: "network-only",
+  });
+
+  /*
+  useEffect(() => {
+    if(avail_called){
+      avail_refetch()
+    }
+    else {
+      getAvailabilities()
+    }
+  }, [cart_menu])
+  */
 
   const handleConfirmClick = async () => {
-    const q = {
-      variables: createRecord(cart_menu),
-    };
-    const orderResponse = await createOrder(q);
-    const orderJson = orderResponse.data.createOrder;
-    const createPaymentResponse = await createPayment({
-      variables: {
-        // new:
-        sourceId: "cnon:card-nonce-ok",
-        orderId: orderJson.id,
-        // new: (locationId is not hardcoded on another branch)
-        locationId: "FMXAFFWJR95WC",
-        subtotal: totals.subtotal * 100,
-        currency: "USD",
-      },
-    });
+    const newRes = await avail_refetch();
+    while (newRes.loading) {}
+    console.log("errors: ", avail_error);
+    console.log("cart_menu:", cart_menu);
+    console.log("availability", newRes.data);
+    if (newRes.data.getAvailabilities === false) {
+      return navigate("/eat/cohen/confirmation");
+    } else {
+      const q = {
+        variables: createRecord(cart_menu),
+      };
+      const orderResponse = await createOrder(q);
+      const orderJson = orderResponse.data.createOrder;
+      const createPaymentResponse = await createPayment({
+        variables: {
+          // new:
+          sourceId: "cnon:card-nonce-ok",
+          orderId: orderJson.id,
+          // new: (locationId is not hardcoded on another branch)
+          locationId: "FMXAFFWJR95WC",
+          subtotal: totals.subtotal * 100,
+          currency: "USD",
+        },
+      });
 
-    if (paymentMethod === "Credit") {
-      // navigate to Almost there page
-      console.log("The payment type is credit card.");
+      if (paymentMethod === "Credit") {
+        // navigate to Almost there page
+        console.log("The payment type is credit card.");
+      }
+      if (paymentMethod === "Cohen House") {
+        // get cohen id from order summary
+        // navigate to order confirmation page
+        console.log("The payment type is through Cohen House.");
+      }
+      if (paymentMethod === "Tetra") {
+        // store student id?
+        // navigate to order confirmation page
+        console.log("The payment type is through Tetra.");
+      }
+      orderSummary(
+        Object.assign(orderSummary(), {
+          orderId: orderJson.id,
+          fulfillment: {
+            uid: orderJson.fulfillment.uid,
+            state: orderJson.fulfillment.state,
+          },
+        })
+      );
+      console.log(orderSummary());
+      return navigate(`/eat/cohen/payment`);
     }
-    if (paymentMethod === "Cohen House") {
-      // get cohen id from order summary
-      // navigate to order confirmation page
-      console.log("The payment type is through Cohen House.");
-    }
-    if (paymentMethod === "Tetra") {
-      // store student id?
-      // navigate to order confirmation page
-      console.log("The payment type is through Tetra.");
-    }
-
-    return navigate("/eat/cohen/payment");
   };
 
   const updateTotal = () => {
@@ -242,6 +303,10 @@ function CartDetail() {
   if (payment_error) {
     return <p>{payment_error.message}</p>;
   }
+
+  if (avail_loading) return <p>'Loading availabilities...'</p>;
+  if (avail_error & (cart_menu.length != 0))
+    return <p>`Error! ${avail_error.message}`</p>;
 
   const currDate = new Date();
   const currDay = currDate.getDay();
@@ -312,7 +377,7 @@ function CartDetail() {
   return (
     <div>
       <CartHeader showBackButton backLink="/eat" />
-      <div className={isIdle ? "float-cart__disabled": "float-cart"}>
+      <div className={isIdle ? "float-cart__disabled" : "float-cart"}>
         <div className="float-cart__content">
           <div className="float-cart__shelf-container">
             <p className="cart-title" style={{ marginTop: "30px" }}>
@@ -359,7 +424,9 @@ function CartDetail() {
           <Select
             options={pickupTimes}
             placeholder={"Select a pickup time"}
-            onChange={(e)=>{setPickupTime(e.value)}}
+            onChange={(e) => {
+              setPickupTime(e.value);
+            }}
             clearable={false}
             style={styles.select}
             className="float-cart__dropdown"
@@ -376,8 +443,18 @@ function CartDetail() {
             className="float-cart__dropdown"
           />
           <div>
-            <p className="float-cart__payment-message">Please enter payment details on the following screen.</p>
+            <p className="float-cart__payment-message">
+              Please enter payment details on the following screen.
+            </p>
           </div>
+
+          {nullError != null && (
+            <p css={{ alignSelf: "center", color: "red" }}>
+              {" "}
+              Error! Submission form contains null value for {nullError}. Please
+              update your profile.{" "}
+            </p>
+          )}
 
           <div className="float-cart__footer">
             <button
@@ -396,25 +473,41 @@ function CartDetail() {
         isOpen={isIdle}
         style={{
           content: {
-            backgroundColor: 'white',
-            height: '44vh',
-            width: '50vw',
-            position: 'absolute',
-            top: '28%',
-            left: '26%',
-            borderRadius: '20px',
-            fontFamily: 'Futura',
-            textAlign: 'center'
+            backgroundColor: "white",
+            height: "44vh",
+            width: "50vw",
+            position: "absolute",
+            top: "28%",
+            left: "26%",
+            borderRadius: "20px",
+            fontFamily: "Futura",
+            textAlign: "center",
           },
           overlay: {
-            zIndex: '10'
-          }
+            zIndex: "10",
+          },
         }}
       >
-      <AiOutlineExclamationCircle style={{fontSize:'100px'}}/>
-      <p style={{marginLeft:'0px'}}>Your session has expired due to inactivity.</p>
-      <button className="modal-btn" onClick={()=>{window.location.reload(false)}}>Refresh Page</button>
-      <button className="modal-btn" onClick={()=>{navigate("/eat")}}>Home Page</button>
+        <AiOutlineExclamationCircle style={{ fontSize: "100px" }} />
+        <p style={{ marginLeft: "0px" }}>
+          Your session has expired due to inactivity.
+        </p>
+        <button
+          className="modal-btn"
+          onClick={() => {
+            window.location.reload(false);
+          }}
+        >
+          Refresh Page
+        </button>
+        <button
+          className="modal-btn"
+          onClick={() => {
+            navigate("/eat");
+          }}
+        >
+          Home Page
+        </button>
       </Modal>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Component, useState } from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
+import { orderSummary, userProfile } from '../../../apollo'
 import Button from '@material-ui/core/Button'
 import styled, { css } from 'styled-components'
 // import visa from 'payment-icons/min/flat/visa.svg';
@@ -23,11 +24,12 @@ const CREATE_PAYMENT = gql`
   ) {
     createPayment(
       record: {
-        source: SQUARE
+        source: SHOPIFY
         sourceId: $sourceId
         orderId: $orderId
         locationId: $locationId
         subtotal: { amount: $amount, currency: $currency }
+        tip: { amount: 0, currency: $currency }
       }
     ) {
       id
@@ -36,6 +38,27 @@ const CREATE_PAYMENT = gql`
         currency
       }
       url
+    }
+  }
+`
+
+const UPDATE_ORDER = gql`
+  mutation(
+    $studentId: String!
+    $orderId: String!
+    $uid: String!
+    $state: FulFillmentStatusEnum!
+  ) {
+    updateOrder(
+      orderId: $orderId
+      record: {
+        studentId: $studentId
+        fulfillment: { uid: $uid, state: $state }
+      }
+    ) {
+      fulfillment {
+        state
+      }
     }
   }
 `
@@ -152,45 +175,83 @@ function Payments () {
     ))
   }
 
-  const handleClickTetra = () => {
-    // To be implemented: Tetra payment should be automatic
-    return null
-  }
-
   const handleClickCohen = () => {
     // Go to the cohen checkout page
     return navigate('/cohen')
   }
 
   // Credit card payment mutation:
-  const [createPayment, { data, loading, error }] = useMutation(CREATE_PAYMENT)
+  const [createPayment, { data: data, loading, error }] = useMutation(
+    CREATE_PAYMENT
+  )
 
-  const handleClickCredit = () => {
+  const [
+    updateOrder,
+    { data: orderData, loading: orderLoading, error: orderError }
+  ] = useMutation(UPDATE_ORDER)
+
+  if (loading) return <p>'Loading vendor's business hour ...'</p>
+  if (error) return <p>`Error! ${error.message}`</p>
+
+  if (orderLoading) return <p>Loading...</p>
+  if (orderError) {
+    return <p>{orderError.message}</p>
+  }
+  const order = orderSummary()
+
+  const handleClickCredit = async () => {
     // Get url and embed that url
-    createPayment({
+    const payment = createPayment({
       variables: {
         sourceId: 'cnon:card-nonce-ok',
-        orderId: /* order()[0] */ 'Ha6zGEo32PyBOlcnbkSuJGxjOuOZY',
-        locationId: 'FMXAFFWJR95WC',
+        // in pr #82 orderId was changed to be included in orderSummary():
+        orderId: order['orderId'],
+        // locationId: "FMXAFFWJR95WC",
+        // in this pr, location id was changed from being hard coded:
+        locationId: orderSummary().vendor.locationIds[0],
         amount: 900,
         currency: 'USD'
       }
     })
-      .then(renderIFrame(data.url))
-      .catch(err => <Navigate to='/payment' />)
-  }
 
-  const renderIFrame = urlInput => {
-    console.log(urlInput)
-    return (
-      <Iframe
-        url={urlInput}
-        position='absolute'
-        width='100%'
-        height='100%'
-        styles={{ height: '25px' }}
-      />
+    // 11/8: Save this url to local storage for now, later want to pass it in as a prop to
+    // CreditPayment.fa-js
+
+    localStorage.setItem('url', payment.data.createPayment.url)
+    orderSummary(
+      Object.assign(orderSummary(), {
+        url: payment.data.createPayment.url
+      })
     )
+
+    // 11/14: iframe url not working correctly
+    // return navigate('/credit', { state: payment.data.createPayment.url });
+    return orderSummary()['url']
+    // Previously used to call this function:
+    // renderIFrame(data.createPayment.url)
+  }
+  const handleClickTetra = () => {
+    // To be implemented: Tetra payment should be automatic
+    console.log(userProfile())
+    console.log({
+      orderId: order['orderId'],
+      // For testing:
+      // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
+      studentId: userProfile()['studentId'],
+      uid: order.fulfillment.uid,
+      state: order.fulfillment.state
+    })
+    updateOrder({
+      variables: {
+        orderId: order['orderId'],
+        // For testing:
+        // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
+        studentId: userProfile()['studentId'],
+        uid: order.fulfillment.uid,
+        state: order.fulfillment.state
+      }
+    })
+    return navigate('/eat/submit')
   }
 
   return (
@@ -201,13 +262,14 @@ function Payments () {
         </Row>
         {renderButtons()}
       </Grid>
-      {/* when next is clicked, render the appropriate payment option process */}
+      {/* when next is clicked, render the appropriate payment option process*/}
       <Footer
-        onClick={() =>
+        onClick={async () =>
           activeButton == 0
             ? handleClickTetra()
-            : activeButton == 1
-            ? handleClickCredit()
+            : // open url in new window:
+            activeButton == 1
+            ? window.open(await handleClickCredit(), '_blank')
             : activeButton == 2
             ? handleClickCohen()
             : { undefined }

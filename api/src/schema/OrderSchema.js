@@ -3,7 +3,6 @@ import {
   CreateOrderRequest,
   SearchOrdersRequest
 } from 'square-connect'
-import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { ApolloError } from 'apollo-server-express'
 import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
 import pubsub from '../utils/pubsub'
@@ -122,7 +121,7 @@ OrderTC.addResolver({
     name: 'createOrder',
     type: OrderTC,
     args: {
-      locationId: GraphQLNonNull(GraphQLString),
+      locationId: 'String!',
       record: CreateOrderInputTC.getTypeNonNull().getType()
     },
     resolve: async ({ args }) => {
@@ -257,20 +256,20 @@ OrderTC.addResolver({
     name: 'updateOrder',
     type: OrderTC,
     args: {
-      orderId: GraphQLNonNull(GraphQLString),
+      orderId: 'String!',
       record: UpdateOrderTC.getType()
     },
     resolve: async ({ args }) => {
       const {
         orderId,
-        record: { orderStatus, fulfillment }
+        record: { orderStatus, cohenId, studentId, fulfillment }
       } = args
 
       const updatedOrderTracker = await OrderTracker.findOne({
         orderId: orderId
       })
 
-      updatedOrderTracker.status = fulfillment
+      updatedOrderTracker.status = fulfillment.state
 
       await updatedOrderTracker.save()
 
@@ -324,8 +323,8 @@ OrderTC.addResolver({
         totalDiscount: total_discount_money,
         total: total_money,
         orderStatus: state,
-        cohenId: updateOrderResponse.order.metadata?.cohenId,
-        studentId: updateOrderResponse.order.metadata?.studentId,
+        cohenId: cohenId,
+        studentId: studentId,
         fulfillment: {
           uid: first.uid,
           state: updatedOrderTracker.status,

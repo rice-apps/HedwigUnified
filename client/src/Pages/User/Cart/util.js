@@ -52,6 +52,10 @@ export const CREATE_ORDER = gql`
       customer {
         name
       }
+      fulfillment {
+        uid
+        state
+      }
       items {
         name
         quantity
@@ -125,4 +129,15 @@ export const createRecord = items => {
     email: recipient.email,
     time: orderSummary().time.format()
   }
+}
+
+export const checkNullFields = () => {
+  const fields = ['first name', 'last name', 'phone', 'id']
+  let field
+  for (field of fields) {
+    if (sStorage.getItem(field) == '') {
+      return field
+    }
+  }
+  return null
 }

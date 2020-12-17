@@ -15,12 +15,10 @@ import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 
 import { makeVar } from '@apollo/client'
 
-console.log(GRAPHQL_URL)
-console.log(GRAPHQL_WS_URL)
-console.log(SERVICE_URL)
-
 export const cartItems = makeVar([])
-export const orderSummary = makeVar([])
+// export const orderSummary = makeVar({vendor: null})
+export const orderSummary = makeVar({ vendor: null, time: null })
+
 export const userProfile = makeVar([])
 
 // Wraps our requests with a token if one exists
@@ -64,7 +62,7 @@ const splitLink = split(
 )
 
 // Setup cache
-const cache = new InMemoryCache()
+export const cache = new InMemoryCache()
 
 // Initialize Client
 export const client = new ApolloClient({
@@ -78,7 +76,7 @@ export const client = new ApolloClient({
             }
           }
         }
-      },
+      }
     }
   }),
   link: authLink.concat(splitLink)

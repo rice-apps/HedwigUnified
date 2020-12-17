@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import logo from '../../../images/tealogo.png'
-import '../Cart/cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import currency from 'currency.js'
 import { cartItems, orderSummary, userProfile } from '../../../apollo'
@@ -11,6 +10,7 @@ import dispatch from '../Products/FunctionalCart'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
+import '../Cart/cart.scss'
 
 function Submit () {
   const navigate = useNavigate()
@@ -61,7 +61,7 @@ function Submit () {
           <h1 className='header'>Bill Details</h1>
           {Object.keys(totals).map(type => {
             if (totals[type]) {
-              const formatted = currency(totals[type]).format()
+              let formatted = currency(totals[type]).format()
               return (
                 <div className='subtotal-container'>
                   <p className='subheader'>{type}</p>

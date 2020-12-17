@@ -17,7 +17,8 @@ const OrderTrackerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Users',
     required: false
-  }
+  },
+  shopifyOrderId: { type: String, required: false }
 })
 
 const OrderTracker = model('OrderTracker', OrderTrackerSchema)

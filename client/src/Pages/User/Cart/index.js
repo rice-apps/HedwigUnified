@@ -2,7 +2,13 @@ import { css, jsx } from "@emotion/react";
 import { Fragment, useEffect, useState } from "react";
 import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
-import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from "./util";
+import {
+  createRecord,
+  checkNullFields,
+  CREATE_ORDER,
+  CREATE_PAYMENT,
+  GET_VENDOR,
+} from "./util";
 import logo from "../../../images/cohenhouse.png";
 import "./cart.scss";
 import { centerCenter, row, column, endStart } from "../../../Styles/flex";
@@ -17,6 +23,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import BottomAppBar from "./../Vendors/BottomAppBar.js";
 import CartHeader from "./CartHeader";
+// import BuyerHeader from "./../Vendors/BuyerHeader.js";
 
 // new dropdown imports:
 import createActivityDetector from "activity-detector";
@@ -29,8 +36,6 @@ const styles = {
   fontSize: 14,
   color: "blue",
 };
-
-import BuyerHeader from "./../Vendors/BuyerHeader.js";
 
 const GET_AVAILABILITIES = gql`
   query GET_AVAILABILITIES($productIds: [String!]) {
@@ -159,7 +164,7 @@ function CartDetail() {
   // from master:
   const [nullError, setNullError] = useState(checkNullFields());
   // eval to a field string if user's name, student id, or phone number is null
-  const { loading, error, data } = useQuery(GET_VENDOR);
+  // const { loading, error, data } = useQuery(GET_VENDOR);
 
   // const options = ["Credit Card", "Tetra", "Cohen House"];
   const options = [
@@ -211,6 +216,26 @@ function CartDetail() {
     }
   }, [cart_menu])
   */
+  const handleClickCredit = async () => {
+    // Get url and embed that url
+    const payment = createPayment({
+      variables: {
+        sourceId: "cnon:card-nonce-ok",
+        orderId: orderSummary()["orderId"],
+        locationId: orderSummary().vendor.locationIds[0],
+        amount: 900,
+        currency: "USD",
+      },
+    });
+
+    localStorage.setItem("url", payment.data.createPayment.url);
+    orderSummary(
+      Object.assign(orderSummary(), {
+        url: payment.data.createPayment.url,
+      })
+    );
+    return orderSummary()["url"];
+  };
 
   const handleConfirmClick = async () => {
     const newRes = await avail_refetch();
@@ -241,16 +266,19 @@ function CartDetail() {
       if (paymentMethod === "Credit") {
         // navigate to Almost there page
         console.log("The payment type is credit card.");
+        window.open(await handleClickCredit(), "_blank");
       }
       if (paymentMethod === "Cohen House") {
         // get cohen id from order summary
         // navigate to order confirmation page
         console.log("The payment type is through Cohen House.");
+        return navigate("/confirmation");
       }
       if (paymentMethod === "Tetra") {
         // store student id?
         // navigate to order confirmation page
         console.log("The payment type is through Tetra.");
+        return navigate("/confirmation");
       }
       orderSummary(
         Object.assign(orderSummary(), {
@@ -310,8 +338,10 @@ function CartDetail() {
 
   const currDate = new Date();
   const currDay = currDate.getDay();
-  const currHour = currDate.getHours();
-  const currMinute = currDate.getMinutes();
+  // const currHour = currDate.getHours();
+  const currHour = "1";
+  // const currMinute = currDate.getMinutes();
+  const currMinute = "59";
 
   const {
     getVendor: { hours: businessHours },
@@ -461,7 +491,7 @@ function CartDetail() {
               disabled={cartItems().length === 0 || pickupTime === null}
               className="buy-btn"
               title="Confirm"
-              onClick={handleConfirmClick}
+              onClick={handleConfirmClick()}
             >
               Submit Order
               <div />

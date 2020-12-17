@@ -1,26 +1,25 @@
-import { gql } from '@apollo/client'
-import { orderSummary } from '../../../apollo'
-import moment from 'moment'
-const { v4: uuidv4 } = require('uuid')
-
+import { gql } from "@apollo/client";
+import { orderSummary } from "../../../apollo";
+import moment from "moment";
+const { v4: uuidv4 } = require("uuid");
 
 export const GET_VENDOR = gql`
-query GET_VENDOR($filter:FilterFindOneVendorsInput!){
-  getVendor(filter: $filter){
-    name
-    hours {
-      start
-      end
-      day
-      isClosed
-    }
-    squareInfo{
-      merchantId
-      locationIds
+  query GET_VENDOR($filter: FilterFindOneVendorsInput!) {
+    getVendor(filter: $filter) {
+      name
+      hours {
+        start
+        end
+        day
+        isClosed
+      }
+      squareInfo {
+        merchantId
+        locationIds
+      }
     }
   }
-}
-`
+`;
 
 export const CREATE_ORDER = gql`
   mutation(
@@ -65,7 +64,7 @@ export const CREATE_ORDER = gql`
       }
     }
   }
-`
+`;
 
 export const CREATE_PAYMENT = gql`
   mutation($orderId: String!, $subtotal: Int!, $currency: String!) {
@@ -86,58 +85,59 @@ export const CREATE_PAYMENT = gql`
       }
     }
   }
-`
+`;
 
-const sStorage = localStorage
+const sStorage = localStorage;
 const getRecipient = () => {
   return {
-    name: sStorage.getItem('first name') + ' ' + sStorage.getItem('last name'),
-    phone: sStorage.getItem('phone'),
-    email: sStorage.getItem('email')
-  }
-}
+    name: sStorage.getItem("first name") + " " + sStorage.getItem("last name"),
+    phone: sStorage.getItem("phone"),
+    email: sStorage.getItem("email"),
+  };
+};
 
-const getLineItems = items => {
-  const rtn = []
-  const item = null
+const getLineItems = (items) => {
+  const rtn = [];
+  const item = null;
   for (const [v, item] of Object.entries(items)) {
-    const modifierList = []
+    const modifierList = [];
     for (const [k, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
-        catalog_object_id: m.dataSourceId
-      })
+        catalog_object_id: m.dataSourceId,
+      });
     }
     const i = {
       modifiers: modifierList,
       catalog_object_id: item.variant.dataSourceId,
-      quantity: item.quantity.toString()
+      quantity: item.quantity.toString(),
       // variation_name: item.variant.name,
-    }
-    rtn.push(i)
+    };
+    rtn.push(i);
   }
-  return rtn
-}
+  return rtn;
+};
 
-export const createRecord = items => {
-  const recipient = getRecipient()
+export const createRecord = (items) => {
+  const recipient = getRecipient();
+  console.log("order summary: ", orderSummary());
   return {
-    studentId: sStorage.getItem('id'),
+    studentId: sStorage.getItem("id"),
     key: uuidv4(),
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
     email: recipient.email,
-    time: orderSummary().time.format()
-  }
-}
+    time: orderSummary().time.format(),
+  };
+};
 
 export const checkNullFields = () => {
-  const fields = ['first name', 'last name', 'phone', 'id']
-  let field
+  const fields = ["first name", "last name", "phone", "id"];
+  let field;
   for (field of fields) {
-    if (sStorage.getItem(field) == '') {
-      return field
+    if (sStorage.getItem(field) == "") {
+      return field;
     }
   }
-  return null
-}
+  return null;
+};

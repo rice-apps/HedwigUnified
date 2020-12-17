@@ -1,16 +1,16 @@
-import { Component, useState } from 'react'
-import { useQuery, gql, useMutation } from '@apollo/client'
-import { orderSummary, userProfile } from '../../../apollo'
-import Button from '@material-ui/core/Button'
-import styled, { css } from 'styled-components'
+import { Component, useState } from "react";
+import { useQuery, gql, useMutation } from "@apollo/client";
+import { orderSummary, userProfile } from "../../../apollo";
+import Button from "@material-ui/core/Button";
+import styled, { css } from "styled-components";
 // import visa from 'payment-icons/min/flat/visa.svg';
-import { FaCreditCard, FaBriefcase } from 'react-icons/fa'
-import { BiIdCard } from 'react-icons/bi'
-import zIndex from '@material-ui/core/styles/zIndex'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { FaCreditCard, FaBriefcase } from "react-icons/fa";
+import { BiIdCard } from "react-icons/bi";
+import zIndex from "@material-ui/core/styles/zIndex";
+import { useNavigate, Navigate } from "react-router-dom";
 
 // import { order } from '../../../apollo'
-import Iframe from 'react-iframe'
+import Iframe from "react-iframe";
 
 // Payment Options page + embedding Shopify url
 
@@ -40,7 +40,7 @@ const CREATE_PAYMENT = gql`
       url
     }
   }
-`
+`;
 
 const UPDATE_ORDER = gql`
   mutation(
@@ -61,31 +61,31 @@ const UPDATE_ORDER = gql`
       }
     }
   }
-`
+`;
 
 // payment options page, coehn club or credit card or tetra
-function Payments () {
-  const navigate = useNavigate()
+function Payments() {
+  const navigate = useNavigate();
 
   // The index of the button that is clicked (0, 1, or 2), if no button is clicked the index is 3
-  const [activeButton, setActiveButton] = useState(3)
+  const [activeButton, setActiveButton] = useState(3);
 
   // colors
-  const bgColors = ['white', '#cf5734']
-  const fontColors = ['#595858', 'white']
-  const fontWeights = [500, 700]
+  const bgColors = ["white", "#cf5734"];
+  const fontColors = ["#595858", "white"];
+  const fontWeights = [500, 700];
 
   const Title = styled.text`
     margin-top: 110px;
     margin-bottom: 20px;
-    font-family: 'adobe-clean', sans-serif;
+    font-family: "adobe-clean", sans-serif;
     font-size: 25px;
     color: #595858;
     font-weight: lighter;
-  `
+  `;
 
   const Button = styled.button`
-    font-family: 'Raleway', sans-serif;
+    font-family: "Raleway", sans-serif;
     border-radius: 20px;
     border-width: 1px;
     border-color: #595858;
@@ -103,15 +103,15 @@ function Payments () {
     display: grid;
     grid-template-columns: 2fr 3fr;
     grid-template-rows: 1fr;
-  `
+  `;
 
-  const Grid = styled.div``
+  const Grid = styled.div``;
 
   const Row = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 40px;
-  `
+  `;
 
   const Footer = styled.footer`
     text-align: center;
@@ -127,43 +127,43 @@ function Payments () {
     font-weight: ${activeButton !== 3 ? fontWeights[1] : fontWeights[0]};
     color: ${activeButton !== 3 ? fontColors[1] : fontColors[0]};
     background-color: ${activeButton !== 3 ? bgColors[1] : bgColors[0]};
-  `
+  `;
 
   // Changes background color of a button if its selected
-  const renderBgColor = index => {
-    return index === activeButton ? bgColors[1] : bgColors[0]
-  }
+  const renderBgColor = (index) => {
+    return index === activeButton ? bgColors[1] : bgColors[0];
+  };
 
   // Changes font color of a button if its selected
-  const renderFontColor = index => {
-    return index === activeButton ? fontColors[1] : fontColors[0]
-  }
+  const renderFontColor = (index) => {
+    return index === activeButton ? fontColors[1] : fontColors[0];
+  };
 
   // Changes weight of font if button is selected
-  const renderFontWeight = index => {
-    return index === activeButton ? fontWeights[1] : fontWeights[0]
-  }
+  const renderFontWeight = (index) => {
+    return index === activeButton ? fontWeights[1] : fontWeights[0];
+  };
 
   // Displays the payment option buttons
   const renderButtons = () => {
     const icons = [
       <BiIdCard size={48} />,
       <FaCreditCard size={37} />,
-      <FaBriefcase size={37} />
-    ]
-    const options = ['Tetra', 'Credit Card', 'Cohen Club Card']
+      <FaBriefcase size={37} />,
+    ];
+    const options = ["Tetra", "Credit Card", "Cohen Club Card"];
 
     return icons.map((icon, index) => (
       <Row>
         <Button
-          variant='outlined'
+          variant="outlined"
           onClick={() =>
             activeButton !== index ? setActiveButton(index) : setActiveButton(3)
           }
           style={{
             backgroundColor: renderBgColor(index),
             color: renderFontColor(index),
-            fontWeight: renderFontWeight(index)
+            fontWeight: renderFontWeight(index),
           }}
         >
           {icons[index]}
@@ -172,87 +172,87 @@ function Payments () {
           {/* </Text> */}
         </Button>
       </Row>
-    ))
-  }
+    ));
+  };
 
   const handleClickCohen = () => {
     // Go to the cohen checkout page
-    return navigate('/cohen')
-  }
+    return navigate("/cohen");
+  };
 
   // Credit card payment mutation:
   const [createPayment, { data: data, loading, error }] = useMutation(
     CREATE_PAYMENT
-  )
+  );
 
   const [
     updateOrder,
-    { data: orderData, loading: orderLoading, error: orderError }
-  ] = useMutation(UPDATE_ORDER)
+    { data: orderData, loading: orderLoading, error: orderError },
+  ] = useMutation(UPDATE_ORDER);
 
-  if (loading) return <p>'Loading vendor's business hour ...'</p>
-  if (error) return <p>`Error! ${error.message}`</p>
+  if (loading) return <p>'Loading vendor's business hour ...'</p>;
+  if (error) return <p>`Error! ${error.message}`</p>;
 
-  if (orderLoading) return <p>Loading...</p>
+  if (orderLoading) return <p>Loading...</p>;
   if (orderError) {
-    return <p>{orderError.message}</p>
+    return <p>{orderError.message}</p>;
   }
-  const order = orderSummary()
+  const order = orderSummary();
 
   const handleClickCredit = async () => {
     // Get url and embed that url
     const payment = createPayment({
       variables: {
-        sourceId: 'cnon:card-nonce-ok',
+        sourceId: "cnon:card-nonce-ok",
         // in pr #82 orderId was changed to be included in orderSummary():
-        orderId: order['orderId'],
+        orderId: order["orderId"],
         // locationId: "FMXAFFWJR95WC",
         // in this pr, location id was changed from being hard coded:
         locationId: orderSummary().vendor.locationIds[0],
         amount: 900,
-        currency: 'USD'
-      }
-    })
+        currency: "USD",
+      },
+    });
 
     // 11/8: Save this url to local storage for now, later want to pass it in as a prop to
     // CreditPayment.fa-js
 
-    localStorage.setItem('url', payment.data.createPayment.url)
+    localStorage.setItem("url", payment.data.createPayment.url);
     orderSummary(
       Object.assign(orderSummary(), {
-        url: payment.data.createPayment.url
+        url: payment.data.createPayment.url,
       })
-    )
+    );
 
     // 11/14: iframe url not working correctly
     // return navigate('/credit', { state: payment.data.createPayment.url });
-    return orderSummary()['url']
+    return orderSummary()["url"];
     // Previously used to call this function:
     // renderIFrame(data.createPayment.url)
-  }
+  };
   const handleClickTetra = () => {
     // To be implemented: Tetra payment should be automatic
-    console.log(userProfile())
+    console.log(userProfile());
     console.log({
-      orderId: order['orderId'],
+      orderId: order["orderId"],
       // For testing:
       // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
-      studentId: userProfile()['studentId'],
+      studentId: userProfile()["studentId"],
       uid: order.fulfillment.uid,
-      state: order.fulfillment.state
-    })
+      state: order.fulfillment.state,
+    });
     updateOrder({
       variables: {
-        orderId: order['orderId'],
+        orderId: order["orderId"],
         // For testing:
         // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
-        studentId: userProfile()['studentId'],
+        studentId: userProfile()["studentId"],
         uid: order.fulfillment.uid,
-        state: order.fulfillment.state
-      }
-    })
-    return navigate('/eat/submit')
-  }
+        state: order.fulfillment.state,
+      },
+    });
+    return navigate("/eat/submit");
+  };
 
   return (
     <div>
@@ -269,7 +269,7 @@ function Payments () {
             ? handleClickTetra()
             : // open url in new window:
             activeButton == 1
-            ? window.open(await handleClickCredit(), '_blank')
+            ? window.open(await handleClickCredit(), "_blank")
             : activeButton == 2
             ? handleClickCohen()
             : { undefined }
@@ -278,7 +278,7 @@ function Payments () {
         Next
       </Footer>
     </div>
-  )
+  );
 }
 
-export default Payments
+export default Payments;

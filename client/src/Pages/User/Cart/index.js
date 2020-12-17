@@ -2,7 +2,7 @@ import { css, jsx } from "@emotion/react";
 import { Fragment, useEffect, useState } from "react";
 import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
-import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from "./util";
+import { createRecord, CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR, UPDATE_ORDER_TRACKER } from "./util";
 import logo from "../../../images/cohenhouse.png";
 import "./cart.scss";
 import { centerCenter, row, column, endStart } from "../../../Styles/flex";
@@ -146,9 +146,9 @@ function CartDetail() {
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   // const options = ["Credit Card", "Tetra", "Cohen House"];
   const options = [
-    { value: "Credit Card", label: "Credit Card" },
-    { value: "Tetra", label: "Tetra" },
-    { value: "Cohen House", label: "Cohen House" },
+    { value: "CREDIT", label: "Credit Card" },
+    { value: "TETRA", label: "Tetra" },
+    { value: "COHEN", label: "Cohen House" },
   ];
   // const defaultPaymentOption = options[0];
 
@@ -163,6 +163,10 @@ function CartDetail() {
     createPayment,
     { loading: payment_loading, error: payment_error, data: payment_data },
   ] = useMutation(CREATE_PAYMENT);
+  const [
+    updateOrderTracker,
+    { loading: ordertracker_loading, error: ordertracker_error, data: ordertracker_data },
+  ] = useMutation(UPDATE_ORDER_TRACKER)
 
   const navigate = useNavigate();
   const cart_menu = cartItems();
@@ -186,17 +190,25 @@ function CartDetail() {
         currency: "USD",
       },
     });
+    const updateOrderTrackerResponse = await updateOrderTracker({
+      variables: {
+        paymentId: paymentMethod,
+        orderId: orderJson.id
+      }
+    });
 
-    if (paymentMethod === "Credit") {
+
+
+    if (paymentMethod === "CREDIT") {
       // navigate to Almost there page
       console.log("The payment type is credit card.");
     }
-    if (paymentMethod === "Cohen House") {
+    if (paymentMethod === "COHEN") {
       // get cohen id from order summary
       // navigate to order confirmation page
       console.log("The payment type is through Cohen House.");
     }
-    if (paymentMethod === "Tetra") {
+    if (paymentMethod === "TETRA") {
       // store student id?
       // navigate to order confirmation page
       console.log("The payment type is through Tetra.");
@@ -242,14 +254,15 @@ function CartDetail() {
   if (payment_error) {
     return <p>{payment_error.message}</p>;
   }
+  if (ordertracker_loading) return <p>Loading...</p>;
+  if (ordertracker_error) {
+    return <p>{ordertracker_error.message}</p>;
+  }
 
   const currDate = new Date();
   const currDay = currDate.getDay();
-  // const currHour = currDate.getHours();
-  // const currMinute = currDate.getMinutes();
-  // testing:
-  const currHour = 12;
-  const currMinute = 0;
+  const currHour = currDate.getHours();
+  const currMinute = currDate.getMinutes();
 
 
   const {

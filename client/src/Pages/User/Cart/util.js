@@ -88,6 +88,21 @@ export const CREATE_PAYMENT = gql`
   }
 `
 
+export const UPDATE_ORDER_TRACKER = gql`
+  mutation($paymentType: String!, $orderId: String!) {
+    updateOrderTracker(
+      record: {
+        paymentType: $paymentType
+      },
+      filter: {
+        orderId: $orderId
+      }
+    ) {
+      recrodId
+    }
+  }
+`
+
 const sStorage = localStorage
 const getRecipient = () => {
   return {

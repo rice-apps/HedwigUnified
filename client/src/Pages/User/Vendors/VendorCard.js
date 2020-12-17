@@ -46,14 +46,24 @@ function VendorCard ({ vendor }) {
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
+    else if (dayObj.isClosed) return true
     const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-    const startTime = convertTimeToNum(dayObj.start[0])
-    const endTime = convertTimeToNum(dayObj.end[0])
-    return currentTime <= startTime || currentTime >= endTime
+    const startTimes = dayObj.start.map((time)=>{
+      return convertTimeToNum(time)
+    })
+    const endTimes = dayObj.end.map((time)=>{
+      return convertTimeToNum(time)
+    })
+    for(let i=0; i<startTimes.length; i++){
+      if(currentTime >= startTimes[i] && currentTime <= endTimes[i]){
+        return true
+      }
+    }
+    return false
   }
 
-  const closed = determineIfClosed(current_date, dayObj)
-
+  //const closed = determineIfClosed(current_date, dayObj)
+  const closed = false
   return (
     <>
       <div className='vendorContainer' onClick={() => handleClick()}>

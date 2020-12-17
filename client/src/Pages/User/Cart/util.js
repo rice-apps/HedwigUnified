@@ -1,23 +1,25 @@
 import { gql } from '@apollo/client'
 import { orderSummary } from '../../../apollo'
-import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
+const { v4: uuidv4 } = require('uuid')
+
 
 export const GET_VENDOR = gql`
-  query {
-    getVendors {
-      name
-      hours {
-        day
-        start
-        end
-      }
-      squareInfo {
-        merchantId
-        locationIds
-      }
+query GET_VENDOR($filter:FilterFindOneVendorsInput!){
+  getVendor(filter: $filter){
+    name
+    hours {
+      start
+      end
+      day
+      isClosed
+    }
+    squareInfo{
+      merchantId
+      locationIds
     }
   }
+}
 `
 
 export const CREATE_ORDER = gql`

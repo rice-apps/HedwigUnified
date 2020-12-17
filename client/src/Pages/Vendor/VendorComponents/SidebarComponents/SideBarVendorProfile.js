@@ -31,15 +31,15 @@ const GET_VENDOR_DATA = gql`
   }
 `
 const GET_USER = gql`
-query getUser($token: String!){
-  userOne(filter: {token: $token}){
-    name
-    netid
-    token
-    vendor
-    _id
+  query getUser($token: String!) {
+    userOne(filter: { token: $token }) {
+      name
+      netid
+      token
+      vendor
+      _id
+    }
   }
-}
 `
 const UPDATE_VENDOR_AVAILABILITY = gql`
   mutation UPDATE_VENDOR_AVAILABILITY(
@@ -56,33 +56,36 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
 const SideBarVendorProfileWrapper = styled.div``
 // const merchantId = '5f836204280dd576b7e828ad'
 
-function SideBarVendorProfile ({setLogo}) {
-  const token = localStorage.getItem("token");
-  const [vendorName, setVendorName] = useState("");
+function SideBarVendorProfile ({ setLogo }) {
+  const token = localStorage.getItem('token')
+  const [vendorName, setVendorName] = useState('')
 
   const [vendorAvailability, { error }] = useMutation(
     UPDATE_VENDOR_AVAILABILITY
   )
 
   // query to get the vendor... is it worth to cache the vendor merchant ID?
-  const { data: userData, loading: userLoading, error: userError } = useQuery(GET_USER, {
-    variables: { token: token }
-  })
+  const { data: userData, loading: userLoading, error: userError } = useQuery(
+    GET_USER,
+    {
+      variables: { token: token }
+    }
+  )
 
   const { data, loading, error: queryError } = useQuery(GET_VENDOR_DATA, {
     variables: { name: vendorName }
   })
 
   useEffect(() => {
-    setVendorName(userData?.userOne.vendor);
-  }, [userData]);
-  
+    setVendorName(userData?.userOne.vendor)
+  }, [userData])
+
   if (error || queryError || userError) {
     return <p>Error</p>
   }
   if (loading || userLoading) return <p>Waiting...</p>
 
-  setLogo(data.getVendor.logoUrl);
+  setLogo(data.getVendor.logoUrl)
 
   return (
     <div>
@@ -93,7 +96,10 @@ function SideBarVendorProfile ({setLogo}) {
           // checked={data.getVendor.isOpen}
           onChange={e =>
             vendorAvailability({
-              variables: { isOpen: e.target.checked, merchantId: data.getVendor._id }
+              variables: {
+                isOpen: e.target.checked,
+                merchantId: data.getVendor._id
+              }
             })
           }
         />

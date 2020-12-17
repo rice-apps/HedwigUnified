@@ -182,7 +182,7 @@ const ORDER_UPDATED = gql`
 
 function OrderDashboard () {
   const vendorId = ['FMXAFFWJR95WC']
-  const userData = userProfile();
+  const userData = userProfile()
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,

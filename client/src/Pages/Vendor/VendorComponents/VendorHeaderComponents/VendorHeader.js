@@ -84,8 +84,13 @@ const showLogout = false
 
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
-  const name = Object.assign({}, {first: localStorage.getItem("first name"),
-                                last: localStorage.getItem("last name")});
+  const name = Object.assign(
+    {},
+    {
+      first: localStorage.getItem('first name'),
+      last: localStorage.getItem('last name')
+    }
+  )
   // const userData = userProfile();
   // console.log("DATA", userData);
 
@@ -134,7 +139,7 @@ function VendorHeader () {
     <IconContext.Provider value={{ style: { marginRight: '7px' } }}>
       <VendorHeaderWrapper>
         <StyledUserDisplayWrapper onClick={toggleLogoutScreen}>
-          <UserText>{name.first + " " + name.last}</UserText>
+          <UserText>{name.first + ' ' + name.last}</UserText>
           <FaUserCircle style={{ fontSize: '30px', marginLeft: '1vw' }} />
         </StyledUserDisplayWrapper>
 

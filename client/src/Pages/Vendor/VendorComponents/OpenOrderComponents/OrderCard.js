@@ -305,7 +305,7 @@ function MakeModalParagraph(props) {
         </div>
       </ModalParagraphWrapper>
     );
-  } else if (paymentType === undefined || "CREDIT") {
+  } else if (paymentType === "CREDIT") {
     return (
       <ModalParagraphWrapper>
         <div>

@@ -125,7 +125,6 @@ PaymentTC.addResolver({
           const unitProduct = await shopifyClient.product.fetchByHandle(
             'unit-product'
           )
-
           const createCheckoutMutation = shopifyClient.graphQLClient.mutation(
             root => {
               root.add(
@@ -160,7 +159,6 @@ PaymentTC.addResolver({
           const checkout = await shopifyClient.graphQLClient.send(
             createCheckoutMutation
           )
-
           response = {
             id: checkout.data.checkoutCreate.checkout.id,
             total: subtotal,
@@ -168,9 +166,12 @@ PaymentTC.addResolver({
             source
           }
 
+          // I changed shopifyOrderId: checkout.data.checkoutCreate.checkout.order.id
+          // to the code below to make createPayment work
+          // not sure if this is correct !!! --- Lorraine
           OrderTracker.findOneAndUpdate(
             { orderId: orderId },
-            { shopifyOrderId: checkout.data.checkoutCreate.checkout.order.id }
+            { shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
           )
 
           break
@@ -420,7 +421,8 @@ PaymentTC.addResolver({
   })
 
 const PaymentQueries = {
-  fetchPayments: PaymentTC.getResolver('fetchPayments')
+  fetchPayments: PaymentTC.getResolver('fetchPayments'),
+  verifyPayment: PaymentTC.getResolver('verifyPayment')
 }
 
 const PaymentMutations = {

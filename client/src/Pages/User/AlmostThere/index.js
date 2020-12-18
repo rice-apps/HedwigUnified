@@ -94,7 +94,11 @@ const AlmostThere = ({ classes }) => {
     return navigate(`/eat`)
   }
 
-  console.log(orderSummary()['orderId']);
+  console.log(orderSummary());
+  const order = orderSummary();
+  const handlePayment = () => {
+    window.open(order.url)
+  }
   
     return (
       <div className='mainDiv'>
@@ -107,13 +111,13 @@ const AlmostThere = ({ classes }) => {
           </P>
         </div>
         <Div> 
-          <Button primary onClick={handleHomeClick}>
+          <Button primary onClick={handlePayment}>
             Enter Payment Details
           </Button>
         </Div>
         <Div vendorCard>
           <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
-          <P header>Vendor's name</P>
+          <P header>{order.vendor.name}</P>
           <P header>Pick Up Instruction:</P>
           <P pickup>msg</P>
         </Div>

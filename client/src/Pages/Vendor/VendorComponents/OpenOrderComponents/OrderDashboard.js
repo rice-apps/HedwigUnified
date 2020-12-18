@@ -12,6 +12,7 @@ import {
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
+import { userProfile } from '../../../../apollo'
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -181,6 +182,8 @@ const ORDER_UPDATED = gql`
 
 function OrderDashboard () {
   const vendorId = ['FMXAFFWJR95WC']
+  const userData = userProfile()
+
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
@@ -220,9 +223,6 @@ function OrderDashboard () {
           return prev
         }
 
-        console.log(prev)
-        console.log(subscriptionData)
-
         const newOrderItem = subscriptionData.data.orderCreated
         return Object.assign({}, prev, {
           findOrders: {
@@ -248,8 +248,6 @@ function OrderDashboard () {
   if (error) {
     return <p>Error...</p>
   }
-  console.log(allOrders)
-  console.log(allOrders.orders)
 
   const handleOrderClick = (order, orderState) => {
     updateOrder({

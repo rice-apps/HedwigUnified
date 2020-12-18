@@ -201,15 +201,14 @@ function Payments () {
 
   const handleClickCredit = async () => {
     // Get url and embed that url
-    const payment = await createPayment({
+    const payment = createPayment({
       variables: {
         sourceId: 'cnon:card-nonce-ok',
+        // in pr #82 orderId was changed to be included in orderSummary():
         orderId: order['orderId'],
-        // hard coded right now:
-        // orderId: "DQI6ReqW4BEWFkHG2KuZ3y3LHucZY",
-        // For testing:
-        // orderId: "NdQueMldCtknK2vMKsxUL01daxAZY",
-        locationId: 'FMXAFFWJR95WC',
+        // locationId: "FMXAFFWJR95WC",
+        // in this pr, location id was changed from being hard coded:
+        locationId: orderSummary().vendor.locationIds[0],
         amount: 900,
         currency: 'USD'
       }

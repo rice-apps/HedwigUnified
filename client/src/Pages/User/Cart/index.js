@@ -9,7 +9,6 @@ import {
   GET_VENDOR
 } from './util'
 import logo from '../../../images/cohenhouse.png'
-import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import Payments from './Payments.js'
@@ -22,6 +21,7 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
+import './cart.scss'
 
 const GET_AVAILABILITIES = gql`
   query GET_AVAILABILITIES($productIds: [String!]) {
@@ -127,33 +127,35 @@ function CartDetail () {
   const handleConfirmClick = async () => {
     const newRes = await avail_refetch()
     while (newRes.loading) {}
-    console.log('errors: ', avail_error)
-    console.log('cart_menu:', cart_menu)
-    console.log('availability', newRes.data)
     if (newRes.data.getAvailabilities === false) {
       return navigate('/eat/cohen/confirmation')
     } else {
       const q = {
         variables: createRecord(cart_menu)
       }
-
       const orderResponse = await createOrder(q)
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
           orderId: orderJson.id,
           subtotal: totals.subtotal * 100,
-          currency: 'USD'
+          currency: 'USD',
+          location: orderSummary()['vendor']['locationIds'][0]
         }
       })
+      console.log(createPaymentResponse);
       orderSummary(
         Object.assign(orderSummary(), {
           orderId: orderJson.id,
           fulfillment: {
             uid: orderJson.fulfillment.uid,
-            state: orderJson.fulfillment.state
-          }
-        })
+            state: orderJson.fulfillment.state,
+            pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
+            placedAt: orderJson.fulfillment.pickupDetails.placedAt
+          },
+          url: createPaymentResponse.data.createPayment.url
+        }
+          )
       )
       console.log(orderSummary())
       return navigate(`/eat/almostThere`)
@@ -258,7 +260,10 @@ function CartDetail () {
                 if (e) {
                   document.getElementsByClassName('buy-btn')[0].disabled = false
                   setPickupTime({ hour: e.hour(), minute: e.minute() })
-                  orderSummary({ time: e })
+                  // orderSummary({ time: e });
+                  Object.assign(orderSummary(), {
+                    time: e
+                  })
                 }
               }}
               showNow={false}

@@ -98,7 +98,7 @@ export const UPDATE_ORDER_TRACKER = gql`
         orderId: $orderId
       }
     ) {
-      recrodId
+      recordId
     }
   }
 `

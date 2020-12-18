@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import styled from 'styled-components'
+import { useEffect } from "react";
+import styled from "styled-components";
 import {
   OrderDashboardWrapper,
   NewOrderTitleWrapper,
@@ -8,11 +8,11 @@ import {
   NewOrderSpaceWrapper,
   AcceptedOrderSpaceWrapper,
   ReadyOrderSpaceWrapper,
-  MakeDashboardTitle
-} from './DashboardComponents.js'
-import OrderCard from './OrderCard.js'
-import { gql, useQuery, useMutation } from '@apollo/client'
-import { userProfile } from '../../../../apollo'
+  MakeDashboardTitle,
+} from "./DashboardComponents.js";
+import OrderCard from "./OrderCard.js";
+import { gql, useQuery, useMutation } from "@apollo/client";
+import { userProfile } from "../../../../apollo";
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -63,7 +63,7 @@ const FIND_ORDERS = gql`
       }
     }
   }
-`
+`;
 const UPDATE_ORDER = gql`
   mutation UPDATE_ORDER(
     $orderId: String!
@@ -80,7 +80,7 @@ const UPDATE_ORDER = gql`
       }
     }
   }
-`
+`;
 
 const ORDER_CREATED = gql`
   subscription {
@@ -129,7 +129,7 @@ const ORDER_CREATED = gql`
       }
     }
   }
-`
+`;
 
 const ORDER_UPDATED = gql`
   subscription {
@@ -178,75 +178,75 @@ const ORDER_UPDATED = gql`
       }
     }
   }
-`
+`;
 
-function OrderDashboard () {
-  const vendorId = ['FMXAFFWJR95WC']
-  const userData = userProfile()
+function OrderDashboard() {
+  const vendorId = ["FMXAFFWJR95WC"];
+  const userData = userProfile();
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId }
+      variables: { location: vendorId },
     }
-  )
-  const [updateOrder] = useMutation(UPDATE_ORDER)
+  );
+  const [updateOrder] = useMutation(UPDATE_ORDER);
 
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
       document: ORDER_CREATED,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
-          return prev
+          return prev;
         }
 
-        console.log(prev)
-        console.log(subscriptionData)
+        console.log(prev);
+        console.log(subscriptionData);
 
-        const newOrderItem = subscriptionData.data.orderCreated
+        const newOrderItem = subscriptionData.data.orderCreated;
         return Object.assign({}, prev, {
           findOrders: {
-            __typename: 'FindManyOrderPayload',
+            __typename: "FindManyOrderPayload",
             orders: [
-              { __typename: 'Order', ...newOrderItem },
-              ...prev.findOrders.orders
-            ]
-          }
-        })
-      }
-    })
+              { __typename: "Order", ...newOrderItem },
+              ...prev.findOrders.orders,
+            ],
+          },
+        });
+      },
+    });
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
       document: ORDER_UPDATED,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
-          return prev
+          return prev;
         }
 
-        const newOrderItem = subscriptionData.data.orderCreated
+        const newOrderItem = subscriptionData.data.orderCreated;
         return Object.assign({}, prev, {
           findOrders: {
-            __typename: 'FindManyOrderPayload',
+            __typename: "FindManyOrderPayload",
             orders: [
-              { __typename: 'Order', ...newOrderItem },
-              ...prev.findOrders.orders
-            ]
-          }
-        })
-      }
-    })
+              { __typename: "Order", ...newOrderItem },
+              ...prev.findOrders.orders,
+            ],
+          },
+        });
+      },
+    });
 
     return () => {
-      unsubscribeToNewOrders()
-      unsubscribeToUpdatedOrders()
-    }
-  })
+      unsubscribeToNewOrders();
+      unsubscribeToUpdatedOrders();
+    };
+  });
 
   if (loading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
   if (error) {
-    return <p>Error...</p>
+    return <p>Error...</p>;
   }
 
   const handleOrderClick = (order, orderState) => {
@@ -254,11 +254,11 @@ function OrderDashboard () {
       variables: {
         orderId: order.id,
         uid: order.fulfillment.uid,
-        state: orderState
-      }
-    })
-    console.log(order.name, order.id)
-  }
+        state: orderState,
+      },
+    });
+    console.log(order.name, order.id);
+  };
   // if (!loading && orders) {
   //     const { order } = orders.items
   //     order.forEach(setElement => {
@@ -267,24 +267,24 @@ function OrderDashboard () {
   //   }
 
   const newOrders = allOrders.findOrders.orders.filter(
-    order => order.fulfillment.state === 'PROPOSED'
-  )
+    (order) => order.fulfillment.state === "PROPOSED"
+  );
   const acceptedOrders = allOrders.findOrders.orders.filter(
-    order => order.fulfillment.state === 'RESERVED'
-  )
+    (order) => order.fulfillment.state === "RESERVED"
+  );
   const readyOrders = allOrders.findOrders.orders.filter(
-    order => order.fulfillment.state === 'PREPARED'
-  )
+    (order) => order.fulfillment.state === "PREPARED"
+  );
 
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>
-        <MakeDashboardTitle name='New' quantity={newOrders.length} />
+        <MakeDashboardTitle name="New" quantity={newOrders.length} />
       </NewOrderTitleWrapper>
 
       <NewOrderSpaceWrapper>
         {allOrders &&
-          newOrders.map(order => (
+          newOrders.map((order) => (
             <OrderCard
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
@@ -292,52 +292,52 @@ function OrderDashboard () {
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               fulfillment={order.fulfillment.state}
-              handleClick={() => handleOrderClick(order, 'RESERVED')}
-              cancelClick={() => handleOrderClick(order, 'CANCELED')}
-              buttonStatus='NEW'
+              handleClick={() => handleOrderClick(order, "RESERVED")}
+              cancelClick={() => handleOrderClick(order, "CANCELED")}
+              buttonStatus="NEW"
             />
           ))}
       </NewOrderSpaceWrapper>
 
       <AcceptedOrderTitleWrapper>
-        <MakeDashboardTitle name='Accepted' quantity={acceptedOrders.length} />
+        <MakeDashboardTitle name="Accepted" quantity={acceptedOrders.length} />
       </AcceptedOrderTitleWrapper>
       <AcceptedOrderSpaceWrapper>
         {allOrders &&
-          acceptedOrders.map(order => (
+          acceptedOrders.map((order) => (
             <OrderCard
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
-              handleClick={() => handleOrderClick(order, 'PREPARED')}
-              cancelClick={() => handleOrderClick(order, 'CANCELED')}
-              buttonStatus='ACCEPTED'
+              handleClick={() => handleOrderClick(order, "PREPARED")}
+              cancelClick={() => handleOrderClick(order, "CANCELED")}
+              buttonStatus="ACCEPTED"
             />
           ))}
       </AcceptedOrderSpaceWrapper>
 
       <ReadyOrderTitleWrapper>
-        <MakeDashboardTitle name='Ready' quantity={readyOrders.length} />
+        <MakeDashboardTitle name="Ready" quantity={readyOrders.length} />
       </ReadyOrderTitleWrapper>
       <ReadyOrderSpaceWrapper>
         {allOrders &&
-          readyOrders.map(order => (
+          readyOrders.map((order) => (
             <OrderCard
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
-              handleClick={() => handleOrderClick(order, 'COMPLETED')}
-              cancelClick={() => handleOrderClick(order, 'CANCELED')}
-              buttonStatus='READY'
+              handleClick={() => handleOrderClick(order, "COMPLETED")}
+              cancelClick={() => handleOrderClick(order, "CANCELED")}
+              buttonStatus="READY"
             />
           ))}
       </ReadyOrderSpaceWrapper>
     </OrderDashboardWrapper>
-  )
+  );
 }
 
-export default OrderDashboard
+export default OrderDashboard;

@@ -503,7 +503,7 @@ ItemTC.addResolver({
     args: {
       merchantId: 'String!'
     },
-    resolver: async ({ args }) => {
+    resolve: async ({ args }) => {
       const api = new CatalogApi()
 
       const upsertCatalogItemResponse = await api.upsertCatalogObject({

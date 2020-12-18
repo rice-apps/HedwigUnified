@@ -4,10 +4,10 @@ import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
 import {
   createRecord,
-  checkNullFields,
   CREATE_ORDER,
   CREATE_PAYMENT,
   GET_VENDOR,
+  UPDATE_ORDER_TRACKER,
 } from "./util";
 import logo from "../../../images/cohenhouse.png";
 import "./cart.scss";
@@ -168,9 +168,9 @@ function CartDetail() {
 
   // const options = ["Credit Card", "Tetra", "Cohen House"];
   const options = [
-    { value: "Credit Card", label: "Credit Card" },
-    { value: "Tetra", label: "Tetra" },
-    { value: "Cohen House", label: "Cohen House" },
+    { value: "CREDIT", label: "Credit Card" },
+    { value: "TETRA", label: "Tetra" },
+    { value: "COHEN", label: "Cohen House" },
   ];
   // const defaultPaymentOption = options[0];
 
@@ -185,11 +185,19 @@ function CartDetail() {
     createPayment,
     { loading: payment_loading, error: payment_error, data: payment_data },
   ] = useMutation(CREATE_PAYMENT);
+  const [
+    updateOrderTracker,
+    {
+      loading: ordertracker_loading,
+      error: ordertracker_error,
+      data: ordertracker_data,
+    },
+  ] = useMutation(UPDATE_ORDER_TRACKER);
 
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({ timeToIdle: 3000, inactivityEvents: [] });
+  const isIdle = useIdle({ timeToIdle: 10000, inactivityEvents: [] });
 
   const product_ids = cart_menu.map((item) => {
     return item.dataSourceId;
@@ -225,6 +233,12 @@ function CartDetail() {
         locationId: orderSummary().vendor.locationIds[0],
         amount: 900,
         currency: "USD",
+      },
+    });
+    const updateOrderTrackerResponse = await updateOrderTracker({
+      variables: {
+        paymentId: paymentMethod,
+        orderId: orderJson.id,
       },
     });
 
@@ -335,6 +349,10 @@ function CartDetail() {
   if (avail_loading) return <p>'Loading availabilities...'</p>;
   if (avail_error & (cart_menu.length != 0))
     return <p>`Error! ${avail_error.message}`</p>;
+  if (ordertracker_loading) return <p>Loading...</p>;
+  if (ordertracker_error) {
+    return <p>{ordertracker_error.message}</p>;
+  }
 
   const currDate = new Date();
   const currDay = currDate.getDay();

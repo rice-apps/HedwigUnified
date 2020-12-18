@@ -133,7 +133,8 @@ OrderTC.addResolver({
           recipient,
           pickupTime,
           cohenId,
-          studentId
+          studentId,
+          paymentType
         }
       } = args
 
@@ -177,7 +178,8 @@ OrderTC.addResolver({
         status: 'PROPOSED',
         pickupTime: pickupTime,
         locationId: locationId,
-        orderId: orderResponse.order.id
+        orderId: orderResponse.order.id,
+        paymentType: paymentType
       })
 
       const {

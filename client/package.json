@@ -19,6 +19,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
     "@testing-library/user-event": "^12.2.2",
+    "activity-detector": "^3.0.0",
     "ant-design": "^1.0.0",
     "antd": "^4.8.4",
     "currency.js": "^2.0.3",

@@ -166,6 +166,8 @@ PaymentTC.addResolver({
             source
           }
 
+          console.log(checkout.data.checkoutCreate.checkout);
+
           // I changed shopifyOrderId: checkout.data.checkoutCreate.checkout.order.id
           // to the code below to make createPayment work
           // not sure if this is correct !!! --- Lorraine

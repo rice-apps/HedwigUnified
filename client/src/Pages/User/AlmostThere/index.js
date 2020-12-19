@@ -119,7 +119,9 @@ const AlmostThere = ({ classes }) => {
           <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
           <P header>{order.vendor.name}</P>
           <P header>Pick Up Instruction:</P>
-          <P pickup>msg</P>
+          <P pickup>Pick up at {order.fulfillment.placedAt} at 
+            {order.fulfillment.pickupAt}
+          </P>
         </Div>
 
         <Div>

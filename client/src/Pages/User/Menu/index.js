@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
 import './index.css'
@@ -130,12 +130,15 @@ function Menu () {
     return <p>ErrorC...</p>
   }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
-  console.log(catalog_data);
+  console.log(catalog_data)
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -150,7 +153,7 @@ function Menu () {
 
   const categories = compileCategories(catalog_data)
 
-  var formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
 
@@ -181,8 +184,13 @@ function Menu () {
   const endTimes = vendor_data.getVendor.hours[currentDay].end
 
   const times = []
+<<<<<<< HEAD
   for(let i=0; i<startTimes.length; i++){
     times.push([startTimes[i],endTimes[i]])
+=======
+  for (let i = 0; i < startTimes.length; i++) {
+    times.push([startTimes[i], endTimes[i]])
+>>>>>>> master
   }
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
 
@@ -204,6 +212,7 @@ function Menu () {
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
           {/* Vendor Operating Hours */}
+<<<<<<< HEAD
           {isClosed? <p class='vendorinfo'>Closed for the Day</p> :
             times.map(time =>{
               return (
@@ -211,6 +220,15 @@ function Menu () {
               )
             })
           }
+=======
+          {isClosed ? (
+            <p class='vendorinfo'>Closed for the Day</p>
+          ) : (
+            times.map(time => {
+              return <p class='vendorinfo'>time[0] - time[1]</p>
+            })
+          )}
+>>>>>>> master
           <p class='vendorinfo'>
             {startTimes[0]} - {endTimes[0]}
           </p>

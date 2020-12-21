@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useHistory } from 'react-router'
 import { useNavigate } from 'react-router-dom'
@@ -19,10 +19,12 @@ const VendorPicture = styled.img`
 `
 
 function SideNavBar () {
+  const [logoUrl, setLogoUrl] = useState('')
+
   return (
     <SideBarWrapper>
-      <VendorPicture src={logo} />
-      <SideBarVendorProfile />
+      <VendorPicture src={logoUrl} />
+      <SideBarVendorProfile setLogo={setLogoUrl} />
       <SideBarItems />
     </SideBarWrapper>
   )

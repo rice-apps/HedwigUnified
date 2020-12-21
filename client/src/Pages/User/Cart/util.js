@@ -1,5 +1,5 @@
-import { gql} from "@apollo/client";
-import { orderSummary } from "../../../apollo";
+import { gql } from '@apollo/client'
+import { orderSummary } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -18,8 +18,7 @@ export const GET_VENDOR = gql`
       }
     }
   }
-`;
-
+`
 
 export const CREATE_ORDER = gql`
   mutation(
@@ -50,6 +49,10 @@ export const CREATE_ORDER = gql`
       }
       customer {
         name
+      }
+      fulfillment {
+        uid
+        state
       }
       items {
         name
@@ -83,7 +86,6 @@ export const CREATE_PAYMENT = gql`
   }
 `
 
-
 const sStorage = localStorage
 const getRecipient = () => {
   return {
@@ -94,16 +96,16 @@ const getRecipient = () => {
 }
 
 const getLineItems = items => {
-  let rtn = []
-  let item = null
+  const rtn = []
+  const item = null
   for (const [v, item] of Object.entries(items)) {
-    let modifierList = []
+    const modifierList = []
     for (const [k, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
         catalog_object_id: m.dataSourceId
       })
     }
-    let i = {
+    const i = {
       modifiers: modifierList,
       catalog_object_id: item.variant.dataSourceId,
       quantity: item.quantity.toString()
@@ -125,4 +127,15 @@ export const createRecord = items => {
     email: recipient.email,
     time: orderSummary().time.format()
   }
+}
+
+export const checkNullFields = () => {
+  const fields = ['first name', 'last name', 'phone', 'id']
+  let field
+  for (field of fields) {
+    if (sStorage.getItem(field) == '') {
+      return field
+    }
+  }
+  return null
 }

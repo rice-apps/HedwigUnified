@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import {
   OrderDashboardWrapper,
@@ -12,7 +12,7 @@ import {
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
-
+import { userProfile } from '../../../../apollo'
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -75,6 +75,7 @@ const UPDATE_ORDER = gql`
       record: { fulfillment: { uid: $uid, state: $state } }
     ) {
       fulfillment {
+        uid
         state
       }
     }
@@ -130,8 +131,59 @@ const ORDER_CREATED = gql`
   }
 `
 
+const ORDER_UPDATED = gql`
+  subscription {
+    orderUpdated {
+      id
+      customer {
+        name
+        email
+        phone
+      }
+      items {
+        name
+        quantity
+        variation_name
+        modifiers {
+          name
+          base_price_money {
+            amount
+          }
+          total_price_money {
+            amount
+          }
+        }
+        total_money {
+          amount
+        }
+        total_tax {
+          amount
+        }
+      }
+      total {
+        amount
+      }
+      totalTax {
+        amount
+      }
+      totalDiscount {
+        amount
+      }
+      fulfillment {
+        uid
+        state
+        pickupDetails {
+          pickupAt
+        }
+      }
+    }
+  }
+`
+
 function OrderDashboard () {
   const vendorId = ['FMXAFFWJR95WC']
+  const userData = userProfile()
+
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
@@ -142,11 +194,51 @@ function OrderDashboard () {
 
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
-      document: ORDER_CREATED
+      document: ORDER_CREATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        console.log(prev)
+        console.log(subscriptionData)
+
+        const newOrderItem = subscriptionData.data.orderCreated
+        return Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: [
+              { __typename: 'Order', ...newOrderItem },
+              ...prev.findOrders.orders
+            ]
+          }
+        })
+      }
+    })
+
+    const unsubscribeToUpdatedOrders = subscribeToMore({
+      document: ORDER_UPDATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        const newOrderItem = subscriptionData.data.orderCreated
+        return Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: [
+              { __typename: 'Order', ...newOrderItem },
+              ...prev.findOrders.orders
+            ]
+          }
+        })
+      }
     })
 
     return () => {
       unsubscribeToNewOrders()
+      unsubscribeToUpdatedOrders()
     }
   })
 
@@ -156,8 +248,6 @@ function OrderDashboard () {
   if (error) {
     return <p>Error...</p>
   }
-  console.log(allOrders)
-  console.log(allOrders.orders)
 
   const handleOrderClick = (order, orderState) => {
     updateOrder({
@@ -167,7 +257,7 @@ function OrderDashboard () {
         state: orderState
       }
     })
-    console.log('button was pressed')
+    console.log(order.name, order.id)
   }
   // if (!loading && orders) {
   //     const { order } = orders.items

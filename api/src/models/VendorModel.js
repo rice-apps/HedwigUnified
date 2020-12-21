@@ -1,4 +1,9 @@
-import { composeWithMongoose } from 'graphql-compose-mongoose'
+import {
+  composeMongoose,
+  convertSchemaToGraphQL
+} from 'graphql-compose-mongoose'
+
+import { sc } from 'graphql-compose'
 
 import '../utils/db'
 
@@ -27,8 +32,15 @@ const BusinessHours = new Schema({
     ],
     required: true
   },
+<<<<<<< HEAD
   isClosed: {type: Boolean, required: true}
+=======
+  isClosed: { type: [Boolean], required: true }
+>>>>>>> master
 })
+
+convertSchemaToGraphQL(SquareInfo, 'VendorSquareInfo', sc)
+convertSchemaToGraphQL(BusinessHours, 'VendorBusinessHours', sc)
 
 const VendorSchema = new Schema({
   name: { type: String, required: true, unique: true },
@@ -37,10 +49,11 @@ const VendorSchema = new Schema({
   logoUrl: String,
   squareInfo: SquareInfo,
   hours: { type: [BusinessHours], required: true },
-  isOpen: { type: Boolean, required: false }
+  isOpen: { type: Boolean, required: false },
+  allowedNetid: { type: [String], required: false } // change this to required true later on
 })
 
 const Vendor = model('Vendors', VendorSchema)
-const VendorTC = composeWithMongoose(Vendor)
+const VendorTC = composeMongoose(Vendor)
 
 export { Vendor, VendorTC }

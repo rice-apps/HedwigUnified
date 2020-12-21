@@ -1,10 +1,15 @@
 import { PaymentsApi, CreatePaymentRequest } from 'square-connect'
-import { GraphQLString, GraphQLNonNull } from 'graphql'
 import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
-import { CreatePaymentITC, PaymentTC, SortOrderEnumTC } from '../models'
+import {
+  CreatePaymentITC,
+  MoneyTC,
+  OrderTracker,
+  PaymentTC,
+  SortOrderEnumTC
+} from '../models'
 import { FetchPaymentPayloadTC } from '../models/PaymentModel'
-import shopifyClient from '../shopify'
+import { shopifyClient, shopifyAdminClient } from '../shopify'
 
 PaymentTC.addResolver({
   name: 'fetchPayments',
@@ -70,7 +75,7 @@ PaymentTC.addResolver({
       let response
 
       switch (source) {
-        case 'SQUARE':
+        case 'SQUARE': {
           const api = new PaymentsApi()
           const paymentBody = new CreatePaymentRequest()
 
@@ -115,32 +120,67 @@ PaymentTC.addResolver({
           }
 
           break
-
-        case 'SHOPIFY':
+        }
+        case 'SHOPIFY': {
           const unitProduct = await shopifyClient.product.fetchByHandle(
-            'unitproduct'
+            'unit-product'
           )
-          const checkout = await shopifyClient.checkout.create()
 
-          await shopifyClient.checkout.addLineItems(checkout.id, [
-            {
-              variantId: unitProduct.variants[0].id,
-              quantity: total_money.amount / 25
+          const createCheckoutMutation = shopifyClient.graphQLClient.mutation(
+            root => {
+              root.add(
+                'checkoutCreate',
+                {
+                  args: {
+                    input: {
+                      lineItems: {
+                        quantity: subtotal.amount / 25,
+                        variantId: unitProduct.variants[0].id
+                      }
+                    }
+                  }
+                },
+                checkoutCreate => {
+                  checkoutCreate.add('checkout', checkout => {
+                    checkout.add('id')
+                    checkout.add('webUrl')
+                    checkout.add('order', order => {
+                      order.add('id')
+                    })
+                    checkout.add('paymentDueV2', payment => {
+                      payment.add('amount')
+                      payment.add('currencyCode')
+                    })
+                  })
+                }
+              )
             }
-          ])
+          )
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            createCheckoutMutation
+          )
 
           response = {
-            id: checkout.id,
+            id: checkout.data.checkoutCreate.checkout.id,
             total: subtotal,
-            url: checkout.webUrl,
+            url: checkout.data.checkoutCreate.checkout.webUrl,
             source
           }
 
+          OrderTracker.findOneAndUpdate(
+            { orderId: orderId },
+            { shopifyOrderId: checkout.data.checkoutCreate.checkout.order.id }
+          )
+
           break
-        default:
+        }
+
+        default: {
           response = new ApolloError(
             'Payment method did not match any specified!'
           )
+        }
       }
 
       return response
@@ -149,42 +189,190 @@ PaymentTC.addResolver({
   .addResolver({
     name: 'completePayment',
     args: {
-      // TODO: add fields for Shopify
-      paymentId: GraphQLNonNull(GraphQLString)
+      paymentId: 'String!',
+      source: 'String!',
+      money: MoneyTC.getITC()
     },
     type: PaymentTC,
     resolve: async ({ args }) => {
-      const api = new PaymentsApi()
+      let response
 
-      const paymentResponse = await api.completePayment(args.paymentId)
+      switch (args.source) {
+        case 'SQUARE': {
+          const api = new PaymentsApi()
 
-      if (paymentResponse.errors) {
-        return new ApolloError(
-          `Encounter the following errors while complete payment: ${paymentResponse.errors}`
-        )
-      }
+          const paymentResponse = await api.completePayment(args.paymentId)
 
-      const {
-        payment: {
-          id,
-          order_id,
-          customer_id,
-          amount_money,
-          tip_money,
-          total_money,
-          status
+          if (paymentResponse.errors) {
+            return new ApolloError(
+              `Encounter the following errors while complete payment: ${paymentResponse.errors}`
+            )
+          }
+
+          const {
+            payment: {
+              id,
+              order_id,
+              customer_id,
+              amount_money,
+              tip_money,
+              total_money,
+              status
+            }
+          } = paymentResponse
+
+          response = {
+            id,
+            order: order_id,
+            customer: customer_id,
+            subtotal: amount_money,
+            tip: tip_money,
+            total: total_money,
+            status
+          }
+
+          break
         }
-      } = paymentResponse
 
-      return {
-        id,
-        order: order_id,
-        customer: customer_id,
-        subtotal: amount_money,
-        tip: tip_money,
-        total: total_money,
-        status
+        case 'SHOPIFY': {
+          const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
+            root.add('node', { args: { id: args.paymentId } }, node => {
+              node.addInlineFragmentOn('Checkout', checkout => {
+                checkout.add('id')
+                checkout.add('order', order => {
+                  order.add('id')
+                })
+              })
+            })
+          })
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            checkoutOrderQuery
+          )
+
+          const transactionQuery = `
+            query GetOrder($id: ID!) {
+              node(id: $id) {
+                ...on Order {
+                  transactions {
+                    id
+                  }
+                }
+              }
+            }
+          `
+
+          const transactions = await shopifyAdminClient.graphql(
+            transactionQuery,
+            {
+              id: checkout.data.node.order.id
+            }
+          )
+
+          const completePayment = `
+            mutation CompletePayment($input: OrderCaptureInput!) {
+              orderCapture(input: $input) {
+                transaction {
+                  id
+                }
+                userErrors {
+                  field
+                  message
+                }
+              }
+            }
+          `
+
+          const completeResponse = await shopifyAdminClient.graphql(
+            completePayment,
+            {
+              input: {
+                amount: args.money.amount / 25,
+                currency: args.money.currency,
+                id: checkout.data.node.order.id,
+                parentTransactionId: transactions.node.transactions[0].id
+              }
+            }
+          )
+
+          console.log(completeResponse.orderCapture)
+
+          response = {
+            id: checkout.data.node.id,
+            order: checkout.data.node.order.id
+          }
+        }
+
+        default: {
+          response = new ApolloError(
+            'Payment method did not match any specified!'
+          )
+        }
       }
+
+      return response
+    }
+  })
+  .addResolver({
+    name: 'verifyPayment',
+    type: 'Boolean',
+    args: {
+      vendor: 'String!',
+      source: 'String!',
+      paymentId: 'String',
+      orderId: 'String'
+    },
+    resolve: async ({ args }) => {
+      const { source, paymentId, orderId } = args
+
+      let response
+
+      switch (source) {
+        case 'SQUARE': {
+          const api = new PaymentsApi()
+
+          const getPaymentResponse = await api.getPayment(paymentId)
+
+          if (getPaymentResponse.errors) {
+            return new ApolloError(
+              `Couldn't verify payment because ${getPaymentResponse.errors}`
+            )
+          }
+
+          response =
+            getPaymentResponse.payment.status != 'CANCELED' &&
+            getPaymentResponse.payment.status != 'FAILED'
+        }
+
+        case 'SHOPIFY': {
+          const orderQuery = `
+            query GetOrder($id: ID!) {
+              node(id: $id) {
+                ...on Order {
+                  fullyPaid
+                  transactions {
+                    id
+                  }
+                }
+              }
+            }
+          `
+
+          const order = await shopifyAdminClient.graphql(orderQuery, {
+            id: orderId
+          })
+
+          response = order.data.node.order.fullyPaid
+        }
+
+        default: {
+          response = new ApolloError(
+            'Payment source should be Shopify or Square!'
+          )
+        }
+      }
+
+      return response
     }
   })
   .addResolver({
@@ -232,7 +420,8 @@ PaymentTC.addResolver({
   })
 
 const PaymentQueries = {
-  fetchPayments: PaymentTC.getResolver('fetchPayments')
+  fetchPayments: PaymentTC.getResolver('fetchPayments'),
+  verifyPayment: PaymentTC.getResolver('verifyPayment')
 }
 
 const PaymentMutations = {

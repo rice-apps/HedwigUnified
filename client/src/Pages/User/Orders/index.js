@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Modal from 'react-modal'
 import { useQuery, gql, useMutation } from '@apollo/client'
 import { useHistory } from 'react-router'
@@ -65,9 +65,9 @@ const OrderItemList = ({ items }) => {
 }
 
 const TotalAndTax = ({ items }) => {
-  var tax = 0.1
-  var total = 0
-  var list = items.map(item => {
+  const tax = 0.1
+  let total = 0
+  const list = items.map(item => {
     if (parseFloat(item.product.price) != undefined) {
       return parseFloat(item.product.price)
     } else {
@@ -114,8 +114,8 @@ function OrderDetail ({ order }) {
   }
 
   function DateFormatter ({ date }) {
-    var formattedDate = String(date).split('-')
-    var months = [
+    const formattedDate = String(date).split('-')
+    const months = [
       'January',
       'February',
       'March',

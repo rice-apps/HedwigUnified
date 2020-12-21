@@ -1,4 +1,3 @@
-import React from 'react'
 import { useHistory } from 'react-router'
 import VendorImage from '../../images/vendorImage.jpg'
 import UserImage from '../../images/userImage.jpeg'

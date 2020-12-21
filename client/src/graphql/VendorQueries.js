@@ -10,13 +10,10 @@ const VENDOR_QUERY = gql`
         end
         day
         isClosed
-<<<<<<< HEAD
-=======
       }
       squareInfo {
         merchantId
         locationIds
->>>>>>> master
       }
     }
   }

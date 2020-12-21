@@ -23,22 +23,6 @@ height: 100%;
   width: 200px;
 }
 
-.orderConfirmed {
-  font-size: 20pt;
-  color: #5a5953;
-  font-family: 'Avenir Black', 'Arial Black', sans-serif;
-  text-align: center;
-  margin: 8px 16px 8px 16px;
-}
-
-.statusUpdate {
-  font-size: 15pt;
-  color: #db6142;
-  font-family: 'Avenir Book', 'Arial Book', sans-serif;
-  text-align: center;
-  margin: 8px 16px 8px 16px;
-}
-
 .pinIcon {
   color: #db6142;
   font-size: 30pt;

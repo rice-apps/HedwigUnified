@@ -28,7 +28,7 @@ function VendorCard({ vendor }) {
   const dayObj = hours[currentDay];
   const convertTimeToNum = (time) => {
     // const [timeNum, halfOfDay] = time.split(' ')
-    const [timeNum, halfOfDay] = "12";
+    const [timeNum, halfOfDay] = time.split(" ");
     let [hours, minutes] = timeNum.split(":");
     hours = parseInt(hours);
     minutes = parseInt(minutes) / 60;

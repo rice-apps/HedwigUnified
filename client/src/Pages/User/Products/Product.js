@@ -1,78 +1,78 @@
-import { useContext, useEffect, useState } from 'react'
-import { useQuery, makeVar } from '@apollo/client'
-import './product.css'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useContext, useEffect, useState } from "react";
+import { useQuery, makeVar } from "@apollo/client";
+import "./product.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import dispatch from './FunctionalCart'
-import { createMuiTheme } from '@material-ui/core'
-import { cartItems, orderSummary } from '../../../apollo'
-import VariantSelection from './VariantSelection'
-import QuantitySelector from './QuantitySelector'
-import ModifierSelection from './ModifierSelection'
-import { GET_ITEM } from '../../../graphql/ProductQueries'
-import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
-import BuyerHeader from './../Vendors/BuyerHeader.js'
-import BottomAppBar from './../Vendors/BottomAppBar.js'
+import dispatch from "./FunctionalCart";
+import { createMuiTheme } from "@material-ui/core";
+import { cartItems, orderSummary } from "../../../apollo";
+import VariantSelection from "./VariantSelection";
+import QuantitySelector from "./QuantitySelector";
+import ModifierSelection from "./ModifierSelection";
+import { GET_ITEM } from "../../../graphql/ProductQueries";
+import { VENDOR_QUERY } from "../../../graphql/VendorQueries";
+import BuyerHeader from "./../Vendors/BuyerHeader.js";
+import BottomAppBar from "./../Vendors/BottomAppBar.js";
 
-function Product () {
-  const navigate = useNavigate()
-  const { state } = useLocation()
-  const { currProduct: productId, currVendor: vendorState } = state
+function Product() {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { currProduct: productId, currVendor: vendorState } = state;
 
   const {
     refetch,
     data: product_data,
     error: product_error,
-    loading: product_loading
+    loading: product_loading,
   } = useQuery(GET_ITEM, {
     variables: {
-      dataSourceId: productId
-    }
-  })
+      dataSourceId: productId,
+    },
+  });
 
   const {
     data: vendor_data,
     error: vendor_error,
-    loading: vendor_loading
+    loading: vendor_loading,
   } = useQuery(VENDOR_QUERY, {
     variables: { vendor: vendorState },
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first'
-  })
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+  });
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(1);
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
   if (vendor_error) {
-    return <p>ErrorV...</p>
+    return <p>ErrorV...</p>;
   }
 
   if (product_loading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
   if (product_error) {
-    return <p>ErrorP...</p>
+    return <p>ErrorP...</p>;
   }
 
-  const { getItem: product } = product_data
-  const { getVendor: vendor } = vendor_data
+  const { getItem: product } = product_data;
+  const { getVendor: vendor } = vendor_data;
   const handleClick = () => {
-    return navigate(`/eat/${vendor.slug}/cart`)
-  }
+    return navigate(`/eat/${vendor.slug}/cart`);
+  };
 
   const increase = () => {
-    setQuantity(quantity + 1)
-  }
+    setQuantity(quantity + 1);
+  };
 
   const decrease = () => {
-    setQuantity(quantity - 1)
-  }
+    setQuantity(quantity - 1);
+  };
 
   /*
   const product = {
@@ -181,55 +181,59 @@ function Product () {
   };
   */
 
-  function makeCartItem () {
-    const vendor = vendor_data.getVendor
-    const order = orderSummary()
+  function makeCartItem() {
+    const vendor = vendor_data.getVendor;
+    const order = orderSummary();
     if (order.vendor && vendor.name != order.vendor.name) {
-      return // todo: add warning window.
+      return; // todo: add warning window.
     }
     orderSummary(
       Object.assign(orderSummary(), {
         vendor: {
           name: vendor.name,
           merchantId: vendor.squareInfo.merchantId,
-          locationIds: vendor.squareInfo.locationIds
-        }
+          locationIds: vendor.squareInfo.locationIds,
+        },
       })
-    )
-    console.log('location Id ', orderSummary().vendor.locationIds[0])
-    const itemName = product.name
-    const itemID = product.squareID
-    const itemDataSourceId = product.dataSourceId
-    let variant
+    );
+    console.log("merchant Id ", orderSummary().vendor.merchantId);
+    console.log("vendor square info ", vendor.squareInfo);
+    console.log("location Id ", orderSummary().vendor.locationIds[0]);
+    const itemName = product.name;
+    const itemID = product.squareID;
+    const itemDataSourceId = product.dataSourceId;
+    let variant;
 
-    if (document.querySelector('.variantSelect:checked') == null) {
-      return false
+    if (document.querySelector(".variantSelect:checked") == null) {
+      return false;
     }
-    variant = JSON.parse(document.querySelector('.variantSelect:checked').value)
-    const variantObject = variant.option
-    const variantCost = variant.option.price.amount
+    variant = JSON.parse(
+      document.querySelector(".variantSelect:checked").value
+    );
+    const variantObject = variant.option;
+    const variantCost = variant.option.price.amount;
 
-    const modifierNames = []
-    let modifierCost = 0
-    const modifierList = {}
-    const modifierLists = document.querySelectorAll('.modifierSelect:checked')
+    const modifierNames = [];
+    let modifierCost = 0;
+    const modifierList = {};
+    const modifierLists = document.querySelectorAll(".modifierSelect:checked");
 
     for (let i = 0; i < modifierLists.length; i++) {
-      const currentModifier = JSON.parse(modifierLists[i].value)
-      modifierList[i] = currentModifier.option
-      const currentModifierName = currentModifier.option.name
+      const currentModifier = JSON.parse(modifierLists[i].value);
+      modifierList[i] = currentModifier.option;
+      const currentModifierName = currentModifier.option.name;
       {
         currentModifier.option.price
           ? (modifierCost += currentModifier.option.price.amount)
-          : (modifierCost += 0)
+          : (modifierCost += 0);
       }
-      modifierNames.push(currentModifierName)
+      modifierNames.push(currentModifierName);
     }
-    const itemQuantity = { quantity }.quantity
-    const totalPrice = (modifierCost + variantCost) * 0.01
+    const itemQuantity = { quantity }.quantity;
+    const totalPrice = (modifierCost + variantCost) * 0.01;
 
     dispatch({
-      type: 'ADD_ITEM',
+      type: "ADD_ITEM",
       item: {
         name: itemName,
         Id: Date.now(),
@@ -238,51 +242,51 @@ function Product () {
         quantity: itemQuantity,
         price: totalPrice,
         modDisplay: modifierNames,
-        dataSourceId: itemDataSourceId
-      }
-    })
-    return true
+        dataSourceId: itemDataSourceId,
+      },
+    });
+    return true;
   }
 
   return (
     <div>
       <BuyerHeader />
-      <div className='container'>
-        <img className='heroImage' src={product.image} alt={product.name} />
+      <div className="container">
+        <img className="heroImage" src={product.image} alt={product.name} />
 
-        <div className='itemHeading'>
+        <div className="itemHeading">
           <h2>{product.name}</h2>
           <p>{product.description}</p>
         </div>
-        <div className='variantsContainer'>
+        <div className="variantsContainer">
           <VariantSelection variants={product.variants} />
         </div>
         {product.modifierLists.length == 0 && (
           <p>Sorry! no modifiers in the database</p>
         )}
-        <div className='modifiersContainer'>
-          {product.modifierLists.map(modifier => {
+        <div className="modifiersContainer">
+          {product.modifierLists.map((modifier) => {
             return (
               <ModifierSelection
                 key={modifier.name}
                 modifierCategory={modifier}
               />
-            )
+            );
           })}
         </div>
-        <div className='quantityContainer'>
+        <div className="quantityContainer">
           <QuantitySelector
             quantity={quantity}
             increase={increase}
             decrease={decrease}
           />
         </div>
-        <div className='submitContainer'>
+        <div className="submitContainer">
           <button
-            className='submitButton'
+            className="submitButton"
             onClick={() => {
-              makeCartItem()
-              navigate('/eat/cohen/cart')
+              makeCartItem();
+              navigate("/eat/cohen/cart");
             }}
           >
             Add
@@ -291,7 +295,7 @@ function Product () {
       </div>
       <BottomAppBar />
     </div>
-  )
+  );
 }
 
-export default Product
+export default Product;

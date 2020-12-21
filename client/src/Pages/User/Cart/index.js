@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { useParams, useHistory } from "react-router";
 import {
+  checkNullFields,
   createRecord,
   CREATE_ORDER,
   CREATE_PAYMENT,
@@ -13,12 +14,9 @@ import logo from "../../../images/cohenhouse.png";
 import "./cart.scss";
 import { centerCenter, row, column, endStart } from "../../../Styles/flex";
 import CartProduct from "./CartProducts";
-import Payments from "./Payments.js";
 import currency from "currency.js";
 import { cartItems, orderSummary } from "../../../apollo";
-import dispatch from "../Products/FunctionalCart";
 import Select from "react-select";
-import { TimePicker } from "antd";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import BottomAppBar from "./../Vendors/BottomAppBar.js";
@@ -214,57 +212,28 @@ function CartDetail() {
     fetchPolicy: "network-only",
   });
 
-  /*
-  useEffect(() => {
-    if(avail_called){
-      avail_refetch()
-    }
-    else {
-      getAvailabilities()
-    }
-  }, [cart_menu])
-  */
   const handleClickCredit = async () => {
     // Get url and embed that url
-    const payment = createPayment({
-      variables: {
-        sourceId: "cnon:card-nonce-ok",
-        orderId: orderSummary()["orderId"],
-        locationId: orderSummary().vendor.locationIds[0],
-        amount: 900,
-        currency: "USD",
-      },
-    });
     const updateOrderTrackerResponse = await updateOrderTracker({
       variables: {
         paymentId: paymentMethod,
-        orderId: orderJson.id,
+        orderId: orderSummary()['orderId'],
       },
     });
-
-    localStorage.setItem("url", payment.data.createPayment.url);
-    orderSummary(
-      Object.assign(orderSummary(), {
-        url: payment.data.createPayment.url,
-      })
-    );
     return orderSummary()["url"];
   };
 
   const handleConfirmClick = async () => {
     const newRes = await avail_refetch();
     while (newRes.loading) {}
-    console.log("errors: ", avail_error);
-    console.log("cart_menu:", cart_menu);
-    console.log("availability", newRes.data);
     if (newRes.data.getAvailabilities === false) {
       return navigate("/eat/cohen/confirmation");
     } else {
       const q = {
-        variables: createRecord(cart_menu),
-      };
-      const orderResponse = await createOrder(q);
-      const orderJson = orderResponse.data.createOrder;
+        variables: createRecord(cart_menu)
+      }
+      const orderResponse = await createOrder(q)
+      const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
           // new:
@@ -276,7 +245,19 @@ function CartDetail() {
           currency: "USD",
         },
       });
-
+      orderSummary(
+        Object.assign(orderSummary(), {
+          orderId: orderJson.id,
+          fulfillment: {
+            uid: orderJson.fulfillment.uid,
+            state: orderJson.fulfillment.state,
+            pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
+            placedAt: orderJson.fulfillment.pickupDetails.placedAt
+          },
+          url: createPaymentResponse.data.createPayment.url
+        }
+        )
+      )
       if (paymentMethod === "Credit") {
         // navigate to Almost there page
         console.log("The payment type is credit card.");
@@ -294,17 +275,7 @@ function CartDetail() {
         console.log("The payment type is through Tetra.");
         return navigate("/confirmation");
       }
-      orderSummary(
-        Object.assign(orderSummary(), {
-          orderId: orderJson.id,
-          fulfillment: {
-            uid: orderJson.fulfillment.uid,
-            state: orderJson.fulfillment.state,
-          },
-        })
-      );
-      console.log(orderSummary());
-      return navigate(`/eat/cohen/payment`);
+      return navigate(`/eat/almostThere`)
     }
   };
 

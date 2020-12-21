@@ -375,7 +375,7 @@ ItemTC.addResolver({
           is_available: {
             name: "Is it available?",
             key: "is_available",
-            custom_attribute_definition_id: "7XN45PC5N5ALEEWG6TV6I7YJ",
+            custom_attribute_definition_id: '7XN45PC5N5ALEEWG6TV6I7YJ',
             type: "BOOLEAN",
             boolean_value: isItemAvailable,
           },

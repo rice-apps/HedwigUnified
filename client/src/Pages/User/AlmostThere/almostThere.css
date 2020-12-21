@@ -1,0 +1,33 @@
+/* .checkmark 
+{
+width: 100%;
+height: 100%;
+} */
+
+.mainDiv {
+  background-color: #faf8f8;
+  margin: 0;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 100vh;
+  width: 100%;
+}
+.checkSvg {
+  display: block;
+
+  margin-top: 8vh;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  width: 200px;
+}
+
+.pinIcon {
+  color: #db6142;
+  font-size: 30pt;
+  position: relative;
+  left: 25px;
+  top: -15px;
+}
+

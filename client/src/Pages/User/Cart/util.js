@@ -54,6 +54,10 @@ export const CREATE_ORDER = gql`
       fulfillment {
         uid
         state
+        pickupDetails {
+          pickupAt
+          placedAt
+        }
       }
       items {
         name
@@ -67,13 +71,13 @@ export const CREATE_ORDER = gql`
 `;
 
 export const CREATE_PAYMENT = gql`
-  mutation($orderId: String!, $subtotal: Int!, $currency: String!) {
+  mutation($orderId: String!, $subtotal: Int!, $currency: String!, $location: String!) {
     createPayment(
       record: {
-        source: SQUARE
+        source: SHOPIFY
         sourceId: "cnon:card-nonce-ok"
         orderId: $orderId
-        locationId: "FMXAFFWJR95WC"
+        locationId: $location
         subtotal: { amount: $subtotal, currency: $currency }
       }
     ) {

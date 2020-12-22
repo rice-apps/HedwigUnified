@@ -26,11 +26,13 @@ import CartHeader from "./CartHeader";
 // import BuyerHeader from "./../Vendors/BuyerHeader.js";
 
 // new dropdown imports:
-import createActivityDetector from "activity-detector";
-import Modal from "react-modal";
+// import createActivityDetector from "activity-detector";
+// import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { checkNullFields } from './util.js'
 // import 'react-dropdown/style.css';
+
 
 const styles = {
   fontSize: 14,
@@ -50,21 +52,37 @@ const defaultTotals = {
 };
 
 function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
-  let pickupTimes = [];
+  let pickupTimes = ["ASAP"];
   let pickupMinute = Math.ceil(currMinute / 15) * 15;
   let pickupHour = currHour;
   while (pickupHour <= endHour) {
     while (
-      pickupMinute < 45 &&
+      pickupMinute <= 45 &&
       !(pickupHour === endHour && pickupMinute >= endMinute)
     ) {
       pickupMinute += 15;
-      const strPickupMinute =
-        pickupMinute === 0 ? "00" : pickupMinute.toString();
-      const strPickupHour =
-        pickupHour === 12
-          ? "12"
-          : (pickupHour - Math.floor(pickupHour / 12) * 12).toString();
+      let strPickupMinute = "";
+      let strPickupHour = "";
+      if(pickupMinute === 60){
+        strPickupMinute += "00";
+        strPickupHour +=
+          pickupHour >= 12
+          ? (pickupHour - Math.floor(pickupHour / 12) * 12+1).toString()
+          : (pickupHour+1).toString()
+      }
+      else {
+        strPickupMinute += pickupMinute.toString();
+        strPickupHour +=
+          pickupHour === 12
+            ? "12"
+            : (pickupHour - Math.floor(pickupHour / 12) * 12).toString();
+      }
+      if(pickupHour >= 12 || (pickupHour === 11 && pickupMinute === 60)){
+        strPickupMinute+=" p.m."
+      }
+      else {
+        strPickupMinute+=" a.m."
+      }
       const pickupTime = strPickupHour + ":" + strPickupMinute;
       pickupTimes.push(pickupTime);
     }
@@ -140,20 +158,20 @@ function calculateNextHours(
   return timeIntervals;
 }
 
-function useIdle(options) {
-  const [isIdle, setIsIdle] = useState(false);
-  useEffect(() => {
-    const activityDetector = createActivityDetector(options);
-    activityDetector.on("idle", () => {
-      setIsIdle(true);
-    });
-    // activityDetector.on('active', ()=>{setIsIdle(false)});
-    return () => {
-      activityDetector.stop();
-    };
-  }, []);
-  return isIdle;
-}
+// function useIdle(options) {
+//   const [isIdle, setIsIdle] = useState(false);
+//   useEffect(() => {
+//     const activityDetector = createActivityDetector(options);
+//     activityDetector.on("idle", () => {
+//       setIsIdle(true);
+//     });
+//     // activityDetector.on('active', ()=>{setIsIdle(false)});
+//     return () => {
+//       activityDetector.stop();
+//     };
+//   }, []);
+//   return isIdle;
+// }
 
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
@@ -197,7 +215,7 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({ timeToIdle: 10000, inactivityEvents: [] });
+  // const isIdle = useIdle({ timeToIdle: 10000, inactivityEvents: [] });
 
   const product_ids = cart_menu.map((item) => {
     return item.dataSourceId;
@@ -224,6 +242,27 @@ function CartDetail() {
     }
   }, [cart_menu])
   */
+
+  const changePickupTime = (newTime) => {
+    setPickupTime(newTime);
+    orderSummary(
+      Object.assign(orderSummary(), {
+        time: newTime,
+      })
+  )}
+
+  const convertStringToTime = (time) => {
+    console.log(time);
+    const timeStr = time.split(' ')[0]
+    const [hour, minute] = timeStr.split(':')
+    if(time.includes('p.m.')){
+      return parseInt(hour)+parseInt(minute)/60+12
+    }
+    else{
+      return parseInt(hour)+parseInt(minute)/60
+    }
+  }
+
   const handleClickCredit = async () => {
     // Get url and embed that url
     const payment = createPayment({
@@ -233,12 +272,6 @@ function CartDetail() {
         locationId: orderSummary().vendor.locationIds[0],
         amount: 900,
         currency: "USD",
-      },
-    });
-    const updateOrderTrackerResponse = await updateOrderTracker({
-      variables: {
-        paymentId: paymentMethod,
-        orderId: orderJson.id,
       },
     });
 
@@ -252,6 +285,13 @@ function CartDetail() {
   };
 
   const handleConfirmClick = async () => {
+    const currTimeVal = moment().hour()+(moment().minutes())/60;
+    const pickupTimeVal = convertStringToTime(pickupTime);
+    console.log(pickupTimeVal, currTimeVal);
+    if(pickupTimeVal <= currTimeVal+15){
+      alert('The time you have selected is no longer valid. Please choose a later time.')
+      return;
+    }
     const newRes = await avail_refetch();
     while (newRes.loading) {}
     console.log("errors: ", avail_error);
@@ -357,9 +397,10 @@ function CartDetail() {
   const currDate = new Date();
   const currDay = currDate.getDay();
   // const currHour = currDate.getHours();
-  const currHour = "1";
+  const currHour = 10;
   // const currMinute = currDate.getMinutes();
-  const currMinute = "59";
+  const currMinute = 17;
+  let currTime = currHour + currMinute/60;
 
   const {
     getVendor: { hours: businessHours },
@@ -385,11 +426,12 @@ function CartDetail() {
   });
 
   const startMinutes = businessHour.start.map((startHour) => {
-    return parseInt(startHour.split(":")[1]);
+    return parseInt(startHour.split(" ")[0].split(":")[1]);
   });
   const endMinutes = businessHour.end.map((endHour) => {
-    return parseInt(endHour.split(":")[1]);
+    return parseInt(endHour.split(" ")[0].split(":")[1]);
   });
+
 
   const timeIntervals = calculateNextHours(
     currHour,
@@ -402,6 +444,7 @@ function CartDetail() {
   let pickupTimes = [];
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i];
+    console.log(interval)
     pickupTimes = [
       ...pickupTimes,
       ...generatePickupTimes(
@@ -409,7 +452,6 @@ function CartDetail() {
         interval[1],
         interval[2],
         interval[3],
-        interval[4]
       ),
     ];
   }
@@ -425,7 +467,9 @@ function CartDetail() {
   return (
     <div>
       <CartHeader showBackButton backLink="/eat" />
-      <div className={isIdle ? "float-cart__disabled" : "float-cart"}>
+      {// <div className={isIdle ? "float-cart__disabled" : "float-cart"}>
+      }
+      <div className={"float-cart"}>
         <div className="float-cart__content">
           <div className="float-cart__shelf-container">
             <p className="cart-title" style={{ marginTop: "30px" }}>
@@ -473,7 +517,7 @@ function CartDetail() {
             options={pickupTimes}
             placeholder={"Select a pickup time"}
             onChange={(e) => {
-              setPickupTime(e.value);
+              changePickupTime(e.value);
             }}
             clearable={false}
             style={styles.select}
@@ -509,54 +553,54 @@ function CartDetail() {
               disabled={cartItems().length === 0 || pickupTime === null}
               className="buy-btn"
               title="Confirm"
-              onClick={handleConfirmClick()}
+              onClick={handleConfirmClick}
             >
               Submit Order
-              <div />
             </button>
           </div>
+          {      // <Modal
+                //   isOpen={isIdle}
+                //   style={{
+                //     content: {
+                //       backgroundColor: "white",
+                //       height: "44vh",
+                //       width: "50vw",
+                //       position: "absolute",
+                //       top: "28%",
+                //       left: "26%",
+                //       borderRadius: "20px",
+                //       fontFamily: "Futura",
+                //       textAlign: "center",
+                //     },
+                //     overlay: {
+                //       zIndex: "10",
+                //     },
+                //   }}
+                // >
+                //   <AiOutlineExclamationCircle style={{ fontSize: "100px" }} />
+                //   <p style={{ marginLeft: "0px" }}>
+                //     Your session has expired due to inactivity.
+                //   </p>
+                //   <button
+                //     className="modal-btn"
+                //     onClick={() => {
+                //       window.location.reload(false);
+                //     }}
+                //   >
+                //     Refresh Page
+                //   </button>
+                //   <button
+                //     className="modal-btn"
+                //     onClick={() => {
+                //       navigate("/eat");
+                //     }}
+                //   >
+                //     Home Page
+                //   </button>
+                // </Modal>
+              }
         </div>
       </div>
-      <Modal
-        isOpen={isIdle}
-        style={{
-          content: {
-            backgroundColor: "white",
-            height: "44vh",
-            width: "50vw",
-            position: "absolute",
-            top: "28%",
-            left: "26%",
-            borderRadius: "20px",
-            fontFamily: "Futura",
-            textAlign: "center",
-          },
-          overlay: {
-            zIndex: "10",
-          },
-        }}
-      >
-        <AiOutlineExclamationCircle style={{ fontSize: "100px" }} />
-        <p style={{ marginLeft: "0px" }}>
-          Your session has expired due to inactivity.
-        </p>
-        <button
-          className="modal-btn"
-          onClick={() => {
-            window.location.reload(false);
-          }}
-        >
-          Refresh Page
-        </button>
-        <button
-          className="modal-btn"
-          onClick={() => {
-            navigate("/eat");
-          }}
-        >
-          Home Page
-        </button>
-      </Modal>
     </div>
   );
 }

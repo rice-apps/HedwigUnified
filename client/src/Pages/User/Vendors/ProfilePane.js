@@ -64,7 +64,11 @@ function ProfilePane () {
         style={{
           position: 'fixed',
           left: '22px',
-          verticalAlign: 'middle'
+          verticalAlign: 'middle',
+          height: '4.5vh',
+          width: '4.5vh',
+          top: '2.5vh',
+          zIndex: '3'
         }}
       />
       <div className={showProfile ? 'profilepane-active' : 'profilepane'}>

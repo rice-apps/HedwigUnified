@@ -42,22 +42,23 @@ function VendorList ({ classes }) {
   const { getVendors } = data
 
   return (
-
-    <div
-      style={{ paddingTop: '8vh', paddingBottom: '10vh' }}
-      className='vendorPage'
-    >
-      <ProfilePane />
-      <BuyerHeader />
-      <div>
-        {getVendors.map(vendor => {
-          return <VendorCard key={vendor.name} vendor={vendor} />
-        })}
+    <>
+      <div
+        style={{ paddingTop: '8vh', paddingBottom: '10vh' }}
+        className='vendorPage'
+      >
+        <ProfilePane />
+        <BuyerHeader />
+        <div>
+          {getVendors.map(vendor => {
+            return <VendorCard key={vendor.name} vendor={vendor} />
+          })}
+        </div>
+        <div>
+          <BottomAppBar />
+        </div>
       </div>
-      <div>
-        <BottomAppBar />
-      </div>
-    </div>
+    </>
   )
 }
 

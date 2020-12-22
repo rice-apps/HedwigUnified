@@ -20,16 +20,12 @@ import Button from "@material-ui/core/Button";
 // `;
 
 const UPDATE_VENDOR = gql`
-  mutation UPDATE_VENDOR_HOURS {
-    updateVendor(
-      record: { hours: [{ start: [], end: [], day: Sunday, isClosed: false }] }
-      filter: { name: "Cohen House" }
-    ) {
+  mutation UPDATE_VENDOR_HOURS($hours: [UpdateOneVendorBusinessHoursInput]!) {
+    updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
       record {
         hours {
           start
           end
-          isClosed
         }
       }
     }
@@ -65,7 +61,24 @@ function EditHoursPage() {
   //       variables: { hours: updatedHours, name: "Cohen House" },
   //     }
   //   );
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+  //   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+
+  const [toggleIsClosed, { data, loading, error }] = useMutation(
+    UPDATE_VENDOR,
+    {
+      variables: {
+        name: "Cohen House",
+        hours: [
+          {
+            start: [],
+            end: [],
+            day: "Sunday",
+            isClosed: true,
+          },
+        ],
+      },
+    }
+  );
   //   toggleIsClosed();
 
   //   useEffect(() => {

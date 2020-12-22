@@ -1,6 +1,5 @@
-import './index.css'
+import './ProfilePane.css'
 import { gql, useQuery, useApolloClient } from '@apollo/client'
-import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
@@ -41,7 +40,7 @@ const getLinks = user => {
   return links
 }
 
-function Profile () {
+function ProfilePane () {
   const { data, loading, error } = useQuery(GET_USER_INFO)
 
   if (error) return <p>Error!</p>
@@ -92,4 +91,4 @@ function Profile () {
   )
 }
 
-export default Profile
+export default ProfilePane

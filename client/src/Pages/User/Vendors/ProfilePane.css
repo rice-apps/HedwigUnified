@@ -1,0 +1,139 @@
+/* Entire pane */
+.profilepane {
+    width: 60vw;
+  }
+  
+  /* Background Color */
+  .background {
+    background-color: #faf8f8;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Header */
+  .profileheader {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 100%;
+    height: 13vh;
+  
+    background-color: white;
+    padding-left: 4vw;
+  
+    top: 0px;
+  }
+  
+  .profilename {
+    color: #5a5953;
+    font-family: 'avenirbold';
+    place-self: center;
+  
+    grid-column: 1/-1;
+    grid-row: 1/3;
+  
+    font-size: 3vh;
+  }
+  
+  .backarrow {
+    font-size: 16px;
+    color: #5a5953;
+    background-color: inherit;
+    border: none;
+  
+    grid-column: 1/2;
+    grid-row: 1/2;
+  
+    justify-self: start;
+    align-self: center;
+  }
+  
+  /* Body */
+  
+  /* Welcome portion */
+  .welcomebody {
+    display: flex;
+    height: 17vh;
+    justify-content: start;
+    align-items: center;
+    padding-left: 4vw;
+  
+    font-family: 'avenirbold';
+  }
+  
+  .welcometext {
+    font-size: 3vh;
+    color: #f49f86;
+  }
+  
+  .nametext {
+    font-size: 3vh;
+    color: #5a5953;
+    padding-left: 5px;
+  }
+  
+  /* Content */
+  .contentbody {
+    display: flex;
+    flex-direction: column;
+    height: 40vh;
+  }
+  
+  .contentcard {
+    display: grid;
+    flex: 1;
+    justify-content: end;
+    align-content: center;
+  
+    grid-template-columns: 1fr 15fr 2fr 1fr;
+    padding-left: 4vw;
+  
+    border-top: #7070701a 1px solid;
+  }
+  
+  .contenticon {
+    align-self: center;
+    color: #5a5953;
+    font-size: 2vh;
+  }
+  
+  .contenttitle {
+    font-family: 'avenirbook';
+    font-size: 2vh;
+    padding-left: 5px;
+  
+    color: #5a5953;
+    align-self: center;
+  }
+  
+  .contentarrow {
+    align-self: center;
+    justify-self: end;
+  
+    color: #5a5953;
+    background-color: inherit;
+    border: none;
+  }
+  
+  /* Sign Out Footer */
+  .profilefooter {
+    display: grid;
+    height: 20vh;
+  
+    background-color: white;
+  
+    bottom: 0px;
+  }
+  
+  .signoutbutton {
+    border: 1px solid #5a595326;
+    background-color: inherit;
+    place-self: center center;
+  
+    font-family: 'avenirbook';
+    color: #f49f86;
+    font-size: 3vh;
+  
+    border-radius: 20px;
+    padding: 10px 20px;
+  }
+  

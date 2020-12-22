@@ -5,7 +5,6 @@ import RalewayFont from './../../../fonts/Raleway/RalewayFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
-import { useState } from 'react'
 import Profile from '../Profile'
 
 const HeaderWrapper = styled.div`
@@ -42,22 +41,10 @@ const HedwigWrapper = styled.div`
 function BuyerHeader (props) {
   const navigate = useNavigate()
 
-  const [showProfile, setShowProfile] = useState(false)
-
   return (
     <HeaderWrapper>
       <RalewayFont />
       <HedwigWrapper>
-        <FaBars
-          onClick={() => {
-            setShowProfile(!showProfile)
-            console.log(showProfile)
-          }}
-          style={{
-            position: 'fixed',
-            left: '22px',
-            verticalAlign: 'middle'
-          }}/>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
             onClick={() => navigate(props.backLink)}
@@ -80,9 +67,6 @@ function BuyerHeader (props) {
           }}
         />
       </HedwigWrapper>
-      {showProfile &&
-        <Profile />
-      }
     </HeaderWrapper>
   )
 }

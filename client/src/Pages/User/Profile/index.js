@@ -25,13 +25,7 @@ const GET_USER_INFO = gql`
 const getLinks = user => {
   // Missing help path, feedback form, and edit phone number page
   const links = [
-    { icon: 'envelope', content: user.netid, path: '' },
-
     { icon: 'phone', content: user.phone, path: '' },
-
-    { icon: 'receipt', content: 'Past Orders', path: 'user/orders' },
-
-    { icon: 'star-and-crescent', content: 'Loyalty Programs', path: '' },
 
     { icon: 'hands-helping', content: 'Help', path: '' },
 
@@ -58,51 +52,53 @@ function Profile () {
   const links = getLinks(user)
 
   return (
-    <div class='background'>
-      {/* Header: My Profile */}
-      <div class='profileheader'>
-        <button class='backarrow' onClick={() => window.history.back()}>
-          <FontAwesomeIcon icon={['fas', 'arrow-left']} />
-        </button>
-        <h1 class='profilename'>My Profile</h1>
-      </div>
+    <div class='profilepane'>
+      <div class='background'>
+        {/* Header: My Profile */}
+        <div class='profileheader'>
+          <button class='backarrow' onClick={() => window.history.back()}>
+            <FontAwesomeIcon icon={['fas', 'arrow-left']} />
+          </button>
+          <h1 class='profilename'>My Profile</h1>
+        </div>
 
-      {/* Body: Welcome */}
-      <div class='welcomebody'>
-        <h1 class='welcometext'> Welcome,</h1>
-        <h1 class='nametext'>
-          {' '}
-          {user.name} <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
-        </h1>
-      </div>
+        {/* Body: Welcome */}
+        <div class='welcomebody'>
+          <h1 class='welcometext'> Welcome,</h1>
+          <h1 class='nametext'>
+            {' '}
+            {user.name} <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
+          </h1>
+        </div>
 
-      {/* Body: Links;;; should map through each of the links up top and create a box */}
-      <div class='contentbody'>
-        {links.map(link => (
-          <div class='contentcard'>
-            <div class='contenticon'>
-              {' '}
-              <FontAwesomeIcon icon={['fas', link.icon]} />
+        {/* Body: Links;;; should map through each of the links up top and create a box */}
+        <div class='contentbody'>
+          {links.map(link => (
+            <div class='contentcard'>
+              <div class='contenticon'>
+                {' '}
+                <FontAwesomeIcon icon={['fas', link.icon]} />
+              </div>
+              <p class='contenttitle'>{link.content}</p>
+              {/* Checks if path exists, if not, then don't put an arrow */}
+              {link.path ? (
+                <button
+                  class='contentarrow'
+                  onClick={() => window.open(link.path, '_self')}
+                >
+                  <FontAwesomeIcon icon={['fas', 'chevron-right']} />
+                </button>
+              ) : null}
             </div>
-            <p class='contenttitle'>{link.content}</p>
-            {/* Checks if path exists, if not, then don't put an arrow */}
-            {link.path ? (
-              <button
-                class='contentarrow'
-                onClick={() => window.open(link.path, '_self')}
-              >
-                <FontAwesomeIcon icon={['fas', 'chevron-right']} />
-              </button>
-            ) : null}
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Footer: SignOut */}
-      <div class='profilefooter'>
-        <button class='signoutbutton' onClick={handleLogoutClick}>
-          Sign Out
-        </button>
+        {/* Footer: SignOut */}
+        <div class='profilefooter'>
+          <button class='signoutbutton' onClick={handleLogoutClick}>
+            Sign Out
+          </button>
+        </div>
       </div>
     </div>
   )

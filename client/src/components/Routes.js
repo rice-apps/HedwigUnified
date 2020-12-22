@@ -1,6 +1,6 @@
-import { Component, useEffect, Profiler } from 'react'
+import { Component, useEffect, Profiler, useState } from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { Routes, Route, useRoutes, Navigate } from 'react-router-dom'
+import { Routes, Route, useRoutes, Navigate, Redirect, useNavigate, useResolvedPath } from 'react-router-dom'
 import {
   gql,
   useQuery,
@@ -23,6 +23,7 @@ import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
+import ErrorPage from './ErrorPage'
 import Product from '../Pages/User/Products/Product'
 import PaymentPage from '../Pages/User/Payment'
 import VendorsideTemplate from '../Pages/Vendor/VendorComponents/VendorGridContainer.js'
@@ -66,6 +67,29 @@ const GET_USER_INFO = gql`
       lastName
       netid
       phone
+      vendor
+    }
+  }
+`
+const GET_USER = gql`
+  query getUser($token: String!) {
+    userOne(filter: { token: $token }) {
+      name
+      netid
+      token
+      vendor
+      _id
+    }
+  }
+`
+const GET_VENDOR_DATA = gql`
+  query GET_AVAILABILITY($name: String!) {
+    getVendor(filter: { name: $name }) {
+      name
+      isOpen
+      logoUrl
+      allowedNetid
+      _id
     }
   }
 `
@@ -74,7 +98,7 @@ const GET_USER_INFO = gql`
  * Defines a private route - if the user is NOT logged in or has an invalid token,
  * then we redirect them to the login page.
  */
-const PrivateRoute = ({ element, ...rest }) => {
+const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   const token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
@@ -86,13 +110,18 @@ const PrivateRoute = ({ element, ...rest }) => {
     errorPolicy: 'none'
   })
 
-  if (error) {
+  const { data: userData, loading: userLoad, error: userError } = useQuery(GET_USER, {
+    variables: { token: token },
+    errorPolicy: 'none'
+  })
+
+  if (error || userError) {
     // Clear the token because something is wrong with it
     localStorage.removeItem('token')
     // Redirect the user to the login page
     return <Navigate to='/login' />
   }
-  if (loading) return <p>Waiting...</p>
+  if (loading || userLoad) return <p>Waiting...</p>
   if (!data || !data.verifyUser) {
     // Clear the token
     localStorage.removeItem('token')
@@ -110,11 +139,57 @@ const PrivateRoute = ({ element, ...rest }) => {
     data: { user: data.verifyUser }
   })
 
-  // Everything looks good! Now let's send the user on their way
-  return <Route {...rest} element={element} />
+  // this route is not an employee route
+  if (!isEmployeeRoute || !(isEmployeeRoute == true)){
+    // Everything looks good! Now let's send the user on their way
+    return <Route {...rest} element={element} />
+  }
+
+  const vendor = userData.userOne.vendor;
+  const netid = userData.userOne.netid;
+  // this is not a vendor and we already passed the verification stage
+  if (!vendor){
+    return <Navigate to="/eat"/>
+  }
+
+  return <EmployeeRoute netid = {netid} vendor={vendor} element={element} {...rest} />
+
+}
+
+const EmployeeRoute = ({vendor, netid, element, ...rest}) => {
+  const { data: vendorData, loading: vendorLoad, error: vendorErr } = useQuery(GET_VENDOR_DATA, {
+    variables: { name: vendor }
+  })
+
+  // this isn't an employee because we have no vendor name
+  if (vendorErr){
+    console.log("vendor", vendorData);
+    return <Navigate to = '/eat' />
+  }
+
+  if (vendorLoad){ return <p>Waiting...</p> }
+
+  console.log("DATA VENDOR", vendorData);
+  console.log('netid', netid);
+  const allowedUsers = vendorData.getVendor.allowedNetid
+  // have to modify this with /contact
+  if (!allowedUsers.includes(netid)) {
+    return <Navigate to='/eat' />
+  }
+
+  // this is a true employee
+  return <Route {...rest} element={element} />;
 }
 
 const newRoutesArray = [
+  {
+    path: '/',
+    element: <Navigate to="/eat"/>
+  },
+  {
+    path: '/404_page',
+    element: <ErrorPage />
+  },
   {
     path: '/login',
     element: <Login />
@@ -183,32 +258,36 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <PrivateRoute element={<OpenOrdersPage />} /> },
+      { path: '/', element: <PrivateRoute isEmployeeRoute = {true} element={<OpenOrdersPage />} /> },
       {
         path: '/openorders',
-        element: <PrivateRoute element={<OpenOrdersPage />} />
+        element: <PrivateRoute isEmployeeRoute = {true} element={<OpenOrdersPage />} />
       },
       {
         path: '/closedorders',
-        element: <PrivateRoute element={<ClosedOrdersPage />} />
+        element: <PrivateRoute isEmployeeRoute = {true} element={<ClosedOrdersPage />} />
       },
       {
         path: '/items',
-        element: <PrivateRoute element={<ItemsMenuManagementPage />} />
+        element: <PrivateRoute isEmployeeRoute = {true} element={<ItemsMenuManagementPage />} />
       },
       {
         path: '/modifiers',
-        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />
+        element: <PrivateRoute isEmployeeRoute = {true} element={<ModifiersMenuManagementPage />} />
       },
       {
         path: '/set-basic-info',
-        element: <PrivateRoute element={<SetBasicInfoPage />} />
+        element: <PrivateRoute isEmployeeRoute = {true} element={<SetBasicInfoPage />} />
       },
       {
         path: '/set-store-hours',
-        element: <PrivateRoute element={<SetStoreHoursPage />} />
+        element: <PrivateRoute isEmployeeRoute = {true} element={<SetStoreHoursPage />} />
       }
     ]
+  },
+  { 
+    path: '/*',
+    element: <Navigate to={'/404_page'} />
   }
 ]
 

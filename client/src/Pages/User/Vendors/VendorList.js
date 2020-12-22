@@ -1,6 +1,5 @@
 import { useQuery, gql } from '@apollo/client'
 import { useHistory, useLocation } from 'react-router'
-import { useState } from 'react'
 
 import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
@@ -16,7 +15,6 @@ import VendorCard from './VendorCard'
 import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
 import ProfilePane from './ProfilePane.js'
-import { FaBars } from 'react-icons/fa'
 
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
@@ -35,8 +33,6 @@ import { FaBars } from 'react-icons/fa'
 // `
 
 function VendorList ({ classes }) {
-  const [showProfile, setShowProfile] = useState(false)
-
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
   if (error) return <p>Error...</p>
@@ -51,19 +47,7 @@ function VendorList ({ classes }) {
       style={{ paddingTop: '8vh', paddingBottom: '10vh' }}
       className='vendorPage'
     >
-      <FaBars
-          onClick={() => {
-            setShowProfile(!showProfile)
-            console.log(showProfile)
-          }}
-          style={{
-            position: 'fixed',
-            left: '22px',
-            verticalAlign: 'middle'
-          }}/>
-      {showProfile &&
-        <ProfilePane />
-      }
+      <ProfilePane />
       <BuyerHeader />
       <div>
         {getVendors.map(vendor => {

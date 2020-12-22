@@ -1,6 +1,8 @@
 import './ProfilePane.css'
 import { gql, useQuery, useApolloClient } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState } from 'react'
+import { FaBars, FaTimes } from 'react-icons/fa'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
@@ -41,6 +43,8 @@ const getLinks = user => {
 }
 
 function ProfilePane () {
+  const [showProfile, setShowProfile] = useState(false)
+
   const { data, loading, error } = useQuery(GET_USER_INFO)
 
   if (error) return <p>Error!</p>
@@ -51,43 +55,62 @@ function ProfilePane () {
   const links = getLinks(user)
 
   return (
-    <div className='profilepane'>
-      <div className='background'>
-        {/* Body: Welcome */}
-        <div className='welcomebody'>
-          <h1 className='welcometext'> Welcome, {' '} {user.name} </h1>
-        </div>
+    <>
+      <FaBars
+        onClick={() => {
+          setShowProfile(!showProfile)
+          console.log(showProfile)
+        }}
+        style={{
+          position: 'fixed',
+          left: '22px',
+          verticalAlign: 'middle'
+        }}
+      />
+      <div className={showProfile ? 'profilepane-active' : 'profilepane'}>
+        <div className='background'>
+          <FaTimes
+            onClick={() => {
+              setShowProfile(!showProfile)
+              console.log(showProfile)
+            }}
+          />
+          {/* Body: Welcome */}
+          <div className='welcomebody'>
+            <h1 className='welcometext'> Welcome, {' '} {user.name} </h1>
+          </div>
 
-        {/* Body: Links;;; should map through each of the links up top and create a box */}
-        <div className='contentbody'>
-          {links.map(link => (
-            <div className='contentcard'>
-              <div className='contenticon'>
-                {' '}
-                <FontAwesomeIcon icon={['fas', link.icon]} />
+          {/* Body: Links;;; should map through each of the links up top and create a box */}
+          <div className='contentbody'>
+            {links.map(link => (
+              <div className='contentcard'>
+                <div className='contenticon'>
+                  {' '}
+                  <FontAwesomeIcon icon={['fas', link.icon]} />
+                </div>
+                <p className='contenttitle'>{link.content}</p>
+                {/* Checks if path exists, if not, then don't put an arrow */}
+                {link.path ? (
+                  <button
+                    className='contentarrow'
+                    onClick={() => window.open(link.path, '_self')}
+                  >
+                    <FontAwesomeIcon icon={['fas', 'chevron-right']} />
+                  </button>
+                ) : null}
               </div>
-              <p className='contenttitle'>{link.content}</p>
-              {/* Checks if path exists, if not, then don't put an arrow */}
-              {link.path ? (
-                <button
-                  className='contentarrow'
-                  onClick={() => window.open(link.path, '_self')}
-                >
-                  <FontAwesomeIcon icon={['fas', 'chevron-right']} />
-                </button>
-              ) : null}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Footer: SignOut */}
-        <div className='profilefooter'>
-          <button className='signoutbutton' onClick={handleLogoutClick}>
-            Sign Out
-          </button>
+          {/* Footer: SignOut */}
+          <div className='profilefooter'>
+            <button className='signoutbutton' onClick={handleLogoutClick}>
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

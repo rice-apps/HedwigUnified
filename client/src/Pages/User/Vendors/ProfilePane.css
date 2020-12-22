@@ -1,6 +1,18 @@
-/* Entire pane */
-.profilepane {
+  /* Entire pane */
+  .profilepane {
+    width: 0;
+    transition: 1s;
+    display: flex;
+    margin-left: -60vw;
+    position: fixed;
+    z-index: 2;
+  }
+
+  .profilepane-active {
     width: 60vw;
+    transition: 1s;
+    position: fixed;
+    z-index: 2;
   }
   
   /* Background Color */

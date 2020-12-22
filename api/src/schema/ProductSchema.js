@@ -511,8 +511,8 @@ ItemTC.addResolver({
     args: {
       merchantId: "String!",
     },
-    resolver: async ({ args }) => {
-      const api = new CatalogApi();
+    resolve: async ({ args }) => {
+      const api = new CatalogApi()
 
       const upsertCatalogItemResponse = await api.upsertCatalogObject({
         idempotency_key: idempotencyKey,

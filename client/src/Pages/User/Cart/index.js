@@ -28,7 +28,6 @@ import createActivityDetector from "activity-detector";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-// import 'react-dropdown/style.css';
 
 const styles = {
   fontSize: 14,
@@ -158,13 +157,10 @@ function CartDetail() {
   const [pickupTime, setPickupTime] = useState(null);
 
   // Add payment method picker:
-  const [paymentMethod, setPaymentMethod] = useState("Credit Card");
+  const [paymentMethod, setPaymentMethod] = useState("CREDIT");
   // from master:
   const [nullError, setNullError] = useState(checkNullFields());
   // eval to a field string if user's name, student id, or phone number is null
-  // const { loading, error, data } = useQuery(GET_VENDOR);
-
-  // const options = ["Credit Card", "Tetra", "Cohen House"];
   const options = [
     { value: "CREDIT", label: "Credit Card" },
     { value: "TETRA", label: "Tetra" },
@@ -183,14 +179,6 @@ function CartDetail() {
     createPayment,
     { loading: payment_loading, error: payment_error, data: payment_data },
   ] = useMutation(CREATE_PAYMENT);
-  const [
-    updateOrderTracker,
-    {
-      loading: ordertracker_loading,
-      error: ordertracker_error,
-      data: ordertracker_data,
-    },
-  ] = useMutation(UPDATE_ORDER_TRACKER);
 
   const navigate = useNavigate();
   const cart_menu = cartItems();
@@ -200,7 +188,6 @@ function CartDetail() {
   const product_ids = cart_menu.map((item) => {
     return item.dataSourceId;
   });
-  console.log("Product IDs", product_ids);
 
   const {
     loading: avail_loading,
@@ -214,12 +201,6 @@ function CartDetail() {
 
   const handleClickCredit = async () => {
     // Get url and embed that url
-    const updateOrderTrackerResponse = await updateOrderTracker({
-      variables: {
-        paymentId: paymentMethod,
-        orderId: orderSummary()['orderId'],
-      },
-    });
     return navigate(`/eat/almostThere`)
   };
 
@@ -227,12 +208,13 @@ function CartDetail() {
     const newRes = await avail_refetch();
     while (newRes.loading) {}
     if (newRes.data.getAvailabilities === false) {
-      return navigate("/eat/cohen/confirmation");
+      return navigate("/eat/confirmation");
     } else {
       const rec = {
-        variables: createRecord(cart_menu)
+        variables: createRecord(cart_menu, paymentMethod)
       }
       const order = orderSummary()
+      console.log(rec);
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
@@ -240,7 +222,7 @@ function CartDetail() {
           // new:
           sourceId: "cnon:card-nonce-ok",
           orderId: orderJson.id,
-          locationId: order.vendor.locationIds[0],
+          location: order.vendor.locationIds[0],
           subtotal: totals.subtotal * 100,
           currency: "USD",
         },
@@ -258,21 +240,18 @@ function CartDetail() {
         }
         )
       )
-      if (paymentMethod === "Credit") {
+      if (paymentMethod === "CREDIT") {
         // navigate to Almost there page
         return handleClickCredit();
       }
-      if (paymentMethod === "Cohen House") {
+      if (paymentMethod === "COHEN") {
         // get cohen id from order summary
         // navigate to order confirmation page
         console.log("The payment type is through Cohen House.");
-        return navigate("/confirmation");
+        return navigate("/eat/confirmation");
       }
-      if (paymentMethod === "Tetra") {
-        // store student id?
-        // navigate to order confirmation page
-        console.log("The payment type is through Tetra.");
-        return navigate("/confirmation");
+      if (paymentMethod === "TETRA") {
+        return navigate("/eat/confirmation");
       }
     }
   };
@@ -315,13 +294,9 @@ function CartDetail() {
     return <p>{payment_error.message}</p>;
   }
 
-  if (avail_loading) return <p>'Loading availabilities...'</p>;
-  if (avail_error & (cart_menu.length != 0))
-    return <p>`Error! ${avail_error.message}`</p>;
-  if (ordertracker_loading) return <p>Loading...</p>;
-  if (ordertracker_error) {
-    return <p>{ordertracker_error.message}</p>;
-  }
+  // if (avail_loading) return <p>'Loading availabilities...'</p>;
+  // if (avail_error & (cart_menu.length != 0))
+  //   return <p>`Error! ${avail_error.message}`</p>;
 
   const currDate = new Date();
   const currDay = currDate.getDay();
@@ -336,29 +311,29 @@ function CartDetail() {
   const businessHour = businessHours[currDay];
 
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
-  const startHours = businessHour.start.map((startHour) => {
+  const startHours = businessHours[currDay] ? businessHour.start.map((startHour) => {
     let hour = startHour.split(":")[0];
     if (startHour.includes("p.m.")) {
       return parseInt(hour) + 12;
     } else {
       return parseInt(hour);
     }
-  });
-  const endHours = businessHour.end.map((endHour) => {
+  }) : ['8', '13'];
+  const endHours = businessHours[currDay] ? businessHour.end.map((endHour) => {
     let hour = endHour.split(":")[0];
     if (endHour.includes("p.m.")) {
       return parseInt(hour) + 12;
     } else {
       return parseInt(hour);
     }
-  });
+  }) : ['12', '21'];
 
-  const startMinutes = businessHour.start.map((startHour) => {
+  const startMinutes = businessHours[currDay] ? businessHour.start.map((startHour) => {
     return parseInt(startHour.split(":")[1]);
-  });
-  const endMinutes = businessHour.end.map((endHour) => {
+  }) : ['30', '00'];
+  const endMinutes = businessHours[currDay] ? businessHour.end.map((endHour) => {
     return parseInt(endHour.split(":")[1]);
-  });
+  }) : ['30', '00'];
 
   const timeIntervals = calculateNextHours(
     currHour,
@@ -383,12 +358,15 @@ function CartDetail() {
     ];
   }
 
-  const disabled = () => false; // uncomment the codde below for prod mode.
-  // moment().hour() > endHour1 ||
-  // (moment().hour() == endHour1 && moment().minute() >= endMinute1);
+  pickupTimes.forEach(t => t.value = moment().set(
+    {'year': moment().year(),
+    'month': moment().month(),
+    'date': moment().date(), 
+    'hour': t.value.split(':')[0], 
+    'minute': t.value.split(':')[1]}))
 
   function onChangeDropdown(newPayment) {
-    setPaymentMethod(newPayment);
+    setPaymentMethod(newPayment.value);
   }
 
   return (
@@ -443,6 +421,11 @@ function CartDetail() {
             placeholder={"Select a pickup time"}
             onChange={(e) => {
               setPickupTime(e.value);
+              orderSummary(
+                Object.assign(orderSummary(),
+                  {time: e.value}
+                )
+              )
             }}
             clearable={false}
             style={styles.select}
@@ -478,7 +461,7 @@ function CartDetail() {
               disabled={cartItems().length === 0 || pickupTime === null}
               className="buy-btn"
               title="Confirm"
-              onClick={handleConfirmClick()}
+              onClick={handleConfirmClick}
             >
               Submit Order
               <div />

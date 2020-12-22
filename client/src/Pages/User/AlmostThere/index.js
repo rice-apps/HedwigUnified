@@ -1,9 +1,4 @@
-import { useState } from 'react'
-import { useQuery, gql } from '@apollo/client'
-import { useHistory, useLocation } from 'react-router'
 import './almostThere.css'
-// import '../../fonts/style.css'
-// fontawesome imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
@@ -11,7 +6,7 @@ import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
 
-const Button = styled.button`
+export const Button = styled.button`
   font-size: 20px;
   line-height: 27px;
   color: #db6142;
@@ -30,7 +25,7 @@ const Button = styled.button`
     `};
 `
 
-const P = styled.p`
+export const P = styled.p`
   font-size: 12pt;
   color: #5a5953;
   font-family: 'Avenir Book', 'Arial Book', sans-serif;
@@ -68,7 +63,7 @@ const P = styled.p`
 }
 `
 
-const Div = styled.div`
+export const Div = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;

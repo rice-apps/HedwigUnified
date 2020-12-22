@@ -52,38 +52,38 @@ function Profile () {
   const links = getLinks(user)
 
   return (
-    <div class='profilepane'>
-      <div class='background'>
+    <div className='profilepane'>
+      <div className='background'>
         {/* Header: My Profile */}
-        <div class='profileheader'>
-          <button class='backarrow' onClick={() => window.history.back()}>
+        <div className='profileheader'>
+          <button className='backarrow' onClick={() => window.history.back()}>
             <FontAwesomeIcon icon={['fas', 'arrow-left']} />
           </button>
-          <h1 class='profilename'>My Profile</h1>
+          <h1 className='profilename'>My Profile</h1>
         </div>
 
         {/* Body: Welcome */}
-        <div class='welcomebody'>
-          <h1 class='welcometext'> Welcome,</h1>
-          <h1 class='nametext'>
+        <div className='welcomebody'>
+          <h1 className='welcometext'> Welcome,</h1>
+          <h1 className='nametext'>
             {' '}
             {user.name} <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
           </h1>
         </div>
 
         {/* Body: Links;;; should map through each of the links up top and create a box */}
-        <div class='contentbody'>
+        <div className='contentbody'>
           {links.map(link => (
-            <div class='contentcard'>
-              <div class='contenticon'>
+            <div className='contentcard'>
+              <div className='contenticon'>
                 {' '}
                 <FontAwesomeIcon icon={['fas', link.icon]} />
               </div>
-              <p class='contenttitle'>{link.content}</p>
+              <p className='contenttitle'>{link.content}</p>
               {/* Checks if path exists, if not, then don't put an arrow */}
               {link.path ? (
                 <button
-                  class='contentarrow'
+                  className='contentarrow'
                   onClick={() => window.open(link.path, '_self')}
                 >
                   <FontAwesomeIcon icon={['fas', 'chevron-right']} />
@@ -94,8 +94,8 @@ function Profile () {
         </div>
 
         {/* Footer: SignOut */}
-        <div class='profilefooter'>
-          <button class='signoutbutton' onClick={handleLogoutClick}>
+        <div className='profilefooter'>
+          <button className='signoutbutton' onClick={handleLogoutClick}>
             Sign Out
           </button>
         </div>

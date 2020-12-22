@@ -81,7 +81,7 @@ function BuyerHeader (props) {
         />
       </HedwigWrapper>
       {showProfile &&
-        <Profile/>
+        <Profile />
       }
     </HeaderWrapper>
   )

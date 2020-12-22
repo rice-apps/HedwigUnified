@@ -14,6 +14,7 @@ import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
 import VendorCard from './VendorCard'
 import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
+import Profile from '../Profile'
 
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
@@ -69,6 +70,7 @@ function VendorList ({ classes }) {
   */
 
   return (
+
     <div
       style={{ paddingTop: '8vh', paddingBottom: '10vh' }}
       className='vendorPage'

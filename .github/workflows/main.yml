@@ -44,7 +44,7 @@ jobs:
           context: ./api
           file: ./api/Dockerfile 
           push: true
-          tags: thewillmundy/hedwigunified:latest
+          tags: riceapps/hedwigunified:latest
           
           
   deploy:

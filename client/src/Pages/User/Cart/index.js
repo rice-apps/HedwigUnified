@@ -220,7 +220,7 @@ function CartDetail() {
         orderId: orderSummary()['orderId'],
       },
     });
-    return orderSummary()["url"];
+    return navigate(`/eat/almostThere`)
   };
 
   const handleConfirmClick = async () => {
@@ -229,18 +229,18 @@ function CartDetail() {
     if (newRes.data.getAvailabilities === false) {
       return navigate("/eat/cohen/confirmation");
     } else {
-      const q = {
+      const rec = {
         variables: createRecord(cart_menu)
       }
-      const orderResponse = await createOrder(q)
+      const order = orderSummary()
+      const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
           // new:
           sourceId: "cnon:card-nonce-ok",
           orderId: orderJson.id,
-          // new: (locationId is not hardcoded on another branch)
-          locationId: "FMXAFFWJR95WC",
+          locationId: order.vendor.locationIds[0],
           subtotal: totals.subtotal * 100,
           currency: "USD",
         },
@@ -260,8 +260,7 @@ function CartDetail() {
       )
       if (paymentMethod === "Credit") {
         // navigate to Almost there page
-        console.log("The payment type is credit card.");
-        window.open(await handleClickCredit(), "_blank");
+        return handleClickCredit();
       }
       if (paymentMethod === "Cohen House") {
         // get cohen id from order summary
@@ -275,7 +274,6 @@ function CartDetail() {
         console.log("The payment type is through Tetra.");
         return navigate("/confirmation");
       }
-      return navigate(`/eat/almostThere`)
     }
   };
 

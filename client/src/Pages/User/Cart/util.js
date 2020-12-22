@@ -30,9 +30,10 @@ export const CREATE_ORDER = gql`
     $time: String!
     $key: String!
     $lineItems: [LineItemInput]!
+    $location: String!
   ) {
     createOrder(
-      locationId: "FMXAFFWJR95WC"
+      locationId: $location
       record: {
         studentId: $studentId
         idempotencyKey: $key
@@ -143,6 +144,7 @@ export const createRecord = (items) => {
     phone: recipient.phone,
     email: recipient.email,
     time: orderSummary().time.format(),
+    location: orderSummary().vendor.locationIds[0]
   };
 };
 

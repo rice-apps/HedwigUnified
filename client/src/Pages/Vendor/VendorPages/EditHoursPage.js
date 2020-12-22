@@ -6,14 +6,31 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
 
-const UPDATE_VENDOR_CLOSED = gql`
-  mutation UPDATE_VENDOR_CLOSED(
-    $hours: [VendorBusinessHours]!
-    $name: String!
-  ) {
-    updateVendor(filter: { name: $name }, record: { hours: $hours }) {
+// const UPDATE_VENDOR = gql`
+//   mutation UPDATE_VENDOR($hours: [VendorBusinessHours]!, $name: String!) {
+//     updateVendor(filter: { name: $name }, record: { hours: $hours }) {
+//       record {
+//         hours {
+//           start
+//           end
+//         }
+//       }
+//     }
+//   }
+// `;
+
+const UPDATE_VENDOR = gql`
+  mutation UPDATE_VENDOR_HOURS {
+    updateVendor(
+      record: { hours: [{ start: [], end: [], day: Sunday, isClosed: false }] }
+      filter: { name: "Cohen House" }
+    ) {
       record {
-        hours
+        hours {
+          start
+          end
+          isClosed
+        }
       }
     }
   }
@@ -39,38 +56,43 @@ function EditHoursPage() {
     updatedIsClosed[0] = false;
     updatedDay.isClosed = updatedIsClosed;
     updatedHours[0] = updatedDay;
+    console.log("updated hours ", updatedHours);
   }
 
-  const [toggleIsClosed, { data, loading, error }] = useMutation(
-    UPDATE_VENDOR_CLOSED,
-    {
-      variables: { hours: updatedHours, name: "Cohen House" },
-    }
-  );
+  //   const [toggleIsClosed, { data, loading, error }] = useMutation(
+  //     UPDATE_VENDOR,
+  //     {
+  //       variables: { hours: updatedHours, name: "Cohen House" },
+  //     }
+  //   );
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+  //   toggleIsClosed();
 
-  useEffect(() => {
-    if (!vendor_loading) {
-      toggleIsClosed(); // called when data ready
-      console.log(data);
-    }
-  });
+  //   useEffect(() => {
+  //     console.log("updatedHours ", updatedHours);
+  //     if (!vendor_loading) {
+  //       toggleIsClosed();
+  //       console.log(data);
+  //     }
+  //   });
 
   return (
     <div>
       <div>Hello</div>
       <Button
-      // onClick={() =>
-      //   //   vendorClosed({
-      //   //     variables: {
-      //   //       hours: updatedHours,
-      //   //       name: "Cohen House",
-      //   //     },
-      //   //   })
-      //   console.log(updated_data)
-      // }
+        onClick={() =>
+          //   vendorClosed({
+          //     variables: {
+          //       hours: updatedHours,
+          //       name: "Cohen House",
+          //     },
+          //   })
+          toggleIsClosed()
+        }
       >
         Change Sunday Closed
       </Button>
+      <Button onClick={() => console.log(data)}>See data</Button>
     </div>
   );
 }

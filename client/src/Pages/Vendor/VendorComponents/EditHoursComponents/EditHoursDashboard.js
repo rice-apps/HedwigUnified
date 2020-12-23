@@ -105,15 +105,15 @@ function CreateStatusDropdown(props) {
       updatedHours[index] = dayCopy;
     });
 
-    // update state:
-    props.updateCurrentHours(updatedHours);
-
     toggleIsClosed({
       variables: {
         name: "Cohen House",
         hours: updatedHours,
       },
     });
+
+    // update state:
+    props.updateCurrentHours(updatedHours);
   }
 
   return (
@@ -246,12 +246,14 @@ function MakeTimeInput(props) {
 
   function onChangeHourModal(inputTime) {
     console.log("inputted time: ", inputTime);
+    console.log("props.currentHours", props.currentHours);
 
-    const originalHours = props.vendor_data.getVendor.hours;
+    const originalHours = props.currentHours;
     const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
     const updatedTime = [...updatedDay.start, inputTime];
+    console.log("updatedTime ", updatedTime);
 
     console.log("after day: ", updatedDay);
 
@@ -269,10 +271,7 @@ function MakeTimeInput(props) {
       },
     });
 
-    console.log(
-      "updated hours with start time",
-      updatedHours[props.index].start
-    );
+    props.updateCurrentHours(updatedHours);
   }
 
   return (
@@ -322,13 +321,15 @@ function MakeAddHoursButton(props) {
             <MakeTimeInput
               id="addedStartTime"
               index={props.index}
-              vendor_data={props.vendor_data}
+              currentHours={props.currentHours}
+              updateCurrentHours={props.updateCurrentHours}
             />
             <div tyle={{ textAlign: "middle" }}> TO </div>
             <MakeTimeInput
               id="addedEndTime"
               index={props.index}
-              vendor_data={props.vendor_data}
+              currentHours={props.currentHours}
+              updateCurrentHours={props.updateCurrentHours}
             />
           </AddHourModalWrapper>
           <IoMdClose
@@ -370,12 +371,16 @@ function EditHoursDashboard() {
     setCurrentHours(newHours);
   }
 
+  console.log(currentHours.length);
+
   if (currentHours.length === 0) {
+    console.log("hours ", hours);
     updateCurrentHours(hours);
+    console.log("current hours in if ", currentHours);
   }
 
   // updateCurrentHours(hours);
-  console.log("current hours:", currentHours);
+  console.log("current hours: ", currentHours);
 
   function getIndex(day) {
     let dayName =
@@ -428,7 +433,8 @@ function EditHoursDashboard() {
               <MakeAddHoursButton
                 weekday={day}
                 index={index}
-                // vendor_data={vendor_data}
+                currentHours={currentHours}
+                updateCurrentHours={updateCurrentHours}
               />
             </EditHoursRow>
           );

@@ -56,15 +56,17 @@ jobs:
       - name: Checkout files
         uses: actions/checkout@v2
         
-      - name: Get tag name
-        uses: olegtarasov/get-tag@v2
-        
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      
-      - name: Provision Droplet & deploy container
-        run: doctl compute droplet create "$GIT_TAG_NAME" --image docker-18-04 --size s-1vcpu-1gb --region nyc1 --user-data-file deploy.sh --wait
+
+      - name: Delete previous droplet
+        run: doctl compute droplet delete "staging"
+
+      - name: Provision Droplet
+        run: doctl compute droplet create "staging" --image docker-18-04 --size s-1vcpu-1gb --region nyc1 --wait
     
+      - name: Setup Droplet with container
+        run: doctl compute ssh "staging" --ssh-command docker run -d -p 3001:3001 --name api riceapps/hedwigunified:latest
           

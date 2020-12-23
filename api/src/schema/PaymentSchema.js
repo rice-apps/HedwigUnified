@@ -319,11 +319,10 @@ PaymentTC.addResolver({
     args: {
       vendor: 'String!',
       source: 'String!',
-      paymentId: 'String',
-      orderId: 'String'
+      paymentId: 'String'
     },
     resolve: async ({ args }) => {
-      const { source, paymentId, orderId } = args
+      const { source, paymentId } = args
 
       let response
 
@@ -345,6 +344,21 @@ PaymentTC.addResolver({
         }
 
         case 'SHOPIFY': {
+          const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
+            root.add('node', { args: { id: args.paymentId } }, node => {
+              node.addInlineFragmentOn('Checkout', checkout => {
+                checkout.add('id')
+                checkout.add('order', order => {
+                  order.add('id')
+                })
+              })
+            })
+          })
+
+          const checkout = await shopifyClient.graphQLClient.send(
+            checkoutOrderQuery
+          )
+
           const orderQuery = `
             query GetOrder($id: ID!) {
               node(id: $id) {
@@ -359,7 +373,7 @@ PaymentTC.addResolver({
           `
 
           const order = await shopifyAdminClient.graphql(orderQuery, {
-            id: orderId
+            id: checkout.data.node.order.id
           })
 
           response = order.data.node.order.fullyPaid
@@ -377,44 +391,84 @@ PaymentTC.addResolver({
   })
   .addResolver({
     name: 'cancelPayment',
-    type: PaymentTC,
+    type: PaymentTC.makeFieldNullable(PaymentTC.getFieldNames()),
     args: {
       vendor: 'String!',
-      paymentId: 'String!'
+      paymentId: 'String!',
+      source: 'String!'
     },
     resolve: async ({ args }) => {
-      const { paymentId } = args // TODO: handle cancelling payments for different vendors
+      const { paymentId, source } = args // TODO: handle cancelling payments for different vendors
 
-      const api = new PaymentsApi()
+      switch (source) {
+        case 'SQUARE': {
+          const api = new PaymentsApi()
 
-      const cancelPaymentResponse = await api.cancelPayment(paymentId)
+          const cancelPaymentResponse = await api.cancelPayment(paymentId)
 
-      if (cancelPaymentResponse.errors) {
-        return new ApolloError(
-          `Couldn't cancel payment because of error: ${cancelPaymentResponse.errors}`
-        )
-      }
+          if (cancelPaymentResponse.errors) {
+            return new ApolloError(
+              `Couldn't cancel payment because of error: ${cancelPaymentResponse.errors}`
+            )
+          }
 
-      const {
-        payment: {
-          id,
-          order_id,
-          customer_id,
-          amount_money,
-          tip_money,
-          total_money,
-          status
+          const {
+            payment: {
+              id,
+              order_id,
+              customer_id,
+              amount_money,
+              tip_money,
+              total_money,
+              status
+            }
+          } = cancelPaymentResponse
+
+          return {
+            id,
+            order: order_id,
+            customer: customer_id,
+            subtotal: amount_money,
+            tip: tip_money,
+            total: total_money,
+            status
+          }
         }
-      } = cancelPaymentResponse
+        case 'SHOPIFY': {
+          const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
+            root.add('node', { args: { id: args.paymentId } }, node => {
+              node.addInlineFragmentOn('Checkout', checkout => {
+                checkout.add('id')
+                checkout.add('order', order => {
+                  order.add('id')
+                })
+              })
+            })
+          })
 
-      return {
-        id,
-        order: order_id,
-        customer: customer_id,
-        subtotal: amount_money,
-        tip: tip_money,
-        total: total_money,
-        status
+          const checkout = await shopifyClient.graphQLClient.send(
+            checkoutOrderQuery
+          )
+
+          const orderCloseMutation = `
+            mutation CloseOrder($id: ID!) {
+              orderClose(input: { id: $id }) {
+                order {
+                  id
+                }
+              }
+            }
+          `
+
+          const order = await shopifyAdminClient.graphql(orderCloseMutation, {
+            id: checkout.data.node.order.id
+          })
+
+          return {
+            id: paymentId,
+            order: order.data.orderClose.order.id
+          }
+        }
       }
     }
   })

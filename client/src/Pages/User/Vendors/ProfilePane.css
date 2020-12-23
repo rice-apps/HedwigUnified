@@ -4,14 +4,14 @@
     transition: 800ms;
     display: flex;
     margin-left: -30vw;
-    position: absolute;
+    position: fixed;
     z-index: 2;
   }
 
   .profilepane-active {
     width: 60vw;
     transition: 500ms;
-    position: absolute;
+    position: fixed;
     z-index: 2;
   }
 
@@ -72,7 +72,7 @@
   .welcomebody {
     display: flex;
     flex-direction: column;
-    height: 20vh;
+    height: 30vh;
     justify-content: center;
     align-items: flex-start;
   
@@ -138,7 +138,7 @@
   /* Sign Out Footer */
   .profilefooter {
     display: grid;
-    height: 50vh;
+    height: 45vh;
   
     background-color: #faf8f8;
     border-top: #7070701a 1px solid;

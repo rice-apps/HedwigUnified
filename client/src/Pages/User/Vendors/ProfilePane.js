@@ -66,7 +66,7 @@ function ProfilePane () {
           height: '4.5vh',
           width: '4.5vh',
           top: '2.5vh',
-          zIndex: '3'
+          zIndex: '2'
         }}
       />
       <div className={showProfile ? 'profilepane-active' : 'profilepane'}>

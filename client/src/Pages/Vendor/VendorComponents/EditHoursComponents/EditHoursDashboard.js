@@ -5,6 +5,9 @@ import { IoMdClose, IoMdArrowDropdown } from "react-icons/io";
 import { CgMathPlus } from "react-icons/cg";
 import Modal from "react-modal";
 
+import { VENDOR_QUERY } from "../../../../graphql/VendorQueries.js";
+import { useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
+
 const EditHoursDashboardWrapper = styled.div`
   height: 90%;
   width: 90%;
@@ -103,6 +106,7 @@ const HoursInterval = styled.div`
 `;
 
 const DaysofTheWeek = ["MON", "TUE", "WED", "THURS", "FRI", "SAT", "SUN"];
+
 function HoursItem(props) {
   return (
     <HoursInterval>
@@ -111,7 +115,7 @@ function HoursItem(props) {
           position: "absolute",
           top: "4",
           right: "4",
-          fontSize: "2.2vh"
+          fontSize: "2.2vh",
         }}
       />
       {props.startTime} – {props.endTime}
@@ -227,19 +231,66 @@ function MakeAddHoursButton(props) {
 }
 
 function EditHoursDashboard() {
+  const {
+    data: vendor_data,
+    error: vendor_error,
+    loading: vendor_loading,
+  } = useQuery(VENDOR_QUERY, {
+    variables: { vendor: "Cohen House" },
+  });
+
+  if (vendor_loading) {
+    return <p>Loading...</p>;
+  }
+  if (vendor_error) {
+    return <p>Error...</p>;
+  }
+
+  const hours = vendor_data.getVendor.hours;
+  console.log(hours);
+
+  function getIndex(day) {
+    let dayName =
+      day === "MON"
+        ? "Monday"
+        : day === "TUE"
+        ? "Tuesday"
+        : day === "TUE"
+        ? "Tuesday"
+        : day === "WED"
+        ? "Wednesday"
+        : day === "THURS"
+        ? "Thursday"
+        : day === "FRI"
+        ? "Friday"
+        : day === "SAT"
+        ? "Saturday"
+        : day === "SUN"
+        ? "Sunday"
+        : "N/A";
+    return hours.findIndex((obj) => obj.day === dayName);
+  }
+
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
       <EditHoursRowWrapper>
-        {DaysofTheWeek.map(day => {
+        {DaysofTheWeek.map((day) => {
+          console.log(getIndex(day));
+          const index = getIndex(day);
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
               <CreateStatusDropdown />
               <HoursColumn>
-                <HoursItem startTime="7:00 AM" endTime="12:00 PM"></HoursItem>
-                <HoursItem startTime="1:00 PM" endTime="6:00 PM"></HoursItem>
-                <HoursItem startTime="8:00 PM" endTime="11:00 PM"></HoursItem>
+                {hours[index].start.map((startInput, timeIndex) => {
+                  return (
+                    <HoursItem
+                      startTime={hours[index].start[timeIndex]}
+                      endTime={hours[index].end[timeIndex]}
+                    ></HoursItem>
+                  );
+                })}
               </HoursColumn>
               <MakeAddHoursButton weekday={day} />
             </EditHoursRow>

@@ -8,6 +8,19 @@ import Modal from "react-modal";
 import { VENDOR_QUERY } from "../../../../graphql/VendorQueries.js";
 import { useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
 
+const UPDATE_VENDOR = gql`
+  mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
+    updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
+      record {
+        hours {
+          start
+          end
+        }
+      }
+    }
+  }
+`;
+
 const EditHoursDashboardWrapper = styled.div`
   height: 90%;
   width: 90%;
@@ -71,18 +84,78 @@ const StatusDropdown = styled.select`
 `;
 
 function CreateStatusDropdown(props) {
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+
+  // const {
+  //   data: vendor_data,
+  //   error: vendor_error,
+  //   loading: vendor_loading,
+  // } = useQuery(VENDOR_QUERY, {
+  //   variables: { vendor: "Cohen House" },
+  // });
+
+  // if (vendor_loading) {
+  //   return <p>Loading...</p>;
+  // }
+  // if (vendor_error) {
+  //   return <p>Error...</p>;
+  // }
+
+  function onChangeIsClosed(value) {
+    let inputIsClosed = value === "OPEN" ? false : true;
+    console.log("value ", value);
+    console.log("inputIsClosed ", inputIsClosed);
+    // props.index
+    const originalHours = props.vendor_data.getVendor.hours;
+    console.log("original hours isClosed", originalHours[props.index].isClosed);
+    const updatedHours = [...originalHours];
+    // This index is the index of the day! should reflect what day the user clicks to edit:
+    const updatedDay = { ...updatedHours[props.index] };
+    const updatedIsClosed = [...updatedDay.isClosed];
+    console.log("before: ", updatedIsClosed[0]);
+    updatedIsClosed[0] = inputIsClosed;
+    console.log("after: ", updatedIsClosed[0]);
+    console.log("before day: ", updatedDay);
+    updatedDay.isClosed = updatedIsClosed;
+    console.log("after day: ", updatedDay);
+
+    updatedHours[0] = updatedDay;
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
+
+    toggleIsClosed({
+      variables: {
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
+
+    console.log("updated hours isClosed", updatedHours[props.index].isClosed);
+  }
+
   return (
     <StatusColumn>
       {props.inputIsClosed ? (
-        <StatusDropdown name="storeStatus" id="storeStatus">
+        <StatusDropdown
+          name="storeStatus"
+          id="storeStatus"
+          onChange={(e) => onChangeIsClosed(e.target.value)}
+        >
           <option value="OPEN">Open</option>
-          <option value="CLOSED" selected>
+          <option value="CLOSED" defaultValue>
             Closed
           </option>
         </StatusDropdown>
       ) : (
-        <StatusDropdown name="storeStatus" id="storeStatus">
-          <option value="OPEN" selected>
+        <StatusDropdown
+          name="storeStatus"
+          id="storeStatus"
+          onChange={() => console.log("change!")}
+        >
+          <option value="OPEN" defaultValue>
             Open
           </option>
           <option value="CLOSED">Closed</option>
@@ -248,6 +321,8 @@ function MakeAddHoursButton(props) {
 }
 
 function EditHoursDashboard() {
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+
   const {
     data: vendor_data,
     error: vendor_error,
@@ -298,7 +373,11 @@ function EditHoursDashboard() {
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
-              <CreateStatusDropdown inputIsClosed={hours[index].isClosed[0]} />
+              <CreateStatusDropdown
+                inputIsClosed={hours[index].isClosed[0]}
+                index={index}
+                vendor_data={vendor_data}
+              />
               <HoursColumn>
                 {hours[index].start.map((startInput, timeIndex) => {
                   return (

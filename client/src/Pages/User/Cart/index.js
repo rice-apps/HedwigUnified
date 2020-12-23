@@ -51,8 +51,8 @@ const defaultTotals = {
   discount: null,
 };
 
-function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
-  let pickupTimes = ["ASAP"];
+function generatePickupTimes(currHour, currMinute, endHour, endMinute, isFirst) {
+  let pickupTimes = [];
   let pickupMinute = Math.ceil(currMinute / 15) * 15;
   let pickupHour = currHour;
   while (pickupHour <= endHour) {
@@ -92,6 +92,9 @@ function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
   const pickupObjs = pickupTimes.map((time) => {
     return { value: time, label: time };
   });
+  if(isFirst && pickupObjs.length > 0) {
+    pickupObjs.unshift({value: "ASAP", label: "ASAP"});
+  }
   return pickupObjs;
 }
 
@@ -252,7 +255,9 @@ function CartDetail() {
   )}
 
   const convertStringToTime = (time) => {
-    console.log(time);
+    if(time === "ASAP"){
+      return moment().hour()+(moment().minutes()+15)/60
+    }
     const timeStr = time.split(' ')[0]
     const [hour, minute] = timeStr.split(':')
     if(time.includes('p.m.')){
@@ -394,13 +399,9 @@ function CartDetail() {
     return <p>{ordertracker_error.message}</p>;
   }
 
-  const currDate = new Date();
-  const currDay = currDate.getDay();
-  // const currHour = currDate.getHours();
-  const currHour = 10;
-  // const currMinute = currDate.getMinutes();
-  const currMinute = 17;
-  let currTime = currHour + currMinute/60;
+  const currDay = moment().day();
+  const currHour = moment().hour();
+  const currMinute = moment().minutes();
 
   const {
     getVendor: { hours: businessHours },
@@ -445,6 +446,7 @@ function CartDetail() {
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i];
     console.log(interval)
+    i === 0 ?
     pickupTimes = [
       ...pickupTimes,
       ...generatePickupTimes(
@@ -452,9 +454,25 @@ function CartDetail() {
         interval[1],
         interval[2],
         interval[3],
+        true
+      ),
+    ]
+    :
+    pickupTimes = [
+      ...pickupTimes,
+      ...generatePickupTimes(
+        interval[0],
+        interval[1],
+        interval[2],
+        interval[3],
+        false
       ),
     ];
   }
+  console.log(pickupTimes)
+  // if(pickupTimes.length > 0){
+  //   pickupTimes.unshift("ASAP");
+  // }
 
   const disabled = () => false; // uncomment the codde below for prod mode.
   // moment().hour() > endHour1 ||

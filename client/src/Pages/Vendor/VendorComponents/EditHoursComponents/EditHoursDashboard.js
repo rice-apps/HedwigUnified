@@ -86,21 +86,6 @@ const StatusDropdown = styled.select`
 function CreateStatusDropdown(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  // const {
-  //   data: vendor_data,
-  //   error: vendor_error,
-  //   loading: vendor_loading,
-  // } = useQuery(VENDOR_QUERY, {
-  //   variables: { vendor: "Cohen House" },
-  // });
-
-  // if (vendor_loading) {
-  //   return <p>Loading...</p>;
-  // }
-  // if (vendor_error) {
-  //   return <p>Error...</p>;
-  // }
-
   function onChangeIsClosed(value) {
     let inputIsClosed = value === "OPEN" ? false : true;
     console.log("value ", value);
@@ -112,10 +97,9 @@ function CreateStatusDropdown(props) {
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
     const updatedIsClosed = [...updatedDay.isClosed];
-    console.log("before: ", updatedIsClosed[0]);
     updatedIsClosed[0] = inputIsClosed;
-    console.log("after: ", updatedIsClosed[0]);
     console.log("before day: ", updatedDay);
+    // updatedDay.isClosed = updatedIsClosed;
     updatedDay.isClosed = updatedIsClosed;
     console.log("after day: ", updatedDay);
 
@@ -153,7 +137,7 @@ function CreateStatusDropdown(props) {
         <StatusDropdown
           name="storeStatus"
           id="storeStatus"
-          onChange={() => console.log("change!")}
+          onChange={(e) => onChangeIsClosed(e.target.value)}
         >
           <option value="OPEN" defaultValue>
             Open
@@ -368,13 +352,14 @@ function EditHoursDashboard() {
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
       <EditHoursRowWrapper>
         {DaysofTheWeek.map((day) => {
-          console.log(getIndex(day));
           const index = getIndex(day);
+          console.log("day: ", day);
+          console.log("index: ", index);
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
               <CreateStatusDropdown
-                inputIsClosed={hours[index].isClosed[0]}
+                inputIsClosed={hours[index].isClosed}
                 index={index}
                 vendor_data={vendor_data}
               />

@@ -43,9 +43,9 @@ function EditHoursPage() {
   const updatedHours = [...originalHours];
   // This index is the index of the day! should reflect what day the user clicks to edit:
   const updatedDay = { ...updatedHours[0] };
-  const updatedIsClosed = [...updatedDay.isClosed];
-  updatedIsClosed[0] = false;
-  updatedDay.isClosed = updatedIsClosed;
+  //   const updatedIsClosed = [...updatedDay.isClosed];
+  //   updatedIsClosed[0] = false;
+  updatedDay.isClosed = false;
 
   console.log("updatedDay ", updatedDay);
 

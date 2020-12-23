@@ -7,6 +7,7 @@ import Modal from "react-modal";
 
 import { VENDOR_QUERY } from "../../../../graphql/VendorQueries.js";
 import { useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
+import { current } from "immer";
 
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
@@ -88,27 +89,24 @@ function CreateStatusDropdown(props) {
 
   function onChangeIsClosed(value) {
     let inputIsClosed = value === "OPEN" ? false : true;
-    console.log("value ", value);
-    console.log("inputIsClosed ", inputIsClosed);
-    // props.index
-    const originalHours = props.vendor_data.getVendor.hours;
-    console.log("original hours isClosed", originalHours[props.index].isClosed);
+    // const originalHours = props.vendor_data.getVendor.hours;
+    const originalHours = props.currentHours;
     const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
     const updatedIsClosed = [...updatedDay.isClosed];
     updatedIsClosed[0] = inputIsClosed;
-    console.log("before day: ", updatedDay);
-    // updatedDay.isClosed = updatedIsClosed;
     updatedDay.isClosed = updatedIsClosed;
-    console.log("after day: ", updatedDay);
 
-    updatedHours[0] = updatedDay;
+    updatedHours[props.index] = updatedDay;
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] };
       delete dayCopy["__typename"];
       updatedHours[index] = dayCopy;
     });
+
+    // update state:
+    props.updateCurrentHours(updatedHours);
 
     toggleIsClosed({
       variables: {
@@ -116,8 +114,6 @@ function CreateStatusDropdown(props) {
         hours: updatedHours,
       },
     });
-
-    console.log("updated hours isClosed", updatedHours[props.index].isClosed);
   }
 
   return (
@@ -245,9 +241,46 @@ const TimeModal = styled.input`
 
 function MakeTimeInput(props) {
   let side = props.side;
+
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+
+  function onChangeHourModal(inputTime) {
+    console.log("inputted time: ", inputTime);
+
+    const originalHours = props.vendor_data.getVendor.hours;
+    const updatedHours = [...originalHours];
+    // This index is the index of the day! should reflect what day the user clicks to edit:
+    const updatedDay = { ...updatedHours[props.index] };
+    const updatedTime = [...updatedDay.start, inputTime];
+
+    console.log("after day: ", updatedDay);
+
+    updatedHours[0] = updatedDay;
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
+
+    toggleIsClosed({
+      variables: {
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
+
+    console.log(
+      "updated hours with start time",
+      updatedHours[props.index].start
+    );
+  }
+
   return (
     <div>
-      <TimeModal type="time"></TimeModal>
+      <TimeModal
+        onChange={(e) => onChangeHourModal(e.target.value)}
+        type="time"
+      ></TimeModal>
     </div>
   );
 }
@@ -261,6 +294,7 @@ function MakeAddHoursButton(props) {
   function closeAddHourModal() {
     setModalIsOpen(false);
   }
+
   return (
     <AddColumn>
       <AddButton onClick={openAddHourModal}>
@@ -285,9 +319,17 @@ function MakeAddHoursButton(props) {
         <form>
           <AddHourModalWrapper>
             <DayModal>{props.weekday}</DayModal>
-            <MakeTimeInput id="addedStartTime" />
+            <MakeTimeInput
+              id="addedStartTime"
+              index={props.index}
+              vendor_data={props.vendor_data}
+            />
             <div tyle={{ textAlign: "middle" }}> TO </div>
-            <MakeTimeInput id="addedEndTime" />
+            <MakeTimeInput
+              id="addedEndTime"
+              index={props.index}
+              vendor_data={props.vendor_data}
+            />
           </AddHourModalWrapper>
           <IoMdClose
             onClick={closeAddHourModal}
@@ -305,7 +347,7 @@ function MakeAddHoursButton(props) {
 }
 
 function EditHoursDashboard() {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+  const [currentHours, setCurrentHours] = useState([]);
 
   const {
     data: vendor_data,
@@ -323,7 +365,17 @@ function EditHoursDashboard() {
   }
 
   const hours = vendor_data.getVendor.hours;
-  console.log(hours);
+
+  function updateCurrentHours(newHours) {
+    setCurrentHours(newHours);
+  }
+
+  if (currentHours === []) {
+    updateCurrentHours(hours);
+  }
+
+  // updateCurrentHours(hours);
+  console.log("current hours:", currentHours);
 
   function getIndex(day) {
     let dayName =
@@ -353,15 +405,15 @@ function EditHoursDashboard() {
       <EditHoursRowWrapper>
         {DaysofTheWeek.map((day) => {
           const index = getIndex(day);
-          console.log("day: ", day);
-          console.log("index: ", index);
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
               <CreateStatusDropdown
                 inputIsClosed={hours[index].isClosed}
                 index={index}
-                vendor_data={vendor_data}
+                currentHours={currentHours}
+                updateCurrentHours={updateCurrentHours}
+                // vendor_data={vendor_data}
               />
               <HoursColumn>
                 {hours[index].start.map((startInput, timeIndex) => {
@@ -373,7 +425,11 @@ function EditHoursDashboard() {
                   );
                 })}
               </HoursColumn>
-              <MakeAddHoursButton weekday={day} />
+              <MakeAddHoursButton
+                weekday={day}
+                index={index}
+                // vendor_data={vendor_data}
+              />
             </EditHoursRow>
           );
         })}

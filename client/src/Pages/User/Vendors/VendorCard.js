@@ -73,8 +73,9 @@ function VendorCard ({ vendor }) {
   const closed = determineIfClosed(current_date, dayObj)
 
   return (
-    <>
-      <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
+    // UNCOMMENT BELOW FOR PRODUCTION:
+      // <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
+         <div className='vendorContainer' onClick={() => handleClick()}>
         <div className='vendorHeading'>
           <div className='vendorHeadingText'>
             <h3 className='vendorName'>{name}</h3>
@@ -116,17 +117,6 @@ function VendorCard ({ vendor }) {
           />
         </div>
       </div>
-      {/* <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>
-          </div> */}
-      {/* <div>
-              <ul>
-                  <li>Food</li>
-                  <li>Drink</li>
-                  <li>Snacks</li>
-                  <li>Coffee</li>
-              </ul>
-          </div> */}
-    </>
   )
 }
 

@@ -70,13 +70,24 @@ const StatusDropdown = styled.select`
   padding-right: 19px;
 `;
 
-function CreateStatusDropdown() {
+function CreateStatusDropdown(props) {
   return (
     <StatusColumn>
-      <StatusDropdown name="storeStatus" id="storeStatus">
-        <option value="OPEN">Open</option>
-        <option value="CLOSED">Closed</option>
-      </StatusDropdown>
+      {props.inputIsClosed ? (
+        <StatusDropdown name="storeStatus" id="storeStatus">
+          <option value="OPEN">Open</option>
+          <option value="CLOSED" selected>
+            Closed
+          </option>
+        </StatusDropdown>
+      ) : (
+        <StatusDropdown name="storeStatus" id="storeStatus">
+          <option value="OPEN" selected>
+            Open
+          </option>
+          <option value="CLOSED">Closed</option>
+        </StatusDropdown>
+      )}
       <IoMdArrowDropdown style={{ position: "absolute", right: "1.1vw" }} />
     </StatusColumn>
   );
@@ -146,16 +157,16 @@ const AddHourModalWrapper = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 0.2fr 1.5fr;
   grid-template-rows: 1.4fr 1fr;
-  height:80%;
-  width:100%;
-  position:absolute;
+  height: 80%;
+  width: 100%;
+  position: absolute;
   grid-template-areas:
     "DOTW StartTime ToSpace EndTime"
     "Confirm Confirm Confirm Confirm";
   align-items: center;
   justify-content: center;
   font-size: 2.8vh;
-  padding:10px 15px;
+  padding: 10px 15px;
 `;
 
 const DayModal = styled.div`
@@ -170,14 +181,13 @@ const TimeModal = styled.input`
   position: relative;
   display: block;
   margin: 0 auto;
-  font-size:2.5vh;
+  font-size: 2.5vh;
   border: none;
   text-align: center;
-  
 `;
 
 function MakeTimeInput(props) {
-    let side = props.side
+  let side = props.side;
   return (
     <div>
       <TimeModal type="time"></TimeModal>
@@ -188,17 +198,17 @@ function MakeTimeInput(props) {
 function MakeAddHoursButton(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  function openAddHourModal () {
-      setModalIsOpen(true)
+  function openAddHourModal() {
+    setModalIsOpen(true);
   }
-  function closeAddHourModal () {
-      setModalIsOpen(false)
+  function closeAddHourModal() {
+    setModalIsOpen(false);
   }
   return (
     <AddColumn>
       <AddButton onClick={openAddHourModal}>
         <CgMathPlus />
-        <div >Add Hours</div>
+        <div>Add Hours</div>
       </AddButton>
       <Modal
         isOpen={modalIsOpen}
@@ -211,19 +221,26 @@ function MakeAddHoursButton(props) {
             top: "36%",
             left: "28%",
             border: "3px solid #9D9D9D45",
-            borderRadius: "20px"
-          }
+            borderRadius: "20px",
+          },
         }}
       >
-          <form>
-        <AddHourModalWrapper>
-          <DayModal>{props.weekday}</DayModal>
-          <MakeTimeInput id="addedStartTime"/>
-          <div tyle={{textAlign:"middle"}}> TO </div>
-          <MakeTimeInput id="addedEndTime"/>
-          
-        </AddHourModalWrapper>
-        <IoMdClose onClick={closeAddHourModal} style={{position:"absolute", top:"15px", right:"15px", fontSize:"3vh"}}/>
+        <form>
+          <AddHourModalWrapper>
+            <DayModal>{props.weekday}</DayModal>
+            <MakeTimeInput id="addedStartTime" />
+            <div tyle={{ textAlign: "middle" }}> TO </div>
+            <MakeTimeInput id="addedEndTime" />
+          </AddHourModalWrapper>
+          <IoMdClose
+            onClick={closeAddHourModal}
+            style={{
+              position: "absolute",
+              top: "15px",
+              right: "15px",
+              fontSize: "3vh",
+            }}
+          />
         </form>
       </Modal>
     </AddColumn>
@@ -281,7 +298,7 @@ function EditHoursDashboard() {
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
-              <CreateStatusDropdown />
+              <CreateStatusDropdown inputIsClosed={hours[index].isClosed[0]} />
               <HoursColumn>
                 {hours[index].start.map((startInput, timeIndex) => {
                   return (

@@ -58,7 +58,7 @@ const SideBarVendorProfileWrapper = styled.div``
 
 function SideBarVendorProfile ({ setLogo }) {
   const token = localStorage.getItem('token')
-  const [vendorName, setVendorName] = useState('')
+  const [vendorName, setVendorName] = useState('Cohen House')
 
   const [vendorAvailability, { error }] = useMutation(
     UPDATE_VENDOR_AVAILABILITY
@@ -73,7 +73,7 @@ function SideBarVendorProfile ({ setLogo }) {
   )
 
   const { data, loading, error: queryError } = useQuery(GET_VENDOR_DATA, {
-    variables: { name: vendorName }
+    variables: { name: 'Cohen House' }
   })
 
   useEffect(() => {

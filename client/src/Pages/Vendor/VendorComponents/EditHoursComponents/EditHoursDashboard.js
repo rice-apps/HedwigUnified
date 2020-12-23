@@ -105,16 +105,6 @@ const HoursInterval = styled.div`
 
 const DaysofTheWeek = ["MON", "TUE", "WED", "THURS", "FRI", "SAT", "SUN"];
 
-const daysForGetVendor = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
 function HoursItem(props) {
   return (
     <HoursInterval>
@@ -213,21 +203,14 @@ function EditHoursDashboard() {
               <DayColumn>{day}</DayColumn>
               <CreateStatusDropdown />
               <HoursColumn>
-                {/* <HoursItem startTime="7:00 AM" endTime="12:00 PM"></HoursItem>
-                <HoursItem startTime="1:00 PM" endTime="6:00 PM"></HoursItem>
-                <HoursItem startTime="8:00 PM" endTime="11:00 PM"></HoursItem> */}
-                <HoursItem
-                  startTime={
-                    hours[index].start !== [] ? hours[index].start[0] : "no"
-                  }
-                  endTime={hours[index].end !== [] ? hours[index].end[0] : "no"}
-                ></HoursItem>
-                <HoursItem
-                  startTime={
-                    hours[index].start !== [] ? hours[index].start[1] : "no"
-                  }
-                  endTime={hours[index].end !== [] ? hours[index].end[1] : "no"}
-                ></HoursItem>
+                {hours[index].start.map((startInput, timeIndex) => {
+                  return (
+                    <HoursItem
+                      startTime={hours[index].start[timeIndex]}
+                      endTime={hours[index].end[timeIndex]}
+                    ></HoursItem>
+                  );
+                })}
               </HoursColumn>
               <MakeAddHoursButton />
             </EditHoursRow>

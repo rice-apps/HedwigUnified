@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Delete previous droplet
-        run: doctl compute droplet delete "staging"
+        run: doctl compute droplet delete -y "staging"
 
       - name: Provision Droplet
         run: doctl compute droplet create "staging" --image docker-18-04 --size s-1vcpu-1gb --region nyc1 --wait

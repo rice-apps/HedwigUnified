@@ -6,7 +6,7 @@ import { AiFillHome } from 'react-icons/ai'
 import RalewayFont from './../../../fonts/Raleway/RalewayFont.js'
 
 const BottomNavigationWrapper = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   height: 10vh;
   width: 100vw;
@@ -17,7 +17,7 @@ const BottomNavigationWrapper = styled.div`
   border-top: 1px solid darkgrey;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  z-index: 0;
 `
 
 const BottomNavigationItem = styled.div`

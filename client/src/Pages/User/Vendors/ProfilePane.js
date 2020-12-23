@@ -26,8 +26,6 @@ const GET_USER_INFO = gql`
 const getLinks = user => {
   // Missing help path, feedback form, and edit phone number page
   const links = [
-    { icon: 'phone', content: user.phone, path: '' },
-
     { icon: 'hands-helping', content: 'Help', path: '' },
 
     {
@@ -73,25 +71,28 @@ function ProfilePane () {
       />
       <div className={showProfile ? 'profilepane-active' : 'profilepane'}>
         <div className='background'>
-          <FaTimes
-            onClick={() => {
-              setShowProfile(!showProfile)
-              console.log(showProfile)
-            }}
-          />
+          <div className='close'>
+            <FaTimes
+              onClick={() => {
+                setShowProfile(!showProfile)
+                console.log(showProfile)
+              }}
+            />
+          </div>
+          
           {/* Body: Welcome */}
           <div className='welcomebody'>
-            <h1 className='welcometext'> Welcome, {' '} {user.name} </h1>
+            <h1 className='welcometext'> Hello, <br/> {user.name} <br/> </h1>
+            <h1 className='phonetext'>
+              ({user.phone.substring(0, 3)}) {' '} {user.phone.substring(3, 6)} 
+              {'-'} {user.phone.substring(6)} 
+            </h1>
           </div>
 
           {/* Body: Links;;; should map through each of the links up top and create a box */}
           <div className='contentbody'>
             {links.map(link => (
               <div className='contentcard'>
-                <div className='contenticon'>
-                  {' '}
-                  <FontAwesomeIcon icon={['fas', link.icon]} />
-                </div>
                 <p className='contenttitle'>{link.content}</p>
                 {/* Checks if path exists, if not, then don't put an arrow */}
                 {link.path ? (

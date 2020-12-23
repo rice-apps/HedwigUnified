@@ -11,6 +11,10 @@ const VENDOR_QUERY = gql`
         day
         isClosed
       }
+      squareInfo {
+        merchantId
+        locationIds
+      }
     }
   }
 `
@@ -31,6 +35,7 @@ const GET_ALL_VENDORS = gql`
         start
         end
         day
+        isClosed
       }
       _id
     }

@@ -274,7 +274,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({ }) => {
+export const RoutesComponent = ({}) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend

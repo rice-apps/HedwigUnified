@@ -16,8 +16,10 @@ import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 import { makeVar } from '@apollo/client'
 
 export const cartItems = makeVar([])
-export const orderSummary = makeVar([])
-export const userProfile = makeVar({})
+// export const orderSummary = makeVar({vendor: null})
+export const orderSummary = makeVar({ vendor: null, time: null })
+
+export const userProfile = makeVar([])
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
@@ -60,8 +62,7 @@ const splitLink = split(
 )
 
 // Setup cache
-export const cache = new InMemoryCache();
-
+export const cache = new InMemoryCache()
 
 // Initialize Client
 export const client = new ApolloClient({
@@ -75,7 +76,7 @@ export const client = new ApolloClient({
             }
           }
         }
-      },
+      }
     }
   }),
   link: authLink.concat(splitLink)
@@ -86,7 +87,7 @@ const initialState = {
   service: SERVICE_URL,
   user: {
     recentUpdate: false,
-    _id: '',
+    _id: ''
   }
 }
 

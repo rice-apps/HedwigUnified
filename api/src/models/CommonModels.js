@@ -11,6 +11,16 @@ const DataSourceEnumTC = sc.createEnumTC({
   }
 })
 
+const PaymentSourceEnumTC = sc.createEnumTC({
+  name: 'PaymentSourceEnum',
+  description: 'The various types of payments',
+  values: {
+    COHEN: { value: 'COHEN' },
+    TETRA: { value: 'TETRA' },
+    CREDIT: { value: 'CREDIT' }
+  }
+})
+
 const MoneyTC = sc.createObjectTC({
   name: 'Money',
   description: 'Common data model money representation',
@@ -120,6 +130,7 @@ const UrlTC = sc.createScalarTC({
 
 export {
   DataSourceEnumTC,
+  PaymentSourceEnumTC,
   MoneyTC,
   OrderStatusEnumTC,
   FulfillmentStatusEnumTC,

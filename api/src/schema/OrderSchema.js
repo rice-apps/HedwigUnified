@@ -3,7 +3,6 @@ import {
   CreateOrderRequest,
   SearchOrdersRequest
 } from 'square-connect'
-import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { ApolloError } from 'apollo-server-express'
 import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
 import pubsub from '../utils/pubsub'
@@ -122,7 +121,7 @@ OrderTC.addResolver({
     name: 'createOrder',
     type: OrderTC,
     args: {
-      locationId: GraphQLNonNull(GraphQLString),
+      locationId: 'String!',
       record: CreateOrderInputTC.getTypeNonNull().getType()
     },
     resolve: async ({ args }) => {
@@ -257,7 +256,7 @@ OrderTC.addResolver({
     name: 'updateOrder',
     type: OrderTC,
     args: {
-      orderId: GraphQLNonNull(GraphQLString),
+      orderId: 'String!',
       record: UpdateOrderTC.getType()
     },
     resolve: async ({ args }) => {

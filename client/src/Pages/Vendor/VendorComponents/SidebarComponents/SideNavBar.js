@@ -19,10 +19,12 @@ const VendorPicture = styled.img`
 `
 
 function SideNavBar () {
+  const [logoUrl, setLogoUrl] = useState('')
+
   return (
     <SideBarWrapper>
-      <VendorPicture src={logo} />
-      <SideBarVendorProfile />
+      <VendorPicture src={logoUrl} />
+      <SideBarVendorProfile setLogo={setLogoUrl} />
       <SideBarItems />
     </SideBarWrapper>
   )

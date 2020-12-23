@@ -314,6 +314,32 @@ ItemTC.addResolver({
     }
   })
   .addResolver({
+    name: 'getAvailabilities',
+    args: {
+      productIds: '[String!]'
+    },
+    type: 'Boolean',
+    resolve: async ({ args }) => {
+      const { productIds } = args
+
+      const api = new CatalogApi()
+
+      const batchRetrieveResponse = await api.batchRetrieveCatalogObjects({
+        object_ids: productIds
+      })
+
+      if (batchRetrieveResponse.errors) {
+        return new ApolloError(
+          `Batch retrieving availabilities failed: ${batchRetrieveResponse.errors}`
+        )
+      }
+
+      return batchRetrieveResponse.objects.every(
+        value => value.custom_attribute_values.is_available.boolean_value
+      )
+    }
+  })
+  .addResolver({
     name: 'setAvailability',
     args: {
       idempotencyKey: 'String!',
@@ -345,7 +371,7 @@ ItemTC.addResolver({
           is_available: {
             name: 'Is it available?',
             key: 'is_available',
-            custom_attribute_definition_id: 'EHK5UB5AKQWHK3PRSPTWAP7B',
+            custom_attribute_definition_id: '7XN45PC5N5ALEEWG6TV6I7YJ',
             type: 'BOOLEAN',
             boolean_value: isItemAvailable
           }
@@ -477,7 +503,7 @@ ItemTC.addResolver({
     args: {
       merchantId: 'String!'
     },
-    resolver: async ({ args }) => {
+    resolve: async ({ args }) => {
       const api = new CatalogApi()
 
       const upsertCatalogItemResponse = await api.upsertCatalogObject({
@@ -677,7 +703,8 @@ ItemTC.addResolver({
 const ItemQueries = {
   getCatalog: ItemTC.getResolver('getCatalog'),
   getItem: ItemTC.getResolver('getItem'),
-  getAvailability: ItemTC.getResolver('getAvailability')
+  getAvailability: ItemTC.getResolver('getAvailability'),
+  getAvailabilities: ItemTC.getResolver('getAvailabilities')
 }
 
 const ItemMutations = {

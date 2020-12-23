@@ -1,9 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
-import { createRecord, checkNullFields ,CREATE_ORDER, CREATE_PAYMENT, GET_VENDOR } from './util'
+import {
+  createRecord,
+  checkNullFields,
+  CREATE_ORDER,
+  CREATE_PAYMENT,
+  GET_VENDOR
+} from './util'
 import logo from '../../../images/cohenhouse.png'
-import './cart.scss'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import Payments from './Payments.js'
@@ -16,6 +21,13 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
+import './cart.scss'
+
+const GET_AVAILABILITIES = gql`
+  query GET_AVAILABILITIES($productIds: [String!]) {
+    getAvailabilities(productIds: $productIds)
+  }
+`
 
 const defaultTotals = {
   subtotal: 0,
@@ -71,7 +83,7 @@ const computeAvailableMinutes = (
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
-  const [nullError, setNullError] = useState(checkNullFields()) 
+  const [nullError, setNullError] = useState(checkNullFields())
   // eval to a field string if user's name, student id, or phone number is null
   const { loading, error, data } = useQuery(GET_VENDOR)
   const [
@@ -86,32 +98,67 @@ function CartDetail () {
   const navigate = useNavigate()
   const cart_menu = cartItems()
 
-  const handleConfirmClick = async () => {
-    const q = {
-      variables: createRecord(cart_menu)
+  const product_ids = cart_menu.map(item => {
+    return item.dataSourceId
+  })
+  console.log('Product IDs', product_ids)
+
+  const {
+    loading: avail_loading,
+    error: avail_error,
+    data: avail_data,
+    refetch: avail_refetch
+  } = useQuery(GET_AVAILABILITIES, {
+    variables: { productIds: product_ids },
+    fetchPolicy: 'network-only'
+  })
+
+  /*
+  useEffect(() => {
+    if(avail_called){
+      avail_refetch()
     }
-    const orderResponse = await createOrder(q)
-    const orderJson = orderResponse.data.createOrder
-    const createPaymentResponse = await createPayment({
-      variables: {
-        orderId: orderJson.id,
-        subtotal: totals.subtotal * 100,
-        currency: 'USD'
+    else {
+      getAvailabilities()
+    }
+  }, [cart_menu])
+  */
+
+  const handleConfirmClick = async () => {
+    const newRes = await avail_refetch()
+    while (newRes.loading) {}
+    console.log('errors: ', avail_error)
+    console.log('cart_menu:', cart_menu)
+    console.log('availability', newRes.data)
+    if (newRes.data.getAvailabilities === false) {
+      return navigate('/eat/cohen/confirmation')
+    } else {
+      const q = {
+        variables: createRecord(cart_menu)
       }
-    })
-    orderSummary(Object.assign(orderSummary(), 
-      {
-        'orderId': orderJson.id, 
-        'fulfillment': {
-          'uid' : orderJson.fulfillment.uid,
-          'state': orderJson.fulfillment.state
-          }
+
+      const orderResponse = await createOrder(q)
+      const orderJson = orderResponse.data.createOrder
+      const createPaymentResponse = await createPayment({
+        variables: {
+          orderId: orderJson.id,
+          subtotal: totals.subtotal * 100,
+          currency: 'USD'
         }
+      })
+      orderSummary(
+        Object.assign(orderSummary(), {
+          orderId: orderJson.id,
+          fulfillment: {
+            uid: orderJson.fulfillment.uid,
+            state: orderJson.fulfillment.state
+          }
+        })
       )
-    )
-    console.log(orderSummary());
-    return navigate(`/eat/cohen/payment`);
-  };
+      console.log(orderSummary())
+      return navigate(`/eat/cohen/payment`)
+    }
+  }
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
@@ -151,11 +198,15 @@ function CartDetail () {
     return <p>{payment_error.message}</p>
   }
 
-  // const businessHour = data.getVendors.filter(e => e.name == 'Cohen House')[0]
-  //   .hours[0]
+  if (avail_loading) return <p>'Loading availabilities...'</p>
+  if (avail_error & (cart_menu.length != 0))
+    return <p>`Error! ${avail_error.message}`</p>
 
-
-  const businessHour = {start: ['8:30 a.m.', '3:00 p.m.'], end:['11:00 a.m.', '5:00 p.m.']} // only for dev mode
+  // temporary fix:
+  const businessHour = {
+    start: ['7:00 a.m.', '11:00 a.m.'],
+    end: ['9:30 a.m.', '2:00 p.m.']
+  }
 
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
@@ -207,7 +258,10 @@ function CartDetail () {
                 if (e) {
                   document.getElementsByClassName('buy-btn')[0].disabled = false
                   setPickupTime({ hour: e.hour(), minute: e.minute() })
-                  orderSummary({ time: e })
+                  // orderSummary({ time: e });
+                  Object.assign(orderSummary(), {
+                    time: e
+                  })
                 }
               }}
               showNow={false}
@@ -268,15 +322,19 @@ function CartDetail () {
             </div>
           </div>
           {nullError != null && (
-              <p css={{ alignSelf: 'center', color: 'red' }}>
-                {' '}
-                Error! Submission form contains null value for {nullError}. 
-                Please update your profile.{' '}
-              </p>
-            )}
+            <p css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              Error! Submission form contains null value for {nullError}. Please
+              update your profile.{' '}
+            </p>
+          )}
           <div className='float-cart__footer'>
             <button
-              disabled={cartItems().length == 0 || pickupTime == null || nullError != null}
+              disabled={
+                cartItems().length == 0 ||
+                pickupTime == null ||
+                nullError != null
+              }
               className='buy-btn'
               title='Confirm'
               onClick={handleConfirmClick}

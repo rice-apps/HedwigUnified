@@ -1,14 +1,14 @@
 import { VendorTC } from '../models/VendorModel'
 
 const VendorQueries = {
-  getVendor: VendorTC.getResolver('findOne'),
-  getVendors: VendorTC.getResolver('findMany')
+  getVendor: VendorTC.mongooseResolvers.findOne(),
+  getVendors: VendorTC.mongooseResolvers.findMany()
 }
 
 const VendorMutations = {
-  createVendor: VendorTC.getResolver('createOne'),
-  updateVendor: VendorTC.getResolver('updateOne'),
-  removeVendor: VendorTC.getResolver('removeOne')
+  createVendor: VendorTC.mongooseResolvers.createOne(),
+  updateVendor: VendorTC.mongooseResolvers.updateOne(),
+  removeVendor: VendorTC.mongooseResolvers.removeOne()
 }
 
 export { VendorQueries, VendorMutations }

@@ -131,11 +131,11 @@ export const createRecord = items => {
 
 export const checkNullFields = () => {
   const fields = ['first name', 'last name', 'phone', 'id']
-  let field;
+  let field
   for (field of fields) {
     if (sStorage.getItem(field) == '') {
-      return field;
+      return field
     }
   }
-  return null;
+  return null
 }

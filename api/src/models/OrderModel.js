@@ -6,7 +6,8 @@ import {
   FulfillmentStatusEnumTC,
   FindOrdersDateTimeFilterTC,
   SortOrderTimeEnumTC,
-  SortOrderEnumTC
+  SortOrderEnumTC,
+  PaymentSourceEnumTC
 } from './CommonModels'
 
 const LineItemTC = sc.createObjectTC({
@@ -100,7 +101,8 @@ const OrderTC = sc.createObjectTC({
     orderStatus: OrderStatusEnumTC.getTypeNonNull().getType(),
     fulfillment: OrderFulfillmentTC.getType(),
     cohenId: 'String',
-    studentId: 'String'
+    studentId: 'String',
+    paymentType: PaymentSourceEnumTC.getType()
   }
 })
 

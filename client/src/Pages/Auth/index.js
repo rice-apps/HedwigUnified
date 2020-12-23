@@ -1,5 +1,5 @@
-import { Component, useEffect } from 'react'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { Component, useEffect, useState } from 'react'
+import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
 import { Redirect } from 'react-router'
 import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
@@ -27,8 +27,8 @@ const parseTicket = url => {
   return url.substring(ticketStartIndex)
 }
 
-const allowedUsers = ["byz2"];
-const lstorage = localStorage;
+// const allowedUsers = ['byz2']
+const lstorage = localStorage
 
 function Auth () {
   // First parse out ticket from URL href
@@ -51,8 +51,8 @@ function Auth () {
   if (!authenticationData) return <p>Bad.</p>
 
   const {
-    token,
     netid,
+    token,
     _id,
     name,
     phone,
@@ -74,12 +74,16 @@ function Auth () {
     token
   })
 
-  userProfile(Object.assign(userProfile(), 
-    {name: lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
-     studentId: lstorage.getItem('id')}))
+  userProfile(
+    Object.assign(userProfile(), {
+      name:
+        lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
+      studentId: lstorage.getItem('id')
+    })
+  )
   // Set token in local storage
 
-  console.log(userProfile());
+  console.log(userProfile())
   lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
@@ -99,7 +103,7 @@ function Auth () {
   // else, if employee is a buyer, then we redirect them automatically to /eat and restrict
   // their access to /employee
 
-  if (allowedUsers.includes(netid) || vendor) {
+  if (vendor) {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients

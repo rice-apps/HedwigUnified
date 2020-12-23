@@ -68,5 +68,5 @@ jobs:
         run: doctl compute droplet create "staging" --image docker-18-04 --size s-1vcpu-1gb --region nyc1 --wait
     
       - name: Setup Droplet with container
-        run: doctl compute ssh "staging" --ssh-command docker run -d -p 3001:3001 --name api riceapps/hedwigunified:latest
+        run: doctl compute ssh "staging" --ssh-command "docker run -d -p 3001:3001 --name api riceapps/hedwigunified:latest"
           

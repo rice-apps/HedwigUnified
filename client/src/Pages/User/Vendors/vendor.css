@@ -29,6 +29,10 @@
 	max-height: 100%; */
 }
 
+.vendorDisabled {
+  pointer-events: none;
+}
+
 .topBar {
   display: flex;
   flex-direction: row;

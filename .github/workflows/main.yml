@@ -47,26 +47,26 @@ jobs:
           tags: riceapps/hedwigunified:latest
           
           
-  deploy:
-    needs: build
+#   deploy:
+#     needs: build
     
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
     
-    steps: 
-      - name: Checkout files
-        uses: actions/checkout@v2
+#     steps: 
+#       - name: Checkout files
+#         uses: actions/checkout@v2
         
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#       - name: Install doctl
+#         uses: digitalocean/action-doctl@v2
+#         with:
+#           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Delete previous droplet
-        run: y | doctl compute droplet delete "staging" || true
+#       - name: Delete previous droplet
+#         run: y | doctl compute droplet delete "staging" || true
 
-      - name: Provision Droplet
-        run: doctl compute droplet create "staging" --image docker-18-04 --size s-1vcpu-1gb --region nyc1 --wait
+#       - name: Provision Droplet
+#         run: doctl compute droplet create "staging" --image docker-18-04 --size s-1vcpu-1gb --region nyc1 --wait
     
-      - name: Setup Droplet with container
-        run: doctl compute ssh "staging" --ssh-command "docker run -d -p 3001:3001 --name api riceapps/hedwigunified:latest"
+#       - name: Setup Droplet with container
+#         run: doctl compute ssh "staging" --ssh-command "docker run -d -p 3001:3001 --name api riceapps/hedwigunified:latest"
           

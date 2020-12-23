@@ -26,6 +26,7 @@ function VendorCard ({ vendor }) {
   // temporary fix:
   // const currentDay = 1
   const dayObj = hours[currentDay]
+  console.log(dayObj)
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
     let [hours, minutes] = timeNum.split(':')
@@ -52,8 +53,7 @@ function VendorCard ({ vendor }) {
       return true
     }
     else{
-      // const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-      const currentTime = 11
+      const currentTime = current_date.getHours() + current_date.getMinutes() / 60
       const startTimes = dayObj.start.map((startTime) => {
         return convertTimeToNum(startTime)
       })

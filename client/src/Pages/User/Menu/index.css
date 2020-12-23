@@ -25,9 +25,20 @@
   font-size: 2vh;
   font-family: 'avenir';
   color: #5a5953;
-  margin: auto;
-  flex-wrap: wrap;
-  line-height: 0.001;
+  margin: 0 5px 0 10px;
+  /* flex-wrap: wrap; */
+  /* line-height: 0.001; */
+}
+
+.statusTitleWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.statusTitleWrapper div{
+  display:flex;
+  flex-direction: column;
 }
 
 .readmore {

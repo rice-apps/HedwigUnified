@@ -196,7 +196,41 @@ function Menu() {
     times.push([startTimes[i], endTimes[i]]);
   }
   console.log(times);
-  const isClosed = vendor_data.getVendor.hours[currentDay].isClosed;
+
+  const determineIfClosed = (current_date, dayObj) => {
+    if (!dayObj) return
+    else if(dayObj.isClosed === true){
+      return true
+    }
+    else{
+      const currentTime = current_date.getHours() + current_date.getMinutes() / 60
+      const startTimes = dayObj.start.map((startTime) => {
+        return convertTimeToNum(startTime)
+      })
+      const endTimes = dayObj.end.map((endTime) => {
+        return convertTimeToNum(endTime)
+      })
+      let isClosedHours = true
+      for(let i = 0; i<startTimes.length; i++){
+        if(currentTime >= startTimes[i] && currentTime < endTimes[i]) {
+          isClosedHours = false
+        }
+      }
+      return isClosedHours
+    }
+  }
+  const convertTimeToNum = time => {
+    const [timeNum, halfOfDay] = time.split(' ')
+    let [hours, minutes] = timeNum.split(':')
+    hours = parseInt(hours)
+    minutes = parseInt(minutes) / 60
+    if (halfOfDay === 'a.m.') {
+      return hours + minutes
+    } else if (halfOfDay === 'p.m.') {
+      return 12 + hours + minutes
+    }
+  }
+  const isClosed = determineIfClosed(current_date,vendor_data.getVendor.hours[currentDay]);
 
   // splash the hours
   const handleToggle = () => {
@@ -266,27 +300,40 @@ function Menu() {
       </div>
     );
   }
-  let dropdownTitle = isClosed ? (
-    <div>
-      <span className="openStatus">Closed </span>
-      {times[0][0].replace(".", "").replace(".", "")} -{" "}
-      {times[0][1].replace(".", "").replace(".", "")}
+
+          {/* {isClosed ? (
+            <p class="vendorinfo">Closed for the Day</p>
+          ) : (
+            times.map(time => {
+              return (
+                <p class="vendorinfo">
+                  {time[0]} - {time[1]}
+                </p>
+              );
+            })
+          )}
+          <button class="readmore"> More Info </button> */}
+
+
+  let dropdownTitle = (
+    <div className="statusTitleWrapper">
+      <span className="openStatus"> {isClosed&&"CLOSED"} {!isClosed && "OPEN"} </span>
+      <div>
+        {times.map(time => {
+                return (
+                  <div class="vendorinfo">
+                    {time[0].replace(".", "").replace(".", "")} - {time[1].replace(".", "").replace(".", "")}
+                  </div>
+                );
+              })}
+      </div>
       <FontAwesomeIcon
         className="arrowIcon"
         icon={open ? faAngleUp : faAngleDown}
       />
     </div>
-  ) : (
-    <span>
-      <span className="openStatus">Open</span>
-      {times[0][0].replace(".", "").replace(".", "")} -{" "}
-      {times[0][1].replace(".", "").replace(".", "")}
-      <FontAwesomeIcon
-        className="arrowIcon"
-        icon={open ? faAngleUp : faAngleDown}
-      />
-    </span>
-  );
+
+  )
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
@@ -349,19 +396,7 @@ function Menu() {
             )}
           </Popper>
 
-          {/* Vendor Operating Hours */}
-          {/* {isClosed ? (
-            <p class="vendorinfo">Closed for the Day</p>
-          ) : (
-            times.map(time => {
-              return (
-                <p class="vendorinfo">
-                  {time[0]} - {time[1]}
-                </p>
-              );
-            })
-          )}
-          <button class="readmore"> More Info </button> */}
+         
         </div>
 
         {/* Category Select Bar */}

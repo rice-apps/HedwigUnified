@@ -32,6 +32,7 @@ export const CREATE_ORDER = gql`
     $lineItems: [LineItemInput]!
     $location: String!
     $type: PaymentSourceEnum!
+    $cohenId: String
   ) {
     createOrder(
       locationId: $location
@@ -42,6 +43,7 @@ export const CREATE_ORDER = gql`
         recipient: { name: $name, phone: $phone, email: $email }
         pickupTime: $time
         paymentType: $type
+        cohenId: $cohenId
       }
     ) {
       id
@@ -135,7 +137,7 @@ const getLineItems = (items) => {
   return rtn;
 };
 
-export const createRecord = (items, paymentType) => {
+export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient();
   console.log(orderSummary().vendor.locationIds[0]);
   return {
@@ -147,7 +149,8 @@ export const createRecord = (items, paymentType) => {
     email: recipient.email,
     time: orderSummary().time.format(),
     location: orderSummary().vendor.locationIds[0],
-    type: paymentType
+    type: paymentType,
+    cohenId: cohenId
   };
 };
 

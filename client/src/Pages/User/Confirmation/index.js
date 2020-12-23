@@ -5,7 +5,7 @@ import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
 import { ReactComponent as ConfirmationSVG } from './check-circle.svg'
-import { orderSummary } from '../../../apollo'
+import { orderSummary, cartItems } from '../../../apollo'
 
 
   function Failure () {
@@ -39,6 +39,7 @@ import { orderSummary } from '../../../apollo'
   function Confirmation () {
     const order = orderSummary()
     const navigate = useNavigate()
+    cartItems([])
     const handleHomeClick = () => {
       return navigate(`/eat`)
     }
@@ -51,14 +52,14 @@ import { orderSummary } from '../../../apollo'
             You will receive order status updates via <strong>text.</strong>
           </P>
         </div>
-        <div className='vendorCard'>
+        <Div vendorCard>
           <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
           <P header>{order.vendor.name}</P>
           <P header>Pick Up Instruction:</P>
           <P pickup>Pick up at {order.fulfillment.placedAt} at 
             {order.fulfillment.pickupAt}
           </P>
-        </div>
+        </Div>
 
         <Div>
           <Button onClick={handleHomeClick}>

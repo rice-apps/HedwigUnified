@@ -1,16 +1,12 @@
-import { css, jsx } from "@emotion/react";
 import { Fragment, useEffect, useState } from "react";
 import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
-import { useParams, useHistory } from "react-router";
 import {
   checkNullFields,
   createRecord,
   CREATE_ORDER,
   CREATE_PAYMENT,
-  GET_VENDOR,
-  UPDATE_ORDER_TRACKER,
+  GET_VENDOR
 } from "./util";
-import logo from "../../../images/cohenhouse.png";
 import "./cart.scss";
 import { centerCenter, row, column, endStart } from "../../../Styles/flex";
 import CartProduct from "./CartProducts";
@@ -19,9 +15,8 @@ import { cartItems, orderSummary } from "../../../apollo";
 import Select from "react-select";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import BottomAppBar from "./../Vendors/BottomAppBar.js";
 import CartHeader from "./CartHeader";
-// import BuyerHeader from "./../Vendors/BuyerHeader.js";
+import styled, { css } from 'styled-components'
 
 // new dropdown imports:
 import createActivityDetector from "activity-detector";
@@ -33,6 +28,15 @@ const styles = {
   fontSize: 14,
   color: "blue",
 };
+
+const Div = styled.div`
+  text-align: right;
+  margin-right: 2vh;
+`
+
+const Input = styled.input`
+
+`
 
 const GET_AVAILABILITIES = gql`
   query GET_AVAILABILITIES($productIds: [String!]) {
@@ -155,10 +159,8 @@ function useIdle(options) {
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
   const [pickupTime, setPickupTime] = useState(null);
-
-  // Add payment method picker:
   const [paymentMethod, setPaymentMethod] = useState("CREDIT");
-  // from master:
+  const [cohenId, setCohenId] = useState(null)
   const [nullError, setNullError] = useState(checkNullFields());
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -183,7 +185,7 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({ timeToIdle: 10000, inactivityEvents: [] });
+  const isIdle = useIdle({ timeToIdle: 100000, inactivityEvents: [] });
 
   const product_ids = cart_menu.map((item) => {
     return item.dataSourceId;
@@ -211,7 +213,7 @@ function CartDetail() {
       return navigate("/eat/confirmation");
     } else {
       const rec = {
-        variables: createRecord(cart_menu, paymentMethod)
+        variables: createRecord(cart_menu, paymentMethod, cohenId)
       }
       const order = orderSummary()
       console.log(rec);
@@ -219,7 +221,6 @@ function CartDetail() {
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
-          // new:
           sourceId: "cnon:card-nonce-ok",
           orderId: orderJson.id,
           location: order.vendor.locationIds[0],
@@ -285,11 +286,11 @@ function CartDetail() {
   if (loading) return <p>'Loading vendor's business hour ...'</p>;
   if (error) return <p>`Error! ${error.message}`</p>;
 
-  if (order_loading) return <p>Loading...</p>;
+  if (order_loading) return <p>Creating new order. Please wait ...</p>;
   if (order_error) {
     return <p>{order_error.message}</p>;
   }
-  if (payment_loading) return <p>Loading...</p>;
+  if (payment_loading) return <p>Creating new payment. Please wait ...</p>;
   if (payment_error) {
     return <p>{payment_error.message}</p>;
   }
@@ -318,7 +319,7 @@ function CartDetail() {
     } else {
       return parseInt(hour);
     }
-  }) : ['8', '13'];
+  }) : [];
   const endHours = businessHours[currDay] ? businessHour.end.map((endHour) => {
     let hour = endHour.split(":")[0];
     if (endHour.includes("p.m.")) {
@@ -326,14 +327,14 @@ function CartDetail() {
     } else {
       return parseInt(hour);
     }
-  }) : ['12', '21'];
+  }) : [];
 
   const startMinutes = businessHours[currDay] ? businessHour.start.map((startHour) => {
     return parseInt(startHour.split(":")[1]);
-  }) : ['30', '00'];
+  }) : [];
   const endMinutes = businessHours[currDay] ? businessHour.end.map((endHour) => {
     return parseInt(endHour.split(":")[1]);
-  }) : ['30', '00'];
+  }) : [];
 
   const timeIntervals = calculateNextHours(
     currHour,
@@ -442,12 +443,12 @@ function CartDetail() {
             style={styles.select}
             className="float-cart__dropdown"
           />
-          <div>
-            <p className="float-cart__payment-message">
-              Please enter payment details on the following screen.
-            </p>
-          </div>
-
+          { paymentMethod === 'COHEN' && (
+            <Div>
+              <label>Enter your Cohen House membership id: </label>
+              <input onChange={e => setCohenId(e.value)}></input>
+            </Div>
+          )}
           {nullError != null && (
             <p css={{ alignSelf: "center", color: "red" }}>
               {" "}
@@ -464,7 +465,6 @@ function CartDetail() {
               onClick={handleConfirmClick}
             >
               Submit Order
-              <div />
             </button>
           </div>
         </div>

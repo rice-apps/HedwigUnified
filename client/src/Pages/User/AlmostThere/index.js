@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
-import { orderSummary } from '../../../apollo'
+import { cartItems, orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
 
 export const Button = styled.button`
@@ -83,7 +83,7 @@ export const Div = styled.div`
 `
 
 const AlmostThere = ({ classes }) => {
-
+  cartItems([])
   const navigate = useNavigate()
   const handleHomeClick = () => {
     return navigate(`/eat`)

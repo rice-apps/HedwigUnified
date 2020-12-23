@@ -370,7 +370,7 @@ function EditHoursDashboard() {
     setCurrentHours(newHours);
   }
 
-  if (currentHours === []) {
+  if (currentHours.length === 0) {
     updateCurrentHours(hours);
   }
 

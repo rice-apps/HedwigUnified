@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { IoMdClose, IoMdArrowDropdown } from "react-icons/io";
 import { CgMathPlus } from "react-icons/cg";
 
+import { VENDOR_QUERY } from "../../../../graphql/VendorQueries.js";
+import { useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
+
 const EditHoursDashboardWrapper = styled.div`
   height: 90%;
   width: 90%;
@@ -62,22 +65,20 @@ const StatusDropdown = styled.select`
   border-radius: 10px;
   -webkit-appearance: none;
   position: relative;
-  padding-right:19px;
+  padding-right: 19px;
 `;
 
-
 function CreateStatusDropdown() {
-    return (
-    
-        <StatusColumn>
-          <StatusDropdown name="storeStatus" id="storeStatus">
-            <option value="OPEN">Open</option>
-            <option value="CLOSED">Closed</option>
-          </StatusDropdown>
-          <IoMdArrowDropdown style={{position:"absolute", right:10}}/>
-        </StatusColumn>
-    );
-  }
+  return (
+    <StatusColumn>
+      <StatusDropdown name="storeStatus" id="storeStatus">
+        <option value="OPEN">Open</option>
+        <option value="CLOSED">Closed</option>
+      </StatusDropdown>
+      <IoMdArrowDropdown style={{ position: "absolute", right: 10 }} />
+    </StatusColumn>
+  );
+}
 
 const HoursColumn = styled.div`
   grid-area: Hours;
@@ -103,6 +104,17 @@ const HoursInterval = styled.div`
 `;
 
 const DaysofTheWeek = ["MON", "TUE", "WED", "THURS", "FRI", "SAT", "SUN"];
+
+const daysForGetVendor = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 function HoursItem(props) {
   return (
     <HoursInterval>
@@ -111,7 +123,7 @@ function HoursItem(props) {
           position: "absolute",
           top: "4",
           right: "4",
-          fontSize: "2.2vh"
+          fontSize: "2.2vh",
         }}
       />
       {props.startTime} – {props.endTime}
@@ -149,19 +161,73 @@ function MakeAddHoursButton() {
 }
 
 function EditHoursDashboard() {
+  const {
+    data: vendor_data,
+    error: vendor_error,
+    loading: vendor_loading,
+  } = useQuery(VENDOR_QUERY, {
+    variables: { vendor: "Cohen House" },
+  });
+
+  if (vendor_loading) {
+    return <p>Loading...</p>;
+  }
+  if (vendor_error) {
+    return <p>Error...</p>;
+  }
+
+  const hours = vendor_data.getVendor.hours;
+  console.log(hours);
+
+  function getIndex(day) {
+    let dayName =
+      day === "MON"
+        ? "Monday"
+        : day === "TUE"
+        ? "Tuesday"
+        : day === "TUE"
+        ? "Tuesday"
+        : day === "WED"
+        ? "Wednesday"
+        : day === "THURS"
+        ? "Thursday"
+        : day === "FRI"
+        ? "Friday"
+        : day === "SAT"
+        ? "Saturday"
+        : day === "SUN"
+        ? "Sunday"
+        : "N/A";
+    return hours.findIndex((obj) => obj.day === dayName);
+  }
+
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
       <EditHoursRowWrapper>
-        {DaysofTheWeek.map(day => {
+        {DaysofTheWeek.map((day) => {
+          console.log(getIndex(day));
+          const index = getIndex(day);
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
               <CreateStatusDropdown />
               <HoursColumn>
-                <HoursItem startTime="7:00 AM" endTime="12:00 PM"></HoursItem>
+                {/* <HoursItem startTime="7:00 AM" endTime="12:00 PM"></HoursItem>
                 <HoursItem startTime="1:00 PM" endTime="6:00 PM"></HoursItem>
-                <HoursItem startTime="8:00 PM" endTime="11:00 PM"></HoursItem>
+                <HoursItem startTime="8:00 PM" endTime="11:00 PM"></HoursItem> */}
+                <HoursItem
+                  startTime={
+                    hours[index].start !== [] ? hours[index].start[0] : "no"
+                  }
+                  endTime={hours[index].end !== [] ? hours[index].end[0] : "no"}
+                ></HoursItem>
+                <HoursItem
+                  startTime={
+                    hours[index].start !== [] ? hours[index].start[1] : "no"
+                  }
+                  endTime={hours[index].end !== [] ? hours[index].end[1] : "no"}
+                ></HoursItem>
               </HoursColumn>
               <MakeAddHoursButton />
             </EditHoursRow>

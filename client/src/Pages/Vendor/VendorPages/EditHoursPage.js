@@ -6,6 +6,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
 
+// route: http://localhost:3000/employee/edithours
+
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR_HOURS($hours: [UpdateOneVendorBusinessHoursInput]!) {
     updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {

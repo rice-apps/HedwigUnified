@@ -21,7 +21,6 @@
     "@testing-library/user-event": "^12.2.2",
     "ant-design": "^1.0.0",
     "antd": "^4.8.4",
-    "bootstrap": "^4.5.3",
     "currency.js": "^2.0.3",
     "emotion": "^11.0.0",
     "firebase": "^8.0.2",

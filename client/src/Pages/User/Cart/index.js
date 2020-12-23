@@ -50,22 +50,38 @@ const defaultTotals = {
   discount: null,
 };
 
-function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
+function generatePickupTimes(currHour, currMinute, endHour, endMinute, isFirst) {
   let pickupTimes = [];
   let pickupMinute = Math.ceil(currMinute / 15) * 15;
   let pickupHour = currHour;
   while (pickupHour <= endHour) {
     while (
-      pickupMinute < 45 &&
+      pickupMinute <= 45 &&
       !(pickupHour === endHour && pickupMinute >= endMinute)
     ) {
       pickupMinute += 15;
-      const strPickupMinute =
-        pickupMinute === 0 ? "00" : pickupMinute.toString();
-      const strPickupHour =
-        pickupHour === 12
-          ? "12"
-          : (pickupHour - Math.floor(pickupHour / 12) * 12).toString();
+      let strPickupMinute = "";
+      let strPickupHour = "";
+      if(pickupMinute === 60){
+        strPickupMinute += "00";
+        strPickupHour +=
+          pickupHour >= 12
+          ? (pickupHour - Math.floor(pickupHour / 12) * 12+1).toString()
+          : (pickupHour+1).toString()
+      }
+      else {
+        strPickupMinute += pickupMinute.toString();
+        strPickupHour +=
+          pickupHour === 12
+            ? "12"
+            : (pickupHour - Math.floor(pickupHour / 12) * 12).toString();
+      }
+      if(pickupHour >= 12 || (pickupHour === 11 && pickupMinute === 60)){
+        strPickupMinute+=" p.m."
+      }
+      else {
+        strPickupMinute+=" a.m."
+      }
       const pickupTime = strPickupHour + ":" + strPickupMinute;
       pickupTimes.push(pickupTime);
     }
@@ -75,6 +91,9 @@ function generatePickupTimes(currHour, currMinute, endHour, endMinute) {
   const pickupObjs = pickupTimes.map((time) => {
     return { value: time, label: time };
   });
+  if(isFirst && pickupObjs.length > 0) {
+    pickupObjs.unshift({value: "ASAP", label: "ASAP"});
+  }
   return pickupObjs;
 }
 
@@ -185,7 +204,7 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({ timeToIdle: 100000, inactivityEvents: [] });
+  const isIdle = useIdle({ timeToIdle: 30000, inactivityEvents: [] });
 
   const product_ids = cart_menu.map((item) => {
     return item.dataSourceId;
@@ -204,9 +223,38 @@ function CartDetail() {
   const handleClickCredit = async () => {
     // Get url and embed that url
     return navigate(`/eat/almostThere`)
-  };
+  }
+
+  const changePickupTime = (newTime) => {
+    setPickupTime(newTime);
+    orderSummary(
+      Object.assign(orderSummary(), {
+        time: newTime,
+      })
+  )}
+
+  const convertStringToTime = (time) => {
+    if(time === "ASAP"){
+      return moment().hour()+(moment().minutes()+15)/60
+    }
+    const timeStr = time.split(' ')[0]
+    const [hour, minute] = timeStr.split(':')
+    if(time.includes('p.m.')){
+      return parseInt(hour)+parseInt(minute)/60+12
+    }
+    else{
+      return parseInt(hour)+parseInt(minute)/60
+    }
+  }
 
   const handleConfirmClick = async () => {
+    const currTimeVal = moment().hour()+(moment().minutes())/60;
+    const pickupTimeVal = convertStringToTime(pickupTime);
+    console.log(pickupTimeVal, currTimeVal);
+    if(pickupTimeVal <= currTimeVal+15){
+      alert('The time you have selected is no longer valid. Please choose a later time.')
+      return;
+    }
     const newRes = await avail_refetch();
     while (newRes.loading) {}
     if (newRes.data.getAvailabilities === false) {
@@ -299,12 +347,9 @@ function CartDetail() {
   // if (avail_error & (cart_menu.length != 0))
   //   return <p>`Error! ${avail_error.message}`</p>;
 
-  const currDate = new Date();
-  const currDay = currDate.getDay();
-  // const currHour = currDate.getHours();
-  const currHour = "1";
-  // const currMinute = currDate.getMinutes();
-  const currMinute = "59";
+  const currDay = moment().day();
+  const currHour = moment().hour();
+  const currMinute = moment().minutes();
 
   const {
     getVendor: { hours: businessHours },
@@ -329,12 +374,13 @@ function CartDetail() {
     }
   }) : [];
 
-  const startMinutes = businessHours[currDay] ? businessHour.start.map((startHour) => {
-    return parseInt(startHour.split(":")[1]);
-  }) : [];
-  const endMinutes = businessHours[currDay] ? businessHour.end.map((endHour) => {
-    return parseInt(endHour.split(":")[1]);
-  }) : [];
+  const startMinutes = businessHour.start.map((startHour) => {
+    return parseInt(startHour.split(" ")[0].split(":")[1]);
+  });
+  const endMinutes = businessHour.end.map((endHour) => {
+    return parseInt(endHour.split(" ")[0].split(":")[1]);
+  });
+
 
   const timeIntervals = calculateNextHours(
     currHour,
@@ -347,6 +393,8 @@ function CartDetail() {
   let pickupTimes = [];
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i];
+    console.log(interval)
+    i === 0 ?
     pickupTimes = [
       ...pickupTimes,
       ...generatePickupTimes(
@@ -354,10 +402,25 @@ function CartDetail() {
         interval[1],
         interval[2],
         interval[3],
-        interval[4]
+        true
+      ),
+    ]
+    :
+    pickupTimes = [
+      ...pickupTimes,
+      ...generatePickupTimes(
+        interval[0],
+        interval[1],
+        interval[2],
+        interval[3],
+        false
       ),
     ];
   }
+  console.log(pickupTimes)
+  // if(pickupTimes.length > 0){
+  //   pickupTimes.unshift("ASAP");
+  // }
 
   pickupTimes.forEach(t => t.value = moment().set(
     {'year': moment().year(),
@@ -373,7 +436,9 @@ function CartDetail() {
   return (
     <div>
       <CartHeader showBackButton backLink="/eat" />
-      <div className={isIdle ? "float-cart__disabled" : "float-cart"}>
+      {// <div className={isIdle ? "float-cart__disabled" : "float-cart"}>
+      }
+      <div className={"float-cart"}>
         <div className="float-cart__content">
           <div className="float-cart__shelf-container">
             <p className="cart-title" style={{ marginTop: "30px" }}>
@@ -467,48 +532,49 @@ function CartDetail() {
               Submit Order
             </button>
           </div>
+          {      // <Modal
+                //   isOpen={isIdle}
+                //   style={{
+                //     content: {
+                //       backgroundColor: "white",
+                //       height: "44vh",
+                //       width: "50vw",
+                //       position: "absolute",
+                //       top: "28%",
+                //       left: "26%",
+                //       borderRadius: "20px",
+                //       fontFamily: "Futura",
+                //       textAlign: "center",
+                //     },
+                //     overlay: {
+                //       zIndex: "10",
+                //     },
+                //   }}
+                // >
+                //   <AiOutlineExclamationCircle style={{ fontSize: "100px" }} />
+                //   <p style={{ marginLeft: "0px" }}>
+                //     Your session has expired due to inactivity.
+                //   </p>
+                //   <button
+                //     className="modal-btn"
+                //     onClick={() => {
+                //       window.location.reload(false);
+                //     }}
+                //   >
+                //     Refresh Page
+                //   </button>
+                //   <button
+                //     className="modal-btn"
+                //     onClick={() => {
+                //       navigate("/eat");
+                //     }}
+                //   >
+                //     Home Page
+                //   </button>
+                // </Modal>
+              }
         </div>
       </div>
-      <Modal
-        isOpen={isIdle}
-        style={{
-          content: {
-            backgroundColor: "white",
-            height: "44vh",
-            width: "50vw",
-            position: "absolute",
-            top: "28%",
-            left: "26%",
-            borderRadius: "20px",
-            fontFamily: "Futura",
-            textAlign: "center",
-          },
-          overlay: {
-            zIndex: "10",
-          },
-        }}
-      >
-        <AiOutlineExclamationCircle style={{ fontSize: "100px" }} />
-        <p style={{ marginLeft: "0px" }}>
-          Your session has expired due to inactivity.
-        </p>
-        <button
-          className="modal-btn"
-          onClick={() => {
-            window.location.reload(false);
-          }}
-        >
-          Refresh Page
-        </button>
-        <button
-          className="modal-btn"
-          onClick={() => {
-            navigate("/eat");
-          }}
-        >
-          Home Page
-        </button>
-      </Modal>
     </div>
   );
 }

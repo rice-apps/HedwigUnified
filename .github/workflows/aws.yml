@@ -82,5 +82,5 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: hedwig-service
-        cluster: default
+        cluster: hedwig
         wait-for-service-stability: true

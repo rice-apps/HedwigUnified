@@ -152,9 +152,6 @@ function Menu () {
     style: 'currency',
     currency: 'USD'
 
-    // These options are needed to round to whole numbers if that's what you want.
-    // minimumFractionDigits: 0,
-    // maximumFractionDigits: 0,
   })
 
   formatter.format(2500)
@@ -185,6 +182,7 @@ function Menu () {
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])
   }
+  console.log(times)
   const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
 
   // we have to change these returns because vendor.name is outdated - brandon
@@ -209,16 +207,8 @@ function Menu () {
             <p class='vendorinfo'>Closed for the Day</p>
           ) : (
             times.map(time => {
-              return <p class='vendorinfo'>time[0] - time[1]</p>
+              return <p class='vendorinfo'>{time[0]} - {time[1]}</p>
             })
-          )}
-          <p class='vendorinfo'>
-            {startTimes[0]} - {endTimes[0]}
-          </p>
-          {startTimes.length > 1 && (
-            <p class='vendorinfo'>
-              {startTimes[1]} - {endTimes[1]}
-            </p>
           )}
           <button class='readmore'> More Info </button>
         </div>

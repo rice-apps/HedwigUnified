@@ -4,11 +4,11 @@ import express from 'express'
 import http from 'http'
 import log from 'loglevel'
 
+import { DEV_PORT } from './config'
+import './utils/db'
+
 import Schema from './schema'
 
-import { DEV_PORT } from './config'
-
-import './utils/db'
 
 // Initialize connection to Square with API token
 import './square'

@@ -35,7 +35,7 @@ import ProfilePane from './ProfilePane.js'
 function VendorList ({ classes }) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
-  if (error) return <p>Error...</p>
+  if (error) return <p>{error.message}</p>
   if (loading) return <p>Loading...</p>
   if (!data) return <p>No data...</p>
 

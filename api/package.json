@@ -43,6 +43,8 @@
     "graphql": "^14.3.0",
     "graphql-compose": "^7.23.0",
     "graphql-compose-mongoose": "^9.0.0",
+    "graphql-redis-subscriptions": "^2.3.1",
+    "ioredis": "^4.19.4",
     "jsonwebtoken": "^8.5.1",
     "loglevel": "^1.7.1",
     "mongoose": "^5.11.8",

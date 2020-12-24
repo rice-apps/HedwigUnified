@@ -151,7 +151,6 @@ function Menu () {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
-
   })
 
   formatter.format(2500)
@@ -207,7 +206,11 @@ function Menu () {
             <p class='vendorinfo'>Closed for the Day</p>
           ) : (
             times.map(time => {
-              return <p class='vendorinfo'>{time[0]} - {time[1]}</p>
+              return (
+                <p class='vendorinfo'>
+                  {time[0]} - {time[1]}
+                </p>
+              )
             })
           )}
           <button class='readmore'> More Info </button>

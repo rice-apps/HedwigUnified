@@ -49,20 +49,20 @@ function VendorCard ({ vendor }) {
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
-    else if(dayObj.isClosed === true){
+    else if (dayObj.isClosed === true) {
       return true
-    }
-    else{
-      const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-      const startTimes = dayObj.start.map((startTime) => {
+    } else {
+      const currentTime =
+        current_date.getHours() + current_date.getMinutes() / 60
+      const startTimes = dayObj.start.map(startTime => {
         return convertTimeToNum(startTime)
       })
-      const endTimes = dayObj.end.map((endTime) => {
+      const endTimes = dayObj.end.map(endTime => {
         return convertTimeToNum(endTime)
       })
       let isClosedHours = true
-      for(let i = 0; i<startTimes.length; i++){
-        if(currentTime >= startTimes[i] && currentTime < endTimes[i]) {
+      for (let i = 0; i < startTimes.length; i++) {
+        if (currentTime >= startTimes[i] && currentTime < endTimes[i]) {
           isClosedHours = false
         }
       }
@@ -74,49 +74,49 @@ function VendorCard ({ vendor }) {
 
   return (
     // UNCOMMENT BELOW FOR PRODUCTION:
-      // <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
-         <div className='vendorContainer' onClick={() => handleClick()}>
-        <div className='vendorHeading'>
-          <div className='vendorHeadingText'>
-            <h3 className='vendorName'>{name}</h3>
-            {/* Case for two start/end times */}
-            {dayObj && dayObj.start.length > 1 && (
-              <p>
-                {' '}
-                Hours Open:{' '}
-                {times.map(time => {
-                  return (
-                    <span>
-                      <br />
-                      {time[0]}
-                      {' - '}
-                      {time[1]}
-                    </span>
-                  )
-                })}
-              </p>
-            )}
-          </div>
-          <div className='vendorHoursIcon'>
-            {closed ? (
-              <FontAwesomeIcon className='door' icon={faDoorClosed} />
-            ) : (
-              <FontAwesomeIcon className='door' icon={faDoorOpen} />
-            )}
-          </div>
+    // <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
+    <div className='vendorContainer' onClick={() => handleClick()}>
+      <div className='vendorHeading'>
+        <div className='vendorHeadingText'>
+          <h3 className='vendorName'>{name}</h3>
+          {/* Case for two start/end times */}
+          {dayObj && dayObj.start.length > 1 && (
+            <p>
+              {' '}
+              Hours Open:{' '}
+              {times.map(time => {
+                return (
+                  <span>
+                    <br />
+                    {time[0]}
+                    {' - '}
+                    {time[1]}
+                  </span>
+                )
+              })}
+            </p>
+          )}
         </div>
-        <div className='vendorImageContainer'>
+        <div className='vendorHoursIcon'>
           {closed ? (
-            <span>
-              <p className='closedText'>Closed</p>
-            </span>
-          ) : null}
-          <img
-            className={closed ? 'vendorImage closed' : 'vendorImage'}
-            src={logoUrl}
-          />
+            <FontAwesomeIcon className='door' icon={faDoorClosed} />
+          ) : (
+            <FontAwesomeIcon className='door' icon={faDoorOpen} />
+          )}
         </div>
       </div>
+      <div className='vendorImageContainer'>
+        {closed ? (
+          <span>
+            <p className='closedText'>Closed</p>
+          </span>
+        ) : null}
+        <img
+          className={closed ? 'vendorImage closed' : 'vendorImage'}
+          src={logoUrl}
+        />
+      </div>
+    </div>
   )
 }
 

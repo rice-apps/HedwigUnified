@@ -1,6 +1,19 @@
+import { RedisPubSub } from 'graphql-redis-subscriptions'
 import { PubSub } from 'apollo-server-express'
 
-// Initialize PubSub: https://www.apollographql.com/docs/apollo-server/data/subscriptions/
-const pubsub = new PubSub()
+import { REDIS_OPTIONS } from '../config'
 
-export default pubsub
+const Redis = require('ioredis')
+
+let pubusb
+
+if (process.env.NODE_ENV === 'production') {
+  pubsub = new RedisPubSub({
+    publisher: new Redis(REDIS_OPTIONS),
+    subscriber: new Redis(REDIS_OPTIONS)
+  })
+} else {
+  pubsub = new PubSub()
+}
+
+export default pubusb

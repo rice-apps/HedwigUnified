@@ -9,7 +9,6 @@ import './utils/db'
 
 import Schema from './schema'
 
-
 // Initialize connection to Square with API token
 import './square'
 

@@ -18,9 +18,9 @@ const shopifyClient = Client.buildClient(
   fetch
 )
 
-console.log("Shop name: ", SHOPIFY_DOMAIN)
-console.log("Shopify API key: ", SHOPIFY_API_KEY)
-console.log("Shopify password: ", SHOPIFY_PASSWORD)
+console.log('Shop name: ', SHOPIFY_DOMAIN)
+console.log('Shopify API key: ', SHOPIFY_API_KEY)
+console.log('Shopify password: ', SHOPIFY_PASSWORD)
 
 const shopifyAdminClient = new Shopify({
   shopName: SHOPIFY_DOMAIN,

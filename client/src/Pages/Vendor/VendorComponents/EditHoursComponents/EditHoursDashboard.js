@@ -109,8 +109,8 @@ function CreateStatusDropdown(props) {
     toggleIsClosed({
       variables: {
         name: "Cohen House",
-        hours: updatedHours,
-      },
+        hours: updatedHours
+      }
     });
 
     // update state:
@@ -124,7 +124,7 @@ function CreateStatusDropdown(props) {
         <StatusDropdown
           name="storeStatus"
           id="storeStatus"
-          onChange={(e) => onChangeIsClosed(e.target.value)}
+          onChange={e => onChangeIsClosed(e.target.value)}
         >
           <option value="OPEN">Open</option>
           <option value="CLOSED" selected>
@@ -135,7 +135,7 @@ function CreateStatusDropdown(props) {
         <StatusDropdown
           name="storeStatus"
           id="storeStatus"
-          onChange={(e) => onChangeIsClosed(e.target.value)}
+          onChange={e => onChangeIsClosed(e.target.value)}
         >
           <option value="OPEN" selected>
             Open
@@ -231,7 +231,7 @@ function HoursItem(props) {
           position: "absolute",
           top: "4",
           right: "4",
-          fontSize: "2.2vh",
+          fontSize: "2.2vh"
         }}
       />
       {props.startTime} – {props.endTime}
@@ -267,7 +267,7 @@ const AddHourModalWrapper = styled.div`
   position: absolute;
   grid-template-areas:
     "DOTW StartTime ToSpace EndTime"
-    "Confirm Confirm Confirm Confirm";
+    "ConfirmSpace ConfirmSpace ConfirmSpace ConfirmSpace";
   align-items: center;
   justify-content: center;
   font-size: 2.8vh;
@@ -291,9 +291,28 @@ const TimeModal = styled.input`
   text-align: center;
 `;
 
-function MakeTimeInput(props) {
-  let side = props.side;
+const ConfirmButtonWrapper = styled.div`
+  grid-area: ConfirmSpace;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
+const ConfirmButton = styled.button`
+  color: white;
+  background-color: #ea907a;
+  border-radius: 70px;
+  grid-area: ConfirmSpace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border: none;
+`;
+
+function MakeTimeInput(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
   let startTime = null;
@@ -303,6 +322,7 @@ function MakeTimeInput(props) {
       startTime = inputTime;
     }
 
+<<<<<<< HEAD
     if (props.id === "addedEndTime") {
       const originalHours = props.currentHours;
       const updatedHours = [...originalHours];
@@ -333,14 +353,46 @@ function MakeTimeInput(props) {
       });
     }
     // window.location.reload();
+=======
+    toggleIsClosed({
+      variables: {
+        name: "Cohen House",
+        hours: updatedHours
+      }
+    });
+>>>>>>> d637c530f39cc8ef1d68447408bd80d06f6c80fe
 
     // props.updateCurrentHours(updatedHours);
+  }
+// This function formats the time so that it is not in 24h format
+  function updateAddedTime(addedTime) {
+    const updateHourState = props.setHours
+    let halfOfDay = "";
+    let formattedHour = "";
+    // console.log("addedTime", addedTime, typeof addedTime);
+    const addedHours = parseInt(addedTime.split(":")[0]);
+    const formattedMinute = addedTime.split(":")[1]
+    // console.log("Hour", addedHours);
+    // console.log("Minutes", addedMinute);
+    if (addedHours > 12) {
+      halfOfDay = "p.m.";
+      formattedHour = (addedHours - 12).toString()
+    } else {
+      halfOfDay = "a.m.";
+      formattedHour = addedHours.toString()
+    }
+    console.log(formattedHour, halfOfDay);
+    const formattedAddedTime = formattedHour + ":" + formattedMinute + " " + halfOfDay
+    console.log("Formatted Time", formattedAddedTime)
+    // this updates the state of either addedStartTime or addedendtime
+updateHourState(formattedAddedTime)
   }
 
   return (
     <div>
       <TimeModal
-        onChange={(e) => onChangeHourModal(e.target.value)}
+        // onChange={e => onChangeHourModal(e.target.value)}
+        onChange={e => updateAddedTime(e.target.value)}
         type="time"
       ></TimeModal>
     </div>
@@ -349,14 +401,31 @@ function MakeTimeInput(props) {
 
 function MakeAddHoursButton(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [addedStartTime, setAddedStartTime] = useState("");
+  const [addedEndTime, setAddedEndTime] = useState("");
 
   function openAddHourModal() {
     setModalIsOpen(true);
   }
   function closeAddHourModal() {
+      AddStartTime("")
+      AddEndTime("")
     setModalIsOpen(false);
     window.location.reload();
   }
+
+  function AddStartTime(time) {
+      setAddedStartTime(time)
+  }
+
+  function AddEndTime(time) {
+    setAddedEndTime(time)
+}
+
+function ConfirmOnClick() {
+    let timesToAdd = [addedStartTime, addedEndTime]
+    console.log(timesToAdd)
+}
 
   return (
     <AddColumn>
@@ -375,8 +444,8 @@ function MakeAddHoursButton(props) {
             top: "36%",
             left: "28%",
             border: "3px solid #9D9D9D45",
-            borderRadius: "20px",
-          },
+            borderRadius: "20px"
+          }
         }}
       >
         <form>
@@ -386,6 +455,7 @@ function MakeAddHoursButton(props) {
               id="addedStartTime"
               index={props.index}
               currentHours={props.currentHours}
+              setHours={AddStartTime}
               // updateCurrentHours={props.updateCurrentHours}
             />
             <div tyle={{ textAlign: "middle" }}> TO </div>
@@ -393,16 +463,21 @@ function MakeAddHoursButton(props) {
               id="addedEndTime"
               index={props.index}
               currentHours={props.currentHours}
+              setHours={AddEndTime}
               // updateCurrentHours={props.updateCurrentHours}
             />
+            <ConfirmButtonWrapper>
+              <ConfirmButton onClick={ConfirmOnClick} disabled={addedStartTime == "" || addedEndTime ==""} type="button">Confirm</ConfirmButton>
+            </ConfirmButtonWrapper>
           </AddHourModalWrapper>
+
           <IoMdClose
             onClick={closeAddHourModal}
             style={{
               position: "absolute",
               top: "15px",
               right: "15px",
-              fontSize: "3vh",
+              fontSize: "3vh"
             }}
           />
         </form>
@@ -417,9 +492,9 @@ function EditHoursDashboard() {
   const {
     data: vendor_data,
     error: vendor_error,
-    loading: vendor_loading,
+    loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: "Cohen House" },
+    variables: { vendor: "Cohen House" }
   });
 
   if (vendor_loading) {
@@ -466,14 +541,14 @@ function EditHoursDashboard() {
         : day === "SUN"
         ? "Sunday"
         : "N/A";
-    return hours.findIndex((obj) => obj.day === dayName);
+    return hours.findIndex(obj => obj.day === dayName);
   }
 
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
       <EditHoursRowWrapper>
-        {DaysofTheWeek.map((day) => {
+        {DaysofTheWeek.map(day => {
           const index = getIndex(day);
           return (
             <EditHoursRow>

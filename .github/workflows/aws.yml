@@ -68,12 +68,16 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./api
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition hedwig-api-build --query 5 > task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: ./aws_task_definitions/hedwig-api-build.json
+        task-definition: task-definition.json
         container-name: hedwig
         image: ${{ steps.build-image.outputs.image }}
 

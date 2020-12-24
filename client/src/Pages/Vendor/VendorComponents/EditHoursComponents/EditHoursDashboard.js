@@ -109,8 +109,8 @@ function CreateStatusDropdown(props) {
     toggleIsClosed({
       variables: {
         name: "Cohen House",
-        hours: updatedHours
-      }
+        hours: updatedHours,
+      },
     });
 
     // update state:
@@ -124,7 +124,7 @@ function CreateStatusDropdown(props) {
         <StatusDropdown
           name="storeStatus"
           id="storeStatus"
-          onChange={e => onChangeIsClosed(e.target.value)}
+          onChange={(e) => onChangeIsClosed(e.target.value)}
         >
           <option value="OPEN">Open</option>
           <option value="CLOSED" selected>
@@ -135,7 +135,7 @@ function CreateStatusDropdown(props) {
         <StatusDropdown
           name="storeStatus"
           id="storeStatus"
-          onChange={e => onChangeIsClosed(e.target.value)}
+          onChange={(e) => onChangeIsClosed(e.target.value)}
         >
           <option value="OPEN" selected>
             Open
@@ -185,7 +185,7 @@ function HoursItem(props) {
     const updatedDay = { ...updatedHours[props.index] };
 
     const updatedStart = [...updatedDay.start];
-    console.log(props.startTime);
+    console.log("Start time: ", props.startTime);
     const indexOfStartHour = updatedStart.indexOf(props.startTime);
     if (indexOfStartHour > -1) {
       console.log("updated start before: ", updatedStart);
@@ -194,7 +194,9 @@ function HoursItem(props) {
     }
 
     const updatedEnd = [...updatedDay.end];
-    const indexOfEndHour = updatedStart.indexOf(props.endTime);
+    console.log("End time: ", props.endTime);
+    const indexOfEndHour = updatedEnd.indexOf(props.endTime);
+    console.log("indexOfEndHour: ", indexOfEndHour);
     if (indexOfEndHour > -1) {
       console.log("updated end before: ", updatedEnd);
       updatedEnd.splice(indexOfEndHour, 1);
@@ -220,7 +222,7 @@ function HoursItem(props) {
       },
     });
 
-    // window.location.reload();
+    window.location.reload();
   }
 
   return (
@@ -231,7 +233,7 @@ function HoursItem(props) {
           position: "absolute",
           top: "4",
           right: "4",
-          fontSize: "2.2vh"
+          fontSize: "2.2vh",
         }}
       />
       {props.startTime} – {props.endTime}
@@ -322,7 +324,6 @@ function MakeTimeInput(props) {
       startTime = inputTime;
     }
 
-<<<<<<< HEAD
     if (props.id === "addedEndTime") {
       const originalHours = props.currentHours;
       const updatedHours = [...originalHours];
@@ -353,46 +354,39 @@ function MakeTimeInput(props) {
       });
     }
     // window.location.reload();
-=======
-    toggleIsClosed({
-      variables: {
-        name: "Cohen House",
-        hours: updatedHours
-      }
-    });
->>>>>>> d637c530f39cc8ef1d68447408bd80d06f6c80fe
 
     // props.updateCurrentHours(updatedHours);
   }
-// This function formats the time so that it is not in 24h format
+  // This function formats the time so that it is not in 24h format
   function updateAddedTime(addedTime) {
-    const updateHourState = props.setHours
+    const updateHourState = props.setHours;
     let halfOfDay = "";
     let formattedHour = "";
     // console.log("addedTime", addedTime, typeof addedTime);
     const addedHours = parseInt(addedTime.split(":")[0]);
-    const formattedMinute = addedTime.split(":")[1]
+    const formattedMinute = addedTime.split(":")[1];
     // console.log("Hour", addedHours);
     // console.log("Minutes", addedMinute);
     if (addedHours > 12) {
       halfOfDay = "p.m.";
-      formattedHour = (addedHours - 12).toString()
+      formattedHour = (addedHours - 12).toString();
     } else {
       halfOfDay = "a.m.";
-      formattedHour = addedHours.toString()
+      formattedHour = addedHours.toString();
     }
     console.log(formattedHour, halfOfDay);
-    const formattedAddedTime = formattedHour + ":" + formattedMinute + " " + halfOfDay
-    console.log("Formatted Time", formattedAddedTime)
+    const formattedAddedTime =
+      formattedHour + ":" + formattedMinute + " " + halfOfDay;
+    console.log("Formatted Time", formattedAddedTime);
     // this updates the state of either addedStartTime or addedendtime
-updateHourState(formattedAddedTime)
+    updateHourState(formattedAddedTime);
   }
 
   return (
     <div>
       <TimeModal
         // onChange={e => onChangeHourModal(e.target.value)}
-        onChange={e => updateAddedTime(e.target.value)}
+        onChange={(e) => updateAddedTime(e.target.value)}
         type="time"
       ></TimeModal>
     </div>
@@ -408,24 +402,24 @@ function MakeAddHoursButton(props) {
     setModalIsOpen(true);
   }
   function closeAddHourModal() {
-      AddStartTime("")
-      AddEndTime("")
+    AddStartTime("");
+    AddEndTime("");
     setModalIsOpen(false);
     window.location.reload();
   }
 
   function AddStartTime(time) {
-      setAddedStartTime(time)
+    setAddedStartTime(time);
   }
 
   function AddEndTime(time) {
-    setAddedEndTime(time)
-}
+    setAddedEndTime(time);
+  }
 
-function ConfirmOnClick() {
-    let timesToAdd = [addedStartTime, addedEndTime]
-    console.log(timesToAdd)
-}
+  function ConfirmOnClick() {
+    let timesToAdd = [addedStartTime, addedEndTime];
+    console.log(timesToAdd);
+  }
 
   return (
     <AddColumn>
@@ -444,8 +438,8 @@ function ConfirmOnClick() {
             top: "36%",
             left: "28%",
             border: "3px solid #9D9D9D45",
-            borderRadius: "20px"
-          }
+            borderRadius: "20px",
+          },
         }}
       >
         <form>
@@ -467,7 +461,13 @@ function ConfirmOnClick() {
               // updateCurrentHours={props.updateCurrentHours}
             />
             <ConfirmButtonWrapper>
-              <ConfirmButton onClick={ConfirmOnClick} disabled={addedStartTime == "" || addedEndTime ==""} type="button">Confirm</ConfirmButton>
+              <ConfirmButton
+                onClick={ConfirmOnClick}
+                disabled={addedStartTime == "" || addedEndTime == ""}
+                type="button"
+              >
+                Confirm
+              </ConfirmButton>
             </ConfirmButtonWrapper>
           </AddHourModalWrapper>
 
@@ -477,7 +477,7 @@ function ConfirmOnClick() {
               position: "absolute",
               top: "15px",
               right: "15px",
-              fontSize: "3vh"
+              fontSize: "3vh",
             }}
           />
         </form>
@@ -492,9 +492,9 @@ function EditHoursDashboard() {
   const {
     data: vendor_data,
     error: vendor_error,
-    loading: vendor_loading
+    loading: vendor_loading,
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: "Cohen House" }
+    variables: { vendor: "Cohen House" },
   });
 
   if (vendor_loading) {
@@ -541,14 +541,14 @@ function EditHoursDashboard() {
         : day === "SUN"
         ? "Sunday"
         : "N/A";
-    return hours.findIndex(obj => obj.day === dayName);
+    return hours.findIndex((obj) => obj.day === dayName);
   }
 
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
       <EditHoursRowWrapper>
-        {DaysofTheWeek.map(day => {
+        {DaysofTheWeek.map((day) => {
           const index = getIndex(day);
           return (
             <EditHoursRow>

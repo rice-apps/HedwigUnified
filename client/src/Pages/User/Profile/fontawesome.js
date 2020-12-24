@@ -11,7 +11,6 @@ import {
   faPaperPlane,
   faQuestionCircle,
   faEdit,
-  faCheck,
   faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -24,7 +23,6 @@ library.add(
   faHandsHelping,
   faArrowLeft,
   faEdit,
-  faCheck,
   faChevronRight,
   faStarAndCrescent
 )

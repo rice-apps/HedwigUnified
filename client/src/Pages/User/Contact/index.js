@@ -80,7 +80,7 @@ function ContactForm () {
         variant='outlined'
         className='confirm-btn'
         onClick={() => {
-          if (phone && phone.length === 10) {
+          if (phone && phone.length == 10) {
             setConfirmed(true)
           }
         }}

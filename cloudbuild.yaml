@@ -34,6 +34,8 @@ steps:
     - 'REACT_APP_BACKEND_URL=${_REACT_APP_BACKEND_URL}'
     - 'REACT_APP_GRAPHQL_URL=${_REACT_APP_GRAPHQL_URL}'
     - 'REACT_APP_GRAPHQL_WS_URL=${_REACT_APP_GRAPHQL_WS_URL}'
+    - 'REACT_APP_FIREBASE_API_KEY=${_REACT_APP_FIREBASE_API_KEY}'
+    - 'REACT_APP_AUTH_DOMAIN=${_REACT_APP_AUTH_DOMAIN}'
   dir: 'client/'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']

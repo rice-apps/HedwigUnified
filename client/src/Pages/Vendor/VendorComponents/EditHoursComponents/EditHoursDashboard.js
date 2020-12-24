@@ -196,7 +196,9 @@ function HoursItem(props) {
     const updatedEnd = [...updatedDay.end];
     const indexOfEndHour = updatedStart.indexOf(props.endTime);
     if (indexOfEndHour > -1) {
+      console.log("updated end before: ", updatedEnd);
       updatedEnd.splice(indexOfEndHour, 1);
+      console.log("updated end after: ", updatedEnd);
     }
 
     updatedDay.start = updatedStart;
@@ -218,7 +220,7 @@ function HoursItem(props) {
       },
     });
 
-    window.location.reload();
+    // window.location.reload();
   }
 
   return (
@@ -294,40 +296,43 @@ function MakeTimeInput(props) {
 
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  function onChangeHourModal(inputTime) {
-    console.log("inputted time: ", inputTime);
-    console.log("props.currentHours", props.currentHours);
+  let startTime = null;
 
-    const originalHours = props.currentHours;
-    const updatedHours = [...originalHours];
-    // This index is the index of the day! should reflect what day the user clicks to edit:
-    const updatedDay = { ...updatedHours[props.index] };
+  function onChangeHourModal(inputTime) {
     if (props.id === "addedStartTime") {
-      const updatedTime = updatedDay.start.concat(inputTime);
-      console.log("updatedTime ", updatedTime);
-      updatedDay.start = updatedTime;
-    } else {
-      const updatedTime = updatedDay.end.concat(inputTime);
-      console.log("updatedTime ", updatedTime);
-      updatedDay.end = updatedTime;
+      startTime = inputTime;
     }
 
-    console.log("after day: ", updatedDay);
+    if (props.id === "addedEndTime") {
+      const originalHours = props.currentHours;
+      const updatedHours = [...originalHours];
+      const updatedDay = { ...updatedHours[props.index] };
 
-    updatedHours[props.index] = updatedDay;
-    updatedHours.map((day, index) => {
-      const dayCopy = { ...updatedHours[index] };
-      delete dayCopy["__typename"];
-      updatedHours[index] = dayCopy;
-    });
+      const updatedStartTime = updatedDay.start.concat(startTime);
+      console.log("start time after ", updatedStartTime);
+      updatedDay.start = updatedStartTime;
 
-    toggleIsClosed({
-      variables: {
-        name: "Cohen House",
-        hours: updatedHours,
-      },
-    });
-    window.location.reload();
+      console.log("end time before: ", updatedDay.end);
+
+      const updatedEndTime = updatedDay.end.concat(inputTime);
+      console.log("end time after: ", updatedEndTime);
+      updatedDay.end = updatedEndTime;
+
+      updatedHours[props.index] = updatedDay;
+      updatedHours.map((day, index) => {
+        const dayCopy = { ...updatedHours[index] };
+        delete dayCopy["__typename"];
+        updatedHours[index] = dayCopy;
+      });
+
+      toggleIsClosed({
+        variables: {
+          name: "Cohen House",
+          hours: updatedHours,
+        },
+      });
+    }
+    // window.location.reload();
 
     // props.updateCurrentHours(updatedHours);
   }
@@ -350,7 +355,7 @@ function MakeAddHoursButton(props) {
   }
   function closeAddHourModal() {
     setModalIsOpen(false);
-    // window.location.reload();
+    window.location.reload();
   }
 
   return (

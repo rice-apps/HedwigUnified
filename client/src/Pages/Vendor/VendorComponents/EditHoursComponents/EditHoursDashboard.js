@@ -117,15 +117,17 @@ function CreateStatusDropdown(props) {
   }
 
   return (
+      
     <StatusColumn>
-      {props.inputIsClosed ? (
+        {console.log(props.day, props.inputIsClosed[0])}
+      {props.inputIsClosed[0] ? (
         <StatusDropdown
           name="storeStatus"
           id="storeStatus"
           onChange={(e) => onChangeIsClosed(e.target.value)}
         >
           <option value="OPEN">Open</option>
-          <option value="CLOSED" defaultValue>
+          <option value="CLOSED" selected>
             Closed
           </option>
         </StatusDropdown>
@@ -135,7 +137,7 @@ function CreateStatusDropdown(props) {
           id="storeStatus"
           onChange={(e) => onChangeIsClosed(e.target.value)}
         >
-          <option value="OPEN" defaultValue>
+          <option value="OPEN" selected>
             Open
           </option>
           <option value="CLOSED">Closed</option>
@@ -418,6 +420,7 @@ function EditHoursDashboard() {
                 index={index}
                 currentHours={currentHours}
                 updateCurrentHours={updateCurrentHours}
+                day={day}
                 // vendor_data={vendor_data}
               />
               <HoursColumn>

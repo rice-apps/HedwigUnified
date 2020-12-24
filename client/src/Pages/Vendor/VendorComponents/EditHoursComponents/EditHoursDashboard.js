@@ -260,7 +260,7 @@ function MakeTimeInput(props) {
 
     console.log("after day: ", updatedDay);
 
-    updatedHours[0] = updatedDay;
+    updatedHours[props.index] = updatedDay;
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] };
       delete dayCopy["__typename"];
@@ -417,6 +417,7 @@ function EditHoursDashboard() {
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
+              {console.log("hours[index]", hours[index])}
               <CreateStatusDropdown
                 inputIsClosed={hours[index].isClosed}
                 index={index}

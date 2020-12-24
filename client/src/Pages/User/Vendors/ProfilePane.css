@@ -24,7 +24,7 @@
   }
 
   .close {
-    height: 3vh;
+    height: 4vh;
     align-self: flex-end;
     padding: 2vh 3vw;
   }
@@ -87,9 +87,30 @@
   
   .phonetext {
     font-size: 3vh;
-    color: #5a5953;
+    color: black;
     margin-left: 1vw;
     padding-top: 2vh;
+  }
+
+  .phoneedit {
+    background-color: inherit;
+    border: none;
+    color: lightgray;
+    margin-left: 2vw;
+    font-size: 2.5vh;
+  }
+
+  .phoneconfirm {
+    background-color: inherit;
+    border: none;
+    margin-left: 2vw;
+    font-size: 2.5vh;
+  }
+
+  #telinput {
+    height: 2vh;
+    width: 20vh;
+    font-family: 'avenir';
   }
   
   /* Content */
@@ -120,7 +141,7 @@
     font-family: 'avenirbook';
     font-size: 2.5vh;
   
-    color: #5a5953;
+    color:darkslategray;
     justify-self: flex-start;
     align-self: flex-end;
     margin-left: 0vw;

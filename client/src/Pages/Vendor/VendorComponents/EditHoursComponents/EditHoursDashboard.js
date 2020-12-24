@@ -174,9 +174,57 @@ const HoursInterval = styled.div`
 const DaysofTheWeek = ["MON", "TUE", "WED", "THURS", "FRI", "SAT", "SUN"];
 
 function HoursItem(props) {
+  const [updateDeleteTime, { data, loading, error }] = useMutation(
+    UPDATE_VENDOR
+  );
+
+  function deleteStartEndTime() {
+    const originalHours = props.currentHours;
+    const updatedHours = [...originalHours];
+    // This index is the index of the day! should reflect what day the user clicks to edit:
+    const updatedDay = { ...updatedHours[props.index] };
+
+    const updatedStart = [...updatedDay.start];
+    console.log(props.startTime);
+    const indexOfStartHour = updatedStart.indexOf(props.startTime);
+    if (indexOfStartHour > -1) {
+      console.log("updated start before: ", updatedStart);
+      updatedStart.splice(indexOfStartHour, 1);
+      console.log("updated start after: ", updatedStart);
+    }
+
+    const updatedEnd = [...updatedDay.end];
+    const indexOfEndHour = updatedStart.indexOf(props.endTime);
+    if (indexOfEndHour > -1) {
+      updatedEnd.splice(indexOfEndHour, 1);
+    }
+
+    updatedDay.start = updatedStart;
+    updatedDay.end = updatedEnd;
+
+    console.log("updated day: ", updatedDay);
+
+    updatedHours[props.index] = updatedDay;
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
+
+    updateDeleteTime({
+      variables: {
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
+
+    window.location.reload();
+  }
+
   return (
     <HoursInterval>
       <IoMdClose
+        onClick={deleteStartEndTime}
         style={{
           position: "absolute",
           top: "4",
@@ -436,6 +484,8 @@ function EditHoursDashboard() {
                 {hours[index].start.map((startInput, timeIndex) => {
                   return (
                     <HoursItem
+                      index={index}
+                      currentHours={hours}
                       startTime={hours[index].start[timeIndex]}
                       endTime={hours[index].end[timeIndex]}
                     ></HoursItem>

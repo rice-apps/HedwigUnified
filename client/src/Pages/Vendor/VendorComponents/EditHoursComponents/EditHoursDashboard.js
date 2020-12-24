@@ -247,7 +247,6 @@ function MakeTimeInput(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
   function onChangeHourModal(inputTime) {
-    window.location.reload();
     console.log("inputted time: ", inputTime);
     console.log("props.currentHours", props.currentHours);
 
@@ -255,8 +254,15 @@ function MakeTimeInput(props) {
     const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
-    const updatedTime = [...updatedDay.start, inputTime];
-    console.log("updatedTime ", updatedTime);
+    if (props.id === "addedStartTime") {
+      const updatedTime = updatedDay.start.concat(inputTime);
+      console.log("updatedTime ", updatedTime);
+      updatedDay.start = updatedTime;
+    } else {
+      const updatedTime = updatedDay.end.concat(inputTime);
+      console.log("updatedTime ", updatedTime);
+      updatedDay.end = updatedTime;
+    }
 
     console.log("after day: ", updatedDay);
 
@@ -273,6 +279,7 @@ function MakeTimeInput(props) {
         hours: updatedHours,
       },
     });
+    window.location.reload();
 
     // props.updateCurrentHours(updatedHours);
   }
@@ -295,6 +302,7 @@ function MakeAddHoursButton(props) {
   }
   function closeAddHourModal() {
     setModalIsOpen(false);
+    // window.location.reload();
   }
 
   return (

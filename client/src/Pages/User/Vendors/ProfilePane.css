@@ -81,7 +81,7 @@
   
   .welcometext {
     font-size: 4vh;
-    color: #f49f86;
+    color: #db6142;
     margin-left: 1vw;
   }
   
@@ -89,7 +89,7 @@
     font-size: 3vh;
     color: #5a5953;
     margin-left: 1vw;
-    padding-bottom: 2vh;
+    padding-top: 2vh;
   }
   
   /* Content */
@@ -103,6 +103,7 @@
     display: grid;
     flex: 1;
     height: 5vh;
+    padding-top: 2.5vh;
   
     grid-template-columns: 15fr 2fr;
   
@@ -138,7 +139,7 @@
   /* Sign Out Footer */
   .profilefooter {
     display: grid;
-    height: 45vh;
+    height: 41vh;
   
     background-color: #faf8f8;
     border-top: #7070701a 1px solid;
@@ -148,13 +149,16 @@
   
   .signoutbutton {
     border: 1px solid #5a595326;
-    background-color: inherit;
-    place-self: center center;
+    background-color: #db6142;
+    width: 70%;
+    height: 20%;
   
     font-family: 'avenirbook';
-    color: #f49f86;
+    color: white;
     font-size: 3vh;
   
+    align-self: flex-end;
+    margin-bottom: 5vh;
     border-radius: 20px;
     padding: 10px 20px;
   }

@@ -85,7 +85,7 @@ function ContactForm () {
           }
         }}
       >
-        confirm
+        Confirm
       </div>
     </div>
   )

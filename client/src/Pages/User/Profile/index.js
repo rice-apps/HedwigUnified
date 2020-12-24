@@ -23,7 +23,6 @@ const GET_USER_INFO = gql`
 `
 
 const getLinks = user => {
-  // Missing help path, feedback form, and edit phone number page
   const links = [
     { icon: 'phone', content: user.phone, path: '' },
 

@@ -24,7 +24,6 @@ const GET_USER_INFO = gql`
 `
 
 const getLinks = user => {
-  // Missing help path, feedback form, and edit phone number page
   const links = [
     { icon: 'hands-helping', content: 'Help', path: '' },
 
@@ -110,7 +109,7 @@ function ProfilePane () {
           {/* Footer: SignOut */}
           <div className='profilefooter'>
             <button className='signoutbutton' onClick={handleLogoutClick}>
-              Sign Out
+              Log Out
             </button>
           </div>
         </div>

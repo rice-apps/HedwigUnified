@@ -73,7 +73,7 @@ jobs:
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: ./aws_task_definitions/first-run-task-definition.json
+        task-definition: ./aws_task_definitions/hedwig-api-build.json
         container-name: hedwig
         image: ${{ steps.build-image.outputs.image }}
 

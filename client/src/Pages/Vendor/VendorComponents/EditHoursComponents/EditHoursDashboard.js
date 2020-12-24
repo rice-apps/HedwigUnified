@@ -88,6 +88,7 @@ function CreateStatusDropdown(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
   function onChangeIsClosed(value) {
+    window.location.reload();
     let inputIsClosed = value === "OPEN" ? false : true;
     // const originalHours = props.vendor_data.getVendor.hours;
     const originalHours = props.currentHours;
@@ -113,13 +114,12 @@ function CreateStatusDropdown(props) {
     });
 
     // update state:
-    props.updateCurrentHours(updatedHours);
+    // props.updateCurrentHours(updatedHours);
   }
 
   return (
-      
     <StatusColumn>
-        {console.log(props.day, props.inputIsClosed[0])}
+      {console.log(props.day, props.inputIsClosed[0])}
       {props.inputIsClosed[0] ? (
         <StatusDropdown
           name="storeStatus"
@@ -247,6 +247,7 @@ function MakeTimeInput(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
   function onChangeHourModal(inputTime) {
+    window.location.reload();
     console.log("inputted time: ", inputTime);
     console.log("props.currentHours", props.currentHours);
 
@@ -273,7 +274,7 @@ function MakeTimeInput(props) {
       },
     });
 
-    props.updateCurrentHours(updatedHours);
+    // props.updateCurrentHours(updatedHours);
   }
 
   return (
@@ -324,14 +325,14 @@ function MakeAddHoursButton(props) {
               id="addedStartTime"
               index={props.index}
               currentHours={props.currentHours}
-              updateCurrentHours={props.updateCurrentHours}
+              // updateCurrentHours={props.updateCurrentHours}
             />
             <div tyle={{ textAlign: "middle" }}> TO </div>
             <MakeTimeInput
               id="addedEndTime"
               index={props.index}
               currentHours={props.currentHours}
-              updateCurrentHours={props.updateCurrentHours}
+              // updateCurrentHours={props.updateCurrentHours}
             />
           </AddHourModalWrapper>
           <IoMdClose
@@ -350,7 +351,7 @@ function MakeAddHoursButton(props) {
 }
 
 function EditHoursDashboard() {
-  const [currentHours, setCurrentHours] = useState([]);
+  // const [currentHours, setCurrentHours] = useState([]);
 
   const {
     data: vendor_data,
@@ -369,20 +370,21 @@ function EditHoursDashboard() {
 
   const hours = vendor_data.getVendor.hours;
 
-  function updateCurrentHours(newHours) {
-    setCurrentHours(newHours);
-  }
+  console.log("hours: ", hours);
 
-  console.log(currentHours.length);
+  // function updateCurrentHours(newHours) {
+  //   setCurrentHours(newHours);
+  // }
 
-  if (currentHours.length === 0) {
-    console.log("hours ", hours);
-    updateCurrentHours(hours);
-    console.log("current hours in if ", currentHours);
-  }
+  // console.log(currentHours.length);
+
+  // if (currentHours.length === 0) {
+  //   console.log("hours ", hours);
+  //   updateCurrentHours(hours);
+  //   console.log("current hours in if ", currentHours);
+  // }
 
   // updateCurrentHours(hours);
-  console.log("current hours: ", currentHours);
 
   function getIndex(day) {
     let dayName =
@@ -418,10 +420,8 @@ function EditHoursDashboard() {
               <CreateStatusDropdown
                 inputIsClosed={hours[index].isClosed}
                 index={index}
-                currentHours={currentHours}
-                updateCurrentHours={updateCurrentHours}
+                currentHours={hours}
                 day={day}
-                // vendor_data={vendor_data}
               />
               <HoursColumn>
                 {hours[index].start.map((startInput, timeIndex) => {
@@ -436,8 +436,7 @@ function EditHoursDashboard() {
               <MakeAddHoursButton
                 weekday={day}
                 index={index}
-                currentHours={currentHours}
-                updateCurrentHours={updateCurrentHours}
+                currentHours={hours}
               />
             </EditHoursRow>
           );

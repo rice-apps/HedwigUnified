@@ -394,6 +394,8 @@ function MakeTimeInput(props) {
 }
 
 function MakeAddHoursButton(props) {
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [addedStartTime, setAddedStartTime] = useState("");
   const [addedEndTime, setAddedEndTime] = useState("");
@@ -419,6 +421,34 @@ function MakeAddHoursButton(props) {
   function ConfirmOnClick() {
     let timesToAdd = [addedStartTime, addedEndTime];
     console.log(timesToAdd);
+
+    const originalHours = props.currentHours;
+    const updatedHours = [...originalHours];
+    const updatedDay = { ...updatedHours[props.index] };
+
+    const updatedStartTime = updatedDay.start.concat(addedStartTime);
+    console.log("start time after ", updatedStartTime);
+    updatedDay.start = updatedStartTime;
+
+    const updatedEndTime = updatedDay.end.concat(addedEndTime);
+    console.log("end time after: ", updatedEndTime);
+    updatedDay.end = updatedEndTime;
+
+    updatedHours[props.index] = updatedDay;
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
+
+    toggleIsClosed({
+      variables: {
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
+
+    window.location.reload();
   }
 
   return (

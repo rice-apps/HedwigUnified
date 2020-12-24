@@ -19,10 +19,7 @@
           "awslogs-stream-prefix": "ecs"
         }
       },
-      "entryPoint": [
-        "sh",
-        "-c"
-      ],
+      "entryPoint": null,
       "portMappings": [
         {
           "hostPort": 80,
@@ -35,9 +32,7 @@
           "containerPort": 3001
         }
       ],
-      "command": [
-        "/bin/sh -c \"echo ready!\""
-      ],
+      "command": null,
       "linuxParameters": null,
       "cpu": 256,
       "environment": [],
@@ -52,7 +47,7 @@
       "memoryReservation": 512,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "225107574193.dkr.ecr.us-east-1.amazonaws.com/riceapps:a6f75342e3ad0fc455680505b9ceb122c1d6f268_api",
+      "image": "httpd:2.4",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -79,7 +74,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:225107574193:task-definition/hedwig-api-build:1",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:225107574193:task-definition/hedwig-api-build:3",
   "family": "hedwig-api-build",
   "requiresAttributes": [
     {
@@ -93,12 +88,6 @@
       "targetType": null,
       "value": null,
       "name": "ecs.capability.execution-role-awslogs"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.ecr-auth"
     },
     {
       "targetId": null,
@@ -122,12 +111,6 @@
       "targetId": null,
       "targetType": null,
       "value": null,
-      "name": "ecs.capability.execution-role-ecr-pull"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
     },
     {
@@ -143,7 +126,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "256",
-  "revision": 1,
+  "revision": 3,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,

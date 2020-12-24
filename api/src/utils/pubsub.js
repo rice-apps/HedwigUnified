@@ -5,7 +5,7 @@ import { REDIS_OPTIONS } from '../config'
 
 const Redis = require('ioredis')
 
-let pubusb
+let pubsub
 
 if (process.env.NODE_ENV === 'production') {
   pubsub = new RedisPubSub({
@@ -16,4 +16,4 @@ if (process.env.NODE_ENV === 'production') {
   pubsub = new PubSub()
 }
 
-export default pubusb
+export default pubsub

@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "apollo-server-express": "^2.19.0",
+    "apollo-server-express": "^2.19.1",
     "axios": "^0.21.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -49,7 +49,7 @@
     "loglevel": "^1.7.1",
     "mongoose": "^5.11.8",
     "node-fetch": "^2.6.1",
-    "shopify-api-node": "^3.5.4",
+    "shopify-api-node": "^3.6.0",
     "shopify-buy": "^2.11.0",
     "square-connect": "6.20201216.0",
     "twilio": "^3.54.1",

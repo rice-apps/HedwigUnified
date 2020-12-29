@@ -62,8 +62,14 @@ OrderTC.addResolver({
 
     const { cursor: newCursor, orders } = searchOrderResponse
 
-    const returnedOrders = orders.map(async order => {
+    let filteredOrders = orders.filter(
+      order => typeof order.fulfillments !== 'undefined'
+    )
+
+    const returnedOrders = filteredOrders.map(async order => {
       const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+
+      console.log(order.fulfillments)
 
       return {
         id: order.id,

@@ -51,7 +51,7 @@ const GET_COMPLETED_ORDERS = gql`
   }
 `
 function ClosedOrderDashboard () {
-  const vendorId = ['FMXAFFWJR95WC']
+  const vendorId = ['LBBZPB7F5A100']
   const filter = { fulfillment_filter: { fulfillment_states: 'COMPLETED' } }
 
   const { data, loading, error } = useQuery(GET_COMPLETED_ORDERS, {

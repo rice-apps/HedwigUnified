@@ -31,7 +31,7 @@ export const CREATE_ORDER = gql`
     $lineItems: [LineItemInput]!
   ) {
     createOrder(
-      locationId: "FMXAFFWJR95WC"
+      locationId: "LBBZPB7F5A100"
       record: {
         studentId: $studentId
         idempotencyKey: $key
@@ -72,7 +72,7 @@ export const CREATE_PAYMENT = gql`
         source: SQUARE
         sourceId: "cnon:card-nonce-ok"
         orderId: $orderId
-        locationId: "FMXAFFWJR95WC"
+        locationId: "LBBZPB7F5A100"
         subtotal: { amount: $subtotal, currency: $currency }
       }
     ) {

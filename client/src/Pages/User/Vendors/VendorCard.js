@@ -25,17 +25,17 @@ function VendorCard({ vendor }) {
   const currentDay = current_date.getDay();
   // temporary fix:
   // const currentDay = 1
-  const dayObj = hours[currentDay];
-  const convertTimeToNum = (time) => {
-    // const [timeNum, halfOfDay] = time.split(' ')
-    const [timeNum, halfOfDay] = time.split(" ");
-    let [hours, minutes] = timeNum.split(":");
-    hours = parseInt(hours);
-    minutes = parseInt(minutes) / 60;
-    if (halfOfDay === "a.m.") {
-      return hours + minutes;
-    } else if (halfOfDay === "p.m.") {
-      return 12 + hours + minutes;
+  const dayObj = hours[currentDay]
+  console.log(dayObj)
+  const convertTimeToNum = time => {
+    const [timeNum, halfOfDay] = time.split(' ')
+    let [hours, minutes] = timeNum.split(':')
+    hours = parseInt(hours)
+    minutes = parseInt(minutes) / 60
+    if (halfOfDay === 'a.m.') {
+      return hours + minutes
+    } else if (halfOfDay === 'p.m.') {
+      return 12 + hours + minutes
     }
   };
 
@@ -48,72 +48,76 @@ function VendorCard({ vendor }) {
   }
 
   const determineIfClosed = (current_date, dayObj) => {
-    if (!dayObj) return;
-    const currentTime =
-      current_date.getHours() + current_date.getMinutes() / 60;
-    const startTime = convertTimeToNum(dayObj.start[0]);
-    const endTime = convertTimeToNum(dayObj.end[0]);
-    return currentTime <= startTime || currentTime >= endTime;
-  };
+    if (!dayObj) return
+    else if (dayObj.isClosed === true) {
+      return true
+    } else {
+      const currentTime =
+        current_date.getHours() + current_date.getMinutes() / 60
+      const startTimes = dayObj.start.map(startTime => {
+        return convertTimeToNum(startTime)
+      })
+      const endTimes = dayObj.end.map(endTime => {
+        return convertTimeToNum(endTime)
+      })
+      let isClosedHours = true
+      for (let i = 0; i < startTimes.length; i++) {
+        if (currentTime >= startTimes[i] && currentTime < endTimes[i]) {
+          isClosedHours = false
+        }
+      }
+      return isClosedHours
+    }
+  }
 
   const closed = determineIfClosed(current_date, dayObj);
 
   return (
-    <>
-      <div className="vendorContainer" onClick={() => handleClick()}>
-        <div className="vendorHeading">
-          <div className="vendorHeadingText">
-            <h3 className="vendorName">{name}</h3>
-            {/* Case for two start/end times */}
-            {dayObj && dayObj.start.length > 1 && (
-              <p>
-                {" "}
-                Hours Open:{" "}
-                {times.map((time) => {
-                  return (
-                    <span>
-                      <br />
-                      {time[0]}
-                      {" - "}
-                      {time[1]}
-                    </span>
-                  );
-                })}
-              </p>
-            )}
-          </div>
-          <div className="vendorHoursIcon">
-            {closed ? (
-              <FontAwesomeIcon className="door" icon={faDoorClosed} />
-            ) : (
-              <FontAwesomeIcon className="door" icon={faDoorOpen} />
-            )}
-          </div>
+    // UNCOMMENT BELOW FOR PRODUCTION:
+    // <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
+    <div className='vendorContainer' onClick={() => handleClick()}>
+      <div className='vendorHeading'>
+        <div className='vendorHeadingText'>
+          <h3 className='vendorName'>{name}</h3>
+          {/* Case for two start/end times */}
+          {dayObj && dayObj.start.length > 1 && (
+            <p>
+              {' '}
+              Hours Open:{' '}
+              {times.map(time => {
+                return (
+                  <span>
+                    <br />
+                    {time[0]}
+                    {' - '}
+                    {time[1]}
+                  </span>
+                )
+              })}
+            </p>
+          )}
         </div>
-        <div className="vendorImageContainer">
+        <div className='vendorHoursIcon'>
           {closed ? (
-            <span>
-              <p className="closedText">Closed</p>
-            </span>
-          ) : null}
-          <img
-            className={closed ? "vendorImage closed" : "vendorImage"}
-            src={logoUrl}
-          />
+            <FontAwesomeIcon className='door' icon={faDoorClosed} />
+          ) : (
+            <FontAwesomeIcon className='door' icon={faDoorOpen} />
+          )}
         </div>
       </div>
-      {/* <div style={{ backgroundImage: `url(${vendor.imageURL})` }} className="vendorcard" onClick={handleClick}>
-          </div> */}
-      {/* <div>
-              <ul>
-                  <li>Food</li>
-                  <li>Drink</li>
-                  <li>Snacks</li>
-                  <li>Coffee</li>
-              </ul>
-          </div> */}
-    </>
-  );
+      <div className='vendorImageContainer'>
+        {closed ? (
+          <span>
+            <p className='closedText'>Closed</p>
+          </span>
+        ) : null}
+        <img
+          className={closed ? 'vendorImage closed' : 'vendorImage'}
+          src={logoUrl}
+        />
+      </div>
+    </div>
+  )
 }
 
 export default VendorCard;

@@ -1,44 +1,44 @@
-import { Component, useEffect, Profiler } from "react";
+import { Component, useEffect, Profiler } from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { Routes, Route, useRoutes, Navigate } from "react-router-dom";
+import { Routes, Route, useRoutes, Navigate } from 'react-router-dom'
 import {
   gql,
   useQuery,
   useApolloClient,
-  createSignalIfSupported,
-} from "@apollo/client";
-import Login from "../Pages/Login";
-import Auth from "../Pages/Auth";
-import Home from "../Pages/Home";
-import SignUp from "../Pages/SignUp";
-import Profile from "../Pages/User/Profile";
-import Confirmation from "../Pages/User/Confirmation";
+  createSignalIfSupported
+} from '@apollo/client'
+import Login from '../Pages/Login'
+import Auth from '../Pages/Auth'
+import Home from '../Pages/Home'
+import SignUp from '../Pages/SignUp'
+import Profile from '../Pages/User/Profile'
+import Confirmation from '../Pages/User/Confirmation'
 // Vendor imports
-import Orders from "../Pages/Vendor/Orders";
+import Orders from '../Pages/Vendor/Orders'
 // import VendorSettings from '../Pages/Vendor/Settings';
-import VendorList from "../Pages/User/Vendors/VendorList";
+import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
-import CartDetail from "../Pages/User/Cart";
-import ContactForm from "../Pages/User/Contact";
-import OrderList from "../Pages/User/Orders";
-import Menu from "../Pages/User/Menu";
-import Product from "../Pages/User/Products/Product";
-import PaymentPage from "../Pages/User/Payment";
-import VendorsideTemplate from "../Pages/Vendor/VendorComponents/VendorGridContainer.js";
-import ClosedOrdersPage from "../Pages/Vendor/VendorPages/ClosedOrdersPage.js";
-import OpenOrdersPage from "../Pages/Vendor/VendorPages/OpenOrdersPage.js";
-import ItemsMenuManagementPage from "../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js";
-import ModifiersMenuManagementPage from "../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js";
-import SetBasicInfoPage from "../Pages/Vendor/VendorPages/SetBasicInfoPage.js";
-import SetStoreHoursPage from "../Pages/Vendor/VendorPages/SetStoreHoursPage.js";
-import Payments from "../Pages/User/Cart/Payments";
-import VendorSelect from "../Pages/Login/VendorCheck";
-import CohenPayment from "../Pages/User/Payment/CohenPayment";
-import Submit from "../Pages/User/Submit";
-import CreditPayment from "../Pages/User/Cart/CreditPayment.js";
+import CartDetail from '../Pages/User/Cart'
+import ContactForm from '../Pages/User/Contact'
+import OrderList from '../Pages/User/Orders'
+import Menu from '../Pages/User/Menu'
+import Product from '../Pages/User/Products/Product'
+import PaymentPage from '../Pages/User/Payment'
+import VendorsideTemplate from '../Pages/Vendor/VendorComponents/VendorGridContainer.js'
+import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
+import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
+import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js'
+import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
+import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
+import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
+import Payments from '../Pages/User/Cart/Payments'
+import VendorSelect from '../Pages/Login/VendorCheck'
+import CohenPayment from '../Pages/User/Payment/CohenPayment'
+import Submit from '../Pages/User/Submit'
+import CreditPayment from '../Pages/User/Cart/CreditPayment.js'
 
-import EditHoursPage from "../Pages/Vendor/VendorPages/EditHoursPage.js";
+import EditHoursPage from '../Pages/Vendor/VendorPages/EditHoursPage.js'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -54,7 +54,7 @@ const VERIFY_USER = gql`
       recentUpdate
     }
   }
-`;
+`
 
 /**
  * This simply fetches from our cache whether a recent update has occurred
@@ -70,7 +70,7 @@ const GET_USER_INFO = gql`
       phone
     }
   }
-`;
+`
 
 /**
  * Defines a private route - if the user is NOT logged in or has an invalid token,
@@ -78,28 +78,28 @@ const GET_USER_INFO = gql`
  */
 const PrivateRoute = ({ element, ...rest }) => {
   const token =
-    localStorage.getItem("token") != null ? localStorage.getItem("token") : "";
+    localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
-  const client = useApolloClient();
+  const client = useApolloClient()
 
   // Verify that the token is valid on the backend
   const { data, loading, error } = useQuery(VERIFY_USER, {
     variables: { token: token },
-    errorPolicy: "none",
-  });
+    errorPolicy: 'none'
+  })
 
   if (error) {
     // Clear the token because something is wrong with it
-    localStorage.removeItem("token");
+    localStorage.removeItem('token')
     // Redirect the user to the login page
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />
   }
-  if (loading) return <p>Waiting...</p>;
+  if (loading) return <p>Waiting...</p>
   if (!data || !data.verifyUser) {
     // Clear the token
-    localStorage.removeItem("token");
+    localStorage.removeItem('token')
     // Redirect the user
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />
   }
 
   // Check whether any recent updates have come in
@@ -109,114 +109,114 @@ const PrivateRoute = ({ element, ...rest }) => {
 
   client.writeQuery({
     query: GET_USER_INFO,
-    data: { user: data.verifyUser },
-  });
+    data: { user: data.verifyUser }
+  })
 
   // Everything looks good! Now let's send the user on their way
-  return <Route {...rest} element={element} />;
-};
+  return <Route {...rest} element={element} />
+}
 
 const newRoutesArray = [
   {
-    path: "/login",
-    element: <Login />,
+    path: '/login',
+    element: <Login />
   },
   {
-    path: "/auth",
-    element: <Auth />,
+    path: '/auth',
+    element: <Auth />
   },
   {
-    path: "/signup",
-    element: <PrivateRoute element={<SignUp />} />,
+    path: '/signup',
+    element: <PrivateRoute element={<SignUp />} />
   },
   {
-    path: "/vendor_choice",
-    element: <PrivateRoute element={<VendorSelect />} />,
+    path: '/vendor_choice',
+    element: <PrivateRoute element={<VendorSelect />} />
   },
   {
-    path: "/eat/*",
+    path: '/eat/*',
     children: [
-      { path: "/", element: <PrivateRoute element={<VendorList />} /> },
-      { path: "/profile", element: <PrivateRoute element={<Profile />} /> },
-      { path: "/orders", element: <PrivateRoute element={<OrderList />} /> },
-      { path: "/submit", element: <Submit /> },
+      { path: '/', element: <PrivateRoute element={<VendorList />} /> },
+      { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
+      { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
+      { path: '/submit', element: <Submit /> },
       {
-        path: "/:vendor/*",
+        path: '/:vendor/*',
         children: [
-          { path: "/", element: <PrivateRoute element={<Menu />} /> },
+          { path: '/', element: <PrivateRoute element={<Menu />} /> },
           {
-            path: "/:product",
-            element: <PrivateRoute element={<Product />} />,
+            path: '/:product',
+            element: <PrivateRoute element={<Product />} />
           },
-          { path: "/cart", element: <PrivateRoute element={<CartDetail />} /> },
+          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
           // payment options
           {
-            path: "/payment",
-            element: <PrivateRoute element={<Payments />} />,
+            path: '/payment',
+            element: <PrivateRoute element={<Payments />} />
           },
           {
-            path: "/confirmation",
-            element: <PrivateRoute element={<Confirmation />} />,
-          },
-        ],
-      },
-    ],
+            path: '/confirmation',
+            element: <PrivateRoute element={<Confirmation />} />
+          }
+        ]
+      }
+    ]
   },
   // This is to credit card payment:
   {
-    path: "/payment",
-    element: <PaymentPage />,
+    path: '/payment',
+    element: <PaymentPage />
   },
   // embedding url page:
   {
-    path: "/credit",
-    element: <CreditPayment />,
+    path: '/credit',
+    element: <CreditPayment />
   },
 
   {
-    path: "/contact",
-    element: <ContactForm />,
+    path: '/contact',
+    element: <ContactForm />
   },
   // Cohen house payment page:
   {
-    path: "/cohen",
-    element: <PrivateRoute element={<CohenPayment />} />,
+    path: '/cohen',
+    element: <PrivateRoute element={<CohenPayment />} />
   },
   {
-    path: "/employee/*",
+    path: '/employee/*',
     children: [
-      { path: "/", element: <PrivateRoute element={<OpenOrdersPage />} /> },
+      { path: '/', element: <PrivateRoute element={<OpenOrdersPage />} /> },
       {
-        path: "/openorders",
-        element: <PrivateRoute element={<OpenOrdersPage />} />,
+        path: '/openorders',
+        element: <PrivateRoute element={<OpenOrdersPage />} />
       },
       {
-        path: "/closedorders",
-        element: <PrivateRoute element={<ClosedOrdersPage />} />,
+        path: '/closedorders',
+        element: <PrivateRoute element={<ClosedOrdersPage />} />
       },
       {
-        path: "/items",
-        element: <PrivateRoute element={<ItemsMenuManagementPage />} />,
+        path: '/items',
+        element: <PrivateRoute element={<ItemsMenuManagementPage />} />
       },
       {
-        path: "/modifiers",
-        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />,
+        path: '/modifiers',
+        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />
       },
       {
-        path: "/set-basic-info",
-        element: <PrivateRoute element={<SetBasicInfoPage />} />,
+        path: '/set-basic-info',
+        element: <PrivateRoute element={<SetBasicInfoPage />} />
       },
       {
-        path: "/set-store-hours",
-        element: <PrivateRoute element={<SetStoreHoursPage />} />,
+        path: '/set-store-hours',
+        element: <PrivateRoute element={<SetStoreHoursPage />} />
       },
       {
-        path: "/edithours",
-        element: <PrivateRoute element={<EditHoursPage />} />,
-      },
-    ],
-  },
-];
+        path: '/edithours',
+        element: <PrivateRoute element={<EditHoursPage />} />
+      }
+    ]
+  }
+]
 
 // const routesArray = [
 //     {
@@ -298,9 +298,9 @@ export const RoutesComponent = ({}) => {
   //         });
   //     }, []
   // );
-  const newRoutes = useRoutes(newRoutesArray);
-  return newRoutes;
-};
+  const newRoutes = useRoutes(newRoutesArray)
+  return newRoutes
+}
 
 //     return (
 //         <Switch>

@@ -1,28 +1,28 @@
-import { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
-import BottomAppBar from "./BottomAppBar.js";
+import { Fragment } from 'react'
+import { useNavigate } from 'react-router-dom'
+import BottomAppBar from './BottomAppBar.js'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDoorOpen, faDoorClosed } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDoorOpen, faDoorClosed } from '@fortawesome/free-solid-svg-icons'
 
-function VendorCard({ vendor }) {
-  const { name, hours, logoUrl } = vendor;
+function VendorCard ({ vendor }) {
+  const { name, hours, logoUrl } = vendor
 
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   // if (errors) return <h1>lol oops something broke</h1>;
   // if (loading) return <h1>loading... be patient u hoe</h1>
 
   const handleClick = () => {
     // Go to this particular vendor's detail page
-    return navigate(`/eat/${vendor.slug}`, { state: { currentVendor: name } });
-  };
+    return navigate(`/eat/${vendor.slug}`, { state: { currentVendor: name } })
+  }
 
   // includes time
-  const current_date = new Date();
-  const currentDay = current_date.getDay();
+  const current_date = new Date()
+  const currentDay = current_date.getDay()
   // temporary fix:
   // const currentDay = 1
   const dayObj = hours[currentDay]
@@ -37,14 +37,14 @@ function VendorCard({ vendor }) {
     } else if (halfOfDay === 'p.m.') {
       return 12 + hours + minutes
     }
-  };
+  }
 
-  const startTimes = hours[currentDay].start;
-  const endTimes = hours[currentDay].end;
+  const startTimes = hours[currentDay].start
+  const endTimes = hours[currentDay].end
 
-  const times = [];
+  const times = []
   for (let i = 0; i < startTimes.length; i++) {
-    times.push([startTimes[i], endTimes[i]]);
+    times.push([startTimes[i], endTimes[i]])
   }
 
   const determineIfClosed = (current_date, dayObj) => {
@@ -70,7 +70,7 @@ function VendorCard({ vendor }) {
     }
   }
 
-  const closed = determineIfClosed(current_date, dayObj);
+  const closed = determineIfClosed(current_date, dayObj)
 
   return (
     // UNCOMMENT BELOW FOR PRODUCTION:
@@ -120,4 +120,4 @@ function VendorCard({ vendor }) {
   )
 }
 
-export default VendorCard;
+export default VendorCard

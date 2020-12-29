@@ -38,7 +38,6 @@ import CohenPayment from '../Pages/User/Payment/CohenPayment'
 import Submit from '../Pages/User/Submit'
 import CreditPayment from '../Pages/User/Cart/CreditPayment.js'
 
-import EditHoursPage from '../Pages/Vendor/VendorPages/EditHoursPage.js'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -209,10 +208,6 @@ const newRoutesArray = [
       {
         path: '/set-store-hours',
         element: <PrivateRoute element={<SetStoreHoursPage />} />
-      },
-      {
-        path: '/edithours',
-        element: <PrivateRoute element={<EditHoursPage />} />
       }
     ]
   }

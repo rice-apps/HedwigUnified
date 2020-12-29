@@ -52,7 +52,7 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     // const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-    const currentTime = 9.6
+    const currentTime = 10
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
       console.log(i, startTime)
@@ -62,10 +62,10 @@ function VendorCard ({ vendor }) {
       } else if (currentTime > endTime - 0.25 && currentTime <= endTime) {
         return { status: 'kitchenClosed', nextClose: dayObj.end[i] }
       } else if (currentTime < startTime) {
-        return { status: 'closed', nextOpen: dayObj.start[i] }
+        return { status: 'closed', nextOpen: dayObj.start[i], restOfDay:true }
       }
     }
-    return { status: 'closed', nextOpen: dayObj.start[0] }
+    return { status: 'closed', nextOpen: dayObj.start[0], restOfDay:false }
   }
 
   const handleClickStatus = () => {
@@ -104,7 +104,7 @@ function VendorCard ({ vendor }) {
           </div>
         </div>
       )
-    } else if (openStatus.status === 'closed') {
+    } else if (openStatus.status === 'closed' && statusDetail) {
       return (
         <div className='detailWrapper'>
           <div className='detailBox'>
@@ -114,10 +114,10 @@ function VendorCard ({ vendor }) {
             </div>
             <div className='detailText'>
               <h1>Closed</h1>
-              <p>
+              {openStatus.restOfDay ? (<p>
                 {' '}
                 {name} will be opening at {openStatus.nextOpen}
-              </p>
+              </p>) : (<p> {name} is closed for the day! </p>)}
             </div>
           </div>
         </div>

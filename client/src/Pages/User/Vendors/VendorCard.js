@@ -17,7 +17,7 @@ function VendorCard ({ vendor }) {
 
   // open status text
   const openStatusText = {
-    openning: ' OPENNING ',
+    openning: ' OPEN ',
     kitchenClosed: ' KITCHEN CLOSED ',
     closed: ' CLOSED '
   }
@@ -51,9 +51,11 @@ function VendorCard ({ vendor }) {
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
-    const currentTime = current_date.getHours() + current_date.getMinutes() / 60
+    // const currentTime = current_date.getHours() + current_date.getMinutes() / 60
+    const currentTime = 9.6
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
+      console.log(i, startTime)
       const endTime = convertTimeToNum(dayObj.end[i])
       if (currentTime >= startTime && currentTime <= endTime - 0.25) {
         return { status: 'openning' }
@@ -71,7 +73,7 @@ function VendorCard ({ vendor }) {
   }
 
   const openStatus = determineIfClosed(current_date, dayObj)
-
+  console.log('openStatus', openStatus)
   const handleClick = () => {
     if (openStatus.status === 'openning') {
       // Go to this particular vendor's detail page
@@ -81,8 +83,9 @@ function VendorCard ({ vendor }) {
     }
   }
 
-  const showStatusDetail = (openStatus, vendorName) => {
-    if (openStatus.status === 'kitchenClosed') {
+  const showStatusDetail = () => {
+    if (openStatus.status === 'kitchenClosed' && statusDetail) {
+      console.log("Status Detail", statusDetail)
       return (
         <div className='detailWrapper'>
           <div className='detailBox'>
@@ -92,7 +95,7 @@ function VendorCard ({ vendor }) {
             </div>
             <div className='detailText'>
               <h1>Kitchen Closed</h1>
-              <p> {vendorName} is no longer accepting orders </p>
+              <p> {name} is no longer accepting orders </p>
               <p>
                 Orders placed before {openStatus.nextClose} can be picked up as
                 scheduled
@@ -113,7 +116,7 @@ function VendorCard ({ vendor }) {
               <h1>Closed</h1>
               <p>
                 {' '}
-                {vendorName} will be openning at {openStatus.nextOpen}
+                {name} will be opening at {openStatus.nextOpen}
               </p>
             </div>
           </div>
@@ -126,6 +129,7 @@ function VendorCard ({ vendor }) {
     // UNCOMMENT BELOW FOR PRODUCTION:
     // <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
     <div className='vendorContainer' onClick={() => handleClick()}>
+      {showStatusDetail()}
       <div className='vendorImageContainer'>
         <img
           className={

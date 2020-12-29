@@ -19,6 +19,7 @@
   padding-right: 1rem;
   max-width: 100%;
   cursor: pointer;
+  border-bottom:0.5pt solid #5a59534d;
   /* display: flex;
 	justify-content: center;
 	align-content: center;
@@ -247,7 +248,7 @@ p {
   outline: none;
   border: none;
   border-radius: 0.3rem;
-  font-size: 0.3rem;
+  font-size: 0.7rem;
   padding: 0.2rem 0.3rem 0.2rem 0.3rem;
 }
 

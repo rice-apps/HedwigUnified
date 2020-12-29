@@ -17,8 +17,8 @@
 .vendortitle {
   font-size: 4vh;
   font-family: 'santana';
-  /* color: #f49f86; */
   margin-bottom:5px;
+  /* color: #f49f86; */
 }
 
 .vendorinfo {
@@ -26,8 +26,7 @@
   font-family: 'avenir';
   color: #5a5953;
   margin: 0 5px 0 10px;
-  margin: 0 5px 0 10px;
-  line-height: 2.4vh;
+  line-height:2.4vh;
 }
 
 .statusTitleWrapper {
@@ -171,7 +170,8 @@
   margin: 10px 0px;
 }
 .dayInitial {
-  margin: 10px;
+  margin:10px;
+  margin-right:5.5vw;
   font-weight: bold;
 }
 .openStatus {

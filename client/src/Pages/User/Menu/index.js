@@ -165,6 +165,10 @@ function Menu () {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
+
+    // These options are needed to round to whole numbers if that's what you want.
+    // minimumFractionDigits: 0,
+    // maximumFractionDigits: 0,
   })
 
   formatter.format(2500)
@@ -187,15 +191,15 @@ function Menu () {
 
   const currentDay = current_date.getDay()
   // current day is an integer
-
+  console.log(vendor_data.getVendor.hours[currentDay])
   const startTimes = vendor_data.getVendor.hours[currentDay].start
+  console.log('start times: ' + startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
 
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])
   }
-  console.log(times)
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
@@ -411,6 +415,7 @@ function Menu () {
             <h1 class='categoryname'>
               <Link
                 activeClass='categoryactive'
+                style={{textDecoration: "none", color:"black"}}
                 to={category}
                 smooth
                 spy

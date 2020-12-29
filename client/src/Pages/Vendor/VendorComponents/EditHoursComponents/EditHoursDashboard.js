@@ -31,6 +31,7 @@ const EditHoursDashboardWrapper = styled.div`
   grid-template-rows: 1fr 8fr;
   font-family: "Futura", sans-serif;
   justify-items: center;
+  overflow: hidden;
 `;
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
@@ -39,7 +40,7 @@ const EditHoursTitleWrapper = styled.div`
 
 const EditHoursRowWrapper = styled.div`
   font-size: 2.8vh;
-  overflow: scroll;
+  overflow-y: scroll;
 `;
 const EditHoursRow = styled.div`
   border-radius: 10px;
@@ -82,6 +83,7 @@ const StatusDropdown = styled.select`
   -webkit-appearance: none;
   position: relative;
   padding-right: 19px;
+  cursor: pointer;
 `;
 
 function CreateStatusDropdown(props) {
@@ -143,7 +145,7 @@ function CreateStatusDropdown(props) {
           <option value="CLOSED">Closed</option>
         </StatusDropdown>
       )}
-      <IoMdArrowDropdown style={{ position: "absolute", right: "1.1vw" }} />
+      <IoMdArrowDropdown style={{ position: "absolute", right: "1.0vw" }} />
     </StatusColumn>
   );
 }
@@ -234,7 +236,9 @@ function HoursItem(props) {
           top: "4",
           right: "4",
           fontSize: "2.2vh",
+          cursor: "pointer"
         }}
+        
       />
       {props.startTime} – {props.endTime}
     </HoursInterval>
@@ -407,7 +411,6 @@ function MakeAddHoursButton(props) {
     AddStartTime("");
     AddEndTime("");
     setModalIsOpen(false);
-    window.location.reload();
   }
 
   function AddStartTime(time) {

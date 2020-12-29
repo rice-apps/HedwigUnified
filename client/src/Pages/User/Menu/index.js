@@ -151,6 +151,10 @@ function Menu () {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
+
+    // These options are needed to round to whole numbers if that's what you want.
+    // minimumFractionDigits: 0,
+    // maximumFractionDigits: 0,
   })
 
   formatter.format(2500)
@@ -175,6 +179,7 @@ function Menu () {
   // current day is an integer
 
   const startTimes = vendor_data.getVendor.hours[currentDay].start
+  console.log('start times: ' + startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
 
   const times = []

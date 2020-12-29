@@ -30,14 +30,14 @@
   /* line-height: 0.001; */
 }
 
-.statusTitleWrapper{
+.statusTitleWrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.statusTitleWrapper div{
-  display:flex;
+.statusTitleWrapper div {
+  display: flex;
   flex-direction: column;
 }
 
@@ -152,45 +152,45 @@
 
   align-self: start;
 }
-.storeHourBox{
+.storeHourBox {
   flex-direction: column;
-  display:flex;
+  display: flex;
   text-align: center;
   font-size: 0.8em;
   background: white;
   z-index: 100;
   margin-left: 20px;
-  margin-right:20px;
+  margin-right: 20px;
 }
-.dayHourRow{
-  display:grid;
+.dayHourRow {
+  display: grid;
   grid-template-columns: 15% 85%;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   text-align: center;
   margin: 10px 0px;
 }
-.dayInitial{
+.dayInitial {
   margin: 10px;
   font-weight: bold;
 }
-.openStatus{
+.openStatus {
   font-weight: bold;
   color: #f49f86;
 }
-.hourDisplay{
+.hourDisplay {
   background-color: white;
   display: block;
-  font-size: .5rem;
+  font-size: 0.5rem;
   border-radius: 15px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.arrowIcon{
+.arrowIcon {
   margin-left: 10px;
 }
-.menuItem{
+.menuItem {
   background-color: transparent;
-  padding:0;
+  padding: 0;
 }
 /* .menuItem{
   background-color: transparent;
@@ -198,4 +198,3 @@
 .menuItem:selected{
   background-color: transparent;
 } */
-

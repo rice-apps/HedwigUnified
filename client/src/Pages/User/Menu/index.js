@@ -1,23 +1,23 @@
-import { useState, useRef } from "react";
-import hero from "../../../images/hero.jpg";
-import boba from "../../../images/boba.jpg";
-import "./index.css";
-import { Link, animateScroll as scroll } from "react-scroll";
-import { useNavigate, useLocation } from "react-router-dom";
-import { GET_CATALOG } from "../../../graphql/ProductQueries.js";
-import { VENDOR_QUERY } from "../../../graphql/VendorQueries.js";
-import { useQuery, gql } from "@apollo/client";
-import BottomAppBar from "./../Vendors/BottomAppBar.js";
-import BuyerHeader from "./../Vendors/BuyerHeader.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
-import Button from "@material-ui/core/Button";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
-import Popper from "@material-ui/core/Popper";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
+import { useState, useRef } from 'react'
+import hero from '../../../images/hero.jpg'
+import boba from '../../../images/boba.jpg'
+import './index.css'
+import { Link, animateScroll as scroll } from 'react-scroll'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
+import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
+import { useQuery, gql } from '@apollo/client'
+import BottomAppBar from './../Vendors/BottomAppBar.js'
+import BuyerHeader from './../Vendors/BuyerHeader.js'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Grow from '@material-ui/core/Grow'
+import Popper from '@material-ui/core/Popper'
+import MenuItem from '@material-ui/core/MenuItem'
+import MenuList from '@material-ui/core/MenuList'
 /*
 const vendor = {
   name: 'East West Tea',
@@ -93,14 +93,14 @@ const vendor = {
 // <Menu currentVendor = {"East West Tea"}/>
 
 // add a proceed to checkout
-function Menu() {
-  const [open, setOpen] = React.useState(false);
-  const prevOpen = React.useRef(open);
-  const anchorRef = useRef(null);
-  const [arrowState, setArrowState] = useState(false);
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { currentVendor } = state;
+function Menu () {
+  const [open, setOpen] = React.useState(false)
+  const prevOpen = React.useRef(open)
+  const anchorRef = useRef(null)
+  const [arrowState, setArrowState] = useState(false)
+  const navigate = useNavigate()
+  const { state } = useLocation()
+  const { currentVendor } = state
   const {
     refetch,
     data: catalog_info,
@@ -111,7 +111,7 @@ function Menu() {
       // dataSource: 'SQUARE',
       vendor: currentVendor
     }
-  });
+  })
   // const catalog_data = vendor;
 
   const {
@@ -120,54 +120,54 @@ function Menu() {
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
     variables: { vendor: currentVendor },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first"
-  });
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
+  })
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
+      anchorRef.current.focus()
     }
-    prevOpen.current = open;
-  }, [open]);
+    prevOpen.current = open
+  }, [open])
 
   if (vendor_loading) {
-    return <p>Loading...</p>;
+    return <p>Loading...</p>
   }
   if (vendor_error) {
-    return <p>ErrorV...</p>;
+    return <p>ErrorV...</p>
   }
   // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
-    return <p>Loading...</p>;
+    return <p>Loading...</p>
   }
   if (catalog_error) {
-    console.log(catalog_error);
-    return <p>ErrorC...</p>;
+    console.log(catalog_error)
+    return <p>ErrorC...</p>
   }
 
-  const { getCatalog: catalog_data } = catalog_info;
+  const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
   // sampleFunction
   // input: a number
   // output: number * 3
   const compileCategories = data => {
-    let categories = [];
+    let categories = []
     data.forEach(product => {
-      categories.push(product.category);
-    });
-    categories = new Set(categories);
-    return [...categories];
-  };
+      categories.push(product.category)
+    })
+    categories = new Set(categories)
+    return [...categories]
+  }
 
-  const categories = compileCategories(catalog_data);
+  const categories = compileCategories(catalog_data)
 
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-  });
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  })
 
-  formatter.format(2500);
+  formatter.format(2500)
 
   /**
    * Input: a product id
@@ -180,39 +180,39 @@ function Menu() {
         currProduct: `${product.dataSourceId}`,
         currVendor: currentVendor
       }
-    });
-  };
+    })
+  }
 
-  const current_date = new Date();
+  const current_date = new Date()
 
-  const currentDay = current_date.getDay();
+  const currentDay = current_date.getDay()
   // current day is an integer
 
-  const startTimes = vendor_data.getVendor.hours[currentDay].start;
-  const endTimes = vendor_data.getVendor.hours[currentDay].end;
+  const startTimes = vendor_data.getVendor.hours[currentDay].start
+  const endTimes = vendor_data.getVendor.hours[currentDay].end
 
-  const times = [];
+  const times = []
   for (let i = 0; i < startTimes.length; i++) {
-    times.push([startTimes[i], endTimes[i]]);
+    times.push([startTimes[i], endTimes[i]])
   }
-  console.log(times);
+  console.log(times)
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
-    else if(dayObj.isClosed === true){
+    else if (dayObj.isClosed === true) {
       return true
-    }
-    else{
-      const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-      const startTimes = dayObj.start.map((startTime) => {
+    } else {
+      const currentTime =
+        current_date.getHours() + current_date.getMinutes() / 60
+      const startTimes = dayObj.start.map(startTime => {
         return convertTimeToNum(startTime)
       })
-      const endTimes = dayObj.end.map((endTime) => {
+      const endTimes = dayObj.end.map(endTime => {
         return convertTimeToNum(endTime)
       })
       let isClosedHours = true
-      for(let i = 0; i<startTimes.length; i++){
-        if(currentTime >= startTimes[i] && currentTime < endTimes[i]) {
+      for (let i = 0; i < startTimes.length; i++) {
+        if (currentTime >= startTimes[i] && currentTime < endTimes[i]) {
           isClosedHours = false
         }
       }
@@ -230,78 +230,82 @@ function Menu() {
       return 12 + hours + minutes
     }
   }
-  const isClosed = determineIfClosed(current_date,vendor_data.getVendor.hours[currentDay]);
+  const isClosed = determineIfClosed(
+    current_date,
+    vendor_data.getVendor.hours[currentDay]
+  )
 
   // splash the hours
   const handleToggle = () => {
-    setOpen(prevOpen => !prevOpen);
-  };
+    setOpen(prevOpen => !prevOpen)
+  }
 
   const handleClose = event => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
+      return
     }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  function handleListKeyDown(event) {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setOpen(false);
+  function handleListKeyDown (event) {
+    if (event.key === 'Tab') {
+      event.preventDefault()
+      setOpen(false)
     }
   }
 
   // display start - end time of a specific day
-  function dayDisplay(dayItem) {
-    let start = dayItem.start;
-    let end = dayItem.end;
-    let time = start.map(function(e, i) {
-      return [e, end[i]];
-    });
+  function dayDisplay (dayItem) {
+    let start = dayItem.start
+    let end = dayItem.end
+    let time = start.map(function (e, i) {
+      return [e, end[i]]
+    })
     if (dayItem.start.length === 0) {
       return (
-        <div className="dayHourRow">
-          <span className="dayInitial">{dayItem.day.charAt(0)} </span>
-          <span>Closed</span>{" "}
+        <div className='dayHourRow'>
+          <span className='dayInitial'>{dayItem.day.charAt(0)} </span>
+          <span>Closed</span>{' '}
         </div>
-      );
+      )
     } else {
       return (
-        <div className="dayHourRow">
-          {" "}
-          <span className="dayInitial"> {dayItem.day.charAt(0)} </span>
-          <span className="hoursColumn">
+        <div className='dayHourRow'>
+          {' '}
+          <span className='dayInitial'> {dayItem.day.charAt(0)} </span>
+          <span className='hoursColumn'>
             {time.map(startend => {
               return (
                 <div>
                   <span>
-                    {startend[0].replace(".", "").replace(".", "")} -{" "}
-                    {startend[1].replace(".", "").replace(".", "")}
+                    {startend[0].replace('.', '').replace('.', '')} -{' '}
+                    {startend[1].replace('.', '').replace('.', '')}
                   </span>
                 </div>
-              );
+              )
             })}
           </span>
         </div>
-      );
+      )
     }
   }
 
   // display day name and its hours
-  function hourDisplay() {
-    let hourItems = vendor_data.getVendor.hours;
+  function hourDisplay () {
+    let hourItems = vendor_data.getVendor.hours
     return (
       <div>
-        {console.log("HourItems", hourItems)}
+        {console.log('HourItems', hourItems)}
         {hourItems.map(dayItem => {
-          return <div>{dayDisplay(dayItem)}</div>;
+          return <div>{dayDisplay(dayItem)}</div>
         })}
       </div>
-    );
+    )
   }
 
-          {/* {isClosed ? (
+  {
+    /* {isClosed ? (
             <p class="vendorinfo">Closed for the Day</p>
           ) : (
             times.map(time => {
@@ -312,53 +316,56 @@ function Menu() {
               );
             })
           )}
-          <button class="readmore"> More Info </button> */}
-
+          <button class="readmore"> More Info </button> */
+  }
 
   let dropdownTitle = (
-    <div className="statusTitleWrapper">
-      <span className="openStatus"> {isClosed&&"CLOSED"} {!isClosed && "OPEN"} </span>
+    <div className='statusTitleWrapper'>
+      <span className='openStatus'>
+        {' '}
+        {isClosed && 'CLOSED'} {!isClosed && 'OPEN'}{' '}
+      </span>
       <div>
         {times.map(time => {
-                return (
-                  <div class="vendorinfo">
-                    {time[0].replace(".", "").replace(".", "")} - {time[1].replace(".", "").replace(".", "")}
-                  </div>
-                );
-              })}
+          return (
+            <div class='vendorinfo'>
+              {time[0].replace('.', '').replace('.', '')} -{' '}
+              {time[1].replace('.', '').replace('.', '')}
+            </div>
+          )
+        })}
       </div>
       <FontAwesomeIcon
-        className="arrowIcon"
+        className='arrowIcon'
         icon={open ? faAngleUp : faAngleDown}
       />
     </div>
-
   )
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
       <BuyerHeader />
-      <div style={{ paddingBottom: "10vh" }}>
+      <div style={{ paddingBottom: '10vh' }}>
         {/* Hero Image */}
         <img
-          style={{ filter: "blur(2.5px)" }}
+          style={{ filter: 'blur(2.5px)' }}
           src={hero}
-          class="hero"
-          alt="hero"
+          class='hero'
+          alt='hero'
         />
 
         {/* Vendor Info */}
-        <div class="vendorinfocontainer">
+        <div class='vendorinfocontainer'>
           {/* Vendor Name */}
-          <h1 class="vendortitle"> {vendor_data.getVendor.name} </h1>
+          <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
 
           {/* Vendor Operating Hours */}
           <Button
             ref={anchorRef}
-            aria-controls={open ? "menu-list-grow" : undefined}
-            aria-haspopup="true"
-            style={{ backgroundColor: "white" }}
+            aria-controls={open ? 'menu-list-grow' : undefined}
+            aria-haspopup='true'
+            style={{ backgroundColor: 'white' }}
             onClick={handleToggle}
             disableRipple
           >
@@ -375,18 +382,18 @@ function Menu() {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList
                     autoFocusItem={open}
-                    id="menu-list-grow"
+                    id='menu-list-grow'
                     onKeyDown={handleListKeyDown}
-                    className="hourDisplay"
+                    className='hourDisplay'
                   >
                     <MenuItem
-                      className="menuItem"
+                      className='menuItem'
                       onClick={handleClose}
                       disableGutters
                     >
-                      <div className="storeHourBox">
-                        {" "}
-                        <div style={{ fontWeight: "bold" }}>Hours</div>
+                      <div className='storeHourBox'>
+                        {' '}
+                        <div style={{ fontWeight: 'bold' }}>Hours</div>
                         {hourDisplay()}
                       </div>
                     </MenuItem>
@@ -395,17 +402,15 @@ function Menu() {
               </Grow>
             )}
           </Popper>
-
-         
         </div>
 
         {/* Category Select Bar */}
-        <div class="categoryselect">
+        <div class='categoryselect'>
           {categories.map(category => (
             // smooth scrolling feature
-            <h1 class="categoryname">
+            <h1 class='categoryname'>
               <Link
-                activeClass="categoryactive"
+                activeClass='categoryactive'
                 to={category}
                 smooth
                 spy
@@ -419,18 +424,18 @@ function Menu() {
         </div>
 
         {/* Products */}
-        <div class="itemlist">
+        <div class='itemlist'>
           {/* Appending each category to the list */}
           {categories.map(category => (
             <div id={category}>
               {/* Giving each category a header */}
-              <h3 class="categoryheader">{category}</h3>
+              <h3 class='categoryheader'>{category}</h3>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
                 .filter(item => item.category === category)
                 .map(product => (
                   <div
-                    class="itemgrid"
+                    class='itemgrid'
                     onClick={
                       product.isAvailable ? () => handleClick(product) : null
                     }
@@ -438,16 +443,16 @@ function Menu() {
                     {/* Displaying the item: image, name, and price */}
                     <img
                       src={product.image}
-                      class="itemimage"
+                      class='itemimage'
                       alt={product.name}
                     />
-                    <h1 class="itemname">{product.name}</h1>
-                    <p class="itemprice">
+                    <h1 class='itemname'>{product.name}</h1>
+                    <p class='itemprice'>
                       {product.isAvailable
                         ? formatter.format(
                             product.variants[0].price.amount / 100
-                          ) + "+"
-                        : "Unavailable"}
+                          ) + '+'
+                        : 'Unavailable'}
                     </p>
                   </div>
                 ))}
@@ -457,7 +462,7 @@ function Menu() {
       </div>
       <BottomAppBar />
     </div>
-  );
+  )
 }
 
-export default Menu;
+export default Menu

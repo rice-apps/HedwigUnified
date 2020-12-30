@@ -82,8 +82,6 @@ function Auth () {
     })
   )
   // Set token in local storage
-
-  console.log(userProfile())
   lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
@@ -107,9 +105,9 @@ function Auth () {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients
-  // if (phone) {
-  //   return <Navigate to='/eat' />
-  // }
+  if (phone) {
+    return <Navigate to='/eat' />
+  }
   return <Navigate to='/contact' />
 }
 

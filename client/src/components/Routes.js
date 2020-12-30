@@ -19,13 +19,13 @@ import Orders from '../Pages/Vendor/Orders'
 import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
+import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
 import Product from '../Pages/User/Products/Product'
-import PaymentPage from '../Pages/User/Payment'
 import VendorsideTemplate from '../Pages/Vendor/VendorComponents/VendorGridContainer.js'
 import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
 import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
@@ -33,11 +33,8 @@ import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManage
 import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
-import Payments from '../Pages/User/Cart/Payments'
 import VendorSelect from '../Pages/Login/VendorCheck'
-import CohenPayment from '../Pages/User/Payment/CohenPayment'
 import Submit from '../Pages/User/Submit'
-import CreditPayment from '../Pages/User/Cart/CreditPayment.js'
 
 /**
  * Requests to verify the user's token on the backend
@@ -214,6 +211,11 @@ const newRoutesArray = [
       { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
       { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
       { path: '/submit', element: <Submit /> },
+      { path: '/almostThere', element: <AlmostThere /> },
+      {
+        path: '/confirmation',
+        element: <PrivateRoute element={<Confirmation />} />
+      },
       {
         path: '/:vendor/*',
         children: [
@@ -222,39 +224,14 @@ const newRoutesArray = [
             path: '/:product',
             element: <PrivateRoute element={<Product />} />
           },
-          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
-          // payment options
-          {
-            path: '/payment',
-            element: <PrivateRoute element={<Payments />} />
-          },
-          {
-            path: '/confirmation',
-            element: <PrivateRoute element={<Confirmation />} />
-          }
+          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> }
         ]
       }
     ]
   },
-  // This is to credit card payment:
-  {
-    path: '/payment',
-    element: <PaymentPage />
-  },
-  // embedding url page:
-  {
-    path: '/credit',
-    element: <CreditPayment />
-  },
-
   {
     path: '/contact',
     element: <ContactForm />
-  },
-  // Cohen house payment page:
-  {
-    path: '/cohen',
-    element: <PrivateRoute element={<CohenPayment />} />
   },
   {
     path: '/employee/*',

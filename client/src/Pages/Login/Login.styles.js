@@ -3,45 +3,45 @@ import styled from 'styled-components'
 const MainDiv = styled.div`
   height: 100vh;
   width: 100vw;
-  display: grid;
-  grid-template-rows: 25% 15% 30% 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  font-family: 'Raleway', sans-serif;
+  background-color: white;
+`
+
+const ElemDiv = styled.div`
+  display: flex;
+  flex-direction: column;
   text-align: center;
   align-items: center;
   justify-items: center;
-  background-color: #f49f86;
-  max-width: 100%;
-  font-family: 'Raleway', sans-serif;
+  max-height: 70%;
 `
 
 const Logo = styled.img`
-  grid-row: 3/4;
-  max-height: 100%;
-  width: 80%;
+  width: 10rem;
 `
 
 const HedwigLogo = styled.img`
-  max-height: 40%;
-  max-width: 40%;
+  max-height: 20%;
+  max-width: 20%;
 `
 const Title = styled.h1`
-  color: white;
-  grid-row: 1/2;
-  font-size: 60pt;
-`
-const SubTitle = styled.div`
-  color: white;
-  grid-row: 2/3;
-  align-self: start;
+  color: #f7735a;
+  font-size: 3.3rem;
+  margin: 0.1rem;
 `
 const LoginButton = styled.button`
-  grid-row: 4/5;
   border-radius: 25pt;
-  height: 37pt;
-  width: 169pt;
+  height: 2.2rem;
+  width: 8.5rem;
   border: none;
-  font-size: 17pt;
+  font-size: 0.8rem;
   font-weight: bold;
-  color: #f49f86;
+  background-color: #f7735a;
+  color: white;
   :hover {
     text-decoration: underline;
     box-shadow: 2px 8px 5px -5px #9d7a96;
@@ -52,7 +52,7 @@ const BackgroundCover = styled.div`
   height: 100vh;
   width: 100vw;
   display: grid;
-  background-color: #f49f86;
+  background-color: white;
   max-width: 100%;
   font-family: 'Raleway', sans-serif;
 
@@ -148,9 +148,9 @@ const LoginQuestion = styled.p`
 
 export {
   MainDiv,
+  ElemDiv,
   Logo,
   Title,
-  SubTitle,
   LoginButton,
   BackgroundCover,
   ButtonPane,

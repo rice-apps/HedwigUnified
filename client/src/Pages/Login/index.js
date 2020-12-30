@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
-import logo from './logo.svg'
+import logo from './HedwigLogoFinal_02.svg'
 import { SERVICE_URL } from '../../config'
-import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
+import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
 // import './Transitions.css';
 import { userProfile } from '../../apollo'
 import { useNavigate } from 'react-router-dom'
@@ -67,10 +67,11 @@ function Login () {
 
   return (
     <MainDiv>
-      <Logo src={logo} />
-      <Title>HEDWIG</Title>
-      <SubTitle>brought to you by riceapps</SubTitle>
-      <LoginButton onClick={signInSAML}>Login with NetID</LoginButton>
+      <ElemDiv>
+        <Logo src={logo} />
+        <Title>hedwig</Title>
+        <LoginButton onClick={signInSAML}>Login with NetID</LoginButton>
+      </ElemDiv>
     </MainDiv>
   )
 }

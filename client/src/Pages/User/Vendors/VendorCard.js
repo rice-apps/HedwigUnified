@@ -10,6 +10,9 @@ function VendorCard ({ vendor }) {
   const [statusDetail, setStatusDetail] = useState(false)
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
 
+  // make testMode true if you want the store to be open
+  const testMode = false
+
   const navigate = useNavigate()
 
   // if (errors) return <h1>lol oops something broke</h1>;
@@ -24,9 +27,7 @@ function VendorCard ({ vendor }) {
 
   // includes time
   const current_date = new Date()
-  const currentDay = current_date.getDay()
-  // temporary fix:
-  // const currentDay = 1
+  const currentDay = (testMode) ? 1 : current_date.getDay()
   const dayObj = hours[currentDay]
   console.log(dayObj)
   const convertTimeToNum = time => {
@@ -51,8 +52,8 @@ function VendorCard ({ vendor }) {
 
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
-    // const currentTime = current_date.getHours() + current_date.getMinutes() / 60
-    const currentTime = 10
+    // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
+    const currentTime = testMode ? 9 : current_date.getHours() + current_date.getMinutes() / 60
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
       console.log(i, startTime)
@@ -126,8 +127,6 @@ function VendorCard ({ vendor }) {
   }
 
   return (
-    // UNCOMMENT BELOW FOR PRODUCTION:
-    // <div className={closed ? 'vendorContainer vendorDisabled' : 'vendorContainer'} onClick={() => handleClick()}>
     <div className='vendorContainer' onClick={() => handleClick()}>
       {showStatusDetail()}
       <div className='vendorImageContainer'>

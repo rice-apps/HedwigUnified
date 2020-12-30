@@ -45,7 +45,7 @@ function VendorList ({ classes }) {
     <>
     <ProfilePane />
       <div
-        style={{ paddingTop: '8.4vh', paddingBottom: '10vh' }}
+        style={{ paddingTop: '10vh', paddingBottom: '10vh' }}
         className='vendorPage'
       >
         <BuyerHeader

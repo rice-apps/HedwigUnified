@@ -1,0 +1,41 @@
+#main-div{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 100%;
+    font-family: 'Raleway', sans-serif;
+    background-color: white;
+}
+
+.home-btn{
+  border-radius: 25pt;
+  height: 2.2rem;
+  width: 6rem;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background-color: #f7735a;
+  color: white;
+}
+.home-btn:hover {
+  text-decoration: underline;
+}
+.home-btn:focus{
+  outline: none;
+}
+#title{
+  color: #f7735a;
+  font-size: 2rem;
+  /* font-weight: 600; */
+  margin-top: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+#sub-title{
+    color: #f7735a;
+    font-size: 1.2rem;
+    /* font-weight: bold; */
+    /* margin: 0.8rem; */
+}

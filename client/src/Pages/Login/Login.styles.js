@@ -44,7 +44,9 @@ const LoginButton = styled.button`
   color: white;
   :hover {
     text-decoration: underline;
-    box-shadow: 2px 8px 5px -5px #9d7a96;
+  }
+  :focus{
+    outline: none;
   }
 `
 

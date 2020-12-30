@@ -29,6 +29,7 @@ function ContactForm () {
   const user = userProfile()
   const userName =
     sStorage.getItem('first name') + ' ' + sStorage.getItem('last name')
+    const firstName = sStorage.getItem('first name')
   const navigate = useNavigate()
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
@@ -50,34 +51,34 @@ function ContactForm () {
   if (confirmed) {
     localStorage.setItem('phone', phone)
     addPhone({ variables: { name: userName, phone: phone, netid: user.netid } })
-    return <Navigate to='/eat' />
+    return <Navigate to='/launch' />
   }
 
   return (
-    <div>
-      <div id='header-container' className='texts'>
-        <h2 className='center-header'>Hedwig</h2>
-      </div>
+    <div id='main-div'>
+      <div id='elem-div'>
+
+     
       <div id='greeting-container' className='texts'>
-        <h3>Hello, {userName}!</h3>
+        <p className='greetings'>Hello,</p>
+        <p className='greetings'>{firstName}!</p>
       </div>
-      <div id='text-container' className='texts'>
-        <p>
-          In order to send you timely updates on your order status, please tell
-          us your phone number.
+        <p id="instruction">
+          Let's set up your profile with us. We'll need your phone number to send you updates on your order status.
         </p>
-      </div>
       <div className='tel-container'>
         <TextField
           type='tel'
-          label='phone number:'
+          placeholder='Phone number:'
           id='tel'
           margin='dense'
+          fullWidth='true'
+          inputProps={{style: {fontSize: '0.7rem'}}}
           onChange={e => setPhone(e.target.value)}
         />
       </div>
+      <div id='btn-container'>
       <div
-        variant='outlined'
         className='confirm-btn'
         onClick={() => {
           if (phone && phone.length === 10) {
@@ -86,6 +87,8 @@ function ContactForm () {
         }}
       >
         Confirm
+      </div>
+      </div>
       </div>
     </div>
   )

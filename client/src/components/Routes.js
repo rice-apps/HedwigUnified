@@ -13,6 +13,7 @@ import Home from '../Pages/Home'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
 import Confirmation from '../Pages/User/Confirmation'
+import Launch from '../Pages/User/Launch'
 // Vendor imports
 import Orders from '../Pages/Vendor/Orders'
 // import VendorSettings from '../Pages/Vendor/Settings';
@@ -202,6 +203,10 @@ const newRoutesArray = [
   {
     path: '/signup',
     element: <PrivateRoute element={<SignUp />} />
+  },
+  {
+    path: '/launch',
+    element: <Launch />
   },
   {
     path: '/vendor_choice',

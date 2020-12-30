@@ -58,14 +58,6 @@ function BuyerHeader (props) {
           />
         ) : null}
         <HedwigLogo src={HedwigLogoFinal} /> hedwig
-        <FaUserCircle
-          style={{
-            position: 'fixed',
-            right: '22px',
-            fontSize: '25px',
-            verticalAlign: 'middle'
-          }}
-        />
       </HedwigWrapper>
     </HeaderWrapper>
   )

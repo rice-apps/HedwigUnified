@@ -9,6 +9,7 @@ steps:
     - 'SERVICE_URL=${_SERVICE_URL}'
     - 'SECRET=${_SECRET}'
     - 'DEV_PORT=${_DEV_PORT}'
+    - 'NODE_ENV=${_NODE_ENV}'
     - 'SQUARE_ACCESS_TOKEN=${_SQUARE_ACCESS_TOKEN}'
     - 'SHOPIFY_DOMAIN=${_SHOPIFY_DOMAIN}'
     - 'SHOPIFY_API_KEY=${_SHOPIFY_API_KEY}'
@@ -17,6 +18,8 @@ steps:
     - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
     - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
     - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
+    - 'REDISHOST=${_REDISHOST}'
+    - 'REDISPORT=${_REDISPORT}'
   dir: 'api/'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
@@ -34,6 +37,8 @@ steps:
     - 'REACT_APP_BACKEND_URL=${_REACT_APP_BACKEND_URL}'
     - 'REACT_APP_GRAPHQL_URL=${_REACT_APP_GRAPHQL_URL}'
     - 'REACT_APP_GRAPHQL_WS_URL=${_REACT_APP_GRAPHQL_WS_URL}'
+    - 'REACT_APP_FIREBASE_API_KEY=${_REACT_APP_FIREBASE_API_KEY}'
+    - 'REACT_APP_AUTH_DOMAIN=${_REACT_APP_AUTH_DOMAIN}'
   dir: 'client/'
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']

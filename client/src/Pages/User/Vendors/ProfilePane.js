@@ -98,10 +98,10 @@ function ProfilePane () {
         style={{
           position: 'fixed',
           left: '22px',
+          color: '#474747',
           verticalAlign: 'middle',
-          height: '4.5vh',
-          width: '4.5vh',
-          top: '2.5vh',
+          fontSize: '2.8vh',
+          top: '2.8vh',
           zIndex: '2'
         }}
       />

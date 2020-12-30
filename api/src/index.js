@@ -9,7 +9,6 @@ import './utils/db'
 
 import Schema from './schema'
 
-
 // Initialize connection to Square with API token
 import './square'
 
@@ -17,15 +16,7 @@ const app = express().use(cors())
 
 const server = new ApolloServer({
   schema: Schema,
-  introspection: true,
-  context: ({ req, res }) => {
-    return {
-      keyMap: {
-        ZETW20E2NB4EG: process.env.SQUARE_ACCESS_TOKEN,
-        FMXAFFWJR95WC: process.env.SQUARE_ACCESS_TOKEN
-      }
-    }
-  }
+  introspection: true
 })
 
 server.applyMiddleware({ app })

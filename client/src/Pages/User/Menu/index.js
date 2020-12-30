@@ -349,7 +349,7 @@ function Menu () {
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
-      <BuyerHeader />
+      <BuyerHeader showBackButton="true" backLink='/eat'/>
       <div style={{ paddingBottom: '8.6vh' }}>
         {/* Hero Image */}
         <img

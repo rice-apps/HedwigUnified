@@ -3,7 +3,7 @@
     width: 0;
     transition: 800ms;
     display: flex;
-    margin-left: -30vw;
+    margin-left: -35vw;
     position: fixed;
     z-index: 2;
   }

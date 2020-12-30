@@ -4,6 +4,8 @@ import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
 import RalewayFont from './../../../fonts/Raleway/RalewayFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
+import { FaBars } from 'react-icons/fa'
+import Profile from '../Profile'
 
 const HeaderWrapper = styled.div`
   position: fixed;

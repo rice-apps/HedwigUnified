@@ -1,13 +1,13 @@
-import React from 'react'
-import { useState } from 'react'
-import styled from 'styled-components'
-import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
-import { CgMathPlus } from 'react-icons/cg'
-import Modal from 'react-modal'
+import React from "react";
+import { useState } from "react";
+import styled from "styled-components";
+import { IoMdClose, IoMdArrowDropdown } from "react-icons/io";
+import { CgMathPlus } from "react-icons/cg";
+import Modal from "react-modal";
 
-import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
-import { useQuery, gql, useMutation, InMemoryCache } from '@apollo/client'
-import { current } from 'immer'
+import { VENDOR_QUERY } from "../../../../graphql/VendorQueries.js";
+import { useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
+import { current } from "immer";
 
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
@@ -20,7 +20,7 @@ const UPDATE_VENDOR = gql`
       }
     }
   }
-`
+`;
 
 const EditHoursDashboardWrapper = styled.div`
   height: 90%;
@@ -29,19 +29,19 @@ const EditHoursDashboardWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 8fr;
-  font-family: 'Futura', sans-serif;
+  font-family: "Futura", sans-serif;
   justify-items: center;
   overflow: hidden;
-`
+`;
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
   font-weight: 500;
-`
+`;
 
 const EditHoursRowWrapper = styled.div`
   font-size: 2.8vh;
   overflow-y: scroll;
-`
+`;
 const EditHoursRow = styled.div`
   border-radius: 10px;
   background-color: white;
@@ -53,8 +53,8 @@ const EditHoursRow = styled.div`
   justify-items: center;
   grid-template-columns: 1.3fr 1.3fr 42vw 1.8fr;
   grid-template-rows: 1fr;
-  grid-template-areas: 'Day Status Hours AddHours';
-`
+  grid-template-areas: "Day Status Hours AddHours";
+`;
 
 const DayColumn = styled.div`
   grid-area: Day;
@@ -64,7 +64,7 @@ const DayColumn = styled.div`
   margin-left: 2vw;
   align-items: center;
   text-align: left;
-`
+`;
 const StatusColumn = styled.div`
   grid-area: Status;
   width: 100%;
@@ -73,7 +73,7 @@ const StatusColumn = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-`
+`;
 
 const StatusDropdown = styled.select`
   background-color: #3121170d;
@@ -84,36 +84,37 @@ const StatusDropdown = styled.select`
   position: relative;
   padding-right: 19px;
   cursor: pointer;
-`
+`;
 
-function CreateStatusDropdown (props) {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+function CreateStatusDropdown(props) {
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  function onChangeIsClosed (value) {
-    window.location.reload()
-    let inputIsClosed = value === 'OPEN' ? false : true
+  function onChangeIsClosed(value) {
+    window.location.reload();
+    let inputIsClosed = value === "OPEN" ? false : true;
+    console.log("input value isClosed: ", inputIsClosed);
     // const originalHours = props.vendor_data.getVendor.hours;
-    const originalHours = props.currentHours
-    const updatedHours = [...originalHours]
+    const originalHours = props.currentHours;
+    const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
-    const updatedDay = { ...updatedHours[props.index] }
-    const updatedIsClosed = [...updatedDay.isClosed]
-    updatedIsClosed[0] = inputIsClosed
-    updatedDay.isClosed = updatedIsClosed
+    const updatedDay = { ...updatedHours[props.index] };
+    // const updatedIsClosed = [...updatedDay.isClosed]
+    // updatedIsClosed[0] = inputIsClosed
+    updatedDay.isClosed = inputIsClosed;
 
-    updatedHours[props.index] = updatedDay
+    updatedHours[props.index] = updatedDay;
     updatedHours.map((day, index) => {
-      const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
-      updatedHours[index] = dayCopy
-    })
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
 
     toggleIsClosed({
       variables: {
-        name: 'Cohen House',
-        hours: updatedHours
-      }
-    })
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
 
     // update state:
     // props.updateCurrentHours(updatedHours);
@@ -121,33 +122,33 @@ function CreateStatusDropdown (props) {
 
   return (
     <StatusColumn>
-      {console.log(props.day, props.inputIsClosed[0])}
-      {props.inputIsClosed[0] ? (
+      {console.log(props.day, props.inputIsClosed)}
+      {props.inputIsClosed ? (
         <StatusDropdown
-          name='storeStatus'
-          id='storeStatus'
-          onChange={e => onChangeIsClosed(e.target.value)}
+          name="storeStatus"
+          id="storeStatus"
+          onChange={(e) => onChangeIsClosed(e.target.value)}
         >
-          <option value='OPEN'>Open</option>
-          <option value='CLOSED' selected>
+          <option value="OPEN">Open</option>
+          <option value="CLOSED" selected>
             Closed
           </option>
         </StatusDropdown>
       ) : (
         <StatusDropdown
-          name='storeStatus'
-          id='storeStatus'
-          onChange={e => onChangeIsClosed(e.target.value)}
+          name="storeStatus"
+          id="storeStatus"
+          onChange={(e) => onChangeIsClosed(e.target.value)}
         >
-          <option value='OPEN' selected>
+          <option value="OPEN" selected>
             Open
           </option>
-          <option value='CLOSED'>Closed</option>
+          <option value="CLOSED">Closed</option>
         </StatusDropdown>
       )}
-      <IoMdArrowDropdown style={{ position: 'absolute', right: '1.0vw' }} />
+      <IoMdArrowDropdown style={{ position: "absolute", right: "1.0vw" }} />
     </StatusColumn>
-  )
+  );
 }
 
 const HoursColumn = styled.div`
@@ -159,7 +160,7 @@ const HoursColumn = styled.div`
   font-size: 2.8vh;
   flex-wrap: wrap;
   padding: 0px 7px;
-`
+`;
 const HoursInterval = styled.div`
   background-color: #f8eae7;
   position: relative;
@@ -171,60 +172,60 @@ const HoursInterval = styled.div`
   padding: 2px 0px;
   width: 19vw;
   height: min-content;
-`
+`;
 
-const DaysofTheWeek = ['MON', 'TUE', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']
+const DaysofTheWeek = ["MON", "TUE", "WED", "THURS", "FRI", "SAT", "SUN"];
 
-function HoursItem (props) {
+function HoursItem(props) {
   const [updateDeleteTime, { data, loading, error }] = useMutation(
     UPDATE_VENDOR
-  )
+  );
 
-  function deleteStartEndTime () {
-    const originalHours = props.currentHours
-    const updatedHours = [...originalHours]
+  function deleteStartEndTime() {
+    const originalHours = props.currentHours;
+    const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
-    const updatedDay = { ...updatedHours[props.index] }
+    const updatedDay = { ...updatedHours[props.index] };
 
-    const updatedStart = [...updatedDay.start]
-    console.log('Start time: ', props.startTime)
-    const indexOfStartHour = updatedStart.indexOf(props.startTime)
+    const updatedStart = [...updatedDay.start];
+    console.log("Start time: ", props.startTime);
+    const indexOfStartHour = updatedStart.indexOf(props.startTime);
     if (indexOfStartHour > -1) {
-      console.log('updated start before: ', updatedStart)
-      updatedStart.splice(indexOfStartHour, 1)
-      console.log('updated start after: ', updatedStart)
+      console.log("updated start before: ", updatedStart);
+      updatedStart.splice(indexOfStartHour, 1);
+      console.log("updated start after: ", updatedStart);
     }
 
-    const updatedEnd = [...updatedDay.end]
-    console.log('End time: ', props.endTime)
-    const indexOfEndHour = updatedEnd.indexOf(props.endTime)
-    console.log('indexOfEndHour: ', indexOfEndHour)
+    const updatedEnd = [...updatedDay.end];
+    console.log("End time: ", props.endTime);
+    const indexOfEndHour = updatedEnd.indexOf(props.endTime);
+    console.log("indexOfEndHour: ", indexOfEndHour);
     if (indexOfEndHour > -1) {
-      console.log('updated end before: ', updatedEnd)
-      updatedEnd.splice(indexOfEndHour, 1)
-      console.log('updated end after: ', updatedEnd)
+      console.log("updated end before: ", updatedEnd);
+      updatedEnd.splice(indexOfEndHour, 1);
+      console.log("updated end after: ", updatedEnd);
     }
 
-    updatedDay.start = updatedStart
-    updatedDay.end = updatedEnd
+    updatedDay.start = updatedStart;
+    updatedDay.end = updatedEnd;
 
-    console.log('updated day: ', updatedDay)
+    console.log("updated day: ", updatedDay);
 
-    updatedHours[props.index] = updatedDay
+    updatedHours[props.index] = updatedDay;
     updatedHours.map((day, index) => {
-      const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
-      updatedHours[index] = dayCopy
-    })
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
 
     updateDeleteTime({
       variables: {
-        name: 'Cohen House',
-        hours: updatedHours
-      }
-    })
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
 
-    window.location.reload()
+    window.location.reload();
   }
 
   return (
@@ -232,16 +233,16 @@ function HoursItem (props) {
       <IoMdClose
         onClick={deleteStartEndTime}
         style={{
-          position: 'absolute',
-          top: '4',
-          right: '4',
-          fontSize: '2.2vh',
-          cursor: 'pointer'
+          position: "absolute",
+          top: "4",
+          right: "4",
+          fontSize: "2.2vh",
+          cursor: "pointer",
         }}
       />
       {props.startTime} – {props.endTime}
     </HoursInterval>
-  )
+  );
 }
 
 const AddColumn = styled.div`
@@ -249,7 +250,7 @@ const AddColumn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const AddButton = styled.div`
   border-radius: 30px;
@@ -261,7 +262,7 @@ const AddButton = styled.div`
   font-size: 2.5vh;
   display: flex;
   align-items: center;
-`
+`;
 
 const AddHourModalWrapper = styled.div`
   display: grid;
@@ -271,18 +272,18 @@ const AddHourModalWrapper = styled.div`
   width: 100%;
   position: absolute;
   grid-template-areas:
-    'DOTW StartTime ToSpace EndTime'
-    'ConfirmSpace ConfirmSpace ConfirmSpace ConfirmSpace';
+    "DOTW StartTime ToSpace EndTime"
+    "ConfirmSpace ConfirmSpace ConfirmSpace ConfirmSpace";
   align-items: center;
   justify-content: center;
   font-size: 2.8vh;
   padding: 10px 15px;
-`
+`;
 
 const DayModal = styled.div`
   grid-area: DOTW;
   text-align: right;
-`
+`;
 
 const TimeModal = styled.input`
   background-color: #f4f3f3;
@@ -294,7 +295,7 @@ const TimeModal = styled.input`
   font-size: 2.5vh;
   border: none;
   text-align: center;
-`
+`;
 
 const ConfirmButtonWrapper = styled.div`
   grid-area: ConfirmSpace;
@@ -303,7 +304,7 @@ const ConfirmButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const ConfirmButton = styled.button`
   color: white;
@@ -315,142 +316,142 @@ const ConfirmButton = styled.button`
   justify-content: center;
   padding: 5px 10px;
   border: none;
-`
+`;
 
-function MakeTimeInput (props) {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+function MakeTimeInput(props) {
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  let startTime = null
+  let startTime = null;
 
-  function onChangeHourModal (inputTime) {
-    if (props.id === 'addedStartTime') {
-      startTime = inputTime
+  function onChangeHourModal(inputTime) {
+    if (props.id === "addedStartTime") {
+      startTime = inputTime;
     }
 
-    if (props.id === 'addedEndTime') {
-      const originalHours = props.currentHours
-      const updatedHours = [...originalHours]
-      const updatedDay = { ...updatedHours[props.index] }
+    if (props.id === "addedEndTime") {
+      const originalHours = props.currentHours;
+      const updatedHours = [...originalHours];
+      const updatedDay = { ...updatedHours[props.index] };
 
-      const updatedStartTime = updatedDay.start.concat(startTime)
-      console.log('start time after ', updatedStartTime)
-      updatedDay.start = updatedStartTime
+      const updatedStartTime = updatedDay.start.concat(startTime);
+      console.log("start time after ", updatedStartTime);
+      updatedDay.start = updatedStartTime;
 
-      console.log('end time before: ', updatedDay.end)
+      console.log("end time before: ", updatedDay.end);
 
-      const updatedEndTime = updatedDay.end.concat(inputTime)
-      console.log('end time after: ', updatedEndTime)
-      updatedDay.end = updatedEndTime
+      const updatedEndTime = updatedDay.end.concat(inputTime);
+      console.log("end time after: ", updatedEndTime);
+      updatedDay.end = updatedEndTime;
 
-      updatedHours[props.index] = updatedDay
+      updatedHours[props.index] = updatedDay;
       updatedHours.map((day, index) => {
-        const dayCopy = { ...updatedHours[index] }
-        delete dayCopy['__typename']
-        updatedHours[index] = dayCopy
-      })
+        const dayCopy = { ...updatedHours[index] };
+        delete dayCopy["__typename"];
+        updatedHours[index] = dayCopy;
+      });
 
       toggleIsClosed({
         variables: {
-          name: 'Cohen House',
-          hours: updatedHours
-        }
-      })
+          name: "Cohen House",
+          hours: updatedHours,
+        },
+      });
     }
     // window.location.reload();
 
     // props.updateCurrentHours(updatedHours);
   }
   // This function formats the time so that it is not in 24h format
-  function updateAddedTime (addedTime) {
-    const updateHourState = props.setHours
-    let halfOfDay = ''
-    let formattedHour = ''
+  function updateAddedTime(addedTime) {
+    const updateHourState = props.setHours;
+    let halfOfDay = "";
+    let formattedHour = "";
     // console.log("addedTime", addedTime, typeof addedTime);
-    const addedHours = parseInt(addedTime.split(':')[0])
-    const formattedMinute = addedTime.split(':')[1]
+    const addedHours = parseInt(addedTime.split(":")[0]);
+    const formattedMinute = addedTime.split(":")[1];
     // console.log("Hour", addedHours);
     // console.log("Minutes", addedMinute);
     if (addedHours > 12) {
-      halfOfDay = 'p.m.'
-      formattedHour = (addedHours - 12).toString()
+      halfOfDay = "p.m.";
+      formattedHour = (addedHours - 12).toString();
     } else {
-      halfOfDay = 'a.m.'
-      formattedHour = addedHours.toString()
+      halfOfDay = "a.m.";
+      formattedHour = addedHours.toString();
     }
-    console.log(formattedHour, halfOfDay)
+    console.log(formattedHour, halfOfDay);
     const formattedAddedTime =
-      formattedHour + ':' + formattedMinute + ' ' + halfOfDay
-    console.log('Formatted Time', formattedAddedTime)
+      formattedHour + ":" + formattedMinute + " " + halfOfDay;
+    console.log("Formatted Time", formattedAddedTime);
     // this updates the state of either addedStartTime or addedendtime
-    updateHourState(formattedAddedTime)
+    updateHourState(formattedAddedTime);
   }
 
   return (
     <div>
       <TimeModal
         // onChange={e => onChangeHourModal(e.target.value)}
-        onChange={e => updateAddedTime(e.target.value)}
-        type='time'
+        onChange={(e) => updateAddedTime(e.target.value)}
+        type="time"
       ></TimeModal>
     </div>
-  )
+  );
 }
 
-function MakeAddHoursButton (props) {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+function MakeAddHoursButton(props) {
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [addedStartTime, setAddedStartTime] = useState('')
-  const [addedEndTime, setAddedEndTime] = useState('')
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [addedStartTime, setAddedStartTime] = useState("");
+  const [addedEndTime, setAddedEndTime] = useState("");
 
-  function openAddHourModal () {
-    setModalIsOpen(true)
+  function openAddHourModal() {
+    setModalIsOpen(true);
   }
-  function closeAddHourModal () {
-    AddStartTime('')
-    AddEndTime('')
-    setModalIsOpen(false)
-  }
-
-  function AddStartTime (time) {
-    setAddedStartTime(time)
+  function closeAddHourModal() {
+    AddStartTime("");
+    AddEndTime("");
+    setModalIsOpen(false);
   }
 
-  function AddEndTime (time) {
-    setAddedEndTime(time)
+  function AddStartTime(time) {
+    setAddedStartTime(time);
   }
 
-  function ConfirmOnClick () {
-    let timesToAdd = [addedStartTime, addedEndTime]
-    console.log(timesToAdd)
+  function AddEndTime(time) {
+    setAddedEndTime(time);
+  }
 
-    const originalHours = props.currentHours
-    const updatedHours = [...originalHours]
-    const updatedDay = { ...updatedHours[props.index] }
+  function ConfirmOnClick() {
+    let timesToAdd = [addedStartTime, addedEndTime];
+    console.log(timesToAdd);
 
-    const updatedStartTime = updatedDay.start.concat(addedStartTime)
-    console.log('start time after ', updatedStartTime)
-    updatedDay.start = updatedStartTime
+    const originalHours = props.currentHours;
+    const updatedHours = [...originalHours];
+    const updatedDay = { ...updatedHours[props.index] };
 
-    const updatedEndTime = updatedDay.end.concat(addedEndTime)
-    console.log('end time after: ', updatedEndTime)
-    updatedDay.end = updatedEndTime
+    const updatedStartTime = updatedDay.start.concat(addedStartTime);
+    console.log("start time after ", updatedStartTime);
+    updatedDay.start = updatedStartTime;
 
-    updatedHours[props.index] = updatedDay
+    const updatedEndTime = updatedDay.end.concat(addedEndTime);
+    console.log("end time after: ", updatedEndTime);
+    updatedDay.end = updatedEndTime;
+
+    updatedHours[props.index] = updatedDay;
     updatedHours.map((day, index) => {
-      const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
-      updatedHours[index] = dayCopy
-    })
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
 
     toggleIsClosed({
       variables: {
-        name: 'Cohen House',
-        hours: updatedHours
-      }
-    })
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
 
-    window.location.reload()
+    window.location.reload();
   }
 
   return (
@@ -463,30 +464,30 @@ function MakeAddHoursButton (props) {
         isOpen={modalIsOpen}
         style={{
           content: {
-            backgroundColor: 'white',
-            height: '25vh',
-            width: '44vw',
-            position: 'absolute',
-            top: '36%',
-            left: '28%',
-            border: '3px solid #9D9D9D45',
-            borderRadius: '20px'
-          }
+            backgroundColor: "white",
+            height: "25vh",
+            width: "44vw",
+            position: "absolute",
+            top: "36%",
+            left: "28%",
+            border: "3px solid #9D9D9D45",
+            borderRadius: "20px",
+          },
         }}
       >
         <form>
           <AddHourModalWrapper>
             <DayModal>{props.weekday}</DayModal>
             <MakeTimeInput
-              id='addedStartTime'
+              id="addedStartTime"
               index={props.index}
               currentHours={props.currentHours}
               setHours={AddStartTime}
               // updateCurrentHours={props.updateCurrentHours}
             />
-            <div tyle={{ textAlign: 'middle' }}> TO </div>
+            <div tyle={{ textAlign: "middle" }}> TO </div>
             <MakeTimeInput
-              id='addedEndTime'
+              id="addedEndTime"
               index={props.index}
               currentHours={props.currentHours}
               setHours={AddEndTime}
@@ -495,8 +496,8 @@ function MakeAddHoursButton (props) {
             <ConfirmButtonWrapper>
               <ConfirmButton
                 onClick={ConfirmOnClick}
-                disabled={addedStartTime == '' || addedEndTime == ''}
-                type='button'
+                disabled={addedStartTime == "" || addedEndTime == ""}
+                type="button"
               >
                 Confirm
               </ConfirmButton>
@@ -506,39 +507,39 @@ function MakeAddHoursButton (props) {
           <IoMdClose
             onClick={closeAddHourModal}
             style={{
-              position: 'absolute',
-              top: '15px',
-              right: '15px',
-              fontSize: '3vh'
+              position: "absolute",
+              top: "15px",
+              right: "15px",
+              fontSize: "3vh",
             }}
           />
         </form>
       </Modal>
     </AddColumn>
-  )
+  );
 }
 
-function EditHoursDashboard () {
+function EditHoursDashboard() {
   // const [currentHours, setCurrentHours] = useState([]);
 
   const {
     data: vendor_data,
     error: vendor_error,
-    loading: vendor_loading
+    loading: vendor_loading,
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: 'Cohen House' }
-  })
+    variables: { vendor: "Cohen House" },
+  });
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
   if (vendor_error) {
-    return <p>Error...</p>
+    return <p>Error...</p>;
   }
 
-  const hours = vendor_data.getVendor.hours
+  const hours = vendor_data.getVendor.hours;
 
-  console.log('hours: ', hours)
+  console.log("hours: ", hours);
 
   // function updateCurrentHours(newHours) {
   //   setCurrentHours(newHours);
@@ -554,38 +555,38 @@ function EditHoursDashboard () {
 
   // updateCurrentHours(hours);
 
-  function getIndex (day) {
+  function getIndex(day) {
     let dayName =
-      day === 'MON'
-        ? 'Monday'
-        : day === 'TUE'
-        ? 'Tuesday'
-        : day === 'TUE'
-        ? 'Tuesday'
-        : day === 'WED'
-        ? 'Wednesday'
-        : day === 'THURS'
-        ? 'Thursday'
-        : day === 'FRI'
-        ? 'Friday'
-        : day === 'SAT'
-        ? 'Saturday'
-        : day === 'SUN'
-        ? 'Sunday'
-        : 'N/A'
-    return hours.findIndex(obj => obj.day === dayName)
+      day === "MON"
+        ? "Monday"
+        : day === "TUE"
+        ? "Tuesday"
+        : day === "TUE"
+        ? "Tuesday"
+        : day === "WED"
+        ? "Wednesday"
+        : day === "THURS"
+        ? "Thursday"
+        : day === "FRI"
+        ? "Friday"
+        : day === "SAT"
+        ? "Saturday"
+        : day === "SUN"
+        ? "Sunday"
+        : "N/A";
+    return hours.findIndex((obj) => obj.day === dayName);
   }
 
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
       <EditHoursRowWrapper>
-        {DaysofTheWeek.map(day => {
-          const index = getIndex(day)
+        {DaysofTheWeek.map((day) => {
+          const index = getIndex(day);
           return (
             <EditHoursRow>
               <DayColumn>{day}</DayColumn>
-              {console.log('hours[index]', hours[index])}
+              {console.log("hours[index]", hours[index])}
               <CreateStatusDropdown
                 inputIsClosed={hours[index].isClosed}
                 index={index}
@@ -601,7 +602,7 @@ function EditHoursDashboard () {
                       startTime={hours[index].start[timeIndex]}
                       endTime={hours[index].end[timeIndex]}
                     ></HoursItem>
-                  )
+                  );
                 })}
               </HoursColumn>
               <MakeAddHoursButton
@@ -610,11 +611,11 @@ function EditHoursDashboard () {
                 currentHours={hours}
               />
             </EditHoursRow>
-          )
+          );
         })}
       </EditHoursRowWrapper>
     </EditHoursDashboardWrapper>
-  )
+  );
 }
 
-export default EditHoursDashboard
+export default EditHoursDashboard;

@@ -19,6 +19,7 @@
   padding-right: 1rem;
   max-width: 100%;
   cursor: pointer;
+  border-bottom:0.5pt solid #5a59534d;
   /* display: flex;
 	justify-content: center;
 	align-content: center;
@@ -226,4 +227,75 @@ p {
   margin: 3px 0px;
   border-bottom: 1px solid #7070704d;
   width: 100%;
+}
+
+.openning {
+  background-color: #e2fdf2 !important;
+  color: #56b48f !important;
+}
+
+.kitchenClosed {
+  background-color: rgb(255, 243, 204) !important;
+  color: orange !important;
+}
+
+.closed {
+  background-color: #d1d0d0 !important;
+  color: #000000 !important;
+}
+
+.statusIcon {
+  outline: none;
+  border: none;
+  border-radius: 0.3rem;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.3rem 0.2rem 0.3rem;
+}
+
+.detailWrapper {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(3px);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detailBox {
+  text-align: center;
+  background-color: white;
+  position: relative;
+  width: 15rem;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px 0px rgb(185, 185, 185);
+  border: rgb(218, 218, 218) 0.5px solid;
+}
+
+.detailBox .detailText {
+  padding: 0rem 1.2rem 1.2rem 1.2rem;
+}
+
+.detailBox h1 {
+  margin-bottom: 0;
+  color: #ea907a;
+}
+
+.detailBox p {
+  margin: 10px 0px 20px 0px;
+  font-size: 0.83rem;
+  line-height: 1.1rem;
+}
+
+.closeIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0.35rem 0.35rem 0 0;
 }

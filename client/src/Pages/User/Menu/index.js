@@ -201,7 +201,6 @@ function Menu () {
     times.push([startTimes[i], endTimes[i]])
   }
 
-
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     else if (dayObj.isClosed === true) {
@@ -328,10 +327,9 @@ function Menu () {
     <div className='statusTitleWrapper'>
       <span className='openStatus'>
         {' '}
-        {isClosed && 'CLOSED'}{!isClosed && 'OPEN'}{' '}
+        {isClosed && 'CLOSED'} {!isClosed && 'OPEN'}{' '}
       </span>
       <div>
-        {console.log("times dropdown",times)}
         {times.map(time => {
           return (
             <div class='vendorinfo'>

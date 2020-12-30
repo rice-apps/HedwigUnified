@@ -1,8 +1,10 @@
 steps:
-- name: 'gcr.io/cloud-builders/npm'
+- name: node:$_NODE_VERSION
+  entrypoint: npm
   args: ['install']
-  dir: 'api/'
-- name: 'gcr.io/cloud-builders/npm'
+  dir: 'api'
+- name: node:$_NODE_VERSION
+  entrypoint: npm
   args: ['run', 'create-env']
   env:
     - 'MONGODB_URL=${_MONGODB_URL}'
@@ -20,17 +22,20 @@ steps:
     - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
     - 'REDISHOST=${_REDISHOST}'
     - 'REDISPORT=${_REDISPORT}'
-  dir: 'api/'
-- name: 'gcr.io/cloud-builders/npm'
+  dir: 'api'
+- name: node:$_NODE_VERSION
+  entrypoint: npm
   args: ['run', 'build']
-  dir: 'api/'
+  dir: 'api'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'api.yaml', '-v', '$_GAE_VERSION']
-  dir: 'api/'
-- name: 'gcr.io/cloud-builders/npm'
+  dir: 'api'
+- name: node:$_NODE_VERSION
+  entrypoint: npm
   args: ['install']
   dir: 'client'
-- name: 'gcr.io/cloud-builders/npm'
+- name: node:$_NODE_VERSION
+  entrypoint: npm
   args: ['run', 'create-env']
   env:
     - 'REACT_APP_SERVICE_URL=${_REACT_APP_SERVICE_URL}'
@@ -39,15 +44,13 @@ steps:
     - 'REACT_APP_GRAPHQL_WS_URL=${_REACT_APP_GRAPHQL_WS_URL}'
     - 'REACT_APP_FIREBASE_API_KEY=${_REACT_APP_FIREBASE_API_KEY}'
     - 'REACT_APP_AUTH_DOMAIN=${_REACT_APP_AUTH_DOMAIN}'
-  dir: 'client/'
-- name: 'gcr.io/cloud-builders/npm'
+  dir: 'client'
+- name: node:$_NODE_VERSION
+  entrypoint: npm
   args: ['run', 'build']
   dir: 'client'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'client.yaml', '-v', '$_GAE_VERSION']
-  dir: 'client'
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', 'dispatch.yaml', '-v', '$_GAE_VERSION']
   dir: 'client'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'services', '--project', '$PROJECT_ID', 'set-traffic', '--splits', '$_GAE_TRAFFIC']

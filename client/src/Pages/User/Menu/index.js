@@ -350,7 +350,7 @@ function Menu () {
   return (
     <div>
       <BuyerHeader />
-      <div style={{ paddingBottom: '10vh' }}>
+      <div style={{ paddingBottom: '8.6vh' }}>
         {/* Hero Image */}
         <img
           style={{ filter: 'blur(2.5px)' }}

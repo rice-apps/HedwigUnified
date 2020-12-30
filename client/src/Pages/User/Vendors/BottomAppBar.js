@@ -8,9 +8,9 @@ import RalewayFont from './../../../fonts/Raleway/RalewayFont.js'
 
 
 const BottomNavigationWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 0px;
-  height: 9vh;
+  height: 8.5vh;
   width: 100vw;
   background-color: white;
   display: grid;

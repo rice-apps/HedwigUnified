@@ -7,3 +7,7 @@ services:
     build: ./client
     ports:
       - "3000:3000"
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

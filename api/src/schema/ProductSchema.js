@@ -8,7 +8,7 @@ import { ApolloError } from 'apollo-server-express'
 import { v4 as uuid } from 'uuid'
 import { ItemTC } from '../models'
 import { DataSourceEnumTC } from '../models/CommonModels'
-import pubsub from '../utils/pubsub'
+import { pubsub } from '../utils/pubsub'
 
 ItemTC.addResolver({
   name: 'getCatalog',

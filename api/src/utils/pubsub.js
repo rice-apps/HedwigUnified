@@ -16,4 +16,4 @@ if (process.env.NODE_ENV === 'production') {
   pubsub = new PubSub()
 }
 
-export default pubsub
+export { pubsub }

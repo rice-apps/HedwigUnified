@@ -5,7 +5,7 @@ import {
 } from 'square-connect'
 import { ApolloError } from 'apollo-server-express'
 import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
-import pubsub from '../utils/pubsub'
+import { pubsub } from '../utils/pubsub'
 import {
   FilterOrderInputTC,
   SortOrderInputTC,

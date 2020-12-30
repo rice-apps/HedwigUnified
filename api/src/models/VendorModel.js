@@ -31,7 +31,7 @@ const BusinessHours = new Schema({
     ],
     required: true
   },
-  isClosed: { type: [Boolean], required: true }
+  isClosed: { type: Boolean, required: true }
 })
 
 convertSchemaToGraphQL(SquareInfo, 'VendorSquareInfo', sc)

@@ -196,6 +196,8 @@ function Product () {
         }
       })
     )
+    console.log('merchant Id ', orderSummary().vendor.merchantId)
+    console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', orderSummary().vendor.locationIds[0])
     const itemName = product.name
     const itemID = product.squareID

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import hero from '../../../images/hero.jpg'
 import boba from '../../../images/boba.jpg'
 import './index.css'
@@ -8,9 +8,16 @@ import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery, gql } from '@apollo/client'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
-import { Hidden } from '@material-ui/core'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Grow from '@material-ui/core/Grow'
+import Popper from '@material-ui/core/Popper'
+import MenuItem from '@material-ui/core/MenuItem'
+import MenuList from '@material-ui/core/MenuList'
 /*
 const vendor = {
   name: 'East West Tea',
@@ -87,10 +94,13 @@ const vendor = {
 
 // add a proceed to checkout
 function Menu () {
+  const [open, setOpen] = React.useState(false)
+  const prevOpen = React.useRef(open)
+  const anchorRef = useRef(null)
+  const [arrowState, setArrowState] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currentVendor } = state
-
   const {
     refetch,
     data: catalog_info,
@@ -102,7 +112,6 @@ function Menu () {
       vendor: currentVendor
     }
   })
-
   // const catalog_data = vendor;
 
   const {
@@ -114,6 +123,12 @@ function Menu () {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
   })
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus()
+    }
+    prevOpen.current = open
+  }, [open])
 
   if (vendor_loading) {
     return <p>Loading...</p>
@@ -133,7 +148,6 @@ function Menu () {
   const { getCatalog: catalog_data } = catalog_info
   // Later in the code, we call sampleFunction(product.number)
 
-  console.log(catalog_data)
   // sampleFunction
   // input: a number
   // output: number * 3
@@ -177,21 +191,166 @@ function Menu () {
 
   const currentDay = current_date.getDay()
   // current day is an integer
-
+  console.log(vendor_data.getVendor.hours[currentDay])
   const startTimes = vendor_data.getVendor.hours[currentDay].start
+  console.log('start times: ' + startTimes)
   const endTimes = vendor_data.getVendor.hours[currentDay].end
 
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])
   }
-  const isClosed = vendor_data.getVendor.hours[currentDay].isClosed
+
+  const determineIfClosed = (current_date, dayObj) => {
+    if (!dayObj) return
+    else if (dayObj.isClosed === true) {
+      return true
+    } else {
+      const currentTime =
+        current_date.getHours() + current_date.getMinutes() / 60
+      const startTimes = dayObj.start.map(startTime => {
+        return convertTimeToNum(startTime)
+      })
+      const endTimes = dayObj.end.map(endTime => {
+        return convertTimeToNum(endTime)
+      })
+      let isClosedHours = true
+      for (let i = 0; i < startTimes.length; i++) {
+        if (currentTime >= startTimes[i] && currentTime < endTimes[i]) {
+          isClosedHours = false
+        }
+      }
+      return isClosedHours
+    }
+  }
+  const convertTimeToNum = time => {
+    const [timeNum, halfOfDay] = time.split(' ')
+    let [hours, minutes] = timeNum.split(':')
+    hours = parseInt(hours)
+    minutes = parseInt(minutes) / 60
+    if (halfOfDay === 'a.m.') {
+      return hours + minutes
+    } else if (halfOfDay === 'p.m.') {
+      return 12 + hours + minutes
+    }
+  }
+  const isClosed = determineIfClosed(
+    current_date,
+    vendor_data.getVendor.hours[currentDay]
+  )
+
+  // splash the hours
+  const handleToggle = () => {
+    setOpen(prevOpen => !prevOpen)
+  }
+
+  const handleClose = event => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return
+    }
+
+    setOpen(false)
+  }
+
+  function handleListKeyDown (event) {
+    if (event.key === 'Tab') {
+      event.preventDefault()
+      setOpen(false)
+    }
+  }
+
+  // display start - end time of a specific day
+  function dayDisplay (dayItem) {
+    let start = dayItem.start
+    let end = dayItem.end
+    let time = start.map(function (e, i) {
+      return [e, end[i]]
+    })
+    if (dayItem.start.length === 0) {
+      return (
+        <div className='dayHourRow'>
+          <span className='dayInitial'>{dayItem.day.charAt(0)} </span>
+          <span>Closed</span>{' '}
+        </div>
+      )
+    } else {
+      return (
+        <div className='dayHourRow'>
+          {' '}
+          <span className='dayInitial'> {dayItem.day.charAt(0)} </span>
+          <span className='hoursColumn'>
+            {time.map(startend => {
+              return (
+                <div>
+                  <span>
+                    {startend[0].replace('.', '').replace('.', '')} -{' '}
+                    {startend[1].replace('.', '').replace('.', '')}
+                  </span>
+                </div>
+              )
+            })}
+          </span>
+        </div>
+      )
+    }
+  }
+
+  // display day name and its hours
+  function hourDisplay () {
+    let hourItems = vendor_data.getVendor.hours
+    return (
+      <div>
+        {console.log('HourItems', hourItems)}
+        {hourItems.map(dayItem => {
+          return <div>{dayDisplay(dayItem)}</div>
+        })}
+      </div>
+    )
+  }
+
+  {
+    /* {isClosed ? (
+            <p class="vendorinfo">Closed for the Day</p>
+          ) : (
+            times.map(time => {
+              return (
+                <p class="vendorinfo">
+                  {time[0]} - {time[1]}
+                </p>
+              );
+            })
+          )}
+          <button class="readmore"> More Info </button> */
+  }
+
+  let dropdownTitle = (
+    <div className='statusTitleWrapper'>
+      <span className='openStatus'>
+        {' '}
+        {isClosed && 'CLOSED'} {!isClosed && 'OPEN'}{' '}
+      </span>
+      <div>
+        {times.map(time => {
+          return (
+            <div class='vendorinfo'>
+              {time[0].replace('.', '').replace('.', '')} -{' '}
+              {time[1].replace('.', '').replace('.', '')}
+            </div>
+          )
+        })}
+      </div>
+      <FontAwesomeIcon
+        className='arrowIcon'
+        icon={open ? faAngleUp : faAngleDown}
+      />
+    </div>
+  )
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
-      <BuyerHeader />
-      <div style={{ paddingBottom: '10vh' }}>
+      <BuyerHeader showBackButton="true" backLink='/eat'/>
+      <div style={{ paddingBottom: '8.6vh' }}>
         {/* Hero Image */}
         <img
           style={{ filter: 'blur(2.5px)' }}
@@ -204,23 +363,49 @@ function Menu () {
         <div class='vendorinfocontainer'>
           {/* Vendor Name */}
           <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
+
           {/* Vendor Operating Hours */}
-          {isClosed ? (
-            <p class='vendorinfo'>Closed for the Day</p>
-          ) : (
-            times.map(time => {
-              return <p class='vendorinfo'>time[0] - time[1]</p>
-            })
-          )}
-          <p class='vendorinfo'>
-            {startTimes[0]} - {endTimes[0]}
-          </p>
-          {startTimes.length > 1 && (
-            <p class='vendorinfo'>
-              {startTimes[1]} - {endTimes[1]}
-            </p>
-          )}
-          <button class='readmore'> More Info </button>
+          <Button
+            ref={anchorRef}
+            aria-controls={open ? 'menu-list-grow' : undefined}
+            aria-haspopup='true'
+            style={{ backgroundColor: 'white' }}
+            onClick={handleToggle}
+            disableRipple
+          >
+            {dropdownTitle}
+          </Button>
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow {...TransitionProps}>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList
+                    autoFocusItem={open}
+                    id='menu-list-grow'
+                    onKeyDown={handleListKeyDown}
+                    className='hourDisplay'
+                  >
+                    <MenuItem
+                      className='menuItem'
+                      onClick={handleClose}
+                      disableGutters
+                    >
+                      <div className='storeHourBox'>
+                        {' '}
+                        <div style={{ fontWeight: 'bold' }}>Hours</div>
+                        {hourDisplay()}
+                      </div>
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Grow>
+            )}
+          </Popper>
         </div>
 
         {/* Category Select Bar */}
@@ -230,6 +415,7 @@ function Menu () {
             <h1 class='categoryname'>
               <Link
                 activeClass='categoryactive'
+                style={{textDecoration: "none", color:"black"}}
                 to={category}
                 smooth
                 spy

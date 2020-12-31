@@ -117,7 +117,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+api/.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -222,7 +222,6 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/node,react,visualstudiocode,macos,windows,linux,yarn
 
-.env
 .env.local
 .env.development.local
 .env.test.local

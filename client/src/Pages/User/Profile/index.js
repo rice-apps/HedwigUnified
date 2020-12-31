@@ -55,7 +55,7 @@ function Profile () {
       <div className='background'>
         {/* Body: Welcome */}
         <div className='welcomebody'>
-          <h1 className='welcometext'> Welcome, {' '} {user.name} </h1>
+          <h1 className='welcometext'> Welcome, {user.name} </h1>
         </div>
 
         {/* Body: Links;;; should map through each of the links up top and create a box */}

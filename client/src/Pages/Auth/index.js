@@ -5,10 +5,9 @@ import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
-  mutation AuthenticateMutation($ticket: String!) {
-    authenticateUser(ticket: $ticket) {
+  mutation AuthenticateMutation($netid: String!) {
+    authenticateUser(netid: $netid) {
       _id
-      netid
       token
       recentUpdate
       vendor
@@ -32,12 +31,15 @@ const lstorage = localStorage
 
 function Auth () {
   // First parse out ticket from URL href
+  console.log(window.location.href)
   const ticket = parseTicket(window.location.href)
+  console.log(ticket)
+  const netId = lstorage.getItem('netid');
   // Run query against backend to authenticate user
   const [
     authenticateUser,
     { data: authenticationData, loading, error }
-  ] = useMutation(AUTHENTICATE_USER, { variables: { ticket: ticket } })
+  ] = useMutation(AUTHENTICATE_USER, { variables: { netid: netId } })
 
   console.log(authenticationData)
   useEffect(() => {

@@ -5,6 +5,7 @@ import {
   createToken
 } from '../utils/authenticationUtils'
 
+
 /**
  * Relations (necessary for any fields that link to other types in the schema)
  * https://graphql-compose.github.io/docs/plugins/plugin-mongoose.html#how-to-build-nesting-relations
@@ -39,6 +40,22 @@ import {
 /**
  * Authentication-related resolvers
  */
+
+UserTC.addResolver({
+	name: "samlAuth",
+	type: UserTC,
+	args: { netid: "String!" },
+	resolve: async ({ source, args, context, info }) => {
+		let { netid } = args;
+    let blank = "";
+    console.log(context);
+		const { user } = await context.passport.authenticate('graphql-local', { email: netid, password: blank });
+		console.log(user);
+    context.passport.login(user);
+    console.log(user)
+		return user;
+	}
+});
 
 UserTC.addResolver({
   name: 'authenticate',
@@ -97,7 +114,7 @@ const UserQueries = {
 const UserMutations = {
   userCreateOne: UserTC.mongooseResolvers.createOne(),
   userUpdateOne: UserTC.mongooseResolvers.updateOne(),
-  authenticateUser: UserTC.getResolver('authenticate')
+  authenticateUser: UserTC.getResolver('samlAuth')
 }
 
 async function authMiddleware (resolve, source, args, context, info) {

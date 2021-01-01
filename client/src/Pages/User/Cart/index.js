@@ -19,7 +19,6 @@ import CartHeader from "./CartHeader";
 import styled, { css } from 'styled-components'
 
 // new dropdown imports:
-import createActivityDetector from "activity-detector";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -89,10 +88,10 @@ function generatePickupTimes(currHour, currMinute, endHour, endMinute, isFirst) 
     pickupHour += 1;
   }
   const pickupObjs = pickupTimes.map((time) => {
-    return { value: time, label: time };
+    return { value: moment(time, 'h:mm a').format(), label: time };
   });
   if(isFirst && pickupObjs.length > 0) {
-    pickupObjs.unshift({value: "ASAP", label: "ASAP"});
+    pickupObjs.unshift({value: moment().add(15, 'minutes'), label: "ASAP"});
   }
   return pickupObjs;
 }
@@ -160,21 +159,6 @@ function calculateNextHours(
   return timeIntervals;
 }
 
-function useIdle(options) {
-  const [isIdle, setIsIdle] = useState(false);
-  useEffect(() => {
-    const activityDetector = createActivityDetector(options);
-    activityDetector.on("idle", () => {
-      setIsIdle(true);
-    });
-    // activityDetector.on('active', ()=>{setIsIdle(false)});
-    return () => {
-      activityDetector.stop();
-    };
-  }, []);
-  return isIdle;
-}
-
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
   const [pickupTime, setPickupTime] = useState(null);
@@ -204,8 +188,6 @@ function CartDetail() {
   const navigate = useNavigate();
   const cart_menu = cartItems();
 
-  const isIdle = useIdle({ timeToIdle: 30000, inactivityEvents: [] });
-
   const product_ids = cart_menu.map((item) => {
     return item.dataSourceId;
   });
@@ -225,27 +207,11 @@ function CartDetail() {
     return navigate(`/eat/almostThere`)
   }
 
-  const changePickupTime = (newTime) => {
-    setPickupTime(newTime);
-    orderSummary(
-      Object.assign(orderSummary(), {
-        time: newTime,
-      })
-  )}
-
-  const convertStringToTime = (time) => {
-    console.log(time)
-    if(time === "ASAP"){
-      return moment().hour()+(moment().minutes()+15)/60
-    }
-    return time
-  }
-
   const handleConfirmClick = async () => {
     const currTimeVal = moment().hour()+(moment().minutes())/60;
-    const pickupTimeVal = convertStringToTime(pickupTime);
+    const pickupTimeVal = moment(pickupTime).hour()+(moment(pickupTime).minutes())/60;
     console.log(pickupTimeVal, currTimeVal);
-    if(pickupTimeVal <= currTimeVal+15){
+    if(pickupTimeVal < currTimeVal+.25){
       alert('The time you have selected is no longer valid. Please choose a later time.')
       return;
     }
@@ -387,7 +353,6 @@ function CartDetail() {
   let pickupTimes = [];
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i];
-    console.log(interval)
     i === 0 ?
     pickupTimes = [
       ...pickupTimes,
@@ -411,27 +376,32 @@ function CartDetail() {
       ),
     ];
   }
+
+  // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
+  //   {'year': moment().year(),
+  //   'month': moment().month(),
+  //   'date': moment().date(),
+  //   'hour': t.value.split(':')[0],
+  //   'minute': t.value.split(':')[1]}))
+
   console.log(pickupTimes)
-  // if(pickupTimes.length > 0){
-  //   pickupTimes.unshift("ASAP");
-  // }
 
-  pickupTimes.forEach(t => t.value = moment().set(
-    {'year': moment().year(),
-    'month': moment().month(),
-    'date': moment().date(), 
-    'hour': t.value.split(':')[0], 
-    'minute': t.value.split(':')[1]}))
-
-  function onChangeDropdown(newPayment) {
+  function changePaymentType(newPayment) {
     setPaymentMethod(newPayment.value);
+  }
+
+  function changePickupTime(newTime) {
+    setPickupTime(newTime.value)
+    orderSummary(
+      Object.assign(orderSummary(),
+        {time: newTime.value}
+      )
+    )
   }
 
   return (
     <div>
       <CartHeader showBackButton backLink="/eat" />
-      {// <div className={isIdle ? "float-cart__disabled" : "float-cart"}>
-      }
       <div className={"float-cart"}>
         <div className="float-cart__content">
           <div className="float-cart__shelf-container">
@@ -479,14 +449,7 @@ function CartDetail() {
           <Select
             options={pickupTimes}
             placeholder={"Select a pickup time"}
-            onChange={(e) => {
-              setPickupTime(e.value);
-              orderSummary(
-                Object.assign(orderSummary(),
-                  {time: e.value}
-                )
-              )
-            }}
+            onChange={changePickupTime}
             clearable={false}
             style={styles.select}
             className="float-cart__dropdown"
@@ -496,7 +459,7 @@ function CartDetail() {
           <p className="float-cart__dropdown-title">Payment Method:</p>
           <Select
             options={options}
-            onChange={onChangeDropdown}
+            onChange={changePaymentType}
             placeholder={"Select a payment method"}
             clearable={false}
             style={styles.select}
@@ -526,47 +489,6 @@ function CartDetail() {
               Submit Order
             </button>
           </div>
-          {      // <Modal
-                //   isOpen={isIdle}
-                //   style={{
-                //     content: {
-                //       backgroundColor: "white",
-                //       height: "44vh",
-                //       width: "50vw",
-                //       position: "absolute",
-                //       top: "28%",
-                //       left: "26%",
-                //       borderRadius: "20px",
-                //       fontFamily: "Futura",
-                //       textAlign: "center",
-                //     },
-                //     overlay: {
-                //       zIndex: "10",
-                //     },
-                //   }}
-                // >
-                //   <AiOutlineExclamationCircle style={{ fontSize: "100px" }} />
-                //   <p style={{ marginLeft: "0px" }}>
-                //     Your session has expired due to inactivity.
-                //   </p>
-                //   <button
-                //     className="modal-btn"
-                //     onClick={() => {
-                //       window.location.reload(false);
-                //     }}
-                //   >
-                //     Refresh Page
-                //   </button>
-                //   <button
-                //     className="modal-btn"
-                //     onClick={() => {
-                //       navigate("/eat");
-                //     }}
-                //   >
-                //     Home Page
-                //   </button>
-                // </Modal>
-              }
         </div>
       </div>
     </div>

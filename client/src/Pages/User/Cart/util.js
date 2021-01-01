@@ -139,7 +139,7 @@ const getLineItems = (items) => {
 
 export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient();
-  console.log(orderSummary().vendor.locationIds[0]);
+  console.log(orderSummary());
   return {
     studentId: sStorage.getItem("id"),
     key: uuidv4(),
@@ -147,7 +147,7 @@ export const createRecord = (items, paymentType, cohenId) => {
     name: recipient.name,
     phone: recipient.phone,
     email: recipient.email,
-    time: orderSummary().time.format(),
+    time: moment(orderSummary().time).format(),
     location: orderSummary().vendor.locationIds[0],
     type: paymentType,
     cohenId: cohenId

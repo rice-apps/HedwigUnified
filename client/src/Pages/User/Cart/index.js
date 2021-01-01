@@ -234,17 +234,11 @@ function CartDetail() {
   )}
 
   const convertStringToTime = (time) => {
+    console.log(time)
     if(time === "ASAP"){
       return moment().hour()+(moment().minutes()+15)/60
     }
-    const timeStr = time.split(' ')[0]
-    const [hour, minute] = timeStr.split(':')
-    if(time.includes('p.m.')){
-      return parseInt(hour)+parseInt(minute)/60+12
-    }
-    else{
-      return parseInt(hour)+parseInt(minute)/60
-    }
+    return time
   }
 
   const handleConfirmClick = async () => {

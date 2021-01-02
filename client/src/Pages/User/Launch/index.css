@@ -1,4 +1,4 @@
-#main-div{
+#main-div-launch{
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: space-around;
     max-width: 100%;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Proxima Nova';
     background-color: white;
 }
 
@@ -17,7 +17,7 @@
   border: none;
   font-size: 0.8rem;
   font-weight: bold;
-  background-color: #f7735a;
+  background-color: #F3725B;
   color: white;
 }
 .home-btn:hover {
@@ -27,14 +27,14 @@
   outline: none;
 }
 #title{
-  color: #f7735a;
+  color: #F3725B;
   font-size: 2rem;
-  /* font-weight: 600; */
+  font-weight: bold;
   margin-top: 0.8rem;
   margin-bottom: 0.2rem;
 }
 #sub-title{
-    color: #f7735a;
+    color: #F3725B;
     font-size: 1.2rem;
     /* font-weight: bold; */
     /* margin: 0.8rem; */

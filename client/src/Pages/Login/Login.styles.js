@@ -1,13 +1,17 @@
 import styled from 'styled-components'
 
 const MainDiv = styled.div`
+@font-face {
+  font-family: 'Omnes';
+  src: local('Omnes'), url(../../fonts/Omnes-Font/Omnes/Omnes.ttf);
+}
   height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   max-width: 100%;
-  font-family: 'Raleway', sans-serif;
+  
   background-color: white;
 `
 
@@ -29,19 +33,27 @@ const HedwigLogo = styled.img`
   max-width: 20%;
 `
 const Title = styled.h1`
-  color: #f7735a;
+  color: #F3725B;
   font-size: 3.3rem;
   margin: 0.1rem;
+  font-family:  Omnes;
+  font-style: normal;
+  font-weight: 500;
 `
 const LoginButton = styled.button`
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima Nova'), url(../../fonts/FontsFree-Net-proxima_nova_reg-webfont.ttf);
+}
   border-radius: 25pt;
   height: 2.2rem;
   width: 8.5rem;
   border: none;
   font-size: 0.8rem;
-  font-weight: bold;
-  background-color: #f7735a;
+  background-color:#F3725B;
   color: white;
+  font-family: Proxima Nova;
+  font-weight: bold;
   :hover {
     text-decoration: underline;
   }

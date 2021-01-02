@@ -10,7 +10,7 @@ function Launch () {
         return <Navigate to='/eat' />
     }
     return (
-        <div id='main-div'>
+        <div id='main-div-launch'>
         <ElemDiv>
             <Logo style={{marginTop: '30%'}} src={logo} />
             <h1 id='title'>Thank you!</h1>

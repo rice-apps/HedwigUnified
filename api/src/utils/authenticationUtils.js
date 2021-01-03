@@ -92,18 +92,18 @@ export const authenticateTicket = async idToken => {
     // )
     // idToken = JSON.parse(idToken)
     // firebaseApp.getExplicitProjectId().then(id => console.log(id))
-    firebaseApp
+    return firebaseApp
       .auth()
       .verifyIdToken(idToken)
       .then((decodedToken) => {
         const uid = decodedToken.uid;
         console.log(decodedToken);
+        return {success: true, netid: decodedToken.firebase.sign_in_attributes['urn:oid:0.9.2342.19200300.100.1.1']}
     }).catch((error) => {
         console.log("cannot verify token")
         console.log(error)
         return failureResponse
     });
-    return {success: true}
   } catch (e) {
     console.log(e)
     console.log('Something went wrong.')

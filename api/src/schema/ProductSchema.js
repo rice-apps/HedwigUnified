@@ -2,6 +2,7 @@ import {
   BatchRetrieveCatalogObjectsRequest,
   CatalogApi,
   ListCatalogRequest,
+<<<<<<< HEAD
   UpsertCatalogObjectRequest,
 } from "square-connect";
 import { ApolloError } from "apollo-server-express";
@@ -9,6 +10,15 @@ import { v4 as uuid } from "uuid";
 import { ItemTC } from "../models";
 import { DataSourceEnumTC } from "../models/CommonModels";
 import pubsub from "../utils/pubsub";
+=======
+  UpsertCatalogObjectRequest
+} from 'square-connect'
+import { ApolloError } from 'apollo-server-express'
+import { v4 as uuid } from 'uuid'
+import { ItemTC } from '../models'
+import { DataSourceEnumTC } from '../models/CommonModels'
+import { pubsub } from '../utils/pubsub'
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
 
 ItemTC.addResolver({
   name: "getCatalog",
@@ -88,10 +98,19 @@ ItemTC.addResolver({
       });
 
       const modifierLists = modifier_list_info
+<<<<<<< HEAD
         ? modifier_list_info.map((info) =>
             modifierListId2Data(info.modifier_list_id)
           )
         : [];
+=======
+        ? modifier_list_info.map(info => [
+            modifierListId2Data(info.modifier_list_id),
+            info.min_selected_modifiers,
+            info.max_selected_modifiers
+          ])
+        : []
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
 
       const returnedModifierLists = modifierLists.map((modifierList) => {
         const {
@@ -99,9 +118,15 @@ ItemTC.addResolver({
           modifier_list_data: {
             name: modifierListName,
             selection_type,
+<<<<<<< HEAD
             modifiers,
           },
         } = modifierList;
+=======
+            modifiers
+          }
+        } = modifierList[0]
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
 
         const returnedModifiers = modifiers.map((modifier) => {
           const {
@@ -133,8 +158,15 @@ ItemTC.addResolver({
           name: modifierListName,
           selectionType: selection_type,
           modifiers: returnedModifiers,
+<<<<<<< HEAD
         };
       });
+=======
+          minModifiers: modifierList[1],
+          maxModifiers: modifierList[2]
+        }
+      })
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
 
       return {
         dataSourceId: itemId,
@@ -216,10 +248,15 @@ ItemTC.addResolver({
 
       // Get all modifier list IDs that correspond to this item
       // this mapping below is breaking because the modifier_list_info is null
+<<<<<<< HEAD
       console.log("modifier_list_info is null", modifier_list_info);
       let returnedModifierLists;
       if (modifier_list_info) {
         console.log("Actually fired?");
+=======
+      let returnedModifierLists
+      if (modifier_list_info) {
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
         const modifier_list_ids = modifier_list_info.map(
           (info) => info.modifier_list_id
         );
@@ -244,7 +281,15 @@ ItemTC.addResolver({
             },
           } = modifierList;
 
+<<<<<<< HEAD
           const returnedModifiers = modifiers.map((modifier) => {
+=======
+          const parentListInfo = modifier_list_info.filter(
+            info => info.modifier_list_id === parentListId
+          )[0]
+
+          const returnedModifiers = modifiers.map(modifier => {
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
             const {
               id,
               modifier_data: {
@@ -274,8 +319,15 @@ ItemTC.addResolver({
             name: modifierListName,
             selectionType: selection_type,
             modifiers: returnedModifiers,
+<<<<<<< HEAD
           };
         });
+=======
+            minModifiers: parentListInfo.min_selected_modifiers,
+            maxModifiers: parentListInfo.max_selected_modifiers
+          }
+        })
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
       }
 
       // Step 3: Return product in common data model format
@@ -373,6 +425,7 @@ ItemTC.addResolver({
         retrieveCatalogObjectResponse.object.item_data),
         (upsertCatalogObjectBody.object.custom_attribute_values = {
           is_available: {
+<<<<<<< HEAD
             name: "Is it available?",
             key: "is_available",
             custom_attribute_definition_id: "7XN45PC5N5ALEEWG6TV6I7YJ",
@@ -380,6 +433,15 @@ ItemTC.addResolver({
             boolean_value: isItemAvailable,
           },
         });
+=======
+            name: 'Is it available?',
+            key: 'is_available',
+            custom_attribute_definition_id: '7XN45PC5N5ALEEWG6TV6I7YJ',
+            type: 'BOOLEAN',
+            boolean_value: isItemAvailable
+          }
+        })
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
 
       const upsertCatalogItemResponse = await api.upsertCatalogObject(
         upsertCatalogObjectBody
@@ -450,7 +512,15 @@ ItemTC.addResolver({
           },
         } = modifierList;
 
+<<<<<<< HEAD
         const returnedModifiers = modifiers.map((modifier) => {
+=======
+        const parentListInfo = modifier_list_info.filter(
+          info => info.modifier_list_id === parentListId
+        )[0]
+
+        const returnedModifiers = modifiers.map(modifier => {
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
           const {
             id,
             modifier_data: {
@@ -480,8 +550,15 @@ ItemTC.addResolver({
           name: modifierListName,
           selectionType: selection_type,
           modifiers: returnedModifiers,
+<<<<<<< HEAD
         };
       });
+=======
+          minModifiers: parentListInfo.min_selected_modifiers,
+          maxModifiers: parentListInfo.max_selected_modifiers
+        }
+      })
+>>>>>>> 1178e1a136dd9ce9bcf845868491cc5f31288d1f
 
       // Step 3: Return product in common data model format
       const CDMProduct = {

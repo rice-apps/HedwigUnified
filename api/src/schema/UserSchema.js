@@ -42,32 +42,17 @@ import {
  */
 
 UserTC.addResolver({
-	name: "samlAuth",
-	type: UserTC,
-	args: { netid: "String!" },
-	resolve: async ({ source, args, context, info }) => {
-		let { netid } = args;
-    let blank = "";
-    console.log(context);
-		const { user } = await context.passport.authenticate('graphql-local', { email: netid, password: blank });
-		console.log(user);
-    context.passport.login(user);
-    console.log(user)
-		return user;
-	}
-});
-
-UserTC.addResolver({
   name: 'authenticate',
   type: UserTC,
-  args: { ticket: 'String!' },
+  args: { netid : 'String!', idToken : 'String!' },
   resolve: async ({ args }) => {
-    const authenticationResponse = await authenticateTicket(args.ticket)
+    const authenticationResponse = await authenticateTicket(args.idToken)
     if (authenticationResponse.success) {
       let user // this will be used as the return object
 
       // Get the netid of the authenticated user
-      const { netid } = authenticationResponse
+      // const { netid } = authenticationResponse
+      const netid = args.netid
 
       // Check if user exists based on netid
       const exists = await User.exists({ netid })
@@ -114,7 +99,7 @@ const UserQueries = {
 const UserMutations = {
   userCreateOne: UserTC.mongooseResolvers.createOne(),
   userUpdateOne: UserTC.mongooseResolvers.updateOne(),
-  authenticateUser: UserTC.getResolver('samlAuth')
+  authenticateUser: UserTC.getResolver('authenticate')
 }
 
 async function authMiddleware (resolve, source, args, context, info) {

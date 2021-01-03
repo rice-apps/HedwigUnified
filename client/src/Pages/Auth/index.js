@@ -5,8 +5,8 @@ import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
-  mutation AuthenticateMutation($netid: String!) {
-    authenticateUser(netid: $netid) {
+  mutation AuthenticateMutation($netid: String!, $idToken: String!) {
+    authenticateUser(netid: $netid, idToken: $idToken) {
       _id
       token
       recentUpdate
@@ -31,15 +31,14 @@ const lstorage = localStorage
 
 function Auth () {
   // First parse out ticket from URL href
-  console.log(window.location.href)
   const ticket = parseTicket(window.location.href)
-  console.log(ticket)
-  const netId = lstorage.getItem('netid');
+  const netid = lstorage.getItem('netid');
+  const idToken = lstorage.getItem('idToken')
   // Run query against backend to authenticate user
   const [
     authenticateUser,
     { data: authenticationData, loading, error }
-  ] = useMutation(AUTHENTICATE_USER, { variables: { netid: netId } })
+  ] = useMutation(AUTHENTICATE_USER, { variables: { netid: netid, idToken: idToken } })
 
   console.log(authenticationData)
   useEffect(() => {
@@ -53,15 +52,14 @@ function Auth () {
   if (!authenticationData) return <p>Bad.</p>
 
   const {
-    netid,
-    token,
     _id,
     name,
     phone,
     isAdmin,
     vendor,
     recentUpdate,
-    type
+    type,
+    token
   } = authenticationData.authenticateUser
 
   userProfile({
@@ -76,6 +74,8 @@ function Auth () {
     token
   })
 
+  lstorage.setItem('token', token);
+
   userProfile(
     Object.assign(userProfile(), {
       name:
@@ -86,7 +86,6 @@ function Auth () {
   // Set token in local storage
 
   console.log(userProfile())
-  lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {
@@ -109,9 +108,9 @@ function Auth () {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients
-  // if (phone) {
-  //   return <Navigate to='/eat' />
-  // }
+  if (phone) {
+    return <Navigate to='/eat' />
+  }
   return <Navigate to='/contact' />
 }
 

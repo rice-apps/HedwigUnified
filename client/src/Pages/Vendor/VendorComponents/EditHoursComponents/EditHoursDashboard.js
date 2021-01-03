@@ -23,15 +23,16 @@ const UPDATE_VENDOR = gql`
 `;
 
 const EditHoursDashboardWrapper = styled.div`
-  height: 90%;
+  height: 98%;
   width: 90%;
   font-size: 3.8vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 8fr;
+  grid-template-rows: 1fr 8fr 1fr;
   font-family: "Futura", sans-serif;
   justify-items: center;
   overflow: hidden;
+
 `;
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
@@ -42,6 +43,18 @@ const EditHoursRowWrapper = styled.div`
   font-size: 2.8vh;
   overflow-y: scroll;
 `;
+
+const CloseNowButton = styled.button`
+border: 2px solid #EA907A;
+border-radius: 40px;
+color:#EA907A;
+font-size:2.5vh;
+padding: 2px 5px;
+background-color: white;
+height: 6vh;
+width:12vw;
+margin-top:1.8vh;
+`
 const EditHoursRow = styled.div`
   border-radius: 10px;
   background-color: white;
@@ -614,6 +627,7 @@ function EditHoursDashboard() {
           );
         })}
       </EditHoursRowWrapper>
+      <CloseNowButton>Close Now</CloseNowButton>
     </EditHoursDashboardWrapper>
   );
 }

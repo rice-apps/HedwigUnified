@@ -9,6 +9,8 @@ import { VENDOR_QUERY } from "../../../../graphql/VendorQueries.js";
 import { useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
 import { current } from "immer";
 
+import moment from "moment";
+
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
     updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
@@ -32,7 +34,6 @@ const EditHoursDashboardWrapper = styled.div`
   font-family: "Futura", sans-serif;
   justify-items: center;
   overflow: hidden;
-
 `;
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
@@ -45,16 +46,16 @@ const EditHoursRowWrapper = styled.div`
 `;
 
 const CloseNowButton = styled.button`
-border: 2px solid #EA907A;
-border-radius: 40px;
-color:#EA907A;
-font-size:2.5vh;
-padding: 2px 5px;
-background-color: white;
-height: 6vh;
-width:12vw;
-margin-top:1.8vh;
-`
+  border: 2px solid #ea907a;
+  border-radius: 40px;
+  color: #ea907a;
+  font-size: 2.5vh;
+  padding: 2px 5px;
+  background-color: white;
+  height: 6vh;
+  width: 12vw;
+  margin-top: 1.8vh;
+`;
 const EditHoursRow = styled.div`
   border-radius: 10px;
   background-color: white;
@@ -175,8 +176,8 @@ const HoursColumn = styled.div`
   padding: 0px 7px;
 `;
 const HoursInterval = styled.div`
-  background-color: ${props => props.isClosed ? "#FFF7F5" : "#f8eae7"};
-  opacity: ${props => props.isClosed ? "0.6" : "1"};
+  background-color: ${(props) => (props.isClosed ? "#FFF7F5" : "#f8eae7")};
+  opacity: ${(props) => (props.isClosed ? "0.6" : "1")};
   position: relative;
   border-radius: 10px;
   color: #ea907a;
@@ -534,7 +535,7 @@ function MakeAddHoursButton(props) {
 }
 
 function EditHoursDashboard() {
-  // const [currentHours, setCurrentHours] = useState([]);
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
   const {
     data: vendor_data,
@@ -554,20 +555,6 @@ function EditHoursDashboard() {
   const hours = vendor_data.getVendor.hours;
 
   console.log("hours: ", hours);
-
-  // function updateCurrentHours(newHours) {
-  //   setCurrentHours(newHours);
-  // }
-
-  // console.log(currentHours.length);
-
-  // if (currentHours.length === 0) {
-  //   console.log("hours ", hours);
-  //   updateCurrentHours(hours);
-  //   console.log("current hours in if ", currentHours);
-  // }
-
-  // updateCurrentHours(hours);
 
   function getIndex(day) {
     let dayName =
@@ -591,6 +578,38 @@ function EditHoursDashboard() {
     return hours.findIndex((obj) => obj.day === dayName);
   }
 
+  function closeOnClick() {
+    window.location.reload();
+
+    const currentDay = moment().format("dddd");
+    console.log("current day ", currentDay);
+    const index = hours.findIndex((obj) => obj.day === currentDay);
+    console.log("index ", index);
+
+    const originalHours = hours;
+    const updatedHours = [...originalHours];
+    // This index is the index of the day! should reflect what day the user clicks to edit:
+    const updatedDay = { ...updatedHours[index] };
+
+    updatedDay.isClosed = true;
+
+    updatedHours[index] = updatedDay;
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] };
+      delete dayCopy["__typename"];
+      updatedHours[index] = dayCopy;
+    });
+
+    console.log("updated day ", updatedDay);
+
+    toggleIsClosed({
+      variables: {
+        name: "Cohen House",
+        hours: updatedHours,
+      },
+    });
+  }
+
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
@@ -611,7 +630,7 @@ function EditHoursDashboard() {
                 {hours[index].start.map((startInput, timeIndex) => {
                   return (
                     <HoursItem
-                    isClosed = {hours[index].isClosed}
+                      isClosed={hours[index].isClosed}
                       index={index}
                       currentHours={hours}
                       startTime={hours[index].start[timeIndex]}
@@ -629,7 +648,7 @@ function EditHoursDashboard() {
           );
         })}
       </EditHoursRowWrapper>
-      <CloseNowButton>Close Now</CloseNowButton>
+      <CloseNowButton onClick={closeOnClick}>Close Now</CloseNowButton>
     </EditHoursDashboardWrapper>
   );
 }

@@ -175,7 +175,8 @@ const HoursColumn = styled.div`
   padding: 0px 7px;
 `;
 const HoursInterval = styled.div`
-  background-color: #f8eae7;
+  background-color: ${props => props.isClosed ? "#FFF7F5" : "#f8eae7"};
+  opacity: ${props => props.isClosed ? "0.6" : "1"};
   position: relative;
   border-radius: 10px;
   color: #ea907a;
@@ -242,7 +243,7 @@ function HoursItem(props) {
   }
 
   return (
-    <HoursInterval>
+    <HoursInterval isClosed={props.isClosed}>
       <IoMdClose
         onClick={deleteStartEndTime}
         style={{
@@ -610,6 +611,7 @@ function EditHoursDashboard() {
                 {hours[index].start.map((startInput, timeIndex) => {
                   return (
                     <HoursItem
+                    isClosed = {hours[index].isClosed}
                       index={index}
                       currentHours={hours}
                       startTime={hours[index].start[timeIndex]}

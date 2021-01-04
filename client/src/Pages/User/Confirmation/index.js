@@ -1,10 +1,8 @@
 import '../AlmostThere/almostThere.css'
 import {P, Button, Div, MessageWrapper} from '../AlmostThere/index'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapPin } from '@fortawesome/free-solid-svg-icons'
+
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
-import { ReactComponent as ConfirmationSVG } from './check-circle.svg'
 import { ReactComponent as HedwigLogoSVG} from './../../Login/HedwigLogoFinal.svg'
 import { orderSummary, cartItems } from '../../../apollo'
 

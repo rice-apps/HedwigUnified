@@ -17,6 +17,7 @@ export const Button = styled.button`
   margin: auto;
   padding: 5px 20px 5px 20px;
 
+
   ${props =>
     props.primary &&
     css`
@@ -39,7 +40,7 @@ export const P = styled.p`
       font-size: 19pt;
       color: #5a5953;
       position: relative;
-      top:14px;
+      top: 14px;
       line-height: 22pt;
       font-family: 'Avenir Black', 'Arial Black', sans-serif;
       text-align: center;
@@ -51,16 +52,24 @@ export const P = styled.p`
         margin: 0.2vh 1vw;
         font-size: 14pt;
         position: relative;
-        top:15px;
+        top: 15px;
         font-family: 'Avenir Book', 'Arial Book', sans-serif;
-    `};
+      `};
 
     ${props =>
       props.title &&
       css`
         font-size: 20pt;
         margin: 8px 16px 8px 16px;
-    `};
+      `};
+
+    ${props =>
+      props.message &&
+      css`
+        line-height: 16pt;
+        width: 300px;
+        margin: 0px 0px 15px 0px;
+      `};
 }
 `
 
@@ -83,6 +92,12 @@ export const Div = styled.div`
     `};
 `
 
+const MessageWrapper = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`
+
 const AlmostThere = ({ classes }) => {
   cartItems([])
   const navigate = useNavigate()
@@ -90,42 +105,41 @@ const AlmostThere = ({ classes }) => {
     return navigate(`/eat`)
   }
 
-  console.log(orderSummary());
-  const order = orderSummary();
+  console.log(orderSummary())
+  const order = orderSummary()
   const handlePayment = () => {
     window.open(order.url)
   }
-  
-    return (
-      <div className='mainDiv'>
-        <WarningSVG className='checkSvg' />
-        <div>
-          <P title>Almost There!</P>
-          <P>
-            You order is not complete until you enter payment details. 
-            You will receive a confirmation text once they are received.
-          </P>
-        </div>
-        <Div> 
-          <Button primary onClick={handlePayment}>
-            Enter Payment Details
-          </Button>
-        </Div>
-        <Div vendorCard>
-          <P header>{order.vendor.name}Cohen House</P>
-          <P header>Pick Up Instruction:</P>
-          <P pickup>Pick up at {order.fulfillment.placedAt} at 
-            {order.fulfillment.pickupAt}
-          </P>
-        </Div>
 
-        <Div>
-          <Button onClick={handleHomeClick}>
-            Home
-          </Button>
-        </Div>
-      </div>
-    )
+  return (
+    <div className='mainDiv'>
+      <WarningSVG className='checkSvg' />
+      <MessageWrapper>
+        <P title>Almost There!</P>
+        <P message>
+          You order is not complete until you enter payment details. You will
+          receive a confirmation text once they are received.
+        </P>
+      </MessageWrapper>
+      <Div>
+        <Button primary onClick={handlePayment}>
+          Enter Payment Details
+        </Button>
+      </Div>
+      <Div vendorCard>
+        <P header>{order.vendor.name}</P>
+        <P header>Pick Up Instruction:</P>
+        <P pickup>
+          Pick up at {order.fulfillment.placedAt} at
+          {order.fulfillment.pickupAt}
+        </P>
+      </Div>
+
+      <Div>
+        <Button onClick={handleHomeClick}>Home</Button>
+      </Div>
+    </div>
+  )
 }
 
 export default AlmostThere

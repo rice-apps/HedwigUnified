@@ -39,7 +39,8 @@ export const P = styled.p`
       font-size: 19pt;
       color: #5a5953;
       position: relative;
-      top: -30px;
+      top:14px;
+      line-height: 22pt;
       font-family: 'Avenir Black', 'Arial Black', sans-serif;
       text-align: center;
     `};
@@ -50,7 +51,7 @@ export const P = styled.p`
         margin: 0.2vh 1vw;
         font-size: 14pt;
         position: relative;
-        top: -30px;
+        top:15px;
         font-family: 'Avenir Book', 'Arial Book', sans-serif;
     `};
 
@@ -111,8 +112,7 @@ const AlmostThere = ({ classes }) => {
           </Button>
         </Div>
         <Div vendorCard>
-          <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
-          <P header>{order.vendor.name}</P>
+          <P header>{order.vendor.name}Cohen House</P>
           <P header>Pick Up Instruction:</P>
           <P pickup>Pick up at {order.fulfillment.placedAt} at 
             {order.fulfillment.pickupAt}

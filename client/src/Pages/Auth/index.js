@@ -5,42 +5,32 @@ import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
-  mutation AuthenticateMutation($netid: String!, $idToken: String!) {
-    authenticateUser(netid: $netid, idToken: $idToken) {
+  mutation AuthenticateMutation($idToken: String!) {
+    authenticateUser(idToken: $idToken) {
       _id
       token
+      netid
       recentUpdate
       vendor
       phone
       name
+      isAdmin
+      type
     }
   }
 `
-const parseTicket = url => {
-  // Ex: http://example.com/auth?ticket=ST-1590205338989-7y7ojqvDfvGIFDLyjahEqIp2F
-  // Get the ticket query param
-  const ticketParamName = 'ticket='
-  // We're searching for the part of the string AFTER ticket=
-  const ticketStartIndex = url.indexOf(ticketParamName) + ticketParamName.length
-  // Only returns the ticket portion
-  return url.substring(ticketStartIndex)
-}
 
 // const allowedUsers = ['byz2']
 const lstorage = localStorage
 
 function Auth () {
-  // First parse out ticket from URL href
-  const ticket = parseTicket(window.location.href)
-  const netid = lstorage.getItem('netid');
   const idToken = lstorage.getItem('idToken')
   // Run query against backend to authenticate user
   const [
     authenticateUser,
     { data: authenticationData, loading, error }
-  ] = useMutation(AUTHENTICATE_USER, { variables: { netid: netid, idToken: idToken } })
+  ] = useMutation(AUTHENTICATE_USER, { variables: { idToken: idToken } })
 
-  console.log(authenticationData)
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
     authenticateUser().catch(err => <p>{err.message}</p>)
@@ -54,6 +44,7 @@ function Auth () {
   const {
     _id,
     name,
+    netid,
     phone,
     isAdmin,
     vendor,
@@ -74,18 +65,8 @@ function Auth () {
     token
   })
 
-  lstorage.setItem('token', token);
-
-  userProfile(
-    Object.assign(userProfile(), {
-      name:
-        lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
-      studentId: lstorage.getItem('id')
-    })
-  )
   // Set token in local storage
-
-  console.log(userProfile())
+  lstorage.setItem('token', token);
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

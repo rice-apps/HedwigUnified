@@ -5,7 +5,6 @@ import {
   createToken
 } from '../utils/authenticationUtils'
 
-
 /**
  * Relations (necessary for any fields that link to other types in the schema)
  * https://graphql-compose.github.io/docs/plugins/plugin-mongoose.html#how-to-build-nesting-relations
@@ -44,20 +43,20 @@ import {
 UserTC.addResolver({
   name: 'authenticate',
   type: UserTC,
-  args: { idToken : 'String!' },
+  args: { idToken: 'String!' },
   resolve: async ({ args }) => {
     const authenticationResponse = await authenticateTicket(args.idToken)
     if (authenticationResponse.success) {
       let user // this will be used as the return object
 
       // Get the netid of the authenticated user
-      const netid = authenticationResponse.netid
+      const { netid, name } = authenticationResponse
 
       // Check if user exists based on netid
       const exists = await User.exists({ netid })
       if (!exists) {
         // Create user
-        user = await User.create({ netid })
+        user = await User.create({ netid, name })
       } else {
         user = await User.findOne({ netid })
       }

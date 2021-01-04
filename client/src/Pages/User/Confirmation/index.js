@@ -1,10 +1,11 @@
 import '../AlmostThere/almostThere.css'
-import {P, Button, Div} from '../AlmostThere/index'
+import {P, Button, Div, MessageWrapper} from '../AlmostThere/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
 import { ReactComponent as ConfirmationSVG } from './check-circle.svg'
+import { ReactComponent as HedwigLogoSVG} from './../../Login/HedwigLogoFinal.svg'
 import { orderSummary, cartItems } from '../../../apollo'
 
 
@@ -45,15 +46,15 @@ import { orderSummary, cartItems } from '../../../apollo'
     }
     return (
       <div className='mainDiv'>
-        <ConfirmationSVG className='checkSvg' />
+        <HedwigLogoSVG className='checkSvg' />
         <div>
-          <P title>Order Confirmed!</P>
-          <P>
-            You will receive order status updates via <strong>text.</strong>
-          </P>
+          <P title>Order Submitted!</P>
+          <MessageWrapper>
+            <P message>We'll text you updates on your order's status!</P>
+            
+          </MessageWrapper>
         </div>
         <Div vendorCard>
-          <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
           <P header>{order.vendor.name}</P>
           <P header>Pick Up Instruction:</P>
           <P pickup>Pick up at {order.fulfillment.placedAt} at 
@@ -62,7 +63,7 @@ import { orderSummary, cartItems } from '../../../apollo'
         </Div>
 
         <Div>
-          <Button onClick={handleHomeClick}>
+          <Button primary home onClick={handleHomeClick}>
             Home
           </Button>
         </Div>

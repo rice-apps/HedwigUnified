@@ -9,20 +9,29 @@ import styled, { css } from 'styled-components'
 export const Button = styled.button`
   font-size: 20px;
   line-height: 27px;
-  color: #db6142;
+  color: #f3725b;
   height: 5vh;
   background-color: #ffffff;
-  border: 1px solid #db6142;
+  border: 1px solid #f3725b;
   border-radius: 20px;
   margin: auto;
   padding: 5px 20px 5px 20px;
 
-
   ${props =>
     props.primary &&
     css`
-      background: #db6142;
+      background: #f3725b;
       color: white;
+    `};
+  ${props =>
+    props.home &&
+    css`
+      position:absolute;
+      margin-left: auto;
+      margin-right:auto;
+      left:0;
+      right:0;
+      bottom: 6vh;
     `};
 `
 
@@ -59,6 +68,8 @@ export const P = styled.p`
     ${props =>
       props.title &&
       css`
+        font-weight: 700;
+        color: #f3725b;
         font-size: 20pt;
         margin: 8px 16px 8px 16px;
       `};
@@ -66,8 +77,9 @@ export const P = styled.p`
     ${props =>
       props.message &&
       css`
+        font-size: 13.2pt;
         line-height: 16pt;
-        width: 300px;
+        width: 280px;
         margin: 0px 0px 15px 0px;
       `};
 }
@@ -92,10 +104,10 @@ export const Div = styled.div`
     `};
 `
 
-const MessageWrapper = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
+export const MessageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const AlmostThere = ({ classes }) => {
@@ -136,7 +148,7 @@ const AlmostThere = ({ classes }) => {
       </Div>
 
       <Div>
-        <Button onClick={handleHomeClick}>Home</Button>
+        <Button home onClick={handleHomeClick}>Home</Button>
       </Div>
     </div>
   )

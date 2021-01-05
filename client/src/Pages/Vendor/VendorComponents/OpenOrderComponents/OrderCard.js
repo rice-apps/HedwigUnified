@@ -311,7 +311,7 @@ function MakeModalParagraph (props) {
       </ModalParagraphWrapper>
     )
   } else {
-    return <ModalParagraphWrapper>error</ModalParagraphWrapper>
+    return <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
   }
 }
 
@@ -462,7 +462,7 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            <AcceptButton onClick={props.handleClick}> Accept </AcceptButton>
+            <AcceptButton onClick={() => { props.handleClick(); closeAcceptModal()}}> Accept </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>
@@ -495,7 +495,7 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={(closeCancelModal, cancelOrder)}>
+            <AcceptButton onClick={ () => (closeCancelModal(), cancelOrder())}>
               Cancel
             </AcceptButton>
           </ModalButtonsWrapper>

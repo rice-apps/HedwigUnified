@@ -10,6 +10,12 @@ import { gql } from '@apollo/client'
 import moment from 'moment'
 import { GrRestaurant } from 'react-icons/gr'
 
+
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD'
+})
+
 const OrderCardWrapper = styled.div`
   background-color: white;
   border-radius: 20px;
@@ -25,7 +31,7 @@ const OrderCardWrapper = styled.div`
   margin-right: 14px;
   overflow: visible;
   grid-template-columns: 1fr;
-  grid-template-rows: 35px max-content max-content 92px;
+  grid-template-rows: max-content max-content max-content 92px;
   grid-template-areas:
     'OrderTitleSpace'
     'OrderTimeSpace'
@@ -41,6 +47,7 @@ const OrderTitleSpaceWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 1fr;
   font-size: 22px;
+  line-height:23.5px;
   justify-content: center;
   justify-items: center;
   padding-top: 8px;
@@ -147,7 +154,7 @@ function MakeOrderDetails (props) {
           <IoIosAddCircleOutline /> {props.modifiers}
         </div>
       </ItemDescriptionWrapper>
-      <div style={{ fontWeight: 'bold' }}>${props.price}</div>
+      <div style={{ fontWeight: 'bold' }}>{formatter.format(props.price)}</div>
     </OrderDetailsItemWrapper>
   )
 }
@@ -346,7 +353,7 @@ function MakeModalOrderDetails (props) {
       </ModalOrderDetailRow>
       <ModalOrderDetailRow>
         <div>Amount:</div>
-        <div>${props.orderTotal}</div>
+        <div>{formatter.format(props.orderTotal)}</div>
       </ModalOrderDetailRow>
     </ModalOrderDetailsWrapper>
   )
@@ -414,10 +421,10 @@ function MakePaymentSpace (props) {
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
         <div>
-          Tax: <strong>${props.orderTax}</strong>
+          Tax: <strong>{ props.orderTax ? formatter.format(props.orderTax): formatter.format(0)}</strong>
         </div>
         <div>
-          Total: <strong>${props.orderTotal}</strong>
+          Total: <strong>{formatter.format(props.orderTotal)}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>

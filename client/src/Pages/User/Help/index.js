@@ -18,7 +18,10 @@ import {
   BackArrowSection,
   FAQSection,
   FAQHeader,
-  SubHeader
+  SubHeader,
+  ContactSection,
+  ContactText,
+  ContactInfo
 } from './HelpPage.styles'
 
 const CatalogFAQ = [
@@ -142,6 +145,10 @@ function HelpPage () {
           />
         ))}
 
+        <ContactSection>
+          <ContactText> {'Contact Us:'} </ContactText>
+          <ContactInfo> {'********@rice.edu'} </ContactInfo>
+        </ContactSection>
       </FAQSection>
     </>
   )

@@ -68,6 +68,26 @@ const AnswerSection = styled.section`
   border-bottom: #5A59534D 1px solid;
 `
 
+const ContactSection = styled.section`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+  padding: 5vh 0vw 3vh 0vw;
+`
+
+const ContactText = styled.section`
+  font-family: 'Avenir-black';
+  font-size: 5vw;
+`
+
+const ContactInfo = styled.section`
+  font-family: 'Avenir';
+  font-size: 4vw;
+
+  justify-self: end;
+`
+
 export {
   HelpHeader,
   BackArrowSection,
@@ -77,5 +97,8 @@ export {
   QuestionSection,
   QuestionText,
   ExpandSection,
-  AnswerSection
+  AnswerSection,
+  ContactSection,
+  ContactText,
+  ContactInfo
 }

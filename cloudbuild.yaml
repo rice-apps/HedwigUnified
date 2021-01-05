@@ -1,57 +1,67 @@
-steps:
-- name: node:$_NODE_VERSION
-  entrypoint: npm
-  args: ['install']
-  dir: 'api'
-- name: node:$_NODE_VERSION
-  entrypoint: npm
-  args: ['run', 'create-env']
-  env:
-    - 'MONGODB_URL=${_MONGODB_URL}'
-    - 'SERVICE_URL=${_SERVICE_URL}'
-    - 'SECRET=${_SECRET}'
-    - 'DEV_PORT=${_DEV_PORT}'
-    - 'NODE_ENV=${_NODE_ENV}'
-    - 'SQUARE_ACCESS_TOKEN=${_SQUARE_ACCESS_TOKEN}'
-    - 'SHOPIFY_DOMAIN=${_SHOPIFY_DOMAIN}'
-    - 'SHOPIFY_API_KEY=${_SHOPIFY_API_KEY}'
-    - 'SHOPIFY_PASSWORD=${_SHOPIFY_PASSWORD}'
-    - 'SHOPIFY_STOREFRONT_TOKEN=${_SHOPIFY_STOREFRONT_TOKEN}'
-    - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
-    - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
-    - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
-    - 'REDISHOST=${_REDISHOST}'
-    - 'REDISPORT=${_REDISPORT}'
-  dir: 'api'
-- name: node:$_NODE_VERSION
-  entrypoint: npm
-  args: ['run', 'build']
-  dir: 'api'
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', 'api.yaml', '-v', '$_GAE_VERSION']
-  dir: 'api'
-- name: node:$_NODE_VERSION
-  entrypoint: npm
-  args: ['install']
-  dir: 'client'
-- name: node:$_NODE_VERSION
-  entrypoint: npm
-  args: ['run', 'create-env']
-  env:
-    - 'REACT_APP_SERVICE_URL=${_REACT_APP_SERVICE_URL}'
-    - 'REACT_APP_BACKEND_URL=${_REACT_APP_BACKEND_URL}'
-    - 'REACT_APP_GRAPHQL_URL=${_REACT_APP_GRAPHQL_URL}'
-    - 'REACT_APP_GRAPHQL_WS_URL=${_REACT_APP_GRAPHQL_WS_URL}'
-    - 'REACT_APP_FIREBASE_API_KEY=${_REACT_APP_FIREBASE_API_KEY}'
-    - 'REACT_APP_AUTH_DOMAIN=${_REACT_APP_AUTH_DOMAIN}'
-  dir: 'client'
-- name: node:$_NODE_VERSION
-  entrypoint: npm
-  args: ['run', 'build']
-  dir: 'client'
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', 'client.yaml', '-v', '$_GAE_VERSION']
-  dir: 'client'
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'services', '--project', '$PROJECT_ID', 'set-traffic', '--splits', '$_GAE_TRAFFIC']
 timeout: '1600s'
+steps:
+  # Backend
+  # Install backend packages
+  - name: node:$_NODE_VERSION
+    entrypoint: npm
+    args: ['install']
+    dir: 'api'
+  # Create backend .env
+  - name: node:$_NODE_VERSION
+    entrypoint: npm
+    args: ['run', 'create-env']
+    env:
+      - 'MONGODB_URL=${_MONGODB_URL}'
+      - 'SERVICE_URL=${_SERVICE_URL}'
+      - 'SECRET=${_SECRET}'
+      - 'DEV_PORT=${_DEV_PORT}'
+      - 'NODE_ENV=${_NODE_ENV}'
+      - 'SQUARE_ACCESS_TOKEN=${_SQUARE_ACCESS_TOKEN}'
+      - 'SHOPIFY_DOMAIN=${_SHOPIFY_DOMAIN}'
+      - 'SHOPIFY_API_KEY=${_SHOPIFY_API_KEY}'
+      - 'SHOPIFY_PASSWORD=${_SHOPIFY_PASSWORD}'
+      - 'SHOPIFY_STOREFRONT_TOKEN=${_SHOPIFY_STOREFRONT_TOKEN}'
+      - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
+      - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
+      - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
+      - 'REDISHOST=${_REDISHOST}'
+      - 'REDISPORT=${_REDISPORT}'
+    dir: 'api'
+  # Build the backend
+  - name: node:$_NODE_VERSION
+    entrypoint: npm
+    args: ['run', 'build']
+    dir: 'api'
+  # Deploy the backend to App Engine Flex
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', 'api.yaml', '-v', '$_GAE_VERSION']
+    dir: 'api'
+  # Install frontend packages
+  - name: node:$_NODE_VERSION
+    entrypoint: npm
+    args: ['install']
+    dir: 'client'
+  # Generate backend .env
+  - name: node:$_NODE_VERSION
+    entrypoint: npm
+    args: ['run', 'create-env']
+    env:
+      - 'REACT_APP_SERVICE_URL=${_REACT_APP_SERVICE_URL}'
+      - 'REACT_APP_BACKEND_URL=${_REACT_APP_BACKEND_URL}'
+      - 'REACT_APP_GRAPHQL_URL=${_REACT_APP_GRAPHQL_URL}'
+      - 'REACT_APP_GRAPHQL_WS_URL=${_REACT_APP_GRAPHQL_WS_URL}'
+      - 'REACT_APP_FIREBASE_API_KEY=${_REACT_APP_FIREBASE_API_KEY}'
+      - 'REACT_APP_AUTH_DOMAIN=${_REACT_APP_AUTH_DOMAIN}'
+    dir: 'client'
+  # Build the frontend
+  - name: node:$_NODE_VERSION
+    entrypoint: npm
+    args: ['run', 'build']
+    dir: 'client'
+  # Deploy the frontend to App Engine Standard
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', 'client.yaml', '-v', '$_GAE_VERSION']
+    dir: 'client'
+  # Split the traffic to newly deployed version
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'services', '--project', '$PROJECT_ID', 'set-traffic', '--splits', '$_GAE_TRAFFIC']

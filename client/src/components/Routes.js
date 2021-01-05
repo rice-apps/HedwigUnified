@@ -1,6 +1,14 @@
 import { Component, useEffect, Profiler, useState } from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { Routes, Route, useRoutes, Navigate, Redirect, useNavigate, useResolvedPath } from 'react-router-dom'
+import {
+  Routes,
+  Route,
+  useRoutes,
+  Navigate,
+  Redirect,
+  useNavigate,
+  useResolvedPath
+} from 'react-router-dom'
 import {
   gql,
   useQuery,
@@ -108,10 +116,13 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
     errorPolicy: 'none'
   })
 
-  const { data: userData, loading: userLoad, error: userError } = useQuery(GET_USER, {
-    variables: { token: token },
-    errorPolicy: 'none'
-  })
+  const { data: userData, loading: userLoad, error: userError } = useQuery(
+    GET_USER,
+    {
+      variables: { token: token },
+      errorPolicy: 'none'
+    }
+  )
 
   if (error || userError) {
     // Clear the token because something is wrong with it
@@ -138,37 +149,43 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   })
 
   // this route is not an employee route
-  if (!isEmployeeRoute || !(isEmployeeRoute == true)){
+  if (!isEmployeeRoute || !(isEmployeeRoute == true)) {
     // Everything looks good! Now let's send the user on their way
     return <Route {...rest} element={element} />
   }
 
-  const vendor = userData.userOne.vendor;
-  const netid = userData.userOne.netid;
+  const vendor = userData.userOne.vendor
+  const netid = userData.userOne.netid
   // this is not a vendor and we already passed the verification stage
-  if (!vendor){
-    return <Navigate to="/eat"/>
+  if (!vendor) {
+    return <Navigate to='/eat' />
   }
 
-  return <EmployeeRoute netid = {netid} vendor={vendor} element={element} {...rest} />
-
+  return (
+    <EmployeeRoute netid={netid} vendor={vendor} element={element} {...rest} />
+  )
 }
 
-const EmployeeRoute = ({vendor, netid, element, ...rest}) => {
-  const { data: vendorData, loading: vendorLoad, error: vendorErr } = useQuery(GET_VENDOR_DATA, {
-    variables: { name: vendor }
-  })
+const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
+  const { data: vendorData, loading: vendorLoad, error: vendorErr } = useQuery(
+    GET_VENDOR_DATA,
+    {
+      variables: { name: vendor }
+    }
+  )
 
   // this isn't an employee because we have no vendor name
-  if (vendorErr){
-    console.log("vendor", vendorData);
-    return <Navigate to = '/eat' />
+  if (vendorErr) {
+    console.log('vendor', vendorData)
+    return <Navigate to='/eat' />
   }
 
-  if (vendorLoad){ return <p>Waiting...</p> }
+  if (vendorLoad) {
+    return <p>Waiting...</p>
+  }
 
-  console.log("DATA VENDOR", vendorData);
-  console.log('netid', netid);
+  console.log('DATA VENDOR', vendorData)
+  console.log('netid', netid)
   const allowedUsers = vendorData.getVendor.allowedNetid
   // have to modify this with /contact
   if (!allowedUsers.includes(netid)) {
@@ -176,13 +193,13 @@ const EmployeeRoute = ({vendor, netid, element, ...rest}) => {
   }
 
   // this is a true employee
-  return <Route {...rest} element={element} />;
+  return <Route {...rest} element={element} />
 }
 
 const newRoutesArray = [
   {
     path: '/',
-    element: <Navigate to="/eat"/>
+    element: <Navigate to='/eat' />
   },
   {
     path: '/404_page',
@@ -236,34 +253,60 @@ const newRoutesArray = [
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <PrivateRoute isEmployeeRoute = {true} element={<OpenOrdersPage />} /> },
+      {
+        path: '/',
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
+        )
+      },
       {
         path: '/openorders',
-        element: <PrivateRoute isEmployeeRoute = {true} element={<OpenOrdersPage />} />
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
+        )
       },
       {
         path: '/closedorders',
-        element: <PrivateRoute isEmployeeRoute = {true} element={<ClosedOrdersPage />} />
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} />
+        )
       },
       {
         path: '/items',
-        element: <PrivateRoute isEmployeeRoute = {true} element={<ItemsMenuManagementPage />} />
+        element: (
+          <PrivateRoute
+            isEmployeeRoute={true}
+            element={<ItemsMenuManagementPage />}
+          />
+        )
       },
       {
         path: '/modifiers',
-        element: <PrivateRoute isEmployeeRoute = {true} element={<ModifiersMenuManagementPage />} />
+        element: (
+          <PrivateRoute
+            isEmployeeRoute={true}
+            element={<ModifiersMenuManagementPage />}
+          />
+        )
       },
       {
         path: '/set-basic-info',
-        element: <PrivateRoute isEmployeeRoute = {true} element={<SetBasicInfoPage />} />
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<SetBasicInfoPage />} />
+        )
       },
       {
         path: '/set-store-hours',
-        element: <PrivateRoute isEmployeeRoute = {true} element={<SetStoreHoursPage />} />
+        element: (
+          <PrivateRoute
+            isEmployeeRoute={true}
+            element={<SetStoreHoursPage />}
+          />
+        )
       }
     ]
   },
-  { 
+  {
     path: '/*',
     element: <Navigate to={'/404_page'} />
   }

@@ -2,13 +2,13 @@ import {
   BatchRetrieveCatalogObjectsRequest,
   CatalogApi,
   ListCatalogRequest,
-  UpsertCatalogObjectRequest,
-} from "square-connect";
-import { ApolloError } from "apollo-server-express";
-import { v4 as uuid } from "uuid";
-import { ItemTC } from "../models";
-import { DataSourceEnumTC } from "../models/CommonModels";
-import pubsub from "../utils/pubsub";
+  UpsertCatalogObjectRequest
+} from 'square-connect'
+import { ApolloError } from 'apollo-server-express'
+import { v4 as uuid } from 'uuid'
+import { ItemTC } from '../models'
+import { DataSourceEnumTC } from '../models/CommonModels'
+import { pubsub } from '../utils/pubsub'
 
 ItemTC.addResolver({
   name: "getCatalog",
@@ -88,10 +88,12 @@ ItemTC.addResolver({
       });
 
       const modifierLists = modifier_list_info
-        ? modifier_list_info.map((info) =>
-            modifierListId2Data(info.modifier_list_id)
-          )
-        : [];
+        ? modifier_list_info.map(info => [
+            modifierListId2Data(info.modifier_list_id),
+            info.min_selected_modifiers,
+            info.max_selected_modifiers
+          ])
+        : []
 
       const returnedModifierLists = modifierLists.map((modifierList) => {
         const {
@@ -99,9 +101,9 @@ ItemTC.addResolver({
           modifier_list_data: {
             name: modifierListName,
             selection_type,
-            modifiers,
-          },
-        } = modifierList;
+            modifiers
+          }
+        } = modifierList[0]
 
         const returnedModifiers = modifiers.map((modifier) => {
           const {
@@ -133,8 +135,10 @@ ItemTC.addResolver({
           name: modifierListName,
           selectionType: selection_type,
           modifiers: returnedModifiers,
-        };
-      });
+          minModifiers: modifierList[1],
+          maxModifiers: modifierList[2]
+        }
+      })
 
       return {
         dataSourceId: itemId,
@@ -216,10 +220,8 @@ ItemTC.addResolver({
 
       // Get all modifier list IDs that correspond to this item
       // this mapping below is breaking because the modifier_list_info is null
-      console.log("modifier_list_info is null", modifier_list_info);
-      let returnedModifierLists;
+      let returnedModifierLists
       if (modifier_list_info) {
-        console.log("Actually fired?");
         const modifier_list_ids = modifier_list_info.map(
           (info) => info.modifier_list_id
         );
@@ -244,7 +246,11 @@ ItemTC.addResolver({
             },
           } = modifierList;
 
-          const returnedModifiers = modifiers.map((modifier) => {
+          const parentListInfo = modifier_list_info.filter(
+            info => info.modifier_list_id === parentListId
+          )[0]
+
+          const returnedModifiers = modifiers.map(modifier => {
             const {
               id,
               modifier_data: {
@@ -274,8 +280,10 @@ ItemTC.addResolver({
             name: modifierListName,
             selectionType: selection_type,
             modifiers: returnedModifiers,
-          };
-        });
+            minModifiers: parentListInfo.min_selected_modifiers,
+            maxModifiers: parentListInfo.max_selected_modifiers
+          }
+        })
       }
 
       // Step 3: Return product in common data model format
@@ -450,7 +458,11 @@ ItemTC.addResolver({
           },
         } = modifierList;
 
-        const returnedModifiers = modifiers.map((modifier) => {
+        const parentListInfo = modifier_list_info.filter(
+          info => info.modifier_list_id === parentListId
+        )[0]
+
+        const returnedModifiers = modifiers.map(modifier => {
           const {
             id,
             modifier_data: {
@@ -480,8 +492,10 @@ ItemTC.addResolver({
           name: modifierListName,
           selectionType: selection_type,
           modifiers: returnedModifiers,
-        };
-      });
+          minModifiers: parentListInfo.min_selected_modifiers,
+          maxModifiers: parentListInfo.max_selected_modifiers
+        }
+      })
 
       // Step 3: Return product in common data model format
       const CDMProduct = {

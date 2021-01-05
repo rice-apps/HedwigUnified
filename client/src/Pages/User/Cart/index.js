@@ -11,7 +11,6 @@ import {
 import logo from '../../../images/cohenhouse.png'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
-import Payments from './Payments.js'
 import currency from 'currency.js'
 import { cartItems, orderSummary } from '../../../apollo'
 import dispatch from '../Products/FunctionalCart'

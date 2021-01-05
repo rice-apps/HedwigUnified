@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import { AiFillHome } from 'react-icons/ai'
 import RalewayFont from './../../../fonts/Raleway/RalewayFont.js'
 
-
-
 const BottomNavigationWrapper = styled.div`
   position: fixed;
   bottom: 0px;
@@ -20,7 +18,7 @@ const BottomNavigationWrapper = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1;
-  font-size:2.4vh;
+  font-size: 2.4vh;
 `
 
 const BottomNavigationItem = styled.div`
@@ -33,7 +31,7 @@ const BottomNavigationItem = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-weight:500;
+  font-weight: 500;
   &&:active {
     transform: scale(1.001);
     background-color: #fac8bb;
@@ -51,7 +49,7 @@ function BottomAppBar () {
     <BottomNavigationWrapper>
       <RalewayFont />
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
-        <GrCart style={{fontSize: "2.8vh"}}/>
+        <GrCart style={{ fontSize: '2.8vh' }} />
         <BottomNavigationText>View Cart</BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>

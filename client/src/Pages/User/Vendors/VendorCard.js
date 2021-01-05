@@ -11,7 +11,7 @@ function VendorCard ({ vendor }) {
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
 
   // make testMode true if you want the store to be open
-  const testMode = true
+  const testMode = false
 
   const navigate = useNavigate()
 
@@ -27,7 +27,7 @@ function VendorCard ({ vendor }) {
 
   // includes time
   const current_date = new Date()
-  const currentDay = (testMode) ? 1 : current_date.getDay()
+  const currentDay = testMode ? 1 : current_date.getDay()
   const dayObj = hours[currentDay]
   console.log(dayObj)
   const convertTimeToNum = time => {
@@ -53,7 +53,9 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
-    const currentTime = testMode ? 9 : current_date.getHours() + current_date.getMinutes() / 60
+    const currentTime = testMode
+      ? 9
+      : current_date.getHours() + current_date.getMinutes() / 60
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
       console.log(i, startTime)
@@ -63,10 +65,10 @@ function VendorCard ({ vendor }) {
       } else if (currentTime > endTime - 0.25 && currentTime <= endTime) {
         return { status: 'kitchenClosed', nextClose: dayObj.end[i] }
       } else if (currentTime < startTime) {
-        return { status: 'closed', nextOpen: dayObj.start[i], restOfDay:true }
+        return { status: 'closed', nextOpen: dayObj.start[i], restOfDay: true }
       }
     }
-    return { status: 'closed', nextOpen: dayObj.start[0], restOfDay:false }
+    return { status: 'closed', nextOpen: dayObj.start[0], restOfDay: false }
   }
 
   const handleClickStatus = () => {
@@ -86,7 +88,7 @@ function VendorCard ({ vendor }) {
 
   const showStatusDetail = () => {
     if (openStatus.status === 'kitchenClosed' && statusDetail) {
-      console.log("Status Detail", statusDetail)
+      console.log('Status Detail', statusDetail)
       return (
         <div className='detailWrapper'>
           <div className='detailBox'>
@@ -115,10 +117,14 @@ function VendorCard ({ vendor }) {
             </div>
             <div className='detailText'>
               <h1>Closed</h1>
-              {openStatus.restOfDay ? (<p>
-                {' '}
-                {name} will be opening at {openStatus.nextOpen}
-              </p>) : (<p> {name} is closed for the day! </p>)}
+              {openStatus.restOfDay ? (
+                <p>
+                  {' '}
+                  {name} will be opening at {openStatus.nextOpen}
+                </p>
+              ) : (
+                <p> {name} is closed for the day! </p>
+              )}
             </div>
           </div>
         </div>

@@ -1,21 +1,13 @@
-runtime: nodejs
-env: flex
+runtime: nodejs12
 service: default
-
-automatic_scaling:
-  min_num_instances: 1
-
-resources:
-  cpu: 1
-  memory_gb: 1.0
-  disk_size_gb: 10
-
 handlers:
   # Serve all static files with urls ending with a file extension
   - url: /(.*\..+)$
     static_files: build/\1
     upload: build/(.*\..+)$
+    secure: always
     # catch all handlers to index.html
   - url: /.*
     static_files: build/index.html
     upload: build/index.html
+    secure: always

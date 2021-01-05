@@ -43,16 +43,12 @@ function VendorList ({ classes }) {
 
   return (
     <>
-    <ProfilePane />
+      <ProfilePane />
       <div
         style={{ paddingTop: '10vh', paddingBottom: '10vh' }}
         className='vendorPage'
       >
-        <BuyerHeader
-          style={{
-            
-          }}
-        />
+        <BuyerHeader style={{}} />
         <div>
           {getVendors.map(vendor => {
             return <VendorCard key={vendor.name} vendor={vendor} />

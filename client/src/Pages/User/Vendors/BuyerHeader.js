@@ -36,7 +36,7 @@ const HedwigWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #db6142;
+  color: #F3725B;
 `
 
 function BuyerHeader (props) {

@@ -17,7 +17,7 @@ import { makeVar } from '@apollo/client'
 
 export const cartItems = makeVar([])
 // export const orderSummary = makeVar({vendor: null})
-export const orderSummary = makeVar({ vendor: null, time: null })
+export const orderSummary = makeVar({ vendor: {}, time: null, fulfillment: {}})
 
 export const userProfile = makeVar([])
 

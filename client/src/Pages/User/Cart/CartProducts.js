@@ -3,7 +3,7 @@ import Thumb from './Thumb.js'
 import logo from '../../../images/headphones.jpg'
 import dispatch from '../Products/FunctionalCart'
 import { cartItems } from '../../../apollo'
-import './cart.scss'
+import './cart.css'
 
 // import Dropdown from "react-dropdown";
 // import "react-dropdown/style.css";

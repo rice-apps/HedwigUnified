@@ -26,11 +26,11 @@ export const Button = styled.button`
   ${props =>
     props.home &&
     css`
-      position:absolute;
+      position: absolute;
       margin-left: auto;
-      margin-right:auto;
-      left:0;
-      right:0;
+      margin-right: auto;
+      left: 0;
+      right: 0;
       bottom: 6vh;
     `};
 `
@@ -148,7 +148,9 @@ const AlmostThere = ({ classes }) => {
       </Div>
 
       <Div>
-        <Button home onClick={handleHomeClick}>Home</Button>
+        <Button home onClick={handleHomeClick}>
+          Home
+        </Button>
       </Div>
     </div>
   )

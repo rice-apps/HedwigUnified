@@ -33,7 +33,7 @@ height: 100%;
 
 .statusUpdate {
   font-size: 15pt;
-  color: #F3725B;
+  color: #f3725b;
   font-family: 'Avenir Book', 'Arial Book', sans-serif;
   text-align: center;
   margin: 8px 16px 8px 16px;
@@ -67,7 +67,6 @@ height: 100%;
   text-align: center;
   font-family: 'Avenir Book', 'Arial Book', sans-serif;
 }
-
 
 .buttonsContainer {
   display: flex;

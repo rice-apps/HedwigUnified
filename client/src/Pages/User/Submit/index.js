@@ -10,7 +10,7 @@ import dispatch from '../Products/FunctionalCart'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartItem from './CartItem'
-import '../Cart/cart.scss'
+import '../Cart/cart.css'
 
 function Submit () {
   const navigate = useNavigate()

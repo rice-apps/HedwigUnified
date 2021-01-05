@@ -475,7 +475,7 @@ function CartDetail() {
             <p css={{ alignSelf: "center", color: "red" }}>
               {" "}
               Error! Submission form contains null value for {nullError}. Please
-              update your profile.{" "}
+              complete your profile and order.{" "}
             </p>
           )}
 

@@ -26,7 +26,6 @@ export const CREATE_ORDER = gql`
     $studentId: String!
     $name: String!
     $phone: String!
-    $email: String!
     $time: String!
     $key: String!
     $lineItems: [LineItemInput]!
@@ -40,7 +39,7 @@ export const CREATE_ORDER = gql`
         studentId: $studentId
         idempotencyKey: $key
         lineItems: $lineItems
-        recipient: { name: $name, phone: $phone, email: $email }
+        recipient: { name: $name, phone: $phone }
         pickupTime: $time
         paymentType: $type
         cohenId: $cohenId
@@ -111,8 +110,7 @@ const getRecipient = () => {
   const user = userProfile();
   return {
     name: user.name,
-    phone: user.phone,
-    email: user.email,
+    phone: user.phone
   };
 };
 
@@ -147,7 +145,6 @@ export const createRecord = (items, paymentType, cohenId) => {
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
-    email: recipient.email,
     time: orderSummary().time ? moment(orderSummary().time).format() : null,
     location: orderSummary().vendor.locationIds[0],
     type: paymentType,

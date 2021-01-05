@@ -98,7 +98,6 @@ function ProfilePane () {
       <FaBars
         onClick={() => {
           setShowProfile(!showProfile)
-          console.log(showProfile)
         }}
         style={{
           position: 'fixed',
@@ -116,7 +115,6 @@ function ProfilePane () {
             <FaTimes
               onClick={() => {
                 setShowProfile(!showProfile)
-                console.log(showProfile)
               }}
             />
           </div>

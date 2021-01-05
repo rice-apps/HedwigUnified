@@ -29,6 +29,7 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
+import HelpPage from '../Pages/User/Help'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
@@ -268,6 +269,12 @@ const newRoutesArray = [
     path: '/contact',
     element: <ContactForm />
   },
+  // Help/FAQ page:
+  {
+    path: '/help',
+    element: <HelpPage />
+  },
+
   // Cohen house payment page:
   {
     path: '/cohen',

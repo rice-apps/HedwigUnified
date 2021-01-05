@@ -20,7 +20,7 @@ const LineItemTC = sc.createObjectTC({
       description:
         'The amount of this item to order. Inputted as String for Square compatibility purposes'
     },
-    catalog_object_id: {
+    catalogObjectId: {
       type: 'String!',
       description: 'The ID of the variant of this item'
     },
@@ -34,10 +34,10 @@ const LineItemTC = sc.createObjectTC({
 const OrderLineItemModifierTC = sc.createObjectTC(`
   type OrderLineItemModifier {
     uid: String
-    catalog_object_id: String,
+    catalogObjectId: String,
     name: String
-    base_price_money: Money
-    total_price_money: Money
+    basePriceMoney: Money
+    totalPriceMoney: Money
   }
 `)
 
@@ -47,11 +47,11 @@ const PreviousLineItemTC = sc.createObjectTC({
   fields: {
     name: 'String',
     quantity: 'String',
-    catalog_object_id: 'String',
-    variation_name: 'String',
+    catalogObjectId: 'String',
+    variationName: 'String',
     modifiers: [OrderLineItemModifierTC],
-    total_money: MoneyTC,
-    total_tax: MoneyTC
+    totalMoney: MoneyTC,
+    totalTax: MoneyTC
   }
 })
 
@@ -148,8 +148,8 @@ const FindOrdersFulfillmentFilterTC = sc.createInputTC({
   name: 'FindOrderFulfillmentFilterInput',
   description: 'Input type for filtering by fulfillment',
   fields: {
-    fulfillment_types: '[String]',
-    fulfillment_states: '[String]'
+    fulfillmentTypes: '[String]',
+    fulfillmentStates: '[String]'
   }
 })
 
@@ -165,10 +165,10 @@ const FilterOrderInputTC = sc.createInputTC({
   name: 'FilterOrderInput',
   description: 'Input type for filter orders',
   fields: {
-    state_filter: FilterOrderStateInputTC,
-    date_time_filter: FindOrdersDateTimeFilterTC,
-    fulfillment_filter: FindOrdersFulfillmentFilterTC,
-    customer_filter: '[String]'
+    stateFilter: FilterOrderStateInputTC,
+    dateTimeFilter: FindOrdersDateTimeFilterTC,
+    fulfillmentFilter: FindOrdersFulfillmentFilterTC,
+    customerFilter: '[String]'
   }
 })
 
@@ -176,8 +176,8 @@ const SortOrderInputTC = sc.createInputTC({
   name: 'SortOrderInput',
   description: 'Input type for sorting orders',
   fields: {
-    sort_field: SortOrderTimeEnumTC,
-    sort_order: SortOrderEnumTC
+    sortField: SortOrderTimeEnumTC,
+    sortOrder: SortOrderEnumTC
   }
 })
 

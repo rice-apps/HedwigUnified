@@ -1,8 +1,3 @@
-import {
-  OrdersApi,
-  CreateOrderRequest,
-  SearchOrdersRequest
-} from 'square-connect'
 import { ApolloError } from 'apollo-server-express'
 import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
 import { pubsub } from '../utils/pubsub'
@@ -12,7 +7,9 @@ import {
   FindManyOrderPayloadTC,
   UpdateOrderTC
 } from '../models/OrderModel'
+import squareClient from '../square'
 import TwilioClient from '../twilio'
+import { ApiError } from 'square'
 
 OrderTC.addResolver({
   name: 'findOrders',
@@ -33,7 +30,7 @@ OrderTC.addResolver({
   resolve: async ({ args }) => {
     const { locations, cursor, limit, filter, sort } = args
 
-    const api = new OrdersApi()
+    const ordersApi = squareClient.ordersApi
 
     const query = {}
 
@@ -45,81 +42,82 @@ OrderTC.addResolver({
       query.sort = sort
     }
 
-    const searchOrderResponse = await api.searchOrders({
-      ...new SearchOrdersRequest(),
-      location_ids: locations,
-      cursor,
-      limit,
-      query,
-      return_entries: false
-    })
+    try {
+      const {
+        result: { cursor: newCursor, orders }
+      } = await ordersApi.searchOrders({
+        locationIds: locations,
+        cursor,
+        limit,
+        query,
+        returnEntries: false
+      })
 
-    if (searchOrderResponse.errors) {
-      return new ApolloError(
-        `Finding orders failed with errors: ${searchOrderResponse.errors}`
+      const filteredOrders = orders.filter(
+        order => typeof order.fulfillments !== 'undefined'
       )
-    }
 
-    const { cursor: newCursor, orders } = searchOrderResponse
+      const returnedOrders = filteredOrders.map(async order => {
+        const orderTracker = await OrderTracker.findOne({ orderId: order.id })
 
-    let filteredOrders = orders.filter(
-      order => typeof order.fulfillments !== 'undefined'
-    )
-
-    const returnedOrders = filteredOrders.map(async order => {
-      const orderTracker = await OrderTracker.findOne({ orderId: order.id })
-
-      console.log(order.fulfillments)
-
-      return {
-        id: order.id,
-        merchant: order.location_id,
-        customer: {
-          name: order.fulfillments[0].pickup_details.recipient.display_name,
-          email: order.fulfillments[0].pickup_details.recipient.email_address,
-          phone: order.fulfillments[0].pickup_details.recipient.phone_number
-        },
-        items: order.line_items?.map(lineItem => ({
-          name: lineItem.name,
-          quantity: lineItem.quantity,
-          catalog_object_id: lineItem.catalog_object_id,
-          variation_name: lineItem.variation_name,
-          total_money: lineItem.total_money,
-          total_tax: lineItem.total_tax,
-          modifiers: lineItem.modifiers?.map(modifier => ({
-            uid: modifier.uid,
-            catalog_object_id: modifier.catalog_object_id,
-            name: modifier.name,
-            base_price_money: modifier.base_price_money,
-            total_price_money: modifier.total_price_money
-          }))
-        })),
-        totalTax: order.total_tax_money,
-        totalDiscount: order.total_discount_money,
-        total: order.total_money,
-        orderStatus: order.state,
-        cohenId: order.metadata?.cohenId,
-        studentId: order.metadata?.studentId,
-        fulfillment: {
-          uid: order.fulfillments[0].uid,
-          state: orderTracker?.status || order.fulfillments[0].state,
-          pickupDetails: {
-            pickupAt: order.fulfillments[0].pickup_details.pickup_at,
-            placedAt: order.fulfillments[0].pickup_details.placed_at,
-            recipient: {
-              name: order.fulfillments[0].pickup_details.recipient.display_name,
-              email:
-                order.fulfillments[0].pickup_details.recipient.email_address,
-              phone: order.fulfillments[0].pickup_details.recipient.phone_number
+        return {
+          id: order.id,
+          merchant: order.locationId,
+          customer: {
+            name: order.fulfillments[0].pickupDetails.recipient.displayName,
+            email: order.fulfillments[0].pickupDetails.recipient.emailAddress,
+            phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
+          },
+          items: order.lineItems.map(lineItem => ({
+            name: lineItem.name,
+            quantity: lineItem.quantity,
+            catalogObjectId: lineItem.catalogObjectId,
+            variationName: lineItem.variationName,
+            totalMoney: lineItem.totalMoney,
+            totalTax: lineItem.totalTax,
+            modifiers: lineItem.modifiers?.map(modifier => ({
+              uid: modifier.uid,
+              catalogObjectId: modifier.catalogObjectId,
+              name: modifier.name,
+              basePriceMoney: modifier.basePriceMoney,
+              totalPriceMoney: modifier.totalPriceMoney
+            }))
+          })),
+          totalTax: order.totalTaxMoney,
+          totalDiscount: order.totalDiscountMoney,
+          total: order.totalMoney,
+          orderStatus: order.state,
+          cohenId: order.metadata?.cohenId,
+          studentId: order.metadata?.studentId,
+          fulfillment: {
+            uid: order.fulfillments[0].uid,
+            state: orderTracker?.status || order.fulfillments[0].state,
+            pickupDetails: {
+              pickupAt: order.fulfillments[0].pickupDetails.pickupAt,
+              placedAt: order.fulfillments[0].pickupDetails.placedAt,
+              recipient: {
+                name: order.fulfillments[0].pickupDetails.recipient.displayName,
+                email:
+                  order.fulfillments[0].pickupDetails.recipient.emailAddress,
+                phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
+              }
             }
           }
         }
-      }
-    })
+      })
 
-    return {
-      cursor: newCursor,
-      orders: returnedOrders
+      return {
+        cursor: newCursor,
+        orders: returnedOrders
+      }
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return new ApolloError(
+          `Finding orders using Square failed because ${error.result}`
+        )
+      }
+
+      return new ApolloError(`Something went wrong finding orders`)
     }
   }
 })

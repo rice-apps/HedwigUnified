@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
@@ -6,8 +5,7 @@ import { CgMathPlus } from 'react-icons/cg'
 import Modal from 'react-modal'
 
 import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
-import { useQuery, gql, useMutation, InMemoryCache } from '@apollo/client'
-import { current } from 'immer'
+import { useQuery, gql, useMutation } from '@apollo/client'
 
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
@@ -87,7 +85,7 @@ const StatusDropdown = styled.select`
 `
 
 function CreateStatusDropdown (props) {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
   function onChangeIsClosed (value) {
     window.location.reload()
@@ -176,9 +174,7 @@ const HoursInterval = styled.div`
 const DaysofTheWeek = ['MON', 'TUE', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']
 
 function HoursItem (props) {
-  const [updateDeleteTime, { data, loading, error }] = useMutation(
-    UPDATE_VENDOR
-  )
+  const [updateDeleteTime] = useMutation(UPDATE_VENDOR)
 
   function deleteStartEndTime () {
     const originalHours = props.currentHours
@@ -318,48 +314,10 @@ const ConfirmButton = styled.button`
 `
 
 function MakeTimeInput (props) {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
   let startTime = null
 
-  function onChangeHourModal (inputTime) {
-    if (props.id === 'addedStartTime') {
-      startTime = inputTime
-    }
-
-    if (props.id === 'addedEndTime') {
-      const originalHours = props.currentHours
-      const updatedHours = [...originalHours]
-      const updatedDay = { ...updatedHours[props.index] }
-
-      const updatedStartTime = updatedDay.start.concat(startTime)
-      console.log('start time after ', updatedStartTime)
-      updatedDay.start = updatedStartTime
-
-      console.log('end time before: ', updatedDay.end)
-
-      const updatedEndTime = updatedDay.end.concat(inputTime)
-      console.log('end time after: ', updatedEndTime)
-      updatedDay.end = updatedEndTime
-
-      updatedHours[props.index] = updatedDay
-      updatedHours.map((day, index) => {
-        const dayCopy = { ...updatedHours[index] }
-        delete dayCopy['__typename']
-        updatedHours[index] = dayCopy
-      })
-
-      toggleIsClosed({
-        variables: {
-          name: 'Cohen House',
-          hours: updatedHours
-        }
-      })
-    }
-    // window.location.reload();
-
-    // props.updateCurrentHours(updatedHours);
-  }
   // This function formats the time so that it is not in 24h format
   function updateAddedTime (addedTime) {
     const updateHourState = props.setHours
@@ -397,7 +355,7 @@ function MakeTimeInput (props) {
 }
 
 function MakeAddHoursButton (props) {
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [addedStartTime, setAddedStartTime] = useState('')

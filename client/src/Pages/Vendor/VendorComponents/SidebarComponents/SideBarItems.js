@@ -1,9 +1,8 @@
 import Collapsible from 'react-collapsible'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import './SidebarCollapsible.css'
 import { FcCollapse, FcExpand } from 'react-icons/fc'
 import { NavLink } from 'react-router-dom'
-import { IconContext } from 'react-icons'
 
 const SideBarItemsWrapper = styled.div`
   display: flex;

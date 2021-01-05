@@ -1,5 +1,5 @@
 import './ProfilePane.css'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
+import { gql, useQuery, useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
@@ -40,7 +40,7 @@ const EDIT_PHONE = gql`
   }
 `
 
-const getLinks = user => {
+const getLinks = () => {
   const links = [
     { icon: 'hands-helping', content: 'Help', path: '/help' },
 
@@ -72,7 +72,7 @@ function ProfilePane () {
 
   const [
     editPhone,
-    { loading: phone_loading, error: phone_error, data: phone_data }
+    { loading: phone_loading, error: phone_error }
   ] = useMutation(EDIT_PHONE)
 
   if (error) return <p>Error!</p>

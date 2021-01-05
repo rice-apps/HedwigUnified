@@ -1,6 +1,4 @@
 import './almostThere.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { cartItems, orderSummary } from '../../../apollo'
@@ -110,7 +108,7 @@ export const MessageWrapper = styled.div`
   align-items: center;
 `
 
-const AlmostThere = ({ classes }) => {
+const AlmostThere = ({}) => {
   cartItems([])
   const navigate = useNavigate()
   const handleHomeClick = () => {

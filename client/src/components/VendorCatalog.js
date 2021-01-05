@@ -1,21 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 
 // Catalog Mock Data
-const vendor_catalog = [
-  {
-    catagory: 'sandwich',
-    name: 'chicken sandwich',
-    varients: [{ regular: 3.5 }, { extra_chicken: 4.5 }]
-  },
-  {
-    catagory: 'drink',
-    name: 'iced tea',
-    varients: [
-      { name: 'regular', price: 1.5 },
-      { name: 'large', price: 2.75 }
-    ]
-  }
-]
 
 // Finds the cheapest varient within an item
 export const FIND_CHEAPEST_VARIENT = item => {

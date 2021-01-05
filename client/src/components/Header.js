@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components'
-import { useHistory } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 
 const Primary = css`
@@ -34,14 +33,6 @@ const Logo = styled.div`
   }
 `
 
-const OrdersLink = styled.a`
-  grid-column: 2/3;
-  :hover {
-    color: red;
-    cursor: pointer;
-  }
-  align-self: center;
-`
 const VendorsLink = styled.a`
   grid-column: Vendors
   :hover {
@@ -60,15 +51,6 @@ const CartLink = styled.a`
   }
   align-self: center;
   justify-self: center;
-`
-
-const SettingsLink = styled.a`
-  grid-column: 4/5;
-  :hover {
-    color: red;
-    cursor: pointer;
-  }
-  align-self: center;
 `
 
 const Header = () => {

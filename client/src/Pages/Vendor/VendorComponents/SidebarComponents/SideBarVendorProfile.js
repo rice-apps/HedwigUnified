@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Toggle from 'react-toggle'
 import './Toggle.css'
 import { gql, useMutation, useQuery } from '@apollo/client'
@@ -53,7 +53,6 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
     }
   }
 `
-const SideBarVendorProfileWrapper = styled.div``
 // const merchantId = '5f836204280dd576b7e828ad'
 
 function SideBarVendorProfile ({ setLogo }) {

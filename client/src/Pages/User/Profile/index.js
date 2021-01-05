@@ -1,5 +1,5 @@
 import './index.css'
-import { gql, useQuery, useApolloClient } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

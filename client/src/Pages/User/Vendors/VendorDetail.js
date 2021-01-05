@@ -1,6 +1,5 @@
-import { useState, useContext, useEffect } from 'react'
-import { useQuery, gql, useMutation, ApolloError } from '@apollo/client'
-import { useParams, useHistory, useLocation } from 'react-router'
+import { useQuery, gql } from '@apollo/client'
+import { useParams, useHistory } from 'react-router'
 import ErrorPage from '../../../components/ErrorPage'
 
 const GET_VENDOR_PRODUCTS_QUERY = gql`

@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
-import { useParams, useHistory } from 'react-router'
+import { useEffect, useState, Fragment } from 'react'
+import { gql, useQuery, useMutation } from '@apollo/client'
 import {
   createRecord,
   checkNullFields,
@@ -9,16 +8,13 @@ import {
   GET_VENDOR
 } from './util'
 import logo from '../../../images/cohenhouse.png'
-import { centerCenter, row, column, endStart } from '../../../Styles/flex'
+import { centerCenter, row } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
 import { cartItems, orderSummary } from '../../../apollo'
-import dispatch from '../Products/FunctionalCart'
-import Select from 'react-select'
 import { TimePicker } from 'antd'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
-import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
 import './cart.css'
 
@@ -82,16 +78,16 @@ const computeAvailableMinutes = (
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
-  const [nullError, setNullError] = useState(checkNullFields())
+  const [nullError] = useState(checkNullFields())
   // eval to a field string if user's name, student id, or phone number is null
-  const { loading, error, data } = useQuery(GET_VENDOR)
+  const { loading, error } = useQuery(GET_VENDOR)
   const [
     createOrder,
-    { loading: order_loading, error: order_error, data: order_data }
+    { loading: order_loading, error: order_error }
   ] = useMutation(CREATE_ORDER)
   const [
     createPayment,
-    { loading: payment_loading, error: payment_error, data: payment_data }
+    { loading: payment_loading, error: payment_error }
   ] = useMutation(CREATE_PAYMENT)
 
   const navigate = useNavigate()
@@ -105,7 +101,6 @@ function CartDetail () {
   const {
     loading: avail_loading,
     error: avail_error,
-    data: avail_data,
     refetch: avail_refetch
   } = useQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids },
@@ -138,13 +133,6 @@ function CartDetail () {
 
       const orderResponse = await createOrder(q)
       const orderJson = orderResponse.data.createOrder
-      const createPaymentResponse = await createPayment({
-        variables: {
-          orderId: orderJson.id,
-          subtotal: totals.subtotal * 100,
-          currency: 'USD'
-        }
-      })
       orderSummary(
         Object.assign(orderSummary(), {
           orderId: orderJson.id,
@@ -183,7 +171,7 @@ function CartDetail () {
 
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
-  const [dummyDelete, setDummyDelete] = useState(0)
+  const [, setDummyDelete] = useState(0)
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
@@ -209,8 +197,6 @@ function CartDetail () {
 
   let startHour1 = parseInt(businessHour.start[0].split(':')[0])
   let endHour1 = parseInt(businessHour.end[0].split(':')[0])
-  let startHour2 = parseInt(businessHour.start[0].split(':')[1])
-  let endHour2 = parseInt(businessHour.end[0].split(':')[1])
   if (businessHour.start[0].includes('p.m.')) {
     startHour1 += 12
   }
@@ -218,10 +204,8 @@ function CartDetail () {
     endHour1 += 12
   }
   if (businessHour.start[1].includes('p.m.')) {
-    startHour2 += 12
   }
   if (businessHour.end[1].includes('p.m.')) {
-    endHour2 += 12
   }
   const startMinute1 = parseInt(
     businessHour.start[0].split(':')[1].substring(0, 2)
@@ -288,14 +272,14 @@ function CartDetail () {
             <hr className='breakline' />
             {cartItems().map(item => {
               return (
-                <React.Fragment>
+                <Fragment>
                   <CartProduct
                     product={item}
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
                   <hr className='breakline' />
-                </React.Fragment>
+                </Fragment>
               )
             })}
           </div>

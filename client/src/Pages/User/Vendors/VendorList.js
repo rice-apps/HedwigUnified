@@ -1,16 +1,11 @@
-import { useQuery, gql } from '@apollo/client'
-import { useHistory, useLocation } from 'react-router'
+import { useQuery } from '@apollo/client'
 
-import withStyles from '@material-ui/core/styles/withStyles'
 import './vendor.css'
 import '../../../fonts/style.css'
 
 // fontawesome imports
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { PickupDropdown } from '../../../components/PickupDropdown'
-import { VENDOR_QUERY, GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
+import { GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
 import VendorCard from './VendorCard'
 import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
@@ -32,7 +27,7 @@ import ProfilePane from './ProfilePane.js'
 //     }
 // `
 
-function VendorList ({ classes }) {
+function VendorList ({}) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
   if (error) return <p>{error.message}</p>

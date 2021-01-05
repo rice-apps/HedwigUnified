@@ -1,11 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import {
-  useQuery,
-  gql,
-  useMutation,
-  useApolloClient,
-  ApolloError
-} from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { useQuery, gql, useMutation } from '@apollo/client'
 import { useParams, useHistory } from 'react-router'
 import omitDeep from 'omit-deep-lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -167,7 +161,6 @@ function ProductDetail () {
   const [count, setCount] = useState(1)
   const history = useHistory()
 
-  const userID = ''
   const vendorID = '5ecf473841ccf22523280c3b'
 
   // We'll use this hook to initialize our cart when we want to create an order
@@ -200,12 +193,11 @@ function ProductDetail () {
   const {
     _id: productID,
     name,
-    type,
     description,
     price,
     category
   } = productData.productOne
-  const { _id: cartID, items, fulfillment } = cartData.findOrCreateCart
+  const { _id: cartID, items } = cartData.findOrCreateCart
 
   // Check if this product is already in the cart
   let item

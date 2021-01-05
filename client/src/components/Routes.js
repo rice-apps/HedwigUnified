@@ -1,28 +1,12 @@
-import { Component, useEffect, Profiler, useState } from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import {
-  Routes,
-  Route,
-  useRoutes,
-  Navigate,
-  Redirect,
-  useNavigate,
-  useResolvedPath
-} from 'react-router-dom'
-import {
-  gql,
-  useQuery,
-  useApolloClient,
-  createSignalIfSupported
-} from '@apollo/client'
+import { Route, useRoutes, Navigate } from 'react-router-dom'
+import { gql, useQuery, useApolloClient } from '@apollo/client'
 import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
-import Home from '../Pages/Home'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
 import Confirmation from '../Pages/User/Confirmation'
 // Vendor imports
-import Orders from '../Pages/Vendor/Orders'
 // import VendorSettings from '../Pages/Vendor/Settings';
 import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
@@ -34,7 +18,6 @@ import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
 import Product from '../Pages/User/Products/Product'
-import VendorsideTemplate from '../Pages/Vendor/VendorComponents/VendorGridContainer.js'
 import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
 import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
 import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js'

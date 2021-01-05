@@ -41,6 +41,7 @@ import { orderSummary, cartItems } from '../../../apollo'
     const navigate = useNavigate()
     cartItems([])
     const handleHomeClick = () => {
+      orderSummary({ vendor: null, time: null })
       return navigate(`/eat`)
     }
     return (

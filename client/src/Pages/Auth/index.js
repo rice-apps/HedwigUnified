@@ -78,7 +78,8 @@ function Auth () {
     Object.assign(userProfile(), {
       name:
         lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
-      studentId: lstorage.getItem('id')
+      studentId: lstorage.getItem('id'),
+      email: lstorage.getItem('email')
     })
   )
   // Set token in local storage

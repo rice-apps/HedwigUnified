@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { orderSummary } from "../../../apollo";
+import { orderSummary, userProfile } from "../../../apollo";
 import moment from "moment";
 const { v4: uuidv4 } = require("uuid");
 
@@ -107,12 +107,12 @@ export const UPDATE_ORDER_TRACKER = gql`
   }
 `;
 
-const sStorage = localStorage;
 const getRecipient = () => {
+  const user = userProfile();
   return {
-    name: sStorage.getItem("first name") + " " + sStorage.getItem("last name"),
-    phone: sStorage.getItem("phone"),
-    email: sStorage.getItem("email"),
+    name: user.name,
+    phone: user.phone,
+    email: user.email,
   };
 };
 
@@ -139,28 +139,37 @@ const getLineItems = (items) => {
 
 export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient();
+  const user = userProfile();
   console.log(orderSummary());
   return {
-    studentId: sStorage.getItem("id"),
+    studentId: user.studentId,
     key: uuidv4(),
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
     email: recipient.email,
-    time: moment(orderSummary().time).format(),
+    time: orderSummary().time ? moment(orderSummary().time).format() : null,
     location: orderSummary().vendor.locationIds[0],
     type: paymentType,
     cohenId: cohenId
   };
 };
 
-export const checkNullFields = () => {
-  const fields = ["first name", "last name", "phone", "id"];
+export const checkNullFields = (source) => {
+  const fields = ['name', 'phone', 'studentId', 'type', 'time']
+  const detailedInfo = ['name', 'phone number', 'rice student id', 'payment method', 'pickup time']
   let field;
-  for (field of fields) {
-    if (sStorage.getItem(field) == "") {
-      return field;
+  console.log(source)
+  for (field in fields) {
+    if (!source.variables[fields[field]]) {
+      console.log(detailedInfo[field])
+      return detailedInfo[field]
     }
+  }
+  console.log(source.variables.cohenId)
+  if (source.variables.type === 'COHEN' && !source.variables.cohenId) {
+    console.log('no cohen id')
+    return 'cohen id'
   }
   return null;
 };

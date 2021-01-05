@@ -162,9 +162,9 @@ function calculateNextHours(
 function CartDetail() {
   const [totals, setTotals] = useState(defaultTotals);
   const [pickupTime, setPickupTime] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState("CREDIT");
+  const [paymentMethod, setPaymentMethod] = useState(null);
   const [cohenId, setCohenId] = useState(null)
-  const [nullError, setNullError] = useState(checkNullFields());
+  const [nullError, setNullError] = useState(null);
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
     { value: "CREDIT", label: "Credit Card" },
@@ -210,7 +210,6 @@ function CartDetail() {
   const handleConfirmClick = async () => {
     const currTimeVal = moment().hour()+(moment().minutes())/60;
     const pickupTimeVal = moment(pickupTime).hour()+(moment(pickupTime).minutes())/60;
-    console.log(pickupTimeVal, currTimeVal);
     if(pickupTimeVal < currTimeVal+.25){
       alert('The time you have selected is no longer valid. Please choose a later time.')
       return;
@@ -224,7 +223,11 @@ function CartDetail() {
         variables: createRecord(cart_menu, paymentMethod, cohenId)
       }
       const order = orderSummary()
-      console.log(rec);
+      const emptyField = checkNullFields(rec);
+      if (checkNullFields(rec)) {
+        setNullError(emptyField);
+        return;
+      }
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
@@ -254,12 +257,11 @@ function CartDetail() {
         return handleClickCredit();
       }
       if (paymentMethod === "COHEN") {
-        // get cohen id from order summary
         // navigate to order confirmation page
-        console.log("The payment type is through Cohen House.");
         return navigate("/eat/confirmation");
       }
       if (paymentMethod === "TETRA") {
+        // navigate to order confirmation page
         return navigate("/eat/confirmation");
       }
     }
@@ -384,8 +386,6 @@ function CartDetail() {
   //   'hour': t.value.split(':')[0],
   //   'minute': t.value.split(':')[1]}))
 
-  console.log(pickupTimes)
-
   function changePaymentType(newPayment) {
     setPaymentMethod(newPayment.value);
   }
@@ -468,10 +468,10 @@ function CartDetail() {
           { paymentMethod === 'COHEN' && (
             <Div>
               <label>Enter your Cohen House membership id: </label>
-              <input onChange={e => setCohenId(e.value)}></input>
+              <input onChange={e => setCohenId(e.target.value)}></input>
             </Div>
           )}
-          {nullError != null && (
+          {nullError && (
             <p css={{ alignSelf: "center", color: "red" }}>
               {" "}
               Error! Submission form contains null value for {nullError}. Please
@@ -481,7 +481,7 @@ function CartDetail() {
 
           <div className="float-cart__footer">
             <button
-              disabled={cartItems().length === 0 || pickupTime === null}
+              disabled={cartItems().length === 0 }
               className="buy-btn"
               title="Confirm"
               onClick={handleConfirmClick}

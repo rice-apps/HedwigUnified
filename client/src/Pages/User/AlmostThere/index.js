@@ -86,11 +86,12 @@ const AlmostThere = ({ classes }) => {
   cartItems([])
   const navigate = useNavigate()
   const handleHomeClick = () => {
+    orderSummary({ vendor: null, time: null })
     return navigate(`/eat`)
   }
 
   console.log(orderSummary());
-  const order = orderSummary();
+  const order = orderSummary()
   const handlePayment = () => {
     window.open(order.url)
   }

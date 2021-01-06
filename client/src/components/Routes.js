@@ -147,7 +147,6 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
     return <Route {...rest} element={element} />
   }
 
-  const vendor = userData.userOne.vendor;
   const netid = userData.userOne.netid;
   // this is not a vendor and we already passed the verification stage
   if (!vendor){

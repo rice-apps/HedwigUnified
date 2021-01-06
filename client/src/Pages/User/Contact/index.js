@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import './contact.css'
-import { css, jsx } from '@emotion/react'
 import { userProfile } from '../../../apollo'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { centerCenter } from '../../../Styles/flex'
 
 const ADD_PHONE = gql`
   mutation($name: String!, $phone: String!, $netid: String!) {
@@ -29,20 +27,9 @@ function ContactForm () {
   const user = userProfile()
   const userName =
     sStorage.getItem('first name') + ' ' + sStorage.getItem('last name')
-  const navigate = useNavigate()
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
-  const record = {
-    name: userName,
-    netid: user.netid,
-    phone: phone,
-    token: user.token,
-    recentUpdate: user.recentUpdate,
-    type: user.type,
-    vendor: user.vendor,
-    isAdmin: user.isAdmin
-  }
-  const [addPhone, { loading, error, data }] = useMutation(ADD_PHONE)
+  const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error.message}</p>

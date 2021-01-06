@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 import { orderSummary } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
-import moment from 'moment'
 
 export const GET_VENDOR = gql`
   query {
@@ -97,10 +96,9 @@ const getRecipient = () => {
 
 const getLineItems = items => {
   const rtn = []
-  const item = null
-  for (const [v, item] of Object.entries(items)) {
+  for (const [, item] of Object.entries(items)) {
     const modifierList = []
-    for (const [k, m] of Object.entries(item.modifierLists)) {
+    for (const [, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
         catalog_object_id: m.dataSourceId
       })

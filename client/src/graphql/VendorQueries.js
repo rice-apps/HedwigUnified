@@ -1,5 +1,4 @@
-import { Fragment } from 'react'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
 
 const VENDOR_QUERY = gql`
   query getVendorInfo($vendor: String!) {

@@ -1,8 +1,6 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BottomAppBar from './BottomAppBar.js'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IoIosClose } from 'react-icons/io'
 
 function VendorCard ({ vendor }) {

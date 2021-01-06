@@ -1,15 +1,9 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import {
-  makeStyles,
-  ThemeProvider,
-  createMuiTheme
-} from '@material-ui/core/styles'
-import { Tab, Box, Tabs, Typography, AppBar } from '@material-ui/core'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { Tab, Tabs } from '@material-ui/core'
 
 import MakeCatalogItems from './CatalogDisplayComponents.js'
-import souppic from './../../../../images/soup.jpg'
 
 const theme = createMuiTheme({
   palette: {
@@ -20,9 +14,7 @@ const theme = createMuiTheme({
       main: '#F3DAC2'
     }
   },
-  typography: {
-    fontFamily: 'Futura'
-  }
+
 })
 const PageWrapper = styled.div`
   background-color: #f7f7f7;
@@ -110,7 +102,7 @@ const StyledTab = styled(Tab)`
 `
 
 function TabPanel (props) {
-  const { children, value, category, ...other } = props
+  const { children, value, category } = props
 
   return (
     <div

@@ -579,7 +579,6 @@ function EditHoursDashboard() {
   }
 
   function closeOnClick() {
-    window.location.reload();
 
     const currentDay = moment().format("dddd");
     console.log("current day ", currentDay);
@@ -608,6 +607,7 @@ function EditHoursDashboard() {
         hours: updatedHours,
       },
     });
+    window.location.reload()
   }
 
   return (

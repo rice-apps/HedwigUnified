@@ -103,10 +103,10 @@ function ContactForm () {
           placeholder='Phone number:'
           id='tel'
           margin='dense'
-          fullWidth='true'
           inputProps={{style: {fontSize: '0.7rem', fontFamily: 'Proxima Nova'}}}
-          value = {format}
+          value = {format === null? "" : format}
           error={errorState}
+          fullWidth = {true}
           onChange={e => {handleChange(e.target)}}
         />
       </div>

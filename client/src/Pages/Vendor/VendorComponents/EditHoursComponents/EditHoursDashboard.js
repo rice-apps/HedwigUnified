@@ -25,17 +25,17 @@ const UPDATE_VENDOR = gql`
 const EditHoursDashboardWrapper = styled.div`
   height: 98%;
   width: 90%;
-  font-size: 3.8vh;
+  font-size: 3.6vh;
   display: grid;
+  font-weight:500;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 8fr 1fr;
-  font-family: 'Futura', sans-serif;
   justify-items: center;
   overflow: hidden;
 `
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
-  font-weight: 500;
+  font-weight: 600;
 `
 
 const EditHoursRowWrapper = styled.div`
@@ -52,6 +52,7 @@ const CloseNowButton = styled.button`
   background-color: white;
   height: 6vh;
   width: 12vw;
+  font-weight:600;
   margin-top: 1.8vh;
 `
 const EditHoursRow = styled.div`
@@ -71,6 +72,7 @@ const EditHoursRow = styled.div`
 const DayColumn = styled.div`
   grid-area: Day;
   width: 100%;
+  font-weight:600;
   height: 100%;
   display: flex;
   margin-left: 2vw;
@@ -93,9 +95,11 @@ const StatusDropdown = styled.select`
   text-align-last: center;
   border-radius: 10px;
   -webkit-appearance: none;
+  font-size:2.4vh;
   position: relative;
   padding-right: 19px;
   cursor: pointer;
+  font-weight:500;
 `
 
 function CreateStatusDropdown (props) {

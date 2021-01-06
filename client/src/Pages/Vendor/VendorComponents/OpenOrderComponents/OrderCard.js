@@ -23,7 +23,7 @@ const OrderCardWrapper = styled.div`
   border-color: #cacaca;
   border-style: solid;
   justify-self: center;
-  font-family: 'Futura', sans-serif;
+
   display: grid;
   width: 26vw;
   height: max-content;
@@ -90,7 +90,8 @@ const ExactTimeSpaceWrapper = styled.div`
 const TimeLeftSpaceWrapper = styled.div`
   grid-area: TimeLeftSpace;
   text-align: right;
-  color: #9d9d9d;
+  color: #2d2d2d;
+  font-size:13px;
 `
 
 function MakeOrderTime (props) {
@@ -111,7 +112,7 @@ function MakeOrderTime (props) {
             textDecoration: 'underline'
           }}
         >
-          Pickup time {props.pickupCountdown}
+          Pickup time <br/> {props.pickupCountdown}
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
@@ -188,7 +189,7 @@ const ButtonsSpaceWrapper = styled.div`
   align-items: center;
 `
 const ButtonWrapper = styled.button`
-  font-family: 'Futura', sans-serif;
+
   border-radius: 20px;
   cursor: pointer;
   border: 0px;
@@ -445,7 +446,7 @@ function MakePaymentSpace (props) {
             top: '28%',
             left: '28%',
             borderRadius: '20px',
-            fontFamily: 'Futura'
+  
           }
         }}
       >
@@ -478,7 +479,7 @@ function MakePaymentSpace (props) {
             top: '28%',
             left: '28%',
             borderRadius: '20px',
-            fontFamily: 'Futura'
+
           }
         }}
       >

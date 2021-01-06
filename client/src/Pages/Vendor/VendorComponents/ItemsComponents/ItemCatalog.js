@@ -14,9 +14,7 @@ const theme = createMuiTheme({
       main: '#F3DAC2'
     }
   },
-  typography: {
-    fontFamily: 'Futura'
-  }
+
 })
 const PageWrapper = styled.div`
   background-color: #f7f7f7;

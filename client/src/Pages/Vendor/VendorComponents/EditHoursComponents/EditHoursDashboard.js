@@ -579,7 +579,8 @@ function EditHoursDashboard () {
     return hours.findIndex(obj => obj.day === dayName)
   }
 
-  function closeOnClick () {
+  async function closeOnClick () {
+    
     const currentDay = moment().format('dddd')
     console.log('current day ', currentDay)
     const index = hours.findIndex(obj => obj.day === currentDay)
@@ -601,13 +602,13 @@ function EditHoursDashboard () {
 
     console.log('updated day ', updatedDay)
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours
       }
     })
-    window.location.reload()
+    window.location.reload() 
   }
 
   return (

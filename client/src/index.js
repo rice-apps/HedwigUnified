@@ -1,12 +1,10 @@
 import './index.css'
 import 'antd/dist/antd.css'
 
-import { Component } from 'react'
 import { render } from 'react-dom'
 
 // import { Router } from 'react-router';
 import { BrowserRouter } from 'react-router-dom'
-import { RoutesComponent } from './components/Routes'
 
 // Setup history
 // //import { createBrowserHistory } from 'history';

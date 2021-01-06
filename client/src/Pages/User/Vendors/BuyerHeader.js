@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { FaUserCircle } from 'react-icons/fa'
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
 import RalewayFont from './../../../fonts/Raleway/RalewayFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
@@ -18,6 +17,7 @@ const HeaderWrapper = styled.div`
   background-color: white;
   z-index: 1;
   padding-top: 1vh;
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
 `
 
 const HedwigLogo = styled.img`
@@ -33,7 +33,7 @@ const HedwigWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #db6142;
+  color: #f3725b;
 `
 
 function BuyerHeader (props) {
@@ -56,14 +56,6 @@ function BuyerHeader (props) {
           />
         ) : null}
         <HedwigLogo src={HedwigLogoFinal} /> hedwig
-        <FaUserCircle
-          style={{
-            position: 'fixed',
-            right: '22px',
-            fontSize: '25px',
-            verticalAlign: 'middle'
-          }}
-        />
       </HedwigWrapper>
     </HeaderWrapper>
   )

@@ -1,42 +1,31 @@
-import { Component, useEffect, Profiler } from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { Routes, Route, useRoutes, Navigate } from 'react-router-dom'
-import {
-  gql,
-  useQuery,
-  useApolloClient,
-  createSignalIfSupported
-} from '@apollo/client'
+import { Route, useRoutes, Navigate } from 'react-router-dom'
+import { gql, useQuery, useApolloClient } from '@apollo/client'
 import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
-import Home from '../Pages/Home'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
 import Confirmation from '../Pages/User/Confirmation'
 // Vendor imports
-import Orders from '../Pages/Vendor/Orders'
 // import VendorSettings from '../Pages/Vendor/Settings';
 import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
+import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
 import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
+import ErrorPage from './ErrorPage'
 import Product from '../Pages/User/Products/Product'
-import PaymentPage from '../Pages/User/Payment'
-import VendorsideTemplate from '../Pages/Vendor/VendorComponents/VendorGridContainer.js'
 import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
 import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
 import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js'
 import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
-import Payments from '../Pages/User/Cart/Payments'
 import VendorSelect from '../Pages/Login/VendorCheck'
-import CohenPayment from '../Pages/User/Payment/CohenPayment'
 import Submit from '../Pages/User/Submit'
-import CreditPayment from '../Pages/User/Cart/CreditPayment.js'
 
 /**
  * Requests to verify the user's token on the backend
@@ -67,6 +56,29 @@ const GET_USER_INFO = gql`
       lastName
       netid
       phone
+      vendor
+    }
+  }
+`
+const GET_USER = gql`
+  query getUser($token: String!) {
+    userOne(filter: { token: $token }) {
+      name
+      netid
+      token
+      vendor
+      _id
+    }
+  }
+`
+const GET_VENDOR_DATA = gql`
+  query GET_AVAILABILITY($name: String!) {
+    getVendor(filter: { name: $name }) {
+      name
+      isOpen
+      logoUrl
+      allowedNetid
+      _id
     }
   }
 `
@@ -75,7 +87,7 @@ const GET_USER_INFO = gql`
  * Defines a private route - if the user is NOT logged in or has an invalid token,
  * then we redirect them to the login page.
  */
-const PrivateRoute = ({ element, ...rest }) => {
+const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   const token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
@@ -87,13 +99,21 @@ const PrivateRoute = ({ element, ...rest }) => {
     errorPolicy: 'none'
   })
 
-  if (error) {
+  const { data: userData, loading: userLoad, error: userError } = useQuery(
+    GET_USER,
+    {
+      variables: { token: token },
+      errorPolicy: 'none'
+    }
+  )
+
+  if (error || userError) {
     // Clear the token because something is wrong with it
     localStorage.removeItem('token')
     // Redirect the user to the login page
     return <Navigate to='/login' />
   }
-  if (loading) return <p>Waiting...</p>
+  if (loading || userLoad) return <p>Waiting...</p>
   if (!data || !data.verifyUser) {
     // Clear the token
     localStorage.removeItem('token')
@@ -111,11 +131,63 @@ const PrivateRoute = ({ element, ...rest }) => {
     data: { user: data.verifyUser }
   })
 
-  // Everything looks good! Now let's send the user on their way
+  // this route is not an employee route
+  if (!isEmployeeRoute || !(isEmployeeRoute == true)) {
+    // Everything looks good! Now let's send the user on their way
+    return <Route {...rest} element={element} />
+  }
+
+  const vendor = userData.userOne.vendor
+  const netid = userData.userOne.netid
+  // this is not a vendor and we already passed the verification stage
+  if (!vendor) {
+    return <Navigate to='/eat' />
+  }
+
+  return (
+    <EmployeeRoute netid={netid} vendor={vendor} element={element} {...rest} />
+  )
+}
+
+const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
+  const { data: vendorData, loading: vendorLoad, error: vendorErr } = useQuery(
+    GET_VENDOR_DATA,
+    {
+      variables: { name: vendor }
+    }
+  )
+
+  // this isn't an employee because we have no vendor name
+  if (vendorErr) {
+    console.log('vendor', vendorData)
+    return <Navigate to='/eat' />
+  }
+
+  if (vendorLoad) {
+    return <p>Waiting...</p>
+  }
+
+  console.log('DATA VENDOR', vendorData)
+  console.log('netid', netid)
+  const allowedUsers = vendorData.getVendor.allowedNetid
+  // have to modify this with /contact
+  if (!allowedUsers.includes(netid)) {
+    return <Navigate to='/eat' />
+  }
+
+  // this is a true employee
   return <Route {...rest} element={element} />
 }
 
 const newRoutesArray = [
+  {
+    path: '/',
+    element: <Navigate to='/eat' />
+  },
+  {
+    path: '/404_page',
+    element: <ErrorPage />
+  },
   {
     path: '/login',
     element: <Login />
@@ -139,6 +211,11 @@ const newRoutesArray = [
       { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
       { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
       { path: '/submit', element: <Submit /> },
+      { path: '/almostThere', element: <AlmostThere /> },
+      {
+        path: '/confirmation',
+        element: <PrivateRoute element={<Confirmation />} />
+      },
       {
         path: '/:vendor/*',
         children: [
@@ -147,69 +224,74 @@ const newRoutesArray = [
             path: '/:product',
             element: <PrivateRoute element={<Product />} />
           },
-          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> },
-          // payment options
-          {
-            path: '/payment',
-            element: <PrivateRoute element={<Payments />} />
-          },
-          {
-            path: '/confirmation',
-            element: <PrivateRoute element={<Confirmation />} />
-          }
+          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> }
         ]
       }
     ]
   },
-  // This is to credit card payment:
-  {
-    path: '/payment',
-    element: <PaymentPage />
-  },
-  // embedding url page:
-  {
-    path: '/credit',
-    element: <CreditPayment />
-  },
-
   {
     path: '/contact',
     element: <ContactForm />
   },
-  // Cohen house payment page:
-  {
-    path: '/cohen',
-    element: <PrivateRoute element={<CohenPayment />} />
-  },
   {
     path: '/employee/*',
     children: [
-      { path: '/', element: <PrivateRoute element={<OpenOrdersPage />} /> },
+      {
+        path: '/',
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
+        )
+      },
       {
         path: '/openorders',
-        element: <PrivateRoute element={<OpenOrdersPage />} />
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
+        )
       },
       {
         path: '/closedorders',
-        element: <PrivateRoute element={<ClosedOrdersPage />} />
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} />
+        )
       },
       {
         path: '/items',
-        element: <PrivateRoute element={<ItemsMenuManagementPage />} />
+        element: (
+          <PrivateRoute
+            isEmployeeRoute={true}
+            element={<ItemsMenuManagementPage />}
+          />
+        )
       },
       {
         path: '/modifiers',
-        element: <PrivateRoute element={<ModifiersMenuManagementPage />} />
+        element: (
+          <PrivateRoute
+            isEmployeeRoute={true}
+            element={<ModifiersMenuManagementPage />}
+          />
+        )
       },
       {
         path: '/set-basic-info',
-        element: <PrivateRoute element={<SetBasicInfoPage />} />
+        element: (
+          <PrivateRoute isEmployeeRoute={true} element={<SetBasicInfoPage />} />
+        )
       },
       {
         path: '/set-store-hours',
-        element: <PrivateRoute element={<SetStoreHoursPage />} />
+        element: (
+          <PrivateRoute
+            isEmployeeRoute={true}
+            element={<SetStoreHoursPage />}
+          />
+        )
       }
     ]
+  },
+  {
+    path: '/*',
+    element: <Navigate to={'/404_page'} />
   }
 ]
 

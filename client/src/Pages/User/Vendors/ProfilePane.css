@@ -1,6 +1,18 @@
 /* Entire pane */
 .profilepane {
+  width: 0;
+  transition: 800ms;
+  display: flex;
+  margin-left: -35vw;
+  position: fixed;
+  z-index: 2;
+}
+
+.profilepane-active {
   width: 60vw;
+  transition: 500ms;
+  position: fixed;
+  z-index: 2;
 }
 
 /* Background Color */
@@ -8,6 +20,12 @@
   background-color: #faf8f8;
   display: flex;
   flex-direction: column;
+}
+
+.close {
+  height: 4vh;
+  align-self: flex-end;
+  padding: 2vh 3vw;
 }
 
 /* Header */
@@ -52,40 +70,62 @@
 /* Welcome portion */
 .welcomebody {
   display: flex;
-  height: 17vh;
-  justify-content: start;
-  align-items: center;
-  padding-left: 4vw;
+  flex-direction: column;
+  height: 30vh;
+  justify-content: center;
+  align-items: flex-start;
 
-  font-family: 'avenirbold';
+  font-family: 'avenir';
 }
 
 .welcometext {
-  font-size: 3vh;
-  color: #f49f86;
+  font-size: 4vh;
+  color: #db6142;
+  margin-left: 1vw;
 }
 
-.nametext {
+.phonetext {
   font-size: 3vh;
-  color: #5a5953;
-  padding-left: 5px;
+  color: black;
+  margin-left: 1vw;
+  padding-top: 2vh;
+}
+
+.phoneedit {
+  background-color: inherit;
+  border: none;
+  color: lightgray;
+  margin-left: 2vw;
+  font-size: 2.5vh;
+}
+
+.phoneconfirm {
+  background-color: inherit;
+  border: none;
+  margin-left: 2vw;
+  font-size: 2.5vh;
+}
+
+#telinput {
+  height: 2vh;
+  width: 20vh;
+  font-family: 'avenir';
 }
 
 /* Content */
 .contentbody {
   display: flex;
   flex-direction: column;
-  height: 40vh;
+  height: 25vh;
 }
 
 .contentcard {
   display: grid;
   flex: 1;
-  justify-content: end;
-  align-content: center;
+  height: 5vh;
+  padding-top: 2.5vh;
 
-  grid-template-columns: 1fr 15fr 2fr 1fr;
-  padding-left: 4vw;
+  grid-template-columns: 15fr 2fr;
 
   border-top: #7070701a 1px solid;
 }
@@ -98,16 +138,17 @@
 
 .contenttitle {
   font-family: 'avenirbook';
-  font-size: 2vh;
-  padding-left: 5px;
+  font-size: 2.5vh;
 
-  color: #5a5953;
-  align-self: center;
+  color: darkslategray;
+  justify-self: flex-start;
+  align-self: flex-end;
+  margin-left: 0vw;
 }
 
 .contentarrow {
-  align-self: center;
-  justify-self: end;
+  align-self: flex-start;
+  justify-self: flex-start;
 
   color: #5a5953;
   background-color: inherit;
@@ -117,22 +158,26 @@
 /* Sign Out Footer */
 .profilefooter {
   display: grid;
-  height: 20vh;
+  height: 41vh;
 
-  background-color: white;
+  background-color: #faf8f8;
+  border-top: #7070701a 1px solid;
 
   bottom: 0px;
 }
 
 .signoutbutton {
   border: 1px solid #5a595326;
-  background-color: inherit;
-  place-self: center center;
+  background-color: #db6142;
+  width: 70%;
+  height: 20%;
 
   font-family: 'avenirbook';
-  color: #f49f86;
+  color: white;
   font-size: 3vh;
 
+  align-self: flex-end;
+  margin-bottom: 5vh;
   border-radius: 20px;
   padding: 10px 20px;
 }

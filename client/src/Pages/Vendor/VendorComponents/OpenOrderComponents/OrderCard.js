@@ -6,25 +6,15 @@ import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { FaIdCard } from 'react-icons/fa'
 import Modal from 'react-modal'
-import { gql, useMutation } from '@apollo/client'
+import { gql } from '@apollo/client'
 import moment from 'moment'
 import { GrRestaurant } from 'react-icons/gr'
 
-const ACCEPT_ORDER = gql`
-  mutation {
-    updateOrder(
-      orderId: "Pu4mWMvZJlkb2J0QdxIWapYVt9EZY"
-      record: {
-        fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED }
-      }
-    ) {
-      fulfillment {
-        uid
-        state
-      }
-    }
-  }
-`
+
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD'
+})
 
 const OrderCardWrapper = styled.div`
   background-color: white;
@@ -41,7 +31,7 @@ const OrderCardWrapper = styled.div`
   margin-right: 14px;
   overflow: visible;
   grid-template-columns: 1fr;
-  grid-template-rows: 35px max-content max-content 92px;
+  grid-template-rows: max-content max-content max-content 92px;
   grid-template-areas:
     'OrderTitleSpace'
     'OrderTimeSpace'
@@ -57,6 +47,7 @@ const OrderTitleSpaceWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 1fr;
   font-size: 22px;
+  line-height:23.5px;
   justify-content: center;
   justify-items: center;
   padding-top: 8px;
@@ -163,7 +154,7 @@ function MakeOrderDetails (props) {
           <IoIosAddCircleOutline /> {props.modifiers}
         </div>
       </ItemDescriptionWrapper>
-      <div style={{ fontWeight: 'bold' }}>${props.price}</div>
+      <div style={{ fontWeight: 'bold' }}>{formatter.format(props.price)}</div>
     </OrderDetailsItemWrapper>
   )
 }
@@ -320,7 +311,7 @@ function MakeModalParagraph (props) {
       </ModalParagraphWrapper>
     )
   } else {
-    return <ModalParagraphWrapper>error</ModalParagraphWrapper>
+    return <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
   }
 }
 
@@ -362,7 +353,7 @@ function MakeModalOrderDetails (props) {
       </ModalOrderDetailRow>
       <ModalOrderDetailRow>
         <div>Amount:</div>
-        <div>${props.orderTotal}</div>
+        <div>{formatter.format(props.orderTotal)}</div>
       </ModalOrderDetailRow>
     </ModalOrderDetailsWrapper>
   )
@@ -430,10 +421,10 @@ function MakePaymentSpace (props) {
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
         <div>
-          Tax: <strong>${props.orderTax}</strong>
+          Tax: <strong>{ props.orderTax ? formatter.format(props.orderTax): formatter.format(0)}</strong>
         </div>
         <div>
-          Total: <strong>${props.orderTotal}</strong>
+          Total: <strong>{formatter.format(props.orderTotal)}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -471,7 +462,7 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            <AcceptButton onClick={props.handleClick}> Accept </AcceptButton>
+            <AcceptButton onClick={() => { props.handleClick(); closeAcceptModal()}}> Accept </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>
@@ -504,7 +495,7 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={(closeCancelModal, cancelOrder)}>
+            <AcceptButton onClick={ () => (closeCancelModal(), cancelOrder())}>
               Cancel
             </AcceptButton>
           </ModalButtonsWrapper>

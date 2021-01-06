@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
@@ -6,8 +5,7 @@ import { CgMathPlus } from 'react-icons/cg'
 import Modal from 'react-modal'
 
 import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
-import { useQuery, gql, useMutation, InMemoryCache } from '@apollo/client'
-import { current } from 'immer'
+import { useQuery, gql, useMutation } from '@apollo/client'
 
 import moment from 'moment'
 
@@ -106,7 +104,6 @@ function CreateStatusDropdown (props) {
   function onChangeIsClosed (value) {
     window.location.reload()
     let inputIsClosed = value === 'OPEN' ? false : true
-    console.log('input value isClosed: ', inputIsClosed)
     // const originalHours = props.vendor_data.getVendor.hours;
     const originalHours = props.currentHours
     const updatedHours = [...originalHours]

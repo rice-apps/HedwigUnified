@@ -33,7 +33,7 @@ height: 100%;
 
 .statusUpdate {
   font-size: 15pt;
-  color: #db6142;
+  color: #f3725b;
   font-family: 'Avenir Book', 'Arial Book', sans-serif;
   text-align: center;
   margin: 8px 16px 8px 16px;
@@ -66,13 +66,6 @@ height: 100%;
   top: -30px;
   text-align: center;
   font-family: 'Avenir Book', 'Arial Book', sans-serif;
-}
-.pinIcon {
-  color: #db6142;
-  font-size: 30pt;
-  position: relative;
-  left: 25px;
-  top: -15px;
 }
 
 .buttonsContainer {

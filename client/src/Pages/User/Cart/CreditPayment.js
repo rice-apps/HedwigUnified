@@ -1,4 +1,3 @@
-import React, { Component, useState } from 'react'
 import Iframe from 'react-iframe'
 
 // Embed shopify url

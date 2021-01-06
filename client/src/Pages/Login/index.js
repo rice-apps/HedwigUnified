@@ -1,11 +1,7 @@
-import { useState } from 'react'
-import { useQuery, gql } from '@apollo/client'
-
 import logo from './logo.svg'
 import { SERVICE_URL } from '../../config'
 import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
 // import './Transitions.css';
-import { userProfile } from '../../apollo'
 import { useNavigate } from 'react-router-dom'
 
 // This import loads the firebase namespace along with all its type information.
@@ -14,13 +10,9 @@ import firebase from 'firebase/app'
 // These imports load individual services into the firebase namespace.
 import 'firebase/auth'
 
-const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
-
 const sStorage = window.localStorage
 
 function Login () {
-  const navigate = useNavigate()
-
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
   // Fetch service from cache since it depends on where this app is deployed

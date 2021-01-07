@@ -33,9 +33,11 @@ function VendorCard ({ vendor }) {
     let [hours, minutes] = timeNum.split(':')
     hours = parseInt(hours)
     minutes = parseInt(minutes) / 60
-    if (halfOfDay === 'a.m.') {
+    if (halfOfDay === 'a.m.' & hours === 12) {
+      return  minutes
+    } else if ((halfOfDay === 'a.m.') || (halfOfDay === 'p.m.' & hours === 12)) {
       return hours + minutes
-    } else if (halfOfDay === 'p.m.') {
+    }else if (halfOfDay === 'p.m.') {
       return 12 + hours + minutes
     }
   }

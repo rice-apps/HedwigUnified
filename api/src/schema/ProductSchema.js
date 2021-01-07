@@ -34,7 +34,7 @@ ItemTC.addResolver({
 
       // Define functions for getting category and modifier list data from id
       const categoryId2Name = id =>
-        categories.find(category => category.id === id).category_data.name
+        categories.find(category => category.id === id).categoryData.name
       const modifierListId2Data = id =>
         modifierLists.find(modifierList => modifierList.id === id)
 
@@ -144,6 +144,7 @@ ItemTC.addResolver({
           `Getting Square catalog failed because ${error.result}`
         )
       }
+      console.log(error)
       return new ApolloError(`Something went wrong when getting Square catalog`)
     }
   }
@@ -579,7 +580,7 @@ ItemTC.addResolver({
         const {
           result: { objects: catalogObjects }
         } = await catalogApi.batchRetrieveCatalogObjects({
-          object_ids: products
+          objectIds: products
         })
 
         const upsertBatchObjects = catalogObjects.map(product => ({
@@ -618,7 +619,7 @@ ItemTC.addResolver({
 
         // Define functions for getting category and modifier list data from id
         const categoryId2Name = id =>
-          categories.find(category => category.id === id).category_data.name
+          categories.find(category => category.id === id).categoryData.name
         const modifierListId2Data = id =>
           modifierLists.find(modifierList => modifierList.id === id)
 

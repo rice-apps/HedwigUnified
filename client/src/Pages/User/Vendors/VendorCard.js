@@ -149,7 +149,7 @@ function VendorCard ({ vendor }) {
         <div className='vendorHeadingText'>
           <h3 className='vendorName'>{name}</h3>
           {/* Case for two start/end times */}
-          {dayObj && dayObj.start.length > 1 && (
+          {dayObj && dayObj.start.length >= 1 && (
             <p>
               {' '}
               Hours Open:{' '}

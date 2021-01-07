@@ -1,5 +1,5 @@
-import { composeMongoose } from "graphql-compose-mongoose";
-import { Schema, model } from "mongoose";
+import { composeMongoose } from 'graphql-compose-mongoose'
+import { Schema, model } from 'mongoose'
 
 const OrderTrackerSchema = new Schema({
   merchantId: { type: String, required: false },
@@ -9,28 +9,28 @@ const OrderTrackerSchema = new Schema({
   paymentType: {
     type: String,
     required: false,
-    enum: ["COHEN", "TETRA", "CREDIT"],
+    enum: ['COHEN', 'TETRA', 'CREDIT']
   },
   pickupTime: { type: Date, required: false },
   status: {
     type: String,
     required: true,
-    enum: ["PROPOSED", "RESERVED", "PREPARED", "COMPLETED", "CANCELED"],
+    enum: ['PROPOSED', 'RESERVED', 'PREPARED', 'COMPLETED', 'CANCELED']
   },
   customer: {
     type: Schema.Types.ObjectId,
-    ref: "Users",
-    required: false,
+    ref: 'Users',
+    required: false
   },
   shopifyOrderId: { type: String, required: false },
   dataSource: {
     type: String,
     required: false,
-    enum: ["SQUARE", "SHOPIFY", "EXCEL"],
-  },
-});
+    enum: ['SQUARE', 'SHOPIFY', 'EXCEL']
+  }
+})
 
-const OrderTracker = model("OrderTracker", OrderTrackerSchema);
-const OrderTrackerTC = composeMongoose(OrderTracker);
+const OrderTracker = model('OrderTracker', OrderTrackerSchema)
+const OrderTrackerTC = composeMongoose(OrderTracker)
 
-export { OrderTracker, OrderTrackerTC };
+export { OrderTracker, OrderTrackerTC }

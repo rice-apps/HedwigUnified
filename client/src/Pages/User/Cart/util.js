@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
-import { orderSummary, userProfile } from "../../../apollo";
-import moment from "moment";
-const { v4: uuidv4 } = require("uuid");
+import { gql } from '@apollo/client'
+import { orderSummary, userProfile } from '../../../apollo'
+import moment from 'moment'
+const { v4: uuidv4 } = require('uuid')
 
 export const GET_VENDOR = gql`
   query GET_VENDOR($filter: FilterFindOneVendorsInput!) {
@@ -19,7 +19,7 @@ export const GET_VENDOR = gql`
       }
     }
   }
-`;
+`
 
 export const CREATE_ORDER = gql`
   mutation(
@@ -72,10 +72,15 @@ export const CREATE_ORDER = gql`
       }
     }
   }
-`;
+`
 
 export const CREATE_PAYMENT = gql`
-  mutation($orderId: String!, $subtotal: Int!, $currency: String!, $location: String!) {
+  mutation(
+    $orderId: String!
+    $subtotal: Int!
+    $currency: String!
+    $location: String!
+  ) {
     createPayment(
       record: {
         source: SHOPIFY
@@ -93,7 +98,7 @@ export const CREATE_PAYMENT = gql`
       }
     }
   }
-`;
+`
 
 export const UPDATE_ORDER_TRACKER = gql`
   mutation($paymentType: String!, $orderId: String!) {
@@ -104,41 +109,41 @@ export const UPDATE_ORDER_TRACKER = gql`
       recordId
     }
   }
-`;
+`
 
 const getRecipient = () => {
-  const user = userProfile();
+  const user = userProfile()
   return {
     name: user.name,
     phone: user.phone
-  };
-};
+  }
+}
 
-const getLineItems = (items) => {
-  const rtn = [];
-  const item = null;
+const getLineItems = items => {
+  const rtn = []
+  const item = null
   for (const [v, item] of Object.entries(items)) {
-    const modifierList = [];
+    const modifierList = []
     for (const [k, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
-        catalog_object_id: m.dataSourceId,
-      });
+        catalog_object_id: m.dataSourceId
+      })
     }
     const i = {
       modifiers: modifierList,
       catalog_object_id: item.variant.dataSourceId,
-      quantity: item.quantity.toString(),
+      quantity: item.quantity.toString()
       // variation_name: item.variant.name,
-    };
-    rtn.push(i);
+    }
+    rtn.push(i)
   }
-  return rtn;
-};
+  return rtn
+}
 
 export const createRecord = (items, paymentType, cohenId) => {
-  const recipient = getRecipient();
-  const user = userProfile();
-  console.log(orderSummary());
+  const recipient = getRecipient()
+  const user = userProfile()
+  console.log(orderSummary())
   return {
     studentId: user.studentId,
     key: uuidv4(),
@@ -149,13 +154,19 @@ export const createRecord = (items, paymentType, cohenId) => {
     location: orderSummary().vendor.locationIds[0],
     type: paymentType,
     cohenId: cohenId
-  };
-};
+  }
+}
 
-export const checkNullFields = (source) => {
+export const checkNullFields = source => {
   const fields = ['name', 'phone', 'studentId', 'type', 'time']
-  const detailedInfo = ['name', 'phone number', 'rice student id', 'payment method', 'pickup time']
-  let field;
+  const detailedInfo = [
+    'name',
+    'phone number',
+    'rice student id',
+    'payment method',
+    'pickup time'
+  ]
+  let field
   console.log(source)
   for (field in fields) {
     if (!source.variables[fields[field]]) {
@@ -168,5 +179,5 @@ export const checkNullFields = (source) => {
     console.log('no cohen id')
     return 'cohen id'
   }
-  return null;
-};
+  return null
+}

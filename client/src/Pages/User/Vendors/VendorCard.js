@@ -3,6 +3,20 @@ import { useNavigate } from 'react-router-dom'
 
 import { IoIosClose } from 'react-icons/io'
 
+export const convertTimeToNum = time => {
+  const [timeNum, halfOfDay] = time.split(' ')
+  let [hours, minutes] = timeNum.split(':')
+  hours = parseInt(hours)
+  minutes = parseInt(minutes) / 60
+  if (halfOfDay === 'a.m.' & hours === 12) {
+    return  minutes
+  } else if ((halfOfDay === 'a.m.') || (halfOfDay === 'p.m.' & hours === 12)) {
+    return hours + minutes
+  }else if (halfOfDay === 'p.m.') {
+    return 12 + hours + minutes
+  }
+}
+
 function VendorCard ({ vendor }) {
   const { name, hours, logoUrl } = vendor
   const [statusDetail, setStatusDetail] = useState(false)
@@ -28,19 +42,7 @@ function VendorCard ({ vendor }) {
   const currentDay = testMode ? 1 : current_date.getDay()
   const dayObj = hours[currentDay]
   console.log(dayObj)
-  const convertTimeToNum = time => {
-    const [timeNum, halfOfDay] = time.split(' ')
-    let [hours, minutes] = timeNum.split(':')
-    hours = parseInt(hours)
-    minutes = parseInt(minutes) / 60
-    if (halfOfDay === 'a.m.' & hours === 12) {
-      return  minutes
-    } else if ((halfOfDay === 'a.m.') || (halfOfDay === 'p.m.' & hours === 12)) {
-      return hours + minutes
-    }else if (halfOfDay === 'p.m.') {
-      return 12 + hours + minutes
-    }
-  }
+  
 
   const startTimes = hours[currentDay].start
   const endTimes = hours[currentDay].end

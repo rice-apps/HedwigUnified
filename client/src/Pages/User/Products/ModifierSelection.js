@@ -1,4 +1,3 @@
-import { useContext, useEffect, useState } from 'react'
 import currency from 'currency.js'
 
 function ModifierSelection ({ modifierCategory }) {

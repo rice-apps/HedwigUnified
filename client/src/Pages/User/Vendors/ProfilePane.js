@@ -1,5 +1,5 @@
 import './ProfilePane.css'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
+import { gql, useQuery, useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
@@ -40,7 +40,7 @@ const EDIT_PHONE = gql`
   }
 `
 
-const getLinks = user => {
+const getLinks = () => {
   const links = [
     { icon: 'hands-helping', content: 'Help', path: '/help' },
 
@@ -50,10 +50,11 @@ const getLinks = user => {
       path: 'https://riceapps.org/'
     },
 
-    { 
-      icon: 'paper-plane', 
-      content: 'Feedback', 
-      path: 'https://docs.google.com/forms/d/e/1FAIpQLSetekjRuZWNc5MB1hwQW_ihNeH07PfAzJzJX2BuLZHM78T7GA/viewform'
+    {
+      icon: 'paper-plane',
+      content: 'Feedback',
+      path:
+        'https://docs.google.com/forms/d/e/1FAIpQLSetekjRuZWNc5MB1hwQW_ihNeH07PfAzJzJX2BuLZHM78T7GA/viewform'
     }
   ]
 
@@ -69,7 +70,10 @@ function ProfilePane () {
 
   const { data, loading, error } = useQuery(GET_USER_INFO)
 
-  const [editPhone, { loading: phone_loading, error: phone_error, data: phone_data }] = useMutation(EDIT_PHONE)
+  const [
+    editPhone,
+    { loading: phone_loading, error: phone_error }
+  ] = useMutation(EDIT_PHONE)
 
   if (error) return <p>Error!</p>
   if (loading) return <p>Waiting...</p>
@@ -78,13 +82,14 @@ function ProfilePane () {
   if (phone_error) return <p> {phone_error.message} </p>
   if (phone_loading) return <p> (Phone) Waiting... </p>
 
-  
   const { user } = data
   const links = getLinks(user)
 
   if (confirmed) {
     localStorage.setItem('phone', phone)
-    editPhone({ variables: { name: user.name, phone: phone, netid: user.netid } })
+    editPhone({
+      variables: { name: user.name, phone: phone, netid: user.netid }
+    })
     window.location.reload(false)
   }
 
@@ -115,11 +120,14 @@ function ProfilePane () {
               }}
             />
           </div>
-          
+
           {/* Body: Welcome */}
           <div className='welcomebody'>
-            <h1 className='welcometext'> Hello, <br/> {user.name} <br/> </h1>
-            <h1 className='phonetext'> 
+            <h1 className='welcometext'>
+              {' '}
+              Hello, <br /> {user.name} <br />{' '}
+            </h1>
+            <h1 className='phonetext'>
               {editing ? (
                 <TextField
                   type='telinput'
@@ -128,11 +136,12 @@ function ProfilePane () {
                 />
               ) : (
                 <>
-                  ({user.phone.substring(0, 3)}) {' '} {user.phone.substring(3, 6)} 
-                  {'-'}{user.phone.substring(6)} 
+                  ({user.phone.substring(0, 3)}) {user.phone.substring(3, 6)}
+                  {'-'}
+                  {user.phone.substring(6)}
                 </>
               )}
-            
+
               {editing ? (
                 <button
                   className='phoneconfirm'
@@ -155,7 +164,6 @@ function ProfilePane () {
                   <FontAwesomeIcon icon={['fas', 'edit']} />
                 </button>
               )}
-              
             </h1>
           </div>
 

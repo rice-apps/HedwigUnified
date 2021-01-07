@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
-import { useQuery, makeVar } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
 import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import dispatch from './FunctionalCart'
-import { createMuiTheme } from '@material-ui/core'
-import { cartItems, orderSummary } from '../../../apollo'
+import { orderSummary } from '../../../apollo'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
@@ -20,7 +19,6 @@ function Product () {
   const { currProduct: productId, currVendor: vendorState } = state
 
   const {
-    refetch,
     data: product_data,
     error: product_error,
     loading: product_loading
@@ -62,9 +60,6 @@ function Product () {
 
   const { getItem: product } = product_data
   const { getVendor: vendor } = vendor_data
-  const handleClick = () => {
-    return navigate(`/eat/${vendor.slug}/cart`)
-  }
 
   const increase = () => {
     setQuantity(quantity + 1)
@@ -200,7 +195,6 @@ function Product () {
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', orderSummary().vendor.locationIds[0])
     const itemName = product.name
-    const itemID = product.squareID
     const itemDataSourceId = product.dataSourceId
     let variant
 

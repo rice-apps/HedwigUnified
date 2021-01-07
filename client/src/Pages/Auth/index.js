@@ -1,45 +1,35 @@
-import { Component, useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
-import { Redirect } from 'react-router'
+import { useEffect } from 'react'
+import { gql, useMutation } from '@apollo/client'
 import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
-  mutation AuthenticateMutation($ticket: String!) {
-    authenticateUser(ticket: $ticket) {
+  mutation AuthenticateMutation($idToken: String!) {
+    authenticateUser(idToken: $idToken) {
       _id
-      netid
       token
+      netid
       recentUpdate
       vendor
       phone
       name
+      isAdmin
+      type
     }
   }
 `
-const parseTicket = url => {
-  // Ex: http://example.com/auth?ticket=ST-1590205338989-7y7ojqvDfvGIFDLyjahEqIp2F
-  // Get the ticket query param
-  const ticketParamName = 'ticket='
-  // We're searching for the part of the string AFTER ticket=
-  const ticketStartIndex = url.indexOf(ticketParamName) + ticketParamName.length
-  // Only returns the ticket portion
-  return url.substring(ticketStartIndex)
-}
 
 // const allowedUsers = ['byz2']
 const lstorage = localStorage
 
 function Auth () {
-  // First parse out ticket from URL href
-  const ticket = parseTicket(window.location.href)
+  const idToken = lstorage.getItem('idToken')
   // Run query against backend to authenticate user
   const [
     authenticateUser,
     { data: authenticationData, loading, error }
-  ] = useMutation(AUTHENTICATE_USER, { variables: { ticket: ticket } })
+  ] = useMutation(AUTHENTICATE_USER, { variables: { idToken: idToken } })
 
-  console.log(authenticationData)
   useEffect(() => {
     // We only want this mutation to run once; if we hit any errors we redirect to login
     authenticateUser().catch(err => <p>{err.message}</p>)
@@ -51,15 +41,15 @@ function Auth () {
   if (!authenticationData) return <p>Bad.</p>
 
   const {
-    netid,
-    token,
     _id,
     name,
+    netid,
     phone,
     isAdmin,
     vendor,
     recentUpdate,
-    type
+    type,
+    token
   } = authenticationData.authenticateUser
 
   userProfile({
@@ -74,16 +64,7 @@ function Auth () {
     token
   })
 
-  userProfile(
-    Object.assign(userProfile(), {
-      name:
-        lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
-      studentId: lstorage.getItem('id')
-    })
-  )
   // Set token in local storage
-
-  console.log(userProfile())
   lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
@@ -107,9 +88,9 @@ function Auth () {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients
-  // if (phone) {
-  //   return <Navigate to='/eat' />
-  // }
+  if (phone) {
+    return <Navigate to='/eat' />
+  }
   return <Navigate to='/contact' />
 }
 

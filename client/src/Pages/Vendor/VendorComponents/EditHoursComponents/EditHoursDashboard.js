@@ -105,7 +105,7 @@ const StatusDropdown = styled.select`
 function CreateStatusDropdown (props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
-  function onChangeIsClosed (value) {
+  async function onChangeIsClosed (value) {
     window.location.reload()
     let inputIsClosed = value === 'OPEN' ? false : true
     // const originalHours = props.vendor_data.getVendor.hours;
@@ -124,7 +124,7 @@ function CreateStatusDropdown (props) {
       updatedHours[index] = dayCopy
     })
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours
@@ -390,7 +390,14 @@ function MakeTimeInput (props) {
     if (addedHours > 12) {
       halfOfDay = 'p.m.'
       formattedHour = (addedHours - 12).toString()
-    } else {
+    } else if (addedHours === 12) {
+      halfOfDay ='p.m.'
+      formattedHour ='12'
+    } else if (addedHours === 0) {
+      halfOfDay ='a.m.'
+      formattedHour ='12'
+    }
+    else {
       halfOfDay = 'a.m.'
       formattedHour = addedHours.toString()
     }
@@ -437,7 +444,7 @@ function MakeAddHoursButton (props) {
     setAddedEndTime(time)
   }
 
-  function ConfirmOnClick () {
+  async function ConfirmOnClick () {
     let timesToAdd = [addedStartTime, addedEndTime]
     console.log(timesToAdd)
 
@@ -460,7 +467,7 @@ function MakeAddHoursButton (props) {
       updatedHours[index] = dayCopy
     })
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours

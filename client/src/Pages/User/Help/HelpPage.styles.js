@@ -6,33 +6,39 @@ const HelpHeader = styled.section`
   justify-items: center;
   align-items: center;
 
-  height: 10vh;
+  height: 20vw;
+  @media (min-width: 768px) {
+    height: 150px;
+  }
   background-color: white;
 
-  font-family: 'Avenir-black';
+  font-family: 'Proxima Nova';
   font-size: 6vw;
+  @media (min-width: 1024px) {
+    font-size: 50px;
+  }
 `
 
 const BackArrowSection = styled.section`
   display: grid;
   font-size: 8vw;
+  @media (min-width: 768px) {
+    font-size: 50px;
+  }
 `
 
 const FAQSection = styled.section`
   padding: 0vh 5vw;
 `
 
-const FAQHeader = styled.section`
-  padding: 0vh 0vw 1vh 0vw;
-  font-family: 'Avenir-black';
-  font-size: 6vw;
-`
-
 const SubHeader = styled.section`
   padding: 2vh 0vw 1vh 0vw;
 
-  font-family: 'Avenir-black';
+  font-family: 'Proxima Nova';
   font-size: 5vw;
+  @media (min-width: 768px) {
+    font-size: 35px;
+  }
 `
 
 const QuestionSection = styled.section`
@@ -46,13 +52,19 @@ const QuestionSection = styled.section`
 `
 
 const QuestionText = styled.section`
-  font-family: 'Avenir';
+  font-family: 'Proxima Nova';
   font-size: 4.5vw;
+  @media (min-width: 768px) {
+    font-size: 25px;
+  }
   margin-right: 4vw;
 `
 
 const ExpandSection = styled.section`
   font-size: 6vw;
+  @media (min-width: 768px) {
+    font-size: 35px;
+  }
   margin-bottom: -0.5vh;
 `
 
@@ -60,9 +72,12 @@ const AnswerSection = styled.section`
   height: auto;
   white-space: pre-wrap;
 
-  font-family: 'Avenir';
+  font-family: 'Proxima Nova';
   color: #5A5953;
   font-size: 4vw;
+  @media (min-width: 768px) {
+    font-size: 20px;
+  }
 
   padding: 0vh 0vw 1vh 0vw;
   border-bottom: #5A59534D 1px solid;
@@ -77,13 +92,19 @@ const ContactSection = styled.section`
 `
 
 const ContactText = styled.section`
-  font-family: 'Avenir-black';
+  font-family: 'Proxima Nova';
   font-size: 5vw;
+  @media (min-width: 768px) {
+    font-size: 35px;
+  }
 `
 
 const ContactInfo = styled.section`
-  font-family: 'Avenir';
+  font-family: 'Proxima Nova';
   font-size: 4vw;
+  @media (min-width: 768px) {
+    font-size: 30px;
+  }
 
   justify-self: end;
 `
@@ -92,7 +113,6 @@ export {
   HelpHeader,
   BackArrowSection,
   FAQSection,
-  FAQHeader,
   SubHeader,
   QuestionSection,
   QuestionText,

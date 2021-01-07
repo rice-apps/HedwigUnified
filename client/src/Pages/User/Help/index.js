@@ -17,7 +17,6 @@ import {
   HelpHeader,
   BackArrowSection,
   FAQSection,
-  FAQHeader,
   SubHeader,
   ContactSection,
   ContactText,

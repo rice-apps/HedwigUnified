@@ -386,7 +386,14 @@ function MakeTimeInput (props) {
     if (addedHours > 12) {
       halfOfDay = 'p.m.'
       formattedHour = (addedHours - 12).toString()
-    } else {
+    } else if (addedHours === 12) {
+      halfOfDay ='p.m.'
+      formattedHour ='12'
+    } else if (addedHours === 0) {
+      halfOfDay ='a.m.'
+      formattedHour ='12'
+    }
+    else {
       halfOfDay = 'a.m.'
       formattedHour = addedHours.toString()
     }

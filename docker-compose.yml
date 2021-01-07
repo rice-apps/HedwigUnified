@@ -5,9 +5,9 @@ services:
     env_file:
       - ./env
     ports:
-      - 3001:3001
+      - 8080:8080
     expose:
-      - 3001
+      - 8080
   client:
     image: riceapps/hedwig-client:latest
     env_file:

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { cartItems, orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
+import moment from 'moment'
 
 export const Button = styled.button`
   font-size: 20px;
@@ -95,18 +96,19 @@ const AlmostThere = ({ classes }) => {
   const handlePayment = () => {
     window.open(order.url)
   }
-  
+  const pickupTime = moment(new Date(order.fulfillment.pickupAt)).format('h:mm a')
+
     return (
       <div className='mainDiv'>
         <WarningSVG className='checkSvg' />
         <div>
           <P title>Almost There!</P>
           <P>
-            You order is not complete until you enter payment details. 
+            You order is not complete until you enter payment details.
             You will receive a confirmation text once they are received.
           </P>
         </div>
-        <Div> 
+        <Div>
           <Button primary onClick={handlePayment}>
             Enter Payment Details
           </Button>
@@ -115,8 +117,8 @@ const AlmostThere = ({ classes }) => {
           <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
           <P header>{order.vendor.name}</P>
           <P header>Pick Up Instruction:</P>
-          <P pickup>Pick up at {order.fulfillment.placedAt} at 
-            {order.fulfillment.pickupAt}
+          <P pickup>Pick up at {order.fulfillment.placedAt} at
+            {" "+pickupTime}
           </P>
         </Div>
 

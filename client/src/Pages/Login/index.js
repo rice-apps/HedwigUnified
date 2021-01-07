@@ -15,47 +15,25 @@ const sStorage = window.localStorage
 function Login () {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
-  // Fetch service from cache since it depends on where this app is deployed
-  // const { data } = useQuery(GET_SERVICE_LOCAL);
 
-  const casLoginURL = 'https://idp.rice.edu/idp/profile/cas/login'
-
-  // Handles click of login button
-  const login = () => {
-    // Redirects user to the CAS login page
-    const redirectURL = casLoginURL + '?service=' + SERVICE_URL
-    window.open(redirectURL, '_self')
-  }
-
+  /* Lets user sign in in a pop-up tab, get the user's info then generates a token. */
   const signInSAML = () => {
     firebase
       .auth()
-      .signInWithRedirect(provider)
+      .signInWithPopup(provider)
       .then(result => {
-        console.log(result)
-        console.log(result.user)
-        console.log(result.additionalUserInfo)
+        const profile = result.additionalUserInfo.profile
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          sStorage.setItem('idToken', idToken)
+
+        }).catch(function(error) {
+          console.log(error)
+        });
       })
       .catch(error => console.log(error))
-  }
 
-  firebase
-    .auth()
-    .getRedirectResult()
-    .then(result => {
-      if (result.user) {
-        const profile = result.additionalUserInfo.profile
-        // redirect to auth page carrying state from IDP
-        sStorage.setItem('last name', profile['urn:oid:2.5.4.4'])
-        sStorage.setItem('first name', profile['urn:oid:2.5.4.42'])
-        sStorage.setItem('email', profile['urn:oid:0.9.2342.19200300.100.1.3'])
-        sStorage.setItem('id', profile['urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'])
-        login()
-      }
-    })
-    .catch(error => {
-      console.log(error)
-    })
+      return navigate('/auth')
+  }
 
   return (
     <MainDiv>

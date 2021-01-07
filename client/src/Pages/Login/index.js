@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useQuery, gql } from '@apollo/client'
 
 import logo from './HedwigLogoFinal_02.svg'
-
 import { SERVICE_URL } from '../../config'
 import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
 // import './Transitions.css';

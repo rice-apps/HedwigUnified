@@ -4,11 +4,6 @@ import { userProfile } from '../../../apollo'
 import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
-<<<<<<< HEAD
-import { centerCenter } from '../../../Styles/flex'
-import { BiFontFamily } from 'react-icons/bi'
-=======
->>>>>>> master
 
 const ADD_PHONE = gql`
   mutation($name: String!, $phone: String!, $netid: String!) {
@@ -55,7 +50,6 @@ function ContactForm () {
   const user = userProfile()
   const userName =
     sStorage.getItem('first name') + ' ' + sStorage.getItem('last name')
-<<<<<<< HEAD
     const firstName = sStorage.getItem('first name')
   const navigate = useNavigate()
   const [phone, setPhone] = useState(null)
@@ -77,12 +71,8 @@ function ContactForm () {
     vendor: user.vendor,
     isAdmin: user.isAdmin
   }
-  const [addPhone, { loading, error, data }] = useMutation(ADD_PHONE)
-=======
-  const [phone, setPhone] = useState(null)
-  const [confirmed, setConfirmed] = useState(false)
   const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
->>>>>>> master
+
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error.message}</p>

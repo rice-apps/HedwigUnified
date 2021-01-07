@@ -138,12 +138,9 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
     return <Route {...rest} element={element} />
   }
 
-<<<<<<< HEAD
-  const netid = userData.userOne.netid;
-=======
   const vendor = userData.userOne.vendor
   const netid = userData.userOne.netid
->>>>>>> master
+
   // this is not a vendor and we already passed the verification stage
   if (!vendor) {
     return <Navigate to='/eat' />

@@ -349,7 +349,7 @@ function Menu () {
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
-      <BuyerHeader showBackButton="true" backLink='/eat'/>
+      <BuyerHeader showBackButton='true' backLink='/eat' />
       <div style={{ paddingBottom: '8.6vh' }}>
         {/* Hero Image */}
         <img
@@ -415,7 +415,7 @@ function Menu () {
             <h1 class='categoryname'>
               <Link
                 activeClass='categoryactive'
-                style={{textDecoration: "none", color:"black"}}
+                style={{ textDecoration: 'none', color: 'black' }}
                 to={category}
                 smooth
                 spy

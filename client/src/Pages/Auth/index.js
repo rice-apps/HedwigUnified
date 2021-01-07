@@ -1,6 +1,5 @@
-import { Component, useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
-import { Redirect } from 'react-router'
+import { useEffect } from 'react'
+import { gql, useMutation } from '@apollo/client'
 import { userProfile } from '../../apollo'
 import { Navigate } from 'react-router-dom'
 
@@ -66,7 +65,7 @@ function Auth () {
   })
 
   // Set token in local storage
-  lstorage.setItem('token', token);
+  lstorage.setItem('token', token)
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

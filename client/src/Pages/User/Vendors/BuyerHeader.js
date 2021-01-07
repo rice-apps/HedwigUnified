@@ -1,11 +1,8 @@
 import styled from 'styled-components'
-import { FaUserCircle } from 'react-icons/fa'
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
-import RalewayFont from './../../../fonts/Raleway/RalewayFont'
+import RalewayFont from '../../../fonts/GlobalFont.js'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
-import { FaBars } from 'react-icons/fa'
-import Profile from '../Profile'
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -27,7 +24,7 @@ const HedwigLogo = styled.img`
   height: 4.5vh;
   width: 4.5vh;
   margin-right: 5px;
-  margin-top: 0l5vh;
+  margin-top: 0.15vh;
 `
 
 const HedwigWrapper = styled.div`
@@ -36,7 +33,7 @@ const HedwigWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #db6142;
+  color: #f3725b;
 `
 
 function BuyerHeader (props) {

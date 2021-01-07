@@ -14,10 +14,7 @@ import './square'
 
 const app = express().use(cors())
 
-const server = new ApolloServer({
-  schema: Schema,
-  introspection: true
-})
+const server = new ApolloServer({ schema: Schema })
 
 server.applyMiddleware({ app })
 
@@ -26,11 +23,10 @@ const httpServer = http.createServer(app)
 server.installSubscriptionHandlers(httpServer)
 
 httpServer.listen({ port: DEV_PORT }, () => {
-  log.info('Server running.')
   log.info(
     `🚀 Server ready at http://localhost:${DEV_PORT}${server.graphqlPath}`
   )
   log.info(
-    `🚀 Subscriptions ready at http://localhost:${DEV_PORT}${server.subscriptionsPath}`
+    `🚀 Subscriptions ready at ws://localhost:${DEV_PORT}${server.subscriptionsPath}`
   )
 })

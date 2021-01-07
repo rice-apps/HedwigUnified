@@ -35,6 +35,8 @@ function Login () {
     window.open(redirectURL, '_self')
   }
 
+  const navigate = useNavigate()
+  /* Lets user sign in in a pop-up tab, get the user's info then generates a token. */
   const signInSAML = () => {
     firebase
       .auth()

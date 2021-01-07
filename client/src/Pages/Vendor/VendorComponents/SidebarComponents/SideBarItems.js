@@ -12,6 +12,7 @@ const SideBarItemsWrapper = styled.div`
   flex-direction: column;
   align-content: stretch;
   margin-top: 10px;
+  font-weight: 500;
 `
 
 const MainMenuItemWrapper = styled.div`
@@ -20,6 +21,7 @@ const MainMenuItemWrapper = styled.div`
   width: 100%;
   padding: 0.5vh 0.5vw;
   border-radius: 20px;
+  font-weight: 600;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -62,7 +64,7 @@ function SubMenuItem (props) {
     <SubMenuItemWrapper>
       <StyledNavLink
         to={props.path}
-        activeStyle={{ color: '#EA907A', fontWeight: 'bold' }}
+        activeStyle={{ color: '#EA907A', fontWeight: '700' }}
       >
         {' '}
         {props.label}{' '}

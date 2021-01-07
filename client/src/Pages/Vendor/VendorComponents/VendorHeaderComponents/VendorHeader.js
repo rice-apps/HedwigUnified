@@ -8,7 +8,7 @@ import { IconContext } from 'react-icons'
 import { useApolloClient } from '@apollo/client'
 
 const VendorHeaderWrapper = styled.div`
-  font-family: 'Futura', sans-serif;
+  font-weight: 600;
   display: grid;
   width: 100%;
   height: 100%;

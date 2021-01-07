@@ -25,17 +25,17 @@ const UPDATE_VENDOR = gql`
 const EditHoursDashboardWrapper = styled.div`
   height: 98%;
   width: 90%;
-  font-size: 3.8vh;
+  font-size: 3.6vh;
   display: grid;
+  font-weight: 500;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 8fr 1fr;
-  font-family: 'Futura', sans-serif;
   justify-items: center;
   overflow: hidden;
 `
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
-  font-weight: 500;
+  font-weight: 600;
 `
 
 const EditHoursRowWrapper = styled.div`
@@ -52,6 +52,7 @@ const CloseNowButton = styled.button`
   background-color: white;
   height: 6vh;
   width: 12vw;
+  font-weight: 600;
   margin-top: 1.8vh;
 `
 const EditHoursRow = styled.div`
@@ -71,6 +72,7 @@ const EditHoursRow = styled.div`
 const DayColumn = styled.div`
   grid-area: Day;
   width: 100%;
+  font-weight: 600;
   height: 100%;
   display: flex;
   margin-left: 2vw;
@@ -93,15 +95,17 @@ const StatusDropdown = styled.select`
   text-align-last: center;
   border-radius: 10px;
   -webkit-appearance: none;
+  font-size: 2.4vh;
   position: relative;
   padding-right: 19px;
   cursor: pointer;
+  font-weight: 500;
 `
 
 function CreateStatusDropdown (props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
-  function onChangeIsClosed (value) {
+  async function onChangeIsClosed (value) {
     window.location.reload()
     let inputIsClosed = value === 'OPEN' ? false : true
     // const originalHours = props.vendor_data.getVendor.hours;
@@ -120,7 +124,7 @@ function CreateStatusDropdown (props) {
       updatedHours[index] = dayCopy
     })
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours
@@ -440,7 +444,7 @@ function MakeAddHoursButton (props) {
     setAddedEndTime(time)
   }
 
-  function ConfirmOnClick () {
+  async function ConfirmOnClick () {
     let timesToAdd = [addedStartTime, addedEndTime]
     console.log(timesToAdd)
 
@@ -463,7 +467,7 @@ function MakeAddHoursButton (props) {
       updatedHours[index] = dayCopy
     })
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours
@@ -582,7 +586,7 @@ function EditHoursDashboard () {
     return hours.findIndex(obj => obj.day === dayName)
   }
 
-  function closeOnClick () {
+  async function closeOnClick () {
     const currentDay = moment().format('dddd')
     console.log('current day ', currentDay)
     const index = hours.findIndex(obj => obj.day === currentDay)
@@ -604,7 +608,7 @@ function EditHoursDashboard () {
 
     console.log('updated day ', updatedDay)
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours

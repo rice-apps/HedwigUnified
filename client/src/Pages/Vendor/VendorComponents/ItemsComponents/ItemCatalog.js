@@ -13,9 +13,6 @@ const theme = createMuiTheme({
     secondary: {
       main: '#F3DAC2'
     }
-  },
-  typography: {
-    fontFamily: 'Futura'
   }
 })
 const PageWrapper = styled.div`

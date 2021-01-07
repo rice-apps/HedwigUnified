@@ -10,7 +10,6 @@ import { gql } from '@apollo/client'
 import moment from 'moment'
 import { GrRestaurant } from 'react-icons/gr'
 
-
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD'
@@ -47,7 +46,7 @@ const OrderTitleSpaceWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 1fr;
   font-size: 22px;
-  line-height:23.5px;
+  line-height: 23.5px;
   justify-content: center;
   justify-items: center;
   padding-top: 8px;
@@ -91,7 +90,7 @@ const TimeLeftSpaceWrapper = styled.div`
   grid-area: TimeLeftSpace;
   text-align: right;
   color: #2d2d2d;
-  font-size:13px;
+  font-size: 13px;
 `
 
 function MakeOrderTime (props) {
@@ -112,7 +111,7 @@ function MakeOrderTime (props) {
             textDecoration: 'underline'
           }}
         >
-          Pickup time <br/> {props.pickupCountdown}
+          Pickup time <br /> {props.pickupCountdown}
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
@@ -189,7 +188,6 @@ const ButtonsSpaceWrapper = styled.div`
   align-items: center;
 `
 const ButtonWrapper = styled.button`
-
   border-radius: 20px;
   cursor: pointer;
   border: 0px;
@@ -312,7 +310,9 @@ function MakeModalParagraph (props) {
       </ModalParagraphWrapper>
     )
   } else {
-    return <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
+    return (
+      <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
+    )
   }
 }
 
@@ -422,7 +422,12 @@ function MakePaymentSpace (props) {
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
         <div>
-          Tax: <strong>{ props.orderTax ? formatter.format(props.orderTax): formatter.format(0)}</strong>
+          Tax:{' '}
+          <strong>
+            {props.orderTax
+              ? formatter.format(props.orderTax)
+              : formatter.format(0)}
+          </strong>
         </div>
         <div>
           Total: <strong>{formatter.format(props.orderTotal)}</strong>
@@ -445,8 +450,7 @@ function MakePaymentSpace (props) {
             position: 'absolute',
             top: '28%',
             left: '28%',
-            borderRadius: '20px',
-  
+            borderRadius: '20px'
           }
         }}
       >
@@ -463,7 +467,15 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            <AcceptButton onClick={() => { props.handleClick(); closeAcceptModal()}}> Accept </AcceptButton>
+            <AcceptButton
+              onClick={() => {
+                props.handleClick()
+                closeAcceptModal()
+              }}
+            >
+              {' '}
+              Accept{' '}
+            </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
       </Modal>
@@ -478,8 +490,7 @@ function MakePaymentSpace (props) {
             position: 'absolute',
             top: '28%',
             left: '28%',
-            borderRadius: '20px',
-
+            borderRadius: '20px'
           }
         }}
       >
@@ -496,7 +507,7 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={ () => (closeCancelModal(), cancelOrder())}>
+            <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
               Cancel
             </AcceptButton>
           </ModalButtonsWrapper>

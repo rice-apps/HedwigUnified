@@ -7,7 +7,7 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 const VendorName = styled.div`
   font-size: 2.1vw;
   margin-top: 10px;
-
+  font-weight: 700;
   text-align: center;
 `
 
@@ -89,20 +89,6 @@ function SideBarVendorProfile ({ setLogo }) {
   return (
     <div>
       <VendorName>{vendorName}</VendorName>
-      <StoreStatus>
-        Store Status:
-        <Toggle
-          // checked={data.getVendor.isOpen}
-          onChange={e =>
-            vendorAvailability({
-              variables: {
-                isOpen: e.target.checked,
-                merchantId: data.getVendor._id
-              }
-            })
-          }
-        />
-      </StoreStatus>
     </div>
   )
 }

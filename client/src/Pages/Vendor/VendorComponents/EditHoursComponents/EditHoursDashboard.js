@@ -25,18 +25,18 @@ const UPDATE_VENDOR = gql`
 const EditHoursDashboardWrapper = styled.div`
   height: 98%;
   width: 90%;
-  font-size: 3.8vh;
+  font-size: 3.6vh;
   display: grid;
+  font-weight: 500;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 8fr 1fr;
-  font-family: "Futura", sans-serif;
   justify-items: center;
   overflow: hidden;
 `;
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
-  font-weight: 500;
-`;
+  font-weight: 600;
+`
 
 const EditHoursRowWrapper = styled.div`
   font-size: 2.8vh;
@@ -52,6 +52,7 @@ const CloseNowButton = styled.button`
   background-color: white;
   height: 6vh;
   width: 12vw;
+  font-weight: 600;
   margin-top: 1.8vh;
 `;
 const EditHoursRow = styled.div`
@@ -71,6 +72,7 @@ const EditHoursRow = styled.div`
 const DayColumn = styled.div`
   grid-area: Day;
   width: 100%;
+  font-weight: 600;
   height: 100%;
   display: flex;
   margin-left: 2vw;
@@ -93,20 +95,22 @@ const StatusDropdown = styled.select`
   text-align-last: center;
   border-radius: 10px;
   -webkit-appearance: none;
+  font-size: 2.4vh;
   position: relative;
   padding-right: 19px;
   cursor: pointer;
-`;
+  font-weight: 500;
+`
 
 function CreateStatusDropdown(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  function onChangeIsClosed(value) {
-    window.location.reload();
-
-    let inputIsClosed = value === "OPEN" ? false : true;
-    const originalHours = props.currentHours;
-    const updatedHours = [...originalHours];
+  async function onChangeIsClosed (value) {
+    window.location.reload()
+    let inputIsClosed = value === 'OPEN' ? false : true
+    // const originalHours = props.vendor_data.getVendor.hours;
+    const originalHours = props.currentHours
+    const updatedHours = [...originalHours]
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
     updatedDay.isClosed = inputIsClosed;
@@ -118,7 +122,7 @@ function CreateStatusDropdown(props) {
       updatedHours[index] = dayCopy;
     });
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: "Cohen House",
         hours: updatedHours,
@@ -336,11 +340,18 @@ function MakeTimeInput(props) {
     const formattedMinute = addedTime.split(":")[1];
 
     if (addedHours > 12) {
-      halfOfDay = "p.m.";
-      formattedHour = (addedHours - 12).toString();
-    } else {
-      halfOfDay = "a.m.";
-      formattedHour = addedHours.toString();
+      halfOfDay = 'p.m.'
+      formattedHour = (addedHours - 12).toString()
+    } else if (addedHours === 12) {
+      halfOfDay ='p.m.'
+      formattedHour ='12'
+    } else if (addedHours === 0) {
+      halfOfDay ='a.m.'
+      formattedHour ='12'
+    }
+    else {
+      halfOfDay = 'a.m.'
+      formattedHour = addedHours.toString()
     }
 
     const formattedAddedTime =
@@ -405,7 +416,7 @@ function MakeAddHoursButton(props) {
       updatedHours[index] = dayCopy;
     });
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: "Cohen House",
         hours: updatedHours,
@@ -540,7 +551,7 @@ function EditHoursDashboard() {
       updatedHours[index] = dayCopy;
     });
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: "Cohen House",
         hours: updatedHours,

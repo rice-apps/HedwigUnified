@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Toggle from 'react-toggle'
 import './Toggle.css'
 import { gql, useMutation, useQuery } from '@apollo/client'
@@ -7,7 +7,7 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 const VendorName = styled.div`
   font-size: 2.1vw;
   margin-top: 10px;
-
+  font-weight: 700;
   text-align: center;
 `
 
@@ -53,12 +53,11 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
     }
   }
 `
-const SideBarVendorProfileWrapper = styled.div``
 // const merchantId = '5f836204280dd576b7e828ad'
 
 function SideBarVendorProfile ({ setLogo }) {
   const token = localStorage.getItem('token')
-  const [vendorName, setVendorName] = useState('')
+  const [vendorName, setVendorName] = useState('Cohen House')
 
   const [vendorAvailability, { error }] = useMutation(
     UPDATE_VENDOR_AVAILABILITY
@@ -73,7 +72,7 @@ function SideBarVendorProfile ({ setLogo }) {
   )
 
   const { data, loading, error: queryError } = useQuery(GET_VENDOR_DATA, {
-    variables: { name: vendorName }
+    variables: { name: 'Cohen House' }
   })
 
   useEffect(() => {
@@ -90,20 +89,6 @@ function SideBarVendorProfile ({ setLogo }) {
   return (
     <div>
       <VendorName>{vendorName}</VendorName>
-      <StoreStatus>
-        Store Status:
-        <Toggle
-          // checked={data.getVendor.isOpen}
-          onChange={e =>
-            vendorAvailability({
-              variables: {
-                isOpen: e.target.checked,
-                merchantId: data.getVendor._id
-              }
-            })
-          }
-        />
-      </StoreStatus>
     </div>
   )
 }

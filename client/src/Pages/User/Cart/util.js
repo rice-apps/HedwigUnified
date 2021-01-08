@@ -1,16 +1,17 @@
 import { gql } from '@apollo/client'
-import { orderSummary } from '../../../apollo'
+import { orderSummary, userProfile } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
 export const GET_VENDOR = gql`
-  query {
-    getVendors {
+  query GET_VENDOR($filter: FilterFindOneVendorsInput!) {
+    getVendor(filter: $filter) {
       name
       hours {
-        day
         start
         end
+        day
+        isClosed
       }
       squareInfo {
         merchantId
@@ -25,19 +26,23 @@ export const CREATE_ORDER = gql`
     $studentId: String!
     $name: String!
     $phone: String!
-    $email: String!
     $time: String!
     $key: String!
     $lineItems: [LineItemInput]!
+    $location: String!
+    $type: PaymentSourceEnum!
+    $cohenId: String
   ) {
     createOrder(
-      locationId: "FMXAFFWJR95WC"
+      locationId: $location
       record: {
         studentId: $studentId
         idempotencyKey: $key
         lineItems: $lineItems
-        recipient: { name: $name, phone: $phone, email: $email }
+        recipient: { name: $name, phone: $phone }
         pickupTime: $time
+        paymentType: $type
+        cohenId: $cohenId
       }
     ) {
       id
@@ -53,6 +58,10 @@ export const CREATE_ORDER = gql`
       fulfillment {
         uid
         state
+        pickupDetails {
+          pickupAt
+          placedAt
+        }
       }
       items {
         name
@@ -66,13 +75,18 @@ export const CREATE_ORDER = gql`
 `
 
 export const CREATE_PAYMENT = gql`
-  mutation($orderId: String!, $subtotal: Int!, $currency: String!) {
+  mutation(
+    $orderId: String!
+    $subtotal: Int!
+    $currency: String!
+    $location: String!
+  ) {
     createPayment(
       record: {
-        source: SQUARE
+        source: SHOPIFY
         sourceId: "cnon:card-nonce-ok"
         orderId: $orderId
-        locationId: "FMXAFFWJR95WC"
+        locationId: $location
         subtotal: { amount: $subtotal, currency: $currency }
       }
     ) {
@@ -86,21 +100,30 @@ export const CREATE_PAYMENT = gql`
   }
 `
 
-const sStorage = localStorage
+export const UPDATE_ORDER_TRACKER = gql`
+  mutation($paymentType: String!, $orderId: String!) {
+    updateOrderTracker(
+      record: { paymentType: $paymentType }
+      filter: { orderId: $orderId }
+    ) {
+      recordId
+    }
+  }
+`
+
 const getRecipient = () => {
+  const user = userProfile()
   return {
-    name: sStorage.getItem('first name') + ' ' + sStorage.getItem('last name'),
-    phone: sStorage.getItem('phone'),
-    email: sStorage.getItem('email')
+    name: user.name,
+    phone: user.phone
   }
 }
 
 const getLineItems = items => {
   const rtn = []
-  const item = null
-  for (const [v, item] of Object.entries(items)) {
+  for (const [, item] of Object.entries(items)) {
     const modifierList = []
-    for (const [k, m] of Object.entries(item.modifierLists)) {
+    for (const [, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
         catalog_object_id: m.dataSourceId
       })
@@ -116,26 +139,44 @@ const getLineItems = items => {
   return rtn
 }
 
-export const createRecord = items => {
+export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient()
+  const user = userProfile()
+  console.log(orderSummary())
   return {
-    studentId: sStorage.getItem('id'),
+    studentId: user.studentId,
     key: uuidv4(),
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
-    email: recipient.email,
-    time: orderSummary().time.format()
+    time: orderSummary().time ? moment(orderSummary().time).format() : null,
+    location: orderSummary().vendor.locationIds[0],
+    type: paymentType,
+    cohenId: cohenId
   }
 }
 
-export const checkNullFields = () => {
-  const fields = ['first name', 'last name', 'phone', 'id']
+export const checkNullFields = source => {
+  const fields = ['name', 'phone', 'studentId', 'type', 'time']
+  const detailedInfo = [
+    'name',
+    'phone number',
+    'rice student id',
+    'payment method',
+    'pickup time'
+  ]
   let field
-  for (field of fields) {
-    if (sStorage.getItem(field) == '') {
-      return field
+  console.log(source)
+  for (field in fields) {
+    if (!source.variables[fields[field]]) {
+      console.log(detailedInfo[field])
+      return detailedInfo[field]
     }
+  }
+  console.log(source.variables.cohenId)
+  if (source.variables.type === 'COHEN' && !source.variables.cohenId) {
+    console.log('no cohen id')
+    return 'cohen id'
   }
   return null
 }

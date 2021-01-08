@@ -110,6 +110,14 @@ const ItemModifierListTC = sc.createObjectTC({
     modifiers: {
       type: ItemModifierTC.getTypePlural().getType(),
       description: 'The modifiers that are included in this modifier list.'
+    },
+    minModifiers: {
+      type: 'Int',
+      description: 'The minimum number of modifiers needed to be selected'
+    },
+    maxModifiers: {
+      type: 'Int',
+      description: 'The maximum number of modifiers needed to be selected'
     }
   }
 })

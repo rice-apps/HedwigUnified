@@ -12,21 +12,12 @@ import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
 
-const ACCEPT_ORDER = gql`
-  mutation {
-    updateOrder(
-      orderId: "Pu4mWMvZJlkb2J0QdxIWapYVt9EZY"
-      record: {
-        fulfillment: { uid: "WXe2kpdIeO7phMhR7hY6GD", state: RESERVED }
-      }
-    ) {
-      fulfillment {
-        uid
-        state
-      }
-    }
-  }
-`
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD'
+})
+
+
 
 const OrderCardWrapper = styled.div`
   background-color: white;
@@ -35,7 +26,7 @@ const OrderCardWrapper = styled.div`
   border-color: #cacaca;
   border-style: solid;
   justify-self: center;
-  font-family: 'Futura', sans-serif;
+
   display: grid;
   width: 26vw;
   height: max-content;
@@ -43,7 +34,7 @@ const OrderCardWrapper = styled.div`
   margin-right: 14px;
   overflow: visible;
   grid-template-columns: 1fr;
-  grid-template-rows: 35px max-content max-content 92px;
+  grid-template-rows: max-content max-content max-content 92px;
   grid-template-areas:
     'OrderTitleSpace'
     'OrderTimeSpace'
@@ -59,6 +50,7 @@ const OrderTitleSpaceWrapper = styled.div`
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 1fr;
   font-size: 22px;
+  line-height: 23.5px;
   justify-content: center;
   justify-items: center;
   padding-top: 8px;
@@ -101,7 +93,8 @@ const ExactTimeSpaceWrapper = styled.div`
 const TimeLeftSpaceWrapper = styled.div`
   grid-area: TimeLeftSpace;
   text-align: right;
-  color: #9d9d9d;
+  color: #2d2d2d;
+  font-size: 13px;
 `
 
 function MakeOrderTime (props) {
@@ -122,7 +115,7 @@ function MakeOrderTime (props) {
             textDecoration: 'underline'
           }}
         >
-          Pickup time {props.pickupCountdown}
+          Pickup time <br /> {props.pickupCountdown}
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
@@ -165,7 +158,7 @@ function MakeOrderDetails (props) {
           <IoIosAddCircleOutline /> {props.modifiers}
         </div>
       </ItemDescriptionWrapper>
-      <div style={{ fontWeight: 'bold' }}>${props.price}</div>
+      <div style={{ fontWeight: 'bold' }}>{formatter.format(props.price)}</div>
     </OrderDetailsItemWrapper>
   )
 }
@@ -199,7 +192,6 @@ const ButtonsSpaceWrapper = styled.div`
   align-items: center;
 `
 const ButtonWrapper = styled.button`
-  font-family: 'Futura', sans-serif;
   border-radius: 20px;
   cursor: pointer;
   border: 0px;
@@ -258,13 +250,13 @@ function MakeModalHeader (props) {
     <ModalHeaderWrapper>
       <FaIdCard style={{ marginTop: '3px', marginRight: '12px' }} />
       {paymentType === 'TETRA' ? (
-        <div>Tetra Pay (No.{props.orderNumber})</div>
+        <div>Tetra</div>
       ) : null}
       {paymentType === 'COHEN' ? (
-        <div>Cohen House Membership ID (No.{props.orderNumber})</div>
+        <div>Cohen House Membership ID </div>
       ) : null}
       {paymentType === 'CREDIT' ? (
-        <div>Credit Card (No.{props.orderNumber})</div>
+        <div>Credit Card </div>
       ) : null}
     </ModalHeaderWrapper>
   )
@@ -279,7 +271,17 @@ const ModalParagraphWrapper = styled.div`
   font-size: 16px;
   grid-area: ModalParagraph;
   border-bottom: 1px solid grey;
+
 `
+
+function isEmpty(obj) {
+  for(var prop in obj) {
+    if(obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }}
+
+
 function MakeModalParagraph (props) {
   const { paymentType, cancel, isVerified } = props
 
@@ -334,7 +336,9 @@ function MakeModalParagraph (props) {
       </ModalParagraphWrapper>
     )
   } else {
-    return <ModalParagraphWrapper>error</ModalParagraphWrapper>
+    return (
+      <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
+    )
   }
 }
 
@@ -365,18 +369,16 @@ function MakeModalOrderDetails (props) {
         <div>{props.customerName}</div>
       </ModalOrderDetailRow>
       <ModalOrderDetailRow>
-        {paymentType === 'Tetra' ? (
+        {paymentType === 'TETRA' ? (
           <div>Student ID:</div>
-        ) : paymentType === 'Membership' ? (
+        ) : paymentType === 'COHEN' ? (
           <div>Membership ID:</div>
         ) : null}
-        {paymentType === 'Tetra' || paymentType === 'Membership' ? (
-          <div> *******</div>
-        ) : null}
+        {paymentType === 'TETRA' ? (<div>{props.studentId}</div>) : paymentType === 'COHEN' ? (<div>{props.cohenId}</div>): null}
       </ModalOrderDetailRow>
       <ModalOrderDetailRow>
         <div>Amount:</div>
-        <div>${props.orderTotal}</div>
+        <div>{formatter.format(props.orderTotal)}</div>
       </ModalOrderDetailRow>
     </ModalOrderDetailsWrapper>
   )
@@ -452,10 +454,15 @@ function MakePaymentSpace (props) {
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
         <div>
-          Tax: <strong>${props.orderTax}</strong>
+          Tax:{' '}
+          <strong>
+            {props.orderTax
+              ? formatter.format(props.orderTax)
+              : formatter.format(0)}
+          </strong>
         </div>
         <div>
-          Total: <strong>${props.orderTotal}</strong>
+          Total: <strong>{formatter.format(props.orderTotal)}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -475,8 +482,7 @@ function MakePaymentSpace (props) {
             position: 'absolute',
             top: '28%',
             left: '28%',
-            borderRadius: '20px',
-            fontFamily: 'Futura'
+            borderRadius: '20px'
           }
         }}
       >
@@ -494,11 +500,13 @@ function MakePaymentSpace (props) {
             paymentType={props.paymentType}
             orderTotal={props.orderTotal}
             customerName={props.customerName}
+            studentId={props.studentId}
+            cohenId={props.cohenId}
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
-            {isVerified ? (
-              <AcceptButton onClick={props.handleClick}>Accept</AcceptButton>
+            {(props.paymentType!= "CREDIT") | (props.paymentType==="CREDIT" & isVerified) ? (
+              <AcceptButton onClick={() => props.handleClick, closeAcceptModal}>Accept</AcceptButton>
             ) : (
               <AcceptButton onClick={closeAcceptModal}>
                 Return To Home
@@ -518,8 +526,7 @@ function MakePaymentSpace (props) {
             position: 'absolute',
             top: '28%',
             left: '28%',
-            borderRadius: '20px',
-            fontFamily: 'Futura'
+            borderRadius: '20px'
           }
         }}
       >
@@ -536,7 +543,7 @@ function MakePaymentSpace (props) {
           />
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={(closeCancelModal, cancelOrder)}>
+            <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
               Cancel
             </AcceptButton>
           </ModalButtonsWrapper>
@@ -556,9 +563,28 @@ function OrderCard (props) {
     fulfillment,
     handleClick,
     buttonStatus,
-    cancelClick
+    cancelClick,
+    id
   } = props
   // RFC3339
+
+  const {
+    data: orderTrackerData,
+    loading: orderTrackerLoading,
+    error: orderTrackerError
+  } = useQuery(ORDER_TRACKER, {
+    variables: { orderId: id }
+  })
+
+  if (orderTrackerLoading) {
+    return <p> Loading...</p>
+  }
+
+  if (orderTrackerError) {
+    return <p style={{fontSize: "10px"}}> {orderTrackerError.message}.</p>
+  }
+  
+
   const pickupAt = moment(pickupTime).format('h:mm A')
   const timeLeft = moment(pickupTime).fromNow()
 
@@ -566,6 +592,7 @@ function OrderCard (props) {
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
+      {/* {orderTrackerData.getOrderTracker.paymentType === null ? console.log("HIII", orderTrackerData.getOrderTracker) : null} */}
       <OrderCardWrapper>
         {/* Section of Order card with customer name, order number */}
 
@@ -575,7 +602,7 @@ function OrderCard (props) {
         <MakeOrderTime
           pickupTime={pickupAt}
           submissionTime='4:35pm'
-          paymentType='Tetra'
+          paymentType={orderTrackerData.getOrderTracker.paymentType === null ? "None" : orderTrackerData.getOrderTracker.paymentType }
           pickupCountdown={timeLeft}
         />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
@@ -597,10 +624,12 @@ function OrderCard (props) {
         <MakePaymentSpace
           buttonStatus={buttonStatus}
           orderCost={orderCost}
+          studentId={props.studentId}
+          cohenId={props.cohenId}
           orderTax={props.orderTax}
           orderTotal={orderTotal}
           fulfillment={fulfillment}
-          paymentType={props.paymentType}
+          paymentType={isEmpty(orderTrackerData)  ? "None": orderTrackerData.getOrderTracker.paymentType }
           handleClick={handleClick}
           customerName={customerName}
           cancelClick={cancelClick}

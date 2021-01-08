@@ -5,7 +5,7 @@ import {
 } from 'square-connect'
 import { ApolloError } from 'apollo-server-express'
 import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
-import pubsub from '../utils/pubsub'
+import { pubsub } from '../utils/pubsub'
 import {
   FilterOrderInputTC,
   SortOrderInputTC,
@@ -62,8 +62,14 @@ OrderTC.addResolver({
 
     const { cursor: newCursor, orders } = searchOrderResponse
 
-    const returnedOrders = orders.map(async order => {
+    let filteredOrders = orders.filter(
+      order => typeof order.fulfillments !== 'undefined'
+    )
+
+    const returnedOrders = filteredOrders.map(async order => {
       const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+
+      console.log(order.fulfillments)
 
       return {
         id: order.id,
@@ -133,7 +139,8 @@ OrderTC.addResolver({
           recipient,
           pickupTime,
           cohenId,
-          studentId
+          studentId,
+          paymentType
         }
       } = args
 
@@ -177,7 +184,8 @@ OrderTC.addResolver({
         status: 'PROPOSED',
         pickupTime: pickupTime,
         locationId: locationId,
-        orderId: orderResponse.order.id
+        orderId: orderResponse.order.id,
+        paymentType: paymentType
       })
 
       const {

@@ -31,7 +31,7 @@ const BusinessHours = new Schema({
     ],
     required: true
   },
-  isClosed: { type: [Boolean], required: true }
+  isClosed: { type: Boolean, required: true }
 })
 
 convertSchemaToGraphQL(SquareInfo, 'VendorSquareInfo', sc)
@@ -41,11 +41,16 @@ const VendorSchema = new Schema({
   name: { type: String, required: true, unique: true },
   slug: { type: String, min: 3, max: 5, unique: true, required: true }, // short 3-5 letter slug that identifies this vendor
   phone: String,
+  email: {type: String, required: false},
   logoUrl: String,
   squareInfo: SquareInfo,
   hours: { type: [BusinessHours], required: true },
   isOpen: { type: Boolean, required: false },
-  allowedNetid: { type: [String], required: false } // change this to required true later on
+  allowedNetid: { type: [String], required: false }, // change this to required true later on
+  pickupInstruction: {type: String, required: false},
+  cutoffTime: {type: Number, required: false},
+  website:{type: String, required: false },
+  facebook:{type: String, required: false }
 })
 
 const Vendor = model('Vendors', VendorSchema)

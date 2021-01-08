@@ -1,0 +1,301 @@
+.logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+.imageParent {
+  display: flex;
+  width: 100%;
+  height: 80px;
+}
+.buy-btn:disabled {
+  background-color: #666;
+}
+.float-cart {
+  padding-top: 7vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  transition: right 0.2s;
+}
+.float-cart--open {
+  right: 0;
+}
+.float-cart__close-btn {
+  width: 50px;
+  height: 50px;
+  color: #ececec;
+  background-color: #1b1a20;
+  text-align: center;
+  line-height: 50px;
+  position: absolute;
+  top: 0;
+  left: -50px;
+  cursor: pointer;
+}
+.float-cart__close-btn:hover {
+  background-color: #212027;
+}
+.float-cart__shelf-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
+}
+.float-cart__shelf-container .cart-title {
+  font-family: "avenir";
+  letter-spacing:1px;
+  font-size: 20px;
+  text-align: left;
+  padding-left:2.5vw;
+  font-weight: bold;
+  margin-bottom:0px;
+}
+.float-cart__shelf-container .vendor-title {
+  margin-left: 10px;
+  font-weight: bold;
+  font-family: 'Futura', sans-serif;
+}
+.float-cart__shelf-container .shelf-empty {
+  color: #ececec;
+  text-align: center;
+  line-height: 40px;
+}
+.float-cart__shelf-container .shelf-item {
+  display: grid;
+  grid-template-columns: 0.8fr 2fr 0.5fr 0.8fr;
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding:15px 0px 5px 0px;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+.float-cart__shelf-container .shelf-item #image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius:50%;
+  word-break: break-all;
+  justify-self: end;
+}
+.float-cart__shelf-container .shelf-item__title {
+  padding-right: 3px;
+  padding-left:0px;
+}
+.float-cart__shelf-container .shelf-item__title #title {
+  font-size: 16px;
+  margin-bottom: 0px;
+  font-family: 'avenir';
+  letter-spacing:0.9px;
+  font-weight: bold;
+  word-break: break-word;
+  text-align: left;
+}
+.float-cart__shelf-container .shelf-item__title #options {
+  font-size: 12px;
+  margin-top: 0px;
+  opacity: 0.7;
+  line-height:14px;
+  text-align: left;
+}
+.float-cart__shelf-container .shelf-item__quantity {
+  justify-self: flex-end;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 28px;
+  width: 5rem;
+  opacity: 1;
+}
+.float-cart__shelf-container .shelf-item__quantity p {
+  font-family: 'Futura', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 0px;
+}
+.float-cart__shelf-container .shelf-item__quantity button {
+  font-size: 10px;
+  font-weight: 800;
+  height: 15px;
+  width: 15px;
+  border: 2px solid #606060;
+  background-color: #606060;
+  border-radius: 100px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+}
+.float-cart__shelf-container .shelf-item__quantity button:disabled {
+  background-color: #d8d8d8;
+  border: 2px solid #d8d8d8;
+}
+.float-cart__shelf-container .shelf-item__price {
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+.float-cart__shelf-container .shelf-item__price div {
+  font-family: 'avenirmedium';
+  letter-spacing: 1px;
+  text-align:right;
+}
+.float-cart__shelf-container .shelf-item--mouseover {
+  background: #818085;
+}
+.float-cart__shelf-container .shelf-item--mouseover .shelf-item__details .title,
+.float-cart__shelf-container .shelf-item--mouseover .shelf-item__details .desc {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.float-cart__shelf-container .shelf-item--mouseover .shelf-item__price,
+.float-cart__shelf-container .shelf-item--mouseover .shelf-item__title {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.float-cart__shelf-container .shelf-item__del {
+  font-size: 13px;
+  font-family: 'Avenir', sans-serif;
+  color: gray;
+  z-index: 2;
+  cursor: pointer;
+  text-align: right;
+  text-decoration: underline;
+}
+.float-cart__shelf-container .shelf-item__del:hover {
+  background-position-x: -17px;
+}
+.float-cart__shelf-container .shelf-item__thumb {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100px;
+  margin-right: 3%;
+}
+.float-cart__shelf-container .shelf-item__thumb img {
+  align: middle;
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+}
+.float-cart__footer {
+  justify-self: flex-end;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 0;
+    text-align: center;
+    margin-bottom: 5vh;
+}
+.float-cart__footer .buy-btn {
+  color: white;
+  background-color: #d5573e;
+  text-align: center;
+  cursor: pointer;
+  font-family: "Avenir", sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  height: 5vh;
+  width: 60vw;
+  outline: none;
+  border: none;
+  border-radius: 30px;
+  align-self: center;
+  margin: 15px auto;
+}
+/* MAC scrollbar para desktop*/
+@media screen and (min-width: 640px) {
+  .float-cart__content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+  }
+}
+.float-cart__content {
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.float-bill {
+  display: flex;
+  flex-direction: column;
+  padding:5% 5% 0px 0px; 
+  background-color: #ffffff;
+}
+.float-bill p {
+  font-family: 'avenirmedium', sans-serif;
+  letter-spacing:1px;
+  font-weight: bold;
+  line-height:11px;
+}
+.float-bill .subtotal-container {
+  display: inline-flex;
+  text-align: right;
+  justify-content: flex-end;
+}
+.float-bill .subheader {
+  display: inline;
+  font-family: 'Avenir', sans-serif;
+  font-weight: normal;
+  font-size:15px;
+  opacity: 0.8;
+  text-transform: capitalize;
+}
+.float-bill .total-container {
+  display: block;
+  padding-left: 60%;
+}
+.float-bill .total-container .total {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.float-bill .total .total__header {
+  font-size: 15px;
+  font-family: 'avenirbold';
+}
+.dropdowncontainer {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+.dd-wrapper {
+  display: flex;
+}
+.breakline {
+  border-bottom: 2px solid #d8d8d8;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin: 0px;
+  width: 100%;
+}
+
+
+.float-cart__dropdown-title {
+  font-size: 19px;
+    text-align: left;
+    font-weight: bold;
+    font-family: "avenir";
+    letter-spacing: 1px;
+    margin-left:5vw;
+    display:flex;
+    align-items: center;
+
+
+}
+
+.float-cart__dropdown{
+  margin-right:5vw;
+}

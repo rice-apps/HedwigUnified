@@ -13,12 +13,15 @@ import {
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { userProfile } from '../../../../apollo'
+import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
     findOrders(locations: $location) {
       orders {
         id
+        studentId
+        cohenId
         customer {
           name
           email
@@ -86,6 +89,8 @@ const ORDER_CREATED = gql`
   subscription {
     orderCreated {
       id
+      studentId
+      cohenId
       customer {
         name
         email
@@ -135,6 +140,8 @@ const ORDER_UPDATED = gql`
   subscription {
     orderUpdated {
       id
+      studentId
+      cohenId
       customer {
         name
         email
@@ -180,8 +187,10 @@ const ORDER_UPDATED = gql`
   }
 `
 
+
+
 function OrderDashboard () {
-  const vendorId = ['FMXAFFWJR95WC']
+  const vendorId = ['LBBZPB7F5A100']
   const userData = userProfile()
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
@@ -272,6 +281,7 @@ function OrderDashboard () {
   const acceptedOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'RESERVED'
   )
+  console.log("ACCEPTED", acceptedOrders)
   const readyOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PREPARED'
   )
@@ -286,6 +296,9 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
+            id={order.id}
+            studentId={order.studentId}
+            cohenId={order.cohenId}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -306,6 +319,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
+            id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -325,6 +339,7 @@ function OrderDashboard () {
         {allOrders &&
           readyOrders.map(order => (
             <OrderCard
+            id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}

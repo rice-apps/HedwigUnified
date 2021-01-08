@@ -4,6 +4,7 @@ const ORDER_TRACKER = gql`
   query ORDER_TRACKER($orderId: String!) {
     getOrderTracker(filter: { orderId: $orderId }) {
       shopifyOrderId
+      paymentType
     }
   }
 `;

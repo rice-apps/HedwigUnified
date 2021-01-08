@@ -19,7 +19,6 @@ const DashboardWrapper = styled.div`
   /* background-color: #FAFAFA; */
   border-radius: 20px;
   display: grid;
-  font-family: 'Futura', sans-serif;
   grid-template-columns: 1fr;
   grid-template-rows: 8vh minmax(5.5vh, max-content) auto;
   grid-template-areas:

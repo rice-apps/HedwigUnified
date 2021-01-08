@@ -1,156 +1,70 @@
-import { useState } from 'react'
-import { useQuery, gql } from '@apollo/client'
-import { useHistory, useLocation } from 'react-router'
-import './confirmation.css'
-// import '../../fonts/style.css'
-// fontawesome imports
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapPin } from '@fortawesome/free-solid-svg-icons'
+import '../AlmostThere/almostThere.css'
+import { P, Button, Div, MessageWrapper } from '../AlmostThere/index'
+
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
-import { ReactComponent as ConfirmationSVG } from './check-circle.svg'
-import { cartItems } from '../../../apollo'
+import { ReactComponent as HedwigLogoSVG } from './../../Login/HedwigLogoFinal.svg'
+import { orderSummary, cartItems } from '../../../apollo'
+import moment from 'moment'
 
-// const GET_VENDORS_QUERY = gql`
-//     query VendorList {
-//         vendorMany {
-//             _id
-//             name
-//         }
-//     }
-// `
-
-const Confirmation = ({ classes }) => {
-  // const { data, loading, error } = useQuery(GET_VENDORS_QUERY)
-  const [availability, setAvailability] = useState(true)
-
-  const vendor = {
-    name: 'Cohen House',
-    message:
-      '“When your order is ready, wait in the tables in Sammy’s, and we will bring your order out to you”',
-    slug: 'cohen'
-  }
+function Failure () {
   const navigate = useNavigate()
-  const handleMenuClick = () => {
-    return navigate(`/eat/${vendor.slug}`)
+  const handleHomeClick = () => {
+    return navigate(`/eat`)
   }
-  const handleOrdersClick = () => {
-    return navigate('/eat/orders')
-  }
-  const handleCartClick = () => {
-    return navigate(`/eat/${vendor.slug}/cart`)
-  }
-  // if (error) return <p>Error...</p>
-  // if (loading) return <p>Loading...</p>
-  // if (!data) return <p>No data...</p>
-  // let vendorId = '5ecf473e41ccf22523280c3c'
-  // let dataSourceIdTest = 'WCCTHDOMDN564YCZYPJP5DF3'
-  const GET_CATALOG = gql`
-    query GET_CATALOG($vendorName: String!) {
-      getCatalog(vendor: $vendorName, dataSource: SQUARE) {
-        dataSourceId
-        variants {
-          dataSourceId
-        }
-        isAvailable
-      }
-    }
-  `
+  return (
+    <div className='mainDiv'>
+      <FailureSVG className='checkSvg' />
+      <div>
+        <P className='orderConfirmed'>Oops!</P>
+        <P className='orderConfirmed'>An item you ordered is not available.</P>
 
-  const ewteaName = 'East West Tea'
-  const {
-    data: catalog,
-    loading: catalogLoading,
-    error: catalogError
-  } = useQuery(GET_CATALOG, { variables: { vendorName: ewteaName } })
-
-  if (catalogLoading) {
-    return <p>loading...</p>
-  }
-  if (catalogError) {
-    return <p>Error.</p>
-  }
-  // const FETCH_AVAILABILITY = gql`
-  //   query FETCH_AVAILśBILITY($productId: String!){
-  //     getAvailability(productId: $productId)
-  //   }
-  // `;
-
-  // const { data: availability, loading, error } = useQuery(FETCH_AVAILABILITY, { variables: { productId: /*catalog.dataSourceId*/dataSourceIdTest } });
-  // console.log(availability)
-  const cartIds = cartItems().map(item => item.Id)
-  catalog.getCatalog.forEach(element => {
-    // if not, order not confirmed page
-    if (cartIds.includes(element.dataSourceId)) {
-      if (element.isAvailable !== true) {
-        setAvailability(false)
-      }
-    }
-    element.variants.forEach(variant => {
-      if (cartIds.includes(variant.dataSourceId)) {
-        if (element.isAvailable !== true) {
-          setAvailability(false)
-        }
-      }
-    })
-  })
-
-  // how do we get the current item in cart?
-  // right now we hard coded vendor id and item
-  function renderFailure () {
-    return (
-      <div className='mainDiv'>
-        <FailureSVG className='checkSvg' />
-        <div>
-          <p className='orderConfirmed'>Oops!</p>
-          <p className='orderConfirmed'>
-            An item you ordered is not available.
-          </p>
-
-          <p className='statusUpdate'>
-            Please go back to your cart and make adjustments. Your order will{' '}
-            <strong>not</strong> be placed at this time
-          </p>
-        </div>
-        <div className='buttonsContainer'>
-          <button className='bottomButton' onClick={handleCartClick}>
-            View Cart
-          </button>
-        </div>
+        <P className='statusUpdate'>
+          Please go back to your cart and make adjustments. Your order will{' '}
+          <strong>not</strong> be placed at this time
+        </P>
       </div>
-    )
-  }
-  function renderConfirmation () {
-    return (
-      <div className='mainDiv'>
-        <ConfirmationSVG className='checkSvg' />
-        <div>
-          <p className='orderConfirmed'>Order Confirmed!</p>
-          <p className='statusUpdate'>
-            You will receive order status updates via <strong>text.</strong>
-          </p>
-        </div>
-        <div className='vendorCard'>
-          <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
-          <p className='vendorHeader'>{vendor.name}</p>
-          <p className='vendorHeader'>Pick Up Instruction:</p>
-          <p className='pickupInstructions'>{vendor.message}</p>
-        </div>
+      <Div>
+        <Button className='bottomButton' onClick={handleHomeClick}>
+          Home
+        </Button>
+      </Div>
+    </div>
+  )
+}
 
-        <div className='buttonsContainer'>
-          <button className='bottomButton' onClick={handleMenuClick}>
-            Main Menu
-          </button>
-          <button className='bottomButton' onClick={handleOrdersClick}>
-            View Orders
-          </button>
-        </div>
-      </div>
-    )
+function Confirmation () {
+  const order = orderSummary()
+  const navigate = useNavigate()
+  cartItems([])
+  const handleHomeClick = () => {
+    return navigate(`/eat`)
   }
-  if (catalogLoading) return <p>Loading...</p>
-  // return <div>{availability ? renderConfirmation() : renderFailure()}</div>
-  return <div> {renderFailure()} </div>
+  return (
+    <div className='mainDiv'>
+      <HedwigLogoSVG className='checkSvg' />
+      <div>
+        <P title>Order Submitted!</P>
+        <MessageWrapper>
+          <P message>We'll text you updates on your order's status!</P>
+        </MessageWrapper>
+      </div>
+      <Div vendorCard>
+        <P header>{order.vendor.name}</P>
+        <P header>Pick Up Instruction:</P>
+        <P pickup>
+          Pick up at {order.fulfillment.placedAt} at
+          {order.fulfillment.pickupAt}
+        </P>
+      </Div>
+
+      <Div>
+        <Button primary home onClick={handleHomeClick}>
+          Home
+        </Button>
+      </Div>
+    </div>
+  )
 }
 
 export default Confirmation

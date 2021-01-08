@@ -1,42 +1,13 @@
-// This will be created when the user logs in
-
-import jwt from 'jsonwebtoken'
-import { SECRET } from '../config.js'
-import { User } from '../models/index.js'
-import { firebaseApp } from '../utils/firebase.js'
+import firebaseAdmin from '../firebase'
+import log from 'loglevel'
+import { AuthenticationError } from 'apollo-server-express'
 
 /**
- * Default failure response when authentication / verification doesn't work.
+ * Decodes an ID token and returns the SAML attributes of said user
+ *
+ * @param {string} token the Firebase ID token to get user attributes from
  */
-const failureResponse = { success: false }
-
-/**
- * Given a user, creates a new token for them.
- */
-export const createToken = user => {
-  const token = jwt.sign(
-    {
-      id: user._id,
-      netid: user.netid
-    },
-    SECRET,
-    { expiresIn: 129600 }
-  )
-  return token
-}
-
-/**
- * Given a token, finds the associated user.
- */
-export const getUserFromToken = async token => {
-  const user = await User.find({ token })
-  return user
-}
-
-/**
- * Given a token, verifies that it is still valid.
- */
-export const verifyToken = async token => {
+async function decodeFirebaseToken (token) {
   try {
     // In the future, we may need the other properties...
     const { id } = await jwt.verify(token, SECRET)
@@ -50,40 +21,46 @@ export const verifyToken = async token => {
 /**
  * Given a ticket, authenticates it and returns the corresponding netid of the now-authenticated user.
  */
-export const authenticateTicket = async idToken => {
+const authenticateTicket = async token => {
   try {
-    // validate the idToken via firebase, extract netid and user's name
-    // The user's name is needed if they're new to Hedwig
-    return firebaseApp
-      .auth()
-      .verifyIdToken(idToken)
-      .then(decodedToken => {
-        const name =
-          decodedToken.firebase.sign_in_attributes['urn:oid:2.5.4.42'] +
-          ' ' +
-          decodedToken.firebase.sign_in_attributes['urn:oid:2.5.4.4']
-        const id =
-          decodedToken.firebase.sign_in_attributes[
-            'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
-          ]
-        return {
-          name,
-          success: true,
-          studentId: id,
-          netid:
-            decodedToken.firebase.sign_in_attributes[
-              'urn:oid:0.9.2342.19200300.100.1.1'
-            ]
-        }
-      })
-      .catch(error => {
-        console.log('cannot verify token')
-        console.log(error)
-        return failureResponse
-      })
-  } catch (e) {
-    console.log(e)
-    console.log('Something went wrong.')
-    return failureResponse
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(token)
+    const fullName =
+      decodedToken.firebase.sign_in_attributes['urn:oid:2.5.4.42'] +
+      decodedToken.firebase.sign_in_attributes['urn:oid:2.5.4.4']
+    const netid =
+      decodedToken.firebase.sign_in_attributes[
+        'urn:oid:0.9.2342.19200300.100.1.1'
+      ]
+    const idNumber =
+      decodedToken.firebase.sign_in_attributes[
+        'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
+      ]
+    const role =
+      decodedToken.firebase.sign_in_attributes[
+        'urn:oid:1.3.6.1.4.1.5923.1.1.1.5'
+      ]
+    return {
+      fullName,
+      netid,
+      idNumber,
+      role,
+      token: token,
+      success: true
+    }
+  } catch (error) {
+    log.error('Firebase ID verification failed because ' + error)
+    return {
+      success: false
+    }
   }
 }
+
+function checkLoggedIn (resolve, source, args, context, info) {
+  if (context.token) {
+    return resolve(source, args, context, info)
+  }
+
+  return new AuthenticationError('Not logged in')
+}
+
+export { decodeFirebaseToken, checkLoggedIn, authenticateTicket }

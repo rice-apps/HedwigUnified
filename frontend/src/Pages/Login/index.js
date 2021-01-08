@@ -19,10 +19,15 @@ function Login () {
   firebase
     .auth()
     .getRedirectResult()
-    .then(result => result.user.getIdToken())
+    .then(result => result.user.getIdTokenResult())
+    .then(idTokenResult => {
+      console.log(idTokenResult.claims.firebase.sign_in_attributes)
+
+      return idTokenResult.token
+    })
     .then(idToken => {
       localStorage.setItem('idToken', idToken)
-      navigate('/auth')
+      // navigate('/auth')
     })
     .catch(error => console.log(error))
 

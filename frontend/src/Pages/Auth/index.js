@@ -71,13 +71,6 @@ function Auth () {
   }
   console.log('DATA', userData)
 
-<<<<<<< HEAD:frontend/src/Pages/Auth/index.js
-  // Set token and user data in local storage
-  lstorage.setItem('token', token)
-  lstorage.setItem('userProfile', JSON.stringify(userData))
-
-=======
->>>>>>> Getting ready to fix auth:client/src/Pages/Auth/index.js
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {
   //   return <Navigate to='/vendor' />

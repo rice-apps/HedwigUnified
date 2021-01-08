@@ -1,10 +1,8 @@
-import admin from 'firebase-admin'
-import { FIREBASE_AUTH_DOMAIN, FIREBASE_API_KEY } from '../config.js'
+import * as admin from 'firebase-admin'
 
-const firebaseAppConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  projectId: 'hedwig-279117'
-}
+const firebaseAdmin = admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  databaseURL: 'https://hedwig-279117.firebaseio.com'
+})
 
-export const firebaseApp = admin.initializeApp(firebaseAppConfig)
+export default firebaseAdmin

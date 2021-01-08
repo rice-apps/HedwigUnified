@@ -65,9 +65,6 @@ function Auth () {
   })
 
 
-  // for debug use
-  userProfile.vendor = "Cohen House";
-
   // Set token in local storage
   lstorage.setItem('token', token)
 

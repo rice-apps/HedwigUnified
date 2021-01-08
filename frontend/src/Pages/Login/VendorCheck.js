@@ -23,17 +23,11 @@ const VendorSelect = () => {
   const navigate = useNavigate()
   const userData = JSON.parse(localStorage.getItem('userProfile'))
 
-  // const {
-  //   data: vendorData,
-  //   loading: vendorLoading,
-  //   error: vendorError
-  // } = useQuery(GET_VENDOR, { variables: { name: userData.vendor } })
-  // for debug use !!!!!!!!!!!!!!!!!!!!
   const {
     data: vendorData,
     loading: vendorLoading,
     error: vendorError
-  } = useQuery(GET_VENDOR, { variables: { name: "Cohen House" } })
+  } = useQuery(GET_VENDOR, { variables: { name: userData.vendor } })
 
   if (vendorLoading) return <p>Loading...</p>
   if (vendorError) return <p>User broken</p>

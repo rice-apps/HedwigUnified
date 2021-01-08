@@ -103,14 +103,12 @@ function CreateStatusDropdown(props) {
 
   function onChangeIsClosed(value) {
     window.location.reload();
+
     let inputIsClosed = value === "OPEN" ? false : true;
-    // const originalHours = props.vendor_data.getVendor.hours;
     const originalHours = props.currentHours;
     const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
-    // const updatedIsClosed = [...updatedDay.isClosed]
-    // updatedIsClosed[0] = inputIsClosed
     updatedDay.isClosed = inputIsClosed;
 
     updatedHours[props.index] = updatedDay;
@@ -126,9 +124,6 @@ function CreateStatusDropdown(props) {
         hours: updatedHours,
       },
     });
-
-    // update state:
-    // props.updateCurrentHours(updatedHours);
   }
 
   return (
@@ -449,7 +444,6 @@ function MakeAddHoursButton(props) {
               index={props.index}
               currentHours={props.currentHours}
               setHours={AddStartTime}
-              // updateCurrentHours={props.updateCurrentHours}
             />
             <div tyle={{ textAlign: "middle" }}> TO </div>
             <MakeTimeInput
@@ -457,7 +451,6 @@ function MakeAddHoursButton(props) {
               index={props.index}
               currentHours={props.currentHours}
               setHours={AddEndTime}
-              // updateCurrentHours={props.updateCurrentHours}
             />
             <ConfirmButtonWrapper>
               <ConfirmButton

@@ -36,7 +36,7 @@ const EditHoursDashboardWrapper = styled.div`
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
   font-weight: 600;
-`
+`;
 
 const EditHoursRowWrapper = styled.div`
   font-size: 2.8vh;
@@ -100,17 +100,17 @@ const StatusDropdown = styled.select`
   padding-right: 19px;
   cursor: pointer;
   font-weight: 500;
-`
+`;
 
 function CreateStatusDropdown(props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR);
 
-  async function onChangeIsClosed (value) {
-    window.location.reload()
-    let inputIsClosed = value === 'OPEN' ? false : true
+  async function onChangeIsClosed(value) {
+    window.location.reload();
+    let inputIsClosed = value === "OPEN" ? false : true;
     // const originalHours = props.vendor_data.getVendor.hours;
-    const originalHours = props.currentHours
-    const updatedHours = [...originalHours]
+    const originalHours = props.currentHours;
+    const updatedHours = [...originalHours];
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] };
     updatedDay.isClosed = inputIsClosed;
@@ -340,18 +340,17 @@ function MakeTimeInput(props) {
     const formattedMinute = addedTime.split(":")[1];
 
     if (addedHours > 12) {
-      halfOfDay = 'p.m.'
-      formattedHour = (addedHours - 12).toString()
+      halfOfDay = "p.m.";
+      formattedHour = (addedHours - 12).toString();
     } else if (addedHours === 12) {
-      halfOfDay ='p.m.'
-      formattedHour ='12'
+      halfOfDay = "p.m.";
+      formattedHour = "12";
     } else if (addedHours === 0) {
-      halfOfDay ='a.m.'
-      formattedHour ='12'
-    }
-    else {
-      halfOfDay = 'a.m.'
-      formattedHour = addedHours.toString()
+      halfOfDay = "a.m.";
+      formattedHour = "12";
+    } else {
+      halfOfDay = "a.m.";
+      formattedHour = addedHours.toString();
     }
 
     const formattedAddedTime =
@@ -395,7 +394,7 @@ function MakeAddHoursButton(props) {
     setAddedEndTime(time);
   }
 
-  function ConfirmOnClick() {
+  async function ConfirmOnClick() {
     // let timesToAdd = [addedStartTime, addedEndTime];
     // console.log(timesToAdd);
 
@@ -533,7 +532,7 @@ function EditHoursDashboard() {
     return hours.findIndex((obj) => obj.day === dayName);
   }
 
-  function closeOnClick() {
+  async function closeOnClick() {
     const currentDay = moment().format("dddd");
     const index = hours.findIndex((obj) => obj.day === currentDay);
 

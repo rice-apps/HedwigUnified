@@ -27,7 +27,6 @@ function VendorCard ({ vendor }) {
   const current_date = new Date()
   const currentDay = testMode ? 1 : current_date.getDay()
   const dayObj = hours[currentDay]
-  console.log(dayObj)
   const convertTimeToNum = time => {
     const [timeNum, halfOfDay] = time.split(' ')
     let [hours, minutes] = timeNum.split(':')
@@ -56,7 +55,6 @@ function VendorCard ({ vendor }) {
       : current_date.getHours() + current_date.getMinutes() / 60
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
-      console.log(i, startTime)
       const endTime = convertTimeToNum(dayObj.end[i])
       if (currentTime >= startTime && currentTime <= endTime - 0.25) {
         return { status: 'openning' }
@@ -74,7 +72,6 @@ function VendorCard ({ vendor }) {
   }
 
   const openStatus = determineIfClosed(current_date, dayObj)
-  console.log('openStatus', openStatus)
   const handleClick = () => {
     if (openStatus.status === 'openning') {
       // Go to this particular vendor's detail page
@@ -86,7 +83,6 @@ function VendorCard ({ vendor }) {
 
   const showStatusDetail = () => {
     if (openStatus.status === 'kitchenClosed' && statusDetail) {
-      console.log('Status Detail', statusDetail)
       return (
         <div className='detailWrapper'>
           <div className='detailBox'>
@@ -153,7 +149,7 @@ function VendorCard ({ vendor }) {
               Hours Open:{' '}
               {times.map(time => {
                 return (
-                  <span>
+                  <span key={time}>
                     <br />
                     {time[0]}
                     {' - '}

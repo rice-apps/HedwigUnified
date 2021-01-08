@@ -192,7 +192,7 @@
   font-size: 20px;
   transition: background-color 0.2s;
   height: 10vh;
-  position: fixed;
+  position: relative;
   bottom: 0px;
   left: 0px;
   width: 100vw;

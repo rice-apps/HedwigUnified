@@ -4,7 +4,7 @@ import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import dispatch from './FunctionalCart'
-import { orderSummary } from '../../../apollo'
+import { orderSummary, cartItems } from '../../../apollo'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
@@ -69,119 +69,13 @@ function Product () {
     setQuantity(quantity - 1)
   }
 
-  /*
-  const product = {
-    name: "Milk Tea",
-    description:
-      "A refreshing blend of tea and milk. You can choose to added fresh and chewy bobas for an adventurous taste.",
-    squareID: 123456787,
-    variants: [
-      {
-        question: "Select your size",
-        options: [
-          {
-            name: "Medium (16oz)",
-            description: "Medium-Sized Drink",
-            variantID: "123",
-            price: { amount: 3.5, currency: "USD" }
-          },
-          {
-            name: "Large (20oz)",
-            description: "Large-Sized Drink",
-            variantID: "246",
-            price: { amount: 4.0, currency: "USD" }
-          }
-        ]
-      }
-    ],
-    modifierLists: [
-      {
-        question: "Pick your free topping",
-        description: "One included for free!",
-        multiSelect: false,
-        options: [
-          {
-            name: "Oreo",
-            description: "Oreo cookie crubles",
-            variantID: "123"
-          },
-          {
-            name: "Lychee Jelly",
-            description: "Bite-sized lychee jelly pieces",
-            variantID: "123"
-          },
-          {
-            name: "Tapioca Pearls (Boba)",
-            description: "Fun, chewy balls",
-            variantID: "123"
-          }
-        ]
-      },
-
-      {
-        question: "Pick your additional topping(s)",
-        description: "$0.50 for each additional topping.",
-        multiSelect: true,
-        options: [
-          {
-            name: "Oreo",
-            description: "Oreo cookie crubles",
-            variantID: "123",
-            price: { amount: 0.5, currency: "USD" }
-          },
-          {
-            name: "Lychee Jelly",
-            description: "Bite-sized lychee jelly pieces",
-            variantID: "123",
-            price: { amount: 0.5, currency: "USD" }
-          },
-          {
-            name: "Tapioca Pearls (Boba)",
-            description: "Fun, chewy balls",
-            variantID: "123",
-            price: { amount: 0.5, currency: "USD" }
-          },
-          {
-            name: "No additional topping",
-            description: "None",
-            variantID: "123"
-          }
-        ]
-      },
-
-      {
-        question: "Choose your ice level",
-        description: "",
-        multiSelect: false,
-        options: [
-          { name: "No Ice", description: "No ice at all", variantID: "123" },
-          { name: "Light Ice", description: "75% ice", variantID: "123" },
-          { name: "Regular Ice", description: "100% ice", variantID: "123" },
-          { name: "More Ice", description: "125% ice", variantID: "123" }
-        ]
-      },
-      {
-        question: "Choose your sugar level",
-        description: "",
-        multiSelect: false,
-        options: [
-          { name: "0% Sugar", description: "No Sugar", variantID: "123" },
-          { name: "25% Sugar", description: "Light Sugar", variantID: "123" },
-          { name: "50% Sugar", description: "Half Sugar", variantID: "123" },
-          { name: "75% Sugar", description: "Less Sugar", variantID: "123" },
-          { name: "100% Sugar", description: "Normal Sugar", variantID: "123" }
-        ]
-      }
-    ]
-  };
-  */
+  
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
     const order = orderSummary()
-    if (order.vendor && vendor.name != order.vendor.name) {
-      return // todo: add warning window.
-    }
+    console.log("ORDER SUMMARY", orderSummary(), "VENDOR NAME", vendor.name)
+    
     orderSummary(
       Object.assign(orderSummary(), {
         vendor: {
@@ -191,6 +85,12 @@ function Product () {
         }
       })
     )
+    if (order.vendor && vendor.name != order.vendor.name) {
+      
+      console.log("Order is not from the same vendor! ERROR")
+      return // todo: add warning window.
+      
+    }
     console.log('merchant Id ', orderSummary().vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', orderSummary().vendor.locationIds[0])
@@ -237,6 +137,7 @@ function Product () {
         dataSourceId: itemDataSourceId
       }
     })
+    console.log( itemName, variantObject)
     return true
   }
 
@@ -279,6 +180,7 @@ function Product () {
             onClick={() => {
               makeCartItem()
               navigate('/eat/cohen/cart')
+              console.log(cartItems())
             }}
           >
             Add

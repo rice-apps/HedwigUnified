@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { cartItems, orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
+import moment from 'moment'
 
 export const Button = styled.button`
   font-size: 20px;
@@ -80,7 +81,7 @@ export const P = styled.p`
         width: 280px;
         margin: 0px 0px 15px 0px;
       `};
-}
+
 `
 
 export const Div = styled.div`
@@ -112,6 +113,7 @@ const AlmostThere = ({}) => {
   cartItems([])
   const navigate = useNavigate()
   const handleHomeClick = () => {
+    orderSummary({ vendor: null, time: null })
     return navigate(`/eat`)
   }
 

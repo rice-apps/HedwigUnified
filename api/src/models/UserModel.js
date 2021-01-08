@@ -10,6 +10,7 @@ const UserSchema = new Schema({
   token: { type: String, default: '' }, // We will use this to store the user's JWT token
   recentUpdate: { type: Boolean, default: false }, // this field used for displaying banners/modals on version updates of our app
   phone: String,
+  studentId: String,
   type: {
     type: String,
     enum: ['Undergraduate', 'Graduate', 'Faculty', 'Staff'],

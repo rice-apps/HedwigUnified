@@ -50,13 +50,13 @@ UserTC.addResolver({
       let user // this will be used as the return object
 
       // Get the netid of the authenticated user
-      const { netid, name } = authenticationResponse
-
+      const { netid, name, studentId } = authenticationResponse
+      
       // Check if user exists based on netid
       const exists = await User.exists({ netid })
       if (!exists) {
         // Create user
-        user = await User.create({ netid, name })
+        user = await User.create({ netid, name, studentId })
       } else {
         user = await User.findOne({ netid })
       }

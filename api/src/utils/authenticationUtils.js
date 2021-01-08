@@ -72,13 +72,16 @@ export const authenticateTicket = async idToken => {
       .auth()
       .verifyIdToken(idToken)
       .then(decodedToken => {
+        console.log(decodedToken)
         const name =
           decodedToken.firebase.sign_in_attributes['urn:oid:2.5.4.42'] +
           ' ' +
           decodedToken.firebase.sign_in_attributes['urn:oid:2.5.4.4']
+        const id = decodedToken.firebase.sign_in_attributes['urn:oid:1.3.6.1.4.1.134.1.1.1.1.19']
         return {
           name,
           success: true,
+          studentId: id,
           netid:
             decodedToken.firebase.sign_in_attributes[
               'urn:oid:0.9.2342.19200300.100.1.1'

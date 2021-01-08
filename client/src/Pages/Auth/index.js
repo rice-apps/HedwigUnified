@@ -46,6 +46,7 @@ function Auth () {
     name,
     netid,
     phone,
+    studentId,
     isAdmin,
     vendor,
     recentUpdate,
@@ -57,6 +58,7 @@ function Auth () {
     netid,
     name,
     phone,
+    studentId,
     _id,
     isAdmin,
     vendor,
@@ -64,15 +66,8 @@ function Auth () {
     type,
     token
   })
-
-  userProfile(
-    Object.assign(userProfile(), {
-      name:
-        lstorage.getItem('first name') + ' ' + lstorage.getItem('last name'),
-      studentId: lstorage.getItem('id'),
-      email: lstorage.getItem('email')
-    })
-  )
+  
+  console.log(userProfile())
   // Set token in local storage
   lstorage.setItem('token', token)
 

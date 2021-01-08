@@ -13,8 +13,7 @@ const theme = createMuiTheme({
     secondary: {
       main: '#F3DAC2'
     }
-  },
-
+  }
 })
 const PageWrapper = styled.div`
   background-color: #f7f7f7;

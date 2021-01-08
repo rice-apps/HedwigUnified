@@ -24,6 +24,7 @@ const lstorage = localStorage
 
 function Auth () {
   const idToken = lstorage.getItem('idToken')
+
   // Run query against backend to authenticate user
   const [
     authenticateUser,

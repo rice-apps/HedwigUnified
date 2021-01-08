@@ -137,7 +137,7 @@ function Product () {
         dataSourceId: itemDataSourceId
       }
     })
-    console.log("HEY", itemName, variantObject)
+    console.log( itemName, variantObject)
     return true
   }
 

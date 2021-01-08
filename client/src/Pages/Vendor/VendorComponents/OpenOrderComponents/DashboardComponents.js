@@ -21,7 +21,7 @@ const GeneralTitleWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: 1px 10px;
-  font-weight:700;
+  font-weight: 700;
 `
 
 const NewOrderTitleWrapper = styled(GeneralTitleWrapper)`

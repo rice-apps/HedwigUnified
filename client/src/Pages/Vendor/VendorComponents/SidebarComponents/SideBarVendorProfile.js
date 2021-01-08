@@ -7,7 +7,7 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 const VendorName = styled.div`
   font-size: 2.1vw;
   margin-top: 10px;
-font-weight:700;
+  font-weight: 700;
   text-align: center;
 `
 
@@ -89,7 +89,6 @@ function SideBarVendorProfile ({ setLogo }) {
   return (
     <div>
       <VendorName>{vendorName}</VendorName>
-    
     </div>
   )
 }

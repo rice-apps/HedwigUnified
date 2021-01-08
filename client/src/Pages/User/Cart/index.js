@@ -39,7 +39,7 @@ const OptionWrapper = styled.div`
  grid-template-columns: 7fr 4fr;
  grid-template-rows: 1fr;
  align-items: center;
- padding:12px 0px;
+ padding:15px 0px;
  height:100%;
  width:100%;
 `

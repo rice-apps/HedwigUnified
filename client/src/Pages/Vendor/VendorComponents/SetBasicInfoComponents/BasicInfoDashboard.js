@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { useState, useEffect } from 'react'
 import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 
 const GET_VENDOR_INFO = gql`
@@ -78,7 +79,7 @@ font-size:2.8vh;
       display: grid;
       grid-area: ${props => props.gridArea};
       grid-template-rows: 1fr;
-      grid-template-columns: 0.8fr 2fr;
+      grid-template-columns: 0.6fr 2fr;
       height:100%;
       width:100%;
       align-items: center;
@@ -109,19 +110,31 @@ const Input = styled.input`
  border: none;
  border-radius:20px;
 background-color:#f1f1f1;
-width: 80%;
+width: 85%;
 margin-left:1rem;
-font-size:2.3vh;
+font-size:2.2vh;
 padding-left: 15px;
+font-weight:600;
 `
 
 function BasicInfoDetail (props) {
+ 
+  
   return (
     <Div detail gridArea={props.gridArea}>
       <Div detailTitle>{props.gridArea}:</Div>
-    <Input type="text"></Input>
+    <Input type="text" placeholder={props.placeholder} onChange={e => console.log(e.target.value)}></Input>
     </Div>
   )
+}
+
+function isEmpty(obj) {
+  for(var prop in obj) {
+      if(obj.hasOwnProperty(prop))
+          return false;
+  }
+
+  return true;
 }
 
 function BasicInfoDashboard () {
@@ -133,9 +146,31 @@ function BasicInfoDashboard () {
   } = useQuery(GET_VENDOR_INFO, {
     variables: { name: 'Cohen House' }
   })
+  const [updatedInfo, setUpdatedInfo] = useState({})
+
   if (vendorError) {return <p>Error</p>}
   if (vendorLoading) {return <p>Waiting...</p>}
-  console.log('vendorData ', vendorData.getVendor.logoUrl)
+  const {name, logoUrl, website, email, facebook , phone, cutoffTime, pickupInstruction} = vendorData.getVendor
+
+  console.log('vendorData ', name, logoUrl, website, email, facebook , phone, cutoffTime, pickupInstruction)
+
+  const originalInfo = ({
+    name: name,
+    logoUrl: logoUrl,
+    website: website,
+    email: email,
+    facebook: facebook,
+    phone: phone,
+    cutoffTime: cutoffTime, 
+    pickupInstruction: pickupInstruction
+  }
+  )
+
+  if (isEmpty(updatedInfo)) {
+    setUpdatedInfo(originalInfo)
+  }
+
+  console.log("UPDATED", updatedInfo)
 
   //   updateBasicInfo({
   //     variables: {
@@ -153,11 +188,11 @@ function BasicInfoDashboard () {
   return (
     <Div wrapper>
       <Img logo src={vendorData.getVendor.logoUrl}/>
-      <BasicInfoDetail gridArea='Name' />
-      <BasicInfoDetail gridArea='Website'/>
-      <BasicInfoDetail gridArea='Email'/>
-      <BasicInfoDetail gridArea='Facebook'/>
-      <BasicInfoDetail gridArea='Phone'/>
+      <BasicInfoDetail gridArea='Name' placeholder={updatedInfo.name}/>
+      <BasicInfoDetail gridArea='Website' placeholder={updatedInfo.website}/>
+      <BasicInfoDetail gridArea='Email' placeholder={updatedInfo.email}/>
+      <BasicInfoDetail gridArea='Facebook' placeholder={updatedInfo.facebook}/>
+      <BasicInfoDetail gridArea='Phone' placeholder={updatedInfo.phone}/>
     </Div>
   )
 }

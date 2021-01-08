@@ -51,6 +51,7 @@
   text-align: left;
   padding-left:2.5vw;
   font-weight: bold;
+  margin-bottom:0px;
 }
 .float-cart__shelf-container .vendor-title {
   margin-left: 10px;
@@ -70,6 +71,7 @@
   width: 100%;
   background-color: #ffffff;
   box-sizing: border-box;
+  padding:15px 0px 5px 0px;
   transition: background-color 0.2s, opacity 0.2s;
 }
 .float-cart__shelf-container .shelf-item #image {
@@ -140,9 +142,10 @@
   align-items: flex-end;
   text-align: right;
 }
-.float-cart__shelf-container .shelf-item__price p {
-  font-family: 'Futura', sans-serif;
-  font-weight: bold;
+.float-cart__shelf-container .shelf-item__price div {
+  font-family: 'avenirmedium';
+  letter-spacing: 1px;
+  text-align:right;
 }
 .float-cart__shelf-container .shelf-item--mouseover {
   background: #818085;

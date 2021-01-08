@@ -155,7 +155,7 @@ function Product () {
           <VariantSelection variants={product.variants} />
         </div>
         {product.modifierLists.length == 0 && (
-          <p>Sorry! no modifiers in the database</p>
+          null
         )}
         <div className='modifiersContainer'>
           {product.modifierLists.map(modifier => {

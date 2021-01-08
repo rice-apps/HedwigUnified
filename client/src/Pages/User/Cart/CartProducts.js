@@ -14,6 +14,7 @@ grid-template-rows:1fr;
 width:80%;
 height:100%;
 align-items: center;
+justify-items:center;
 font-size:15px;
 `
 
@@ -22,10 +23,10 @@ font-size:15px;
 function QuantitySelector ({ quantity, decrease, increase }) {
   return (
     <QuantitySelectorWrapper>
-      <HiMinusCircle onClick={ quantity === 1 ? null : decrease}/>
+      <HiMinusCircle onClick={ quantity === 1 ? null : decrease} style={{opacity: "0.85"}}/>
 
       <div style={{margin:"0px 7px"}}>{quantity}</div>
-      <HiPlusCircle onClick={increase}/>
+      <HiPlusCircle onClick={increase} style={{opacity: "0.85"}}/>
     </QuantitySelectorWrapper>
   )
 }
@@ -115,7 +116,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
         decrease={decrease}
       />
       <div className='shelf-item__price'>
-        <p>{formatter.format(product.price * quantity)}</p>
+        <div>{formatter.format(product.price * quantity)}</div>
       </div>
       <div />
       <div />

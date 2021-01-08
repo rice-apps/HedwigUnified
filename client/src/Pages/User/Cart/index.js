@@ -458,7 +458,7 @@ function CartDetail () {
           <div className='float-cart__dropdown-title'> Pickup Time:</div>
           <Select
             options={pickupTimes}
-            placeholder={'Select a pickup time'}
+            placeholder={'Select...'}
             onChange={changePickupTime}
             clearable={false}
             style={styles.select}
@@ -473,7 +473,7 @@ function CartDetail () {
           <Select
             options={options}
             onChange={changePaymentType}
-            placeholder={'Select a payment method'}
+            placeholder={'Select...'}
             clearable={false}
             style={styles.select}
             className='float-cart__dropdown'

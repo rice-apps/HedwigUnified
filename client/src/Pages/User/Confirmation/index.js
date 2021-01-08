@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
 import { ReactComponent as ConfirmationSVG } from './check-circle.svg'
 import { orderSummary, cartItems } from '../../../apollo'
+import moment from 'moment'
 
 
   function Failure () {
@@ -38,6 +39,7 @@ import { orderSummary, cartItems } from '../../../apollo'
 
   function Confirmation () {
     const order = orderSummary()
+    const pickupTime = moment(new Date(order.fulfillment.pickupAt)).format('h:mm a')
     const navigate = useNavigate()
     cartItems([])
     const handleHomeClick = () => {
@@ -57,8 +59,8 @@ import { orderSummary, cartItems } from '../../../apollo'
           <FontAwesomeIcon icon={faMapPin} className='pinIcon' />
           <P header>{order.vendor.name}</P>
           <P header>Pick Up Instruction:</P>
-          <P pickup>Pick up at {order.fulfillment.placedAt} at 
-            {order.fulfillment.pickupAt}
+          <P pickup>Pick up at {order.fulfillment.placedAt} at
+            {" "+pickupTime}
           </P>
         </Div>
 

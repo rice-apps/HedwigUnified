@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { cartItems, orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
+import moment from 'moment'
 
 export const Button = styled.button`
   font-size: 20px;

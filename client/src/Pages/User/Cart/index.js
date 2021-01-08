@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
 
+
 // new dropdown imports:
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -406,10 +407,9 @@ function CartDetail () {
       <div className={'float-cart'}>
         <div className='float-cart__content'>
           <div className='float-cart__shelf-container'>
-            <p className='cart-title' style={{ marginTop: '30px' }}>
+            <p className='cart-title' style={{ marginTop: '25px' }}>
               Order Summary:
             </p>
-            <div css={[centerCenter, row]}></div>
             {cartItems().map(item => {
               return (
                 <Fragment>
@@ -437,7 +437,7 @@ function CartDetail () {
               }
             })}
             <div className='total-container'>
-              <hr className='breakline' />
+              <hr className='breakline' style={{margin: "-5px 0px 10px 5px"}} />
               <div className='total' style={{ marginBottom: '9vh' }}>
                 <p className='total__header'>Total</p>
                 <p>{currency(totals.subtotal + totals.tax).format()}</p>

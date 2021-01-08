@@ -45,9 +45,11 @@
   min-height: 100px;
 }
 .float-cart__shelf-container .cart-title {
-  font-family: 'Futura', sans-serif;
-  font-size: 14px;
-  text-align: center;
+  font-family: "avenir";
+  letter-spacing:1px;
+  font-size: 20px;
+  text-align: left;
+  padding-left:10px;
   font-weight: bold;
 }
 .float-cart__shelf-container .vendor-title {
@@ -66,7 +68,7 @@
   align-items: center;
   width: 100%;
   font-family: Poppins;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   box-sizing: border-box;
   padding: 5%;
   transition: background-color 0.2s, opacity 0.2s;
@@ -218,12 +220,14 @@
 .float-bill {
   display: flex;
   flex-direction: column;
-  padding: 5%;
-  background-color: #f8f8f8;
+  padding:5% 5% 0px 0px; 
+  background-color: #ffffff;
 }
 .float-bill p {
-  font-family: 'Futura', sans-serif;
+  font-family: 'avenirmedium', sans-serif;
+  letter-spacing:1px;
   font-weight: bold;
+  line-height:11px;
 }
 .float-bill .subtotal-container {
   display: inline-flex;
@@ -234,7 +238,8 @@
   display: inline;
   font-family: 'Avenir', sans-serif;
   font-weight: normal;
-  opacity: 0.5;
+  font-size:15px;
+  opacity: 0.8;
   text-transform: capitalize;
 }
 .float-bill .total-container {
@@ -246,10 +251,9 @@
   flex-direction: row;
   justify-content: flex-end;
 }
-.float-bill .total-container .total__header {
-  font-size: 16px;
-  font-family: 'Futura', sans-serif;
-  font-weight: bold;
+.float-bill .total .total__header {
+  font-size: 15px;
+  font-family: 'avenirbold';
 }
 .dropdowncontainer {
   position: relative;

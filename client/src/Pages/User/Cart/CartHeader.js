@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FaUserCircle } from "react-icons/fa";
+
 import HedwigLogoFinal from "./../../../images/HedwigLogoFinal.png";
 import RalewayFont from "./../../../fonts/GlobalFont";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -21,6 +21,7 @@ const HeaderWrapper = styled.div`
   background-color: white;
   z-index: 1;
   padding-top: 1vh;
+  box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
 `;
 
 const HedwigLogo = styled.img`
@@ -31,7 +32,7 @@ const HedwigLogo = styled.img`
 `;
 
 const HedwigWrapper = styled.div`
-  font-family: "Raleway";
+  font-family: "avenirbold";
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -85,14 +86,7 @@ function CartHeader(props) {
           />
         ) : null}
         Checkout: {getVendorName()}
-        <FaUserCircle
-          style={{
-            position: "fixed",
-            right: "22px",
-            fontSize: "25px",
-            verticalAlign: "middle",
-          }}
-        />
+        
       </HedwigWrapper>
     </HeaderWrapper>
   );

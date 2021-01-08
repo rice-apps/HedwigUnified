@@ -9,6 +9,8 @@ import { useQuery, gql, useMutation } from "@apollo/client";
 
 import moment from "moment";
 
+import { convertTimeToNum } from "../../../User/Menu/index.js";
+
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
     updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
@@ -394,21 +396,65 @@ function MakeAddHoursButton(props) {
     setAddedEndTime(time);
   }
 
-  async function ConfirmOnClick() {
-    // let timesToAdd = [addedStartTime, addedEndTime];
-    // console.log(timesToAdd);
+  function convertTimeToNum(time) {
+    const [timeNum, halfOfDay] = time.split(" ");
+    let [hours, minutes] = timeNum.split(":");
+    hours = parseInt(hours);
+    minutes = parseInt(minutes) / 60;
+    if (halfOfDay === "a.m.") {
+      // 12 AM is considered to be "0"
+      if (hours === 12) {
+        return minutes;
+      }
+      return hours + minutes;
+    } else if (halfOfDay === "p.m.") {
+      // 12 PM should just be "12"
+      if (hours === 12) {
+        return hours + minutes;
+      }
+      return 12 + hours + minutes;
+    }
+  }
 
+  function findIndexToSort(startTimes) {
+    // If addedStartTime is greater than an existing start time, then
+    // it should be inserted right before it in the times array
+    for (var i = 0; i < startTimes.length; i++) {
+      if (
+        convertTimeToNum(startTimes[i]) >= convertTimeToNum(addedStartTime) ||
+        i === startTimes.length - 1
+      ) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  async function ConfirmOnClick() {
     const originalHours = props.currentHours;
     const updatedHours = [...originalHours];
     const updatedDay = { ...updatedHours[props.index] };
 
-    const updatedStartTime = updatedDay.start.concat(addedStartTime);
+    // Create a copy of the start and end times, then add the new time chronologically:
+
+    let updatedStartTime = [...updatedDay.start];
+    // index is the sorted position to add the start, end times at
+    let index = findIndexToSort(updatedDay.start);
+
+    // If addedStartTime has the greatest value, increment the index so as to concatenate not insert
+    if (index === updatedDay.start.length - 1) {
+      index += 1;
+    }
+
+    updatedStartTime.splice(index, 0, addedStartTime);
     updatedDay.start = updatedStartTime;
 
-    const updatedEndTime = updatedDay.end.concat(addedEndTime);
+    let updatedEndTime = [...updatedDay.end];
+    updatedEndTime.splice(index, 0, addedEndTime);
     updatedDay.end = updatedEndTime;
 
     updatedHours[props.index] = updatedDay;
+
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] };
       delete dayCopy["__typename"];
@@ -556,10 +602,7 @@ function EditHoursDashboard() {
         hours: updatedHours,
       },
     });
-    // this one
-    if (!loading) {
-      window.location.reload();
-    }
+    window.location.reload();
   }
 
   return (

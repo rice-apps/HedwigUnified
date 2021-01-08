@@ -314,14 +314,14 @@ function MakeModalParagraph (props) {
           This order is paid in <strong>Credit Card</strong>. <br />
           {isVerified ? (
             <>
-              <h3>Payment Status: Verified</h3>
+              <div>Payment Status: Verified</div>
             </>
           ) : (
             <>
-              <h3>Payment Status: Pending</h3>
-              <h5>
+              <div>Payment Status: <span style={{color:"#EA907A", fontWeight:"bold"}}>Pending</span></div>
+              <div >
                 Payment has not been completed yet. Please check back later
-              </h5>
+              </div>
             </>
           )}
         </div>
@@ -504,9 +504,9 @@ function MakePaymentSpace (props) {
             cohenId={props.cohenId}
           />
           <ModalButtonsWrapper>
-            <CancelButton onClick={closeAcceptModal}>Cancel</CancelButton>
+            <CancelButton onClick={()  => {closeAcceptModal(); cancelOrder()}}>Cancel</CancelButton>
             {(props.paymentType!= "CREDIT") | (props.paymentType==="CREDIT" & isVerified) ? (
-              <AcceptButton onClick={() => props.handleClick, closeAcceptModal}>Accept</AcceptButton>
+              <AcceptButton onClick={() => {props.handleClick(); closeAcceptModal()}}>Accept</AcceptButton>
             ) : (
               <AcceptButton onClick={closeAcceptModal}>
                 Return To Home
@@ -577,7 +577,7 @@ function OrderCard (props) {
   })
 
   if (orderTrackerLoading) {
-    return <p> Loading...</p>
+    return <p style={{fontSize: "10px"}}>  Loading...</p>
   }
 
   if (orderTrackerError) {

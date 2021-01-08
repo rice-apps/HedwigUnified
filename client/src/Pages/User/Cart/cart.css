@@ -178,28 +178,28 @@
 }
 .float-cart__footer {
   justify-self: flex-end;
-  box-sizing: border-box;
-  width: 100%;
-  z-index: 2;
-  background-color: #d5573e;
-  text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 0;
+    text-align: center;
+    margin-bottom: 5vh;
 }
 .float-cart__footer .buy-btn {
   color: white;
   background-color: #d5573e;
   text-align: center;
   cursor: pointer;
-  font-family: 'Futura', sans-serif;
+  font-family: "Avenir", sans-serif;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   transition: background-color 0.2s;
-  height: 10vh;
-  position: relative;
-  bottom: 0px;
-  left: 0px;
-  width: 100vw;
+  height: 5vh;
+  width: 60vw;
   outline: none;
   border: none;
+  border-radius: 30px;
+  align-self: center;
+  margin: 15px auto;
 }
 /* MAC scrollbar para desktop*/
 @media screen and (min-width: 640px) {
@@ -272,4 +272,18 @@
   border-right: none;
   margin: 0px;
   width: 100%;
+}
+
+
+.float-cart__dropdown-title {
+  font-size: 19px;
+    text-align: left;
+    font-weight: bold;
+    font-family: "avenir";
+    letter-spacing: 1px;
+    margin-left:25px;
+    display:flex;
+    align-items: center;
+
+
 }

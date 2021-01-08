@@ -34,7 +34,15 @@ const Div = styled.div`
   margin-right: 2vh;
 `
 
-const Input = styled.input``
+const OptionWrapper = styled.div`
+ display:grid;
+ grid-template-columns: 7fr 4fr;
+ grid-template-rows: 1fr;
+ align-items: center;
+ padding:12px 0px;
+ height:100%;
+ width:100%;
+`
 
 const GET_AVAILABILITIES = gql`
   query GET_AVAILABILITIES($productIds: [String!]) {
@@ -418,7 +426,7 @@ function CartDetail () {
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
-                  <hr className='breakline' />
+                  <hr className='breakline' style={{opacity:"0.3"}} />
                 </Fragment>
               )
             })}
@@ -440,14 +448,14 @@ function CartDetail () {
               <hr className='breakline' style={{margin: "-5px 0px 10px 5px"}} />
               <div className='total' style={{ marginBottom: '9vh' }}>
                 <p className='total__header'>Total</p>
-                <p>{currency(totals.subtotal + totals.tax).format()}</p>
+                <p style={{marginTop:  "1px"}}>{currency(totals.subtotal + totals.tax).format()}</p>
               </div>
             </div>
           </div>
-          <div css={[centerCenter, row]}></div>
-          <hr className='breakline' />
-
-          <p className='float-cart__dropdown-title'> Pickup Time:</p>
+    
+          <hr className='breakline' style={{marginTop:"-40px", opacity: "0.3"}} />
+<OptionWrapper>
+          <div className='float-cart__dropdown-title'> Pickup Time:</div>
           <Select
             options={pickupTimes}
             placeholder={'Select a pickup time'}
@@ -456,9 +464,12 @@ function CartDetail () {
             style={styles.select}
             className='float-cart__dropdown'
           />
-          <div css={[centerCenter, row]}></div>
-          <hr className='breakline' />
-          <p className='float-cart__dropdown-title'>Payment Method:</p>
+         </OptionWrapper>
+         
+          <hr className='breakline' style={{opacity:"0.3"}} />
+
+          <OptionWrapper>
+          <div className='float-cart__dropdown-title'>Payment Method:</div>
           <Select
             options={options}
             onChange={changePaymentType}
@@ -480,7 +491,7 @@ function CartDetail () {
               complete your profile and order.{' '}
             </p>
           )}
-
+</OptionWrapper>
           <div className='float-cart__footer'>
             <button
               disabled={cartItems().length === 0}

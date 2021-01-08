@@ -18,79 +18,7 @@ import Grow from '@material-ui/core/Grow'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
-/*
-const vendor = {
-  name: 'East West Tea',
-  hours: 'Monday - Thursday 7:00 pm - 10:00 pm',
-  location: "Sammy's Kitchen in Rice Memorial Center",
-  categories: [
-    'Special Offers',
-    'Milk Tea',
-    'Fruit Tea',
-    'Snacks',
-    'Burgers',
-    'Salads',
-    'Chicken'
-  ],
-  products: [
-    {
-      name: 'Nutty Bee Boba',
-      category: 'Special Offers',
-      price: '$3.50',
-      image: boba
-    },
-    {
-      name: 'Peach Black Tea',
-      category: 'Fruit Tea',
-      price: '$3.50',
-      image: boba
-    },
-    {
-      name: 'Strawberry Lemonade',
-      category: 'Fruit Tea',
-      price: '$3.50',
-      image: boba
-    },
-    { name: 'Milk Tea', category: 'Milk Tea', price: '$3.50', image: boba },
-    { name: 'Taro Tea', category: 'Milk Tea', price: '$3.50', image: boba },
-    { name: 'Thai Tea', category: 'Milk Tea', price: '$3.50', image: boba },
-    { name: 'Just Plain Boba', category: 'Snacks', price: '$.50', image: boba },
-    {
-      name: 'Honeydew Boba',
-      category: 'Special Offers',
-      price: '$3.50',
-      image: boba
-    },
-    {
-      name: 'Passionfruit Tea',
-      category: 'Fruit Tea',
-      price: '$3.50',
-      image: boba
-    },
-    {
-      name: 'Pink Lemonade',
-      category: 'Fruit Tea',
-      price: '$3.50',
-      image: boba
-    },
-    { name: 'Green Tea', category: 'Milk Tea', price: '$3.50', image: boba },
-    { name: 'Jasmine Tea', category: 'Milk Tea', price: '$3.50', image: boba },
-    { name: 'Black Tea', category: 'Milk Tea', price: '$3.50', image: boba },
-    { name: 'Goldfish', category: 'Snacks', price: '$1.50', image: boba },
-    { name: 'Hamburger', category: 'Burgers', price: '$7.00', image: boba },
-    { name: 'Cheeseburger', category: 'Burgers', price: '$7.50', image: boba },
-    { name: 'Cobb Salad', category: 'Salads', price: '$7.50', image: boba },
-    { name: 'Whole Chicken', category: 'Chicken', price: '$8.00', image: boba },
-    {
-      name: 'Chicken Nuggets',
-      category: 'Chicken',
-      price: '$6.00',
-      image: boba
-    }
-  ]
-}
-*/
-// <Menu currentVendor = {"East West Tea"}/>
+import {convertTimeToNum} from './../Vendors/VendorCard.js'
 
 // add a proceed to checkout
 function Menu () {
@@ -223,17 +151,7 @@ function Menu () {
       return isClosedHours
     }
   }
-  const convertTimeToNum = time => {
-    const [timeNum, halfOfDay] = time.split(' ')
-    let [hours, minutes] = timeNum.split(':')
-    hours = parseInt(hours)
-    minutes = parseInt(minutes) / 60
-    if (halfOfDay === 'a.m.') {
-      return hours + minutes
-    } else if (halfOfDay === 'p.m.') {
-      return 12 + hours + minutes
-    }
-  }
+
   const isClosed = determineIfClosed(
     current_date,
     vendor_data.getVendor.hours[currentDay]

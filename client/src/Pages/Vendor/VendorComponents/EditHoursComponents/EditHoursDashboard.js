@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
@@ -6,8 +5,9 @@ import { CgMathPlus } from 'react-icons/cg'
 import Modal from 'react-modal'
 
 import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
-import { useQuery, gql, useMutation, InMemoryCache } from '@apollo/client'
-import { current } from 'immer'
+import { useQuery, gql, useMutation } from '@apollo/client'
+
+import moment from 'moment'
 
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
@@ -23,24 +23,37 @@ const UPDATE_VENDOR = gql`
 `
 
 const EditHoursDashboardWrapper = styled.div`
-  height: 90%;
+  height: 98%;
   width: 90%;
-  font-size: 3.8vh;
+  font-size: 3.6vh;
   display: grid;
+  font-weight: 500;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 8fr;
-  font-family: 'Futura', sans-serif;
+  grid-template-rows: 1fr 8fr 1fr;
   justify-items: center;
   overflow: hidden;
 `
 const EditHoursTitleWrapper = styled.div`
   margin-top: 2.2vh;
-  font-weight: 500;
+  font-weight: 600;
 `
 
 const EditHoursRowWrapper = styled.div`
   font-size: 2.8vh;
   overflow-y: scroll;
+`
+
+const CloseNowButton = styled.button`
+  border: 2px solid #ea907a;
+  border-radius: 40px;
+  color: #ea907a;
+  font-size: 2.5vh;
+  padding: 2px 5px;
+  background-color: white;
+  height: 6vh;
+  width: 12vw;
+  font-weight: 600;
+  margin-top: 1.8vh;
 `
 const EditHoursRow = styled.div`
   border-radius: 10px;
@@ -59,6 +72,7 @@ const EditHoursRow = styled.div`
 const DayColumn = styled.div`
   grid-area: Day;
   width: 100%;
+  font-weight: 600;
   height: 100%;
   display: flex;
   margin-left: 2vw;
@@ -81,15 +95,17 @@ const StatusDropdown = styled.select`
   text-align-last: center;
   border-radius: 10px;
   -webkit-appearance: none;
+  font-size: 2.4vh;
   position: relative;
   padding-right: 19px;
   cursor: pointer;
+  font-weight: 500;
 `
 
 function CreateStatusDropdown (props) {
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
-  function onChangeIsClosed (value) {
+  async function onChangeIsClosed (value) {
     window.location.reload()
     let inputIsClosed = value === 'OPEN' ? false : true
     // const originalHours = props.vendor_data.getVendor.hours;
@@ -97,9 +113,9 @@ function CreateStatusDropdown (props) {
     const updatedHours = [...originalHours]
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[props.index] }
-    const updatedIsClosed = [...updatedDay.isClosed]
-    updatedIsClosed[0] = inputIsClosed
-    updatedDay.isClosed = updatedIsClosed
+    // const updatedIsClosed = [...updatedDay.isClosed]
+    // updatedIsClosed[0] = inputIsClosed
+    updatedDay.isClosed = inputIsClosed
 
     updatedHours[props.index] = updatedDay
     updatedHours.map((day, index) => {
@@ -108,7 +124,7 @@ function CreateStatusDropdown (props) {
       updatedHours[index] = dayCopy
     })
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours
@@ -121,8 +137,8 @@ function CreateStatusDropdown (props) {
 
   return (
     <StatusColumn>
-      {console.log(props.day, props.inputIsClosed[0])}
-      {props.inputIsClosed[0] ? (
+      {console.log(props.day, props.inputIsClosed)}
+      {props.inputIsClosed ? (
         <StatusDropdown
           name='storeStatus'
           id='storeStatus'
@@ -161,7 +177,8 @@ const HoursColumn = styled.div`
   padding: 0px 7px;
 `
 const HoursInterval = styled.div`
-  background-color: #f8eae7;
+  background-color: ${props => (props.isClosed ? '#FFF7F5' : '#f8eae7')};
+  opacity: ${props => (props.isClosed ? '0.6' : '1')};
   position: relative;
   border-radius: 10px;
   color: #ea907a;
@@ -228,7 +245,7 @@ function HoursItem (props) {
   }
 
   return (
-    <HoursInterval>
+    <HoursInterval isClosed={props.isClosed}>
       <IoMdClose
         onClick={deleteStartEndTime}
         style={{
@@ -373,7 +390,14 @@ function MakeTimeInput (props) {
     if (addedHours > 12) {
       halfOfDay = 'p.m.'
       formattedHour = (addedHours - 12).toString()
-    } else {
+    } else if (addedHours === 12) {
+      halfOfDay ='p.m.'
+      formattedHour ='12'
+    } else if (addedHours === 0) {
+      halfOfDay ='a.m.'
+      formattedHour ='12'
+    }
+    else {
       halfOfDay = 'a.m.'
       formattedHour = addedHours.toString()
     }
@@ -420,7 +444,7 @@ function MakeAddHoursButton (props) {
     setAddedEndTime(time)
   }
 
-  function ConfirmOnClick () {
+  async function ConfirmOnClick () {
     let timesToAdd = [addedStartTime, addedEndTime]
     console.log(timesToAdd)
 
@@ -443,7 +467,7 @@ function MakeAddHoursButton (props) {
       updatedHours[index] = dayCopy
     })
 
-    toggleIsClosed({
+    await toggleIsClosed({
       variables: {
         name: 'Cohen House',
         hours: updatedHours
@@ -519,7 +543,7 @@ function MakeAddHoursButton (props) {
 }
 
 function EditHoursDashboard () {
-  // const [currentHours, setCurrentHours] = useState([]);
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
   const {
     data: vendor_data,
@@ -539,20 +563,6 @@ function EditHoursDashboard () {
   const hours = vendor_data.getVendor.hours
 
   console.log('hours: ', hours)
-
-  // function updateCurrentHours(newHours) {
-  //   setCurrentHours(newHours);
-  // }
-
-  // console.log(currentHours.length);
-
-  // if (currentHours.length === 0) {
-  //   console.log("hours ", hours);
-  //   updateCurrentHours(hours);
-  //   console.log("current hours in if ", currentHours);
-  // }
-
-  // updateCurrentHours(hours);
 
   function getIndex (day) {
     let dayName =
@@ -576,6 +586,37 @@ function EditHoursDashboard () {
     return hours.findIndex(obj => obj.day === dayName)
   }
 
+  async function closeOnClick () {
+    const currentDay = moment().format('dddd')
+    console.log('current day ', currentDay)
+    const index = hours.findIndex(obj => obj.day === currentDay)
+    console.log('index ', index)
+
+    const originalHours = hours
+    const updatedHours = [...originalHours]
+    // This index is the index of the day! should reflect what day the user clicks to edit:
+    const updatedDay = { ...updatedHours[index] }
+
+    updatedDay.isClosed = true
+
+    updatedHours[index] = updatedDay
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] }
+      delete dayCopy['__typename']
+      updatedHours[index] = dayCopy
+    })
+
+    console.log('updated day ', updatedDay)
+
+    await toggleIsClosed({
+      variables: {
+        name: 'Cohen House',
+        hours: updatedHours
+      }
+    })
+    window.location.reload()
+  }
+
   return (
     <EditHoursDashboardWrapper>
       <EditHoursTitleWrapper>Regular Hours</EditHoursTitleWrapper>
@@ -596,6 +637,7 @@ function EditHoursDashboard () {
                 {hours[index].start.map((startInput, timeIndex) => {
                   return (
                     <HoursItem
+                      isClosed={hours[index].isClosed}
                       index={index}
                       currentHours={hours}
                       startTime={hours[index].start[timeIndex]}
@@ -613,6 +655,7 @@ function EditHoursDashboard () {
           )
         })}
       </EditHoursRowWrapper>
+      <CloseNowButton onClick={closeOnClick}>Close Now</CloseNowButton>
     </EditHoursDashboardWrapper>
   )
 }

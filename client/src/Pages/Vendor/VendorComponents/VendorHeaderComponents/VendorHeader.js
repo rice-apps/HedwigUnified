@@ -1,16 +1,14 @@
 import { useState } from 'react'
-import styled, { css } from 'styled-components'
-import { FaUserCircle, FaClock } from 'react-icons/fa'
+import styled from 'styled-components'
+import { FaUserCircle } from 'react-icons/fa'
 import moment from 'moment'
-import Collapsible from 'react-collapsible'
 import { BiLogOut } from 'react-icons/bi'
 import { AiOutlineUserSwitch } from 'react-icons/ai'
 import { IconContext } from 'react-icons'
 import { useApolloClient } from '@apollo/client'
-import { userProfile } from '../../../../apollo'
 
 const VendorHeaderWrapper = styled.div`
-  font-family: 'Futura', sans-serif;
+  font-weight: 600;
   display: grid;
   width: 100%;
   height: 100%;
@@ -78,9 +76,6 @@ const LogoutItem = styled.div`
   align-items: center;
   justify-content: center;
 `
-
-const toggleLogoutScreen = false
-const showLogout = false
 
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)

@@ -1,18 +1,11 @@
 import hedwigLogo from './HedwigLogoFinal.svg'
-import { Component, useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import { userProfile } from '../../apollo'
 import {
-  MainDiv,
-  Logo,
-  Title,
-  SubTitle,
-  LoginButton,
   BackgroundCover,
   ButtonPane,
   VendorButton,
   ClientButton,
-  ExitButton,
   LoginQuestion,
   HedwigLogo
 } from './Login.styles'

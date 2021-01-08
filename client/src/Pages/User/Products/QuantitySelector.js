@@ -1,5 +1,3 @@
-import { useContext, useEffect, useState } from 'react'
-
 function QuantitySelector ({ quantity, decrease, increase }) {
   return (
     <div className='quantityContainer'>

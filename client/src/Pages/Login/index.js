@@ -15,7 +15,6 @@ function Login () {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const navigate = useNavigate()
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
-  const navigate = useNavigate()
   /* Lets user sign in in a pop-up tab, get the user's info then generates a token. */
   const signInSAML = () => {
     firebase.auth().signInWithRedirect(provider)

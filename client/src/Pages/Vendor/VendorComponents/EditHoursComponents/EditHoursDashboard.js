@@ -401,17 +401,14 @@ function MakeAddHoursButton(props) {
     let [hours, minutes] = timeNum.split(":");
     hours = parseInt(hours);
     minutes = parseInt(minutes) / 60;
-    if (halfOfDay === "a.m.") {
-      // 12 AM is considered to be "0"
-      if (hours === 12) {
-        return minutes;
-      }
+    if ((halfOfDay === "a.m.") & (hours === 12)) {
+      return minutes;
+    } else if (
+      halfOfDay === "a.m." ||
+      (halfOfDay === "p.m.") & (hours === 12)
+    ) {
       return hours + minutes;
     } else if (halfOfDay === "p.m.") {
-      // 12 PM should just be "12"
-      if (hours === 12) {
-        return hours + minutes;
-      }
       return 12 + hours + minutes;
     }
   }

@@ -12,7 +12,7 @@ const HelpHeader = styled.section`
   }
   background-color: white;
 
-  font-family: 'Proxima Nova';
+  font-family: 'Proxima Nova Semibold';
   font-size: 6vw;
   @media (min-width: 1024px) {
     font-size: 50px;
@@ -34,7 +34,7 @@ const FAQSection = styled.section`
 const SubHeader = styled.section`
   padding: 2vh 0vw 1vh 0vw;
 
-  font-family: 'Proxima Nova';
+  font-family: 'Proxima Nova Semibold';
   font-size: 5vw;
   @media (min-width: 768px) {
     font-size: 35px;
@@ -92,7 +92,7 @@ const ContactSection = styled.section`
 `
 
 const ContactText = styled.section`
-  font-family: 'Proxima Nova';
+  font-family: 'Proxima Nova Semibold';
   font-size: 5vw;
   @media (min-width: 768px) {
     font-size: 35px;

@@ -5,41 +5,6 @@ import {
   createToken
 } from '../utils/authenticationUtils.js'
 
-/**
- * Relations (necessary for any fields that link to other types in the schema)
- * https://graphql-compose.github.io/docs/plugins/plugin-mongoose.html#how-to-build-nesting-relations
- */
-
-// Creates relation to carts (order schema)
-// UserTC.addRelation("carts", {
-//     "resolver": () => OrderTC.getResolver('findMany'),
-//     prepareArgs: {
-//         filter: (source) => ({
-//             fulfillment: "Cart",
-//             user: source._id
-//         })
-//     },
-//     projection: { carts: 1 }
-// });
-
-// UserTC.addRelation("employer", {
-//     "resolver": () => VendorTC.getResolver('findOne'),
-//     args: { filter: VendorTC.getInputTypeComposer() },
-//     prepareArgs: {
-//         filter: (source) => ({
-//             employer: source._id, // Uses the vendor _id
-//         })
-//     },
-//     projection: { employer: 1 }
-// });
-/**
- * Custom Resolvers
- */
-
-/**
- * Authentication-related resolvers
- */
-
 UserTC.addResolver({
   name: 'authenticate',
   type: UserTC,
@@ -102,24 +67,6 @@ const UserMutations = {
   userCreateOne: UserTC.mongooseResolvers.createOne(),
   userUpdateOne: UserTC.mongooseResolvers.updateOne(),
   authenticateUser: UserTC.getResolver('authenticate')
-}
-
-async function authMiddleware (resolve, source, args, context, info) {
-  // Without header, throw error
-  if (!context.decodedJWT) {
-    throw new Error('You need to be logged in.')
-  }
-
-  // Pull out unique MongoDB User id (not the netid) from decoded JWT
-  const { id } = context.decodedJWT
-
-  // Allows a user to only access THEIR user object, while maintaining any other filters/args they might have requested
-  return resolve(
-    source,
-    { ...args, filter: { ...args.filter, _id: id } },
-    context,
-    info
-  )
 }
 
 export { UserQueries, UserMutations }

@@ -9,15 +9,23 @@ import { GRAPHQL_URL, GRAPHQL_WS_URL } from './config'
 
 import { resetOrderSummary } from './Pages/User/Cart/util'
 
+<<<<<<< HEAD:frontend/src/apollo.js
 if (!localStorage.getItem('order')) {
   resetOrderSummary()
 }
+=======
+const cartItems = makeVar([])
+
+const orderSummary = makeVar({ vendor: {}, time: null, fulfillment: {} })
+
+const userProfile = makeVar({})
+>>>>>>> Getting ready to fix auth:client/src/apollo.js
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('idToken')
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -53,11 +61,8 @@ const splitLink = split(
   httpLink
 )
 
-// Setup cache
-export const cache = new InMemoryCache()
-
 // Initialize Client
-export const client = new ApolloClient({
+const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -66,6 +71,16 @@ export const client = new ApolloClient({
             read () {
               return localStorage.getItem('cartItems')
             }
+          },
+          orderSummary: {
+            read () {
+              return orderSummary()
+            }
+          },
+          userProfile: {
+            read () {
+              return userProfile()
+            }
           }
         }
       }
@@ -73,3 +88,8 @@ export const client = new ApolloClient({
   }),
   link: authLink.concat(splitLink)
 })
+<<<<<<< HEAD:frontend/src/apollo.js
+=======
+
+export { cartItems, orderSummary, userProfile, client }
+>>>>>>> Getting ready to fix auth:client/src/apollo.js

@@ -7,7 +7,7 @@ import {
   CREATE_PAYMENT,
   GET_VENDOR
 } from './util'
-import './cart.scss'
+import './cart.css'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
@@ -180,11 +180,11 @@ function CartDetail () {
   })
   const [
     createOrder,
-    { loading: order_loading, error: order_error, data: order_data }
+    { loading: order_loading, error: order_error }
   ] = useMutation(CREATE_ORDER)
   const [
     createPayment,
-    { loading: payment_loading, error: payment_error, data: payment_data }
+    { loading: payment_loading, error: payment_error }
   ] = useMutation(CREATE_PAYMENT)
 
   const navigate = useNavigate()
@@ -197,7 +197,6 @@ function CartDetail () {
   const {
     loading: avail_loading,
     error: avail_error,
-    data: avail_data,
     refetch: avail_refetch
   } = useQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids },
@@ -295,7 +294,7 @@ function CartDetail () {
 
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
-  const [dummyDelete, setDummyDelete] = useState(0)
+  const [, setDummyDelete] = useState(0)
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
   if (error) return <p>`Error! ${error.message}`</p>
@@ -413,13 +412,14 @@ function CartDetail () {
             <div css={[centerCenter, row]}></div>
             {cartItems().map(item => {
               return (
-                <>
+                <Fragment>
                   <CartProduct
                     product={item}
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
-                </>
+                  <hr className='breakline' />
+                </Fragment>
               )
             })}
           </div>

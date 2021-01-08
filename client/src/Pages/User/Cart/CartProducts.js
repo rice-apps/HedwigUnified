@@ -1,9 +1,6 @@
-import { Component, useState } from 'react'
-import Thumb from './Thumb.js'
-import logo from '../../../images/headphones.jpg'
+import { useState } from 'react'
 import dispatch from '../Products/FunctionalCart'
-import { cartItems } from '../../../apollo'
-import './cart.scss'
+import './cart.css'
 
 // import Dropdown from "react-dropdown";
 // import "react-dropdown/style.css";
@@ -81,7 +78,6 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
 
   const date = new Date()
   const options = ['ASAP', '30 Minutes', '1 Hour']
-  const defaultOption = options[0]
 
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',

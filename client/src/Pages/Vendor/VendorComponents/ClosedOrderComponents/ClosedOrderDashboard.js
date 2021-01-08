@@ -6,7 +6,10 @@ import {
   ClosedOrdersSpaceWrapper,
   MakeIndividualClosedOrder
 } from './ClosedDashboardComponents.js'
+import { useState } from 'react'
 import { IconContext } from 'react-icons'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 
 const GET_COMPLETED_ORDERS = gql`
   query FIND_COMPLETED_ORDERS(
@@ -51,21 +54,41 @@ const GET_COMPLETED_ORDERS = gql`
   }
 `
 function ClosedOrderDashboard () {
-  const vendorId = ['FMXAFFWJR95WC']
-  const filter = { fulfillment_filter: { fulfillment_states: 'COMPLETED' } }
+  const vendorId = ['LBBZPB7F5A100']
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(yesterday.getDate() - 1)
 
+  const [filter, setFilter] = useState({
+    fulfillment_filter: { fulfillment_states: 'COMPLETED' }
+  })
   const { data, loading, error } = useQuery(GET_COMPLETED_ORDERS, {
     variables: { location: vendorId, filter: filter }
   })
   if (error) return <p>Error!</p>
   if (loading) return <p>Waiting...</p>
   if (!data) return <p> No closed orders </p>
-  console.log(data)
+
+  const onSelect = option => {
+    if (option === 'All') {
+      setFilter({ fulfillment_filter: { fulfillment_states: 'COMPLETED' } })
+    } else {
+      setFilter({
+        fulfillment_filter: { fulfillment_states: 'COMPLETED' },
+        date_time_filter: { closed_at: { start_at: yesterday } }
+      })
+    }
+  }
 
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
+      <Dropdown
+        options={['All', 'Today']}
+        onChange={onSelect}
+        placeholder='Select an option'
+      />
       <DashboardWrapper>
         <TitleWrapper>Closed Orders</TitleWrapper>
         <MakeClosedDashboardLabels />

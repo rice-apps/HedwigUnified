@@ -1,4 +1,4 @@
-import firebaseAdmin from '../firebase'
+import firebaseAdmin from './firebase'
 import log from 'loglevel'
 import { AuthenticationError } from 'apollo-server-express'
 
@@ -55,8 +55,19 @@ const authenticateTicket = async token => {
   }
 }
 
+/**
+ * Middleware that hecks if the user is logged in (if netID is present in the context) and throws and error otherwise
+ *
+ * @param {(source: TSource, args: TArgs, context: TContext, info: GraphQLResolveInfo) => any} resolve the next resolver in the chain
+ * @param {TSource} source the previous object or field from which the call originated
+ * @param {TArgs} args the arguments to the resolver
+ * @param {TContext} context the global context (contains stuff like auth)
+ * @param {import('graphql').GraphQLResolveInfo} info holds field-specific information relevant to the current query as well as the schema details
+ *
+ * @return {any | AuthenticationError} returns the result of the next resolver in the sequence or an auth error
+ */
 function checkLoggedIn (resolve, source, args, context, info) {
-  if (context.token) {
+  if (context.idNumber) {
     return resolve(source, args, context, info)
   }
 

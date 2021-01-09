@@ -6,6 +6,7 @@ import {
 } from '../utils/authenticationUtils.js'
 
 import { AuthenticationError } from 'apollo-server-express'
+import log from 'loglevel'
 
 UserTC.addResolver({
   name: 'authenticate',

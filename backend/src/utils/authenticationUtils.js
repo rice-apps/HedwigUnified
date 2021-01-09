@@ -56,7 +56,7 @@ const authenticateTicket = async token => {
 }
 
 /**
- * Middleware that hecks if the user is logged in (if netID is present in the context) and throws and error otherwise
+ * Middleware that hecks if the user is logged in (if ID number is present in the context) and throws an error otherwise
  *
  * @param {(source: TSource, args: TArgs, context: TContext, info: GraphQLResolveInfo) => any} resolve the next resolver in the chain
  * @param {TSource} source the previous object or field from which the call originated
@@ -67,7 +67,7 @@ const authenticateTicket = async token => {
  * @return {any | AuthenticationError} returns the result of the next resolver in the sequence or an auth error
  */
 function checkLoggedIn (resolve, source, args, context, info) {
-  if (context.idNumber) {
+  if (context.idNumber !== null) {
     return resolve(source, args, context, info)
   }
 

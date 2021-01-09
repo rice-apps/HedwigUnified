@@ -22,19 +22,22 @@ const server = new ApolloServer({
       ? req.headers.authorization.split(' ')[1]
       : ''
 
-    const idNumber = await firebaseAdmin
+    const decodedToken = await firebaseAdmin
       .auth()
       .verifyIdToken(token)
-      .then(
-        decodedToken =>
-          decodedToken.firebase.sign_in_attributes[
-            'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
-          ]
-      )
       .catch(_ => null)
 
     return {
-      idNumber: idNumber
+      idNumber: decodedToken
+        ? decodedToken.firebase.sign_in_attributes[
+            'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
+          ]
+        : null,
+      netid: decodedToken
+        ? decodedToken.firebase.sign_in_attributes[
+            'urn:oid:0.9.2342.19200300.100.1.1'
+          ]
+        : null
     }
   }
 })

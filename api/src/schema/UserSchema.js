@@ -51,7 +51,7 @@ UserTC.addResolver({
 
       // Get the netid of the authenticated user
       const { netid, name, studentId } = authenticationResponse
-      
+      console.log(studentId);
       // Check if user exists based on netid
       const exists = await User.exists({ netid })
       if (!exists) {
@@ -59,13 +59,17 @@ UserTC.addResolver({
         user = await User.create({ netid, name, studentId })
       } else {
         user = await User.findOne({ netid })
+        console.log(user)
+        // if (!user.studentId) {
+          
+        // }
       }
 
       // Get a new token for the user
       const token = createToken(user)
 
       // Update the user's token and get their updated information
-      return await User.findByIdAndUpdate(user._id, { token }, { new: true })
+      return await User.findByIdAndUpdate(user._id, { token, studentId }, { new: true })
     }
     console.log('Bad auth!')
     throw Error('Bad authentication.')

@@ -14,6 +14,7 @@ const AUTHENTICATE_USER = gql`
       phone
       name
       isAdmin
+      studentId
       type
     }
   }
@@ -66,7 +67,7 @@ function Auth () {
     type,
     token
   })
-  
+
   console.log(userProfile())
   // Set token in local storage
   lstorage.setItem('token', token)

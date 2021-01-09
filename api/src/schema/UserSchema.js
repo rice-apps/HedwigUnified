@@ -59,10 +59,6 @@ UserTC.addResolver({
         user = await User.create({ netid, name, studentId })
       } else {
         user = await User.findOne({ netid })
-        console.log(user)
-        // if (!user.studentId) {
-          
-        // }
       }
 
       // Get a new token for the user

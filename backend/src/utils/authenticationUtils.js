@@ -1,6 +1,7 @@
 import firebaseAdmin from './firebase'
 import log from 'loglevel'
 import { AuthenticationError } from 'apollo-server-express'
+import { Vendor } from '../models/VendorModel'
 
 /**
  * Decodes an ID token and returns the SAML attributes of said user
@@ -56,7 +57,7 @@ const authenticateTicket = async token => {
 }
 
 /**
- * Middleware that hecks if the user is logged in (if ID number is present in the context) and throws an error otherwise
+ * Middleware that checks if the user is logged in (if ID number is present in the context) and throws an error otherwise
  *
  * @param {(source: TSource, args: TArgs, context: TContext, info: GraphQLResolveInfo) => any} resolve the next resolver in the chain
  * @param {TSource} source the previous object or field from which the call originated
@@ -74,4 +75,25 @@ function checkLoggedIn (resolve, source, args, context, info) {
   return new AuthenticationError('Not logged in')
 }
 
-export { decodeFirebaseToken, checkLoggedIn, authenticateTicket }
+/**
+ * Middleware that checks if the user authorized to edit a vendor's information and throws an error otherwise
+ *
+ * @param {(source: TSource, args: TArgs, context: TContext, info: GraphQLResolveInfo) => any} resolve the next resolver in the chain
+ * @param {TSource} source the previous object or field from which the call originated
+ * @param {TArgs} args the arguments to the resolver
+ * @param {TContext} context the global context (contains stuff like auth)
+ * @param {import('graphql').GraphQLResolveInfo} info holds field-specific information relevant to the current query as well as the schema details
+ *
+ * @return {any | AuthenticationError} returns the result of the next resolver in the sequence or an auth error
+ */
+async function checkCanUpdateVendor (resolve, args, context, info) {
+  const vendor = await Vendor.findOne({ name: args.name })
+
+  if (vendor.allowedNetid.includes(context.netid)) {
+    return resolve(source, args, context, info)
+  }
+
+  return new AuthenticationError("Can't update vendor because not on list")
+}
+
+export { decodeFirebaseToken, checkLoggedIn, checkCanUpdateVendor, authenticateTicket }

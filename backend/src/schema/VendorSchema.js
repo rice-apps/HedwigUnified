@@ -1,6 +1,9 @@
 import { AuthenticationError } from 'apollo-server-express'
 import { VendorTC } from '../models/VendorModel'
-import { checkLoggedIn } from '../utils/authenticationUtils'
+import {
+  checkLoggedIn,
+  checkCanUpdateVendor
+} from '../utils/authenticationUtils'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers
@@ -40,9 +43,12 @@ const VendorQueries = {
 }
 
 const VendorMutations = {
-  createVendor: VendorTC.mongooseResolvers.createOne().withMiddlewares([checkLoggedIn]),
-  updateVendor: VendorTC.mongooseResolvers.updateOne().withMiddlewares([checkLoggedIn]),
-  removeVendor: VendorTC.mongooseResolvers.removeOne().withMiddlewares([checkLoggedIn])
+  createVendor: VendorTC.mongooseResolvers
+    .createOne()
+    .withMiddlewares([checkLoggedIn]),
+  updateVendor: VendorTC.mongooseResolvers
+    .updateOne()
+    .withMiddlewares([checkLoggedIn, checkCanUpdateVendor])
 }
 
 export { VendorQueries, VendorMutations }

@@ -91,7 +91,7 @@ const GET_VENDOR_DATA = gql`
  */
 const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   const token =
-    localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
+    localStorage.getItem('idToken') != null ? localStorage.getItem('idToken') : ''
 
   const client = useApolloClient()
 

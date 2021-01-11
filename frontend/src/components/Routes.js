@@ -34,7 +34,7 @@ import gql from 'graphql-tag.macro'
  */
 const VERIFY_USER = gql`
   query VerifyQuery($token: String!) {
-    verifyUser(token: $token) {
+    verifyUser(idToken: $token) {
       _id
       __typename
       name

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './contact.css'
-import { userProfile } from '../../../apollo'
+
 import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
@@ -24,7 +24,8 @@ const ADD_PHONE = gql`
 const sStorage = window.localStorage
 
 function ContactForm () {
-  const user = userProfile()
+  const user = JSON.parse(localStorage.getItem('userProfile'))
+  console.log(user)
   const userName = user.name
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)

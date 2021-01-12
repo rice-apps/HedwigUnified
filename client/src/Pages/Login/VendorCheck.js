@@ -1,6 +1,5 @@
 import hedwigLogo from './HedwigLogoFinal.svg'
 import { gql, useQuery } from '@apollo/client'
-import { userProfile } from '../../apollo'
 import {
   BackgroundCover,
   ButtonPane,
@@ -23,7 +22,7 @@ const GET_VENDOR = gql`
 
 const VendorSelect = () => {
   const navigate = useNavigate()
-  const userData = userProfile()
+  const userData = JSON.parse(localStorage.getItem('userProfile'))
 
   const {
     data: vendorData,

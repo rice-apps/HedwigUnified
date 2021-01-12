@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { orderSummary, userProfile } from '../../../apollo'
+import { userProfile } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -142,15 +142,15 @@ const getLineItems = items => {
 export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient()
   const user = userProfile()
-  console.log(orderSummary())
+  const order = JSON.parse(localStorage.getItem('order'))
   return {
     studentId: user.studentId,
     key: uuidv4(),
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
-    time: orderSummary().time ? moment(orderSummary().time).format() : null,
-    location: orderSummary().vendor.locationIds[0],
+    time: order.time ? moment(order.time).format() : null,
+    location: order.vendor.locationIds[0],
     type: paymentType,
     cohenId: cohenId
   }
@@ -179,4 +179,8 @@ export const checkNullFields = source => {
     return 'cohen id'
   }
   return null
+}
+
+export const resetOrderSummary = () => {
+  localStorage.setItem('order', JSON.stringify({ vendor: {}, time: null, fulfillment: {} }))
 }

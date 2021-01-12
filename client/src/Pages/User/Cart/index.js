@@ -11,7 +11,6 @@ import './cart.css'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
-import { orderSummary } from '../../../apollo'
 import Select from 'react-select'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
@@ -198,6 +197,7 @@ function CartDetail () {
   const navigate = useNavigate()
   // add catch statement
   const cart_menu = JSON.parse(localStorage.getItem('cartItems'))
+  const order = JSON.parse(localStorage.getItem('order'))
 
   const product_ids = cart_menu.map(item => {
     return item.dataSourceId
@@ -235,7 +235,6 @@ function CartDetail () {
       const rec = {
         variables: createRecord(cart_menu, paymentMethod, cohenId)
       }
-      const order = orderSummary()
       const emptyField = checkNullFields(rec)
       if (checkNullFields(rec)) {
         setNullError(emptyField)
@@ -252,8 +251,8 @@ function CartDetail () {
           currency: 'USD'
         }
       })
-      orderSummary(
-        Object.assign(orderSummary(), {
+      localStorage.setItem('order', 
+        JSON.stringify(Object.assign(order, {
           orderId: orderJson.id,
           fulfillment: {
             uid: orderJson.fulfillment.uid,
@@ -262,7 +261,7 @@ function CartDetail () {
             placedAt: orderJson.fulfillment.pickupDetails.placedAt
           },
           url: createPaymentResponse.data.createPayment.url
-        })
+        }))
       )
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -297,9 +296,9 @@ function CartDetail () {
   //   return parseInt(total)
   // }
 
-  // useEffect(() => {
-    // updateTotal()
-  // }, [cart_menu])
+  useEffect(() => {
+    updateTotal()
+  }, [cart_menu])
 
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
@@ -406,7 +405,7 @@ function CartDetail () {
 
   function changePickupTime (newTime) {
     setPickupTime(newTime.value)
-    orderSummary(Object.assign(orderSummary(), { time: newTime.value }))
+    localStorage.setItem('order', JSON.stringify(Object.assign(order, { time: newTime.value })))
   }
 
   return (

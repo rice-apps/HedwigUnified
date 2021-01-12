@@ -30,20 +30,20 @@ const FIND_ORDERS = gql`
         items {
           name
           quantity
-          variation_name
+          variationName
           modifiers {
             name
-            base_price_money {
+            basePriceMoney {
               amount
             }
-            total_price_money {
+            totalPriceMoney {
               amount
             }
           }
-          total_money {
+          totalMoney {
             amount
           }
-          total_tax {
+          totalTax {
             amount
           }
         }
@@ -99,20 +99,20 @@ const ORDER_CREATED = gql`
       items {
         name
         quantity
-        variation_name
+        variationName
         modifiers {
           name
-          base_price_money {
+          basePriceMoney {
             amount
           }
-          total_price_money {
+          totalPriceMoney {
             amount
           }
         }
-        total_money {
+        totalMoney {
           amount
         }
-        total_tax {
+        totalTax {
           amount
         }
       }
@@ -150,20 +150,20 @@ const ORDER_UPDATED = gql`
       items {
         name
         quantity
-        variation_name
+        variationName
         modifiers {
           name
-          base_price_money {
+          basePriceMoney {
             amount
           }
-          total_price_money {
+          totalPriceMoney {
             amount
           }
         }
-        total_money {
+        totalMoney {
           amount
         }
-        total_tax {
+        totalTax {
           amount
         }
       }

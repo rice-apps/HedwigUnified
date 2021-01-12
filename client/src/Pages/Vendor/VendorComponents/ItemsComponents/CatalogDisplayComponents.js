@@ -88,7 +88,6 @@ function MakeCatalogItems (props) {
           onChange={e => {
             setAvailability({
               variables: {
-                idempotencyKey: uuid(),
                 productId: props.itemId,
                 isItemAvailable: e.target.checked
               }

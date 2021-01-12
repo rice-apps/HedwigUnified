@@ -67,7 +67,7 @@ export const CREATE_ORDER = gql`
         name
         quantity
         modifiers {
-          catalog_object_id
+          catalogObjectId
         }
       }
     }

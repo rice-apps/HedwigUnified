@@ -70,12 +70,9 @@ function Product () {
     setQuantity(quantity - 1)
   }
 
-<<<<<<< HEAD
   let validVariants = true
   let validModifiers = true
 
-=======
->>>>>>> e642d204bcac32a7357c0571ef37b5c228034f2f
   function makeCartItem () {
     const vendor = vendor_data.getVendor
     const order = orderSummary()
@@ -110,43 +107,82 @@ function Product () {
 
     const modifierNames = []
     let modifierCost = 0
-    const modifierList = {}
     const modifierLists = document.querySelectorAll('.modifierSelect:checked')
+    
+    // purpose of subList: to make modifierList match the structure of prodList
+    const modList = []
+    const prodList = product.modifierLists
+    console.log('prodList:', prodList)
+    console.log('modifierLists:', modifierLists)
+    let i = 0, j = 0, subList = []
+    
+    // loops through product modifierLists once
+    // traverses selected modifiers once at a separate pace
+    while (i < prodList.length) {
+      console.log('i:', i)
+      console.log('j:', j)
+      // case where subList would be pushed to modList
+      if (j >= modifierLists.length || prodList[i].dataSourceId !== JSON.parse(modifierLists[j].value).option.parentListId) {
+        modList.push(subList)
+        console.log('adding to modList', modList)
+        subList = []
+        i++
+      }
+      // case where subList would continue being built
+      else {
+        subList.push(JSON.parse(modifierLists[j].value).option)
+        console.log('adding to subList', subList)
+        j++
+      }
+    }
 
     for (let i = 0; i < modifierLists.length; i++) {
-      const currentModifier = JSON.parse(modifierLists[i].value)
-      modifierList[i] = currentModifier.option
-      const currentModifierName = currentModifier.option.name
+      const currentModifier = JSON.parse(modifierLists[i].value).option
+      const currentModifierName = currentModifier.name
       {
-        currentModifier.option.price
-          ? (modifierCost += currentModifier.option.price.amount)
+        currentModifier.price
+          ? (modifierCost += currentModifier.price.amount)
           : (modifierCost += 0)
       }
       modifierNames.push(currentModifierName)
     }
+
     const itemQuantity = { quantity }.quantity
     const totalPrice = (modifierCost + variantCost) * 0.01
-
-    console.log('variantObject', variantObject)
-    console.log('modifierLists', modifierList)
     
+    console.log('product', product)
+
     {product.modifierLists.forEach(modifierList => {
-      console.log(modifierList.minModifiers)
+      console.log('max mods', modifierList.maxModifiers)
     })}
 
-    dispatch({
-      type: 'ADD_ITEM',
-      item: {
-        name: itemName,
-        Id: Date.now(),
-        variant: variantObject,
-        modifierLists: modifierList,
-        quantity: itemQuantity,
-        price: totalPrice,
-        modDisplay: modifierNames,
-        dataSourceId: itemDataSourceId
+    console.log('variantObject', variantObject)
+    console.log('mod list', modList)
+
+    // update modifiers validity flag
+    for (let i = 0; i < prodList.length; i++) {
+      if (modList[i].length < prodList[i].minModifiers ||
+          modList[i].length > prodList[i].maxModifiers) {
+        return false
       }
-    })
+    }
+
+    // apply checks
+    if (validVariants && validModifiers) {
+      dispatch({
+        type: 'ADD_ITEM',
+        item: {
+          name: itemName,
+          Id: Date.now(),
+          variant: variantObject,
+          modifierLists: modList,
+          quantity: itemQuantity,
+          price: totalPrice,
+          modDisplay: modifierNames,
+          dataSourceId: itemDataSourceId
+        }
+      })
+    }
     console.log(itemName, variantObject)
     return true
   }
@@ -186,9 +222,10 @@ function Product () {
           <button
             className='submitButton'
             onClick={() => {
-              makeCartItem()
               // Insert check here
-              navigate('/eat/cohen/cart')
+              if (makeCartItem()) {
+                navigate('/eat/cohen/cart')
+              }
               console.log(cartItems())
             }}
           >

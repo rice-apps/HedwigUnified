@@ -5,10 +5,9 @@ export const FloatCartWrapper = styled.div`
   padding-top: 8vh;
   min-height: 100vh;
   min-width: 100vw;
-  background-color: red;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(100px, min-content) 9vh minmax(9vh, max-content);
+  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content);
   grid-template-areas:
     'OrderSummary'
     'PickUpTime'
@@ -25,18 +24,17 @@ export const SpaceWrapper = styled.div`
     props.orderSummary &&
     css`
       grid-area: OrderSummary;
-      background-color: green;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 40px minmax(8vh, min-content) 10vh;
+      grid-template-rows: 3vh minmax(8vh, min-content) min-content;
       align-items: center;
-      padding-top: 1vh;
+      padding-top: 2.5vh;
     `};
   ${props =>
     props.pickUpTime &&
     css`
       grid-area: PickUpTime;
-      background-color: orange;
+      border-top:1px #DDDDDD solid;
       display: grid;
       grid-template-columns: 1.2fr 1.3fr;
       grid-template-rows: 1fr;
@@ -46,10 +44,10 @@ export const SpaceWrapper = styled.div`
     props.paymentMethod &&
     css`
       grid-area: PaymentMethod;
-      background-color: yellow;
       display: grid;
+      border-top:1px #DDDDDD solid;
       grid-template-columns: 1.2fr 1.3fr;
-      grid-template-rows: 9vh minmax(0px, min-content);
+      grid-template-rows: 10vh minmax(0px, min-content);
       align-items: center;
     `};
 `
@@ -63,7 +61,7 @@ export const Title = styled.div`
 
 export const ShelfItemWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.3fr 0.5fr 2fr 0.7fr 0.55fr;
+  grid-template-columns: 0.3fr 0.5fr 1.9fr 0.8fr 0.55fr;
   grid-template-rows: 1;
   align-items: center;
   justify-items: center;
@@ -116,42 +114,70 @@ export const ShelfItem = styled.div`
     css`
       font-size: 2vh;
       letter-spacing: 1px;
-      margin-right: 6px;
+      margin-right:3vw;
+      justify-self:flex-end;
     `}
 `
+
 export const Bill = styled.div`
   ${props =>
     props.wrapper &&
     css`
+    padding:2vh 0px;
       height: 100%;
       width: 100%;
-      background-color: pink;
       display: grid;
       grid-template-rows: 2fr 1fr;
-      grid-template-columns: auto 40vw 2vw;
+      grid-template-columns: auto 30vw 3vw;
       grid-template-areas:
-        'Blank subcalculationSpace empty'; 
+        'Blank subcalculationSpace empty'
         'Blank totalSpace empty';
     `};
-${props => props.subwrapper && css`
-grid-area:subcalculationSpace;
-display: grid;
-grid-template-rows:1fr 1fr;
-grid-template-columns: 1fr 1fr;
-grid-template-areas:
- "subtotalTitle subtotalNumber"
- "taxTitle taxNumber"
-`}
+  ${props =>
+    props.subwrapper &&
+    css`
+      grid-area: subcalculationSpace;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'subtotalTitle subtotalNumber'
+        'taxTitle taxNumber';
+    `}
   ${props =>
     props.subtitle &&
     css`
-    text-transform: capitalize;
+        font-size:2vh;
+      text-transform: capitalize;
       text-align: right;
       grid-area: ${props => props.gridArea};
     `};
+
+  ${props =>
+    props.price &&
+    css`
+    text-align:right;
+      letter-spacing: 1px;
+    `};
+
+  ${props =>
+    props.totalWrapper &&
+    css`
+      height: 100%;
+      width: 100%;
+      grid-area: totalSpace;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      grid-template-areas: 'totalTitle totalNumber';
+    `}
+
   ${props =>
     props.title &&
     css`
+    padding-top:0.5vh;
+    font-size:2vh;
+    border-top: 1px #DDDDDD solid;
       text-align: right;
       grid-area: ${props => props.gridArea};
       font-weight: bold;

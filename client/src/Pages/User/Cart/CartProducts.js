@@ -111,7 +111,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   return (
     <ShelfItemWrapper>
       <BsTrashFill
-      style={{cursor:"pointer", fontSize:'2vh'}}
+      style={{cursor:"pointer", fontSize:'2vh', color: '#F3725B'}}
         onClick={() => {
           deleteCartItem()
           forceUpdate(date.getTime())

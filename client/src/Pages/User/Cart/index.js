@@ -540,10 +540,14 @@ function CartDetail () {
                 console.log(type + 'Title', formatted)
                 return(<Bill subwrapper>
                   <Bill subtitle gridArea={type + 'Title'}>{type}:</Bill>
-                  <Bill subtitle gridArea={type + 'Number'}>{formatted}</Bill>
+                  <Bill subtitle price gridArea={type + 'Number'}>{formatted}</Bill>
                   </Bill>
                 )
                 }})}
+                <Bill totalWrapper>
+                  <Bill title gridArea="totalTitle">Total:</Bill>
+                  <Bill price title gridrea="totalNumber"> {currency(totals.subtotal + totals.tax).format()}</Bill>
+                </Bill>
           </Bill>
         </SpaceWrapper>
         <SpaceWrapper pickUpTime>

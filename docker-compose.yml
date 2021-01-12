@@ -1,0 +1,26 @@
+version: "3"
+services:
+  api:
+    image: riceapps/hedwig-api:latest
+    env_file:
+      - ./env
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+  client:
+    image: riceapps/hedwig-client:latest
+    env_file:
+      - ./env-client
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    links:
+      - api
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 300

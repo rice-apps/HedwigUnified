@@ -6,9 +6,10 @@ import { BiLogOut } from 'react-icons/bi'
 import { AiOutlineUserSwitch } from 'react-icons/ai'
 import { IconContext } from 'react-icons'
 import { useApolloClient } from '@apollo/client'
+import { gql, useQuery, useMutation } from '@apollo/client'
 
 const VendorHeaderWrapper = styled.div`
-  font-family: 'Futura', sans-serif;
+  font-weight: 600;
   display: grid;
   width: 100%;
   height: 100%;
@@ -76,16 +77,28 @@ const LogoutItem = styled.div`
   align-items: center;
   justify-content: center;
 `
-
+const GET_USER_INFO = gql`
+  query GetUserInfo {
+    user @client {
+      _id
+      recentUpdate
+      name
+      netid
+      phone
+    }
+  }
+`
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
-  const name = Object.assign(
-    {},
-    {
-      first: localStorage.getItem('first name'),
-      last: localStorage.getItem('last name')
-    }
-  )
+  const { data, loading, error } = useQuery(GET_USER_INFO)
+
+  if (error) return <p>Error!</p>
+  if (loading) return <p>Waiting...</p>
+  if (!data) return <p> work pls </p>
+
+
+  const { user } = data
+  
   // const userData = userProfile();
   // console.log("DATA", userData);
 
@@ -134,7 +147,7 @@ function VendorHeader () {
     <IconContext.Provider value={{ style: { marginRight: '7px' } }}>
       <VendorHeaderWrapper>
         <StyledUserDisplayWrapper onClick={toggleLogoutScreen}>
-          <UserText>{name.first + ' ' + name.last}</UserText>
+          <UserText>{user.name}</UserText>
           <FaUserCircle style={{ fontSize: '30px', marginLeft: '1vw' }} />
         </StyledUserDisplayWrapper>
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
-import RalewayFont from './../../../fonts/Raleway/RalewayFont'
+import RalewayFont from '../../../fonts/GlobalFont.js'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,14 +17,14 @@ const HeaderWrapper = styled.div`
   background-color: white;
   z-index: 1;
   padding-top: 1vh;
-  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
 `
 
 const HedwigLogo = styled.img`
   height: 4.5vh;
   width: 4.5vh;
   margin-right: 5px;
-  margin-top: 0l5vh;
+  margin-top: 0.15vh;
 `
 
 const HedwigWrapper = styled.div`

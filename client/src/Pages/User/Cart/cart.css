@@ -45,10 +45,13 @@
   min-height: 100px;
 }
 .float-cart__shelf-container .cart-title {
-  font-family: 'Futura', sans-serif;
-  font-size: 14px;
-  text-align: center;
+  font-family: "avenir";
+  letter-spacing:1px;
+  font-size: 20px;
+  text-align: left;
+  padding-left:2.5vw;
   font-weight: bold;
+  margin-bottom:0px;
 }
 .float-cart__shelf-container .vendor-title {
   margin-left: 10px;
@@ -62,35 +65,41 @@
 }
 .float-cart__shelf-container .shelf-item {
   display: grid;
-  grid-template-columns: 1fr 2fr 0.5fr 1fr;
+  grid-template-columns: 0.8fr 2fr 0.5fr 0.8fr;
   align-items: center;
+  justify-items: center;
   width: 100%;
-  font-family: Poppins;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   box-sizing: border-box;
-  padding: 5%;
+  padding:15px 0px 5px 0px;
   transition: background-color 0.2s, opacity 0.2s;
 }
 .float-cart__shelf-container .shelf-item #image {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius:50%;
   word-break: break-all;
+  justify-self: end;
 }
 .float-cart__shelf-container .shelf-item__title {
-  padding-right: 5px;
+  padding-right: 3px;
+  padding-left:0px;
 }
 .float-cart__shelf-container .shelf-item__title #title {
   font-size: 16px;
   margin-bottom: 0px;
-  font-family: 'Futura', sans-serif;
+  font-family: 'avenir';
+  letter-spacing:0.9px;
   font-weight: bold;
   word-break: break-word;
   text-align: left;
 }
 .float-cart__shelf-container .shelf-item__title #options {
   font-size: 12px;
-  margin-top: 4px;
-  opacity: 0.5;
+  margin-top: 0px;
+  opacity: 0.7;
+  line-height:14px;
   text-align: left;
 }
 .float-cart__shelf-container .shelf-item__quantity {
@@ -133,9 +142,10 @@
   align-items: flex-end;
   text-align: right;
 }
-.float-cart__shelf-container .shelf-item__price p {
-  font-family: 'Futura', sans-serif;
-  font-weight: bold;
+.float-cart__shelf-container .shelf-item__price div {
+  font-family: 'avenirmedium';
+  letter-spacing: 1px;
+  text-align:right;
 }
 .float-cart__shelf-container .shelf-item--mouseover {
   background: #818085;
@@ -176,28 +186,28 @@
 }
 .float-cart__footer {
   justify-self: flex-end;
-  box-sizing: border-box;
-  width: 100%;
-  z-index: 2;
-  background-color: #d5573e;
-  text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 0;
+    text-align: center;
+    margin-bottom: 5vh;
 }
 .float-cart__footer .buy-btn {
   color: white;
   background-color: #d5573e;
   text-align: center;
   cursor: pointer;
-  font-family: 'Futura', sans-serif;
+  font-family: "Avenir", sans-serif;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   transition: background-color 0.2s;
-  height: 10vh;
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  width: 100vw;
+  height: 5vh;
+  width: 60vw;
   outline: none;
   border: none;
+  border-radius: 30px;
+  align-self: center;
+  margin: 15px auto;
 }
 /* MAC scrollbar para desktop*/
 @media screen and (min-width: 640px) {
@@ -218,12 +228,14 @@
 .float-bill {
   display: flex;
   flex-direction: column;
-  padding: 5%;
-  background-color: #f8f8f8;
+  padding:5% 5% 0px 0px; 
+  background-color: #ffffff;
 }
 .float-bill p {
-  font-family: 'Futura', sans-serif;
+  font-family: 'avenirmedium', sans-serif;
+  letter-spacing:1px;
   font-weight: bold;
+  line-height:11px;
 }
 .float-bill .subtotal-container {
   display: inline-flex;
@@ -234,7 +246,8 @@
   display: inline;
   font-family: 'Avenir', sans-serif;
   font-weight: normal;
-  opacity: 0.5;
+  font-size:15px;
+  opacity: 0.8;
   text-transform: capitalize;
 }
 .float-bill .total-container {
@@ -246,10 +259,9 @@
   flex-direction: row;
   justify-content: flex-end;
 }
-.float-bill .total-container .total__header {
-  font-size: 16px;
-  font-family: 'Futura', sans-serif;
-  font-weight: bold;
+.float-bill .total .total__header {
+  font-size: 15px;
+  font-family: 'avenirbold';
 }
 .dropdowncontainer {
   position: relative;
@@ -268,4 +280,22 @@
   border-right: none;
   margin: 0px;
   width: 100%;
+}
+
+
+.float-cart__dropdown-title {
+  font-size: 19px;
+    text-align: left;
+    font-weight: bold;
+    font-family: "avenir";
+    letter-spacing: 1px;
+    margin-left:5vw;
+    display:flex;
+    align-items: center;
+
+
+}
+
+.float-cart__dropdown{
+  margin-right:5vw;
 }

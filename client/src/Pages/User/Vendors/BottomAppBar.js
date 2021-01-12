@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { GrCart } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
-import RalewayFont from './../../../fonts/Raleway/RalewayFont.js'
+import RalewayFont from '../../../fonts/GlobalFont.js'
 
 const BottomNavigationWrapper = styled.div`
   position: fixed;

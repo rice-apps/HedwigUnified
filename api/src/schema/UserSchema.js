@@ -43,20 +43,20 @@ import {
 UserTC.addResolver({
   name: 'authenticate',
   type: UserTC,
-  args: { ticket: 'String!' },
+  args: { idToken: 'String!' },
   resolve: async ({ args }) => {
-    const authenticationResponse = await authenticateTicket(args.ticket)
+    const authenticationResponse = await authenticateTicket(args.idToken)
     if (authenticationResponse.success) {
       let user // this will be used as the return object
 
       // Get the netid of the authenticated user
-      const { netid } = authenticationResponse
-
+      const { netid, name, studentId } = authenticationResponse
+      console.log(studentId);
       // Check if user exists based on netid
       const exists = await User.exists({ netid })
       if (!exists) {
         // Create user
-        user = await User.create({ netid })
+        user = await User.create({ netid, name, studentId })
       } else {
         user = await User.findOne({ netid })
       }
@@ -65,7 +65,7 @@ UserTC.addResolver({
       const token = createToken(user)
 
       // Update the user's token and get their updated information
-      return await User.findByIdAndUpdate(user._id, { token }, { new: true })
+      return await User.findByIdAndUpdate(user._id, { token, studentId }, { new: true })
     }
     console.log('Bad auth!')
     throw Error('Bad authentication.')

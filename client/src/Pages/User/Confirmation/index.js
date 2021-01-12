@@ -4,7 +4,7 @@ import { P, Button, Div, MessageWrapper } from '../AlmostThere/index'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
 import { ReactComponent as HedwigLogoSVG } from './../../Login/HedwigLogoFinal.svg'
-import { orderSummary, cartItems } from '../../../apollo'
+import { orderSummary } from '../../../apollo'
 import moment from 'moment'
 
 function Failure () {
@@ -36,7 +36,7 @@ function Failure () {
 function Confirmation () {
   const order = orderSummary()
   const navigate = useNavigate()
-  cartItems([])
+  localStorage.setItem('cartItem', JSON.stringify([]))
   const handleHomeClick = () => {
     return navigate(`/eat`)
   }

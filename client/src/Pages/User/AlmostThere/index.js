@@ -1,7 +1,7 @@
 import './almostThere.css'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
-import { cartItems, orderSummary } from '../../../apollo'
+import { orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
 import moment from 'moment'
 
@@ -109,7 +109,7 @@ export const MessageWrapper = styled.div`
 `
 
 const AlmostThere = ({}) => {
-  cartItems([])
+  localStorage.setItem('cartItem', JSON.stringify([]))
   const navigate = useNavigate()
   const handleHomeClick = () => {
     orderSummary({ vendor: null, time: null })

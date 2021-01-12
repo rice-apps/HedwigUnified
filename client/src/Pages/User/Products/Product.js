@@ -4,7 +4,7 @@ import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import dispatch from './FunctionalCart'
-import { orderSummary, cartItems } from '../../../apollo'
+import { orderSummary } from '../../../apollo'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
@@ -174,7 +174,6 @@ function Product () {
             onClick={() => {
               makeCartItem()
               navigate('/eat/cohen/cart')
-              console.log(cartItems())
             }}
           >
             Add

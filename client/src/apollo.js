@@ -15,8 +15,6 @@ import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 
 import { makeVar } from '@apollo/client'
 
-export const cartItems = makeVar([])
-// export const orderSummary = makeVar({vendor: null})
 export const orderSummary = makeVar({ vendor: {}, time: null, fulfillment: {} })
 
 export const userProfile = makeVar([])
@@ -72,7 +70,7 @@ export const client = new ApolloClient({
         fields: {
           cartItems: {
             read () {
-              return cartItems()
+              return localStorage.getItem('cartItems')
             }
           }
         }

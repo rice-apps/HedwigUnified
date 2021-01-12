@@ -25,7 +25,6 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
-import Submit from '../Pages/User/Submit'
 
 /**
  * Requests to verify the user's token on the backend
@@ -210,7 +209,6 @@ const newRoutesArray = [
       { path: '/', element: <PrivateRoute element={<VendorList />} /> },
       { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
       { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
-      { path: '/submit', element: <Submit /> },
       { path: '/almostThere', element: <AlmostThere /> },
       {
         path: '/confirmation',

@@ -24,6 +24,12 @@ const HeaderWrapper = styled.div`
   box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
 `
 
+const HedwigLogo = styled.img`
+  height: 4.5vh;
+  width: 4.5vh;
+  margin-right: 5px;
+  margin-top: 0l5vh;
+`
 
 const HedwigWrapper = styled.div`
   font-family: 'avenirbold';

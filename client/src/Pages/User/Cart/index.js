@@ -518,6 +518,14 @@ function CartDetail () {
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>
+          {cartDUMMY.map(item => {
+              return (
+                <CartProduct
+                  product={item}
+                  forceUpdate={setDummyDelete}
+                  updateTotal={updateTotal}
+                />
+              )})}
         </SpaceWrapper>
         <SpaceWrapper pickUpTime>
           <Title>Pick Up Time:</Title>

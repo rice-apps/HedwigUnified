@@ -18,7 +18,6 @@ import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
 
-
 // new dropdown imports:
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -35,13 +34,13 @@ const Div = styled.div`
 `
 
 const OptionWrapper = styled.div`
- display:grid;
- grid-template-columns: 7fr 4fr;
- grid-template-rows: 1fr;
- align-items: center;
- padding:15px 0px;
- height:100%;
- width:100%;
+  display: grid;
+  grid-template-columns: 7fr 4fr;
+  grid-template-rows: 1fr;
+  align-items: center;
+  padding: 15px 0px;
+  height: 100%;
+  width: 100%;
 `
 
 const GET_AVAILABILITIES = gql`
@@ -426,7 +425,7 @@ function CartDetail () {
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
-                  <hr className='breakline' style={{opacity:"0.3"}} />
+                  <hr className='breakline' style={{ opacity: '0.3' }} />
                 </Fragment>
               )
             })}
@@ -445,53 +444,61 @@ function CartDetail () {
               }
             })}
             <div className='total-container'>
-              <hr className='breakline' style={{margin: "-5px 0px 10px 5px"}} />
+              <hr
+                className='breakline'
+                style={{ margin: '-5px 0px 10px 5px' }}
+              />
               <div className='total' style={{ marginBottom: '9vh' }}>
                 <p className='total__header'>Total</p>
-                <p style={{marginTop:  "1px"}}>{currency(totals.subtotal + totals.tax).format()}</p>
+                <p style={{ marginTop: '1px' }}>
+                  {currency(totals.subtotal + totals.tax).format()}
+                </p>
               </div>
             </div>
           </div>
-    
-          <hr className='breakline' style={{marginTop:"-40px", opacity: "0.3"}} />
-<OptionWrapper>
-          <div className='float-cart__dropdown-title'> Pickup Time:</div>
-          <Select
-            options={pickupTimes}
-            placeholder={'Select...'}
-            onChange={changePickupTime}
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
+
+          <hr
+            className='breakline'
+            style={{ marginTop: '-40px', opacity: '0.3' }}
           />
-         </OptionWrapper>
-         
-          <hr className='breakline' style={{opacity:"0.3"}} />
+          <OptionWrapper>
+            <div className='float-cart__dropdown-title'> Pickup Time:</div>
+            <Select
+              options={pickupTimes}
+              placeholder={'Select...'}
+              onChange={changePickupTime}
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+          </OptionWrapper>
+
+          <hr className='breakline' style={{ opacity: '0.3' }} />
 
           <OptionWrapper>
-          <div className='float-cart__dropdown-title'>Payment Method:</div>
-          <Select
-            options={options}
-            onChange={changePaymentType}
-            placeholder={'Select...'}
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-          {paymentMethod === 'COHEN' && (
-            <Div>
-              <label>Enter your Cohen House membership id: </label>
-              <input onChange={e => setCohenId(e.target.value)}></input>
-            </Div>
-          )}
-          {nullError && (
-            <p css={{ alignSelf: 'center', color: 'red' }}>
-              {' '}
-              Error! Submission form contains null value for {nullError}. Please
-              complete your profile and order.{' '}
-            </p>
-          )}
-</OptionWrapper>
+            <div className='float-cart__dropdown-title'>Payment Method:</div>
+            <Select
+              options={options}
+              onChange={changePaymentType}
+              placeholder={'Select...'}
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+            {paymentMethod === 'COHEN' && (
+              <Div>
+                <label>Enter your Cohen House membership id: </label>
+                <input onChange={e => setCohenId(e.target.value)}></input>
+              </Div>
+            )}
+            {nullError && (
+              <p css={{ alignSelf: 'center', color: 'red' }}>
+                {' '}
+                Error! Submission form contains null value for {nullError}.
+                Please complete your profile and order.{' '}
+              </p>
+            )}
+          </OptionWrapper>
           <div className='float-cart__footer'>
             <button
               disabled={cartItems().length === 0}

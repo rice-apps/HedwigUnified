@@ -45,13 +45,13 @@
   min-height: 100px;
 }
 .float-cart__shelf-container .cart-title {
-  font-family: "avenir";
-  letter-spacing:1px;
+  font-family: 'avenir';
+  letter-spacing: 1px;
   font-size: 20px;
   text-align: left;
-  padding-left:2.5vw;
+  padding-left: 2.5vw;
   font-weight: bold;
-  margin-bottom:0px;
+  margin-bottom: 0px;
 }
 .float-cart__shelf-container .vendor-title {
   margin-left: 10px;
@@ -71,26 +71,26 @@
   width: 100%;
   background-color: #ffffff;
   box-sizing: border-box;
-  padding:15px 0px 5px 0px;
+  padding: 15px 0px 5px 0px;
   transition: background-color 0.2s, opacity 0.2s;
 }
 .float-cart__shelf-container .shelf-item #image {
   width: 60px;
   height: 60px;
   object-fit: cover;
-  border-radius:50%;
+  border-radius: 50%;
   word-break: break-all;
   justify-self: end;
 }
 .float-cart__shelf-container .shelf-item__title {
   padding-right: 3px;
-  padding-left:0px;
+  padding-left: 0px;
 }
 .float-cart__shelf-container .shelf-item__title #title {
   font-size: 16px;
   margin-bottom: 0px;
   font-family: 'avenir';
-  letter-spacing:0.9px;
+  letter-spacing: 0.9px;
   font-weight: bold;
   word-break: break-word;
   text-align: left;
@@ -99,7 +99,7 @@
   font-size: 12px;
   margin-top: 0px;
   opacity: 0.7;
-  line-height:14px;
+  line-height: 14px;
   text-align: left;
 }
 .float-cart__shelf-container .shelf-item__quantity {
@@ -145,7 +145,7 @@
 .float-cart__shelf-container .shelf-item__price div {
   font-family: 'avenirmedium';
   letter-spacing: 1px;
-  text-align:right;
+  text-align: right;
 }
 .float-cart__shelf-container .shelf-item--mouseover {
   background: #818085;
@@ -186,18 +186,18 @@
 }
 .float-cart__footer {
   justify-self: flex-end;
-    box-sizing: border-box;
-    width: 100%;
-    z-index: 0;
-    text-align: center;
-    margin-bottom: 5vh;
+  box-sizing: border-box;
+  width: 100%;
+  z-index: 0;
+  text-align: center;
+  margin-bottom: 5vh;
 }
 .float-cart__footer .buy-btn {
   color: white;
   background-color: #d5573e;
   text-align: center;
   cursor: pointer;
-  font-family: "Avenir", sans-serif;
+  font-family: 'Avenir', sans-serif;
   font-weight: bold;
   font-size: 16px;
   transition: background-color 0.2s;
@@ -228,14 +228,14 @@
 .float-bill {
   display: flex;
   flex-direction: column;
-  padding:5% 5% 0px 0px; 
+  padding: 5% 5% 0px 0px;
   background-color: #ffffff;
 }
 .float-bill p {
   font-family: 'avenirmedium', sans-serif;
-  letter-spacing:1px;
+  letter-spacing: 1px;
   font-weight: bold;
-  line-height:11px;
+  line-height: 11px;
 }
 .float-bill .subtotal-container {
   display: inline-flex;
@@ -246,7 +246,7 @@
   display: inline;
   font-family: 'Avenir', sans-serif;
   font-weight: normal;
-  font-size:15px;
+  font-size: 15px;
   opacity: 0.8;
   text-transform: capitalize;
 }
@@ -282,20 +282,17 @@
   width: 100%;
 }
 
-
 .float-cart__dropdown-title {
   font-size: 19px;
-    text-align: left;
-    font-weight: bold;
-    font-family: "avenir";
-    letter-spacing: 1px;
-    margin-left:5vw;
-    display:flex;
-    align-items: center;
-
-
+  text-align: left;
+  font-weight: bold;
+  font-family: 'avenir';
+  letter-spacing: 1px;
+  margin-left: 5vw;
+  display: flex;
+  align-items: center;
 }
 
-.float-cart__dropdown{
-  margin-right:5vw;
+.float-cart__dropdown {
+  margin-right: 5vw;
 }

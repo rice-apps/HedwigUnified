@@ -18,7 +18,7 @@ import Grow from '@material-ui/core/Grow'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
-import {convertTimeToNum} from './../Vendors/VendorCard.js'
+import { convertTimeToNum } from './../Vendors/VendorCard.js'
 
 // add a proceed to checkout
 function Menu () {

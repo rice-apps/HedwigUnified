@@ -67,7 +67,7 @@ export const CREATE_ORDER = gql`
         name
         quantity
         modifiers {
-          catalog_object_id
+          catalogObjectId
         }
       }
     }
@@ -125,12 +125,12 @@ const getLineItems = items => {
     const modifierList = []
     for (const [, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
-        catalog_object_id: m.dataSourceId
+        catalogObjectId: m.dataSourceId
       })
     }
     const i = {
       modifiers: modifierList,
-      catalog_object_id: item.variant.dataSourceId,
+      catalogObjectId: item.variant.dataSourceId,
       quantity: item.quantity.toString()
       // variation_name: item.variant.name,
     }

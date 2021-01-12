@@ -82,6 +82,8 @@
   font-size: 4vh;
   color: #db6142;
   margin-left: 1vw;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .phonetext {

@@ -109,47 +109,6 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     currency: 'USD'
   })
   return (
-    // <div
-    //   className='shelf-item'
-    // >
-    //   {/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
-    //   {/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}
-    //   <img
-    //     id='image'
-    //     src={
-    //       product.image
-    //         ? product.image
-    //         : 'https://img.cinemablend.com/filter:scale/quill/9/6/6/3/7/a/96637aabb562881adec1336c0d78acc6cc5d1403.jpg?mw=600'
-    //     }
-    //     alt={product.name}
-    //   />
-    //   <div className='shelf-item__title'>
-    //     <p id='title'>{product.name}</p>
-    //     <p id='options'> {getVarMod()}</p>
-    //   </div>
-    //   <QuantitySelector
-    //     quantity={quantity}
-    //     increase={increase}
-    //     decrease={decrease}
-    //   />
-    //   <div className='shelf-item__price'>
-    //     <div>{formatter.format(product.price * quantity)}</div>
-    //   </div>
-    //   <div />
-    //   <div />
-    //   <div />
-    //   <div
-    //     className='shelf-item__del'
-    //     onMouseOver={() => handleMouseOver()}
-    //     onMouseOut={() => handleMouseOut()}
-    //     onClick={() => {
-    //       deleteCartItem()
-    //       forceUpdate(date.getTime())
-    //     }}
-    //   >
-    //     Remove
-    //   </div>
-    // </div>
     <ShelfItemWrapper>
       <BsTrashFill
       style={{cursor:"pointer"}}

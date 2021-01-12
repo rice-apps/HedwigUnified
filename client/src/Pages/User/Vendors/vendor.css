@@ -300,7 +300,7 @@ p {
   font-size: 1.1rem;
 }
 
-#instructionTitle{
+.instructionTitle{
   font-weight: bold;
 }
 
@@ -308,6 +308,11 @@ p {
   margin-top: 0 !important;
 }
 
-#dayHour{
-  margin-bottom: 2rem;
+.dayHour{
+  margin-bottom: 2rem !important;
+}
+
+.infoIcon{ 
+  width: 0.8rem;
+  height: 0.8rem;
 }

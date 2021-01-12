@@ -20,7 +20,7 @@ export const convertTimeToNum = time => {
 }
 
 function VendorCard ({ vendor }) {
-  // debug
+  // DEBUGGING
   // const { name, hours, logoUrl, phone, email, pickupInstruction } = vendor
   const { name, hours, logoUrl, phone, email } = vendor
   const pickupInstruction = "Enter campus from Rice Entrance #2. Turn left at the stop sign and park in Founder’s Court Lot."
@@ -107,7 +107,7 @@ function VendorCard ({ vendor }) {
             </div>
             <div className='detailText infoText'>
               {dayObj && (
-                <p id='dayHour'>
+                <p className='dayHour'>
                   {' '}
                   {dayObj.day}{' '}
                   {times.lengt&&<div>Closed for the day</div>}
@@ -126,15 +126,13 @@ function VendorCard ({ vendor }) {
               )}
               {pickupInstruction && (
                 <p>
-                <span id='instructionTitle'>Pick Up Instructions:</span>
+                <span className='instructionTitle'>Pick Up Instructions:</span>
                 {(pickupInstruction.split('. ').map(text => {
                   return( 
                     <p className='instructionText' key={text}>{text}</p>
                   )
                 } 
                 ))}
-                
-                {/* <div id='instructionText'>{pickupInstruction}</div> */}
                 </p>
               )}
                 
@@ -216,7 +214,7 @@ function VendorCard ({ vendor }) {
           <button className={'statusIcon ' + openStatus.status}onClick={()=>handleClick()} >
             {openStatusText[openStatus.status]}
           </button>
-        <AiOutlineInfoCircle size="5%" onClick={()=>handleClickInfo()} />
+        <AiOutlineInfoCircle className='infoIcon' onClick={()=>handleClickInfo()} />
       </div>
     </div>
   )

@@ -7,8 +7,7 @@ input[type='checkbox'] {
 
 .container {
   padding-top: 8vh;
-  height: 100vh;
-  width: 100vw;
+
   display: flex;
   flex-direction: column;
   align-items: center;

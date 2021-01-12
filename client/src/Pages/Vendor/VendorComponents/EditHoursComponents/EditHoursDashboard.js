@@ -197,7 +197,7 @@ function HoursItem (props) {
     UPDATE_VENDOR
   )
 
-  function deleteStartEndTime () {
+  async function deleteStartEndTime () {
     const originalHours = props.currentHours
     const updatedHours = [...originalHours]
     // This index is the index of the day! should reflect what day the user clicks to edit:
@@ -234,7 +234,7 @@ function HoursItem (props) {
       updatedHours[index] = dayCopy
     })
 
-    updateDeleteTime({
+    await updateDeleteTime({
       variables: {
         name: 'Cohen House',
         hours: updatedHours

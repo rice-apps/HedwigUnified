@@ -18,6 +18,7 @@ const AUTHENTICATE_USER = gql`
       isAdmin
       studentId
       type
+      studentId
     }
   }
 `
@@ -42,7 +43,7 @@ function Auth () {
   // if (error) return <Navigate to='/login' />
   if (error) return <p>{error.message}</p>
   if (loading) return <p>Loading...</p>
-  if (!authenticationData) return <p>Bad.</p>
+  if (!authenticationData) return <p>Authentication Failed.</p>
 
   const {
     _id,
@@ -54,7 +55,8 @@ function Auth () {
     vendor,
     recentUpdate,
     type,
-    token
+    token,
+    studentId
   } = authenticationData.authenticateUser
 
   const userData = {
@@ -67,9 +69,17 @@ function Auth () {
     vendor,
     recentUpdate,
     type,
+<<<<<<< HEAD:frontend/src/Pages/Auth/index.js
     token
   }
   console.log('DATA', userData)
+=======
+    token,
+    studentId
+  })
+>>>>>>> adds student id to user schema:client/src/Pages/Auth/index.js
+
+  console.log(studentId)
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

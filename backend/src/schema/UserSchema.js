@@ -21,7 +21,8 @@ UserTC.addResolver({
         ? User.create({
             name: authRes.fullName,
             netid: authRes.netid,
-            token: authRes.token
+            token: authRes.token,
+            studentId: authRes.idNumber
           })
         : User.findOne({ netid: authRes.netid }).then(doc => {
             if (doc.token !== authRes.token) {

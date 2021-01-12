@@ -22,7 +22,7 @@ const QuantitySelectorWrapper = styled.div`
   height: 100%;
   align-items: center;
   justify-items: center;
-  font-size: 15px;
+  font-size: 1.9vh;
 `
 
 function QuantitySelector ({ quantity, decrease, increase }) {
@@ -111,7 +111,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   return (
     <ShelfItemWrapper>
       <BsTrashFill
-      style={{cursor:"pointer"}}
+      style={{cursor:"pointer", fontSize:'2vh'}}
         onClick={() => {
           deleteCartItem()
           forceUpdate(date.getTime())

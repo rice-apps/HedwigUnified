@@ -8,7 +8,7 @@ export const FloatCartWrapper = styled.div`
   background-color: red;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(150px, min-content) 9vh minmax(9vh, max-content);
+  grid-template-rows: minmax(100px, min-content) 9vh minmax(9vh, max-content);
   grid-template-areas:
     'OrderSummary'
     'PickUpTime'
@@ -28,7 +28,7 @@ export const SpaceWrapper = styled.div`
       background-color: green;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 40px minmax(10vh, min-content) 10vh;
+      grid-template-rows: 40px minmax(8vh, min-content) 10vh;
       align-items: center;
       padding-top: 1vh;
     `};
@@ -63,7 +63,7 @@ export const Title = styled.div`
 
 export const ShelfItemWrapper = styled.div`
   display: grid;
-  grid-template-columns:0.3fr 0.5fr 2fr 0.7fr 0.55fr ;
+  grid-template-columns: 0.3fr 0.5fr 2fr 0.7fr 0.55fr;
   grid-template-rows: 1;
   align-items: center;
   justify-items: center;
@@ -83,8 +83,8 @@ export const ShelfItemProduct = styled.div`
 `
 
 export const ShelfItemImage = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 6vh;
+  height: 6vh;
   object-fit: cover;
   border-radius: 50%;
 `
@@ -93,28 +93,67 @@ export const ShelfItem = styled.div`
   ${props =>
     props.title &&
     css`
-      font-size: 18px;
+      font-size: 2.4vh;
       font-weight: bold;
       word-break: break-word;
       text-align: left;
-      width:95%;
+      width: 95%;
     `};
 
   ${props =>
     props.options &&
     css`
-      font-size: 12px;
+      font-size: 1.8vh;
       opacity: 0.7;
       letter-spacing: 0.8px;
-      line-height: 14px;
-      width:95%;
+      line-height: 1.9vh;
+      width: 95%;
       text-align: left;
     `}
 
   ${props =>
     props.price &&
     css`
+      font-size: 2vh;
       letter-spacing: 1px;
-      margin-right:6px;
+      margin-right: 6px;
+    `}
+`
+export const Bill = styled.div`
+  ${props =>
+    props.wrapper &&
+    css`
+      height: 100%;
+      width: 100%;
+      background-color: pink;
+      display: grid;
+      grid-template-rows: 2fr 1fr;
+      grid-template-columns: auto 40vw 2vw;
+      grid-template-areas:
+        'Blank subcalculationSpace empty'; 
+        'Blank totalSpace empty';
+    `};
+${props => props.subwrapper && css`
+grid-area:subcalculationSpace;
+display: grid;
+grid-template-rows:1fr 1fr;
+grid-template-columns: 1fr 1fr;
+grid-template-areas:
+ "subtotalTitle subtotalNumber"
+ "taxTitle taxNumber"
+`}
+  ${props =>
+    props.subtitle &&
+    css`
+    text-transform: capitalize;
+      text-align: right;
+      grid-area: ${props => props.gridArea};
+    `};
+  ${props =>
+    props.title &&
+    css`
+      text-align: right;
+      grid-area: ${props => props.gridArea};
+      font-weight: bold;
     `}
 `

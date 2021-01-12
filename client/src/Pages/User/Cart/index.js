@@ -16,23 +16,27 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
-import { FloatCartWrapper, SpaceWrapper, Title } from './CartStyledComponents'
+import {
+  FloatCartWrapper,
+  SpaceWrapper,
+  Title,
+  Bill
+} from './CartStyledComponents'
 // new dropdown imports:
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 
 const styles = {
-  fontSize: 14,
   color: 'blue'
 }
 const Div = styled.div`
   text-align: right;
-  line-height:15px;
-  font-size:13px;
-  margin-right:5vw;
+  line-height: 15px;
+  font-size: 13px;
+  margin-right: 5vw;
   grid-column-start: 2;
-  padding-bottom:10px;
+  padding-bottom: 10px;
 `
 
 const OptionWrapper = styled.div`
@@ -514,18 +518,33 @@ function CartDetail () {
     // </div>
 
     <div>
-      <CartHeader showBackButton backlink='/eat' />
+      <CartHeader showBackButton backLink='/eat' />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>
-          {cartDUMMY.map(item => {
+          <div>
+            {cartDUMMY.map(item => {
               return (
                 <CartProduct
                   product={item}
                   forceUpdate={setDummyDelete}
                   updateTotal={updateTotal}
                 />
-              )})}
+              )
+            })}
+          </div>
+          <Bill wrapper>
+          {Object.keys(totals).map(type => {
+              if (totals[type]) {
+                const formatted = currency(totals[type]).format()
+                console.log(type + 'Title', formatted)
+                return(<Bill subwrapper>
+                  <Bill subtitle gridArea={type + 'Title'}>{type}:</Bill>
+                  <Bill subtitle gridArea={type + 'Number'}>{formatted}</Bill>
+                  </Bill>
+                )
+                }})}
+          </Bill>
         </SpaceWrapper>
         <SpaceWrapper pickUpTime>
           <Title>Pick Up Time:</Title>
@@ -535,32 +554,30 @@ function CartDetail () {
             onChange={changePickupTime}
             clearable={false}
             style={styles.select}
-            className='float-cart__dropdown'
           />
         </SpaceWrapper>
         <SpaceWrapper paymentMethod>
           <Title>Payment Method:</Title>
           <Select
-              options={options}
-              onChange={changePaymentType}
-              placeholder={'Select...'}
-              clearable={false}
-              style={styles.select}
-              className='float-cart__dropdown'
-            />
-            {paymentMethod === 'COHEN' && (
-              <Div>
-                <label>Enter your Cohen House Membership ID: </label>
-                <input onChange={e => setCohenId(e.target.value)}></input>
-              </Div>
-            )}
-            {nullError && (
-              <p css={{ alignSelf: 'center', color: 'red' }}>
-                {' '}
-                Error! Submission form contains null value for {nullError}.
-                Please complete your profile and order.{' '}
-              </p>
-            )}
+            options={options}
+            onChange={changePaymentType}
+            placeholder={'Select...'}
+            clearable={false}
+            style={styles.select}
+          />
+          {paymentMethod === 'COHEN' && (
+            <Div>
+              <label>Enter your Cohen House Membership ID: </label>
+              <input onChange={e => setCohenId(e.target.value)}></input>
+            </Div>
+          )}
+          {nullError && (
+            <p css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              Error! Submission form contains null value for {nullError}. Please
+              complete your profile and order.{' '}
+            </p>
+          )}
         </SpaceWrapper>
       </FloatCartWrapper>
     </div>

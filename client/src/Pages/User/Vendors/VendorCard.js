@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { IoIosClose } from 'react-icons/io'
+import {AiOutlineInfoCircle} from 'react-icons/ai'
+import './vendor.css'
 
 export const convertTimeToNum = time => {
   const [timeNum, halfOfDay] = time.split(' ')
@@ -18,8 +20,12 @@ export const convertTimeToNum = time => {
 }
 
 function VendorCard ({ vendor }) {
-  const { name, hours, logoUrl } = vendor
+  // debug
+  // const { name, hours, logoUrl, phone, email, pickupInstruction } = vendor
+  const { name, hours, logoUrl, phone, email } = vendor
+  const pickupInstruction = "Enter campus from Rice Entrance #2. Turn left at the stop sign and park in Founder’s Court Lot."
   const [statusDetail, setStatusDetail] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
 
   // make testMode true if you want the store to be open
@@ -41,8 +47,6 @@ function VendorCard ({ vendor }) {
   const current_date = new Date()
   const currentDay = testMode ? 1 : current_date.getDay()
   const dayObj = hours[currentDay]
-  console.log(dayObj)
-
   const startTimes = hours[currentDay].start
   const endTimes = hours[currentDay].end
 
@@ -54,12 +58,13 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
+    // DEBUGGING
+    return { status: 'openning' };
     const currentTime = testMode
       ? 9
       : current_date.getHours() + current_date.getMinutes() / 60
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
-      console.log(i, startTime)
       const endTime = convertTimeToNum(dayObj.end[i])
       if (currentTime >= startTime && currentTime <= endTime - 0.25) {
         return { status: 'openning' }
@@ -77,7 +82,7 @@ function VendorCard ({ vendor }) {
   }
 
   const openStatus = determineIfClosed(current_date, dayObj)
-  console.log('openStatus', openStatus)
+
   const handleClick = () => {
     if (openStatus.status === 'openning') {
       // Go to this particular vendor's detail page
@@ -87,14 +92,67 @@ function VendorCard ({ vendor }) {
     }
   }
 
+  const showInfoDetail = () =>{ 
+    if(showInfo){ 
+      return (
+        <div className='detailWrapper'>
+          <div className='detailBox'>
+          <div className='closeIcon'>
+              <IoIosClose size='12%' onClick={() => handleClickInfo()} />
+            </div>
+            <div className='detailText'>
+              <h1 style={{fontWeight:'bold'}}>{name}</h1>
+              <div className='detailContact'>{phone}</div>
+              <div className='detailContact'>{email}</div>
+            </div>
+            <div className='detailText infoText'>
+              {dayObj && (
+                <p id='dayHour'>
+                  {' '}
+                  {dayObj.day}{' '}
+                  {times.lengt&&<div>Closed for the day</div>}
+                    
+                  {times.map(time => {
+                    return (
+                      <span key={time[0]}>
+                        <br />
+                        {time[0]}
+                        {' - '}
+                        {time[1]}
+                      </span>
+                    )
+                  })}
+                 </p>
+              )}
+              {pickupInstruction && (
+                <p>
+                <span id='instructionTitle'>Pick Up Instructions:</span>
+                {(pickupInstruction.split('. ').map(text => {
+                  return( 
+                    <p className='instructionText' key={text}>{text}</p>
+                  )
+                } 
+                ))}
+                
+                {/* <div id='instructionText'>{pickupInstruction}</div> */}
+                </p>
+              )}
+                
+              
+            </div>
+          </div>
+        </div>
+      )
+    }
+  }
+
   const showStatusDetail = () => {
+    if(showInfo === true){return}
     if (openStatus.status === 'kitchenClosed' && statusDetail) {
-      console.log('Status Detail', statusDetail)
       return (
         <div className='detailWrapper'>
           <div className='detailBox'>
             <div className='closeIcon'>
-              {' '}
               <IoIosClose size='12%' onClick={() => handleClickStatus()} />
             </div>
             <div className='detailText'>
@@ -133,10 +191,15 @@ function VendorCard ({ vendor }) {
     }
   }
 
+  const handleClickInfo = () => { 
+    setShowInfo(!showInfo);
+  }
+
   return (
-    <div className='vendorContainer' onClick={() => handleClick()}>
+    <div className='vendorContainer'>
       {showStatusDetail()}
-      <div className='vendorImageContainer'>
+      {showInfoDetail()}
+      <div className='vendorImageContainer' onClick={()=>handleClick()}>
         <img
           className={
             openStatus.status === 'openning'
@@ -146,32 +209,14 @@ function VendorCard ({ vendor }) {
           src={logoUrl}
         />
       </div>
-      <div className='vendorHeading'>
-        <div className='vendorHeadingText'>
-          <h3 className='vendorName'>{name}</h3>
-          {/* Case for two start/end times */}
-          {dayObj && dayObj.start.length >= 1 && (
-            <p>
-              {' '}
-              Hours Open:{' '}
-              {times.map(time => {
-                return (
-                  <span>
-                    <br />
-                    {time[0]}
-                    {' - '}
-                    {time[1]}
-                  </span>
-                )
-              })}
-            </p>
-          )}
+      <div className='vendorHeading' >
+        <div className='vendorHeadingText'onClick={()=>handleClick()}>
+          <div className='vendorName'>{name}</div>
         </div>
-        <div className='vendorHoursIcon'>
-          <button className={'statusIcon ' + openStatus.status}>
+          <button className={'statusIcon ' + openStatus.status}onClick={()=>handleClick()} >
             {openStatusText[openStatus.status]}
           </button>
-        </div>
+        <AiOutlineInfoCircle size="5%" onClick={()=>handleClickInfo()} />
       </div>
     </div>
   )

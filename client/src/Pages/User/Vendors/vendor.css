@@ -4,16 +4,20 @@
 .vendorHeading {
   display: flex;
   flex-direction: row;
+  align-items: center;
   width: 100%;
 }
 
 .vendorHeadingText {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-grow: 1;
+  align-items: center;
+  min-width: 40%;
 }
 
 .vendorContainer {
+  font-family: 'proxima nova';
   padding-left: 1rem;
   padding-right: 1rem;
   max-width: 100%;
@@ -42,17 +46,6 @@
   font-weight: 500;
 }
 
-.vendorHoursIcon {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-grow: 1;
-  /* position: relative;
-	margin-left: 82%;
-	bottom: 10vh;
-	min-height: 2.8vh;
-	min-width: 2.8vw; */
-}
 
 .userIcon {
   position: flex;
@@ -108,14 +101,14 @@
 }
 
 .vendorKeywords {
-  color: #f49f86;
+  color: #F3725B;
   margin-top: 0.5rem;
 }
 
 li {
   display: inline;
   font-family: 'Nunito';
-  color: #f49f86;
+  color: #F3725B;
 }
 
 /* .vendorHeadingText {
@@ -132,13 +125,12 @@ li {
 } */
 
 .vendorName {
-  font-size: 25px;
-  font-family: 'Santana-Bold';
-  color: #5a5953;
-  margin-top: 12px;
-  margin-bottom: 0px;
-  margin-right: 3.5px;
-  padding-left: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  min-width: 50%;
+  margin: 0.7rem 0 0.7rem 0;
+  color: #333333;
+  flex-grow: 1;
 }
 
 .vendorHours {
@@ -165,7 +157,7 @@ p {
 
 .vendorImage {
   position: relative;
-  height: 15vh;
+  height: 4.5rem;
   align-content: left;
   width: 100%;
   object-fit: cover;
@@ -229,8 +221,8 @@ p {
 }
 
 .openning {
-  background-color: #e2fdf2 !important;
-  color: #56b48f !important;
+  background-color: #91C6B040 !important;
+  color: #91C6B0 !important;
 }
 
 .kitchenClosed {
@@ -247,8 +239,9 @@ p {
   outline: none;
   border: none;
   border-radius: 0.3rem;
-  font-size: 0.7rem;
-  padding: 0.2rem 0.3rem 0.2rem 0.3rem;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+  margin-right: 0.3rem;
 }
 
 .detailWrapper {
@@ -281,9 +274,13 @@ p {
   padding: 0rem 1.2rem 1.2rem 1.2rem;
 }
 
+.detailBox .detailContact{ 
+  opacity: 0.7
+}
+
 .detailBox h1 {
   margin-bottom: 0;
-  color: #ea907a;
+  color:#F3725B;
 }
 
 .detailBox p {
@@ -297,4 +294,20 @@ p {
   flex-direction: column;
   align-items: flex-end;
   margin: 0.35rem 0.35rem 0 0;
+}
+
+.infoText{
+  font-size: 1.1rem;
+}
+
+#instructionTitle{
+  font-weight: bold;
+}
+
+.instructionText{
+  margin-top: 0 !important;
+}
+
+#dayHour{
+  margin-bottom: 2rem;
 }

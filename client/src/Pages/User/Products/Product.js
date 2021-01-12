@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import './product.css'
@@ -69,7 +70,8 @@ function Product () {
     setQuantity(quantity - 1)
   }
 
-  
+  let validVariants = true
+  let validModifiers = true
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
@@ -123,6 +125,13 @@ function Product () {
     }
     const itemQuantity = { quantity }.quantity
     const totalPrice = (modifierCost + variantCost) * 0.01
+
+    console.log('variantObject', variantObject)
+    console.log('modifierLists', modifierList)
+    
+    {product.modifierLists.forEach(modifierList => {
+      console.log(modifierList.minModifiers)
+    })}
 
     dispatch({
       type: 'ADD_ITEM',
@@ -179,6 +188,7 @@ function Product () {
             className='submitButton'
             onClick={() => {
               makeCartItem()
+              // Insert check here
               navigate('/eat/cohen/cart')
               console.log(cartItems())
             }}

@@ -52,6 +52,8 @@ const GET_ITEM = gql`
           description
           image
         }
+        minModifiers
+        maxModifiers
       }
       isAvailable
     }

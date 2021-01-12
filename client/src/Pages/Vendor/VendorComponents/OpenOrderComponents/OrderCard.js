@@ -638,7 +638,7 @@ function OrderCard (props) {
                 <MakeOrderDetails
                   quantity={item.quantity}
                   itemName={item.name}
-                  price={item.total_money.amount / 100}
+                  price={item.totalMoney.amount / 100}
                   variant={item.variation_name}
                   modifiers={modifiers && [...modifiers].join(', ')}
                 />

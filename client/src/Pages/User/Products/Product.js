@@ -69,13 +69,11 @@ function Product () {
     setQuantity(quantity - 1)
   }
 
-  
-
   function makeCartItem () {
     const vendor = vendor_data.getVendor
     const order = orderSummary()
-    console.log("ORDER SUMMARY", orderSummary(), "VENDOR NAME", vendor.name)
-    
+    console.log('ORDER SUMMARY', orderSummary(), 'VENDOR NAME', vendor.name)
+
     orderSummary(
       Object.assign(orderSummary(), {
         vendor: {
@@ -86,10 +84,8 @@ function Product () {
       })
     )
     if (order.vendor && vendor.name != order.vendor.name) {
-      
-      console.log("Order is not from the same vendor! ERROR")
+      console.log('Order is not from the same vendor! ERROR')
       return // todo: add warning window.
-      
     }
     console.log('merchant Id ', orderSummary().vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
@@ -137,7 +133,7 @@ function Product () {
         dataSourceId: itemDataSourceId
       }
     })
-    console.log( itemName, variantObject)
+    console.log(itemName, variantObject)
     return true
   }
 
@@ -154,9 +150,7 @@ function Product () {
         <div className='variantsContainer'>
           <VariantSelection variants={product.variants} />
         </div>
-        {product.modifierLists.length == 0 && (
-          null
-        )}
+        {product.modifierLists.length == 0 && null}
         <div className='modifiersContainer'>
           {product.modifierLists.map(modifier => {
             return (

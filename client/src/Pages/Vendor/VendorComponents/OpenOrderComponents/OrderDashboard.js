@@ -187,8 +187,6 @@ const ORDER_UPDATED = gql`
   }
 `
 
-
-
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
   const userData = userProfile()
@@ -281,7 +279,7 @@ function OrderDashboard () {
   const acceptedOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'RESERVED'
   )
-  console.log("ACCEPTED", acceptedOrders)
+  console.log('ACCEPTED', acceptedOrders)
   const readyOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PREPARED'
   )
@@ -296,9 +294,9 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
-            id={order.id}
-            studentId={order.studentId}
-            cohenId={order.cohenId}
+              id={order.id}
+              studentId={order.studentId}
+              cohenId={order.cohenId}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -319,7 +317,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
-            id={order.id}
+              id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -339,7 +337,7 @@ function OrderDashboard () {
         {allOrders &&
           readyOrders.map(order => (
             <OrderCard
-            id={order.id}
+              id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}

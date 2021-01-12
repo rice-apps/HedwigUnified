@@ -20,7 +20,8 @@ import {
   FloatCartWrapper,
   SpaceWrapper,
   Title,
-  Bill
+  Bill,
+  SubmitButton
 } from './CartStyledComponents'
 // new dropdown imports:
 import Modal from 'react-modal'
@@ -583,6 +584,7 @@ function CartDetail () {
             </p>
           )}
         </SpaceWrapper>
+        <SpaceWrapper footer><SubmitButton>Submit Order</SubmitButton></SpaceWrapper>
       </FloatCartWrapper>
     </div>
   )

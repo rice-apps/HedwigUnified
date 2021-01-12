@@ -7,11 +7,13 @@ export const FloatCartWrapper = styled.div`
   min-width: 100vw;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content);
+  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content) auto  8.4vh;
   grid-template-areas:
     'OrderSummary'
     'PickUpTime'
-    'PaymentMethod';
+    'PaymentMethod'
+    'none'
+    'Footer';
   font-family: 'avenir';
   letter-spacing: 0.97px;
 `
@@ -26,8 +28,8 @@ export const SpaceWrapper = styled.div`
       grid-area: OrderSummary;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 3vh minmax(8vh, min-content) min-content;
-      align-items: center;
+      grid-template-rows: 4vh minmax(8vh, min-content) min-content;
+
       padding-top: 2.5vh;
     `};
   ${props =>
@@ -50,6 +52,18 @@ export const SpaceWrapper = styled.div`
       grid-template-rows: 10vh minmax(0px, min-content);
       align-items: center;
     `};
+    ${props => props.footer && css`
+    grid-area: Footer;
+    display:flex;
+    position: sticky;
+    bottom:0;
+    align-items: center;
+    justify-content: center;
+    padding-bottom:8px;
+    background-color:white;
+    width:100%;
+    height:100%;
+    `}
 `
 
 export const Title = styled.div`
@@ -182,4 +196,19 @@ export const Bill = styled.div`
       grid-area: ${props => props.gridArea};
       font-weight: bold;
     `}
+`
+export const SubmitButton = styled.div`
+color: white;
+  background-color: #d5573e;
+  text-align: center;
+  cursor: pointer;
+  display:flex;
+  align-items: center;
+  position: absolute;
+  justify-content: center;
+  font-weight: bold;
+  height:4vh;
+  font-size: 2vh;
+  width: 60vw;
+  border-radius: 30px;
 `

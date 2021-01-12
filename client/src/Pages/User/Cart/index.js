@@ -16,7 +16,7 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
-import {FloatCartWrapper, SpaceWrapper} from './CartStyledComponents'
+import {FloatCartWrapper, SpaceWrapper, Title} from './CartStyledComponents'
 // new dropdown imports:
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -507,13 +507,13 @@ function CartDetail () {
       <CartHeader showBackButton backlink='/eat'/>
       <FloatCartWrapper>
        <SpaceWrapper orderSummary>
-asdf
+<Title>Order Summary:</Title>
        </SpaceWrapper>
        <SpaceWrapper pickUpTime>
-adsf
+<Title>Pick Up Time:</Title> 
        </SpaceWrapper>
        <SpaceWrapper paymentMethod>
-asdf
+<Title>Payment Method:</Title>
        </SpaceWrapper>
       </FloatCartWrapper>
     </div>

@@ -7,7 +7,6 @@ import {
   CREATE_PAYMENT,
   GET_VENDOR
 } from './util'
-import './cart.css'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
@@ -17,21 +16,14 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
-
+import {FloatCartWrapper, SpaceWrapper} from './CartStyledComponents'
 // new dropdown imports:
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 
-const styles = {
-  fontSize: 14,
-  color: 'blue'
-}
 
-const Div = styled.div`
-  text-align: right;
-  margin-right: 2vh;
-`
+
 
 const OptionWrapper = styled.div`
   display: grid;
@@ -407,110 +399,123 @@ function CartDetail () {
     setPickupTime(newTime.value)
     orderSummary(Object.assign(orderSummary(), { time: newTime.value }))
   }
+  // REMOVE LINES 411 412 and change 423 before merging
+
+  let cartDUMMY = JSON.parse(localStorage.getItem('cartProduct'))
 
   return (
+    // <div style={{ height: '100%', width: '100%' }}>
+    //   <CartHeader showBackButton backLink='/eat' />
+    //   <div className='float-cart'>
+    //       <div className='float-cart__shelf-container'>
+    //         <p className='cart-title' style={{ marginTop: '25px' }}>
+    //           Order Summary:
+    //         </p>
+    //         {cartDUMMY.map(item => {
+    //           return (
+    //             <CartProduct
+    //               product={item}
+    //               forceUpdate={setDummyDelete}
+    //               updateTotal={updateTotal}
+    //             />
+    //           )
+    //         })}
+    //       </div>
+
+    //       <div className='float-bill'>
+    //         {Object.keys(totals).map(type => {
+    //           if (totals[type]) {
+    //             const formatted = currency(totals[type]).format()
+    //             return (
+    //               <div className='subtotal-container'>
+    //                 <p className='subheader'>{type}</p>
+    //                 <p>{formatted}</p>
+    //               </div>
+    //             )
+    //           }
+    //         })}
+    //         <div className='total-container'>
+    //           <hr
+    //             className='breakline'
+    //             style={{ margin: '-5px 0px 10px 5px' }}
+    //           />
+    //           <div className='total' style={{ marginBottom: '9vh' }}>
+    //             <p className='total__header'>Total</p>
+    //             <p style={{ marginTop: '1px' }}>
+    //               {currency(totals.subtotal + totals.tax).format()}
+    //             </p>
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <hr
+    //         className='breakline'
+    //         style={{ marginTop: '-40px', opacity: '0.3' }}
+    //       />
+    //       <OptionWrapper>
+    //         <div className='float-cart__dropdown-title'> Pickup Time:</div>
+    //         <Select
+    //           options={pickupTimes}
+    //           placeholder={'Select...'}
+    //           onChange={changePickupTime}
+    //           clearable={false}
+    //           style={styles.select}
+    //           className='float-cart__dropdown'
+    //         />
+    //       </OptionWrapper>
+
+    //       <hr className='breakline' style={{ opacity: '0.3' }} />
+
+    //       <OptionWrapper>
+    //         <div className='float-cart__dropdown-title'>Payment Method:</div>
+    //         <Select
+    //           options={options}
+    //           onChange={changePaymentType}
+    //           placeholder={'Select...'}
+    //           clearable={false}
+    //           style={styles.select}
+    //           className='float-cart__dropdown'
+    //         />
+    //         {paymentMethod === 'COHEN' && (
+    //           <Div>
+    //             <label>Enter your Cohen House membership id: </label>
+    //             <input onChange={e => setCohenId(e.target.value)}></input>
+    //           </Div>
+    //         )}
+    //         {nullError && (
+    //           <p css={{ alignSelf: 'center', color: 'red' }}>
+    //             {' '}
+    //             Error! Submission form contains null value for {nullError}.
+    //             Please complete your profile and order.{' '}
+    //           </p>
+    //         )}
+    //       </OptionWrapper>
+    //       <div className='float-cart__footer'>
+    //         <button
+    //           disabled={cartItems().length === 0}
+    //           className='buy-btn'
+    //           title='Confirm'
+    //           onClick={handleConfirmClick}
+    //         >
+    //           Submit Order
+    //         </button>
+    //       </div>
+    //   </div>
+    // </div>
+
     <div>
-      <CartHeader showBackButton backLink='/eat' />
-      <div className={'float-cart'}>
-        <div className='float-cart__content'>
-          <div className='float-cart__shelf-container'>
-            <p className='cart-title' style={{ marginTop: '25px' }}>
-              Order Summary:
-            </p>
-            {cartItems().map(item => {
-              return (
-                <Fragment>
-                  <CartProduct
-                    product={item}
-                    forceUpdate={setDummyDelete}
-                    updateTotal={updateTotal}
-                  />
-                  <hr className='breakline' style={{ opacity: '0.3' }} />
-                </Fragment>
-              )
-            })}
-          </div>
-
-          <div className='float-bill'>
-            {Object.keys(totals).map(type => {
-              if (totals[type]) {
-                const formatted = currency(totals[type]).format()
-                return (
-                  <div className='subtotal-container'>
-                    <p className='subheader'>{type}</p>
-                    <p>{formatted}</p>
-                  </div>
-                )
-              }
-            })}
-            <div className='total-container'>
-              <hr
-                className='breakline'
-                style={{ margin: '-5px 0px 10px 5px' }}
-              />
-              <div className='total' style={{ marginBottom: '9vh' }}>
-                <p className='total__header'>Total</p>
-                <p style={{ marginTop: '1px' }}>
-                  {currency(totals.subtotal + totals.tax).format()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <hr
-            className='breakline'
-            style={{ marginTop: '-40px', opacity: '0.3' }}
-          />
-          <OptionWrapper>
-            <div className='float-cart__dropdown-title'> Pickup Time:</div>
-            <Select
-              options={pickupTimes}
-              placeholder={'Select...'}
-              onChange={changePickupTime}
-              clearable={false}
-              style={styles.select}
-              className='float-cart__dropdown'
-            />
-          </OptionWrapper>
-
-          <hr className='breakline' style={{ opacity: '0.3' }} />
-
-          <OptionWrapper>
-            <div className='float-cart__dropdown-title'>Payment Method:</div>
-            <Select
-              options={options}
-              onChange={changePaymentType}
-              placeholder={'Select...'}
-              clearable={false}
-              style={styles.select}
-              className='float-cart__dropdown'
-            />
-            {paymentMethod === 'COHEN' && (
-              <Div>
-                <label>Enter your Cohen House membership id: </label>
-                <input onChange={e => setCohenId(e.target.value)}></input>
-              </Div>
-            )}
-            {nullError && (
-              <p css={{ alignSelf: 'center', color: 'red' }}>
-                {' '}
-                Error! Submission form contains null value for {nullError}.
-                Please complete your profile and order.{' '}
-              </p>
-            )}
-          </OptionWrapper>
-          <div className='float-cart__footer'>
-            <button
-              disabled={cartItems().length === 0}
-              className='buy-btn'
-              title='Confirm'
-              onClick={handleConfirmClick}
-            >
-              Submit Order
-            </button>
-          </div>
-        </div>
-      </div>
+      <CartHeader showBackButton backlink='/eat'/>
+      <FloatCartWrapper>
+       <SpaceWrapper orderSummary>
+asdf
+       </SpaceWrapper>
+       <SpaceWrapper pickUpTime>
+adsf
+       </SpaceWrapper>
+       <SpaceWrapper paymentMethod>
+asdf
+       </SpaceWrapper>
+      </FloatCartWrapper>
     </div>
   )
 }

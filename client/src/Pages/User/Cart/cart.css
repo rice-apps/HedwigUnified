@@ -14,37 +14,27 @@
 .float-cart {
   padding-top: 7vh;
   display: flex;
+  position:relative;
   flex-direction: column;
   width: 100%;
   height: 100%;
   background-color: white;
-  box-sizing: border-box;
-  transition: right 0.2s;
 }
-.float-cart--open {
-  right: 0;
-}
-.float-cart__close-btn {
-  width: 50px;
-  height: 50px;
-  color: #ececec;
-  background-color: #1b1a20;
-  text-align: center;
-  line-height: 50px;
-  position: absolute;
-  top: 0;
-  left: -50px;
-  cursor: pointer;
-}
-.float-cart__close-btn:hover {
-  background-color: #212027;
-}
+ .float-cart__content {
+   width:100%;
+   height:100%;
+   position:relative;
+ }
+
 .float-cart__shelf-container {
   display: flex;
+  height:100%;
+  width:100%;
+  position:relative;
   flex-direction: column;
   min-height: 100px;
 }
-.float-cart__shelf-container .cart-title {
+.float-cart__shelf-container > .cart-title {
   font-family: 'avenir';
   letter-spacing: 1px;
   font-size: 20px;
@@ -53,19 +43,13 @@
   font-weight: bold;
   margin-bottom: 0px;
 }
-.float-cart__shelf-container .vendor-title {
-  margin-left: 10px;
-  font-weight: bold;
-  font-family: 'Futura', sans-serif;
-}
-.float-cart__shelf-container .shelf-empty {
-  color: #ececec;
-  text-align: center;
-  line-height: 40px;
-}
-.float-cart__shelf-container .shelf-item {
+
+
+.float-cart__shelf-container > .shelf-item {
   display: grid;
+  position:relative;
   grid-template-columns: 0.8fr 2fr 0.5fr 0.8fr;
+  grid-template-rows: 1;
   align-items: center;
   justify-items: center;
   width: 100%;
@@ -210,14 +194,7 @@
   margin: 15px auto;
 }
 /* MAC scrollbar para desktop*/
-@media screen and (min-width: 640px) {
-  .float-cart__content::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 10px;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 10px;
-  }
-}
+
 .float-cart__content {
   flex-grow: 1;
   height: 100%;

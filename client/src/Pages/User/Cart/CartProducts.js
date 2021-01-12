@@ -23,11 +23,11 @@ function QuantitySelector ({ quantity, decrease, increase }) {
     <QuantitySelectorWrapper>
       <HiMinusCircle
         onClick={quantity === 1 ? null : decrease}
-        style={{ opacity: '0.85' }}
+        style={{ opacity: '0.85', cursor: "pointer" }}
       />
 
       <div style={{ margin: '0px 7px' }}>{quantity}</div>
-      <HiPlusCircle onClick={increase} style={{ opacity: '0.85' }} />
+      <HiPlusCircle onClick={increase} style={{ opacity: '0.85', cursor: "pointer" }} />
     </QuantitySelectorWrapper>
   )
 }
@@ -100,9 +100,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   })
   return (
     <div
-      className={
-        isMouseOver ? 'shelf-item shelf-item--mouseover' : 'shelf-item'
-      }
+      className='shelf-item'
     >
       {/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
       {/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}

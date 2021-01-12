@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
-
 import dispatch from './FunctionalCart'
 import { orderSummary, cartItems } from '../../../apollo'
 import VariantSelection from './VariantSelection'
@@ -133,6 +132,7 @@ function Product () {
         dataSourceId: itemDataSourceId
       }
     })
+    localStorage.setItem('cartProduct', JSON.stringify(cartItems()))
     console.log(itemName, variantObject)
     return true
   }

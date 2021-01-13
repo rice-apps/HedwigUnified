@@ -28,22 +28,23 @@ jobs:
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v1
-    
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
-      
+
       - name: Login to Dockerhub
+        if: ${{ !env.ACT }}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
           context: ./api
-          file: ./api/Dockerfile 
-          push: true
+          file: ./api/Dockerfile
+          push: ${{ !env.ACT }}
           tags: riceapps/hedwig-api:latest
 
   client-build:
@@ -51,14 +52,15 @@ jobs:
     steps:
       - name: Checkout Files
         uses: actions/checkout@v2
-      
+
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v1
-      
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
-        
+
       - name: Login to Dockerhub
+        if: ${{ !env.ACT }}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -73,8 +75,8 @@ jobs:
             REACT_APP_GRAPHQL_URL=http://64.225.55.156:3001/graphql
             REACT_APP_GRAPHQL_WS_URL=ws://64.225.55.156:3001/graphql
           context: ./client
-          file: ./client/Dockerfile 
-          push: true
+          file: ./client/Dockerfile
+          push: ${{ !env.ACT }}
           tags: riceapps/hedwig-client:latest
           secrets: |
             REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}

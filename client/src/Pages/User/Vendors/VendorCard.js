@@ -55,8 +55,6 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
-    // // DEBUGGING
-    // return { status: 'openning' };
     const currentTime = testMode
       ? 9
       : current_date.getHours() + current_date.getMinutes() / 60
@@ -123,11 +121,7 @@ function VendorCard ({ vendor }) {
               {pickupInstruction && (
                 <p>
                 <span className='instructionTitle'>Pick Up Instructions:</span>
-                {(pickupInstruction.split('. ').map(text => {
-                  return( 
-                    <p className='instructionText' key={text}>{text}</p>
-                  )} 
-                ))}
+                <p className='instructionText'>{pickupInstruction}</p>
                 </p>
               )}
             </div>

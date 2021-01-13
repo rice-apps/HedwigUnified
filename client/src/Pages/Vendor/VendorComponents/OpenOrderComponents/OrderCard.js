@@ -639,7 +639,7 @@ function OrderCard (props) {
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}
-                  variant={item.variation_name}
+                  variant={item.variationName}
                   modifiers={modifiers && [...modifiers].join(', ')}
                 />
               )

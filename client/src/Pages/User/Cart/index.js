@@ -261,6 +261,7 @@ function CartDetail () {
       orderSummary(
         Object.assign(orderSummary(), {
           orderId: orderJson.id,
+          pickupInstruction: data.getVendor.pickupInstruction,
           fulfillment: {
             uid: orderJson.fulfillment.uid,
             state: orderJson.fulfillment.state,

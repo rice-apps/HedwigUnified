@@ -35,6 +35,7 @@ function Failure () {
 
 function Confirmation () {
   const order = orderSummary()
+  const time = moment(order.fulfillment.pickupAt)
   const navigate = useNavigate()
   cartItems([])
   const handleHomeClick = () => {
@@ -53,8 +54,10 @@ function Confirmation () {
         <P header>{order.vendor.name}</P>
         <P header>Pick Up Instruction:</P>
         <P pickup>
-          Pick up at {order.fulfillment.placedAt} at
-          {order.fulfillment.pickupAt}
+          {order.pickupInstruction} {' '} at {' '}
+          {time.hour()} {':'} 
+          {time.minute()} {' '}
+          {time.month() + 1} {'/'} {time.date()} {'/'} {time.year()}
         </P>
       </Div>
 

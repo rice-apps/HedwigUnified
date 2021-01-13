@@ -67,7 +67,15 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
+          build-args: |
+            REACT_APP_SERVICE_URL=http://64.225.55.156:3000/auth
+            REACT_APP_BACKEND_URL=http://64.225.55.156:3001/api
+            REACT_APP_GRAPHQL_URL=http://64.225.55.156:3001/graphql
+            REACT_APP_GRAPHQL_WS_URL=ws://64.225.55.156:3001/graphql
           context: ./client
           file: ./client/Dockerfile 
           push: true
-          tags: riceapps/hedwig-client:latest 
+          tags: riceapps/hedwig-client:latest
+          secrets: |
+            REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+            REACT_APP_AUTH_DOMAIN=${{ hedwig-279117.firebaseapp.com }}

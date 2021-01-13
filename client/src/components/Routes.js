@@ -1,11 +1,12 @@
 // import { Switch, Route, Redirect } from 'react-router'
-import { Route, useRoutes, Navigate } from "react-router-dom";
-import { gql, useQuery, useApolloClient } from "@apollo/client";
-import Login from "../Pages/Login";
-import Auth from "../Pages/Auth";
-import SignUp from "../Pages/SignUp";
-import Profile from "../Pages/User/Profile";
-import Confirmation from "../Pages/User/Confirmation";
+import { Route, useRoutes, Navigate } from 'react-router-dom'
+import { gql, useQuery, useApolloClient } from '@apollo/client'
+import Login from '../Pages/Login'
+import Auth from '../Pages/Auth'
+import SignUp from '../Pages/SignUp'
+import Profile from '../Pages/User/Profile'
+import Confirmation from '../Pages/User/Confirmation'
+import Launch from '../Pages/User/Launch'
 // Vendor imports
 // import VendorSettings from '../Pages/Vendor/Settings';
 import VendorList from "../Pages/User/Vendors/VendorList";
@@ -201,8 +202,12 @@ const newRoutesArray = [
     element: <PrivateRoute element={<SignUp />} />,
   },
   {
-    path: "/vendor_choice",
-    element: <PrivateRoute element={<VendorSelect />} />,
+    path: '/launch',
+    element: <Launch />
+  },
+  {
+    path: '/vendor_choice',
+    element: <PrivateRoute element={<VendorSelect />} />
   },
   {
     path: "/eat/*",

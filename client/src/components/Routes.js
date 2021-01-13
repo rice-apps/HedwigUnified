@@ -1,31 +1,31 @@
 // import { Switch, Route, Redirect } from 'react-router'
-import { Route, useRoutes, Navigate } from "react-router-dom";
-import { gql, useQuery, useApolloClient } from "@apollo/client";
-import Login from "../Pages/Login";
-import Auth from "../Pages/Auth";
-import SignUp from "../Pages/SignUp";
-import Profile from "../Pages/User/Profile";
-import Confirmation from "../Pages/User/Confirmation";
+import { Route, useRoutes, Navigate } from 'react-router-dom'
+import { gql, useQuery, useApolloClient } from '@apollo/client'
+import Login from '../Pages/Login'
+import Auth from '../Pages/Auth'
+import SignUp from '../Pages/SignUp'
+import Profile from '../Pages/User/Profile'
+import Confirmation from '../Pages/User/Confirmation'
 // Vendor imports
 // import VendorSettings from '../Pages/Vendor/Settings';
-import VendorList from "../Pages/User/Vendors/VendorList";
+import VendorList from '../Pages/User/Vendors/VendorList'
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
-import AlmostThere from "../Pages/User/AlmostThere";
-import CartDetail from "../Pages/User/Cart";
-import ContactForm from "../Pages/User/Contact";
-import OrderList from "../Pages/User/Orders";
-import Menu from "../Pages/User/Menu";
-import ErrorPage from "./ErrorPage";
-import Product from "../Pages/User/Products/Product";
-import ClosedOrdersPage from "../Pages/Vendor/VendorPages/ClosedOrdersPage.js";
-import OpenOrdersPage from "../Pages/Vendor/VendorPages/OpenOrdersPage.js";
-import ItemsMenuManagementPage from "../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js";
-import ModifiersMenuManagementPage from "../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js";
-import SetBasicInfoPage from "../Pages/Vendor/VendorPages/SetBasicInfoPage.js";
-import SetStoreHoursPage from "../Pages/Vendor/VendorPages/SetStoreHoursPage.js";
-import VendorSelect from "../Pages/Login/VendorCheck";
-import Submit from "../Pages/User/Submit";
+import AlmostThere from '../Pages/User/AlmostThere'
+import CartDetail from '../Pages/User/Cart'
+import ContactForm from '../Pages/User/Contact'
+import OrderList from '../Pages/User/Orders'
+import Menu from '../Pages/User/Menu'
+import ErrorPage from './ErrorPage'
+import Product from '../Pages/User/Products/Product'
+import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
+import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
+import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js'
+import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
+import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
+import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
+import VendorSelect from '../Pages/Login/VendorCheck'
+import Submit from '../Pages/User/Submit'
 
 /**
  * Requests to verify the user's token on the backend
@@ -42,7 +42,7 @@ const VERIFY_USER = gql`
       recentUpdate
     }
   }
-`;
+`
 
 /**
  * This simply fetches from our cache whether a recent update has occurred
@@ -59,7 +59,7 @@ const GET_USER_INFO = gql`
       vendor
     }
   }
-`;
+`
 const GET_USER = gql`
   query getUser($token: String!) {
     userOne(filter: { token: $token }) {
@@ -70,7 +70,7 @@ const GET_USER = gql`
       _id
     }
   }
-`;
+`
 const GET_VENDOR_DATA = gql`
   query GET_AVAILABILITY($name: String!) {
     getVendor(filter: { name: $name }) {
@@ -81,7 +81,7 @@ const GET_VENDOR_DATA = gql`
       _id
     }
   }
-`;
+`
 
 /**
  * Defines a private route - if the user is NOT logged in or has an invalid token,
@@ -89,36 +89,36 @@ const GET_VENDOR_DATA = gql`
  */
 const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   const token =
-    localStorage.getItem("token") != null ? localStorage.getItem("token") : "";
+    localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
-  const client = useApolloClient();
+  const client = useApolloClient()
 
   // Verify that the token is valid on the backend
   const { data, loading, error } = useQuery(VERIFY_USER, {
     variables: { token: token },
-    errorPolicy: "none",
-  });
+    errorPolicy: 'none'
+  })
 
   const { data: userData, loading: userLoad, error: userError } = useQuery(
     GET_USER,
     {
       variables: { token: token },
-      errorPolicy: "none",
+      errorPolicy: 'none'
     }
-  );
+  )
 
   if (error || userError) {
     // Clear the token because something is wrong with it
-    localStorage.removeItem("token");
+    localStorage.removeItem('token')
     // Redirect the user to the login page
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />
   }
-  if (loading || userLoad) return <p>Waiting...</p>;
+  if (loading || userLoad) return <p>Waiting...</p>
   if (!data || !data.verifyUser) {
     // Clear the token
-    localStorage.removeItem("token");
+    localStorage.removeItem('token')
     // Redirect the user
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />
   }
 
   // Check whether any recent updates have come in
@@ -128,172 +128,172 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
 
   client.writeQuery({
     query: GET_USER_INFO,
-    data: { user: data.verifyUser },
-  });
+    data: { user: data.verifyUser }
+  })
 
   // this route is not an employee route
   if (!isEmployeeRoute || !(isEmployeeRoute == true)) {
     // Everything looks good! Now let's send the user on their way
-    return <Route {...rest} element={element} />;
+    return <Route {...rest} element={element} />
   }
 
-  const vendor = userData.userOne.vendor;
-  const netid = userData.userOne.netid;
+  const vendor = userData.userOne.vendor
+  const netid = userData.userOne.netid
   // this is not a vendor and we already passed the verification stage
   if (!vendor) {
-    return <Navigate to="/eat" />;
+    return <Navigate to='/eat' />
   }
 
   return (
     <EmployeeRoute netid={netid} vendor={vendor} element={element} {...rest} />
-  );
-};
+  )
+}
 
 const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
   const { data: vendorData, loading: vendorLoad, error: vendorErr } = useQuery(
     GET_VENDOR_DATA,
     {
-      variables: { name: vendor },
+      variables: { name: vendor }
     }
-  );
+  )
 
   // this isn't an employee because we have no vendor name
   if (vendorErr) {
-    console.log("vendor", vendorData);
-    return <Navigate to="/eat" />;
+    console.log('vendor', vendorData)
+    return <Navigate to='/eat' />
   }
 
   if (vendorLoad) {
-    return <p>Waiting...</p>;
+    return <p>Waiting...</p>
   }
 
-  console.log("DATA VENDOR", vendorData);
-  console.log("netid", netid);
-  const allowedUsers = vendorData.getVendor.allowedNetid;
+  console.log('DATA VENDOR', vendorData)
+  console.log('netid', netid)
+  const allowedUsers = vendorData.getVendor.allowedNetid
   // have to modify this with /contact
   if (!allowedUsers.includes(netid)) {
-    return <Navigate to="/eat" />;
+    return <Navigate to='/eat' />
   }
 
   // this is a true employee
-  return <Route {...rest} element={element} />;
-};
+  return <Route {...rest} element={element} />
+}
 
 const newRoutesArray = [
   {
-    path: "/",
-    element: <Navigate to="/eat" />,
+    path: '/',
+    element: <Navigate to='/eat' />
   },
   {
-    path: "/404_page",
-    element: <ErrorPage />,
+    path: '/404_page',
+    element: <ErrorPage />
   },
   {
-    path: "/login",
-    element: <Login />,
+    path: '/login',
+    element: <Login />
   },
   {
-    path: "/auth",
-    element: <Auth />,
+    path: '/auth',
+    element: <Auth />
   },
   {
-    path: "/signup",
-    element: <PrivateRoute element={<SignUp />} />,
+    path: '/signup',
+    element: <PrivateRoute element={<SignUp />} />
   },
   {
-    path: "/vendor_choice",
-    element: <PrivateRoute element={<VendorSelect />} />,
+    path: '/vendor_choice',
+    element: <PrivateRoute element={<VendorSelect />} />
   },
   {
-    path: "/eat/*",
+    path: '/eat/*',
     children: [
-      { path: "/", element: <PrivateRoute element={<VendorList />} /> },
-      { path: "/profile", element: <PrivateRoute element={<Profile />} /> },
-      { path: "/orders", element: <PrivateRoute element={<OrderList />} /> },
-      { path: "/submit", element: <Submit /> },
-      { path: "/almostThere", element: <AlmostThere /> },
+      { path: '/', element: <PrivateRoute element={<VendorList />} /> },
+      { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
+      { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
+      { path: '/submit', element: <Submit /> },
+      { path: '/almostThere', element: <AlmostThere /> },
       {
-        path: "/confirmation",
-        element: <PrivateRoute element={<Confirmation />} />,
+        path: '/confirmation',
+        element: <PrivateRoute element={<Confirmation />} />
       },
       {
-        path: "/:vendor/*",
+        path: '/:vendor/*',
         children: [
-          { path: "/", element: <PrivateRoute element={<Menu />} /> },
+          { path: '/', element: <PrivateRoute element={<Menu />} /> },
           {
-            path: "/:product",
-            element: <PrivateRoute element={<Product />} />,
+            path: '/:product',
+            element: <PrivateRoute element={<Product />} />
           },
-          { path: "/cart", element: <PrivateRoute element={<CartDetail />} /> },
-        ],
-      },
-    ],
+          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> }
+        ]
+      }
+    ]
   },
   {
-    path: "/contact",
-    element: <ContactForm />,
+    path: '/contact',
+    element: <ContactForm />
   },
   {
-    path: "/employee/*",
+    path: '/employee/*',
     children: [
       {
-        path: "/",
+        path: '/',
         element: (
           <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
-        ),
+        )
       },
       {
-        path: "/openorders",
+        path: '/openorders',
         element: (
           <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
-        ),
+        )
       },
       {
-        path: "/closedorders",
+        path: '/closedorders',
         element: (
           <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} />
-        ),
+        )
       },
       {
-        path: "/items",
+        path: '/items',
         element: (
           <PrivateRoute
             isEmployeeRoute={true}
             element={<ItemsMenuManagementPage />}
           />
-        ),
+        )
       },
       {
-        path: "/modifiers",
+        path: '/modifiers',
         element: (
           <PrivateRoute
             isEmployeeRoute={true}
             element={<ModifiersMenuManagementPage />}
           />
-        ),
+        )
       },
       {
-        path: "/set-basic-info",
+        path: '/set-basic-info',
         element: (
           <PrivateRoute isEmployeeRoute={true} element={<SetBasicInfoPage />} />
-        ),
+        )
       },
       {
-        path: "/set-store-hours",
+        path: '/set-store-hours',
         element: (
           <PrivateRoute
             isEmployeeRoute={true}
             element={<SetStoreHoursPage />}
           />
-        ),
-      },
-    ],
+        )
+      }
+    ]
   },
   {
-    path: "/*",
-    element: <Navigate to={"/404_page"} />,
-  },
-];
+    path: '/*',
+    element: <Navigate to={'/404_page'} />
+  }
+]
 
 // const routesArray = [
 //     {
@@ -375,9 +375,9 @@ export const RoutesComponent = ({}) => {
   //         });
   //     }, []
   // );
-  const newRoutes = useRoutes(newRoutesArray);
-  return newRoutes;
-};
+  const newRoutes = useRoutes(newRoutesArray)
+  return newRoutes
+}
 
 //     return (
 //         <Switch>

@@ -78,4 +78,4 @@ jobs:
           tags: riceapps/hedwig-client:latest
           secrets: |
             REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
-            REACT_APP_AUTH_DOMAIN=${{ hedwig-279117.firebaseapp.com }}
+            REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}

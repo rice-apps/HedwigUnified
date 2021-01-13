@@ -24,7 +24,6 @@ import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-// import { formatTimeByOffset } from "../helpers/formatTimeByOffset";
 import * as RNLocalize from "react-native-localize";
 
 const styles = {

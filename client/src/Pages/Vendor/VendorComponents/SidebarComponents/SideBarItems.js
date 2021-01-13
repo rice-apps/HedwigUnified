@@ -1,7 +1,7 @@
 import Collapsible from 'react-collapsible'
 import styled from 'styled-components'
 import './SidebarCollapsible.css'
-import { FcCollapse, FcExpand } from 'react-icons/fc'
+import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'
 
 const SideBarItemsWrapper = styled.div`
@@ -34,11 +34,11 @@ function MainMenuItem (props) {
     <MainMenuItemWrapper>
       {props.name}
       {props.IsClosed ? (
-        <FcExpand
+        <IoIosArrowDown
           style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
         />
       ) : (
-        <FcCollapse
+        <IoIosArrowUp
           style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
         />
       )}

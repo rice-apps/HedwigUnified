@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import styled from 'styled-components'
-import { FaUserCircle } from 'react-icons/fa'
-import moment from 'moment'
-import { BiLogOut } from 'react-icons/bi'
-import { AiOutlineUserSwitch } from 'react-icons/ai'
-import { IconContext } from 'react-icons'
-import { useApolloClient } from '@apollo/client'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { useState } from "react";
+import styled from "styled-components";
+import { FaUserCircle } from "react-icons/fa";
+import moment from "moment";
+import { BiLogOut } from "react-icons/bi";
+import { AiOutlineUserSwitch } from "react-icons/ai";
+import { IconContext } from "react-icons";
+import { useApolloClient } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 
 const VendorHeaderWrapper = styled.div`
   font-weight: 600;
@@ -15,11 +15,11 @@ const VendorHeaderWrapper = styled.div`
   height: 100%;
   grid-template-columns: 4fr 1fr;
   grid-template-rows: 1fr;
-  grid-template-areas: 'DateTimeDisplay UserDisplay';
+  grid-template-areas: "DateTimeDisplay UserDisplay";
   justify-items: center;
   align-items: center;
   font-size: 2.25vh;
-`
+`;
 
 const StyledUserDisplayWrapper = styled.div`
   grid-area: UserDisplay;
@@ -33,11 +33,11 @@ const StyledUserDisplayWrapper = styled.div`
   align-items: center;
   cursor: pointer;
   position: relative;
-`
+`;
 
 const UserText = styled.div`
   margin-top: 3px;
-`
+`;
 
 const DateTimeDisplayWrapper = styled.div`
   grid-area: DateTimeDisplay;
@@ -49,7 +49,7 @@ const DateTimeDisplayWrapper = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-`
+`;
 const LogoutPopup = styled.div`
   background-color: #d0d0d0;
   height: 16vh;
@@ -63,7 +63,7 @@ const LogoutPopup = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 const LogoutItem = styled.div`
   font-size: 2.25vh;
   width: 80%;
@@ -76,7 +76,7 @@ const LogoutItem = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-`
+`;
 const GET_USER_INFO = gql`
   query GetUserInfo {
     user @client {
@@ -87,78 +87,84 @@ const GET_USER_INFO = gql`
       phone
     }
   }
-`
-function VendorHeader () {
-  const [showLogout, setShowLogout] = useState(false)
-  const { data, loading, error } = useQuery(GET_USER_INFO)
+`;
+function VendorHeader() {
+  const [showLogout, setShowLogout] = useState(false);
+  const { data, loading, error } = useQuery(GET_USER_INFO);
 
-  if (error) return <p>Error!</p>
-  if (loading) return <p>Waiting...</p>
-  if (!data) return <p> work pls </p>
+  if (error) return <p>Error!</p>;
+  if (loading) return <p>Waiting...</p>;
+  if (!data) return <p> work pls </p>;
 
+  const { user } = data;
 
-  const { user } = data
-  
   // const userData = userProfile();
   // console.log("DATA", userData);
 
-  function toggleLogoutScreen () {
-    const logoutOpen = showLogout
-    setShowLogout(!logoutOpen)
+  function toggleLogoutScreen() {
+    const logoutOpen = showLogout;
+    setShowLogout(!logoutOpen);
   }
 
-  function UpdateTime () {
-    const clock = document.getElementById('clockdisplay')
-    const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
+  function UpdateTime() {
+    const clock = document.getElementById("clockdisplay");
+    // const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
+    // ---------------------------------------------------------------
+    // NEW Changes: standardize to central time
+    const CurrentTimeCentral = moment()
+      .utc()
+      .utcOffset(-6)
+      .format("dddd, MMMM Do h:mm:ss A");
+    // ---------------------------------------------------------------
     if (clock) {
-      clock.textContent = CurrentTime
+      clock.textContent = CurrentTimeCentral;
     }
   }
 
-  function MakeLogoutPopup () {
-    const client = useApolloClient()
+  function MakeLogoutPopup() {
+    const client = useApolloClient();
     const handleLogout = () => {
-      window.localStorage.clear()
+      window.localStorage.clear();
       client
         .clearStore()
         .then(() =>
-          window.open('https://idp.rice.edu/idp/profile/cas/logout', '_self')
-        )
-    }
+          window.open("https://idp.rice.edu/idp/profile/cas/logout", "_self")
+        );
+    };
 
     return (
       <LogoutPopup>
         <LogoutItem onClick={handleLogout}>
-          {' '}
+          {" "}
           <BiLogOut /> Logout of Account
         </LogoutItem>
         <LogoutItem>
-          {' '}
+          {" "}
           <AiOutlineUserSwitch />
           Switch to Buyer
         </LogoutItem>
       </LogoutPopup>
-    )
+    );
   }
 
-  setInterval(UpdateTime, 1000)
+  setInterval(UpdateTime, 1000);
 
   return (
-    <IconContext.Provider value={{ style: { marginRight: '7px' } }}>
+    <IconContext.Provider value={{ style: { marginRight: "7px" } }}>
       <VendorHeaderWrapper>
         <StyledUserDisplayWrapper onClick={toggleLogoutScreen}>
           <UserText>{user.name}</UserText>
-          <FaUserCircle style={{ fontSize: '30px', marginLeft: '1vw' }} />
+          <FaUserCircle style={{ fontSize: "30px", marginLeft: "1vw" }} />
         </StyledUserDisplayWrapper>
 
         <DateTimeDisplayWrapper>
-          <div id='clockdisplay'>Loading...</div>
+          <div id="clockdisplay">Loading...</div>
           <div hidden>{setInterval(UpdateTime, 1000)}</div>
         </DateTimeDisplayWrapper>
         {showLogout ? <MakeLogoutPopup /> : null}
       </VendorHeaderWrapper>
     </IconContext.Provider>
-  )
+  );
 }
 
-export default VendorHeader
+export default VendorHeader;

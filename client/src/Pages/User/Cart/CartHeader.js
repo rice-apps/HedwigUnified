@@ -11,7 +11,7 @@ import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
-  font-size: 20px;
+  font-size: 2.8vh;
   width: 100vw;
   top: 0;
   display: grid;

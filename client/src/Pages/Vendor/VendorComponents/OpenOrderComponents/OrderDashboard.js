@@ -12,7 +12,7 @@ import {
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
-import { userProfile } from '../../../../apollo'
+
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 
 const FIND_ORDERS = gql`
@@ -189,7 +189,7 @@ const ORDER_UPDATED = gql`
 
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
-  const userData = userProfile()
+ 
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,

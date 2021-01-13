@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { userProfile } from '../../apollo'
+
 import { Navigate } from 'react-router-dom'
 
 const AUTHENTICATE_USER = gql`
@@ -55,7 +55,9 @@ function Auth () {
     token
   } = authenticationData.authenticateUser
 
-  userProfile({
+
+
+  const userData = {
     netid,
     name,
     phone,
@@ -66,11 +68,12 @@ function Auth () {
     recentUpdate,
     type,
     token
-  })
+  }
+  console.log("DATA", userData)
 
-  console.log(userProfile())
-  // Set token in local storage
+  // Set token and user data in local storage
   lstorage.setItem('token', token)
+  lstorage.setItem('userProfile', JSON.stringify(userData))
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {
@@ -93,7 +96,7 @@ function Auth () {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients
-  if (phone) {
+  if (/^[0-9]{10}$/.test(phone)) {
     return <Navigate to='/eat' />
   }
   return <Navigate to='/contact' />

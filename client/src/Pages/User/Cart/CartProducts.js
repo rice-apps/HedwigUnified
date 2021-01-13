@@ -2,8 +2,15 @@ import { useState } from 'react'
 import dispatch from '../Products/FunctionalCart'
 import './cart.css'
 import styled from 'styled-components'
+import {
+  Title,
+  ShelfItemWrapper,
+  ShelfItemImage,
+  ShelfItem,
+  ShelfItemProduct
+} from './CartStyledComponents'
 import { HiMinusCircle, HiPlusCircle } from 'react-icons/hi'
-
+import { BsTrashFill } from 'react-icons/bs'
 // import Dropdown from "react-dropdown";
 // import "react-dropdown/style.css";
 
@@ -15,7 +22,7 @@ const QuantitySelectorWrapper = styled.div`
   height: 100%;
   align-items: center;
   justify-items: center;
-  font-size: 15px;
+  font-size: 1.9vh;
 `
 
 function QuantitySelector ({ quantity, decrease, increase }) {
@@ -23,11 +30,14 @@ function QuantitySelector ({ quantity, decrease, increase }) {
     <QuantitySelectorWrapper>
       <HiMinusCircle
         onClick={quantity === 1 ? null : decrease}
-        style={{ opacity: '0.85' }}
+        style={{ opacity: '0.85', cursor: 'pointer' }}
       />
 
       <div style={{ margin: '0px 7px' }}>{quantity}</div>
-      <HiPlusCircle onClick={increase} style={{ opacity: '0.85' }} />
+      <HiPlusCircle
+        onClick={increase}
+        style={{ opacity: '0.85', cursor: 'pointer' }}
+      />
     </QuantitySelectorWrapper>
   )
 }
@@ -99,14 +109,15 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     currency: 'USD'
   })
   return (
-    <div
-      className={
-        isMouseOver ? 'shelf-item shelf-item--mouseover' : 'shelf-item'
-      }
-    >
-      {/* <Thumb classes="shelf-item__thumb" src={logo} alt={"Thai Tea"} /> */}
-      {/* <DropDownList data={[ "ASAP",, "30 Minutes", "1 Hour", "1.5 Hours", "2 Hours", "3 Hours", "4 Hours"]} defaultValue="ASAP" />  */}
-      <img
+    <ShelfItemWrapper>
+      <BsTrashFill
+      style={{cursor:"pointer", fontSize:'2vh'}}
+        onClick={() => {
+          deleteCartItem()
+          forceUpdate(date.getTime())
+        }}
+      />
+      <ShelfItemImage
         id='image'
         src={
           product.image
@@ -115,33 +126,17 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
         }
         alt={product.name}
       />
-      <div className='shelf-item__title'>
-        <p id='title'>{product.name}</p>
-        <p id='options'> {getVarMod()}</p>
-      </div>
+      <ShelfItemProduct>
+        <ShelfItem title>{product.name}</ShelfItem>
+        <ShelfItem options>{getVarMod()}</ShelfItem>
+      </ShelfItemProduct>
       <QuantitySelector
         quantity={quantity}
         increase={increase}
         decrease={decrease}
       />
-      <div className='shelf-item__price'>
-        <div>{formatter.format(product.price * quantity)}</div>
-      </div>
-      <div />
-      <div />
-      <div />
-      <div
-        className='shelf-item__del'
-        onMouseOver={() => handleMouseOver()}
-        onMouseOut={() => handleMouseOut()}
-        onClick={() => {
-          deleteCartItem()
-          forceUpdate(date.getTime())
-        }}
-      >
-        Remove
-      </div>
-    </div>
+      <ShelfItem price>{formatter.format(product.price * quantity)}</ShelfItem>
+    </ShelfItemWrapper>
   )
 }
 

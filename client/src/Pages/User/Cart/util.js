@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { orderSummary, userProfile } from '../../../apollo'
+import { orderSummary } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -112,7 +112,7 @@ export const UPDATE_ORDER_TRACKER = gql`
 `
 
 const getRecipient = () => {
-  const user = userProfile()
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   return {
     name: user.name,
     phone: user.phone
@@ -125,12 +125,12 @@ const getLineItems = items => {
     const modifierList = []
     for (const [, m] of Object.entries(item.modifierLists)) {
       modifierList.push({
-        catalog_object_id: m.dataSourceId
+        catalogObjectId: m.dataSourceId
       })
     }
     const i = {
       modifiers: modifierList,
-      catalog_object_id: item.variant.dataSourceId,
+      catalogObjectId: item.variant.dataSourceId,
       quantity: item.quantity.toString()
       // variation_name: item.variant.name,
     }
@@ -141,7 +141,7 @@ const getLineItems = items => {
 
 export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient()
-  const user = userProfile()
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   console.log(orderSummary())
   return {
     studentId: user.studentId,

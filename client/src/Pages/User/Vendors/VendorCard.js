@@ -82,7 +82,6 @@ function VendorCard ({ vendor }) {
   }
 
   const openStatus = determineIfClosed(current_date, dayObj)
-
   const handleClick = () => {
     if (openStatus.status === 'openning') {
       // Go to this particular vendor's detail page

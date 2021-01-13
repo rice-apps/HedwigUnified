@@ -12,7 +12,7 @@ function ModifierSelection ({ modifierCategory }) {
     <div className='modifier'>
       <div className='heading'>
         {description ? <p>{description}</p> : null}
-        <h1>{name}</h1>
+        <h1>{name}:</h1>
       </div>
       <div className='options'>
         {options.map(option => (

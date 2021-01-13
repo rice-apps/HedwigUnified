@@ -71,9 +71,9 @@ jobs:
         with:
           build-args: |
             REACT_APP_SERVICE_URL=http://64.225.55.156:3000/auth
-            REACT_APP_BACKEND_URL=http://64.225.55.156:3001/api
-            REACT_APP_GRAPHQL_URL=http://64.225.55.156:3001/graphql
-            REACT_APP_GRAPHQL_WS_URL=ws://64.225.55.156:3001/graphql
+            REACT_APP_BACKEND_URL=http://64.225.55.156:8080/api
+            REACT_APP_GRAPHQL_URL=http://64.225.55.156:8080/graphql
+            REACT_APP_GRAPHQL_WS_URL=ws://64.225.55.156:8080/graphql
           context: ./client
           file: ./client/Dockerfile
           push: ${{ !env.ACT }}

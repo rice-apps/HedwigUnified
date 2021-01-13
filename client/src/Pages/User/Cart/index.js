@@ -333,7 +333,7 @@ function CartDetail() {
   // NEW Changes: standardize to central time
   const d1 = new Date();
   let currHour = 0;
-  let currDay = 0;
+  let currDay = d1.getUTCDay();
   let currMinute = 0;
   // Central time is UTC -6
   const offset = -6;

@@ -119,7 +119,7 @@ function Menu() {
   // ---------------------------------------------------------------
   // NEW Changes: standardize to central time
   let currentHour = 0;
-  let currentDay = 0;
+  let currentDay = current_date.getUTCDay();
   let currentMinute = 0;
   // Central time is UTC -6
   const offset = -6;

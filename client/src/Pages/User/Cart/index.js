@@ -414,7 +414,7 @@ function CartDetail () {
     setPickupTime(newTime.value)
     orderSummary(Object.assign(orderSummary(), { time: newTime.value }))
   }
- 
+ console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
 
     <div>

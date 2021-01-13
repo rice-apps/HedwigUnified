@@ -27,11 +27,11 @@ const GET_COMPLETED_ORDERS = gql`
         items {
           name
           quantity
-          variation_name
+          variationName
           modifiers {
             name
           }
-          total_money {
+          totalMoney {
             amount
           }
         }

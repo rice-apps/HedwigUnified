@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './contact.css'
-import { userProfile } from '../../../apollo'
+
 import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
@@ -24,9 +24,9 @@ const ADD_PHONE = gql`
 const sStorage = window.localStorage
 
 function ContactForm () {
-  const user = userProfile()
-  const userName =
-    sStorage.getItem('first name') + ' ' + sStorage.getItem('last name')
+  const user = JSON.parse(localStorage.getItem('userProfile'))
+  console.log(user)
+  const userName = user.name
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
   const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
@@ -35,7 +35,6 @@ function ContactForm () {
   if (error) return <p>{error.message}</p>
 
   if (confirmed) {
-    localStorage.setItem('phone', phone)
     addPhone({ variables: { name: userName, phone: phone, netid: user.netid } })
     return <Navigate to='/eat' />
   }

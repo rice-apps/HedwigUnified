@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
 import { ReactComponent as HedwigLogoSVG } from './../../Login/HedwigLogoFinal.svg'
 import { orderSummary, cartItems } from '../../../apollo'
+import moment from 'moment'
 
 function Failure () {
   const navigate = useNavigate()

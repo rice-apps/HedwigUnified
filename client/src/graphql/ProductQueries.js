@@ -66,12 +66,10 @@ const GET_ITEM_AVAILABILITY = gql`
 
 const SET_ITEM_AVAILABILITY = gql`
   mutation SET_ITEM_AVAILABILITY(
-    $idempotencyKey: String!
     $productId: String!
     $isItemAvailable: Boolean!
   ) {
     setAvailability(
-      idempotencyKey: $idempotencyKey
       productId: $productId
       isItemAvailable: $isItemAvailable
       dataSource: SQUARE

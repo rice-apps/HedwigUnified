@@ -20,10 +20,7 @@ export const convertTimeToNum = time => {
 }
 
 function VendorCard ({ vendor }) {
-  // DEBUGGING
-  // const { name, hours, logoUrl, phone, email, pickupInstruction } = vendor
-  const { name, hours, logoUrl, phone, email } = vendor
-  const pickupInstruction = "Enter campus from Rice Entrance #2. Turn left at the stop sign and park in Founder’s Court Lot."
+  const { name, hours, logoUrl, phone, email, pickupInstruction } = vendor
   const [statusDetail, setStatusDetail] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
@@ -58,8 +55,8 @@ function VendorCard ({ vendor }) {
   const determineIfClosed = (current_date, dayObj) => {
     if (!dayObj) return
     // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
-    // DEBUGGING
-    return { status: 'openning' };
+    // // DEBUGGING
+    // return { status: 'openning' };
     const currentTime = testMode
       ? 9
       : current_date.getHours() + current_date.getMinutes() / 60
@@ -129,13 +126,10 @@ function VendorCard ({ vendor }) {
                 {(pickupInstruction.split('. ').map(text => {
                   return( 
                     <p className='instructionText' key={text}>{text}</p>
-                  )
-                } 
+                  )} 
                 ))}
                 </p>
               )}
-                
-              
             </div>
           </div>
         </div>

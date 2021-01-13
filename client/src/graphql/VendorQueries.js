@@ -41,4 +41,24 @@ const GET_ALL_VENDORS = gql`
   }
 `
 
-export { VENDOR_QUERY, GET_ALL_VENDORS }
+const GET_VENDORS = gql`
+ query GET_VENDORS{
+  getVendors{
+    name
+    logoUrl
+    website
+    email
+    hours{
+      start
+      end
+      day
+    }
+    facebook
+    phone
+    cutoffTime
+    pickupInstruction
+  }
+}
+`
+
+export { VENDOR_QUERY, GET_ALL_VENDORS, GET_VENDORS }

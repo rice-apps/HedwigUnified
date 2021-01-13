@@ -5,7 +5,7 @@ import '../../../fonts/style.css'
 
 // fontawesome imports
 
-import { GET_ALL_VENDORS } from '../../../graphql/VendorQueries'
+import { GET_VENDORS } from '../../../graphql/VendorQueries'
 import VendorCard from './VendorCard'
 import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
@@ -27,8 +27,21 @@ import ProfilePane from './ProfilePane.js'
 //     }
 // `
 
+// query GET_VENDOR($name: String!) {
+//   getVendor(filter: { name: $name }) {
+//     name
+//     logoUrl
+//     website
+//     email
+//     facebook
+//     phone
+//     cutoffTime
+//     pickupInstruction
+//   }
+// }
+
 function VendorList ({}) {
-  const { data, loading, error } = useQuery(GET_ALL_VENDORS)
+  const { data, loading, error } = useQuery(GET_VENDORS)
   
 
   if (error) return <p>{error.message}</p>

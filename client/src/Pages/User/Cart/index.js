@@ -283,21 +283,23 @@ function CartDetail () {
       (total, current) => total + current.price * current.quantity,
       0
     )
-    setTotals({
-      subtotal: newSubtotal,
-      tax: newSubtotal * 0.0825
-    })
+    if (newSubtotal != totals.subtotal) {
+      setTotals({
+        subtotal: newSubtotal,
+        tax: newSubtotal * 0.0825
+      })
+    }
   }
 
-  // const getTotal = () => {
-  //   const total = cart_menu.reduce((total, current) => {
-  //     return total + current.quantity
-  //   }, 0)
-  //   return parseInt(total)
-  // }
+  const getTotal = () => {
+    const total = cart_menu.reduce((total, current) => {
+      return total + current.price * current.quantity
+    }, 0)
+    return total
+  }
 
   useEffect(() => {
-    updateTotal()
+      updateTotal()
   }, [cart_menu])
 
   //	This is to make the page re-render so that updated state is shown when item

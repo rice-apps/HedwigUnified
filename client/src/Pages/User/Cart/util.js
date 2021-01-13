@@ -166,14 +166,12 @@ export const checkNullFields = source => {
     'pickup time'
   ]
   let field
-  console.log(source)
   for (field in fields) {
     if (!source.variables[fields[field]]) {
       console.log(detailedInfo[field])
       return detailedInfo[field]
     }
   }
-  console.log(source.variables.cohenId)
   if (source.variables.type === 'COHEN' && !source.variables.cohenId) {
     console.log('no cohen id')
     return 'cohen id'

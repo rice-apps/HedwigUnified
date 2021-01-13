@@ -41,18 +41,6 @@ function VendorCard ({ vendor }) {
   const current_date = new Date()
   const currentDay = testMode ? 1 : current_date.getDay()
   const dayObj = hours[currentDay]
-  const convertTimeToNum = time => {
-    const [timeNum, halfOfDay] = time.split(' ')
-    let [hours, minutes] = timeNum.split(':')
-    hours = parseInt(hours)
-    minutes = parseInt(minutes) / 60
-    if (halfOfDay === 'a.m.') {
-      return hours + minutes
-    } else if (halfOfDay === 'p.m.') {
-      return 12 + hours + minutes
-    }
-  }
-
   const startTimes = hours[currentDay].start
   const endTimes = hours[currentDay].end
 

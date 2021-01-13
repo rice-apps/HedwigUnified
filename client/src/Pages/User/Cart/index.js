@@ -1,40 +1,40 @@
-import { Fragment, useEffect, useState } from "react";
-import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
+import { Fragment, useEffect, useState } from 'react'
+import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
 import {
   checkNullFields,
   createRecord,
   CREATE_ORDER,
   CREATE_PAYMENT,
-  GET_VENDOR,
-} from "./util";
-import "./cart.css";
-import { centerCenter, row, column, endStart } from "../../../Styles/flex";
-import CartProduct from "./CartProducts";
-import currency from "currency.js";
-import { cartItems, orderSummary } from "../../../apollo";
-import Select from "react-select";
+  GET_VENDOR
+} from './util'
+import './cart.css'
+import { centerCenter, row, column, endStart } from '../../../Styles/flex'
+import CartProduct from './CartProducts'
+import currency from 'currency.js'
+import { cartItems, orderSummary } from '../../../apollo'
+import Select from 'react-select'
 // import moment from "moment";
-import moment from "moment-timezone";
-import { useNavigate } from "react-router-dom";
-import CartHeader from "./CartHeader";
-import styled, { css } from "styled-components";
+import moment from 'moment-timezone'
+import { useNavigate } from 'react-router-dom'
+import CartHeader from './CartHeader'
+import styled, { css } from 'styled-components'
 
 // new dropdown imports:
-import Modal from "react-modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import Modal from 'react-modal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { AiOutlineExclamationCircle } from 'react-icons/ai'
 
-import * as RNLocalize from "react-native-localize";
+import * as RNLocalize from 'react-native-localize'
 
 const styles = {
   fontSize: 14,
-  color: "blue",
-};
+  color: 'blue'
+}
 
 const Div = styled.div`
   text-align: right;
   margin-right: 2vh;
-`;
+`
 
 const OptionWrapper = styled.div`
   display: grid;
@@ -44,72 +44,72 @@ const OptionWrapper = styled.div`
   padding: 15px 0px;
   height: 100%;
   width: 100%;
-`;
+`
 
 const GET_AVAILABILITIES = gql`
   query GET_AVAILABILITIES($productIds: [String!]) {
     getAvailabilities(productIds: $productIds)
   }
-`;
+`
 
 const defaultTotals = {
   subtotal: 0,
   tax: 0,
-  discount: null,
-};
+  discount: null
+}
 
-function generatePickupTimes(
+function generatePickupTimes (
   currHour,
   currMinute,
   endHour,
   endMinute,
   isFirst
 ) {
-  let pickupTimes = [];
-  let pickupMinute = Math.ceil(currMinute / 15) * 15;
-  let pickupHour = currHour;
+  let pickupTimes = []
+  let pickupMinute = Math.ceil(currMinute / 15) * 15
+  let pickupHour = currHour
   while (pickupHour <= endHour) {
     while (
       pickupMinute <= 45 &&
       !(pickupHour === endHour && pickupMinute >= endMinute)
     ) {
-      pickupMinute += 15;
-      let strPickupMinute = "";
-      let strPickupHour = "";
+      pickupMinute += 15
+      let strPickupMinute = ''
+      let strPickupHour = ''
       if (pickupMinute === 60) {
-        strPickupMinute += "00";
+        strPickupMinute += '00'
         strPickupHour +=
           pickupHour >= 12
             ? (pickupHour - Math.floor(pickupHour / 12) * 12 + 1).toString()
-            : (pickupHour + 1).toString();
+            : (pickupHour + 1).toString()
       } else {
-        strPickupMinute += pickupMinute.toString();
+        strPickupMinute += pickupMinute.toString()
         strPickupHour +=
           pickupHour === 12
-            ? "12"
-            : (pickupHour - Math.floor(pickupHour / 12) * 12).toString();
+            ? '12'
+            : (pickupHour - Math.floor(pickupHour / 12) * 12).toString()
       }
       if (pickupHour >= 12 || (pickupHour === 11 && pickupMinute === 60)) {
-        strPickupMinute += " p.m.";
+        strPickupMinute += ' p.m.'
       } else {
-        strPickupMinute += " a.m.";
+        strPickupMinute += ' a.m.'
       }
-      const pickupTime = strPickupHour + ":" + strPickupMinute;
-      pickupTimes.push(pickupTime);
+      const pickupTime = strPickupHour + ':' + strPickupMinute
+      pickupTimes.push(pickupTime)
     }
-    pickupMinute = 0;
-    pickupHour += 1;
+    pickupMinute = 0
+    pickupHour += 1
   }
-  const pickupObjs = pickupTimes.map((time) => {
-    return { value: moment(time, "h:mm a").format(), label: time };
-  });
+  const pickupObjs = pickupTimes.map(time => {
+    return { value: moment(time, 'h:mm a').format(), label: time }
+  })
   if (isFirst && pickupObjs.length > 0) {
-    pickupObjs.unshift({ value: moment().add(15, "minutes"), label: "ASAP" });
+    pickupObjs.unshift({ value: moment().add(15, 'minutes'), label: 'ASAP' })
   }
-  return pickupObjs;
+  return pickupObjs
 }
 
-function calculateNextHours(
+function calculateNextHours (
   currHour,
   currMinute,
   startHours,
@@ -117,26 +117,26 @@ function calculateNextHours(
   endHours,
   endMinutes
 ) {
-  const currTime = currHour + currMinute / 60;
-  console.log("currTime: ", currTime);
+  const currTime = currHour + currMinute / 60
+  console.log('currTime: ', currTime)
 
-  const endTimes = [];
+  const endTimes = []
   for (let i = 0; i < endHours.length; i++) {
-    endTimes.push(endHours[i] + endMinutes[i] / 60);
+    endTimes.push(endHours[i] + endMinutes[i] / 60)
   }
-  const startTimes = [];
+  const startTimes = []
   for (let i = 0; i < startHours.length; i++) {
-    startTimes.push(startHours[i] + startMinutes[i] / 60);
+    startTimes.push(startHours[i] + startMinutes[i] / 60)
   }
-  let idx = 0;
+  let idx = 0
   while (currTime >= startTimes[idx]) {
-    idx += 1;
+    idx += 1
   }
-  let timeIntervals = [];
-  let newIdx = 0;
+  let timeIntervals = []
+  let newIdx = 0
   //When restaurant is closed for the day
   if (idx === endTimes.length && currTime >= endTimes[idx - 1]) {
-    return [[0, 0, 0, 0]];
+    return [[0, 0, 0, 0]]
   }
   //When restaurant is not open currently for orders, but open later in the day
   else if (
@@ -148,9 +148,9 @@ function calculateNextHours(
       startHours[idx],
       startMinutes[idx],
       endHours[idx],
-      endMinutes[idx],
-    ]);
-    newIdx = idx + 1;
+      endMinutes[idx]
+    ])
+    newIdx = idx + 1
   }
   //When the restaurant is currently open for orders
   else {
@@ -158,104 +158,104 @@ function calculateNextHours(
       currHour,
       currMinute,
       endHours[idx - 1],
-      endMinutes[idx - 1],
-    ]);
-    newIdx = idx;
+      endMinutes[idx - 1]
+    ])
+    newIdx = idx
   }
   while (newIdx < endTimes.length) {
     timeIntervals.push([
       startHours[newIdx],
       startMinutes[newIdx],
       endHours[newIdx],
-      endMinutes[newIdx],
-    ]);
-    newIdx += 1;
+      endMinutes[newIdx]
+    ])
+    newIdx += 1
   }
-  return timeIntervals;
+  return timeIntervals
 }
 
-function CartDetail() {
-  const [totals, setTotals] = useState(defaultTotals);
-  const [pickupTime, setPickupTime] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState(null);
-  const [cohenId, setCohenId] = useState(null);
-  const [nullError, setNullError] = useState(null);
+function CartDetail () {
+  const [totals, setTotals] = useState(defaultTotals)
+  const [pickupTime, setPickupTime] = useState(null)
+  const [paymentMethod, setPaymentMethod] = useState(null)
+  const [cohenId, setCohenId] = useState(null)
+  const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
-    { value: "CREDIT", label: "Credit Card" },
-    { value: "TETRA", label: "Tetra" },
-    { value: "COHEN", label: "Cohen House" },
-  ];
+    { value: 'CREDIT', label: 'Credit Card' },
+    { value: 'TETRA', label: 'Tetra' },
+    { value: 'COHEN', label: 'Cohen House' }
+  ]
   // const defaultPaymentOption = options[0];
 
   const { loading, error, data } = useQuery(GET_VENDOR, {
-    variables: { filter: { name: "Cohen House" } },
-  });
+    variables: { filter: { name: 'Cohen House' } }
+  })
   const [
     createOrder,
-    { loading: order_loading, error: order_error },
-  ] = useMutation(CREATE_ORDER);
+    { loading: order_loading, error: order_error }
+  ] = useMutation(CREATE_ORDER)
   const [
     createPayment,
-    { loading: payment_loading, error: payment_error },
-  ] = useMutation(CREATE_PAYMENT);
+    { loading: payment_loading, error: payment_error }
+  ] = useMutation(CREATE_PAYMENT)
 
-  const navigate = useNavigate();
-  const cart_menu = cartItems();
+  const navigate = useNavigate()
+  const cart_menu = cartItems()
 
-  const product_ids = cart_menu.map((item) => {
-    return item.dataSourceId;
-  });
+  const product_ids = cart_menu.map(item => {
+    return item.dataSourceId
+  })
 
   const {
     loading: avail_loading,
     error: avail_error,
-    refetch: avail_refetch,
+    refetch: avail_refetch
   } = useQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids },
-    fetchPolicy: "network-only",
-  });
+    fetchPolicy: 'network-only'
+  })
 
   const handleClickCredit = async () => {
     // Get url and embed that url
-    return navigate(`/eat/almostThere`);
-  };
+    return navigate(`/eat/almostThere`)
+  }
 
   const handleConfirmClick = async () => {
-    const currTimeVal = moment().hour() + moment().minutes() / 60;
+    const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
-      moment(pickupTime).hour() + moment(pickupTime).minutes() / 60;
+      moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
     if (pickupTimeVal < currTimeVal + 0.25) {
       alert(
-        "The time you have selected is no longer valid. Please choose a later time."
-      );
-      return;
+        'The time you have selected is no longer valid. Please choose a later time.'
+      )
+      return
     }
-    const newRes = await avail_refetch();
+    const newRes = await avail_refetch()
     while (newRes.loading) {}
     if (newRes.data.getAvailabilities === false) {
-      return navigate("/eat/confirmation");
+      return navigate('/eat/confirmation')
     } else {
       const rec = {
-        variables: createRecord(cart_menu, paymentMethod, cohenId),
-      };
-      const order = orderSummary();
-      const emptyField = checkNullFields(rec);
-      if (checkNullFields(rec)) {
-        setNullError(emptyField);
-        return;
+        variables: createRecord(cart_menu, paymentMethod, cohenId)
       }
-      const orderResponse = await createOrder(rec);
-      const orderJson = orderResponse.data.createOrder;
+      const order = orderSummary()
+      const emptyField = checkNullFields(rec)
+      if (checkNullFields(rec)) {
+        setNullError(emptyField)
+        return
+      }
+      const orderResponse = await createOrder(rec)
+      const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
-          sourceId: "cnon:card-nonce-ok",
+          sourceId: 'cnon:card-nonce-ok',
           orderId: orderJson.id,
           location: order.vendor.locationIds[0],
           subtotal: totals.subtotal * 100,
-          currency: "USD",
-        },
-      });
+          currency: 'USD'
+        }
+      })
       orderSummary(
         Object.assign(orderSummary(), {
           orderId: orderJson.id,
@@ -263,62 +263,62 @@ function CartDetail() {
             uid: orderJson.fulfillment.uid,
             state: orderJson.fulfillment.state,
             pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
-            placedAt: orderJson.fulfillment.pickupDetails.placedAt,
+            placedAt: orderJson.fulfillment.pickupDetails.placedAt
           },
-          url: createPaymentResponse.data.createPayment.url,
+          url: createPaymentResponse.data.createPayment.url
         })
-      );
-      if (paymentMethod === "CREDIT") {
+      )
+      if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
-        return handleClickCredit();
+        return handleClickCredit()
       }
-      if (paymentMethod === "COHEN") {
+      if (paymentMethod === 'COHEN') {
         // navigate to order confirmation page
-        return navigate("/eat/confirmation");
+        return navigate('/eat/confirmation')
       }
-      if (paymentMethod === "TETRA") {
+      if (paymentMethod === 'TETRA') {
         // navigate to order confirmation page
-        return navigate("/eat/confirmation");
+        return navigate('/eat/confirmation')
       }
     }
-  };
+  }
 
   const updateTotal = () => {
     const newSubtotal = cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
-    );
+    )
     setTotals({
       subtotal: newSubtotal,
-      tax: newSubtotal * 0.0825,
-    });
-  };
+      tax: newSubtotal * 0.0825
+    })
+  }
 
   const getTotal = () => {
     const total = cart_menu.reduce((total, current) => {
-      return total + current.quantity;
-    }, 0);
-    return parseInt(total);
-  };
+      return total + current.quantity
+    }, 0)
+    return parseInt(total)
+  }
 
   useEffect(() => {
-    updateTotal();
-  }, [cart_menu]);
+    updateTotal()
+  }, [cart_menu])
 
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
-  const [, setDummyDelete] = useState(0);
+  const [, setDummyDelete] = useState(0)
 
-  if (loading) return <p>'Loading vendor's business hour ...'</p>;
-  if (error) return <p>`Error! ${error.message}`</p>;
+  if (loading) return <p>'Loading vendor's business hour ...'</p>
+  if (error) return <p>`Error! ${error.message}`</p>
 
-  if (order_loading) return <p>Creating new order. Please wait ...</p>;
+  if (order_loading) return <p>Creating new order. Please wait ...</p>
   if (order_error) {
-    return <p>{order_error.message}</p>;
+    return <p>{order_error.message}</p>
   }
-  if (payment_loading) return <p>Creating new payment. Please wait ...</p>;
+  if (payment_loading) return <p>Creating new payment. Please wait ...</p>
   if (payment_error) {
-    return <p>{payment_error.message}</p>;
+    return <p>{payment_error.message}</p>
   }
 
   // if (avail_loading) return <p>'Loading availabilities...'</p>;
@@ -331,69 +331,73 @@ function CartDetail() {
 
   // ---------------------------------------------------------------
   // NEW Changes: standardize to central time
-  const d1 = new Date();
-  let currHour = 0;
-  let currDay = d1.getUTCDay();
-  let currMinute = 0;
+  const d1 = new Date()
+  let currHour = 0
+  let currDay = d1.getUTCDay()
+  let currMinute = 0
   // Central time is UTC -6
-  const offset = -6;
-  const utcHour = d1.getUTCHours();
+  const offset = -6
+  const utcHour = d1.getUTCHours()
 
   if (utcHour < 6) {
-    currHour = 24 + utcHour + offset;
+    currHour = 24 + utcHour + offset
   } else {
-    currHour = utcHour + offset;
+    currHour = utcHour + offset
   }
-  console.log("currHour: ", currHour);
+  console.log('currHour: ', currHour)
 
   // Day adjusts based on hour in UTC time
   if (utcHour <= 6 && currDay === 0) {
-    currDay = 6;
+    currDay = 6
   } else if (utcHour <= 6) {
-    currDay = d1.getUTCDay() - 1;
+    currDay = d1.getUTCDay() - 1
   } else {
-    currDay = d1.getUTCDay();
+    currDay = d1.getUTCDay()
   }
-  console.log("currDay: ", currDay);
+  console.log('currDay: ', currDay)
 
   // Minutes is same
-  currMinute = d1.getUTCMinutes();
-  console.log("currMinute: ", currMinute);
+  currMinute = d1.getUTCMinutes()
+  console.log('currMinute: ', currMinute)
   // ---------------------------------------------------------------
 
   const {
-    getVendor: { hours: businessHours },
-  } = data;
-  const businessHour = businessHours[currDay];
+    getVendor: { hours: businessHours }
+  } = data
+  const businessHour = businessHours[currDay]
 
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
   const startHours = businessHours[currDay]
-    ? businessHour.start.map((startHour) => {
-        let hour = startHour.split(":")[0];
-        if (startHour.includes("p.m.")) {
-          return parseInt(hour) + 12;
+    ? businessHour.start.map(startHour => {
+        let hour = startHour.split(':')[0]
+        if (startHour.includes('p.m.')) {
+          return parseInt(hour) + 12
         } else {
-          return parseInt(hour);
+          return parseInt(hour)
         }
       })
-    : [];
+    : []
   const endHours = businessHours[currDay]
-    ? businessHour.end.map((endHour) => {
-        let hour = endHour.split(":")[0];
-        if (endHour.includes("p.m.")) {
-          return parseInt(hour) + 12;
+    ? businessHour.end.map(endHour => {
+        let hour = endHour.split(':')[0]
+        if (endHour.includes('p.m.')) {
+          return parseInt(hour) + 12
         } else {
-          return parseInt(hour);
+          return parseInt(hour)
         }
       })
-    : [];
+    : []
 
-  const startMinutes = businessHour.start.map((startHour) => {
-    return parseInt(startHour.split(" ")[0].split(":")[1]);
-  });
-  const endMinutes = businessHour.end.map((endHour) => {
-    return parseInt(endHour.split(" ")[0].split(":")[1]);
-  });
+  const startMinutes = businessHour.start.map(startHour => {
+    return parseInt(startHour.split(' ')[0].split(':')[1])
+  })
+  const endMinutes = businessHour.end.map(endHour => {
+    return parseInt(endHour.split(' ')[0].split(':')[1])
+  })
+
+  const currDayUser = moment().day()
+  const currHourUser = moment().hour()
+  const currMinuteUser = moment().minutes()
 
   const timeIntervals = calculateNextHours(
     currHour,
@@ -402,10 +406,13 @@ function CartDetail() {
     startMinutes,
     endHours,
     endMinutes
-  );
-  let pickupTimes = [];
+  )
+
+  console.log('tI: ', timeIntervals)
+
+  let pickupTimes = []
   for (let i = 0; i < timeIntervals.length; i++) {
-    const interval = timeIntervals[i];
+    const interval = timeIntervals[i]
     i === 0
       ? (pickupTimes = [
           ...pickupTimes,
@@ -415,7 +422,7 @@ function CartDetail() {
             interval[2],
             interval[3],
             true
-          ),
+          )
         ])
       : (pickupTimes = [
           ...pickupTimes,
@@ -425,9 +432,9 @@ function CartDetail() {
             interval[2],
             interval[3],
             false
-          ),
-        ]);
-    console.log("pickupTimes: ", pickupTimes);
+          )
+        ])
+    console.log('pickupTimes: ', pickupTimes)
   }
 
   // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
@@ -437,26 +444,26 @@ function CartDetail() {
   //   'hour': t.value.split(':')[0],
   //   'minute': t.value.split(':')[1]}))
 
-  function changePaymentType(newPayment) {
-    setPaymentMethod(newPayment.value);
+  function changePaymentType (newPayment) {
+    setPaymentMethod(newPayment.value)
   }
 
-  function changePickupTime(newTime) {
-    console.log(pickupTimes);
-    setPickupTime(newTime.value);
-    orderSummary(Object.assign(orderSummary(), { time: newTime.value }));
+  function changePickupTime (newTime) {
+    console.log(pickupTimes)
+    setPickupTime(newTime.value)
+    orderSummary(Object.assign(orderSummary(), { time: newTime.value }))
   }
 
   return (
     <div>
-      <CartHeader showBackButton backLink="/eat" />
-      <div className={"float-cart"}>
-        <div className="float-cart__content">
-          <div className="float-cart__shelf-container">
-            <p className="cart-title" style={{ marginTop: "25px" }}>
+      <CartHeader showBackButton backLink='/eat' />
+      <div className={'float-cart'}>
+        <div className='float-cart__content'>
+          <div className='float-cart__shelf-container'>
+            <p className='cart-title' style={{ marginTop: '25px' }}>
               Order Summary:
             </p>
-            {cartItems().map((item) => {
+            {cartItems().map(item => {
               return (
                 <Fragment>
                   <CartProduct
@@ -464,32 +471,32 @@ function CartDetail() {
                     forceUpdate={setDummyDelete}
                     updateTotal={updateTotal}
                   />
-                  <hr className="breakline" style={{ opacity: "0.3" }} />
+                  <hr className='breakline' style={{ opacity: '0.3' }} />
                 </Fragment>
-              );
+              )
             })}
           </div>
 
-          <div className="float-bill">
-            {Object.keys(totals).map((type) => {
+          <div className='float-bill'>
+            {Object.keys(totals).map(type => {
               if (totals[type]) {
-                const formatted = currency(totals[type]).format();
+                const formatted = currency(totals[type]).format()
                 return (
-                  <div className="subtotal-container">
-                    <p className="subheader">{type}</p>
+                  <div className='subtotal-container'>
+                    <p className='subheader'>{type}</p>
                     <p>{formatted}</p>
                   </div>
-                );
+                )
               }
             })}
-            <div className="total-container">
+            <div className='total-container'>
               <hr
-                className="breakline"
-                style={{ margin: "-5px 0px 10px 5px" }}
+                className='breakline'
+                style={{ margin: '-5px 0px 10px 5px' }}
               />
-              <div className="total" style={{ marginBottom: "9vh" }}>
-                <p className="total__header">Total</p>
-                <p style={{ marginTop: "1px" }}>
+              <div className='total' style={{ marginBottom: '9vh' }}>
+                <p className='total__header'>Total</p>
+                <p style={{ marginTop: '1px' }}>
                   {currency(totals.subtotal + totals.tax).format()}
                 </p>
               </div>
@@ -497,52 +504,52 @@ function CartDetail() {
           </div>
 
           <hr
-            className="breakline"
-            style={{ marginTop: "-40px", opacity: "0.3" }}
+            className='breakline'
+            style={{ marginTop: '-40px', opacity: '0.3' }}
           />
           <OptionWrapper>
-            <div className="float-cart__dropdown-title"> Pickup Time:</div>
+            <div className='float-cart__dropdown-title'> Pickup Time:</div>
             <Select
               options={pickupTimes}
-              placeholder={"Select..."}
+              placeholder={'Select...'}
               onChange={changePickupTime}
               clearable={false}
               style={styles.select}
-              className="float-cart__dropdown"
+              className='float-cart__dropdown'
             />
           </OptionWrapper>
 
-          <hr className="breakline" style={{ opacity: "0.3" }} />
+          <hr className='breakline' style={{ opacity: '0.3' }} />
 
           <OptionWrapper>
-            <div className="float-cart__dropdown-title">Payment Method:</div>
+            <div className='float-cart__dropdown-title'>Payment Method:</div>
             <Select
               options={options}
               onChange={changePaymentType}
-              placeholder={"Select..."}
+              placeholder={'Select...'}
               clearable={false}
               style={styles.select}
-              className="float-cart__dropdown"
+              className='float-cart__dropdown'
             />
-            {paymentMethod === "COHEN" && (
+            {paymentMethod === 'COHEN' && (
               <Div>
                 <label>Enter your Cohen House membership id: </label>
-                <input onChange={(e) => setCohenId(e.target.value)}></input>
+                <input onChange={e => setCohenId(e.target.value)}></input>
               </Div>
             )}
             {nullError && (
-              <p css={{ alignSelf: "center", color: "red" }}>
-                {" "}
+              <p css={{ alignSelf: 'center', color: 'red' }}>
+                {' '}
                 Error! Submission form contains null value for {nullError}.
-                Please complete your profile and order.{" "}
+                Please complete your profile and order.{' '}
               </p>
             )}
           </OptionWrapper>
-          <div className="float-cart__footer">
+          <div className='float-cart__footer'>
             <button
               disabled={cartItems().length === 0}
-              className="buy-btn"
-              title="Confirm"
+              className='buy-btn'
+              title='Confirm'
               onClick={handleConfirmClick}
             >
               Submit Order
@@ -551,7 +558,7 @@ function CartDetail() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default CartDetail;
+export default CartDetail

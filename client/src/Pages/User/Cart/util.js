@@ -26,7 +26,8 @@ export const CREATE_ORDER = gql`
     $studentId: String!
     $name: String!
     $phone: String!
-    $time: String!
+    $pickupTime: String!
+    $submissionTime: String!
     $key: String!
     $lineItems: [LineItemInput]!
     $location: String!
@@ -40,12 +41,14 @@ export const CREATE_ORDER = gql`
         idempotencyKey: $key
         lineItems: $lineItems
         recipient: { name: $name, phone: $phone }
-        pickupTime: $time
+        pickupTime: $pickupTime
+        submissionTime: $submissionTime
         paymentType: $type
         cohenId: $cohenId
       }
     ) {
       id
+      submissionTime
       total {
         amount
       }
@@ -149,7 +152,8 @@ export const createRecord = (items, paymentType, cohenId) => {
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
-    time: orderSummary().time ? moment(orderSummary().time).format() : null,
+    pickupTime: orderSummary().pickupTime ? moment(orderSummary().pickupTime).format() : null,
+    submissionTime: moment().toISOString(),
     location: orderSummary().vendor.locationIds[0],
     type: paymentType,
     cohenId: cohenId
@@ -157,7 +161,7 @@ export const createRecord = (items, paymentType, cohenId) => {
 }
 
 export const checkNullFields = source => {
-  const fields = ['name', 'phone', 'studentId', 'type', 'time']
+  const fields = ['name', 'phone', 'studentId', 'type', 'pickupTime']
   const detailedInfo = [
     'name',
     'phone number',

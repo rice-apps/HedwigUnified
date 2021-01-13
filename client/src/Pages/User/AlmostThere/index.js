@@ -118,6 +118,7 @@ const AlmostThere = ({}) => {
 
   console.log(orderSummary())
   const order = orderSummary()
+  const pickupTime = moment(order.fulfillment.pickupAt).utcOffset('-6:00').format('h:mm a')
   const handlePayment = () => {
     window.open(order.url)
   }
@@ -142,7 +143,7 @@ const AlmostThere = ({}) => {
         <P header>Pick Up Instruction:</P>
         <P pickup>
           Pick up at {order.fulfillment.placedAt} at
-          {order.fulfillment.pickupAt}
+          {" "+pickupTime}
         </P>
       </Div>
 

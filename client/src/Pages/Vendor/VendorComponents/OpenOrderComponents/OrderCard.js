@@ -574,6 +574,7 @@ function OrderCard (props) {
   const {
     customerName,
     pickupTime,
+    submissionTime, 
     items,
     orderCost,
     orderTotal,
@@ -602,6 +603,7 @@ function OrderCard (props) {
   }
 
   const pickupAt = moment(pickupTime).format('h:mm A')
+  const submittedAt = moment(submissionTime).format('h:mm A')
   const timeLeft = moment(pickupTime).fromNow()
 
   return (
@@ -617,7 +619,7 @@ function OrderCard (props) {
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
           pickupTime={pickupAt}
-          submissionTime='4:35pm'
+          submissionTime={submittedAt}
           paymentType={
             orderTrackerData.getOrderTracker.paymentType === null
               ? 'None'

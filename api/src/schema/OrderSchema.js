@@ -89,6 +89,7 @@ OrderTC.addResolver({
           orderStatus: order.state,
           cohenId: order.metadata?.cohenId,
           studentId: order.metadata?.studentId,
+          submissionTime: order.metadata?.submissionTime,
           fulfillment: {
             uid: order.fulfillments[0].uid,
             state: orderTracker?.status || order.fulfillments[0].state,
@@ -136,12 +137,12 @@ OrderTC.addResolver({
           lineItems,
           recipient,
           pickupTime,
+          submissionTime,
           cohenId,
           studentId,
           paymentType
         }
       } = args
-
       const ordersApi = squareClient.ordersApi
 
       try {
@@ -154,7 +155,8 @@ OrderTC.addResolver({
             lineItems: lineItems,
             metadata: {
               cohenId: cohenId || 'N/A',
-              studentId: studentId || 'N/A'
+              studentId: studentId || 'N/A',
+              submissionTime: submissionTime || 'N/A'
             },
             fulfillments: [
               {
@@ -177,9 +179,10 @@ OrderTC.addResolver({
         await OrderTracker.create({
           status: 'PROPOSED',
           pickupTime: pickupTime,
+          submissionTime: submissionTime,
           locationId: locationId,
           orderId: order.id,
-          paymentType: paymentType
+          paymentType: paymentType,
         })
 
         const CDMOrder = {
@@ -240,6 +243,7 @@ OrderTC.addResolver({
         return CDMOrder
       } catch (error) {
         if (error instanceof ApiError) {
+          console.log("Error:", error.result)
           return new ApolloError(
             `Creating new order on Square failed because ${error.result}`
           )

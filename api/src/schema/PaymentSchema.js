@@ -1,4 +1,3 @@
-import { PaymentsApi, CreatePaymentRequest } from 'square-connect'
 import { v4 as uuid } from 'uuid'
 import { ApolloError } from 'apollo-server-express'
 import {
@@ -9,7 +8,9 @@ import {
   SortOrderEnumTC
 } from '../models'
 import { FetchPaymentPayloadTC } from '../models/PaymentModel'
+import squareClient from '../square'
 import { shopifyClient, shopifyAdminClient } from '../shopify'
+import { ApiError } from 'square'
 
 PaymentTC.addResolver({
   name: 'fetchPayments',
@@ -27,29 +28,39 @@ PaymentTC.addResolver({
     }
   },
   resolve: async ({ args }) => {
-    const api = new PaymentsApi()
+    const { beginTime, endTime, sortOrder, cursor } = args
 
-    const fetchPaymentsResponse = await api.listPayments(args)
+    const paymentsApi = squareClient.paymentsApi
 
-    if (fetchPaymentsResponse.errors) {
+    try {
+      const {
+        result: { cursor: newCursor, payments }
+      } = await paymentsApi.listPayments(beginTime, endTime, sortOrder, cursor)
+
+      const paymentsList = payments.map(payment => ({
+        id: payment.id,
+        order: payment.orderId,
+        customer: payment.customerId,
+        subtotal: payment.amountMoney,
+        tip: payment.tipMoney,
+        total: payment.totalMoney,
+        status: payment.status
+      }))
+
+      return {
+        cursor: newCursor,
+        payments: paymentsList
+      }
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return new ApolloError(
+          `Retrieving list of payments from Square failed because ${error.result}`
+        )
+      }
+
       return new ApolloError(
-        `Payments couldn't be listed because of error: ${fetchPaymentsResponse.errors}`
+        'Something went wrong while retrieving list of payments'
       )
-    }
-
-    const paymentsList = fetchPaymentsResponse.payments.map(payment => ({
-      id: payment.id,
-      order: payment.order_id,
-      customer: payment.customer_id,
-      subtotal: payment.amount_money,
-      tip: payment.tip_money,
-      total: payment.total_money,
-      status: payment.status
-    }))
-
-    return {
-      cursor: fetchPaymentsResponse.cursor,
-      payments: paymentsList
     }
   }
 })
@@ -76,47 +87,41 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
-          const api = new PaymentsApi()
-          const paymentBody = new CreatePaymentRequest()
+          const paymentsApi = squareClient.paymentsApi
 
-          const paymentResponse = await api.createPayment({
-            ...paymentBody,
-            location_id: locationId,
-            source_id: sourceId,
-            idempotency_key: uuid(),
-            amount_money: subtotal,
-            tip_money: tip,
-            order_id: orderId,
-            customer_id: customerId,
-            autocomplete: false
-          })
+          try {
+            const {
+              result: { payment }
+            } = await paymentsApi.createPayment({
+              locationId: locationId,
+              sourceId: sourceId,
+              idempotencyKey: uuid(),
+              amountMoney: subtotal,
+              tipMoney: tip,
+              orderId: orderId,
+              customerId: customerId,
+              autocomplete: false
+            })
 
-          if (paymentResponse.errors) {
-            return new ApolloError(
-              `Encounter the following errors while create payment: ${paymentResponse.errors}`
-            )
-          }
-
-          const {
-            payment: {
-              id,
-              order_id,
-              customer_id,
-              amount_money,
-              tip_money,
-              total_money,
-              status
+            response = {
+              id: payment.id,
+              order: payment.orderId,
+              customer: payment.customerId,
+              subtotal: payment.amountMoney,
+              tip: payment.tipMoney,
+              total: payment.totalMoney,
+              status: payment.status
             }
-          } = paymentResponse
-
-          response = {
-            id,
-            order: order_id,
-            customer: customer_id,
-            subtotal: amount_money,
-            tip: tip_money,
-            total: total_money,
-            status
+          } catch (error) {
+            if (error instanceof ApiError) {
+              response = new ApolloError(
+                `Creating payment in Square failed because ${error.result}`
+              )
+            } else {
+              response = new ApolloError(
+                'Something went wrong while creating a payment in Square'
+              )
+            }
           }
 
           break
@@ -166,8 +171,6 @@ PaymentTC.addResolver({
             source
           }
 
-          console.log(checkout.data.checkoutCreate.checkout)
-
           // I changed shopifyOrderId: checkout.data.checkoutCreate.checkout.order.id
           // to the code below to make createPayment work
           // not sure if this is correct !!! --- Lorraine
@@ -202,36 +205,32 @@ PaymentTC.addResolver({
 
       switch (args.source) {
         case 'SQUARE': {
-          const api = new PaymentsApi()
+          const paymentsApi = squareClient.paymentsApi
 
-          const paymentResponse = await api.completePayment(args.paymentId)
+          try {
+            const {
+              result: { payment }
+            } = await paymentsApi.completePayment(args.paymentId)
 
-          if (paymentResponse.errors) {
-            return new ApolloError(
-              `Encounter the following errors while complete payment: ${paymentResponse.errors}`
-            )
-          }
-
-          const {
-            payment: {
-              id,
-              order_id,
-              customer_id,
-              amount_money,
-              tip_money,
-              total_money,
-              status
+            response = {
+              id: payment.id,
+              order: payment.orderId,
+              customer: payment.customerId,
+              subtotal: payment.amountMoney,
+              tip: payment.tipMoney,
+              total: payment.totalMoney,
+              status: payment.status
             }
-          } = paymentResponse
-
-          response = {
-            id,
-            order: order_id,
-            customer: customer_id,
-            subtotal: amount_money,
-            tip: tip_money,
-            total: total_money,
-            status
+          } catch (error) {
+            if (error instanceof ApiError) {
+              response = new ApolloError(
+                `Completing payment ${args.paymentId} using Square failed because ${error.result}`
+              )
+            } else {
+              response = new ApolloError(
+                `Something went wrong when completing payment ${args.paymentId}`
+              )
+            }
           }
 
           break
@@ -298,12 +297,12 @@ PaymentTC.addResolver({
             }
           )
 
-          console.log(completeResponse.orderCapture)
-
           response = {
             id: checkout.data.node.id,
             order: checkout.data.node.order.id
           }
+
+          break
         }
 
         default: {
@@ -331,24 +330,33 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
-          const api = new PaymentsApi()
+          const paymentsApi = squareClient.paymentsApi
 
-          const getPaymentResponse = await api.getPayment(paymentId)
+          try {
+            const {
+              result: { payment }
+            } = await paymentsApi.getPayment(paymentId)
 
-          if (getPaymentResponse.errors) {
-            return new ApolloError(
-              `Couldn't verify payment because ${getPaymentResponse.errors}`
-            )
+            response =
+              payment.status !== 'CANCELED' && payment.status !== 'FAILED'
+          } catch (error) {
+            if (error instanceof ApiError) {
+              response = new ApolloError(
+                `Verifying payment ${paymentId} on Square failed because ${error.result}`
+              )
+            } else {
+              response = new ApolloError(
+                `Something went wrong when verifying payment ${paymentId} on Square`
+              )
+            }
           }
 
-          response =
-            getPaymentResponse.payment.status != 'CANCELED' &&
-            getPaymentResponse.payment.status != 'FAILED'
+          break
         }
 
         case 'SHOPIFY': {
           const checkoutOrderQuery = shopifyClient.graphQLClient.query(root => {
-            root.add('node', { args: { id: args.paymentId } }, node => {
+            root.add('node', { args: { id: paymentId } }, node => {
               node.addInlineFragmentOn('Checkout', checkout => {
                 checkout.add('id')
                 checkout.add('order', order => {
@@ -380,6 +388,8 @@ PaymentTC.addResolver({
           })
 
           response = order.data.node.order.fullyPaid
+
+          break
         }
 
         default: {
@@ -405,36 +415,32 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
-          const api = new PaymentsApi()
+          const paymentsApi = squareClient.paymentsApi
 
-          const cancelPaymentResponse = await api.cancelPayment(paymentId)
+          try {
+            const {
+              result: { payment }
+            } = await paymentsApi.cancelPayment(paymentId)
 
-          if (cancelPaymentResponse.errors) {
-            return new ApolloError(
-              `Couldn't cancel payment because of error: ${cancelPaymentResponse.errors}`
-            )
-          }
-
-          const {
-            payment: {
-              id,
-              order_id,
-              customer_id,
-              amount_money,
-              tip_money,
-              total_money,
-              status
+            return {
+              id: payment.id,
+              order: payment.orderId,
+              customer: payment.customerId,
+              subtotal: payment.amountMoney,
+              tip: payment.tipMoney,
+              total: payment.totalMoney,
+              status: payment.status
             }
-          } = cancelPaymentResponse
+          } catch (error) {
+            if (error instanceof ApiError) {
+              return new ApolloError(
+                `Cancelling payment ${paymentId} using Square failed because ${error.result}`
+              )
+            }
 
-          return {
-            id,
-            order: order_id,
-            customer: customer_id,
-            subtotal: amount_money,
-            tip: tip_money,
-            total: total_money,
-            status
+            return new ApolloError(
+              `Something went wrong cancelling payment ${paymentId} using Square`
+            )
           }
         }
         case 'SHOPIFY': {

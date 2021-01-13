@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { cartItems, orderSummary } from '../../../apollo'
 import styled, { css } from 'styled-components'
+import moment from 'moment'
 
 export const Button = styled.button`
   font-size: 20px;
@@ -53,34 +54,33 @@ export const P = styled.p`
       text-align: center;
     `};
 
-    ${props =>
-      props.pickup &&
-      css`
-        margin: 0.2vh 1vw;
-        font-size: 14pt;
-        position: relative;
-        top: 15px;
-        font-family: 'Avenir Book', 'Arial Book', sans-serif;
-      `};
+  ${props =>
+    props.pickup &&
+    css`
+      margin: 0.2vh 1vw;
+      font-size: 14pt;
+      position: relative;
+      top: 15px;
+      font-family: 'Avenir Book', 'Arial Book', sans-serif;
+    `};
 
-    ${props =>
-      props.title &&
-      css`
-        font-weight: 700;
-        color: #f3725b;
-        font-size: 20pt;
-        margin: 8px 16px 8px 16px;
-      `};
+  ${props =>
+    props.title &&
+    css`
+      font-weight: 700;
+      color: #f3725b;
+      font-size: 20pt;
+      margin: 8px 16px 8px 16px;
+    `};
 
-    ${props =>
-      props.message &&
-      css`
-        font-size: 13.2pt;
-        line-height: 16pt;
-        width: 280px;
-        margin: 0px 0px 15px 0px;
-      `};
-}
+  ${props =>
+    props.message &&
+    css`
+      font-size: 13.2pt;
+      line-height: 16pt;
+      width: 280px;
+      margin: 0px 0px 15px 0px;
+    `};
 `
 
 export const Div = styled.div`
@@ -112,6 +112,7 @@ const AlmostThere = ({}) => {
   cartItems([])
   const navigate = useNavigate()
   const handleHomeClick = () => {
+    orderSummary({ vendor: null, time: null })
     return navigate(`/eat`)
   }
 

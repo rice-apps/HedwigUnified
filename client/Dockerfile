@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.2
-FROM node:12.20.0-alpine AS build
+FROM node:lts-alpine AS build
 
 WORKDIR /hedwig-client
 

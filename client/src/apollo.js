@@ -14,12 +14,13 @@ import { WebSocketLink } from '@apollo/link-ws'
 import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 
 import { makeVar } from '@apollo/client'
-
-export const cartItems = makeVar([])
-// export const orderSummary = makeVar({vendor: null})
-export const orderSummary = makeVar({ vendor: {}, time: null, fulfillment: {} })
+import { resetOrderSummary } from './Pages/User/Cart/util'
 
 
+
+if (!localStorage.getItem('order')) {
+  resetOrderSummary()
+}
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
@@ -72,7 +73,7 @@ export const client = new ApolloClient({
         fields: {
           cartItems: {
             read () {
-              return cartItems()
+              return localStorage.getItem('cartItems')
             }
           }
         }

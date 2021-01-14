@@ -1,15 +1,19 @@
 import './almostThere.css'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
-import { cartItems, orderSummary } from '../../../apollo'
+import { resetOrderSummary } from '../Cart/util'
 import styled, { css } from 'styled-components'
 import moment from 'moment'
 
-export const Button = styled.button`
+export const Button = styled.div`
   font-size: 20px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
   line-height: 27px;
   color: #f3725b;
   height: 5vh;
+  cursor:pointer;
   background-color: #ffffff;
   border: 1px solid #f3725b;
   border-radius: 20px;
@@ -31,6 +35,7 @@ export const Button = styled.button`
       left: 0;
       right: 0;
       bottom: 6vh;
+      width:15vw;
     `};
 `
 
@@ -58,7 +63,7 @@ export const P = styled.p`
     props.pickup &&
     css`
       margin: 0.2vh 1vw;
-      font-size: 14pt;
+      font-size: 2.1vh;
       position: relative;
       top: 15px;
       font-family: 'Avenir Book', 'Arial Book', sans-serif;
@@ -95,8 +100,9 @@ export const Div = styled.div`
       background-color: white;
       border-radius: 20pt;
       display: block;
-      height: 180px;
+      height: ${props => props.almostthere ? "25vh" : "35vh"};
       width: 290px;
+      overflow:auto;
       margin: 2vh auto;
       box-shadow: 0px 3px 6px 0px #aaaaaa;
     `};
@@ -109,15 +115,14 @@ export const MessageWrapper = styled.div`
 `
 
 const AlmostThere = ({}) => {
-  cartItems([])
+  localStorage.setItem('cartItems', JSON.stringify([]))
   const navigate = useNavigate()
   const handleHomeClick = () => {
-    orderSummary({ vendor: null, time: null })
+    resetOrderSummary()
     return navigate(`/eat`)
   }
 
-  console.log(orderSummary())
-  const order = orderSummary()
+  const order = JSON.parse(localStorage.getItem('order'))
   const time = moment(order.fulfillment.pickupAt)
   const handlePayment = () => {
     window.open(order.url)
@@ -138,7 +143,7 @@ const AlmostThere = ({}) => {
           Enter Payment Details
         </Button>
       </Div>
-      <Div vendorCard>
+      <Div vendorCard almostthere>
         <P header>{order.vendor.name}</P>
         <P header>Pick Up Instruction:</P>
         <P pickup>

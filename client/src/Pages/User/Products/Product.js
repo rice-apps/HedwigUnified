@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client'
 import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 import dispatch from './FunctionalCart'
-import { orderSummary, cartItems } from '../../../apollo'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
@@ -70,25 +69,24 @@ function Product () {
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
-    const order = orderSummary()
-    console.log('ORDER SUMMARY', orderSummary(), 'VENDOR NAME', vendor.name)
+    const order = JSON.parse(localStorage.getItem('order'))
 
-    orderSummary(
-      Object.assign(orderSummary(), {
+    localStorage.setItem('order',
+      JSON.stringify(Object.assign(order, {
         vendor: {
           name: vendor.name,
           merchantId: vendor.squareInfo.merchantId,
           locationIds: vendor.squareInfo.locationIds
         }
-      })
+      }))
     )
     if (order.vendor && vendor.name != order.vendor.name) {
       console.log('Order is not from the same vendor! ERROR')
       return // todo: add warning window.
     }
-    console.log('merchant Id ', orderSummary().vendor.merchantId)
+    console.log('merchant Id ', order.vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
-    console.log('location Id ', orderSummary().vendor.locationIds[0])
+    console.log('location Id ', order.vendor.locationIds[0])
     const itemName = product.name
     const itemDataSourceId = product.dataSourceId
     let variant
@@ -132,7 +130,6 @@ function Product () {
         dataSourceId: itemDataSourceId
       }
     })
-    localStorage.setItem('cartProduct', JSON.stringify(cartItems()))
     console.log(itemName, variantObject)
     return true
   }
@@ -174,7 +171,6 @@ function Product () {
             onClick={() => {
               makeCartItem()
               navigate('/eat/cohen/cart')
-              console.log(cartItems())
             }}
           >
             Add

@@ -96,7 +96,7 @@ function Auth () {
     return <Navigate to='/vendor_choice' />
   }
   // Set recent update in client state.  if it gets to this point it's only clients
-  if (phone) {
+  if (/^[0-9]{10}$/.test(phone)) {
     return <Navigate to='/eat' />
   }
   return <Navigate to='/contact' />

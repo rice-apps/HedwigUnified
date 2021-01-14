@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import firebase from 'firebase/app'
 import { Button } from '../Pages/User/AlmostThere'
+import moment from 'moment'
 
 export const DialogPage = styled.div`
   position: fixed;
@@ -22,6 +23,7 @@ export const DialogWindow = styled.div`
   text-align: center;
   background-color: white;
   position: relative;
+  padding: 5px 8px;
   width: 15rem;
   height: auto;
   border-radius: 20px;
@@ -58,7 +60,8 @@ export const RefreshDialog = ({display, changeTimeoutStatus, timeoutCountDown, u
       window.location.reload()
     }
     const refreshResult = user.getIdTokenResult(true)
-    timeoutCountDown(30 * 1000, refreshResult.token)
+    timeoutCountDown(120 * 1000, refreshResult.token)
+    localStorage.setItem('expireTime', moment().add(1, 'hour'))
     console.log('token', refreshResult)
   }
 
@@ -66,9 +69,9 @@ export const RefreshDialog = ({display, changeTimeoutStatus, timeoutCountDown, u
     display ? 
     <DialogPage>
       <DialogWindow>
-        <DialogHeader>Session expired</DialogHeader>
+        <DialogHeader>Alert</DialogHeader>
         <DialogText>Your session will expire soon. 
-          Click on the button below to refresh your session. 
+          Click on the button below to refresh. 
         </DialogText>
         <Button onClick={handleRefreshClick}>Refresh</Button>
       </DialogWindow>

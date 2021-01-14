@@ -13,14 +13,8 @@ function App () {
   // get the initial login status from localStorage
   // If both token and sessionExpire time is there, set loggedIn to true
   const currentToken = localStorage.getItem('idToken')
-  const expTime = moment(localStorage.getItem('expireTime'))
-
-  if (currentToken && !loggedIn) {
-    setLoggedIn(true)
-    if (!expTime && !timeoutStatus) {
-      setTimeoutStatus(true)
-    }
-  }
+  const prevExpTime = moment(localStorage.getItem('expireTime'))
+  const expTime = prevExpTime.isValid ? prevExpTime : null
 
   const timeoutCountDown = (time, token) => {
     setTimeoutStatus(false)
@@ -29,6 +23,21 @@ function App () {
     }
     timer = setTimeout(() => {console.log('timeout!'); setTimeoutStatus(true)}, time)
   }
+
+  
+
+  // If we have the initial token
+  if (currentToken && !loggedIn) {
+    setLoggedIn(true)
+    // If the expire time is null or invalid
+    if ((!expTime || expTime.isBefore(moment())) && !timeoutStatus) {
+      localStorage.removeItem('expireTime')
+      setTimeoutStatus(true)
+    } else {
+      timeoutCountDown(expTime.diff(moment(), 'seconds') * 1000)
+    }
+  }
+
 
   const changeLoginStatus = (status, time) => {
     setLoggedIn(status)

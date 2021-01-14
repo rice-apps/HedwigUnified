@@ -132,7 +132,6 @@ function Product () {
         dataSourceId: itemDataSourceId
       }
     })
-    localStorage.setItem('cartProduct', JSON.stringify(cartItems()))
     console.log(itemName, variantObject)
     return true
   }

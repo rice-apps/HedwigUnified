@@ -10,7 +10,6 @@ export const Button = styled.div`
   display:flex;
   align-items: center;
   justify-content: center;
-  line-height: 27px;
   color: #f3725b;
   height: 5vh;
   cursor:pointer;
@@ -33,9 +32,10 @@ export const Button = styled.div`
       margin-left: auto;
       margin-right: auto;
       left: 0;
+      height: ${props => props.almostthere ? "4vh" : "5vh"};
       right: 0;
-      bottom: 6vh;
-      width:15vw;
+      bottom: 4vh;
+      width:90px;
     `};
 `
 
@@ -62,13 +62,17 @@ export const P = styled.p`
   ${props =>
     props.pickup &&
     css`
-      margin: 0.2vh 1vw;
+      margin: 0.2vh 3vw;
       font-size: 2.1vh;
       position: relative;
       top: 15px;
       font-family: 'Avenir Book', 'Arial Book', sans-serif;
     `};
+ ${props => props.time && css`
+ font-size:2.3vh;
+ margin: 0.9vh;
 
+ `}
   ${props =>
     props.title &&
     css`
@@ -123,7 +127,7 @@ const AlmostThere = ({}) => {
   }
 
   const order = JSON.parse(localStorage.getItem('order'))
-  const time = moment(order.fulfillment.pickupAt)
+  const time = moment(order.fulfillment.pickupAt).format('h:mm A')
   const handlePayment = () => {
     window.open(order.url)
   }
@@ -145,17 +149,15 @@ const AlmostThere = ({}) => {
       </Div>
       <Div vendorCard almostthere>
         <P header>{order.vendor.name}</P>
-        <P header>Pick Up Instruction:</P>
+        <P header>Pick Up Instructions:</P>
+        <P pickup time style={{fontWeight: "bold"}}> Pickup Time: {time}</P>
         <P pickup>
-          {order.pickupInstruction} {' '} at {' '}
-          {time.hour()} {':'} 
-          {time.minute()} {' '}
-          {time.month() + 1} {'/'} {time.date()} {'/'} {time.year()}
+          {order.pickupInstruction} 
         </P>
       </Div>
 
       <Div>
-        <Button home onClick={handleHomeClick}>
+        <Button home almostthere onClick={handleHomeClick}>
           Home
         </Button>
       </Div>

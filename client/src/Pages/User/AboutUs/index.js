@@ -16,6 +16,8 @@ import Lorraine from '../../../images/Lorraine.jpg'
 import Ananya from '../../../images/Ananya.JPG'
 import Riley from '../../../images/riley.jpg'
 import Vinay from '../../../images/Vinay.jpg'
+import Angus from '../../../images/angus.png'
+import Helena from '../../../images/Helena.jpeg'
 
 
 const MainDiv = styled.div`
@@ -161,6 +163,8 @@ const AboutUs = () => {
                 <HeadShot src={Brandon} name={"Brandon Zhang"} position={"Developer"}/>
                 <HeadShot src={Ananya} name={"Ananya Vaidya"} position={"Developer"}/>
                 <HeadShot src={Vinay} name={"Vinay Tummarakota"} position={"Developer"}/>
+                <HeadShot src={Angus} name={"Angus Jelinek"} position={"Developer"}/>
+                <HeadShot src={Helena} name={"Helena Hu"} position={"Developer"}/>
 
             </PhotoGrid>
             <DescriptionBlock>

@@ -203,12 +203,12 @@ function CartDetail () {
 
   const navigate = useNavigate()
   // add catch statement
-  const cart_menu = JSON.parse(localStorage.getItem('cartItems'))
-  const order = JSON.parse(localStorage.getItem('order'))
+  const cart_menu =  localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : null
+  const order = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('order')) : null
 
-  const product_ids = cart_menu.map(item => {
+  const product_ids = cart_menu ? cart_menu.map(item => {
     return item.dataSourceId
-  })
+  }) : null
 
   const {
     loading: avail_loading,
@@ -225,6 +225,7 @@ function CartDetail () {
   }
 
   const handleConfirmClick = async () => {
+    console.log("HI")
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
@@ -286,10 +287,10 @@ function CartDetail () {
   }
 
   const updateTotal = () => {
-    const newSubtotal = cart_menu.reduce(
+    const newSubtotal = cart_menu ? cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
-    )
+    ): 0
     if (newSubtotal != totals.subtotal) {
       setTotals({
         subtotal: newSubtotal,
@@ -425,7 +426,7 @@ function CartDetail () {
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>
           <div>
-            {cart_menu.map(item => {
+            {cart_menu ? cart_menu.map(item => {
               return (
                 <CartProduct
                   product={item}
@@ -433,7 +434,7 @@ function CartDetail () {
                   updateTotal={updateTotal}
                 />
               )
-            })}
+            }): "Your cart is empty!"}
           </div>
           <Bill wrapper>
             {Object.keys(totals).map(type => {
@@ -500,8 +501,7 @@ function CartDetail () {
         </SpaceWrapper>
         <SpaceWrapper footer>
           <SubmitButton
-            disabled={cart_menu.length === 0}
-            onClick={handleConfirmClick}
+            onClick={ cart_menu.length === 0 ? null : handleConfirmClick}
           >
             Submit Order
           </SubmitButton>

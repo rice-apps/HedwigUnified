@@ -6,6 +6,7 @@ export const GET_VENDOR = gql`
   query GET_VENDOR($filter: FilterFindOneVendorsInput!) {
     getVendor(filter: $filter) {
       name
+      pickupInstruction
       hours {
         start
         end

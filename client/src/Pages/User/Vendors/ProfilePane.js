@@ -8,6 +8,7 @@ import { TextField } from '@material-ui/core'
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
 function handleLogoutClick () {
+  localStorage.clear()
   localStorage.removeItem('token')
   window.open(logoutURL, '_self')
 }

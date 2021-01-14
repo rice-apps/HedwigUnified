@@ -139,7 +139,7 @@ function Product () {
 
   return (
     <div>
-      <BuyerHeader />
+      <BuyerHeader showBackButton={true} backLink={`/eat/${vendor.slug}`} state={{currentVendor: vendor.name}}/>
       <div className='container'>
         <img className='heroImage' src={product.image ? product.image : "https://www.nippon.com/en/ncommon/contents/japan-data/169591/169591.jpg"} alt={product.name} />
 
@@ -173,7 +173,9 @@ function Product () {
             className='submitButton'
             onClick={() => {
               makeCartItem()
-              navigate('/eat/cohen/cart')
+              console.log( vendor)
+              navigate(`/eat/${vendor.slug}`, { state: { currentVendor: vendor.name } })
+              // navigate('/eat/cohen/cart')
               console.log(cartItems())
             }}
           >

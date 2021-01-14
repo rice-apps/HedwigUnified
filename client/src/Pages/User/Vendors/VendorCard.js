@@ -23,7 +23,7 @@ function VendorCard ({ vendor }) {
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
 
   // make testMode true if you want the store to be open
-  const testMode = true
+  const testMode = false
 
   const navigate = useNavigate()
 

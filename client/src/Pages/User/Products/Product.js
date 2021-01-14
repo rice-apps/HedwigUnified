@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import './product.css'
 import { useNavigate, useLocation } from 'react-router-dom'
-
 import dispatch from './FunctionalCart'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
@@ -139,7 +138,7 @@ function Product () {
     <div>
       <BuyerHeader />
       <div className='container'>
-        <img className='heroImage' src={product.image} alt={product.name} />
+        <img className='heroImage' src={product.image ? product.image : "https://www.nippon.com/en/ncommon/contents/japan-data/169591/169591.jpg"} alt={product.name} />
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>

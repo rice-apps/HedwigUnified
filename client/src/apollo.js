@@ -16,7 +16,7 @@ import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 import { makeVar } from '@apollo/client'
 import { resetOrderSummary } from './Pages/User/Cart/util'
 
-export const userProfile = makeVar([])
+
 
 if (!localStorage.getItem('order')) {
   resetOrderSummary()

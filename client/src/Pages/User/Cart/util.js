@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client'
-import { userProfile } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -112,7 +111,7 @@ export const UPDATE_ORDER_TRACKER = gql`
 `
 
 const getRecipient = () => {
-  const user = userProfile()
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   return {
     name: user.name,
     phone: user.phone
@@ -141,7 +140,7 @@ const getLineItems = items => {
 
 export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient()
-  const user = userProfile()
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   const order = JSON.parse(localStorage.getItem('order'))
   return {
     studentId: user.studentId,

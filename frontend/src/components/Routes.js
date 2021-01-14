@@ -26,8 +26,11 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
+<<<<<<< HEAD:frontend/src/components/Routes.js
 import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
+=======
+>>>>>>> adds session timer:client/src/components/Routes.js
 
 /**
  * Requests to verify the user's token on the backend
@@ -89,7 +92,7 @@ const GET_VENDOR_DATA = gql`
  * Defines a private route - if the user is NOT logged in or has an invalid token,
  * then we redirect them to the login page.
  */
-const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
+const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
   const token =
     localStorage.getItem('idToken') != null ? localStorage.getItem('idToken') : ''
 
@@ -111,14 +114,16 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
 
   if (error || userError) {
     // Clear the token because something is wrong with it
-    localStorage.removeItem('token')
+    localStorage.removeItem('idToken')
+    updateLogin(false)
     // Redirect the user to the login page
     return <Navigate to='/login' />
   }
   if (loading || userLoad) return <p>Waiting...</p>
   if (!data || !data.verifyUser) {
     // Clear the token
-    localStorage.removeItem('token')
+    localStorage.removeItem('idToken')
+    updateLogin(false)
     // Redirect the user
     return <Navigate to='/login' />
   }
@@ -181,6 +186,7 @@ const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
   return <Route {...rest} element={element} />
 }
 
+<<<<<<< HEAD:frontend/src/components/Routes.js
 const newRoutesArray = [
   {
     path: '/',
@@ -307,6 +313,8 @@ const newRoutesArray = [
   }
 ]
 
+=======
+>>>>>>> adds session timer:client/src/components/Routes.js
 // const routesArray = [
 //     {
 //         path: "/login",
@@ -369,7 +377,7 @@ const newRoutesArray = [
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({}) => {
+export const RoutesComponent = ({loginCallBack}) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend
@@ -387,6 +395,124 @@ export const RoutesComponent = ({}) => {
   //         });
   //     }, []
   // );
+  const newRoutesArray = [
+    {
+      path: '/',
+      element: <Navigate to='/eat' />
+    },
+    {
+      path: '/404_page',
+      element: <ErrorPage />
+    },
+    {
+      path: '/login',
+      element: <Login updateLoginStatus={loginCallBack} />
+    },
+    {
+      path: '/auth',
+      element: <Auth />
+    },
+    {
+      path: '/signup',
+      element: <PrivateRoute element={<SignUp />} updateLogin={loginCallBack} />
+    },
+    {
+      path: '/vendor_choice',
+      element: <PrivateRoute element={<VendorSelect />} updateLogin={loginCallBack}/>
+    },
+    {
+      path: '/eat/*',
+      children: [
+        { path: '/', element: <PrivateRoute element={<VendorList updateLogin={loginCallBack} />} updateLogin={loginCallBack} /> },
+        { path: '/profile', element: <PrivateRoute element={<Profile updateLogin={loginCallBack}/>} updateLogin={loginCallBack} /> },
+        { path: '/orders', element: <PrivateRoute element={<OrderList />} updateLogin={loginCallBack} /> },
+        { path: '/almostThere', element: <AlmostThere /> },
+        {
+          path: '/confirmation',
+          element: <PrivateRoute element={<Confirmation />} />
+        },
+        {
+          path: '/:vendor/*',
+          children: [
+            { path: '/', element: <PrivateRoute element={<Menu />} updateLogin={loginCallBack} /> },
+            {
+              path: '/:product',
+              element: <PrivateRoute element={<Product />} updateLogin={loginCallBack} />
+            },
+            { path: '/cart', element: <PrivateRoute element={<CartDetail />} updateLogin={loginCallBack} /> }
+          ]
+        }
+      ]
+    },
+    {
+      path: '/contact',
+      element: <ContactForm />
+    },
+    {
+      path: '/employee/*',
+      children: [
+        {
+          path: '/',
+          element: (
+            <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} updateLogin={loginCallBack} />
+          )
+        },
+        {
+          path: '/openorders',
+          element: (
+            <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} updateLogin={loginCallBack} />
+          )
+        },
+        {
+          path: '/closedorders',
+          element: (
+            <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} updateLogin={loginCallBack} />
+          )
+        },
+        {
+          path: '/items',
+          element: (
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<ItemsMenuManagementPage />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/modifiers',
+          element: (
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<ModifiersMenuManagementPage />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/set-basic-info',
+          element: (
+            <PrivateRoute isEmployeeRoute={true} element={<SetBasicInfoPage />} updateLogin={loginCallBack} />
+          )
+        },
+        {
+          path: '/set-store-hours',
+          element: (
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<SetStoreHoursPage />}
+              updateLogin={loginCallBack}
+            />
+          )
+        }
+      ]
+    },
+    {
+      path: '/*',
+      element: <Navigate to={'/404_page'} />
+    }
+  ]
+  
   const newRoutes = useRoutes(newRoutesArray)
   return newRoutes
 }

@@ -8,12 +8,6 @@ import gql from 'graphql-tag.macro'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
-function handleLogoutClick () {
-  localStorage.clear()
-  localStorage.removeItem('token')
-  window.open(logoutURL, '_self')
-}
-
 const GET_USER_INFO = gql`
   query GetUserInfo {
     user @client {
@@ -63,7 +57,7 @@ const getLinks = () => {
   return links
 }
 
-function ProfilePane () {
+function ProfilePane ({updateLogin}) {
   const [showProfile, setShowProfile] = useState(false)
 
   const [phone, setPhone] = useState(null)
@@ -93,6 +87,11 @@ function ProfilePane () {
       variables: { name: user.name, phone: phone, netid: user.netid }
     })
     window.location.reload(false)
+  }
+
+  function handleLogoutClick () {
+    updateLogin(false)
+    window.open(logoutURL, '_self')
   }
 
   return (

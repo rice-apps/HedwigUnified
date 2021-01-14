@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 // This import loads the firebase namespace along with all its type information.
 import firebase from 'firebase/app'
 
-function Login () {
+function Login ({updateLoginStatus}) {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const navigate = useNavigate()
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
@@ -21,8 +21,10 @@ function Login () {
     .getRedirectResult()
     .then(result => result.user.getIdTokenResult(true))
     .then(idTokenResult => {
-      console.log(idTokenResult.claims.firebase.sign_in_attributes)
+      const expTime = idTokenResult.expirationTime
       localStorage.setItem('idToken', idTokenResult.token)
+      localStorage.setItem('expireTime', moment(expTime))
+      updateLoginStatus(true, /* sets expiration alert timer */ 30 * 1000)
       navigate('/auth')
     })
     .catch(error => console.log(error))

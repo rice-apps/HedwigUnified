@@ -12,7 +12,7 @@ import {
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
 import { gql, useQuery, useMutation } from '@apollo/client'
-import { userProfile } from '../../../../apollo'
+
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 
 const FIND_ORDERS = gql`
@@ -30,20 +30,20 @@ const FIND_ORDERS = gql`
         items {
           name
           quantity
-          variation_name
+          variationName
           modifiers {
             name
-            base_price_money {
+            basePriceMoney {
               amount
             }
-            total_price_money {
+            totalPriceMoney {
               amount
             }
           }
-          total_money {
+          totalMoney {
             amount
           }
-          total_tax {
+          totalTax {
             amount
           }
         }
@@ -99,20 +99,20 @@ const ORDER_CREATED = gql`
       items {
         name
         quantity
-        variation_name
+        variationName
         modifiers {
           name
-          base_price_money {
+          basePriceMoney {
             amount
           }
-          total_price_money {
+          totalPriceMoney {
             amount
           }
         }
-        total_money {
+        totalMoney {
           amount
         }
-        total_tax {
+        totalTax {
           amount
         }
       }
@@ -150,20 +150,20 @@ const ORDER_UPDATED = gql`
       items {
         name
         quantity
-        variation_name
+        variationName
         modifiers {
           name
-          base_price_money {
+          basePriceMoney {
             amount
           }
-          total_price_money {
+          totalPriceMoney {
             amount
           }
         }
-        total_money {
+        totalMoney {
           amount
         }
-        total_tax {
+        totalTax {
           amount
         }
       }
@@ -187,11 +187,9 @@ const ORDER_UPDATED = gql`
   }
 `
 
-
-
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
-  const userData = userProfile()
+ 
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
@@ -281,7 +279,7 @@ function OrderDashboard () {
   const acceptedOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'RESERVED'
   )
-  console.log("ACCEPTED", acceptedOrders)
+  console.log('ACCEPTED', acceptedOrders)
   const readyOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PREPARED'
   )
@@ -296,9 +294,9 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
-            id={order.id}
-            studentId={order.studentId}
-            cohenId={order.cohenId}
+              id={order.id}
+              studentId={order.studentId}
+              cohenId={order.cohenId}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -319,7 +317,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
-            id={order.id}
+              id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -339,7 +337,7 @@ function OrderDashboard () {
         {allOrders &&
           readyOrders.map(order => (
             <OrderCard
-            id={order.id}
+              id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}

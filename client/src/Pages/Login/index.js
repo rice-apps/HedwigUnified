@@ -1,5 +1,10 @@
-import logo from './logo.svg'
-import { MainDiv, Logo, Title, SubTitle, LoginButton } from './Login.styles'
+import { useState } from 'react'
+import { useQuery, gql } from '@apollo/client'
+
+import logo from './HedwigLogoFinal_02.svg'
+import { SERVICE_URL } from '../../config'
+import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
+
 // import './Transitions.css';
 import { useNavigate } from 'react-router-dom'
 
@@ -10,7 +15,6 @@ function Login () {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const navigate = useNavigate()
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
-
   /* Lets user sign in in a pop-up tab, get the user's info then generates a token. */
   const signInSAML = () => {
     firebase.auth().signInWithRedirect(provider)
@@ -28,10 +32,11 @@ function Login () {
 
   return (
     <MainDiv>
-      <Logo src={logo} />
-      <Title>HEDWIG</Title>
-      <SubTitle>brought to you by riceapps</SubTitle>
-      <LoginButton onClick={signInSAML}>Login with NetID</LoginButton>
+      <ElemDiv>
+        <Logo src={logo} />
+        <Title>hedwig</Title>
+        <LoginButton onClick={signInSAML}>Login with NetID</LoginButton>
+      </ElemDiv>
     </MainDiv>
   )
 }

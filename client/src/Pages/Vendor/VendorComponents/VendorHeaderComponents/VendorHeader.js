@@ -96,10 +96,8 @@ function VendorHeader () {
   if (loading) return <p>Waiting...</p>
   if (!data) return <p> work pls </p>
 
-
   const { user } = data
-  
-  // const userData = userProfile();
+
   // console.log("DATA", userData);
 
   function toggleLogoutScreen () {

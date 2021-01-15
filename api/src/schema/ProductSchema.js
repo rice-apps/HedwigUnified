@@ -31,29 +31,39 @@ ItemTC.addResolver({
         object => object.type === 'MODIFIER_LIST'
       )
       const items = objects.filter(object => object.type === 'ITEM')
-
+    
       // Define functions for getting category and modifier list data from id
       const categoryId2Name = id =>
         categories.find(category => category.id === id).categoryData.name
       const modifierListId2Data = id =>
         modifierLists.find(modifierList => modifierList.id === id)
-
       // Get fields for GraphQL response
-      return items.map(item => {
+      return items.map(async item => {
         const {
           id: itemId,
+          imageId,
           itemData: {
             name: baseItemName,
             description: baseItemDescription,
             variations,
             modifierListInfo,
-            categoryId
+            categoryId,
           },
           customAttributeValues: {
             is_available: { booleanValue: isAvailable }
           }
         } = item
 
+        console.log(baseItemName, imageId);
+
+        let imageData;
+        try{
+          const response = await catalogApi.retrieveCatalogObject(imageId);
+          imageData = response.result.object.imageData.url;
+        } catch(error){
+          console.log("Image not found");
+        }
+      
         const categoryName = categoryId2Name(categoryId)
 
         const returnedVariants = variations.map(variant => {
@@ -128,6 +138,7 @@ ItemTC.addResolver({
 
         return {
           dataSourceId: itemId,
+          image: imageData,
           category: categoryName,
           variants: returnedVariants,
           modifierLists: returnedModifierLists,
@@ -170,6 +181,7 @@ ItemTC.addResolver({
         } = await catalogApi.retrieveCatalogObject(dataSourceId)
 
         const {
+          imageId,
           itemData: {
             name: baseItemName,
             description: baseItemDescription,
@@ -180,6 +192,17 @@ ItemTC.addResolver({
             is_available: { booleanValue: isAvailable }
           }
         } = object
+
+
+        let imageData;
+        try{
+          const response = await catalogApi.retrieveCatalogObject(imageId);
+          imageData = response.result.object.imageData.url;
+        } catch(error){
+          console.log("Image not found");
+        }
+
+        console.log(imageData);
 
         const returnedVariants = variations.map(variant => {
           const {
@@ -275,6 +298,7 @@ ItemTC.addResolver({
           modifierLists: returnedModifierLists || [],
           // From interface
           dataSource,
+          image: imageData,
           name: baseItemName,
           description: baseItemDescription,
           merchant: '',

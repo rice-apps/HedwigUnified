@@ -127,9 +127,8 @@
   align-self: center;
   justify-self: center;
   width: 12vh;
-  height: auto;
-
-  object-fit: scale-down;
+  height: 12vh;
+  object-fit:cover;
   border-radius: 50%;
 }
 .itemname {

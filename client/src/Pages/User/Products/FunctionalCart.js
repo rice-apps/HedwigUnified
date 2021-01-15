@@ -1,5 +1,3 @@
-import './product.css'
-import { cartItems } from '../../../apollo'
 import produce from 'immer'
 
 // HOW TO CALL DISPATCH:
@@ -21,7 +19,7 @@ import produce from 'immer'
 
 function dispatch (action) {
   const { quantity, Id } = action.item
-  const oldCart = cartItems()
+  const oldCart = JSON.parse(localStorage.getItem('cartItems')) || []
 
   const newCart = produce(oldCart, draft => {
     switch (action.type) {
@@ -45,7 +43,7 @@ function dispatch (action) {
     }
   })
 
-  cartItems(newCart)
+  localStorage.setItem('cartItems', JSON.stringify(newCart))
 
   return newCart
 }

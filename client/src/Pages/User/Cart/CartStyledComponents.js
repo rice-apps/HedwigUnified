@@ -110,11 +110,13 @@ export const ShelfItem = styled.div`
       word-break: break-word;
       text-align: left;
       width: 95%;
+      line-height:2.5vh;
     `};
 
   ${props =>
     props.options &&
     css`
+    padding-top:4px;
       font-size: 1.8vh;
       opacity: 0.7;
       letter-spacing: 0.8px;

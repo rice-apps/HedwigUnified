@@ -195,7 +195,8 @@ function Product () {
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>
-          <p>{product.description}</p>
+          <p>{product.description} <br></br> <text className='asterisk'> * required </text> </p>
+          
         </div>
         <div className='variantsContainer'>
           <VariantSelection variants={product.variants} />

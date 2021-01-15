@@ -6,13 +6,15 @@ function ModifierSelection ({ modifierCategory }) {
     question,
     description,
     selectionType,
-    name
+    name,
+    minModifiers,
+    maxModifiers
   } = modifierCategory
   return (
     <div className='modifier'>
       <div className='heading'>
         {description ? <p>{description}</p> : null}
-        <h1>{name}</h1>
+        <h1>{name} {minModifiers && (<span className='asterisk'> * </span>)} </h1>
       </div>
       <div className='options'>
         {options.map(option => (

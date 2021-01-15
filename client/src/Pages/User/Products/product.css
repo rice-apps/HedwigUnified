@@ -68,6 +68,10 @@ input[type='checkbox'] {
   margin-right: 24px;
 }
 
+.asterisk {
+  color: #f3725b;
+}
+
 .heading > h1,
 h2 {
   font-size: 17px;

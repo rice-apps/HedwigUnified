@@ -1,131 +1,103 @@
 import styled from 'styled-components'
 
+/** MainDiv is used both in VendorCheck and Login. It puts all blocks at the center of the screen. 
+ *  Need to override font for element inside of MainDiv!
+ */
 const MainDiv = styled.div`
+@font-face {
+  font-family: 'Omnes';
+  src: local('Omnes'), url(../../fonts/Omnes-Font/Omnes/Omnes.ttf);
+}
   height: 100vh;
   width: 100vw;
-  display: grid;
-  grid-template-rows: 25% 15% 30% 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  
+  background-color: white;
+`
+
+const ElemDiv = styled.div`
+  display: flex;
+  flex-direction: column;
   text-align: center;
   align-items: center;
   justify-items: center;
-  background-color: #f49f86;
-  max-width: 100%;
-  font-family: 'Raleway', sans-serif;
+  max-height: 70%;
 `
 
 const Logo = styled.img`
-  grid-row: 3/4;
-  max-height: 100%;
-  width: 80%;
+  width: 10rem;
 `
 
 const HedwigLogo = styled.img`
-  max-height: 40%;
-  max-width: 40%;
+  max-height: 20%;
+  max-width: 20%;
 `
 const Title = styled.h1`
-  color: white;
-  grid-row: 1/2;
-  font-size: 60pt;
-`
-const SubTitle = styled.div`
-  color: white;
-  grid-row: 2/3;
-  align-self: start;
+  color: #F3725B;
+  font-size: 3.3rem;
+  margin: 0.1rem;
+  font-family:  Omnes;
+  font-style: normal;
+  font-weight: 500;
 `
 const LoginButton = styled.button`
-  grid-row: 4/5;
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima Nova'), url(../../fonts/FontsFree-Net-proxima_nova_reg-webfont.ttf);
+}
   border-radius: 25pt;
-  height: 37pt;
-  width: 169pt;
+  height: 2.2rem;
+  width: 8.5rem;
   border: none;
-  font-size: 17pt;
+  font-size: 0.8rem;
+  background-color:#F3725B;
+  color: white;
+  font-family: Proxima Nova;
   font-weight: bold;
-  color: #f49f86;
   :hover {
     text-decoration: underline;
-    box-shadow: 2px 8px 5px -5px #9d7a96;
+  }
+  :focus{
+    outline: none;
   }
 `
 
 const BackgroundCover = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: grid;
-  background-color: #f49f86;
-  max-width: 100%;
-  font-family: 'Raleway', sans-serif;
-
-  // for the internal components of this div
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-aspect-ratio: 848/712) {
-    width: 100vw;
-    height: 89vh;
-    top: 11vh;
-    left: 25vw;
-    // background-color: #ffffff;
+  color:#F3725B;
+  backgound-color: white;
   }
+  font-family: 'Proxima Nova';
 `
 
 const ButtonPane = styled.div`
-  background-color: #f49f86;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-`
-
-const VendorButton = styled.button`
-  grid-row: 4/5;
-  border-radius: 25pt;
-  height: 40vh;
-  width: 40%;
-  border: none;
-  font-size: 14pt;
-  font-weight: bold;
-  border: 3px solid blue;
-  background-color: white;
-  cursor: pointer;
-  color: #f49f86;
-  :hover {
-    text-decoration: underline;
-    box-shadow: 2px 8px 5px -5px #9d7a96;
-  }
-`
-
-const ClientButton = styled.button`
-  grid-row: 4/5;
-  border-radius: 25pt;
-  height: 40vh;
-  width: 40%;
-  border: none;
-  font-size: 14pt;
-
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
-
-  font-weight: bold;
-  color: #f49f86;
-  border: 3px solid orange;
-  background-color: white;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-    box-shadow: 2px 8px 5px -5px #9d7a96;
-  }
+  align-items: space-evenly;
 `
+
+const CheckButton = styled.button`
+  border-radius: 20px;
+  border: 2.8px solid #F3725B;
+  cursor: pointer;
+  background-color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 1rem;
+  width: 10rem;
+  margin: 0.5rem;
+  outline: none;
+`
+
 
 const ExitButton = styled.button`
   position: relative;
   background-color: white;
   bottom: 5pt;
-  border: 1px solid red;
+  border: 1px solid #F3725B;
   font-weight: bold;
 
   text-align: center;
@@ -137,25 +109,23 @@ const ExitButton = styled.button`
   }
 `
 
-const LoginQuestion = styled.p`
+const LoginQuestion = styled.div`
   position: relative;
   font-weight: bold;
-  color: white;
-  font-size: 25pt;
+  font-size: 2rem;
   text-align: center;
-  padding: 1em;
+  padding: 0.3rem;
 `
 
 export {
   MainDiv,
+  ElemDiv,
   Logo,
   Title,
-  SubTitle,
   LoginButton,
   BackgroundCover,
   ButtonPane,
-  VendorButton,
-  ClientButton,
+  CheckButton,
   ExitButton,
   LoginQuestion,
   HedwigLogo

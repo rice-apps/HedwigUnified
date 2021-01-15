@@ -98,7 +98,6 @@ function VendorHeader () {
 
   const { user } = data
 
-  // const userData = userProfile();
   // console.log("DATA", userData);
 
   function toggleLogoutScreen () {

@@ -10,17 +10,18 @@ height: 100%;
   position: fixed;
   left: 0px;
   top: 0px;
+  overflow:auto;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
 }
 .checkSvg {
   display: block;
 
-  margin-top: 8vh;
+  margin-top: 6vh;
   margin-left: auto;
   margin-right: auto;
-  height: auto;
-  width: 200px;
+  height: 20vh;
+  width: 20vh;
 }
 
 .orderConfirmed {

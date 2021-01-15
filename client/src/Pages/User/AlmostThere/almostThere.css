@@ -10,15 +10,16 @@ height: 100%;
   position: fixed;
   left: 0px;
   top: 0px;
+  overflow:auto;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
 }
 .checkSvg {
   display: block;
 
-  margin-top: 8vh;
+  margin-top: 5vh;
   margin-left: auto;
   margin-right: auto;
-  height: auto;
-  width: 200px;
+  height: 25vh;
+  width: 25vh;
 }

@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client'
-import { orderSummary, userProfile } from '../../../apollo'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -7,6 +6,7 @@ export const GET_VENDOR = gql`
   query GET_VENDOR($filter: FilterFindOneVendorsInput!) {
     getVendor(filter: $filter) {
       name
+      pickupInstruction
       hours {
         start
         end
@@ -112,7 +112,7 @@ export const UPDATE_ORDER_TRACKER = gql`
 `
 
 const getRecipient = () => {
-  const user = userProfile()
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   return {
     name: user.name,
     phone: user.phone
@@ -141,16 +141,16 @@ const getLineItems = items => {
 
 export const createRecord = (items, paymentType, cohenId) => {
   const recipient = getRecipient()
-  const user = userProfile()
-  console.log(orderSummary())
+  const user = JSON.parse(localStorage.getItem('userProfile'))
+  const order = JSON.parse(localStorage.getItem('order'))
   return {
     studentId: user.studentId,
     key: uuidv4(),
     lineItems: getLineItems(items),
     name: recipient.name,
     phone: recipient.phone,
-    time: orderSummary().time ? moment(orderSummary().time).format() : null,
-    location: orderSummary().vendor.locationIds[0],
+    time: order.time ? moment(order.time).format() : null,
+    location: order.vendor.locationIds[0],
     type: paymentType,
     cohenId: cohenId
   }
@@ -166,17 +166,19 @@ export const checkNullFields = source => {
     'pickup time'
   ]
   let field
-  console.log(source)
   for (field in fields) {
     if (!source.variables[fields[field]]) {
       console.log(detailedInfo[field])
       return detailedInfo[field]
     }
   }
-  console.log(source.variables.cohenId)
   if (source.variables.type === 'COHEN' && !source.variables.cohenId) {
     console.log('no cohen id')
     return 'cohen id'
   }
   return null
+}
+
+export const resetOrderSummary = () => {
+  localStorage.setItem('order', JSON.stringify({ vendor: {}, time: null, fulfillment: {} }))
 }

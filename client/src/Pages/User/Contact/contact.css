@@ -1,24 +1,41 @@
-#header-container {
+#main-div{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F3725B;
+  font-family: 'Proxima Nova';
+}
+
+#elem-div{
+  margin: 1.7rem;
+}
+
+#instruction{
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1rem;
+  color: #333333;
+}
+
+.greetings{
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 2.5rem;
 }
 
 #greeting-container {
-  text-align: center;
-  font-size: larger;
+  text-align: left;
+  margin-bottom: 1.5rem;
 }
 
-#text-containeer {
-  margin: 20%;
-}
-
-.texts {
-  text-align: center;
-  font-family: 'Raleway';
-  color: rgb(205, 104, 75);
-}
 
 .tel-container {
-  margin: auto;
-  width: 30%;
+  margin-top: 1.2rem;
+  width: 100%;
+
 }
 
 #tel {
@@ -27,21 +44,27 @@
 
 .center-header {
   font-size: 400%;
-  color: rgb(205, 104, 75);
+  color: #F3725B;;
   padding: 5%;
 }
 
 .confirm-btn {
+  border: none;
   font-family: 'Raleway';
-  color: rgb(205, 104, 75);
-  border-color: rgb(205, 104, 75);
-  border: solid;
-  border-width: 1px;
-  border-radius: 15px;
-  font-size: 150%;
-  text-align: center;
-  margin: auto;
-  margin-top: 60px;
-  padding: 10px 25px;
-  width: 25%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  background-color:#F3725B;;
+  border-radius: 20px;
+  width: 8.4rem;
+  height: 2.2rem;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#btn-container{
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
 }

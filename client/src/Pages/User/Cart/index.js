@@ -7,30 +7,36 @@ import {
   CREATE_PAYMENT,
   GET_VENDOR
 } from './util'
-import './cart.css'
 import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
-import { cartItems, orderSummary } from '../../../apollo'
 import Select from 'react-select'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
-
+import {
+  FloatCartWrapper,
+  SpaceWrapper,
+  Title,
+  Bill,
+  SubmitButton
+} from './CartStyledComponents'
 // new dropdown imports:
 import Modal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 
 const styles = {
-  fontSize: 14,
   color: 'blue'
 }
-
 const Div = styled.div`
   text-align: right;
-  margin-right: 2vh;
+  line-height: 15px;
+  font-size: 13px;
+  margin-right: 5vw;
+  grid-column-start: 2;
+  padding-bottom: 10px;
 `
 
 const OptionWrapper = styled.div`
@@ -196,11 +202,13 @@ function CartDetail () {
   ] = useMutation(CREATE_PAYMENT)
 
   const navigate = useNavigate()
-  const cart_menu = cartItems()
+  // add catch statement
+  const cart_menu =  localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : null
+  const order = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('order')) : null
 
-  const product_ids = cart_menu.map(item => {
+  const product_ids = cart_menu ? cart_menu.map(item => {
     return item.dataSourceId
-  })
+  }) : null
 
   const {
     loading: avail_loading,
@@ -217,6 +225,7 @@ function CartDetail () {
   }
 
   const handleConfirmClick = async () => {
+    console.log("HI")
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
@@ -234,7 +243,6 @@ function CartDetail () {
       const rec = {
         variables: createRecord(cart_menu, paymentMethod, cohenId)
       }
-      const order = orderSummary()
       const emptyField = checkNullFields(rec)
       if (checkNullFields(rec)) {
         setNullError(emptyField)
@@ -251,9 +259,10 @@ function CartDetail () {
           currency: 'USD'
         }
       })
-      orderSummary(
-        Object.assign(orderSummary(), {
+      localStorage.setItem('order', 
+        JSON.stringify(Object.assign(order, {
           orderId: orderJson.id,
+          pickupInstruction: data.getVendor.pickupInstruction,
           fulfillment: {
             uid: orderJson.fulfillment.uid,
             state: orderJson.fulfillment.state,
@@ -261,7 +270,7 @@ function CartDetail () {
             placedAt: orderJson.fulfillment.pickupDetails.placedAt
           },
           url: createPaymentResponse.data.createPayment.url
-        })
+        }))
       )
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -279,25 +288,27 @@ function CartDetail () {
   }
 
   const updateTotal = () => {
-    const newSubtotal = cart_menu.reduce(
+    const newSubtotal = cart_menu ? cart_menu.reduce(
       (total, current) => total + current.price * current.quantity,
       0
-    )
-    setTotals({
-      subtotal: newSubtotal,
-      tax: newSubtotal * 0.0825
-    })
+    ): 0
+    if (newSubtotal != totals.subtotal) {
+      setTotals({
+        subtotal: newSubtotal,
+        tax: newSubtotal * 0.0825
+      })
+    }
   }
 
   const getTotal = () => {
     const total = cart_menu.reduce((total, current) => {
-      return total + current.quantity
+      return total + current.price * current.quantity
     }, 0)
-    return parseInt(total)
+    return total
   }
 
   useEffect(() => {
-    updateTotal()
+      updateTotal()
   }, [cart_menu])
 
   //	This is to make the page re-render so that updated state is shown when item
@@ -405,112 +416,98 @@ function CartDetail () {
 
   function changePickupTime (newTime) {
     setPickupTime(newTime.value)
-    orderSummary(Object.assign(orderSummary(), { time: newTime.value }))
+    localStorage.setItem('order', JSON.stringify(Object.assign(order, { time: newTime.value })))
   }
-
+ console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
+
     <div>
       <CartHeader showBackButton backLink='/eat' />
-      <div className={'float-cart'}>
-        <div className='float-cart__content'>
-          <div className='float-cart__shelf-container'>
-            <p className='cart-title' style={{ marginTop: '25px' }}>
-              Order Summary:
-            </p>
-            {cartItems().map(item => {
+      <FloatCartWrapper>
+        <SpaceWrapper orderSummary>
+          <Title>Order Summary:</Title>
+          <div>
+            {cart_menu ? cart_menu.map(item => {
               return (
-                <Fragment>
-                  <CartProduct
-                    product={item}
-                    forceUpdate={setDummyDelete}
-                    updateTotal={updateTotal}
-                  />
-                  <hr className='breakline' style={{ opacity: '0.3' }} />
-                </Fragment>
+                <CartProduct
+                  product={item}
+                  forceUpdate={setDummyDelete}
+                  updateTotal={updateTotal}
+                />
               )
-            })}
+            }): "Your cart is empty!"}
           </div>
-
-          <div className='float-bill'>
+          <Bill wrapper>
             {Object.keys(totals).map(type => {
               if (totals[type]) {
                 const formatted = currency(totals[type]).format()
+                console.log(type + 'Title', formatted)
                 return (
-                  <div className='subtotal-container'>
-                    <p className='subheader'>{type}</p>
-                    <p>{formatted}</p>
-                  </div>
+                  <Bill subwrapper>
+                    <Bill subtitle gridArea={type + 'Title'}>
+                      {type}:
+                    </Bill>
+                    <Bill subtitle price gridArea={type + 'Number'}>
+                      {formatted}
+                    </Bill>
+                  </Bill>
                 )
               }
             })}
-            <div className='total-container'>
-              <hr
-                className='breakline'
-                style={{ margin: '-5px 0px 10px 5px' }}
-              />
-              <div className='total' style={{ marginBottom: '9vh' }}>
-                <p className='total__header'>Total</p>
-                <p style={{ marginTop: '1px' }}>
-                  {currency(totals.subtotal + totals.tax).format()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <hr
-            className='breakline'
-            style={{ marginTop: '-40px', opacity: '0.3' }}
-          />
-          <OptionWrapper>
-            <div className='float-cart__dropdown-title'> Pickup Time:</div>
-            <Select
-              options={pickupTimes}
-              placeholder={'Select...'}
-              onChange={changePickupTime}
-              clearable={false}
-              style={styles.select}
-              className='float-cart__dropdown'
-            />
-          </OptionWrapper>
-
-          <hr className='breakline' style={{ opacity: '0.3' }} />
-
-          <OptionWrapper>
-            <div className='float-cart__dropdown-title'>Payment Method:</div>
-            <Select
-              options={options}
-              onChange={changePaymentType}
-              placeholder={'Select...'}
-              clearable={false}
-              style={styles.select}
-              className='float-cart__dropdown'
-            />
-            {paymentMethod === 'COHEN' && (
-              <Div>
-                <label>Enter your Cohen House membership id: </label>
-                <input onChange={e => setCohenId(e.target.value)}></input>
-              </Div>
-            )}
-            {nullError && (
-              <p css={{ alignSelf: 'center', color: 'red' }}>
+            <Bill totalWrapper>
+              <Bill title gridArea='totalTitle'>
+                Total:
+              </Bill>
+              <Bill price title gridrea='totalNumber'>
                 {' '}
-                Error! Submission form contains null value for {nullError}.
-                Please complete your profile and order.{' '}
-              </p>
-            )}
-          </OptionWrapper>
-          <div className='float-cart__footer'>
-            <button
-              disabled={cartItems().length === 0}
-              className='buy-btn'
-              title='Confirm'
-              onClick={handleConfirmClick}
-            >
-              Submit Order
-            </button>
-          </div>
-        </div>
-      </div>
+                {currency(totals.subtotal + totals.tax).format()}
+              </Bill>
+            </Bill>
+          </Bill>
+        </SpaceWrapper>
+        <SpaceWrapper pickUpTime>
+          <Title>Pick Up Time:</Title>
+          <Select
+            options={pickupTimes}
+            placeholder={'Select...'}
+            onChange={changePickupTime}
+            clearable={false}
+            style={styles.select}
+            className='float-cart__dropdown'
+          />
+        </SpaceWrapper>
+        <SpaceWrapper paymentMethod>
+          <Title>Payment Method:</Title>
+          <Select
+            options={options}
+            onChange={changePaymentType}
+            placeholder={'Select...'}
+            clearable={false}
+            style={styles.select}
+            className='float-cart__dropdown'
+          />
+          {paymentMethod === 'COHEN' && (
+            <Div>
+              <label>Enter your Cohen House Membership ID: </label>
+              <input onChange={e => setCohenId(e.target.value)}></input>
+            </Div>
+          )}
+          {nullError && (
+            <Div css={{ alignSelf: 'center', color: 'red' }}>
+              {' '}
+              Error! Submission form contains null value for {nullError}. Please
+              complete your profile and order.{' '}
+            </Div>
+          )}
+        </SpaceWrapper>
+        <SpaceWrapper footer>
+          <SubmitButton
+            onClick={ cart_menu.length === 0 ? null : handleConfirmClick}
+          >
+            Submit Order
+          </SubmitButton>
+        </SpaceWrapper>
+      </FloatCartWrapper>
     </div>
   )
 }

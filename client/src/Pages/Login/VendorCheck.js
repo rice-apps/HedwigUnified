@@ -1,13 +1,11 @@
 import hedwigLogo from './HedwigLogoFinal.svg'
 import { gql, useQuery } from '@apollo/client'
-import { userProfile } from '../../apollo'
 import {
   BackgroundCover,
   ButtonPane,
-  VendorButton,
-  ClientButton,
+  CheckButton,
   LoginQuestion,
-  HedwigLogo
+  MainDiv
 } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,7 +21,7 @@ const GET_VENDOR = gql`
 
 const VendorSelect = () => {
   const navigate = useNavigate()
-  const userData = userProfile()
+  const userData = JSON.parse(localStorage.getItem('userProfile'))
 
   const {
     data: vendorData,
@@ -35,11 +33,15 @@ const VendorSelect = () => {
   if (vendorError) return <p>User broken</p>
 
   const allowedUsers = vendorData.getVendor.allowedNetid
-  console.log(allowedUsers)
 
   // have to modify this with /contact
   if (!allowedUsers.includes(userData.netid)) {
-    navigate('/eat')
+    var pattern=/^[0-9]{10}$/;
+    if(pattern.test(userData.phone)){
+      navigate('/eat');
+    }else{
+      navigate('/contact');
+    }
   }
 
   const clientLogin = () => {
@@ -51,17 +53,15 @@ const VendorSelect = () => {
   }
 
   return (
+    <MainDiv>
     <BackgroundCover>
-      {/* <ExitButton onClick = {closeModal}>Close</ExitButton> */}
-      <LoginQuestion>How do you want to access Hedwig?</LoginQuestion>
+      <LoginQuestion>Sign in:</LoginQuestion>
       <ButtonPane>
-        <VendorButton onClick={vendorLogin}>Login as Vendor</VendorButton>
-        <ClientButton onClick={clientLogin}>
-          Login as Client
-          <HedwigLogo src={hedwigLogo} />
-        </ClientButton>
+        <CheckButton onClick={vendorLogin}>Vendor</CheckButton>
+        <CheckButton onClick={clientLogin}>Customer</CheckButton>
       </ButtonPane>
     </BackgroundCover>
+    </MainDiv>
   )
 }
 

@@ -45,6 +45,8 @@ function Product () {
 
   const [quantity, setQuantity] = useState(1)
 
+  const [requiredFilled, setRequiredFilled] = useState(true)
+
   if (vendor_loading) {
     return <p>Loading...</p>
   }
@@ -69,9 +71,6 @@ function Product () {
   const decrease = () => {
     setQuantity(quantity - 1)
   }
-
-  let validVariants = true
-  let validModifiers = true
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
@@ -99,6 +98,7 @@ function Product () {
     let variant
 
     if (document.querySelector('.variantSelect:checked') == null) {
+      setRequiredFilled(false)
       return false
     }
     variant = JSON.parse(document.querySelector('.variantSelect:checked').value)
@@ -112,26 +112,20 @@ function Product () {
     // purpose of subList: to make modifierList match the structure of prodList
     const modList = []
     const prodList = product.modifierLists
-    console.log('prodList:', prodList)
-    console.log('modifierLists:', modifierLists)
     let i = 0, j = 0, subList = []
     
     // loops through product modifierLists once
     // traverses selected modifiers once at a separate pace
     while (i < prodList.length) {
-      console.log('i:', i)
-      console.log('j:', j)
       // case where subList would be pushed to modList
       if (j >= modifierLists.length || prodList[i].dataSourceId !== JSON.parse(modifierLists[j].value).option.parentListId) {
         modList.push(subList)
-        console.log('adding to modList', modList)
         subList = []
         i++
       }
       // case where subList would continue being built
       else {
         subList.push(JSON.parse(modifierLists[j].value).option)
-        console.log('adding to subList', subList)
         j++
       }
     }
@@ -150,40 +144,31 @@ function Product () {
     const itemQuantity = { quantity }.quantity
     const totalPrice = (modifierCost + variantCost) * 0.01
     
-    console.log('product', product)
-
-    {product.modifierLists.forEach(modifierList => {
-      console.log('max mods', modifierList.maxModifiers)
-    })}
-
-    console.log('variantObject', variantObject)
-    console.log('mod list', modList)
 
     // update modifiers validity flag, ignores check if min/max modifiers is null
     for (let i = 0; i < prodList.length; i++) {
       if ((prodList[i].minModifiers != null && modList[i].length < prodList[i].minModifiers) ||
       (prodList[i].maxModifiers != null && modList[i].length > prodList[i].maxModifiers)) {
+        setRequiredFilled(false)
         return false
       }
     }
 
     // apply checks
-    if (validVariants && validModifiers) {
-      dispatch({
-        type: 'ADD_ITEM',
-        item: {
-          name: itemName,
-          Id: Date.now(),
-          variant: variantObject,
-          modifierLists: modList,
-          quantity: itemQuantity,
-          price: totalPrice,
-          modDisplay: modifierNames,
-          dataSourceId: itemDataSourceId
-        }
-      })
-    }
-    console.log(itemName, variantObject)
+    dispatch({
+      type: 'ADD_ITEM',
+      item: {
+        name: itemName,
+        Id: Date.now(),
+        variant: variantObject,
+        modifierLists: modList,
+        quantity: itemQuantity,
+        price: totalPrice,
+        modDisplay: modifierNames,
+        dataSourceId: itemDataSourceId
+      }
+    })
+    setRequiredFilled(true)
     return true
   }
 
@@ -195,7 +180,7 @@ function Product () {
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>
-          <p>{product.description} <br></br> <text className='asterisk'> * required </text> </p>
+          <p>{product.description} <br></br> <text className='asterisk'> (* required) </text> </p>
           
         </div>
         <div className='variantsContainer'>
@@ -219,6 +204,11 @@ function Product () {
             decrease={decrease}
           />
         </div>
+        {!requiredFilled && (
+          <div className='warningContainer'>
+            Missing required selections!
+          </div>
+        )}
         <div className='submitContainer'>
           <button
             className='submitButton'
@@ -227,7 +217,6 @@ function Product () {
               if (makeCartItem()) {
                 navigate('/eat/cohen/cart')
               }
-              console.log(cartItems())
             }}
           >
             Add

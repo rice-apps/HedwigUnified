@@ -54,6 +54,18 @@ input[type='checkbox'] {
   background-color: #faf8f8;
 }
 
+.warningContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #faf8f8;
+  text-align: center;
+  color: #f3725b;
+  font-size: 20px;
+  margin-top: -20px;
+  padding-bottom: 10px;
+}
+
 .variant,
 .modifier {
   display: flex;

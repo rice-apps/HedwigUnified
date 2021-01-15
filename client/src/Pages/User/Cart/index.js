@@ -502,7 +502,7 @@ function CartDetail () {
         </SpaceWrapper>
         <SpaceWrapper footer>
           <SubmitButton
-            onClick={ cart_menu.length === 0 ? null : handleConfirmClick}
+            onClick={ cart_menu?.length === 0 ? null : handleConfirmClick}
           >
             Submit Order
           </SubmitButton>

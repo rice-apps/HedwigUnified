@@ -62,15 +62,16 @@ export const P = styled.p`
   ${props =>
     props.pickup &&
     css`
-      margin: 0.2vh 3vw;
-      font-size: 2.1vh;
+      margin: 0.2vh 3.8vw;
+      font-size: 2.4vh;
+      line-height:2.7vh;
       position: relative;
       top: 15px;
       font-family: 'Avenir Book', 'Arial Book', sans-serif;
     `};
  ${props => props.time && css`
- font-size:2.3vh;
- margin: 0.9vh;
+ font-size:2.4vh;
+ margin: 1vh 0vh;
 
  `}
   ${props =>
@@ -107,7 +108,7 @@ export const Div = styled.div`
       height: ${props => props.almostthere ? "25vh" : "35vh"};
       width: 290px;
       overflow:auto;
-      margin: 2vh auto;
+      margin: 3vh auto;
       box-shadow: 0px 3px 6px 0px #aaaaaa;
     `};
 `

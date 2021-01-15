@@ -181,6 +181,7 @@ ItemTC.addResolver({
         } = await catalogApi.retrieveCatalogObject(dataSourceId)
 
         const {
+          imageId,
           itemData: {
             name: baseItemName,
             description: baseItemDescription,
@@ -191,6 +192,17 @@ ItemTC.addResolver({
             is_available: { booleanValue: isAvailable }
           }
         } = object
+
+
+        let imageData;
+        try{
+          const response = await catalogApi.retrieveCatalogObject(imageId);
+          imageData = response.result.object.imageData.url;
+        } catch(error){
+          console.log("Image not found");
+        }
+
+        console.log(imageData);
 
         const returnedVariants = variations.map(variant => {
           const {
@@ -286,6 +298,7 @@ ItemTC.addResolver({
           modifierLists: returnedModifierLists || [],
           // From interface
           dataSource,
+          image: imageData,
           name: baseItemName,
           description: baseItemDescription,
           merchant: '',

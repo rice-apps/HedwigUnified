@@ -28,7 +28,7 @@ export const Button = styled.div`
   ${props =>
     props.home &&
     css`
-      position: absolute;
+      position: fixed;
       margin-left: auto;
       margin-right: auto;
       left: 0;

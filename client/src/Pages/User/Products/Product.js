@@ -42,6 +42,7 @@ function Product () {
 
   const [quantity, setQuantity] = useState(1)
 
+  console.log(productId)
   if (vendor_loading) {
     return <p>Loading...</p>
   }
@@ -138,7 +139,7 @@ function Product () {
     <div>
       <BuyerHeader />
       <div className='container'>
-        <img className='heroImage' src={product.image ? product.image : "https://www.nippon.com/en/ncommon/contents/japan-data/169591/169591.jpg"} alt={product.name} />
+        <img className='heroImage' src={product.image} alt={product.name} />
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>

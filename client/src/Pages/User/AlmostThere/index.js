@@ -62,9 +62,9 @@ export const P = styled.p`
   ${props =>
     props.pickup &&
     css`
-      margin: 0.2vh 3.8vw;
-      font-size: 2.4vh;
-      line-height:2.7vh;
+      margin: 0.2vh 4vh;
+      font-size: 2.3vh;
+      line-height:2.8vh;
       position: relative;
       top: 15px;
       font-family: 'Avenir Book', 'Arial Book', sans-serif;

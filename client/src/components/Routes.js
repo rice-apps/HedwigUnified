@@ -26,6 +26,7 @@ import ModifiersMenuManagementPage from "../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from "../Pages/Vendor/VendorPages/SetBasicInfoPage.js";
 import SetStoreHoursPage from "../Pages/Vendor/VendorPages/SetStoreHoursPage.js";
 import VendorSelect from "../Pages/Login/VendorCheck";
+import AboutUs from '../Pages/User/AboutUs'
 
 /**
  * Requests to verify the user's token on the backend
@@ -187,6 +188,10 @@ const newRoutesArray = [
   {
     path: "/404_page",
     element: <ErrorPage />,
+  },
+  {
+    path: '/about_us',
+    element: <AboutUs />
   },
   {
     path: "/login",

@@ -420,7 +420,7 @@ function CartDetail () {
   return (
 
     <div>
-      <CartHeader showBackButton backLink='/eat' />
+      <CartHeader showBackButton backLink='/eat' vendorName={order.vendor.name} />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>

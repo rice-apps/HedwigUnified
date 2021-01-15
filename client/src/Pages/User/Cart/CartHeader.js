@@ -40,7 +40,7 @@ const HedwigWrapper = styled.div`
   color: black;
 `
 
-function CartHeader (props) {
+function CartHeader ({vendorName, backLink, showBackButton}) {
   const navigate = useNavigate()
 
   //   const { state } = useLocation();
@@ -63,19 +63,13 @@ function CartHeader (props) {
   //     return <p>ErrorV...</p>;
   //   }
 
-  function getVendorName () {
-    // const { getVendor: vendor } = vendor_data;
-    // return vendor_data.getVendor.name;
-    return 'Cohen House'
-  }
-
   return (
     <HeaderWrapper>
       <RalewayFont />
       <HedwigWrapper>
-        {props.showBackButton ? (
+        {showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() => navigate(props.backLink)}
+            onClick={() => navigate(backLink)}
             style={{
               position: 'fixed',
               left: '22px',
@@ -85,7 +79,7 @@ function CartHeader (props) {
             }}
           />
         ) : null}
-        Checkout: {getVendorName()}
+        Checkout: {vendorName}
       </HedwigWrapper>
     </HeaderWrapper>
   )

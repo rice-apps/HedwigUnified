@@ -28,7 +28,7 @@ function Menu () {
   const [arrowState, setArrowState] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currentVendor } = state
+  const { currentVendor, slug } = state
   const {
     refetch,
     data: catalog_info,
@@ -110,7 +110,8 @@ function Menu () {
     return navigate(`${product.name}`, {
       state: {
         currProduct: `${product.dataSourceId}`,
-        currVendor: currentVendor
+        currVendor: currentVendor,
+        slug: slug,
       }
     })
   }

@@ -422,7 +422,7 @@ function CartDetail () {
   return (
 
     <div>
-      <CartHeader showBackButton backLink='/eat' />
+      <CartHeader showBackButton backLink='/eat/cohen/' />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>
@@ -430,6 +430,7 @@ function CartDetail () {
             {cart_menu ? cart_menu.map(item => {
               return (
                 <CartProduct
+                  key={item}
                   product={item}
                   forceUpdate={setDummyDelete}
                   updateTotal={updateTotal}

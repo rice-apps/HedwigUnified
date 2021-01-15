@@ -159,10 +159,10 @@ function Product () {
     console.log('variantObject', variantObject)
     console.log('mod list', modList)
 
-    // update modifiers validity flag
+    // update modifiers validity flag, ignores check if min/max modifiers is null
     for (let i = 0; i < prodList.length; i++) {
-      if (modList[i].length < prodList[i].minModifiers ||
-          modList[i].length > prodList[i].maxModifiers) {
+      if ((prodList[i].minModifiers != null && modList[i].length < prodList[i].minModifiers) ||
+      (prodList[i].maxModifiers != null && modList[i].length > prodList[i].maxModifiers)) {
         return false
       }
     }

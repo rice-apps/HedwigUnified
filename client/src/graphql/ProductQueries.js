@@ -26,7 +26,6 @@ const GET_ITEM = gql`
       name
       description
       dataSourceId
-      image
       variants {
         price {
           amount

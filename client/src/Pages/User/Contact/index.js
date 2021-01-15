@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import './contact.css'
 
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
+
+import gql from 'graphql-tag.macro'
 
 const ADD_PHONE = gql`
   mutation($name: String!, $phone: String!, $netid: String!) {

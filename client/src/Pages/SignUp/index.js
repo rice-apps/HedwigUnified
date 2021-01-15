@@ -1,7 +1,8 @@
 import * as Yup from 'yup'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { Formik, Form, Field } from 'formik'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const EditProfileDiv = styled.div`
   display: flex;

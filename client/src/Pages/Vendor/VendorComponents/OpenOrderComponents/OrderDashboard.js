@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import {
   OrderDashboardWrapper,
   NewOrderTitleWrapper,
@@ -11,7 +11,8 @@ import {
   MakeDashboardTitle
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 

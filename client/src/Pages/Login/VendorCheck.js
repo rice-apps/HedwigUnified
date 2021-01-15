@@ -1,5 +1,4 @@
-import hedwigLogo from './HedwigLogoFinal.svg'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import {
   BackgroundCover,
   ButtonPane,
@@ -8,6 +7,7 @@ import {
   MainDiv
 } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
+import gql from 'graphql-tag.macro'
 
 const GET_VENDOR = gql`
   query GET_VENDORS($name: String!) {

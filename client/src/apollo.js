@@ -1,11 +1,5 @@
 // Apollo Client Setup
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-  split,
-  gql
-} from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { setContext } from '@apollo/link-context'
 
@@ -13,7 +7,8 @@ import { setContext } from '@apollo/link-context'
 import { WebSocketLink } from '@apollo/link-ws'
 import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
 
-import { makeVar } from '@apollo/client'
+import gql from 'graphql-tag.macro'
+
 import { resetOrderSummary } from './Pages/User/Cart/util'
 
 if (!localStorage.getItem('order')) {

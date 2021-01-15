@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components/macro'
 
 export const FloatCartWrapper = styled.div`
   -webkit-text-size-adjust: 100%;

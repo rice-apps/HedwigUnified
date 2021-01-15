@@ -1,5 +1,6 @@
-import { Fragment, useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { useQuery, useMutation } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 import {
   checkNullFields,
   createRecord,
@@ -7,14 +8,13 @@ import {
   CREATE_PAYMENT,
   GET_VENDOR
 } from './util'
-import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
 import Select from 'react-select'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components/macro'
 import {
   FloatCartWrapper,
   SpaceWrapper,
@@ -23,9 +23,6 @@ import {
   SubmitButton
 } from './CartStyledComponents'
 // new dropdown imports:
-import Modal from 'react-modal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AiOutlineExclamationCircle } from 'react-icons/ai'
 
 const styles = {
   color: 'blue'
@@ -37,16 +34,6 @@ const Div = styled.div`
   margin-right: 5vw;
   grid-column-start: 2;
   padding-bottom: 10px;
-`
-
-const OptionWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 7fr 4fr;
-  grid-template-rows: 1fr;
-  align-items: center;
-  padding: 15px 0px;
-  height: 100%;
-  width: 100%;
 `
 
 const GET_AVAILABILITIES = gql`
@@ -216,11 +203,7 @@ function CartDetail () {
       })
     : null
 
-  const {
-    loading: avail_loading,
-    error: avail_error,
-    refetch: avail_refetch
-  } = useQuery(GET_AVAILABILITIES, {
+  const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids },
     fetchPolicy: 'network-only'
   })
@@ -309,13 +292,6 @@ function CartDetail () {
         tax: newSubtotal * 0.0825
       })
     }
-  }
-
-  const getTotal = () => {
-    const total = cart_menu.reduce((total, current) => {
-      return total + current.price * current.quantity
-    }, 0)
-    return total
   }
 
   useEffect(() => {

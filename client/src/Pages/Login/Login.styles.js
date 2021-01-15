@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 /** MainDiv is used both in VendorCheck and Login. It puts all blocks at the center of the screen.
  *  Need to override font for element inside of MainDiv!

@@ -1,6 +1,6 @@
 // import { Switch, Route, Redirect } from 'react-router'
 import { Route, useRoutes, Navigate } from 'react-router-dom'
-import { gql, useQuery, useApolloClient } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
@@ -27,6 +27,7 @@ import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
 import AboutUs from '../Pages/User/AboutUs'
+import gql from 'graphql-tag.macro'
 
 /**
  * Requests to verify the user's token on the backend

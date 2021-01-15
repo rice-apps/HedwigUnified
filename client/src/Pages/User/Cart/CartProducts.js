@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import dispatch from '../Products/FunctionalCart'
 import './cart.css'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import {
   Title,
   ShelfItemWrapper,

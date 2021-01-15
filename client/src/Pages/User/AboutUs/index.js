@@ -1,5 +1,5 @@
 import react from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import hedwigLogo from './HedwigLogoFinal.svg'
 import BuyerHeader from './../Vendors/BuyerHeader.js'

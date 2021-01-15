@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
 import { CgMathPlus } from 'react-icons/cg'
 import Modal from 'react-modal'
 
 import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
-import { useQuery, gql, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
+
+import gql from 'graphql-tag.macro'
 
 import moment from 'moment'
 

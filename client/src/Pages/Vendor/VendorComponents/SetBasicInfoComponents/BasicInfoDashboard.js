@@ -1,6 +1,7 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components/macro'
 import { useState, useEffect } from 'react'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
+import { useQuery, useMutation, useApolloClient } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const GET_VENDOR_INFO = gql`
   query GET_AVAILABILITY($name: String!) {

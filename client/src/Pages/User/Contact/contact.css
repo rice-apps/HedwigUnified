@@ -1,25 +1,25 @@
-#main-div{
+#main-div {
   height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #F3725B;
+  color: #f3725b;
   font-family: 'Proxima Nova';
 }
 
-#elem-div{
+#elem-div {
   margin: 1.7rem;
 }
 
-#instruction{
+#instruction {
   margin: 0;
   font-size: 0.8rem;
   line-height: 1rem;
   color: #333333;
 }
 
-.greetings{
+.greetings {
   margin: 0;
   font-size: 2rem;
   font-weight: bold;
@@ -31,11 +31,9 @@
   margin-bottom: 1.5rem;
 }
 
-
 .tel-container {
   margin-top: 1.2rem;
   width: 100%;
-
 }
 
 #tel {
@@ -44,7 +42,7 @@
 
 .center-header {
   font-size: 400%;
-  color: #F3725B;;
+  color: #f3725b;
   padding: 5%;
 }
 
@@ -54,16 +52,16 @@
   font-size: 0.8rem;
   font-weight: 600;
   color: white;
-  background-color:#F3725B;;
+  background-color: #f3725b;
   border-radius: 20px;
   width: 8.4rem;
   height: 2.2rem;
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#btn-container{
+#btn-container {
   margin-top: 1.2rem;
   display: flex;
   justify-content: center;

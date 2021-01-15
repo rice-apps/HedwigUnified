@@ -203,12 +203,18 @@ function CartDetail () {
 
   const navigate = useNavigate()
   // add catch statement
-  const cart_menu =  localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : null
-  const order = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('order')) : null
+  const cart_menu = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : null
+  const order = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('order'))
+    : null
 
-  const product_ids = cart_menu ? cart_menu.map(item => {
-    return item.dataSourceId
-  }) : null
+  const product_ids = cart_menu
+    ? cart_menu.map(item => {
+        return item.dataSourceId
+      })
+    : null
 
   const {
     loading: avail_loading,
@@ -225,7 +231,7 @@ function CartDetail () {
   }
 
   const handleConfirmClick = async () => {
-    console.log("HI")
+    console.log('HI')
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
@@ -259,18 +265,21 @@ function CartDetail () {
           currency: 'USD'
         }
       })
-      localStorage.setItem('order', 
-        JSON.stringify(Object.assign(order, {
-          orderId: orderJson.id,
-          pickupInstruction: data.getVendor.pickupInstruction,
-          fulfillment: {
-            uid: orderJson.fulfillment.uid,
-            state: orderJson.fulfillment.state,
-            pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
-            placedAt: orderJson.fulfillment.pickupDetails.placedAt
-          },
-          url: createPaymentResponse.data.createPayment.url
-        }))
+      localStorage.setItem(
+        'order',
+        JSON.stringify(
+          Object.assign(order, {
+            orderId: orderJson.id,
+            pickupInstruction: data.getVendor.pickupInstruction,
+            fulfillment: {
+              uid: orderJson.fulfillment.uid,
+              state: orderJson.fulfillment.state,
+              pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
+              placedAt: orderJson.fulfillment.pickupDetails.placedAt
+            },
+            url: createPaymentResponse.data.createPayment.url
+          })
+        )
       )
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -288,10 +297,12 @@ function CartDetail () {
   }
 
   const updateTotal = () => {
-    const newSubtotal = cart_menu ? cart_menu.reduce(
-      (total, current) => total + current.price * current.quantity,
-      0
-    ): 0
+    const newSubtotal = cart_menu
+      ? cart_menu.reduce(
+          (total, current) => total + current.price * current.quantity,
+          0
+        )
+      : 0
     if (newSubtotal != totals.subtotal) {
       setTotals({
         subtotal: newSubtotal,
@@ -308,7 +319,7 @@ function CartDetail () {
   }
 
   useEffect(() => {
-      updateTotal()
+    updateTotal()
   }, [cart_menu])
 
   //	This is to make the page re-render so that updated state is shown when item
@@ -416,27 +427,31 @@ function CartDetail () {
 
   function changePickupTime (newTime) {
     setPickupTime(newTime.value)
-    localStorage.setItem('order', JSON.stringify(Object.assign(order, { time: newTime.value })))
+    localStorage.setItem(
+      'order',
+      JSON.stringify(Object.assign(order, { time: newTime.value }))
+    )
   }
- console.log(JSON.parse(localStorage.getItem('userProfile')))
+  console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
-
     <div>
       <CartHeader showBackButton backLink='/eat/cohen/' />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>
           <div>
-            {cart_menu ? cart_menu.map(item => {
-              return (
-                <CartProduct
-                  key={item}
-                  product={item}
-                  forceUpdate={setDummyDelete}
-                  updateTotal={updateTotal}
-                />
-              )
-            }): "Your cart is empty!"}
+            {cart_menu
+              ? cart_menu.map(item => {
+                  return (
+                    <CartProduct
+                      key={item}
+                      product={item}
+                      forceUpdate={setDummyDelete}
+                      updateTotal={updateTotal}
+                    />
+                  )
+                })
+              : 'Your cart is empty!'}
           </div>
           <Bill wrapper>
             {Object.keys(totals).map(type => {
@@ -503,7 +518,7 @@ function CartDetail () {
         </SpaceWrapper>
         <SpaceWrapper footer>
           <SubmitButton
-            onClick={ cart_menu?.length === 0 ? null : handleConfirmClick}
+            onClick={cart_menu?.length === 0 ? null : handleConfirmClick}
           >
             Submit Order
           </SubmitButton>

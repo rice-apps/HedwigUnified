@@ -111,7 +111,7 @@ function Menu () {
       state: {
         currProduct: `${product.dataSourceId}`,
         currVendor: currentVendor,
-        slug: slug,
+        slug: slug
       }
     })
   }

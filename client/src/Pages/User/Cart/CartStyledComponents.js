@@ -7,7 +7,7 @@ export const FloatCartWrapper = styled.div`
   min-width: 100vw;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content) auto  8.4vh;
+  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content) auto 8.4vh;
   grid-template-areas:
     'OrderSummary'
     'PickUpTime'
@@ -36,7 +36,7 @@ export const SpaceWrapper = styled.div`
     props.pickUpTime &&
     css`
       grid-area: PickUpTime;
-      border-top:1px #DDDDDD solid;
+      border-top: 1px #dddddd solid;
       display: grid;
       grid-template-columns: 1.2fr 1.3fr;
       grid-template-rows: 1fr;
@@ -47,22 +47,24 @@ export const SpaceWrapper = styled.div`
     css`
       grid-area: PaymentMethod;
       display: grid;
-      border-top:1px #DDDDDD solid;
+      border-top: 1px #dddddd solid;
       grid-template-columns: 1.2fr 1.3fr;
       grid-template-rows: 10vh minmax(0px, min-content);
       align-items: center;
     `};
-    ${props => props.footer && css`
-    grid-area: Footer;
-    display:flex;
-    position: sticky;
-    bottom:0;
-    align-items: center;
-    justify-content: center;
-    padding-bottom:8px;
-    background-color:white;
-    width:100%;
-    height:100%;
+  ${props =>
+    props.footer &&
+    css`
+      grid-area: Footer;
+      display: flex;
+      position: sticky;
+      bottom: 0;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 8px;
+      background-color: white;
+      width: 100%;
+      height: 100%;
     `}
 `
 
@@ -110,13 +112,13 @@ export const ShelfItem = styled.div`
       word-break: break-word;
       text-align: left;
       width: 95%;
-      line-height:2.5vh;
+      line-height: 2.5vh;
     `};
 
   ${props =>
     props.options &&
     css`
-    padding-top:4px;
+      padding-top: 4px;
       font-size: 1.8vh;
       opacity: 0.7;
       letter-spacing: 0.8px;
@@ -130,8 +132,8 @@ export const ShelfItem = styled.div`
     css`
       font-size: 2vh;
       letter-spacing: 1px;
-      margin-right:3vw;
-      justify-self:flex-end;
+      margin-right: 3vw;
+      justify-self: flex-end;
     `}
 `
 
@@ -139,7 +141,7 @@ export const Bill = styled.div`
   ${props =>
     props.wrapper &&
     css`
-    padding:2vh 0px;
+      padding: 2vh 0px;
       height: 100%;
       width: 100%;
       display: grid;
@@ -163,7 +165,7 @@ export const Bill = styled.div`
   ${props =>
     props.subtitle &&
     css`
-        font-size:2vh;
+      font-size: 2vh;
       text-transform: capitalize;
       text-align: right;
       grid-area: ${props => props.gridArea};
@@ -172,7 +174,7 @@ export const Bill = styled.div`
   ${props =>
     props.price &&
     css`
-    text-align:right;
+      text-align: right;
       letter-spacing: 1px;
     `};
 
@@ -191,25 +193,25 @@ export const Bill = styled.div`
   ${props =>
     props.title &&
     css`
-    padding-top:0.5vh;
-    font-size:2vh;
-    border-top: 1px #DDDDDD solid;
+      padding-top: 0.5vh;
+      font-size: 2vh;
+      border-top: 1px #dddddd solid;
       text-align: right;
       grid-area: ${props => props.gridArea};
       font-weight: bold;
     `}
 `
 export const SubmitButton = styled.div`
-color: white;
+  color: white;
   background-color: #d5573e;
   text-align: center;
   cursor: pointer;
-  display:flex;
+  display: flex;
   align-items: center;
   position: absolute;
   justify-content: center;
   font-weight: bold;
-  height:4vh;
+  height: 4vh;
   font-size: 2vh;
   width: 60vw;
   border-radius: 30px;

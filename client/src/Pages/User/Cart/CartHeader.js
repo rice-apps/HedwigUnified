@@ -75,7 +75,11 @@ function CartHeader (props) {
       <HedwigWrapper>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() =>  navigate(props.backLink, { state:{ currentVendor:getVendorName()}})}
+            onClick={() =>
+              navigate(props.backLink, {
+                state: { currentVendor: getVendorName() }
+              })
+            }
             style={{
               position: 'fixed',
               left: '22px',

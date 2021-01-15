@@ -1,20 +1,20 @@
 import styled from 'styled-components'
 
-/** MainDiv is used both in VendorCheck and Login. It puts all blocks at the center of the screen. 
+/** MainDiv is used both in VendorCheck and Login. It puts all blocks at the center of the screen.
  *  Need to override font for element inside of MainDiv!
  */
 const MainDiv = styled.div`
-@font-face {
-  font-family: 'Omnes';
-  src: local('Omnes'), url(../../fonts/Omnes-Font/Omnes/Omnes.ttf);
-}
+  @font-face {
+    font-family: 'Omnes';
+    src: local('Omnes'), url(../../fonts/Omnes-Font/Omnes/Omnes.ttf);
+  }
   height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   max-width: 100%;
-  
+
   background-color: white;
 `
 
@@ -36,31 +36,32 @@ const HedwigLogo = styled.img`
   max-width: 20%;
 `
 const Title = styled.h1`
-  color: #F3725B;
+  color: #f3725b;
   font-size: 3.3rem;
   margin: 0.1rem;
-  font-family:  Omnes;
+  font-family: Omnes;
   font-style: normal;
   font-weight: 500;
 `
 const LoginButton = styled.button`
-@font-face {
-  font-family: 'Proxima Nova';
-  src: local('Proxima Nova'), url(../../fonts/FontsFree-Net-proxima_nova_reg-webfont.ttf);
-}
+  @font-face {
+    font-family: 'Proxima Nova';
+    src: local('Proxima Nova'),
+      url(../../fonts/FontsFree-Net-proxima_nova_reg-webfont.ttf);
+  }
   border-radius: 25pt;
   height: 2.2rem;
   width: 8.5rem;
   border: none;
   font-size: 0.8rem;
-  background-color:#F3725B;
+  background-color: #f3725b;
   color: white;
   font-family: Proxima Nova;
   font-weight: bold;
   :hover {
     text-decoration: underline;
   }
-  :focus{
+  :focus {
     outline: none;
   }
 `
@@ -81,7 +82,7 @@ const ButtonPane = styled.div`
 
 const CheckButton = styled.button`
   border-radius: 20px;
-  border: 2.8px solid #F3725B;
+  border: 2.8px solid #f3725b;
   cursor: pointer;
   background-color: white;
   font-size: 1rem;
@@ -92,12 +93,11 @@ const CheckButton = styled.button`
   outline: none;
 `
 
-
 const ExitButton = styled.button`
   position: relative;
   background-color: white;
   bottom: 5pt;
-  border: 1px solid #F3725B;
+  border: 1px solid #f3725b;
   font-weight: bold;
 
   text-align: center;

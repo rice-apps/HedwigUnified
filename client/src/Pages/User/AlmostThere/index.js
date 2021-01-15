@@ -115,9 +115,7 @@ export const Div = styled.div`
       box-shadow: 0px 3px 6px 0px #aaaaaa;
     `};
 
-    ${props => props.button && css`
-    
-    `}
+  ${props => props.button && css``}
 `
 
 export const MessageWrapper = styled.div`

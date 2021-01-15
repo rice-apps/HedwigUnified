@@ -45,7 +45,7 @@ function BuyerHeader (props) {
       <HedwigWrapper>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() => navigate(props.backLink, { state: props.state})}
+            onClick={() => navigate(props.backLink, { state: props.state })}
             style={{
               position: 'fixed',
               left: '22px',

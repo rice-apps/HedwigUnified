@@ -310,8 +310,8 @@ const TimeModal = styled.input`
   margin: 0 auto;
   font-size: 2.5vh;
   border: none;
-  width:10vw;
-  height:6vh;
+  width: 10vw;
+  height: 6vh;
   text-align: center;
 `
 
@@ -337,7 +337,7 @@ const ConfirmButton = styled.button`
 `
 
 //FUTURE MVP, safari does not support input type of time so we have to code it ourselves
-function formatTime(timeString) {
+function formatTime (timeString) {
   var cleaned = ('' + timeString).replace(/\D/g, '')
   var match = cleaned.match(/^(\d{2})(\d{2})$/)
   if (match) {

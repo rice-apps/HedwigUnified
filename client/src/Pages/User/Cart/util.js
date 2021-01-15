@@ -180,5 +180,8 @@ export const checkNullFields = source => {
 }
 
 export const resetOrderSummary = () => {
-  localStorage.setItem('order', JSON.stringify({ vendor: {}, time: null, fulfillment: {} }))
+  localStorage.setItem(
+    'order',
+    JSON.stringify({ vendor: {}, time: null, fulfillment: {} })
+  )
 }

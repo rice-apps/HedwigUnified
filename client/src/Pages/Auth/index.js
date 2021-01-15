@@ -55,8 +55,6 @@ function Auth () {
     token
   } = authenticationData.authenticateUser
 
-
-
   const userData = {
     netid,
     name,
@@ -69,7 +67,7 @@ function Auth () {
     type,
     token
   }
-  console.log("DATA", userData)
+  console.log('DATA', userData)
 
   // Set token and user data in local storage
   lstorage.setItem('token', token)

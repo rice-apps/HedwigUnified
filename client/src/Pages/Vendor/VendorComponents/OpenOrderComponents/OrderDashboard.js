@@ -189,7 +189,6 @@ const ORDER_UPDATED = gql`
 
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
- 
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,

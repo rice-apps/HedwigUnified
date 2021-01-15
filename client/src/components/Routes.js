@@ -12,20 +12,22 @@ import Launch from '../Pages/User/Launch'
 import VendorList from "../Pages/User/Vendors/VendorList";
 // import VendorDetail from "../Pages/User/Vendors/VendorDetail";
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
-import AlmostThere from "../Pages/User/AlmostThere";
-import CartDetail from "../Pages/User/Cart";
-import ContactForm from "../Pages/User/Contact";
-import OrderList from "../Pages/User/Orders";
-import Menu from "../Pages/User/Menu";
-import ErrorPage from "./ErrorPage";
-import Product from "../Pages/User/Products/Product";
-import ClosedOrdersPage from "../Pages/Vendor/VendorPages/ClosedOrdersPage.js";
-import OpenOrdersPage from "../Pages/Vendor/VendorPages/OpenOrdersPage.js";
-import ItemsMenuManagementPage from "../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js";
-import ModifiersMenuManagementPage from "../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js";
-import SetBasicInfoPage from "../Pages/Vendor/VendorPages/SetBasicInfoPage.js";
-import SetStoreHoursPage from "../Pages/Vendor/VendorPages/SetStoreHoursPage.js";
-import VendorSelect from "../Pages/Login/VendorCheck";
+import AlmostThere from '../Pages/User/AlmostThere'
+import CartDetail from '../Pages/User/Cart'
+import ContactForm from '../Pages/User/Contact'
+import OrderList from '../Pages/User/Orders'
+import Menu from '../Pages/User/Menu'
+import ErrorPage from './ErrorPage'
+import Product from '../Pages/User/Products/Product'
+import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
+import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
+import ItemsMenuManagementPage from '../Pages/Vendor/VendorPages/ItemsMenuManagementPage.js'
+import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMenuManagementPage.js'
+import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
+import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
+import VendorSelect from '../Pages/Login/VendorCheck'
+import Submit from '../Pages/User/Submit'
+import AboutUs from '../Pages/User/AboutUs'
 
 /**
  * Requests to verify the user's token on the backend
@@ -189,8 +191,12 @@ const newRoutesArray = [
     element: <ErrorPage />,
   },
   {
-    path: "/login",
-    element: <Login />,
+    path: '/about_us',
+    element: <AboutUs />
+  },
+  {
+    path: '/login',
+    element: <Login />
   },
   {
     path: "/auth",

@@ -11,6 +11,7 @@ import mongoose from 'mongoose'
 
 const SquareInfo = new mongoose.Schema({
   merchantId: { type: String, required: true },
+  accessToken: { type: String, required: true},
   locationIds: { type: [String], required: true },
   loyaltyId: { type: String, unique: true }
 })

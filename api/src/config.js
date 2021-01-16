@@ -18,7 +18,6 @@ const {
   TWILIO_ACCOUNT_SID,
   TWILIO_AUTH_TOKEN,
   REDISHOST,
-  REDIS_PASSWORD,
   REACT_APP_FIREBASE_API_KEY,
   REACT_APP_FIREBASE_AUTH_DOMAIN
 } = process.env
@@ -34,7 +33,6 @@ const MONGOOSE_CONFIG = {
 const REDIS_OPTIONS = {
   host: REDISHOST,
   port: REDISPORT,
-  password: REDIS_PASSWORD,
   retryStrategy: times => Math.min(times * 50, 2000)
 }
 

@@ -5,12 +5,10 @@ import { SECRET } from '../config'
 import { User } from '../models'
 import { firebaseApp } from '../firebase'
 
-
 /**
  * Default failure response when authentication / verification doesn't work.
  */
 const failureResponse = { success: false }
-
 
 /**
  * Given a user, creates a new token for them.

@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import styled from 'styled-components/macro'
 import {
   OrderDashboardWrapper,
   NewOrderTitleWrapper,
@@ -13,8 +12,6 @@ import {
 import OrderCard from './OrderCard.js'
 import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
-
-import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {

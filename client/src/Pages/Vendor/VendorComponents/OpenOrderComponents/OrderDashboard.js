@@ -230,14 +230,19 @@ function OrderDashboard () {
           return prev
         }
 
-        const newOrderItem = subscriptionData.data.orderCreated
+        const updatedOrderItem = {
+          __typename: 'Order',
+          ...subscriptionData.data.orderUpdated
+        }
+
+        const updatedOrders = prev.findOrders.orders.map(order =>
+          order.id === updatedOrderItem.id ? updatedOrderItem : order
+        )
+
         return Object.assign({}, prev, {
           findOrders: {
             __typename: 'FindManyOrderPayload',
-            orders: [
-              { __typename: 'Order', ...newOrderItem },
-              ...prev.findOrders.orders
-            ]
+            orders: updatedOrders
           }
         })
       }

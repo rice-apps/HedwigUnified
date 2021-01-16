@@ -14,19 +14,6 @@ services:
     networks:
       - app-network
 
-  client:
-    image: riceapps/hedwig-client:latest
-
-    container_name: client
-
-    restart: unless-stopped
-
-    env_file:
-      - ./env-client
-
-    networks:
-      - app-network
-
   redis:
     image: redis:alpine
 
@@ -47,7 +34,7 @@ services:
       - app-network
 
   nginx:
-    image: nginx:mainline-alpine
+    image: riceapps/hedwig-client:latest
 
     container_name: nginx
 
@@ -66,7 +53,6 @@ services:
 
     depends_on:
       - api
-      - client
       - redis
 
     networks:
@@ -104,11 +90,6 @@ volumes:
   certbot-etc:
   certbot-var:
   web-root:
-    driver: local
-    driver_opts:
-      type: none
-      device: /root/HedwigUnified/default_html
-      o: bind
   dhparam:
     driver: local
     driver_opts:

@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1.2
+
+# build environment
 FROM node:lts-alpine AS build
 
 WORKDIR /hedwig-client
@@ -26,6 +28,12 @@ RUN --mount=type=secret,id=REACT_APP_FIREBASE_API_KEY \
     REACT_APP_AUTH_DOMAIN=$(cat /run/secrets/REACT_APP_AUTH_DOMAIN) \
     npm run build
 
-EXPOSE 3000
+# production environment
 
-CMD ["npm", "start"]
+FROM nginx:stable-alpine
+
+COPY --from=build /hedwig-client/build /var/www/html
+
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]

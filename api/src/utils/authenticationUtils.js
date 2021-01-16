@@ -1,28 +1,16 @@
 // This will be created when the user logs in
-import axios from 'axios'
 
 import jwt from 'jsonwebtoken'
-import { Parser, processors } from 'xml2js'
-import { SECRET, SERVICE_URL } from '../config'
+import { SECRET } from '../config'
 import { User } from '../models'
 import { firebaseApp } from '../firebase'
 
-/**
- * Parser used for XML response by CAS
- */
-const parser = new Parser({
-  tagNameProcessors: [processors.stripPrefix],
-  explicitArray: false
-})
 
 /**
  * Default failure response when authentication / verification doesn't work.
  */
 const failureResponse = { success: false }
 
-const config = {
-  CASValidateURL: 'https://idp.rice.edu/idp/profile/cas/serviceValidate'
-}
 
 /**
  * Given a user, creates a new token for them.
@@ -53,7 +41,7 @@ export const getUserFromToken = async token => {
 export const verifyToken = async token => {
   try {
     // In the future, we may need the other properties...
-    const { id, netid, iat, exp } = await jwt.verify(token, SECRET)
+    const { id } = await jwt.verify(token, SECRET)
 
     return { success: true, id }
   } catch (e) {

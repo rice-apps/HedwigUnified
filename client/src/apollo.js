@@ -5,9 +5,7 @@ import { setContext } from '@apollo/link-context'
 
 // Apollo Subscriptions Setup
 import { WebSocketLink } from '@apollo/link-ws'
-import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
-
-import gql from 'graphql-tag.macro'
+import { GRAPHQL_URL, GRAPHQL_WS_URL } from './config'
 
 import { resetOrderSummary } from './Pages/User/Cart/util'
 
@@ -74,27 +72,4 @@ export const client = new ApolloClient({
     }
   }),
   link: authLink.concat(splitLink)
-})
-
-// Initial local state
-const initialState = {
-  service: SERVICE_URL,
-  user: {
-    recentUpdate: false,
-    _id: ''
-  }
-}
-
-// Initialize cache with a state
-cache.writeQuery({
-  query: gql`
-    query InitialState {
-      service
-      user {
-        recentUpdate
-        _id
-      }
-    }
-  `,
-  data: initialState
 })

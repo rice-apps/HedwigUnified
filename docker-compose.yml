@@ -1,26 +1,101 @@
 version: "3"
+
 services:
   api:
     image: riceapps/hedwig-api:latest
+
+    container_name: api
+
+    restart: unless-stopped
+
     env_file:
       - ./env
-    ports:
-      - 8080:8080
-    expose:
-      - 8080
+
+    networks:
+      - app-network
+
   client:
     image: riceapps/hedwig-client:latest
+
+    container_name: client
+
     env_file:
       - ./env-client
+
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+
+    container_name: redis
+
+    command: redis-server --requirepass LobsterAirplaneWebsite
+
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:mainline-alpine
+
     ports:
-      - 3000:3000
-    expose:
-      - 3000
-    links:
+      - 80:80
+
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+
+    depends_on:
       - api
+      - client
+      - redis
+
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+
+    container_name: certbot
+
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+
+    depends_on:
+      - nginx
+
+    command: certonly --webroot --webroot-path=/var/www/html --email vms2@rice.edu --agree-tos --no-eff-email --staging -d hedwig.vsong.me
+
   watchtower:
     image: containrrr/watchtower
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
+
     command: --interval 300
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /root/HedwigUnified/default_html
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge

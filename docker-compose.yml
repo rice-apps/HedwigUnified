@@ -19,6 +19,8 @@ services:
 
     container_name: client
 
+    restart: unless-stopped
+
     env_file:
       - ./env-client
 
@@ -29,6 +31,8 @@ services:
     image: redis:alpine
 
     container_name: redis
+
+    restart: unless-stopped
 
     command: redis-server --requirepass LobsterAirplaneWebsite
 
@@ -45,14 +49,20 @@ services:
   nginx:
     image: nginx:mainline-alpine
 
+    container_name: nginx
+
+    restart: unless-stopped
+
     ports:
       - 80:80
+      - 443:443
 
     volumes:
       - web-root:/var/www/html
       - ./nginx-conf:/etc/nginx/conf.d
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
 
     depends_on:
       - api
@@ -75,10 +85,14 @@ services:
     depends_on:
       - nginx
 
-    command: certonly --webroot --webroot-path=/var/www/html --email vms2@rice.edu --agree-tos --no-eff-email --staging -d hedwig.vsong.me
+    command: certonly --webroot --webroot-path=/var/www/html --email vms2@rice.edu --agree-tos --no-eff-email --force-renewal -d hedwig.vsong.me
 
   watchtower:
     image: containrrr/watchtower
+
+    container_name: watchtower
+
+    restart: unless-stopped
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -94,6 +108,12 @@ volumes:
     driver_opts:
       type: none
       device: /root/HedwigUnified/default_html
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /root/HedwigUnified/dhparam
       o: bind
 
 networks:

@@ -72,14 +72,17 @@ function Product () {
     const vendor = vendor_data.getVendor
     const order = JSON.parse(localStorage.getItem('order'))
 
-    localStorage.setItem('order',
-      JSON.stringify(Object.assign(order, {
-        vendor: {
-          name: vendor.name,
-          merchantId: vendor.squareInfo.merchantId,
-          locationIds: vendor.squareInfo.locationIds
-        }
-      }))
+    localStorage.setItem(
+      'order',
+      JSON.stringify(
+        Object.assign(order, {
+          vendor: {
+            name: vendor.name,
+            merchantId: vendor.squareInfo.merchantId,
+            locationIds: vendor.squareInfo.locationIds
+          }
+        })
+      )
     )
     if (order.vendor && vendor.name != order.vendor.name) {
       console.log('Order is not from the same vendor! ERROR')
@@ -137,7 +140,15 @@ function Product () {
 
   return (
     <div>
+<<<<<<< HEAD
       <BuyerHeader showBackButton={true} backLink={`/eat/${vendor.slug}`} state={{currentVendor: vendor.name}}/>
+=======
+      <BuyerHeader
+        showBackButton={true}
+        backLink={`/eat/${vendor.slug}`}
+        state={{ currentVendor: vendor.name }}
+      />
+>>>>>>> master
       <div className='container'>
         <img className='heroImage' src={product.image} alt={product.name} />
 
@@ -171,8 +182,15 @@ function Product () {
             className='submitButton'
             onClick={() => {
               makeCartItem()
+<<<<<<< HEAD
               console.log( vendor)
               navigate(`/eat/${vendor.slug}`, { state: { currentVendor: vendor.name } })
+=======
+              console.log(vendor)
+              navigate(`/eat/${vendor.slug}`, {
+                state: { currentVendor: vendor.name }
+              })
+>>>>>>> master
               // navigate('/eat/cohen/cart')
             }}
           >

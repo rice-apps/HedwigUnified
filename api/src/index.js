@@ -14,7 +14,10 @@ import './square'
 
 const app = express().use(cors())
 
-const server = new ApolloServer({ schema: Schema })
+const server = new ApolloServer({
+  schema: Schema,
+  subscriptions: { path: '/ws' }
+})
 
 server.applyMiddleware({ app })
 

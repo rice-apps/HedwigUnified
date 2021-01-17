@@ -71,6 +71,7 @@
     ]
   },
   "devDependencies": {
+    "graphql-tag.macro": "^2.0.1",
     "prettier-standard": "^16.4.1",
     "stylelint": "^13.8.0",
     "stylelint-config-recommended": "^3.0.0",

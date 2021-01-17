@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
+
+import gql from 'graphql-tag.macro'
 
 import { Navigate } from 'react-router-dom'
 
@@ -55,8 +57,6 @@ function Auth () {
     token
   } = authenticationData.authenticateUser
 
-
-
   const userData = {
     netid,
     name,
@@ -69,7 +69,7 @@ function Auth () {
     type,
     token
   }
-  console.log("DATA", userData)
+  console.log('DATA', userData)
 
   // Set token and user data in local storage
   lstorage.setItem('token', token)

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.2
-FROM node:lts-alpine as build-deps
+FROM node:lts-alpine as build
 
 WORKDIR /hedwig-app
 

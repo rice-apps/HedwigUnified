@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const VERIFY_PAYMENT = gql`
   query verifyPayment($orderId: String!) {

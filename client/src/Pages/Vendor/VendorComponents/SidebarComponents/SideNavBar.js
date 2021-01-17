@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import SideBarVendorProfile from './SideBarVendorProfile.js'
 import SideBarItems from './SideBarItems.js'
 

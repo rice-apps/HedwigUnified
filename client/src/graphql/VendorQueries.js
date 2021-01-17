@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const VENDOR_QUERY = gql`
   query getVendorInfo($vendor: String!) {

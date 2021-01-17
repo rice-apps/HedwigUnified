@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import Toggle from 'react-toggle'
+import styled from 'styled-components/macro'
 import './Toggle.css'
-import { gql, useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const VendorName = styled.div`
   font-size: 2.1vw;
@@ -11,15 +11,6 @@ const VendorName = styled.div`
   text-align: center;
 `
 
-const StoreStatus = styled.div`
-  font-size: 1.25vw;
-  margin-top: 2px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-  margin-left: 5px;
-`
 const GET_VENDOR_DATA = gql`
   query GET_AVAILABILITY($name: String!) {
     getVendor(filter: { name: $name }) {
@@ -59,9 +50,7 @@ function SideBarVendorProfile ({ setLogo }) {
   const token = localStorage.getItem('token')
   const [vendorName, setVendorName] = useState('Cohen House')
 
-  const [vendorAvailability, { error }] = useMutation(
-    UPDATE_VENDOR_AVAILABILITY
-  )
+  const [, { error }] = useMutation(UPDATE_VENDOR_AVAILABILITY)
 
   // query to get the vendor... is it worth to cache the vendor merchant ID?
   const { data: userData, loading: userLoading, error: userError } = useQuery(

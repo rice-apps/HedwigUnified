@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
 import RalewayFont from '../../../fonts/GlobalFont.js'
 import { IoMdArrowRoundBack } from 'react-icons/io'
@@ -45,7 +45,11 @@ function BuyerHeader (props) {
       <HedwigWrapper>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
+<<<<<<< HEAD
             onClick={() => navigate(props.backLink, { state: props.state})}
+=======
+            onClick={() => navigate(props.backLink, { state: props.state })}
+>>>>>>> master
             style={{
               position: 'fixed',
               left: '22px',

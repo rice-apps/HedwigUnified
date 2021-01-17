@@ -12,7 +12,7 @@ import CartProduct from './CartProducts'
 import currency from 'currency.js'
 import Select from 'react-select'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled, { css } from 'styled-components'
 import {
@@ -219,6 +219,9 @@ function CartDetail () {
     fetchPolicy: 'network-only'
   })
 
+  const { state } = useLocation()
+  const { vendor} = state;
+
   const handleClickCredit = async () => {
     // Get url and embed that url
     return navigate(`/eat/almostThere`)
@@ -422,7 +425,7 @@ function CartDetail () {
   return (
 
     <div>
-      <CartHeader showBackButton backLink='/eat/cohen/' />
+      <CartHeader showBackButton vendor={vendor} />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>

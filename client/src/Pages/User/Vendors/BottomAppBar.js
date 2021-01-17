@@ -41,12 +41,18 @@ const BottomNavigationText = styled.div`
   margin-left: 8px;
 `
 
-function BottomAppBar () {
-  const navigate = useNavigate()
+function BottomAppBar (props) {
+  const navigate = useNavigate();
   return (
     <BottomNavigationWrapper>
       <RalewayFont />
-      <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
+      <BottomNavigationItem onClick={()=>{
+        const state = {vendor: props.vendor};
+        // change this in the future: where should we navigate from main page's "Cart" button?
+        if(!props.vendor) return navigate('/eat/cohen/cart', {state: state}); 
+        // click inside a vendor's menu
+        return navigate(`/eat/${props.vendor.slug}/cart`, {state: state});
+      }}>
         <GrCart style={{ fontSize: '2.8vh' }} />
         <BottomNavigationText>View Cart</BottomNavigationText>
       </BottomNavigationItem>

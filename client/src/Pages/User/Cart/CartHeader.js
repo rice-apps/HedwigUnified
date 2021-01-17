@@ -63,10 +63,20 @@ function CartHeader (props) {
   //     return <p>ErrorV...</p>;
   //   }
 
-  function getVendorName () {
-    // const { getVendor: vendor } = vendor_data;
-    // return vendor_data.getVendor.name;
-    return 'Cohen House'
+  function getVendorName (vendor) {
+    if(!vendor) return null;
+    return vendor.name;
+    // return 'Cohen House'
+  }
+
+  const handleClickNav = (props) => {
+    // click "Cart" from the main page, & go back to the main page.
+    if(!props.vendor){
+      return navigate('/eat');
+    }else{ // click "Cart" from vendors' menu page
+      const backLink = `/eat/${props.vendor.slug}`
+      return navigate(backLink, { state: { currentVendor: props.vendor.name, slug: props.vendor.slug } });
+    }
   }
 
   return (
@@ -75,7 +85,7 @@ function CartHeader (props) {
       <HedwigWrapper>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() =>  navigate(props.backLink, { state:{ currentVendor:getVendorName()}})}
+            onClick={() => handleClickNav(props)}
             style={{
               position: 'fixed',
               left: '22px',
@@ -85,7 +95,7 @@ function CartHeader (props) {
             }}
           />
         ) : null}
-        Checkout: {getVendorName()}
+        Checkout: {getVendorName(props.vendor)}
       </HedwigWrapper>
     </HeaderWrapper>
   )

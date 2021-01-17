@@ -384,7 +384,7 @@ function Menu () {
           ))}
         </div>
       </div>
-      <BottomAppBar />
+      <BottomAppBar vendor={vendor_data.getVendor}/>
     </div>
   )
 }

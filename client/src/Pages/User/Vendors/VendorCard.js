@@ -52,7 +52,6 @@ function VendorCard ({ vendor }) {
   }
 
   const determineIfClosed = (current_date, dayObj) => {
-    return {status:"openning"}
     if (!dayObj) return
     // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
     const currentTime = testMode

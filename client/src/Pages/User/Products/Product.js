@@ -140,15 +140,11 @@ function Product () {
 
   return (
     <div>
-<<<<<<< HEAD
-      <BuyerHeader showBackButton={true} backLink={`/eat/${vendor.slug}`} state={{currentVendor: vendor.name}}/>
-=======
       <BuyerHeader
         showBackButton={true}
         backLink={`/eat/${vendor.slug}`}
         state={{ currentVendor: vendor.name }}
       />
->>>>>>> master
       <div className='container'>
         <img className='heroImage' src={product.image} alt={product.name} />
 
@@ -182,15 +178,10 @@ function Product () {
             className='submitButton'
             onClick={() => {
               makeCartItem()
-<<<<<<< HEAD
-              console.log( vendor)
-              navigate(`/eat/${vendor.slug}`, { state: { currentVendor: vendor.name } })
-=======
               console.log(vendor)
               navigate(`/eat/${vendor.slug}`, {
                 state: { currentVendor: vendor.name }
               })
->>>>>>> master
               // navigate('/eat/cohen/cart')
             }}
           >

@@ -1,10 +1,10 @@
 version: "3"
 
 services:
-  api:
+  backend:
     image: riceapps/hedwig-api:latest
 
-    container_name: api
+    container_name: backend
 
     restart: unless-stopped
 
@@ -21,7 +21,7 @@ services:
 
     restart: unless-stopped
 
-    command: redis-server --requirepass LobsterAirplaneWebsite
+    command: redis-server
 
     volumes:
       - $PWD/redis-data:/var/lib/redis
@@ -33,10 +33,10 @@ services:
     networks:
       - app-network
 
-  nginx:
+  frontend:
     image: riceapps/hedwig-client:latest
 
-    container_name: nginx
+    container_name: frontend
 
     restart: unless-stopped
 
@@ -52,7 +52,7 @@ services:
       - dhparam:/etc/ssl/certs
 
     depends_on:
-      - api
+      - backend
       - redis
 
     networks:
@@ -69,7 +69,7 @@ services:
       - web-root:/var/www/html
 
     depends_on:
-      - nginx
+      - frontend
 
     command: certonly --webroot --webroot-path=/var/www/html --email vms2@rice.edu --agree-tos --no-eff-email --force-renewal -d hedwig.vsong.me
 

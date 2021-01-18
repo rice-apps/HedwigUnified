@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 8080
 USER node
-CMD [ "npm", "src/index.js" ]
+CMD [ "node", "src/index.js" ]

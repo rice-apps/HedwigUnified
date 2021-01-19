@@ -8,7 +8,7 @@ import {
   SortOrderEnumTC,
   FetchPaymentPayloadTC
 } from '../models/index.js'
-import squareClient from '../utils/square.js'
+import squareClients from '../utils/square.js'
 import { shopifyClient, shopifyAdminClient } from '../utils/shopify.js'
 import { ApiError } from 'square'
 
@@ -16,6 +16,7 @@ PaymentTC.addResolver({
   name: 'fetchPayments',
   type: FetchPaymentPayloadTC,
   args: {
+    vendor: 'String!',
     beginTime: 'String',
     endTime: 'String',
     sortOrder: {
@@ -28,8 +29,10 @@ PaymentTC.addResolver({
     }
   },
   resolve: async ({ args }) => {
-    const { beginTime, endTime, sortOrder, cursor } = args
+    const { beginTime, endTime, sortOrder, cursor, vendor } = args
 
+    const squareClientsMap = await squareClients
+    const squareClient = squareClientsMap.get(vendor)
     const paymentsApi = squareClient.paymentsApi
 
     try {
@@ -67,7 +70,8 @@ PaymentTC.addResolver({
   .addResolver({
     name: 'createPayment',
     args: {
-      record: CreatePaymentITC.getTypeNonNull().getType()
+      record: CreatePaymentITC.getTypeNonNull().getType(),
+      vendor: 'String!'
     },
     type: PaymentTC,
     resolve: async ({ args }) => {
@@ -79,7 +83,8 @@ PaymentTC.addResolver({
           orderId,
           customerId,
           locationId,
-          source
+          source,
+          vendor
         }
       } = args
 
@@ -87,6 +92,8 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
+          const squareClientsMap = await squareClients
+          const squareClient = squareClientsMap.get(vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {
@@ -195,6 +202,7 @@ PaymentTC.addResolver({
   .addResolver({
     name: 'completePayment',
     args: {
+      vendor: 'String!',
       paymentId: 'String!',
       source: 'String!',
       money: MoneyTC.getITC()
@@ -205,6 +213,8 @@ PaymentTC.addResolver({
 
       switch (args.source) {
         case 'SQUARE': {
+          const squareClientsMap = await squareClients
+          const squareClient = squareClientsMap.get(args.vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {
@@ -324,12 +334,14 @@ PaymentTC.addResolver({
       paymentId: 'String'
     },
     resolve: async ({ args }) => {
-      const { source, paymentId } = args
+      const { source, paymentId, vendor } = args
 
       let response
 
       switch (source) {
         case 'SQUARE': {
+          const squareClientsMap = await squareClients
+          const squareClient = squareClientsMap.get(vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {
@@ -411,10 +423,12 @@ PaymentTC.addResolver({
       source: 'String!'
     },
     resolve: async ({ args }) => {
-      const { paymentId, source } = args // TODO: handle cancelling payments for different vendors
+      const { paymentId, source, vendor } = args // TODO: handle cancelling payments for different vendors
 
       switch (source) {
         case 'SQUARE': {
+          const squareClientsMap = await squareClients
+          const squareClient = squareClientsMap.get(vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {

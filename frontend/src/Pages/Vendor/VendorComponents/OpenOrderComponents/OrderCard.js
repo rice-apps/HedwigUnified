@@ -422,10 +422,10 @@ function MakePaymentSpace (props) {
     variables: { orderId: order?.shopifyOrderId }
   })
 
-  let isVerified = false;
+  let isVerified = false
 
   if (!loading && verifyPaymentResult != undefined) {
-    console.log("This is the query result: ", verifyPaymentResult)
+    console.log('This is the query result: ', verifyPaymentResult)
     isVerified = verifyPaymentResult.verifyPayment
   }
 

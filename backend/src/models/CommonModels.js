@@ -6,8 +6,7 @@ const DataSourceEnumTC = sc.createEnumTC({
   description: 'The various types of data sources',
   values: {
     SQUARE: { value: 'SQUARE' },
-    SHOPIFY: { value: 'SHOPIFY' },
-    EXCEL: { value: 'EXCEL' }
+    SHOPIFY: { value: 'SHOPIFY' }
   }
 })
 

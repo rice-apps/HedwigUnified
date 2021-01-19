@@ -1,50 +1,14 @@
 import { VendorTC } from '../models/index.js'
 
 const VendorQueries = {
-  getVendor: VendorTC.mongooseResolvers
-    .findOne()
-    .withMiddlewares([checkLoggedIn])
-    .wrapResolve(next => async rp => {
-      const vendor = await next({
-        ...rp,
-        projection: { allowedNetid: {}, ...rp.projection }
-      })
-
-      // console.log(vendor)
-      if (vendor.allowedNetid.includes(rp.context.netid)) {
-        return vendor
-      }
-
-      return new AuthenticationError('Not on approved vendor list')
-    }),
-  getVendors: VendorTC.mongooseResolvers
-    .findMany()
-    .withMiddlewares([checkLoggedIn])
-    .wrapResolve(next => async rp => {
-      const vendors = await next({
-        ...rp,
-        projection: { allowedNetid: {}, ...rp.projection }
-      })
-
-      const availableVendors = vendors.filter(vendor =>
-        vendor.allowedNetid.includes(rp.context.netid)
-      )
-
-      if (availableVendors.length === 0) {
-        return new AuthenticationError('Not approved for any vendors')
-      }
-
-      return vendors
-    })
+  getVendor: VendorTC.mongooseResolvers.findOne(),
+  getVendors: VendorTC.mongooseResolvers.findMany()
 }
 
 const VendorMutations = {
-  createVendor: VendorTC.mongooseResolvers
-    .createOne()
-    .withMiddlewares([checkLoggedIn]),
-  updateVendor: VendorTC.mongooseResolvers
-    .updateOne()
-    .withMiddlewares([checkLoggedIn, checkCanUpdateVendor])
+  createVendor: VendorTC.mongooseResolvers.createOne(),
+  updateVendor: VendorTC.mongooseResolvers.updateOne(),
+  removeVendor: VendorTC.mongooseResolvers.removeOne()
 }
 
 export { VendorQueries, VendorMutations }

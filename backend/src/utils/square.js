@@ -1,22 +1,23 @@
 import { Client, Environment } from 'square'
-import { SQUARE_ACCESS_TOKEN } from './config'
-import { Vendor } from './models'
+import { Vendor } from '../models/index.js'
 
 
-const squareClient = new Client({
-  environment: Environment.Sandbox,
-  accessToken: SQUARE_ACCESS_TOKEN
-})
+// const squareClient = new Client({
+//   environment: Environment.Sandbox,
+//   accessToken: SQUARE_ACCESS_TOKEN
+// })
 
 const squareClients = new Promise((resolve,reject) => {
     Vendor.find()
     .exec()
     .then(res => {
-      resolve(res.map(vendor => {
-        let newClient = new Client({environment: Environment.Sandbox,accessToken: vendor.squareInfo.accessToken})
-        let slug = vendor.slug
-        return {"slug":slug, "client":newClient}
-    }))
+      
+        const squareClientsMap = new Map()
+        res.forEach(vendor => {
+          squareClientsMap.set(vendor.slug, new Client({environment: Environment.Sandbox,accessToken: vendor.squareInfo.accessToken}))
+        })
+        return resolve(squareClientsMap)
+      
   })
     .catch((error) => {
         reject(error)

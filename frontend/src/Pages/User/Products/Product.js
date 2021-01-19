@@ -8,8 +8,8 @@ import QuantitySelector from './QuantitySelector'
 import ModifierSelection from './ModifierSelection'
 import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
-import BuyerHeader from './../Vendors/BuyerHeader.js'
-import BottomAppBar from './../Vendors/BottomAppBar.js'
+import BuyerHeader from '../Vendors/BuyerHeader.js'
+import BottomAppBar from '../Vendors/BottomAppBar.js'
 
 function Product () {
   const navigate = useNavigate()

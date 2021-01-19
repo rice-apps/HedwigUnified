@@ -1,7 +1,7 @@
-import VendorsideTemplate from './../VendorComponents/VendorGridContainer.js'
+import VendorsideTemplate from '../VendorComponents/VendorGridContainer.js'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'
-import ItemCatalog from './../VendorComponents/ItemsComponents/ItemCatalog.js'
+import ItemCatalog from '../VendorComponents/ItemsComponents/ItemCatalog.js'
 
 function ItemsMenuManagementPage () {
   const {

@@ -2,7 +2,7 @@ import react from 'react'
 import styled from 'styled-components/macro'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import hedwigLogo from './HedwigLogoFinal.svg'
-import BuyerHeader from './../Vendors/BuyerHeader.js'
+import BuyerHeader from '../Vendors/BuyerHeader.js'
 import HeadShot from './HeadShot'
 import { useNavigate } from 'react-router-dom'
 

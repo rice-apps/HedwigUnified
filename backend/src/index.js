@@ -12,8 +12,6 @@ import Schema from './schema/index.js'
 // Initialize connection to Square with API token
 import './utils/square.js'
 
-log.info(`Number of threads: ${process.env.UV_THREADPOOL_SIZE}`)
-
 const app = express().use(cors())
 
 const server = new ApolloServer({

@@ -48,7 +48,7 @@ const getLinks = () => {
 
     {
       icon: 'question-circle',
-      content: 'About Us',
+      content: 'About the Creators',
       path: '/about_us',
     },
     {

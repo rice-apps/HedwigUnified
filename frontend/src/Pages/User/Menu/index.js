@@ -354,7 +354,7 @@ function Menu () {
               <h3 class='categoryheader'>{category}</h3>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
-                .filter(item => item.category === category)
+                .filter(item => item.category === category && item.isAvailable)
                 .map(product => (
                   <div
                     class='itemgrid'

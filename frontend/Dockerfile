@@ -9,7 +9,7 @@ COPY package*.json ./
 
 RUN npm ci --only=production
 
-COPY . .
+COPY . ./
 
 ARG REACT_APP_GRAPHQL_URL
 ARG REACT_APP_GRAPHQL_WS_URL

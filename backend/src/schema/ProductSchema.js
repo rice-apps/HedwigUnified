@@ -14,9 +14,11 @@ ItemTC.addResolver({
   type: [ItemTC],
   resolve: async ({ args }) => {
     // Extract vendor name from args
-    const { dataSource } = args
+    const { dataSource, vendor } = args
 
-    const catalogApi = squareClient.catalogApi
+    const squareClientMap = await squareClients()
+
+    const catalogApi = squareClientMap.get(vendor).catalogApi
 
     try {
       // Make Square request for catalog

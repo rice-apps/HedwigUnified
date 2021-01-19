@@ -1,7 +1,6 @@
 import { Client, Environment } from 'square'
 import { SQUARE_ACCESS_TOKEN } from './config'
-import { VendorTC } from './models/VendorModel'
-import {User, Vendor} from './models'
+import { Vendor } from './models'
 
 
 const squareClient = new Client({
@@ -25,4 +24,4 @@ const squareClients = new Promise((resolve,reject) => {
 });
 
 
-export default squareClient
+export default squareClients

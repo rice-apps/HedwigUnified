@@ -130,6 +130,10 @@
   border-top: #7070701a 1px solid;
 }
 
+.contentcard:hover{
+  background-color: #F4F3F3;
+}
+
 .contenticon {
   align-self: center;
   color: #5a5953;

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { TextField } from '@material-ui/core'
+import {Navigate } from 'react-router-dom'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
@@ -47,7 +48,12 @@ const getLinks = () => {
 
     {
       icon: 'question-circle',
-      content: 'About',
+      content: 'About Us',
+      path: '/about_us',
+    },
+    {
+      icon: 'question-circle',
+      content: 'About RiceApps',
       path: 'https://riceapps.org/'
     },
 
@@ -179,7 +185,7 @@ function ProfilePane () {
                     className='contentarrow'
                     onClick={() => window.open(link.path, '_self')}
                   >
-                    <FontAwesomeIcon icon={['fas', 'chevron-right']} />
+                    <FontAwesomeIcon icon={['fas', 'chevron-right']} style = {{"cursor": "pointer"}}/>
                   </button>
                 ) : null}
               </div>

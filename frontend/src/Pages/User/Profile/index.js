@@ -2,6 +2,7 @@ import './index.css'
 import { gql, useQuery } from '@apollo/client'
 import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {Navigate } from 'react-router-dom'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
@@ -26,11 +27,10 @@ const getLinks = user => {
   const links = [
     { icon: 'phone', content: user.phone, path: '' },
 
-    { icon: 'hands-helping', content: 'Help', path: '' },
-
+    { icon: 'hands-helping', content: 'Help', path: '' }, 
     {
       icon: 'question-circle',
-      content: 'About',
+      content: 'About RiceApps',
       path: 'https://riceapps.org/'
     },
 
@@ -49,6 +49,7 @@ function Profile () {
 
   const { user } = data
   const links = getLinks(user)
+  console.log("LINKS", links);
 
   return (
     <div className='profilepane'>

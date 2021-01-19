@@ -25,7 +25,7 @@ PaymentTC.addResolver({
     },
     cursor: {
       type: 'String',
-      defaultValue: null
+      defaultValue: undefined
     }
   },
   resolve: async ({ args }) => {
@@ -39,7 +39,6 @@ PaymentTC.addResolver({
       const {
         result: { cursor: newCursor, payments }
       } = await paymentsApi.listPayments(beginTime, endTime, sortOrder, cursor)
-
       const paymentsList = payments.map(payment => ({
         id: payment.id,
         order: payment.orderId,

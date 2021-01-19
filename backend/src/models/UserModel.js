@@ -1,10 +1,10 @@
 import { composeMongoose } from 'graphql-compose-mongoose'
 
-import '../utils/db'
+import '../utils/db.js'
 
-import { Schema, model } from 'mongoose'
+import mongoose from 'mongoose'
 
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
   name: String,
   netid: { type: String, required: true, unique: true }, // This will be our unique identifier across systems
   token: { type: String, default: '' }, // We will use this to store the user's JWT token
@@ -20,7 +20,7 @@ const UserSchema = new Schema({
   vendor: { type: String, required: false }
 })
 
-const User = model('Users', UserSchema)
+const User = mongoose.model('Users', UserSchema)
 const UserTC = composeMongoose(User)
 
 export { User, UserTC }

@@ -1,10 +1,14 @@
 import './ProfilePane.css'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { TextField } from '@material-ui/core'
+<<<<<<< HEAD:frontend/src/Pages/User/Vendors/ProfilePane.js
 import {Navigate } from 'react-router-dom'
+=======
+import gql from 'graphql-tag.macro'
+>>>>>>> 19d2e01c27a96c2158d0ccf317d61d2a5ea5d131:client/src/Pages/User/Vendors/ProfilePane.js
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 

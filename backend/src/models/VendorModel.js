@@ -5,17 +5,17 @@ import {
 
 import { sc } from 'graphql-compose'
 
-import '../utils/db'
+import '../utils/db.js'
 
-import { Schema, model } from 'mongoose'
+import mongoose from 'mongoose'
 
-const SquareInfo = new Schema({
+const SquareInfo = new mongoose.Schema({
   merchantId: { type: String, required: true },
   locationIds: { type: [String], required: true },
   loyaltyId: { type: String, unique: true }
 })
 
-const BusinessHours = new Schema({
+const BusinessHours = new mongoose.Schema({
   start: { type: [String], required: true },
   end: { type: [String], required: true },
   day: {
@@ -37,7 +37,7 @@ const BusinessHours = new Schema({
 convertSchemaToGraphQL(SquareInfo, 'VendorSquareInfo', sc)
 convertSchemaToGraphQL(BusinessHours, 'VendorBusinessHours', sc)
 
-const VendorSchema = new Schema({
+const VendorSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   slug: { type: String, min: 3, max: 5, unique: true, required: true }, // short 3-5 letter slug that identifies this vendor
   phone: String,
@@ -53,7 +53,7 @@ const VendorSchema = new Schema({
   facebook: { type: String, required: false }
 })
 
-const Vendor = model('Vendors', VendorSchema)
+const Vendor = mongoose.model('Vendors', VendorSchema)
 const VendorTC = composeMongoose(Vendor)
 
 export { Vendor, VendorTC }

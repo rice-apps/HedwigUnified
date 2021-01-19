@@ -1,5 +1,5 @@
 import Collapsible from 'react-collapsible'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import './SidebarCollapsible.css'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'

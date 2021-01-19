@@ -1,26 +1,102 @@
 version: "3"
+
 services:
-  api:
+  backend:
     image: riceapps/hedwig-api:latest
+
+    container_name: backend
+
+    restart: unless-stopped
+
     env_file:
       - ./env
-    ports:
-      - 8080:8080
-    expose:
-      - 8080
-  client:
+
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+
+    container_name: redis
+
+    restart: unless-stopped
+
+    command: redis-server
+
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+    networks:
+      - app-network
+
+  frontend:
     image: riceapps/hedwig-client:latest
-    env_file:
-      - ./env-client
+
+    container_name: frontend
+
+    restart: unless-stopped
+
     ports:
-      - 3000:3000
-    expose:
-      - 3000
-    links:
-      - api
+      - 80:80
+      - 443:443
+
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+
+    depends_on:
+      - backend
+      - redis
+
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+
+    container_name: certbot
+
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+
+    depends_on:
+      - frontend
+
+    command: certonly --webroot --webroot-path=/var/www/html --email vms2@rice.edu --agree-tos --no-eff-email --force-renewal -d hedwig.vsong.me
+
   watchtower:
     image: containrrr/watchtower
+
+    container_name: watchtower
+
+    restart: unless-stopped
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
+
     command: --interval 300
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /root/HedwigUnified/dhparam
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge

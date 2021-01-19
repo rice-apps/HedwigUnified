@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import {
   DashboardWrapper,
   TitleWrapper,
@@ -9,6 +9,7 @@ import {
 import { useState } from 'react'
 import { IconContext } from 'react-icons'
 import Dropdown from 'react-dropdown'
+import gql from 'graphql-tag.macro'
 import 'react-dropdown/style.css'
 
 const GET_COMPLETED_ORDERS = gql`

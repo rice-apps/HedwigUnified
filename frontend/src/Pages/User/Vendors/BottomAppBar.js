@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { GrCart } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import RalewayFont from '../../../fonts/GlobalFont.js'

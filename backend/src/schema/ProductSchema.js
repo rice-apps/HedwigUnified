@@ -1,10 +1,9 @@
 import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
-import { ItemTC } from '../models'
-import { DataSourceEnumTC } from '../models/CommonModels'
-import squareClient from '../square'
-import { pubsub } from '../utils/pubsub'
+import { ItemTC, DataSourceEnumTC } from '../models/index.js'
+import squareClient from '../utils/square.js'
+import { pubsub } from '../utils/pubsub.js'
 
 ItemTC.addResolver({
   name: 'getCatalog',
@@ -31,7 +30,7 @@ ItemTC.addResolver({
         object => object.type === 'MODIFIER_LIST'
       )
       const items = objects.filter(object => object.type === 'ITEM')
-    
+
       // Define functions for getting category and modifier list data from id
       const categoryId2Name = id =>
         categories.find(category => category.id === id).categoryData.name
@@ -47,23 +46,21 @@ ItemTC.addResolver({
             description: baseItemDescription,
             variations,
             modifierListInfo,
-            categoryId,
+            categoryId
           },
           customAttributeValues: {
             is_available: { booleanValue: isAvailable }
           }
         } = item
 
-        console.log(baseItemName, imageId);
-
-        let imageData;
-        try{
-          const response = await catalogApi.retrieveCatalogObject(imageId);
-          imageData = response.result.object.imageData.url;
-        } catch(error){
-          console.log("Image not found");
+        let imageData
+        try {
+          const response = await catalogApi.retrieveCatalogObject(imageId)
+          imageData = response.result.object.imageData.url
+        } catch (error) {
+          console.log('Image not found')
         }
-      
+
         const categoryName = categoryId2Name(categoryId)
 
         const returnedVariants = variations.map(variant => {
@@ -193,16 +190,15 @@ ItemTC.addResolver({
           }
         } = object
 
-
-        let imageData;
-        try{
-          const response = await catalogApi.retrieveCatalogObject(imageId);
-          imageData = response.result.object.imageData.url;
-        } catch(error){
-          console.log("Image not found");
+        let imageData
+        try {
+          const response = await catalogApi.retrieveCatalogObject(imageId)
+          imageData = response.result.object.imageData.url
+        } catch (error) {
+          console.log('Image not found')
         }
 
-        console.log(imageData);
+        console.log(imageData)
 
         const returnedVariants = variations.map(variant => {
           const {

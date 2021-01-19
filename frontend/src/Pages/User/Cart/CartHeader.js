@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
 import RalewayFont from './../../../fonts/GlobalFont'
@@ -75,7 +75,11 @@ function CartHeader (props) {
       <HedwigWrapper>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() =>  navigate(props.backLink, { state:{ currentVendor:getVendorName()}})}
+            onClick={() =>
+              navigate(props.backLink, {
+                state: { currentVendor: getVendorName() }
+              })
+            }
             style={{
               position: 'fixed',
               left: '22px',

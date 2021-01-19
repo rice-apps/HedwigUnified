@@ -1,5 +1,4 @@
-import hedwigLogo from './HedwigLogoFinal.svg'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import {
   BackgroundCover,
   ButtonPane,
@@ -8,6 +7,7 @@ import {
   MainDiv
 } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
+import gql from 'graphql-tag.macro'
 
 const GET_VENDOR = gql`
   query GET_VENDORS($name: String!) {
@@ -36,11 +36,11 @@ const VendorSelect = () => {
 
   // have to modify this with /contact
   if (!allowedUsers.includes(userData.netid)) {
-    var pattern=/^[0-9]{10}$/;
-    if(pattern.test(userData.phone)){
-      navigate('/eat');
-    }else{
-      navigate('/contact');
+    var pattern = /^[0-9]{10}$/
+    if (pattern.test(userData.phone)) {
+      navigate('/eat')
+    } else {
+      navigate('/contact')
     }
   }
 
@@ -54,13 +54,13 @@ const VendorSelect = () => {
 
   return (
     <MainDiv>
-    <BackgroundCover>
-      <LoginQuestion>Sign in:</LoginQuestion>
-      <ButtonPane>
-        <CheckButton onClick={vendorLogin}>Vendor</CheckButton>
-        <CheckButton onClick={clientLogin}>Customer</CheckButton>
-      </ButtonPane>
-    </BackgroundCover>
+      <BackgroundCover>
+        <LoginQuestion>Sign in:</LoginQuestion>
+        <ButtonPane>
+          <CheckButton onClick={vendorLogin}>Vendor</CheckButton>
+          <CheckButton onClick={clientLogin}>Customer</CheckButton>
+        </ButtonPane>
+      </BackgroundCover>
     </MainDiv>
   )
 }

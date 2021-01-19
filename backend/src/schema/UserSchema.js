@@ -1,9 +1,9 @@
-import { User, UserTC } from '../models'
+import { User, UserTC } from '../models/index.js'
 import {
   authenticateTicket,
   verifyToken,
   createToken
-} from '../utils/authenticationUtils'
+} from '../utils/authenticationUtils.js'
 
 /**
  * Relations (necessary for any fields that link to other types in the schema)

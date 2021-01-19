@@ -1,5 +1,6 @@
-import { Fragment, useEffect, useState } from 'react'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { useQuery, useMutation } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 import {
   checkNullFields,
   createRecord,
@@ -7,14 +8,13 @@ import {
   CREATE_PAYMENT,
   GET_VENDOR
 } from './util'
-import { centerCenter, row, column, endStart } from '../../../Styles/flex'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
 import Select from 'react-select'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components/macro'
 import {
   FloatCartWrapper,
   SpaceWrapper,
@@ -23,9 +23,6 @@ import {
   SubmitButton
 } from './CartStyledComponents'
 // new dropdown imports:
-import Modal from 'react-modal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AiOutlineExclamationCircle } from 'react-icons/ai'
 
 const styles = {
   color: 'blue'
@@ -37,16 +34,6 @@ const Div = styled.div`
   margin-right: 5vw;
   grid-column-start: 2;
   padding-bottom: 10px;
-`
-
-const OptionWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 7fr 4fr;
-  grid-template-rows: 1fr;
-  align-items: center;
-  padding: 15px 0px;
-  height: 100%;
-  width: 100%;
 `
 
 const GET_AVAILABILITIES = gql`
@@ -203,18 +190,20 @@ function CartDetail () {
 
   const navigate = useNavigate()
   // add catch statement
-  const cart_menu =  localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : null
-  const order = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('order')) : null
+  const cart_menu = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : null
+  const order = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('order'))
+    : null
 
-  const product_ids = cart_menu ? cart_menu.map(item => {
-    return item.dataSourceId
-  }) : null
+  const product_ids = cart_menu
+    ? cart_menu.map(item => {
+        return item.dataSourceId
+      })
+    : null
 
-  const {
-    loading: avail_loading,
-    error: avail_error,
-    refetch: avail_refetch
-  } = useQuery(GET_AVAILABILITIES, {
+  const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
     variables: { productIds: product_ids },
     fetchPolicy: 'network-only'
   })
@@ -225,7 +214,7 @@ function CartDetail () {
   }
 
   const handleConfirmClick = async () => {
-    console.log("HI")
+    console.log('HI')
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
@@ -259,18 +248,21 @@ function CartDetail () {
           currency: 'USD'
         }
       })
-      localStorage.setItem('order', 
-        JSON.stringify(Object.assign(order, {
-          orderId: orderJson.id,
-          pickupInstruction: data.getVendor.pickupInstruction,
-          fulfillment: {
-            uid: orderJson.fulfillment.uid,
-            state: orderJson.fulfillment.state,
-            pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
-            placedAt: orderJson.fulfillment.pickupDetails.placedAt
-          },
-          url: createPaymentResponse.data.createPayment.url
-        }))
+      localStorage.setItem(
+        'order',
+        JSON.stringify(
+          Object.assign(order, {
+            orderId: orderJson.id,
+            pickupInstruction: data.getVendor.pickupInstruction,
+            fulfillment: {
+              uid: orderJson.fulfillment.uid,
+              state: orderJson.fulfillment.state,
+              pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
+              placedAt: orderJson.fulfillment.pickupDetails.placedAt
+            },
+            url: createPaymentResponse.data.createPayment.url
+          })
+        )
       )
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -288,10 +280,12 @@ function CartDetail () {
   }
 
   const updateTotal = () => {
-    const newSubtotal = cart_menu ? cart_menu.reduce(
-      (total, current) => total + current.price * current.quantity,
-      0
-    ): 0
+    const newSubtotal = cart_menu
+      ? cart_menu.reduce(
+          (total, current) => total + current.price * current.quantity,
+          0
+        )
+      : 0
     if (newSubtotal != totals.subtotal) {
       setTotals({
         subtotal: newSubtotal,
@@ -300,15 +294,8 @@ function CartDetail () {
     }
   }
 
-  const getTotal = () => {
-    const total = cart_menu.reduce((total, current) => {
-      return total + current.price * current.quantity
-    }, 0)
-    return total
-  }
-
   useEffect(() => {
-      updateTotal()
+    updateTotal()
   }, [cart_menu])
 
   //	This is to make the page re-render so that updated state is shown when item
@@ -416,27 +403,31 @@ function CartDetail () {
 
   function changePickupTime (newTime) {
     setPickupTime(newTime.value)
-    localStorage.setItem('order', JSON.stringify(Object.assign(order, { time: newTime.value })))
+    localStorage.setItem(
+      'order',
+      JSON.stringify(Object.assign(order, { time: newTime.value }))
+    )
   }
- console.log(JSON.parse(localStorage.getItem('userProfile')))
+  console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
-
     <div>
       <CartHeader showBackButton backLink='/eat/cohen/' />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>
           <div>
-            {cart_menu ? cart_menu.map(item => {
-              return (
-                <CartProduct
-                  key={item}
-                  product={item}
-                  forceUpdate={setDummyDelete}
-                  updateTotal={updateTotal}
-                />
-              )
-            }): "Your cart is empty!"}
+            {cart_menu
+              ? cart_menu.map(item => {
+                  return (
+                    <CartProduct
+                      key={item}
+                      product={item}
+                      forceUpdate={setDummyDelete}
+                      updateTotal={updateTotal}
+                    />
+                  )
+                })
+              : 'Your cart is empty!'}
           </div>
           <Bill wrapper>
             {Object.keys(totals).map(type => {
@@ -503,7 +494,7 @@ function CartDetail () {
         </SpaceWrapper>
         <SpaceWrapper footer>
           <SubmitButton
-            onClick={ cart_menu?.length === 0 ? null : handleConfirmClick}
+            onClick={cart_menu?.length === 0 ? null : handleConfirmClick}
           >
             Submit Order
           </SubmitButton>

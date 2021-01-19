@@ -1,5 +1,6 @@
 import './index.css'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {Navigate } from 'react-router-dom'

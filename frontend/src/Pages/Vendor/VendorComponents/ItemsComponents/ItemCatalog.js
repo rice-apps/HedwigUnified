@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { Tab, Tabs } from '@material-ui/core'
 

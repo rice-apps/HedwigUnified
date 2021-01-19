@@ -1,7 +1,7 @@
 import log from 'loglevel'
 import mongoose from 'mongoose'
 
-import { MONGODB_URL, MONGOOSE_CONFIG } from '../config'
+import { MONGODB_URL, MONGOOSE_CONFIG } from '../config.js'
 
 try {
   mongoose.connect(MONGODB_URL, MONGOOSE_CONFIG)

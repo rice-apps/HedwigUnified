@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import styled from 'styled-components'
 import {
   OrderDashboardWrapper,
   NewOrderTitleWrapper,
@@ -11,9 +10,8 @@ import {
   MakeDashboardTitle
 } from './DashboardComponents.js'
 import OrderCard from './OrderCard.js'
-import { gql, useQuery, useMutation } from '@apollo/client'
-
-import ORDER_TRACKER from '../../../../graphql/OrderTracker'
+import { useQuery, useMutation } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -189,7 +187,6 @@ const ORDER_UPDATED = gql`
 
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
- 
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
@@ -230,14 +227,19 @@ function OrderDashboard () {
           return prev
         }
 
-        const newOrderItem = subscriptionData.data.orderCreated
+        const updatedOrderItem = {
+          __typename: 'Order',
+          ...subscriptionData.data.orderUpdated
+        }
+
+        const updatedOrders = prev.findOrders.orders.map(order =>
+          order.id === updatedOrderItem.id ? updatedOrderItem : order
+        )
+
         return Object.assign({}, prev, {
           findOrders: {
             __typename: 'FindManyOrderPayload',
-            orders: [
-              { __typename: 'Order', ...newOrderItem },
-              ...prev.findOrders.orders
-            ]
+            orders: updatedOrders
           }
         })
       }

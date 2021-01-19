@@ -8,7 +8,7 @@ import {
   SortOrderTimeEnumTC,
   SortOrderEnumTC,
   PaymentSourceEnumTC
-} from './CommonModels'
+} from './CommonModels.js'
 
 const LineItemTC = sc.createObjectTC({
   name: 'LineItem',

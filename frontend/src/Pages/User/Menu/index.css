@@ -128,7 +128,7 @@
   justify-self: center;
   width: 12vh;
   height: 12vh;
-  object-fit:cover;
+  object-fit: cover;
   border-radius: 50%;
 }
 .itemname {

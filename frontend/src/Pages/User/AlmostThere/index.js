@@ -2,7 +2,7 @@ import './almostThere.css'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as WarningSVG } from './alert-circle.svg'
 import { resetOrderSummary } from '../Cart/util'
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components/macro'
 import moment from 'moment'
 
 export const Button = styled.div`
@@ -115,9 +115,7 @@ export const Div = styled.div`
       box-shadow: 0px 3px 6px 0px #aaaaaa;
     `};
 
-    ${props => props.button && css`
-    
-    `}
+  ${props => props.button && css``}
 `
 
 export const MessageWrapper = styled.div`

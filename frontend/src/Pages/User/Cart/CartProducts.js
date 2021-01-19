@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import dispatch from '../Products/FunctionalCart'
 import './cart.css'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import {
   Title,
   ShelfItemWrapper,
@@ -111,7 +111,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   return (
     <ShelfItemWrapper>
       <BsTrashFill
-      style={{cursor:"pointer", fontSize:'2vh'}}
+        style={{ cursor: 'pointer', fontSize: '2vh' }}
         onClick={() => {
           deleteCartItem()
           forceUpdate(date.getTime())

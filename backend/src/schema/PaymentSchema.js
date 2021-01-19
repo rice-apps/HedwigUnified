@@ -5,11 +5,11 @@ import {
   MoneyTC,
   OrderTracker,
   PaymentTC,
-  SortOrderEnumTC
-} from '../models'
-import { FetchPaymentPayloadTC } from '../models/PaymentModel'
-import squareClient from '../square'
-import { shopifyClient, shopifyAdminClient } from '../shopify'
+  SortOrderEnumTC,
+  FetchPaymentPayloadTC
+} from '../models/index.js'
+import squareClient from '../utils/square.js'
+import { shopifyClient, shopifyAdminClient } from '../utils/shopify.js'
 import { ApiError } from 'square'
 
 PaymentTC.addResolver({

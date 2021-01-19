@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { FaUserCircle } from 'react-icons/fa'
 import moment from 'moment'
 import { BiLogOut } from 'react-icons/bi'
 import { AiOutlineUserSwitch } from 'react-icons/ai'
 import { IconContext } from 'react-icons'
 import { useApolloClient } from '@apollo/client'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const VendorHeaderWrapper = styled.div`
   font-weight: 600;

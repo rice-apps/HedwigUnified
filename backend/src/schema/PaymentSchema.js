@@ -138,7 +138,7 @@ PaymentTC.addResolver({
                   args: {
                     input: {
                       lineItems: {
-                        quantity: subtotal.amount / 25,
+                        quantity: subtotal.amount,
                         variantId: unitProduct.variants[0].id
                       }
                     }
@@ -177,7 +177,7 @@ PaymentTC.addResolver({
           OrderTracker.findOneAndUpdate(
             { orderId: orderId },
             { shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
-          )
+          ).exec()
 
           break
         }
@@ -362,6 +362,10 @@ PaymentTC.addResolver({
                 checkout.add('order', order => {
                   order.add('id')
                 })
+                checkout.add('paymentDueV2', payment => {
+                  payment.add('amount')
+                  payment.add('currencyCode')
+                })
               })
             })
           })
@@ -375,6 +379,16 @@ PaymentTC.addResolver({
               node(id: $id) {
                 ...on Order {
                   fullyPaid
+                  totalCapturableSet {
+                    presentmentMoney {
+                      amount
+                      currencyCode
+                    }
+                    shopMoney {
+                      amount
+                      currencyCode
+                    }
+                  }
                   transactions {
                     id
                   }
@@ -383,11 +397,19 @@ PaymentTC.addResolver({
             }
           `
 
-          const order = await shopifyAdminClient.graphql(orderQuery, {
-            id: checkout.data.node.order.id
-          })
+          if (checkout.data.node.order != null) {
+            const order = await shopifyAdminClient.graphql(orderQuery, {
+              id: checkout.data.node.order.id
+            })
 
-          response = order.data.node.order.fullyPaid
+            response =
+              checkout.data.node.paymentDueV2.amount ===
+                order.node.totalCapturableSet.presentmentMoney.amount &&
+              checkout.data.node.paymentDueV2.currencyCode ===
+                order.node.totalCapturableSet.presentmentMoney.currencyCode
+          } else {
+            response = false
+          }
 
           break
         }

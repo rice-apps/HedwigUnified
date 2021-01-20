@@ -11,4 +11,5 @@ COPY . .
 
 EXPOSE 8080
 USER node
+ENTRYPOINT ["tini", "--"]
 CMD [ "node", "src/index.js" ]

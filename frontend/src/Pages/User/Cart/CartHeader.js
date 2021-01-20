@@ -51,7 +51,8 @@ const order = localStorage.getItem('cartItems')
 console.log(order)
 console.log(cart_menu)
 
-const backNav = !cart_menu ? '/eat' : order.vendor.name === 'Cohen House' ? '/eat/cohen/' : null 
+const backNav = !cart_menu ? '/eat' : order.vendor.name === 'Cohen House' ? '/eat/cohen/' : '/eat'
+
 const currVendor = order ? order.vendor.name : null 
 
   return (

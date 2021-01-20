@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro'
 
-import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
-import RalewayFont from './../../../fonts/GlobalFont'
+import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
+import RalewayFont from '../../../fonts/GlobalFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate, useLocation } from 'react-router-dom'
 

@@ -79,7 +79,9 @@ function VendorCard ({ vendor }) {
   const handleClick = () => {
     if (openStatus.status === 'openning') {
       // Go to this particular vendor's detail page
-      return navigate(`/eat/${vendor.slug}`, { state: { currentVendor: name } })
+      return navigate(`/eat/${vendor.slug}`, {
+        state: { currentVendor: name, slug: vendor.slug }
+      })
     } else {
       handleClickStatus()
     }

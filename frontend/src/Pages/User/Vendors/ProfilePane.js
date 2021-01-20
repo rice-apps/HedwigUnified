@@ -1,13 +1,15 @@
 import './ProfilePane.css'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { TextField } from '@material-ui/core'
+import gql from 'graphql-tag.macro'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
 function handleLogoutClick () {
+  localStorage.clear()
   localStorage.removeItem('token')
   window.open(logoutURL, '_self')
 }

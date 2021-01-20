@@ -1,12 +1,11 @@
 import { useState, useRef } from 'react'
 import hero from '../../../images/hero.jpg'
-import boba from '../../../images/boba.jpg'
 import './index.css'
-import { Link, animateScroll as scroll } from 'react-scroll'
+import { Link } from 'react-scroll'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
-import { useQuery, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import BottomAppBar from './../Vendors/BottomAppBar.js'
 import BuyerHeader from './../Vendors/BuyerHeader.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -25,12 +24,11 @@ function Menu () {
   const [open, setOpen] = React.useState(false)
   const prevOpen = React.useRef(open)
   const anchorRef = useRef(null)
-  const [arrowState, setArrowState] = useState(false)
+  const [] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currentVendor } = state
+  const { currentVendor, slug } = state
   const {
-    refetch,
     data: catalog_info,
     error: catalog_error,
     loading: catalog_loading
@@ -110,7 +108,8 @@ function Menu () {
     return navigate(`${product.name}`, {
       state: {
         currProduct: `${product.dataSourceId}`,
-        currVendor: currentVendor
+        currVendor: currentVendor,
+        slug: slug
       }
     })
   }
@@ -299,7 +298,7 @@ function Menu () {
             role={undefined}
             transition
           >
-            {({ TransitionProps, placement }) => (
+            {({ TransitionProps }) => (
               <Grow {...TransitionProps}>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList

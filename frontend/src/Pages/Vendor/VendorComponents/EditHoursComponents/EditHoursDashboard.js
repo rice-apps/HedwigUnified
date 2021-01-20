@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
 import { CgMathPlus } from 'react-icons/cg'
 import Modal from 'react-modal'
 
 import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
-import { useQuery, gql, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
+
+import gql from 'graphql-tag.macro'
 
 import moment from 'moment'
 
@@ -310,8 +312,8 @@ const TimeModal = styled.input`
   margin: 0 auto;
   font-size: 2.5vh;
   border: none;
-  width:10vw;
-  height:6vh;
+  width: 10vw;
+  height: 6vh;
   text-align: center;
 `
 
@@ -337,7 +339,7 @@ const ConfirmButton = styled.button`
 `
 
 //FUTURE MVP, safari does not support input type of time so we have to code it ourselves
-function formatTime(timeString) {
+function formatTime (timeString) {
   var cleaned = ('' + timeString).replace(/\D/g, '')
   var match = cleaned.match(/^(\d{2})(\d{2})$/)
   if (match) {

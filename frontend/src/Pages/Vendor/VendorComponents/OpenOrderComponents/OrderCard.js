@@ -1,13 +1,14 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { FaIdCard } from 'react-icons/fa'
 import Modal from 'react-modal'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import moment from 'moment'
+import gql from 'graphql-tag.macro'
 import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
@@ -417,9 +418,16 @@ function MakePaymentSpace (props) {
     variables: { orderId: props.id }
   })
 
-  const { isVerified, fetching } = useQuery(VERIFY_PAYMENT, {
+  const { data: verifyPaymentResult, loading } = useQuery(VERIFY_PAYMENT, {
     variables: { orderId: order?.shopifyOrderId }
   })
+
+  let isVerified = false
+
+  if (!loading && verifyPaymentResult != undefined) {
+    console.log('This is the query result: ', verifyPaymentResult)
+    isVerified = verifyPaymentResult.verifyPayment
+  }
 
   function MakePaymentButtons (props) {
     let buttonStatus = props.buttonStatus

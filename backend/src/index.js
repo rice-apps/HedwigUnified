@@ -4,17 +4,20 @@ import express from 'express'
 import http from 'http'
 import log from 'loglevel'
 
-import { DEV_PORT } from './config'
-import './utils/db'
+import { DEV_PORT } from './config.js'
+import './utils/db.js'
 
-import Schema from './schema'
+import Schema from './schema/index.js'
 
 // Initialize connection to Square with API token
-import './square'
+import './utils/square.js'
 
 const app = express().use(cors())
 
-const server = new ApolloServer({ schema: Schema })
+const server = new ApolloServer({
+  schema: Schema,
+  subscriptions: { path: '/ws' }
+})
 
 server.applyMiddleware({ app })
 

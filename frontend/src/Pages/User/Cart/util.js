@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 
@@ -6,6 +6,7 @@ export const GET_VENDOR = gql`
   query GET_VENDOR($filter: FilterFindOneVendorsInput!) {
     getVendor(filter: $filter) {
       name
+      pickupInstruction
       hours {
         start
         end
@@ -179,5 +180,8 @@ export const checkNullFields = source => {
 }
 
 export const resetOrderSummary = () => {
-  localStorage.setItem('order', JSON.stringify({ vendor: {}, time: null, fulfillment: {} }))
+  localStorage.setItem(
+    'order',
+    JSON.stringify({ vendor: {}, time: null, fulfillment: {} })
+  )
 }

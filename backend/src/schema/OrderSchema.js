@@ -1,14 +1,16 @@
 import { ApolloError } from 'apollo-server-express'
-import { CreateOrderInputTC, OrderTC, OrderTracker } from '../models'
-import { pubsub } from '../utils/pubsub'
 import {
+  CreateOrderInputTC,
+  OrderTC,
+  OrderTracker,
   FilterOrderInputTC,
   SortOrderInputTC,
   FindManyOrderPayloadTC,
   UpdateOrderTC
-} from '../models/OrderModel'
-import squareClient from '../square'
-import TwilioClient from '../twilio'
+} from '../models/index.js'
+import { pubsub } from '../utils/pubsub.js'
+import squareClient from '../utils/square.js'
+import TwilioClient from '../utils/twilio.js'
 import { ApiError } from 'square'
 
 OrderTC.addResolver({

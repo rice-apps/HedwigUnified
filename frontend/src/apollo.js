@@ -1,22 +1,13 @@
 // Apollo Client Setup
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-  split,
-  gql
-} from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { setContext } from '@apollo/link-context'
 
 // Apollo Subscriptions Setup
 import { WebSocketLink } from '@apollo/link-ws'
-import { GRAPHQL_URL, GRAPHQL_WS_URL, SERVICE_URL } from './config'
+import { GRAPHQL_URL, GRAPHQL_WS_URL } from './config'
 
-import { makeVar } from '@apollo/client'
 import { resetOrderSummary } from './Pages/User/Cart/util'
-
-
 
 if (!localStorage.getItem('order')) {
   resetOrderSummary()
@@ -81,27 +72,4 @@ export const client = new ApolloClient({
     }
   }),
   link: authLink.concat(splitLink)
-})
-
-// Initial local state
-const initialState = {
-  service: SERVICE_URL,
-  user: {
-    recentUpdate: false,
-    _id: ''
-  }
-}
-
-// Initialize cache with a state
-cache.writeQuery({
-  query: gql`
-    query InitialState {
-      service
-      user {
-        recentUpdate
-        _id
-      }
-    }
-  `,
-  data: initialState
 })

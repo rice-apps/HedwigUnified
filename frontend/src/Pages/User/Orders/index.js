@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import Modal from 'react-modal'
-import { useQuery, gql, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { useHistory } from 'react-router'
+import gql from 'graphql-tag.macro'
 import './order.css'
 
 Modal.bind('#app')

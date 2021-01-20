@@ -42,6 +42,7 @@ function Product () {
 
   const [quantity, setQuantity] = useState(1)
 
+  console.log(productId)
   if (vendor_loading) {
     return <p>Loading...</p>
   }
@@ -71,14 +72,17 @@ function Product () {
     const vendor = vendor_data.getVendor
     const order = JSON.parse(localStorage.getItem('order'))
 
-    localStorage.setItem('order',
-      JSON.stringify(Object.assign(order, {
-        vendor: {
-          name: vendor.name,
-          merchantId: vendor.squareInfo.merchantId,
-          locationIds: vendor.squareInfo.locationIds
-        }
-      }))
+    localStorage.setItem(
+      'order',
+      JSON.stringify(
+        Object.assign(order, {
+          vendor: {
+            name: vendor.name,
+            merchantId: vendor.squareInfo.merchantId,
+            locationIds: vendor.squareInfo.locationIds
+          }
+        })
+      )
     )
     if (order.vendor && vendor.name != order.vendor.name) {
       console.log('Order is not from the same vendor! ERROR')
@@ -88,6 +92,7 @@ function Product () {
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])
     const itemName = product.name
+    const image = product.image;
     const itemDataSourceId = product.dataSourceId
     let variant
 
@@ -127,7 +132,8 @@ function Product () {
         quantity: itemQuantity,
         price: totalPrice,
         modDisplay: modifierNames,
-        dataSourceId: itemDataSourceId
+        dataSourceId: itemDataSourceId,
+        image: image
       }
     })
     console.log(itemName, variantObject)
@@ -136,9 +142,13 @@ function Product () {
 
   return (
     <div>
-      <BuyerHeader />
+      <BuyerHeader
+        showBackButton={true}
+        backLink={`/eat/${vendor.slug}`}
+        state={{ currentVendor: vendor.name }}
+      />
       <div className='container'>
-        <img className='heroImage' src={product.image ? product.image : "https://www.nippon.com/en/ncommon/contents/japan-data/169591/169591.jpg"} alt={product.name} />
+        <img className='heroImage' src={product.image} alt={product.name} />
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>
@@ -170,7 +180,11 @@ function Product () {
             className='submitButton'
             onClick={() => {
               makeCartItem()
-              navigate('/eat/cohen/cart')
+              console.log(vendor)
+              navigate(`/eat/${vendor.slug}`, {
+                state: { currentVendor: vendor.name }
+              })
+              // navigate('/eat/cohen/cart')
             }}
           >
             Add

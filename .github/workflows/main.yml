@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  api-build:
+  backend-build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -42,12 +42,12 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
-          context: ./api
-          file: ./api/Dockerfile
+          context: ./backend
+          file: ./backend/Dockerfile
           push: ${{ !env.ACT }}
           tags: riceapps/hedwig-api:latest
 
-  client-build:
+  frontend-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Files
@@ -70,12 +70,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            REACT_APP_SERVICE_URL=http://64.225.55.156:3000/auth
-            REACT_APP_BACKEND_URL=http://64.225.55.156:8080/api
-            REACT_APP_GRAPHQL_URL=http://64.225.55.156:8080/graphql
-            REACT_APP_GRAPHQL_WS_URL=ws://64.225.55.156:8080/graphql
-          context: ./client
-          file: ./client/Dockerfile
+            REACT_APP_GRAPHQL_URL=https://hedwig.vsong.me/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.vsong.me/ws
+          context: ./frontend
+          file: ./frontend/Dockerfile
           push: ${{ !env.ACT }}
           tags: riceapps/hedwig-client:latest
           secrets: |

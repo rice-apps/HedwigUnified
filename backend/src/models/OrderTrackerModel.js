@@ -1,7 +1,7 @@
 import { composeMongoose } from 'graphql-compose-mongoose'
-import { Schema, model } from 'mongoose'
+import mongoose from 'mongoose'
 
-const OrderTrackerSchema = new Schema({
+const OrderTrackerSchema = new mongoose.Schema({
   merchantId: { type: String, required: false },
   locationId: { type: String, required: false },
   orderId: { type: String, required: false },
@@ -18,7 +18,7 @@ const OrderTrackerSchema = new Schema({
     enum: ['PROPOSED', 'RESERVED', 'PREPARED', 'COMPLETED', 'CANCELED']
   },
   customer: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Users',
     required: false
   },
@@ -30,7 +30,7 @@ const OrderTrackerSchema = new Schema({
   }
 })
 
-const OrderTracker = model('OrderTracker', OrderTrackerSchema)
+const OrderTracker = mongoose.model('OrderTracker', OrderTrackerSchema)
 const OrderTrackerTC = composeMongoose(OrderTracker)
 
 export { OrderTracker, OrderTrackerTC }

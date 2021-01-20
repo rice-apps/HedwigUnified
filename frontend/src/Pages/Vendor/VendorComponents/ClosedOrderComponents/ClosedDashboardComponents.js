@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { FaAngleRight, FaAngleDown } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import moment from 'moment'

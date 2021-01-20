@@ -1,4 +1,4 @@
-import { VendorTC } from '../models/VendorModel'
+import { VendorTC } from '../models/index.js'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers.findOne(),

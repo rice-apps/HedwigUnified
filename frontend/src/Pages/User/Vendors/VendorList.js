@@ -29,15 +29,14 @@ import ProfilePane from './ProfilePane.js'
 
 function VendorList ({}) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
-  
 
   if (error) return <p>{error.message}</p>
   if (loading) return <p>Loading...</p>
   if (!data) return <p>No data...</p>
 
   const { getVendors } = data
-  let localUser =JSON.parse(localStorage.getItem('userProfile'))
-  console.log("LOCAL USER BEFORE", localUser)
+  let localUser = JSON.parse(localStorage.getItem('userProfile'))
+  console.log('LOCAL USER BEFORE', localUser)
   // Object.assign(localUser, {name: "Test"})
   // console.log("LOCAL USER AFTER", localUser)
   return (

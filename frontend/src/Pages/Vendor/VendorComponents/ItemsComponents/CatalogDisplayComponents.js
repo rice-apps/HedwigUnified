@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import Toggle from 'react-toggle'
 import {
   GET_ITEM_AVAILABILITY,

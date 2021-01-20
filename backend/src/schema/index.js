@@ -1,13 +1,21 @@
 import { sc } from 'graphql-compose'
-import { PaymentQueries, PaymentMutations } from './PaymentSchema'
-import { UserQueries, UserMutations } from './UserSchema'
-import { ItemQueries, ItemMutations, ItemSubscriptions } from './ProductSchema'
-import { OrderQueries, OrderMutations, OrderSubscriptions } from './OrderSchema'
+import { PaymentQueries, PaymentMutations } from './PaymentSchema.js'
+import { UserQueries, UserMutations } from './UserSchema.js'
+import {
+  ItemQueries,
+  ItemMutations,
+  ItemSubscriptions
+} from './ProductSchema.js'
+import {
+  OrderQueries,
+  OrderMutations,
+  OrderSubscriptions
+} from './OrderSchema.js'
 import {
   OrderTrackerQueries,
   OrderTrackerMutations
-} from './OrderTrackerSchema'
-import { VendorQueries, VendorMutations } from './VendorSchema'
+} from './OrderTrackerSchema.js'
+import { VendorQueries, VendorMutations } from './VendorSchema.js'
 
 sc.Query.addFields({
   ...UserQueries,

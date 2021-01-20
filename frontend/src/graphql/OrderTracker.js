@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import gql from 'graphql-tag.macro'
 
 const ORDER_TRACKER = gql`
   query ORDER_TRACKER($orderId: String!) {

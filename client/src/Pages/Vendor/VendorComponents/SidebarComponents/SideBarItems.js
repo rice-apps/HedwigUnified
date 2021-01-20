@@ -57,7 +57,7 @@ const MainMenuItemWrapper = styled.div`
 
   /* NEW */
   background-color: ${props => (props.isClosed ? 'white' : '#ffeaea')};
-  border-left: ${props => (props.isClosed ? '' : '9px solid #EA907A')};
+  border-left: ${props => (props.isClosed ? '' : '6px solid #EA907A')};
   padding: ${props => (props.isClosed ? '9px' : '0px')};
 `
 
@@ -219,12 +219,13 @@ function SideBarItems () {
           onChange={() =>
             onChangeIsClosed(vendor_data.getVendor.hours[index].isClosed)
           }
+          icons={false}
           className='toggleStyle'
         />
       </div>
       <Collapsible
         classParentString='MainMenuCollapsible'
-        open
+        closed
         /* NEW */
         trigger={<MainMenuItem name='Order Processing' isClosed />}
         triggerWhenOpen={<MainMenuItem name='Order Processing' />}
@@ -235,7 +236,7 @@ function SideBarItems () {
 
       <Collapsible
         classParentString='MainMenuCollapsible'
-        open
+        closed
         trigger={<MainMenuItem name='Menu Management' isClosed />}
         triggerWhenOpen={<MainMenuItem name='Menu Management' />}
       >
@@ -245,7 +246,7 @@ function SideBarItems () {
 
       <Collapsible
         classParentString='MainMenuCollapsible'
-        open
+        closed
         trigger={<MainMenuItem name='Store Status' isClosed />}
         triggerWhenOpen={<MainMenuItem name='Store Status' />}
       >
@@ -260,7 +261,7 @@ function SideBarItems () {
             marginBottom: '12px'
           }}
         >
-          <div style={{ marginBottom: '12px' }}>Help</div>
+          <div style={{ marginBottom: '8px' }}>Help</div>
           <div>About</div>
         </BottomWrapper>
       </div>

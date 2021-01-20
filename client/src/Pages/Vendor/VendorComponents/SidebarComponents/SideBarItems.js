@@ -31,11 +31,11 @@ const GET_VENDOR_INFO = gql`
 const SideBarItemsWrapper = styled.div`
   display: flex;
   height: 100%;
-  width: 80%;
+  width: 100%;
   /* background-color: green; */
   flex-direction: column;
   align-content: stretch;
-  margin-top: 10px;
+  /* margin-top: 26px; */
   font-weight: 500;
 `
 
@@ -57,7 +57,7 @@ const MainMenuItemWrapper = styled.div`
 
   flex-direction: row;
   align-items: center;
-  margin: 6px 0px;
+  /* margin: 6px 0px; */
 
   /* NEW */
   background-color: ${props => (props.isClosed ? 'white' : '#ffeaea')};
@@ -70,10 +70,10 @@ const Img = styled.img`
     props.logo &&
     css`
       grid-area: ImageSpace;
-      height: 18vh;
-      width: 18vh;
+      height: 62px;
+      width: 62px;
       border-radius: 50%;
-      margin-top: 10px;
+      margin-top: 37.4px;
     `}
 `
 
@@ -138,6 +138,8 @@ const StyledText = styled.text`
   font-size: 13.4px;
   margin-left: 12.7px;
   margin-right: 18px;
+  margin-top: 8.7px;
+  margin-bottom: 26px;
 `
 
 const BottomWrapper = styled.div`
@@ -186,12 +188,14 @@ function SideBarItems () {
     <SideBarItemsWrapper>
       {/* <Img logo src={vendorData.getVendor.logoUrl} /> */}
       <Title>Cohen House</Title>
-      <StyledText>Store Status: {storeStatus}</StyledText>
-      <Toggle
-        defaultChecked={storeStatus}
-        onChange={() => handleToggleStoreStatus(storeStatus)}
-        className='toggleStyle'
-      />
+      <StyledText>
+        Store Status: {storeStatus}
+        <Toggle
+          defaultChecked={storeStatus}
+          onChange={() => handleToggleStoreStatus(storeStatus)}
+          className='toggleStyle'
+        />
+      </StyledText>
       <Collapsible
         classParentString='MainMenuCollapsible'
         open

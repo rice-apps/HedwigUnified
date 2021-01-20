@@ -29,6 +29,8 @@ FROM nginx:stable-alpine
 
 COPY --from=build /frontend/build /var/www/html
 
+RUN chown -R nginx:nginx /var/www/html
+
 EXPOSE 8000 8001
 USER nginx
 CMD ["nginx", "-g", "daemon off;"]

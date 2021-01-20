@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
+import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
 import RalewayFont from '../../../fonts/GlobalFont.js'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'

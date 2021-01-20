@@ -239,13 +239,13 @@ const newRoutesArray = [
       {
         path: '/',
         element: (
-          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
+          <PrivateRoute isEmployeeRoute={false} element={<OpenOrdersPage />} />
         )
       },
       {
         path: '/openorders',
         element: (
-          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
+          <PrivateRoute isEmployeeRoute={false} element={<OpenOrdersPage />} />
         )
       },
       {

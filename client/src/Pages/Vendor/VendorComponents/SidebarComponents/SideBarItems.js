@@ -13,17 +13,15 @@ import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
 
 import moment from 'moment'
 
-const GET_VENDOR_INFO = gql`
-  query GET_AVAILABILITY($name: String!) {
-    getVendor(filter: { name: $name }) {
-      name
-      logoUrl
-      website
-      email
-      facebook
-      phone
-      cutoffTime
-      pickupInstruction
+const UPDATE_VENDOR = gql`
+  mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
+    updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
+      record {
+        hours {
+          start
+          end
+        }
+      }
     }
   }
 `
@@ -42,22 +40,20 @@ const SideBarItemsWrapper = styled.div`
 const MainMenuItemWrapper = styled.div`
   /* background-color: #ffc8ba; */
   /* background: #ffeaea 0% 0% no-repeat padding-box; */
-  color: black;
+  color: ${props => (props.isClosed ? 'black' : '#EA907A')};
+  font-weight: ${props => (props.isClosed ? 0 : 700)};
   width: 100%;
-  /* padding: 0.5vh 0.5vw; */
-  /* border-radius: 20px; */
   height: 46.1px;
-  /* font-weight: 600; */
-  /* font: normal normal normal 20px/12px Avenir; */
   font-size: 20px/12px;
-  /* font-size: 20px; */
-  font-family: 'Avenir';
   display: flex;
   text-align: left;
 
   flex-direction: row;
   align-items: center;
   /* margin: 6px 0px; */
+  margin-bottom: 7.7px;
+  margin-top: 7.7px;
+  margin-left: ${props => (props.isClosed ? '17.4px' : '0')};
 
   /* NEW */
   background-color: ${props => (props.isClosed ? 'white' : '#ffeaea')};
@@ -82,25 +78,19 @@ function MainMenuItem (props) {
   return (
     /* NEW */
     <MainMenuItemWrapper isClosed={props.isClosed}>
-      {props.name}
-      {/* {props.IsClosed ? (
-        <IoIosArrowDown
-          style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
-        />
-      ) : (
-        <IoIosArrowUp
-          style={{ color: 'black', marginTop: '3px', marginLeft: '6px' }}
-        />
-      )} */}
+      <div style={props.isClosed ? {} : { marginLeft: '17.4px' }}>
+        {props.name}
+      </div>
     </MainMenuItemWrapper>
   )
 }
 
 const SubMenuItemWrapper = styled.div`
   background-color: white;
-  margin-left: 15px;
+  margin-left: 42.7px;
   width: 80%;
-  padding: 0.4vh 0.4vw;
+  padding: 0.85vh;
+  /* 0.4vw */
   border-radius: 20px;
 `
 const StyledNavLink = styled(NavLink)`
@@ -137,19 +127,25 @@ const StyledText = styled.text`
   text-align: left;
   font-size: 13.4px;
   margin-left: 12.7px;
-  margin-right: 18px;
+  margin-right: 8px;
   margin-top: 8.7px;
   margin-bottom: 26px;
+  width: 75.5px;
 `
 
 const BottomWrapper = styled.div`
-  padding-top: 374px;
+  /* padding-top: 215px; */
+  margin-bottom: '10px';
   text-align: left;
   font-family: 'Avenir';
+  margin-left: 26.4px;
 `
 
 function SideBarItems () {
   const [storeStatus, setStoreStatus] = useState('Open')
+
+  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+
   // get vendor data:
   const {
     data: vendor_data,
@@ -172,6 +168,29 @@ function SideBarItems () {
     obj => obj.day === currentDay
   )
 
+  async function onChangeIsClosed (inputIsClosed) {
+    const originalHours = vendor_data.getVendor.hours
+    const updatedHours = [...originalHours]
+    // This index is the index of the day! should reflect what day the user clicks to edit:
+    const updatedDay = { ...updatedHours[index] }
+    updatedDay.isClosed = !inputIsClosed
+
+    updatedHours[index] = updatedDay
+    updatedHours.map((day, index) => {
+      const dayCopy = { ...updatedHours[index] }
+      delete dayCopy['__typename']
+      updatedHours[index] = dayCopy
+    })
+
+    await toggleIsClosed({
+      variables: {
+        name: 'Cohen House',
+        hours: updatedHours
+      }
+    })
+    window.location.reload()
+  }
+
   console.log(vendor_data.getVendor.hours[index].isClosed)
 
   function handleToggleStoreStatus (inputStatus) {
@@ -188,14 +207,21 @@ function SideBarItems () {
     <SideBarItemsWrapper>
       {/* <Img logo src={vendorData.getVendor.logoUrl} /> */}
       <Title>Cohen House</Title>
-      <StyledText>
-        Store Status: {storeStatus}
+      <div style={{ marginBottom: '26px' }}>
+        <StyledText>
+          Store Status:{' '}
+          {vendor_data.getVendor.hours[index].isClosed ? 'Closed' : 'Open'}
+        </StyledText>
         <Toggle
-          defaultChecked={storeStatus}
-          onChange={() => handleToggleStoreStatus(storeStatus)}
+          defaultChecked={
+            vendor_data.getVendor.hours[index].isClosed ? false : true
+          }
+          onChange={() =>
+            onChangeIsClosed(vendor_data.getVendor.hours[index].isClosed)
+          }
           className='toggleStyle'
         />
-      </StyledText>
+      </div>
       <Collapsible
         classParentString='MainMenuCollapsible'
         open
@@ -226,10 +252,18 @@ function SideBarItems () {
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
         <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
-      <BottomWrapper>
-        <div>Help</div>
-        <div>About</div>
-      </BottomWrapper>
+      <div>
+        <BottomWrapper
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            marginBottom: '12px'
+          }}
+        >
+          <div style={{ marginBottom: '12px' }}>Help</div>
+          <div>About</div>
+        </BottomWrapper>
+      </div>
     </SideBarItemsWrapper>
   )
 }

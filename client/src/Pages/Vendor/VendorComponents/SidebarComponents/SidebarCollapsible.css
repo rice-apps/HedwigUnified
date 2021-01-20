@@ -3,3 +3,15 @@
   /* color: red; */
   margin-right: 12px;
 }
+
+.toggleStyle .react-toggle-track {
+  width: 35.73px;
+  height: 14.5px;
+  padding: 1px;
+}
+
+.toggleStyle .react-toggle-thumb {
+  margin-left: -4px;
+  height: 12px;
+  width: 12px;
+}

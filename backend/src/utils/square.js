@@ -11,13 +11,13 @@ const squareClients = new Promise((resolve,reject) => {
     Vendor.find()
     .exec()
     .then(res => {
-      
+
         const squareClientsMap = new Map()
         res.forEach(vendor => {
-          squareClientsMap.set(vendor.slug, new Client({environment: Environment.Sandbox,accessToken: vendor.squareInfo.accessToken}))
+          squareClientsMap.set(vendor.name, new Client({environment: Environment.Sandbox,accessToken: vendor.squareInfo.accessToken}))
         })
         return resolve(squareClientsMap)
-      
+
   })
     .catch((error) => {
         reject(error)

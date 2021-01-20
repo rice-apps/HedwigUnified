@@ -26,7 +26,6 @@ ItemTC.addResolver({
       const {
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
-
       // Filter objects into distinct sets
       const categories = objects.filter(object => object.type === 'CATEGORY')
       const modifierLists = objects.filter(

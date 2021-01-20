@@ -1,17 +1,16 @@
 import Collapsible from 'react-collapsible'
 import styled, { css } from 'styled-components'
 import './SidebarCollapsible.css'
-import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
+// import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'
-import { gql, useQuery, useMutation, useApolloClient } from '@apollo/client'
-
-import { useState, useEffect } from 'react'
+import { gql, useQuery, useMutation } from '@apollo/client'
 
 import Toggle from 'react-toggle'
 
 import { VENDOR_QUERY } from '../../../../graphql/VendorQueries.js'
 
 import moment from 'moment'
+import { faBullseye } from '@fortawesome/free-solid-svg-icons'
 
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
@@ -30,16 +29,12 @@ const SideBarItemsWrapper = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
-  /* background-color: green; */
   flex-direction: column;
   align-content: stretch;
-  /* margin-top: 26px; */
   font-weight: 500;
 `
 
 const MainMenuItemWrapper = styled.div`
-  /* background-color: #ffc8ba; */
-  /* background: #ffeaea 0% 0% no-repeat padding-box; */
   color: ${props => (props.isClosed ? 'black' : '#EA907A')};
   font-weight: ${props => (props.isClosed ? 0 : 700)};
   width: 100%;
@@ -50,12 +45,10 @@ const MainMenuItemWrapper = styled.div`
 
   flex-direction: row;
   align-items: center;
-  /* margin: 6px 0px; */
   margin-bottom: 7.7px;
   margin-top: 7.7px;
   margin-left: ${props => (props.isClosed ? '17.4px' : '0')};
 
-  /* NEW */
   background-color: ${props => (props.isClosed ? 'white' : '#ffeaea')};
   border-left: ${props => (props.isClosed ? '' : '6px solid #EA907A')};
   padding: ${props => (props.isClosed ? '9px' : '0px')};
@@ -76,8 +69,8 @@ const Img = styled.img`
 function MainMenuItem (props) {
   // Make IsExpanded prop true when the menu item is expanded by the user
   return (
-    /* NEW */
     <MainMenuItemWrapper isClosed={props.isClosed}>
+      {/* The margin is adjusted if the menu item is clicked due to style changes: */}
       <div style={props.isClosed ? {} : { marginLeft: '17.4px' }}>
         {props.name}
       </div>
@@ -90,7 +83,6 @@ const SubMenuItemWrapper = styled.div`
   margin-left: 42.7px;
   width: 80%;
   padding: 0.85vh;
-  /* 0.4vw */
   border-radius: 20px;
 `
 const StyledNavLink = styled(NavLink)`
@@ -134,7 +126,6 @@ const StyledText = styled.text`
 `
 
 const BottomWrapper = styled.div`
-  /* padding-top: 215px; */
   margin-bottom: '10px';
   text-align: left;
   font-family: 'Avenir';
@@ -142,16 +133,15 @@ const BottomWrapper = styled.div`
 `
 
 function SideBarItems () {
-  const [storeStatus, setStoreStatus] = useState('Open')
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
-
-  // get vendor data:
+  // Get current hours for the vendor from the Open/Closed toggle:
   const {
     data: vendor_data,
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
+    // vendor is still hard coded:
     variables: { vendor: 'Cohen House' }
   })
 
@@ -162,14 +152,16 @@ function SideBarItems () {
     return <p>Error...</p>
   }
 
-  // Get index of current day:
+  // Get index of the current day to get isClosed value for current day:
   const currentDay = moment().format('dddd')
   const index = vendor_data.getVendor.hours.findIndex(
     obj => obj.day === currentDay
   )
+  const originalHours = vendor_data.getVendor.hours
 
+  // Similar function to onChangeIsClosed in EditHoursDashboard.js
   async function onChangeIsClosed (inputIsClosed) {
-    const originalHours = vendor_data.getVendor.hours
+    // const originalHours = vendor_data.getVendor.hours
     const updatedHours = [...originalHours]
     // This index is the index of the day! should reflect what day the user clicks to edit:
     const updatedDay = { ...updatedHours[index] }
@@ -191,42 +183,38 @@ function SideBarItems () {
     window.location.reload()
   }
 
-  console.log(vendor_data.getVendor.hours[index].isClosed)
-
-  function handleToggleStoreStatus (inputStatus) {
-    if (inputStatus === 'Open') {
-      setStoreStatus('Closed')
-    } else if (inputStatus === 'Closed') {
-      setStoreStatus('Open')
-    } else {
-      console.log('Invalid store status')
-    }
-  }
+  console.log(originalHours[index].isClosed)
 
   return (
     <SideBarItemsWrapper>
-      {/* <Img logo src={vendorData.getVendor.logoUrl} /> */}
+      {/* <Img logo src={vendor_data.getVendor.logoUrl} /> */}
       <Title>Cohen House</Title>
       <div style={{ marginBottom: '26px' }}>
         <StyledText>
-          Store Status:{' '}
-          {vendor_data.getVendor.hours[index].isClosed ? 'Closed' : 'Open'}
+          Store Status: {originalHours[index].isClosed ? 'Closed' : 'Open'}
         </StyledText>
         <Toggle
-          defaultChecked={
-            vendor_data.getVendor.hours[index].isClosed ? false : true
-          }
-          onChange={() =>
-            onChangeIsClosed(vendor_data.getVendor.hours[index].isClosed)
-          }
+          defaultChecked={originalHours[index].isClosed ? false : true}
+          onChange={() => onChangeIsClosed(originalHours[index].isClosed)}
           icons={false}
           className='toggleStyle'
         />
       </div>
+      {/* If user is on a url that collapsible will be open: */}
       <Collapsible
         classParentString='MainMenuCollapsible'
-        closed
-        /* NEW */
+        closed={
+          window.location.href.includes('openorders') ||
+          window.location.href.includes('closedorders')
+            ? undefined
+            : true
+        }
+        open={
+          window.location.href.includes('openorders') ||
+          window.location.href.includes('closedorders')
+            ? true
+            : undefined
+        }
         trigger={<MainMenuItem name='Order Processing' isClosed />}
         triggerWhenOpen={<MainMenuItem name='Order Processing' />}
       >
@@ -236,7 +224,18 @@ function SideBarItems () {
 
       <Collapsible
         classParentString='MainMenuCollapsible'
-        closed
+        closed={
+          window.location.href.includes('items') ||
+          window.location.href.includes('modifiers')
+            ? undefined
+            : true
+        }
+        open={
+          window.location.href.includes('items') ||
+          window.location.href.includes('modifiers')
+            ? true
+            : undefined
+        }
         trigger={<MainMenuItem name='Menu Management' isClosed />}
         triggerWhenOpen={<MainMenuItem name='Menu Management' />}
       >
@@ -246,7 +245,18 @@ function SideBarItems () {
 
       <Collapsible
         classParentString='MainMenuCollapsible'
-        closed
+        closed={
+          window.location.href.includes('set-basic-info') ||
+          window.location.href.includes('set-store-hours')
+            ? undefined
+            : true
+        }
+        open={
+          window.location.href.includes('set-basic-info') ||
+          window.location.href.includes('set-store-hours')
+            ? true
+            : undefined
+        }
         trigger={<MainMenuItem name='Store Status' isClosed />}
         triggerWhenOpen={<MainMenuItem name='Store Status' />}
       >

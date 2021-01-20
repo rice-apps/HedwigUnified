@@ -239,29 +239,26 @@ const newRoutesArray = [
       {
         path: '/',
         element: (
-          <PrivateRoute isEmployeeRoute={false} element={<OpenOrdersPage />} />
+          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
         )
       },
       {
         path: '/openorders',
         element: (
-          <PrivateRoute isEmployeeRoute={false} element={<OpenOrdersPage />} />
+          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
         )
       },
       {
         path: '/closedorders',
         element: (
-          <PrivateRoute
-            isEmployeeRoute={false}
-            element={<ClosedOrdersPage />}
-          />
+          <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} />
         )
       },
       {
         path: '/items',
         element: (
           <PrivateRoute
-            isEmployeeRoute={false}
+            isEmployeeRoute={true}
             element={<ItemsMenuManagementPage />}
           />
         )
@@ -270,7 +267,7 @@ const newRoutesArray = [
         path: '/modifiers',
         element: (
           <PrivateRoute
-            isEmployeeRoute={false}
+            isEmployeeRoute={true}
             element={<ModifiersMenuManagementPage />}
           />
         )
@@ -278,10 +275,7 @@ const newRoutesArray = [
       {
         path: '/set-basic-info',
         element: (
-          <PrivateRoute
-            isEmployeeRoute={false}
-            element={<SetBasicInfoPage />}
-          />
+          <PrivateRoute isEmployeeRoute={true} element={<SetBasicInfoPage />} />
         )
       },
       {

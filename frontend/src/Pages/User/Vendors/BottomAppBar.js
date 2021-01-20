@@ -48,7 +48,8 @@ function BottomAppBar () {
 
   const CartItems = JSON.parse(localStorage.getItem('cartItems'))
   let cartAmount = 0
-  CartItems.forEach(item => cartAmount += item.quantity)
+  if (CartItems){ 
+    CartItems.forEach(item => cartAmount += item.quantity) }
 
   return (
     <BottomNavigationWrapper>

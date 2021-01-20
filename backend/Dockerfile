@@ -9,6 +9,11 @@ RUN npm ci --only=production
 
 COPY . .
 
+RUN apk add --no-cache tini=~0.19.0
+
 EXPOSE 8080
+
 USER node
+
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD [ "node", "src/index.js" ]

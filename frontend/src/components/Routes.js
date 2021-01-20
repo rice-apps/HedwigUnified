@@ -26,6 +26,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
+import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
 
@@ -298,6 +299,10 @@ const newRoutesArray = [
             element={<SetStoreHoursPage />}
           />
         )
+      },
+      {
+        path: '/faq',
+        element: <PrivateRoute isEmployeeRoute={true} element={<FAQ />} />
       }
     ]
   },

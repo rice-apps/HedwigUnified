@@ -53,6 +53,17 @@ const SubMenuItemWrapper = styled.div`
   padding: 0.4vh 0.4vw;
   border-radius: 20px;
 `
+
+const BottomMenuItemWrapper = styled.div`
+  background-color: white;
+  margin-left: 15px;
+  width: 80%;
+  padding: 0.4vh 0.4vw;
+  border-radius: 20px;
+  position: absolute;
+  bottom: 6px;
+`
+
 const StyledNavLink = styled(NavLink)`
   margin-left: 10px;
   text-decoration: none;
@@ -70,6 +81,20 @@ function SubMenuItem (props) {
         {props.label}{' '}
       </StyledNavLink>
     </SubMenuItemWrapper>
+  )
+}
+
+function BottomMenuItem (props) {
+  return (
+    <BottomMenuItemWrapper>
+      <StyledNavLink
+        to={props.path}
+        activeStyle={{ color: '#EA907A', fontWeight: '700' }}
+      >
+        {' '}
+        {props.label}{' '}
+      </StyledNavLink>
+    </BottomMenuItemWrapper>
   )
 }
 
@@ -111,6 +136,7 @@ function SideBarItems () {
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
         <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
+      <BottomMenuItem path='/employee/faq' label='Help' />
     </SideBarItemsWrapper>
   )
 }

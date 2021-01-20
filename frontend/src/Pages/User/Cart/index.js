@@ -413,7 +413,7 @@ function CartDetail () {
   console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
     <div>
-      <CartHeader showBackButton backLink='/eat/cohen/' />
+      <CartHeader showBackButton backLink='/eat' vendorName={order ? order.vendor.name: null} />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>

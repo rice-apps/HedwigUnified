@@ -48,11 +48,17 @@ function normalizeInput(value, previousValue){
 
 
 function ContactForm () {
+<<<<<<< HEAD
   const user = userProfile()
   const userName =
     sStorage.getItem('first name') + ' ' + sStorage.getItem('last name')
     const firstName = sStorage.getItem('first name')
   const navigate = useNavigate()
+=======
+  const user = JSON.parse(localStorage.getItem('userProfile'))
+  const navigate = useNavigate()
+  const userName = user.name
+>>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
   const [format, setFormat] = useState(null)
@@ -79,7 +85,13 @@ function ContactForm () {
   if (error) return <p>{error.message}</p>
 
   if (confirmed) {
+<<<<<<< HEAD
     localStorage.setItem('phone', phone)
+=======
+    Object.assign(user, {phone: phone.replaceAll("-","")})
+    localStorage.setItem('userProfile', JSON.stringify(user))
+    console.log('USER', JSON.parse(localStorage.getItem('userProfile')))
+>>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322
     addPhone({ variables: { name: userName, phone: phone.replaceAll("-",""), netid: user.netid } })
     return <Navigate to='/launch' />
   }
@@ -91,7 +103,11 @@ function ContactForm () {
      
       <div id='greeting-container'>
         <p className='greetings'>Hello,</p>
+<<<<<<< HEAD
         <p className='greetings'>{firstName}!</p>
+=======
+        <p className='greetings'>{userName}!</p>
+>>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322
       </div>
         <p id="instruction" >
           Let's set up your profile with us. We'll need your phone number to send you updates on your order status.

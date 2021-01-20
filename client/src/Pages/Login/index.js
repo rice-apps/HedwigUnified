@@ -4,10 +4,6 @@ import { useQuery, gql } from '@apollo/client'
 import logo from './HedwigLogoFinal_02.svg'
 import { SERVICE_URL } from '../../config'
 import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
-<<<<<<< HEAD
-=======
-
->>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322
 // import './Transitions.css';
 import { userProfile } from '../../apollo'
 import { useNavigate } from 'react-router-dom'
@@ -27,7 +23,6 @@ function Login () {
 
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
-<<<<<<< HEAD
   // Fetch service from cache since it depends on where this app is deployed
   // const { data } = useQuery(GET_SERVICE_LOCAL);
 
@@ -41,8 +36,6 @@ function Login () {
   }
 
   const navigate = useNavigate()
-=======
->>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322
   /* Lets user sign in in a pop-up tab, get the user's info then generates a token. */
   const signInSAML = () => {
     firebase

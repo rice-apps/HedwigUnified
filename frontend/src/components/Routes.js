@@ -1,10 +1,6 @@
 // import { Switch, Route, Redirect } from 'react-router'
 import { Route, useRoutes, Navigate } from 'react-router-dom'
-<<<<<<< HEAD:frontend/src/components/Routes.js
 import { useQuery, useApolloClient } from '@apollo/client'
-=======
-import { gql, useQuery, useApolloClient } from '@apollo/client'
->>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322:client/src/components/Routes.js
 import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
@@ -207,17 +203,8 @@ const newRoutesArray = [
     element: <Auth />
   },
   {
-<<<<<<< HEAD:frontend/src/components/Routes.js
     path: '/signup',
     element: <PrivateRoute element={<SignUp />} />
-=======
-    path: '/launch',
-    element: <Launch />
-  },
-  {
-    path: '/vendor_choice',
-    element: <PrivateRoute element={<VendorSelect />} />
->>>>>>> 9580908c5ea5b32dfe81a52032d6261a6ac76322:client/src/components/Routes.js
   },
   {
     path: '/launch',

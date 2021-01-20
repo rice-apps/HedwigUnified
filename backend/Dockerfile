@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1.2
-FROM node:lts-alpine as build
+FROM node:lts-alpine as build-deps
 
-WORKDIR /backend
+WORKDIR /hedwig-app
 
-COPY package*.json ./
+COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm ci --only=production
+RUN npm install
+COPY . .
 
-COPY . ./
+RUN npm run build
 
 EXPOSE 8080
-USER node
-CMD [ "node", "src/index.js" ]
+CMD [ "node", "build/index.js" ]

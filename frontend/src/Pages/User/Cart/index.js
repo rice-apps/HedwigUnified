@@ -197,6 +197,8 @@ function CartDetail () {
     ? JSON.parse(localStorage.getItem('order'))
     : null
 
+  console.log(cart_menu);
+  
   const product_ids = cart_menu
     ? cart_menu.map(item => {
         return item.dataSourceId
@@ -411,7 +413,7 @@ function CartDetail () {
   console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
     <div>
-      <CartHeader showBackButton backLink='/eat/cohen/' />
+      <CartHeader showBackButton backLink='/eat' vendorName={order ? order.vendor.name: null} />
       <FloatCartWrapper>
         <SpaceWrapper orderSummary>
           <Title>Order Summary:</Title>

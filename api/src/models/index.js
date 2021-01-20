@@ -1,7 +1,0 @@
-export * from './CommonModels'
-export * from './OrderModel'
-export * from './OrderTrackerModel'
-export * from './PaymentModel'
-export * from './ProductModel'
-export * from './UserModel'
-export * from './VendorModel'

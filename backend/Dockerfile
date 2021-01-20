@@ -9,7 +9,7 @@ RUN npm ci --only=production
 
 COPY . .
 
-RUN apk add --no-cache tini=~0.19.0
+RUN apk add --no-cache tini=~0.18.0
 
 EXPOSE 8080
 

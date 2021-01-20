@@ -13,12 +13,10 @@ function Failure () {
     return navigate(`/eat`)
   }
   return (
-    <div className='mainDiv'>
+    <div className='failureDiv'>
       <FailureSVG className='checkSvg' />
       <div>
-        <P className='orderConfirmed'>Oops!</P>
         <P className='orderConfirmed'>An item you ordered is not available.</P>
-
         <P className='statusUpdate'>
           Please go back to your cart and make adjustments. Your order will{' '}
           <strong>not</strong> be placed at this time
@@ -70,4 +68,4 @@ function Confirmation () {
   )
 }
 
-export default Confirmation
+export {Confirmation, Failure}

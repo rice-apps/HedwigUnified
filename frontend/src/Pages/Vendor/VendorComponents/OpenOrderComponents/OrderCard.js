@@ -221,7 +221,7 @@ const PickedUpButton = styled(ButtonWrapper)`
 
 const ModalWrapper = styled.div`
   display: grid;
-  font-family:'Metropolis';
+  font-family: 'Metropolis';
   grid-template-columns: 1fr;
   grid-template-rows: 2fr 4fr 5fr 3fr;
   grid-template-areas:

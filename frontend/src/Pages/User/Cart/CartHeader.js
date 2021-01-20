@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro'
 
-import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
-import RalewayFont from './../../../fonts/GlobalFont'
+import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
+import RalewayFont from '../../../fonts/GlobalFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -40,46 +40,27 @@ const HedwigWrapper = styled.div`
   color: black;
 `
 
-function CartHeader (props) {
+function CartHeader ({vendorName, backLink, showBackButton}) {
   const navigate = useNavigate()
+  const cart_menu = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('cartItems'))
+  : null
+const order = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('order'))
+  : null
+console.log(order)
+console.log(cart_menu)
 
-  //   const { state } = useLocation();
-  //   const { currVendor: vendorState } = state;
-
-  //   const {
-  //     data: vendor_data,
-  //     error: vendor_error,
-  //     loading: vendor_loading,
-  //   } = useQuery(VENDOR_QUERY, {
-  //     variables: { vendor: vendorState },
-  //     fetchPolicy: "cache-and-network",
-  //     nextFetchPolicy: "cache-first",
-  //   });
-
-  //   if (vendor_loading) {
-  //     return <p>Loading...</p>;
-  //   }
-  //   if (vendor_error) {
-  //     return <p>ErrorV...</p>;
-  //   }
-
-  function getVendorName () {
-    // const { getVendor: vendor } = vendor_data;
-    // return vendor_data.getVendor.name;
-    return 'Cohen House'
-  }
+const backNav = !cart_menu ? '/eat' : order.vendor.name === 'Cohen House' ? '/eat/cohen/' : null 
+const currVendor = order ? order.vendor.name : null 
 
   return (
     <HeaderWrapper>
       <RalewayFont />
       <HedwigWrapper>
-        {props.showBackButton ? (
+        {showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() =>
-              navigate(props.backLink, {
-                state: { currentVendor: getVendorName() }
-              })
-            }
+            onClick={() => navigate(backNav, {state:{ currentVendor: currVendor}})}
             style={{
               position: 'fixed',
               left: '22px',
@@ -89,7 +70,7 @@ function CartHeader (props) {
             }}
           />
         ) : null}
-        Checkout: {getVendorName()}
+        Checkout: {vendorName}
       </HedwigWrapper>
     </HeaderWrapper>
   )

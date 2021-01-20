@@ -2,8 +2,8 @@ import react from 'react';
 import styled from 'styled-components'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import hedwigLogo from './HedwigLogoFinal.svg'
-import BuyerHeader from './../Vendors/BuyerHeader.js'
-import HeadShot from "./HeadShot"
+import BuyerHeader from '../Vendors/BuyerHeader.js'
+import HeadShot from './HeadShot'
 import { useNavigate } from 'react-router-dom'
 
 import Brandon from '../../../images/Brandon.jpg'

@@ -41,14 +41,21 @@ const BottomNavigationText = styled.div`
   margin-left: 8px;
 `
 
+
+
 function BottomAppBar () {
   const navigate = useNavigate()
+
+  const CartItems = JSON.parse(localStorage.getItem('cartItems'))
+  let cartAmount = 0
+  CartItems.forEach(item => cartAmount += item.quantity)
+
   return (
     <BottomNavigationWrapper>
       <RalewayFont />
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <GrCart style={{ fontSize: '2.8vh' }} />
-        <BottomNavigationText>View Cart</BottomNavigationText>
+        <BottomNavigationText>View Cart ({cartAmount})</BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>
   )

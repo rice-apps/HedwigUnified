@@ -418,9 +418,16 @@ function MakePaymentSpace (props) {
     variables: { orderId: props.id }
   })
 
-  const { isVerified, fetching } = useQuery(VERIFY_PAYMENT, {
+  const { data: verifyPaymentResult, loading } = useQuery(VERIFY_PAYMENT, {
     variables: { orderId: order?.shopifyOrderId }
   })
+
+  let isVerified = false
+
+  if (!loading && verifyPaymentResult != undefined) {
+    console.log('This is the query result: ', verifyPaymentResult)
+    isVerified = verifyPaymentResult.verifyPayment
+  }
 
   function MakePaymentButtons (props) {
     let buttonStatus = props.buttonStatus

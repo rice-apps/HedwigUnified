@@ -6,7 +6,8 @@ import {
   OrderTracker,
   PaymentTC,
   SortOrderEnumTC,
-  FetchPaymentPayloadTC
+  FetchPaymentPayloadTC,
+  DataSourceEnumTC
 } from '../models/index.js'
 import squareClient from '../utils/square.js'
 import { shopifyClient, shopifyAdminClient } from '../utils/shopify.js'
@@ -138,7 +139,7 @@ PaymentTC.addResolver({
                   args: {
                     input: {
                       lineItems: {
-                        quantity: subtotal.amount / 25,
+                        quantity: subtotal.amount,
                         variantId: unitProduct.variants[0].id
                       }
                     }
@@ -177,7 +178,7 @@ PaymentTC.addResolver({
           OrderTracker.findOneAndUpdate(
             { orderId: orderId },
             { shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
-          )
+          ).exec()
 
           break
         }
@@ -195,8 +196,9 @@ PaymentTC.addResolver({
   .addResolver({
     name: 'completePayment',
     args: {
+      vendor: 'String!',
       paymentId: 'String!',
-      source: 'String!',
+      source: DataSourceEnumTC,
       money: MoneyTC.getITC()
     },
     type: PaymentTC,
@@ -264,6 +266,13 @@ PaymentTC.addResolver({
             }
           `
 
+          if (checkout.data.node.order === undefined) {
+            response = new ApolloError(
+              'Cannot complete payment for transaction with no authorization'
+            )
+            break
+          }
+
           const transactions = await shopifyAdminClient.graphql(
             transactionQuery,
             {
@@ -289,13 +298,15 @@ PaymentTC.addResolver({
             completePayment,
             {
               input: {
-                amount: args.money.amount / 25,
+                amount: args.money.amount / 100,
                 currency: args.money.currency,
                 id: checkout.data.node.order.id,
                 parentTransactionId: transactions.node.transactions[0].id
               }
             }
           )
+
+          console.log(completeResponse.orderCapture.userErrors)
 
           response = {
             id: checkout.data.node.id,
@@ -320,7 +331,7 @@ PaymentTC.addResolver({
     type: 'Boolean',
     args: {
       vendor: 'String!',
-      source: 'String!',
+      source: DataSourceEnumTC,
       paymentId: 'String'
     },
     resolve: async ({ args }) => {
@@ -362,6 +373,10 @@ PaymentTC.addResolver({
                 checkout.add('order', order => {
                   order.add('id')
                 })
+                checkout.add('paymentDueV2', payment => {
+                  payment.add('amount')
+                  payment.add('currencyCode')
+                })
               })
             })
           })
@@ -375,6 +390,16 @@ PaymentTC.addResolver({
               node(id: $id) {
                 ...on Order {
                   fullyPaid
+                  totalCapturableSet {
+                    presentmentMoney {
+                      amount
+                      currencyCode
+                    }
+                    shopMoney {
+                      amount
+                      currencyCode
+                    }
+                  }
                   transactions {
                     id
                   }
@@ -383,11 +408,20 @@ PaymentTC.addResolver({
             }
           `
 
-          const order = await shopifyAdminClient.graphql(orderQuery, {
-            id: checkout.data.node.order.id
-          })
+          if (checkout.data.node.order != null) {
+            const order = await shopifyAdminClient.graphql(orderQuery, {
+              id: checkout.data.node.order.id
+            })
 
-          response = order.data.node.order.fullyPaid
+            response =
+              order.node.fullyPaid ||
+              (checkout.data.node.paymentDueV2.amount ===
+                order.node.totalCapturableSet.presentmentMoney.amount &&
+                checkout.data.node.paymentDueV2.currencyCode ===
+                  order.node.totalCapturableSet.presentmentMoney.currencyCode)
+          } else {
+            response = false
+          }
 
           break
         }
@@ -408,7 +442,7 @@ PaymentTC.addResolver({
     args: {
       vendor: 'String!',
       paymentId: 'String!',
-      source: 'String!'
+      source: DataSourceEnumTC
     },
     resolve: async ({ args }) => {
       const { paymentId, source } = args // TODO: handle cancelling payments for different vendors
@@ -475,7 +509,7 @@ PaymentTC.addResolver({
 
           return {
             id: paymentId,
-            order: order.data.orderClose.order.id
+            order: order.orderClose.order.id
           }
         }
       }

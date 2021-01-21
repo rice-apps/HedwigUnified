@@ -420,12 +420,7 @@ function MakePaymentSpace (props) {
   let isVerified = false
 
   if (!loading && verifyPaymentResult !== undefined) {
-<<<<<<< HEAD
-    isVerified = verifyPaymentResult.verifyPayment;
-=======
-    console.log('HERE!')
     isVerified = verifyPaymentResult.verifyPayment
->>>>>>> d509ebd7e791eb7765eabc91da353fc7f9c44f01
   }
 
   function MakePaymentButtons (props) {
@@ -445,6 +440,7 @@ function MakePaymentSpace (props) {
                     source: 'SHOPIFY'
                   }
                 })
+
                 openAcceptModal()
               }}
             >
@@ -517,7 +513,7 @@ function MakePaymentSpace (props) {
           <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}
-            verified={isVerified}
+            isVerified={isVerified}
           />
           <MakeModalOrderDetails
             paymentType={props.paymentType}

@@ -92,7 +92,7 @@ function Product () {
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])
     const itemName = product.name
-    const image = product.image;
+    const image = product.image
     const itemDataSourceId = product.dataSourceId
     let variant
 

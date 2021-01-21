@@ -40,20 +40,24 @@ const HedwigWrapper = styled.div`
   color: black;
 `
 
-function CartHeader ({vendorName, backLink, showBackButton}) {
+function CartHeader ({ vendorName, backLink, showBackButton }) {
   const navigate = useNavigate()
   const cart_menu = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
-  : null
-const order = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('order'))
-  : null
-console.log(order)
-console.log(cart_menu)
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : null
+  const order = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('order'))
+    : null
+  console.log(order)
+  console.log(cart_menu)
 
-const backNav = !cart_menu ? '/eat' : order.vendor.name === 'Cohen House' ? '/eat/cohen/' : '/eat'
+  const backNav = !cart_menu
+    ? '/eat'
+    : order.vendor.name === 'Cohen House'
+    ? '/eat/cohen/'
+    : '/eat'
 
-const currVendor = order ? order.vendor.name : null 
+  const currVendor = order ? order.vendor.name : null
 
   return (
     <HeaderWrapper>
@@ -61,7 +65,9 @@ const currVendor = order ? order.vendor.name : null
       <HedwigWrapper>
         {showBackButton ? (
           <IoMdArrowRoundBack
-            onClick={() => navigate(backNav, {state:{ currentVendor: currVendor}})}
+            onClick={() =>
+              navigate(backNav, { state: { currentVendor: currVendor } })
+            }
             style={{
               position: 'fixed',
               left: '22px',

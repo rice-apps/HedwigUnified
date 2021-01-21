@@ -52,16 +52,20 @@ const SubMenuItemWrapper = styled.div`
   width: 80%;
   padding: 0.4vh 0.4vw;
   border-radius: 20px;
+  position: relative;
 `
 
 const BottomMenuItemWrapper = styled.div`
-  background-color: white;
-  margin-left: 15px;
-  width: 80%;
-  padding: 0.4vh 0.4vw;
-  border-radius: 20px;
+  text-align: left;
+  margin-left: 2vw;
+  display: grid;
+  font-size: 2.3vh;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
+
   position: absolute;
-  bottom: 6px;
+  bottom: 3vh;
+  left: 0px;
 `
 
 const StyledNavLink = styled(NavLink)`
@@ -88,12 +92,16 @@ function BottomMenuItem (props) {
   return (
     <BottomMenuItemWrapper>
       <StyledNavLink
-        to={props.path}
+        to='/employee/faq'
         activeStyle={{ color: '#EA907A', fontWeight: '700' }}
       >
-        {' '}
-        {props.label}{' '}
+        Help
       </StyledNavLink>
+      {/* <StyledNavLink
+      to='/employee/about'
+      activeStyle={{ color: '#EA907A', fontWeight: '700' }}>
+        About 
+      </StyledNavLink> */}
     </BottomMenuItemWrapper>
   )
 }

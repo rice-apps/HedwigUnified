@@ -10,8 +10,8 @@ import './utils/db.js'
 import Schema from './schema/index.js'
 
 // Initialize connection to Square with API token
-import './utils/square'
-import firebaseAdmin from './utils/firebase'
+import './utils/square.js'
+import firebaseAdmin from './utils/firebase.js'
 
 const app = express().use(cors())
 

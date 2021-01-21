@@ -26,11 +26,8 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
-<<<<<<< HEAD:frontend/src/components/Routes.js
 import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
-=======
->>>>>>> adds session timer:client/src/components/Routes.js
 
 /**
  * Requests to verify the user's token on the backend
@@ -186,135 +183,6 @@ const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
   return <Route {...rest} element={element} />
 }
 
-<<<<<<< HEAD:frontend/src/components/Routes.js
-const newRoutesArray = [
-  {
-    path: '/',
-    element: <Navigate to='/eat' />
-  },
-  {
-    path: '/404_page',
-    element: <ErrorPage />
-  },
-  {
-    path: '/about_us',
-    element: <AboutUs />
-  },
-  {
-    path: '/login',
-    element: <Login />
-  },
-  {
-    path: '/auth',
-    element: <Auth />
-  },
-  {
-    path: '/signup',
-    element: <PrivateRoute element={<SignUp />} />
-  },
-  {
-    path: '/launch',
-    element: <Launch />
-  },
-  {
-    path: '/vendor_choice',
-    element: <PrivateRoute element={<VendorSelect />} />
-  },
-  {
-    path: '/eat/*',
-    children: [
-      { path: '/', element: <PrivateRoute element={<VendorList />} /> },
-      { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
-      { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
-      { path: '/almostThere', element: <AlmostThere /> },
-      {
-        path: '/confirmation',
-        element: <PrivateRoute element={<Confirmation />} />
-      },
-      {
-        path: '/:vendor/*',
-        children: [
-          { path: '/', element: <PrivateRoute element={<Menu />} /> },
-          {
-            path: '/:product',
-            element: <PrivateRoute element={<Product />} />
-          },
-          { path: '/cart', element: <PrivateRoute element={<CartDetail />} /> }
-        ]
-      }
-    ]
-  },
-  {
-    path: '/contact',
-    element: <ContactForm />
-  },
-  {
-    path: '/employee/*',
-    children: [
-      {
-        path: '/',
-        element: (
-          <PrivateRoute isEmployeeRoute={false} element={<OpenOrdersPage />} />
-        )
-      },
-      {
-        path: '/openorders',
-        element: (
-          <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} />
-        )
-      },
-      {
-        path: '/closedorders',
-        element: (
-          <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} />
-        )
-      },
-      {
-        path: '/items',
-        element: (
-          <PrivateRoute
-            isEmployeeRoute={true}
-            element={<ItemsMenuManagementPage />}
-          />
-        )
-      },
-      {
-        path: '/modifiers',
-        element: (
-          <PrivateRoute
-            isEmployeeRoute={true}
-            element={<ModifiersMenuManagementPage />}
-          />
-        )
-      },
-      {
-        path: '/set-basic-info',
-        element: (
-          <PrivateRoute
-            isEmployeeRoute={false}
-            element={<SetBasicInfoPage />}
-          />
-        )
-      },
-      {
-        path: '/set-store-hours',
-        element: (
-          <PrivateRoute
-            isEmployeeRoute={true}
-            element={<SetStoreHoursPage />}
-          />
-        )
-      }
-    ]
-  },
-  {
-    path: '/*',
-    element: <Navigate to={'/404_page'} />
-  }
-]
-
-=======
->>>>>>> adds session timer:client/src/components/Routes.js
 // const routesArray = [
 //     {
 //         path: "/login",

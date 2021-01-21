@@ -1,8 +1,7 @@
 import { User, UserTC } from '../models/index.js'
 import {
-  authenticateTicket,
-  verifyToken,
-  decodeFirebaseToken
+  decodeFirebaseToken,
+  checkLoggedIn
 } from '../utils/authenticationUtils.js'
 
 import { AuthenticationError } from 'apollo-server-express'

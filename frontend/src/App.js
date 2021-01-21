@@ -1,17 +1,24 @@
 import { BsDisplay } from 'react-icons/bs'
 import './App.css'
 import { useState } from 'react'
-import { RefreshDialog } from './components/refreshDialog'
+import { RefreshDialog } from './components/RefreshDialog'
 import { RoutesComponent } from './components/Routes'
 import moment from 'moment'
 
 function App () {
+  /* 
+    The boolean for log in status; true means the user has logged in and
+    the current session is valid.
+  */
   const [loggedIn, setLoggedIn] = useState(false)
+  /*
+    The boolean value indicating whether there should be a timeout alert
+  */
   const [timeoutStatus, setTimeoutStatus] = useState(false)
   let timer = null
 
   // get the initial login status from localStorage
-  // If both token and sessionExpire time is there, set loggedIn to true
+  // If both token and sessionExpire time is valid, set loggedIn to true
   const currentToken = localStorage.getItem('idToken')
   const prevExpTime = moment(localStorage.getItem('expireTime'))
   const expTime = prevExpTime.isValid ? prevExpTime : null

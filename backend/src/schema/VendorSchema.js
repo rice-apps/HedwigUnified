@@ -1,9 +1,9 @@
 import { AuthenticationError } from 'apollo-server-express'
-import { VendorTC } from '../models/VendorModel'
+import { VendorTC } from '../models/index.js'
 import {
   checkLoggedIn,
   checkCanUpdateVendor
-} from '../utils/authenticationUtils'
+} from '../utils/authenticationUtils.js'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers

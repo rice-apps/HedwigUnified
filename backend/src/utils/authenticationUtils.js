@@ -1,7 +1,7 @@
-import firebaseAdmin from './firebase'
+import firebaseAdmin from './firebase.js'
 import log from 'loglevel'
 import { AuthenticationError } from 'apollo-server-express'
-import { Vendor } from '../models/VendorModel'
+import { Vendor } from '../models/index.js'
 
 /**
  * Decodes an ID token and returns the SAML attributes of said user
@@ -9,20 +9,6 @@ import { Vendor } from '../models/VendorModel'
  * @param {string} token the Firebase ID token to get user attributes from
  */
 async function decodeFirebaseToken (token) {
-  try {
-    // In the future, we may need the other properties...
-    const { id } = await jwt.verify(token, SECRET)
-
-    return { success: true, id }
-  } catch (e) {
-    return failureResponse
-  }
-}
-
-/**
- * Given a ticket, authenticates it and returns the corresponding netid of the now-authenticated user.
- */
-const authenticateTicket = async token => {
   try {
     const decodedToken = await firebaseAdmin.auth().verifyIdToken(token)
     const fullName =
@@ -96,4 +82,4 @@ async function checkCanUpdateVendor (resolve, args, context, info) {
   return new AuthenticationError("Can't update vendor because not on list")
 }
 
-export { decodeFirebaseToken, checkLoggedIn, checkCanUpdateVendor, authenticateTicket }
+export { decodeFirebaseToken, checkLoggedIn, checkCanUpdateVendor }

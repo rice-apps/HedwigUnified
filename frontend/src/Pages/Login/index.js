@@ -3,6 +3,7 @@ import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
 
 // import './Transitions.css';
 import { useNavigate } from 'react-router-dom'
+import moment from 'moment'
 
 // This import loads the firebase namespace along with all its type information.
 import firebase from 'firebase/app'
@@ -24,7 +25,7 @@ function Login ({updateLoginStatus}) {
       const expTime = idTokenResult.expirationTime
       localStorage.setItem('idToken', idTokenResult.token)
       localStorage.setItem('expireTime', moment(expTime))
-      updateLoginStatus(true, /* sets expiration alert timer */ 30 * 1000)
+      updateLoginStatus(true, /* sets expiration alert timer */ 40 * 60 * 1000)
       navigate('/auth')
     })
     .catch(error => console.log(error))

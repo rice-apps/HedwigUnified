@@ -56,7 +56,6 @@ function Auth () {
     recentUpdate,
     type,
     token,
-    studentId
   } = authenticationData.authenticateUser
 
   const userData = {
@@ -69,17 +68,12 @@ function Auth () {
     vendor,
     recentUpdate,
     type,
-<<<<<<< HEAD:frontend/src/Pages/Auth/index.js
     token
   }
-  console.log('DATA', userData)
-=======
-    token,
-    studentId
-  })
->>>>>>> adds student id to user schema:client/src/Pages/Auth/index.js
 
-  console.log(studentId)
+  // Set token and user data in local storage
+  lstorage.setItem('token', token)
+  lstorage.setItem('userProfile', JSON.stringify(userData))
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

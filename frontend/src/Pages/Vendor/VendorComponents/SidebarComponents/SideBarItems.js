@@ -97,11 +97,11 @@ function BottomMenuItem (props) {
       >
        Help
       </StyledNavLink>
-      <StyledNavLink
+      {/* <StyledNavLink
       to='/employee/about'
       activeStyle={{ color: '#EA907A', fontWeight: '700' }}>
         About 
-      </StyledNavLink>
+      </StyledNavLink> */}
     </BottomMenuItemWrapper>
   )
 }

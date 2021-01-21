@@ -41,15 +41,14 @@ const BottomNavigationText = styled.div`
   margin-left: 8px;
 `
 
-
-
 function BottomAppBar () {
   const navigate = useNavigate()
 
   const CartItems = JSON.parse(localStorage.getItem('cartItems'))
   let cartAmount = 0
-  if (CartItems){ 
-    CartItems.forEach(item => cartAmount += item.quantity) }
+  if (CartItems) {
+    CartItems.forEach(item => (cartAmount += item.quantity))
+  }
 
   return (
     <BottomNavigationWrapper>

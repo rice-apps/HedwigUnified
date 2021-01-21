@@ -15,12 +15,12 @@ const FaqColumn = styled.div`
 
 const Wrapper = styled.div`
   height: 100%;
-  display:grid;
-  grid-template-columns:1fr ;
-  grid-template-rows:10vh 1fr;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10vh 1fr;
   grid-template-areas:
-  "HeaderSpace "
-  "FAQSpace";
+    'HeaderSpace '
+    'FAQSpace';
   width: 100%;
   background-color: white;
 `
@@ -33,18 +33,17 @@ const FaqPanel = styled.div`
   width: 100%;
   height: 100%;
   font-size: 1.8vh;
-  grid-area:FAQSpace;
-  display:grid;
-  grid-template-columns:0.1fr 1fr 1fr 1fr 0.1fr;
+  grid-area: FAQSpace;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr 1fr 1fr 0.1fr;
   grid-template-rows: 1fr;
-  grid-template-areas:
-  "empty CatalogSpace OrderSpace StoreSpace empty2";
+  grid-template-areas: 'empty CatalogSpace OrderSpace StoreSpace empty2';
 `
 
 const Header = styled.h1`
   text-align: center;
-  margin:2vh;
-  grid-area:HeaderSpace;
+  margin: 2vh;
+  grid-area: HeaderSpace;
   font-size: 3.6vh;
   font-family: 'avenirbold';
 `

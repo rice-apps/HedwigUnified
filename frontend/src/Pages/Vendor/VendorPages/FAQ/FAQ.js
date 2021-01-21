@@ -76,9 +76,8 @@ function Answer (props) {
 
 function FAQPage (props) {
   return (
-    <div >
+    <div>
       <Collapsible
-      
         closed
         trigger={<Question question={props.question} IsClosed />}
         triggerWhenOpen={

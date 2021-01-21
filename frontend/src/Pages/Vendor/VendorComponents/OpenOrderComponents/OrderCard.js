@@ -420,7 +420,6 @@ function MakePaymentSpace(props) {
   let isVerified = false;
 
   if (!loading && verifyPaymentResult !== undefined) {
-    console.log("HERE!");
     isVerified = verifyPaymentResult.verifyPayment;
   }
 
@@ -513,7 +512,7 @@ function MakePaymentSpace(props) {
           <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}
-            verified={props.isVerified}
+            verified={isVerified}
           />
           <MakeModalOrderDetails
             paymentType={props.paymentType}

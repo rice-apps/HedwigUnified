@@ -67,7 +67,7 @@ function Menu () {
     return <p>Loading...</p>
   }
   if (catalog_error) {
-    console.log(catalog_error)
+    console.log("CATALOG ERROR", catalog_error)
     return <p>ErrorC...</p>
   }
 

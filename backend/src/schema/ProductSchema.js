@@ -53,8 +53,7 @@ ItemTC.addResolver({
           }
         } = item
 
-        
-        console.log(baseItemName, imageId);
+        console.log(baseItemName, imageId)
         console.log(isAvailable)
         let imageData
         try {
@@ -193,8 +192,7 @@ ItemTC.addResolver({
           }
         } = object
 
-
-        let imageData;
+        let imageData
         try {
           const response = await catalogApi.retrieveCatalogObject(imageId)
           imageData = response.result.object.imageData.url

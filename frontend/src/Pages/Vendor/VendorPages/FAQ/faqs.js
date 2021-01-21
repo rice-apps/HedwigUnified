@@ -47,8 +47,7 @@ export const order_faqs = [
     ]
   },
   {
-    question:
-      '[Cohen House Only] How do I accept an order paid in Cohen House Club Card?',
+    question: 'How do I accept an order paid in Cohen House Club Card?',
     answer: [
       'Select “View Payment Details” to view the Cohen House Club Card ID. ',
       'Enter the Club Card ID and amount to charge into the Revention POS System.',

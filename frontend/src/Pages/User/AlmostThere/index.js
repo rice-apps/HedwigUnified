@@ -116,6 +116,15 @@ export const Div = styled.div`
     `};
 
   ${props => props.button && css``}
+
+  ${props => props.failure && css`
+  display:flex;
+  height:80vh;
+  background-color:white;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  `}
 `
 
 export const MessageWrapper = styled.div`

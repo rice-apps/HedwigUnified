@@ -229,7 +229,8 @@ function CartDetail () {
     const newRes = await avail_refetch()
     while (newRes.loading) {}
     if (newRes.data.getAvailabilities === false) {
-      return navigate('/eat/confirmation')
+      console.log("Availability: ", newRes.data.getAvailabilities)
+      return navigate(`/eat/failure`)
     } else {
       const rec = {
         variables: createRecord(cart_menu, paymentMethod, cohenId)

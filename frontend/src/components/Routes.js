@@ -5,7 +5,7 @@ import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
-import Confirmation from '../Pages/User/Confirmation'
+import { Confirmation, Failure } from '../Pages/User/Confirmation'
 import Launch from '../Pages/User/Launch'
 // Vendor imports
 // import VendorSettings from '../Pages/Vendor/Settings';
@@ -225,6 +225,10 @@ const newRoutesArray = [
       {
         path: '/confirmation',
         element: <PrivateRoute element={<Confirmation />} />
+      },
+      {
+        path: '/failure',
+        element: <PrivateRoute element={<Failure />} />
       },
       {
         path: '/:vendor/*',

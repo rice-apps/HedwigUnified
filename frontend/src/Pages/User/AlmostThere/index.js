@@ -10,10 +10,10 @@ export const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f3725b;
+  color: #ffffff;
   height: 5vh;
   cursor: pointer;
-  background-color: #ffffff;
+  background-color: #f3725b;
   border: 1px solid #f3725b;
   border-radius: 20px;
   margin: auto;

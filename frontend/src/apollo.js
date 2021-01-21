@@ -63,16 +63,6 @@ const client = new ApolloClient({
             read () {
               return localStorage.getItem('cartItems')
             }
-          },
-          orderSummary: {
-            read () {
-              return orderSummary()
-            }
-          },
-          userProfile: {
-            read () {
-              return userProfile()
-            }
           }
         }
       }

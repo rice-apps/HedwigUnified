@@ -5,6 +5,7 @@ import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { FaIdCard } from 'react-icons/fa'
+import { GoVerified } from 'react-icons/go'
 import Modal from 'react-modal'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
@@ -264,9 +265,15 @@ const ModalParagraphWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  text-align: center;
   font-size: 16px;
   grid-area: ModalParagraph;
   border-bottom: 1px solid grey;
+`
+
+const ModalPaymentWrapper = styled.div`
+  color: #3d3d3d;
+  font-weight: bold;
 `
 
 function isEmpty (obj) {
@@ -303,12 +310,12 @@ function MakeModalParagraph (props) {
   } else if (paymentType === 'CREDIT') {
     return (
       <ModalParagraphWrapper>
-        <div>
+        <div style={{ width: '100%' }}>
           This order is paid in <strong>Credit Card</strong>. <br />
           {isVerified ? (
-            <>
-              <div>Payment Status: Verified</div>
-            </>
+            <ModalPaymentWrapper>
+              Payment Status: Verified <GoVerified color={'#2CA1D5'} />
+            </ModalPaymentWrapper>
           ) : (
             <>
               <div>

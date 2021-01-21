@@ -1,4 +1,4 @@
-import gql from 'graphql-tag.macro'
+import gql from "graphql-tag.macro";
 
 const ORDER_TRACKER = gql`
   query ORDER_TRACKER($orderId: String!) {
@@ -7,6 +7,6 @@ const ORDER_TRACKER = gql`
       paymentType
     }
   }
-`
+`;
 
-export default ORDER_TRACKER
+export default ORDER_TRACKER;

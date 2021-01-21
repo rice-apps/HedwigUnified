@@ -109,7 +109,7 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
     currency: 'USD'
   })
 
-  console.log(product)
+  console.log(product);
   return (
     <ShelfItemWrapper>
       <BsTrashFill

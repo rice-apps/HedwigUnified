@@ -61,7 +61,7 @@ function generatePickupTimes (
   while (pickupHour <= endHour) {
     while (
       pickupMinute <= 45 &&
-      !(pickupHour === endHour && pickupMinute >= endMinute)
+      !(pickupHour === endHour && pickupMinute >= endMinute-15)
     ) {
       pickupMinute += 15
       let strPickupMinute = ''
@@ -79,7 +79,10 @@ function generatePickupTimes (
             ? '12'
             : (pickupHour - Math.floor(pickupHour / 12) * 12).toString()
       }
-      if (pickupHour >= 12 || (pickupHour === 11 && pickupMinute === 60)) {
+      if(pickupHour === 23 && pickupMinute === 60){
+        strPickupMinute += ' a.m.'
+      }
+      else if ((pickupHour >= 12) || (pickupHour === 11 && pickupMinute === 60)) {
         strPickupMinute += ' p.m.'
       } else {
         strPickupMinute += ' a.m.'
@@ -91,6 +94,9 @@ function generatePickupTimes (
     pickupHour += 1
   }
   const pickupObjs = pickupTimes.map(time => {
+    if(time[0]==='0'){
+      time = "12"+time.substring(1)
+    }
     return { value: moment(time, 'h:mm a').format(), label: time }
   })
   if (isFirst && pickupObjs.length > 0) {
@@ -333,22 +339,12 @@ function CartDetail () {
   // const businessHour = {start: '8:30 a.m.', end:'11:00 p.m.'}
   const startHours = businessHours[currDay]
     ? businessHour.start.map(startHour => {
-        let hour = startHour.split(':')[0]
-        if (startHour.includes('p.m.')) {
-          return parseInt(hour) + 12
-        } else {
-          return parseInt(hour)
-        }
+      return moment(startHour, 'h:mm a').hour()
       })
     : []
   const endHours = businessHours[currDay]
     ? businessHour.end.map(endHour => {
-        let hour = endHour.split(':')[0]
-        if (endHour.includes('p.m.')) {
-          return parseInt(hour) + 12
-        } else {
-          return parseInt(hour)
-        }
+      return moment(endHour, 'h:mm a').hour()
       })
     : []
 
@@ -408,8 +404,9 @@ function CartDetail () {
     setPickupTime(newTime.value)
     localStorage.setItem(
       'order',
-      JSON.stringify(Object.assign(order, { time: newTime.value }))
+      JSON.stringify(Object.assign(order, { pickupTime: newTime.value }))
     )
+    console.log("NEW PICKUP TIME", order)
   }
   console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (

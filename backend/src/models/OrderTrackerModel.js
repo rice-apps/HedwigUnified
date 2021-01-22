@@ -12,6 +12,7 @@ const OrderTrackerSchema = new mongoose.Schema({
     enum: ['COHEN', 'TETRA', 'CREDIT']
   },
   pickupTime: { type: Date, required: false },
+  submissionTime: {type: Date, required: false},
   status: {
     type: String,
     required: true,

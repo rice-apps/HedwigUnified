@@ -632,7 +632,8 @@ function OrderCard (props) {
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
-      {/* {orderTrackerData.getOrderTracker.paymentType === null ? console.log("HIII", orderTrackerData.getOrderTracker) : null} */}
+      
+      {console.log(orderTrackerData.getOrderTracker)}
       <OrderCardWrapper>
         {/* Section of Order card with customer name, order number */}
 
@@ -643,10 +644,12 @@ function OrderCard (props) {
           pickupTime={pickupAt}
           submissionTime='4:35pm'
           paymentType={
-            orderTrackerData.getOrderTracker.paymentType === null
+            orderTrackerData.getOrderTracker === null ? "None" :
+            orderTrackerData.getOrderTracker.paymentType === null 
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType
           }
+          
           pickupCountdown={timeLeft}
         />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
@@ -678,7 +681,8 @@ function OrderCard (props) {
           orderTotal={orderTotal}
           fulfillment={fulfillment}
           paymentType={
-            isEmpty(orderTrackerData)
+            orderTrackerData.getOrderTracker === null ? "None" :
+            orderTrackerData.getOrderTracker.paymentType === null 
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType
           }
@@ -687,7 +691,8 @@ function OrderCard (props) {
           cancelClick={cancelClick}
           id={props.id}
           shopifyOrderId={
-            orderTrackerData.getOrderTracker.shopifyOrderId ?? null
+            orderTrackerData.getOrderTracker == null ? "None" :
+            orderTrackerData.getOrderTracker.shopifyOrderId ? orderTrackerData.getOrderTracker.shopifyOrderId : null
           }
         />
       </OrderCardWrapper>

@@ -180,11 +180,10 @@ function Product () {
             className='submitButton'
             onClick={() => {
               makeCartItem()
-              console.log(vendor)
+              console.log(vendor.slug)
               navigate(`/eat/${vendor.slug}`, {
                 state: { currentVendor: vendor.name }
               })
-              // navigate('/eat/cohen/cart')
             }}
           >
             Add

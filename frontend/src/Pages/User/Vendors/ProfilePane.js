@@ -49,7 +49,7 @@ const getLinks = () => {
       icon: 'question-circle',
       content: 'About',
       content: 'About the Creators',
-      path: '/about_us',
+      path: '/about_us'
     },
     {
       icon: 'question-circle',
@@ -185,7 +185,10 @@ function ProfilePane () {
                     className='contentarrow'
                     onClick={() => window.open(link.path, '_self')}
                   >
-                     <FontAwesomeIcon icon={['fas', 'chevron-right']} style = {{"cursor": "pointer"}}/>
+                    <FontAwesomeIcon
+                      icon={['fas', 'chevron-right']}
+                      style={{ cursor: 'pointer' }}
+                    />
                   </button>
                 ) : null}
               </div>

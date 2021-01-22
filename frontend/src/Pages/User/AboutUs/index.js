@@ -76,9 +76,8 @@ const MeetHedwigText = styled.p`
   top: 35%;
   height: 5vh;
 
-  text-shadow: 0px 15px 5px rgba(0,0,0,0.1),
-  10px 20px 5px rgba(0,0,0,0.05),
-  -10px 20px 5px rgba(0,0,0,0.05);
+  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
+    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 
 const HedwigLogo = styled.img`
@@ -118,10 +117,9 @@ const GoalTitle = styled.p`
   line-height: 100%;
   font-weight: bold;
   margin: 2%;
-  
-  text-shadow: 0px 15px 5px rgba(0,0,0,0.1),
-  10px 20px 5px rgba(0,0,0,0.05),
-  -10px 20px 5px rgba(0,0,0,0.05);
+
+  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
+    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 const GoalText = styled.p`
   font-family: 'Raleway';
@@ -141,7 +139,7 @@ const ContactText = styled.p`
 `
 
 const AboutUs = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <MainDiv>
@@ -172,8 +170,8 @@ const AboutUs = () => {
           name={'Melinda Ding'}
           position={'Project Manager'}
         />
-        <HeadShot src={Victor} name={'Victor Song'} position={'Team Lead'}  />
-        <HeadShot src={Newton} name={'Newton Huynh'} position={'Team Lead'}  />
+        <HeadShot src={Victor} name={'Victor Song'} position={'Team Lead'} />
+        <HeadShot src={Newton} name={'Newton Huynh'} position={'Team Lead'} />
         <HeadShot src={Riley} name={'Riley Holmes'} position={'Designer'} />
         <HeadShot src={Henry} name={'Henry Qin'} position={'Developer'} />
         <HeadShot src={Lorraine} name={'Lorraine Lyu'} position={'Developer'} />

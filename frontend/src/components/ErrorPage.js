@@ -19,7 +19,7 @@ const BackButton = styled.button`
   font-weight: bold;
   :hover {
     text-decoration: underline;
-    box-shadow: 0 0 50px rgba(33,33,33,.2); 
+    box-shadow: 0 0 50px rgba(33, 33, 33, 0.2);
   }
   :focus {
     outline: none;
@@ -28,17 +28,21 @@ const BackButton = styled.button`
 
 function ErrorPage (props) {
   {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const goBack = () => {
-      navigate(-1);
-      navigate(-1);
+      navigate(-1)
+      navigate(-1)
     }
     return (
       <div className='errorPage'>
-        <h1 style={{"font-size": "52px"}}>Page doesn't exist... How did you get here?</h1>
+        <h1 style={{ 'font-size': '52px' }}>
+          Page doesn't exist... How did you get here?
+        </h1>
         {/* <p>Page not found. Try a different URL!</p> */}
         <p>{props.errMessage} Try a different URL!</p>
-        <BackButton onClick={goBack} style={{"cursor": "pointer"}}>Go Back</BackButton>
+        <BackButton onClick={goBack} style={{ cursor: 'pointer' }}>
+          Go Back
+        </BackButton>
       </div>
     )
   }

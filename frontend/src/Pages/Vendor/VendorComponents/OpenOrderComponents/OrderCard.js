@@ -627,14 +627,15 @@ function OrderCard (props) {
   }
 
   const pickupAt = moment(pickupTime).format('h:mm A')
-  const submittedAt = submissionTime ? moment(submissionTime).format('h:mm A') : "None"
+  const submittedAt = submissionTime
+    ? moment(submissionTime).format('h:mm A')
+    : 'None'
   const timeLeft = moment(pickupTime).fromNow()
 
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
-      
       {console.log(orderTrackerData.getOrderTracker)}
       <OrderCardWrapper>
         {/* Section of Order card with customer name, order number */}
@@ -646,12 +647,12 @@ function OrderCard (props) {
           pickupTime={pickupAt}
           submissionTime={submittedAt}
           paymentType={
-            orderTrackerData.getOrderTracker === null ? "None" :
-            orderTrackerData.getOrderTracker.paymentType === null 
+            orderTrackerData.getOrderTracker === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType
           }
-          
           pickupCountdown={timeLeft}
         />
         {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
@@ -683,8 +684,9 @@ function OrderCard (props) {
           orderTotal={orderTotal}
           fulfillment={fulfillment}
           paymentType={
-            orderTrackerData.getOrderTracker === null ? "None" :
-            orderTrackerData.getOrderTracker.paymentType === null 
+            orderTrackerData.getOrderTracker === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType
           }
@@ -693,8 +695,11 @@ function OrderCard (props) {
           cancelClick={cancelClick}
           id={props.id}
           shopifyOrderId={
-            orderTrackerData.getOrderTracker == null ? "None" :
-            orderTrackerData.getOrderTracker.shopifyOrderId ? orderTrackerData.getOrderTracker.shopifyOrderId : null
+            orderTrackerData.getOrderTracker == null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.shopifyOrderId
+              ? orderTrackerData.getOrderTracker.shopifyOrderId
+              : null
           }
         />
       </OrderCardWrapper>

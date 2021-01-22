@@ -33,7 +33,7 @@ const Position = styled.p`
 
 const HeadShot = ({ src, name, position }) => {
   return (
-    <MainDiv className="emphasize">
+    <MainDiv className='emphasize'>
       <HeadPhoto src={src} />
       <Name>{name}</Name>
       <Position>{position}</Position>

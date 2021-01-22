@@ -185,7 +185,7 @@ OrderTC.addResolver({
           submissionTime: submissionTime,
           locationId: locationId,
           orderId: order.id,
-          paymentType: paymentType,
+          paymentType: paymentType
         })
 
         const CDMOrder = {
@@ -246,7 +246,7 @@ OrderTC.addResolver({
         return CDMOrder
       } catch (error) {
         if (error instanceof ApiError) {
-          console.log("Error:", error.result)
+          console.log('Error:', error.result)
           return new ApolloError(
             `Creating new order on Square failed because ${error.result}`
           )

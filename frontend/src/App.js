@@ -34,16 +34,16 @@ function App () {
   
 
   // If we have the initial token
-  if (currentToken && !loggedIn) {
-    setLoggedIn(true)
-    // If the expire time is null or invalid
-    if ((!expTime || expTime.isBefore(moment())) && !timeoutStatus) {
-      localStorage.removeItem('expireTime')
-      setTimeoutStatus(true)
-    } else {
-      timeoutCountDown(expTime.diff(moment(), 'seconds') * 1000)
-    }
-  }
+  // if (currentToken && !loggedIn) {
+  //   setLoggedIn(true)
+  //   // If the expire time is null or invalid
+  //   if ((!expTime || expTime.isBefore(moment())) && !timeoutStatus) {
+  //     localStorage.removeItem('expireTime')
+  //     setTimeoutStatus(true)
+  //   } else {
+  //     timeoutCountDown(expTime.diff(moment(), 'seconds') * 1000)
+  //   }
+  // }
 
 
   const changeLoginStatus = (status, time) => {

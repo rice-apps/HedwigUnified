@@ -59,9 +59,14 @@ export const RefreshDialog = ({display, changeTimeoutStatus, timeoutCountDown, u
       console.log('please log in again')
       window.location.reload()
     }
-    const refreshResult = user.getIdTokenResult(true)
-    timeoutCountDown(40 * 60 * 1000, refreshResult.token)
     localStorage.setItem('expireTime', moment().add(40, 'minute'))
+    const refreshResult = user.getIdTokenResult(true)
+    if (!refreshResult) {
+      localStorage.removeItem('expireTime')
+      return
+    }
+    // the firebase session interval is 1 hour
+    timeoutCountDown(40 * 60 * 1000, refreshResult.token)
   }
 
   return (

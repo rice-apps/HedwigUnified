@@ -228,13 +228,13 @@ function Product () {
             )
           })}
         </div>
-        <div className='quantityContainer'>
+     
           <QuantitySelector
             quantity={quantity}
             increase={increase}
             decrease={decrease}
           />
-        </div>
+    
         {!requiredFilled && (
           <div className='warningContainer'>Missing required selections!</div>
         )}

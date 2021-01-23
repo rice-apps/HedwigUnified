@@ -45,10 +45,15 @@ const EDIT_PHONE = gql`
 const getLinks = () => {
   const links = [
     { icon: 'hands-helping', content: 'Help', path: '/help' },
-
     {
       icon: 'question-circle',
       content: 'About',
+      content: 'About the Creators',
+      path: '/about_us'
+    },
+    {
+      icon: 'question-circle',
+      content: 'About RiceApps',
       path: 'https://riceapps.org/'
     },
 
@@ -180,7 +185,10 @@ function ProfilePane () {
                     className='contentarrow'
                     onClick={() => window.open(link.path, '_self')}
                   >
-                    <FontAwesomeIcon icon={['fas', 'chevron-right']} />
+                    <FontAwesomeIcon
+                      icon={['fas', 'chevron-right']}
+                      style={{ cursor: 'pointer' }}
+                    />
                   </button>
                 ) : null}
               </div>

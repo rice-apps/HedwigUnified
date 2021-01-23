@@ -71,7 +71,9 @@
   font-size: 4vh;
   color: #F3725B;
   margin-left: 1vw;
-  font-weight: bold
+  font-weight: bold;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .phonetext {
@@ -117,6 +119,10 @@
   flex: 1;
   height: 5vh;
   border-top: #7070701a 1px solid;
+}
+
+.contentcard:hover {
+  background-color: #f4f3f3;
 }
 
 .contenticon {

@@ -52,7 +52,22 @@ const SubMenuItemWrapper = styled.div`
   width: 80%;
   padding: 0.4vh 0.4vw;
   border-radius: 20px;
+  position: relative;
 `
+
+const BottomMenuItemWrapper = styled.div`
+  text-align: left;
+  margin-left: 2vw;
+  display: grid;
+  font-size: 2.3vh;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
+
+  position: absolute;
+  bottom: 3vh;
+  left: 0px;
+`
+
 const StyledNavLink = styled(NavLink)`
   margin-left: 10px;
   text-decoration: none;
@@ -70,6 +85,24 @@ function SubMenuItem (props) {
         {props.label}{' '}
       </StyledNavLink>
     </SubMenuItemWrapper>
+  )
+}
+
+function BottomMenuItem (props) {
+  return (
+    <BottomMenuItemWrapper>
+      <StyledNavLink
+        to='/employee/faq'
+        activeStyle={{ color: '#EA907A', fontWeight: '700' }}
+      >
+        Help
+      </StyledNavLink>
+      {/* <StyledNavLink
+      to='/employee/about'
+      activeStyle={{ color: '#EA907A', fontWeight: '700' }}>
+        About 
+      </StyledNavLink> */}
+    </BottomMenuItemWrapper>
   )
 }
 
@@ -111,6 +144,7 @@ function SideBarItems () {
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
         <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
+      <BottomMenuItem path='/employee/faq' label='Help' />
     </SideBarItemsWrapper>
   )
 }

@@ -5,7 +5,7 @@ import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
-import Confirmation from '../Pages/User/Confirmation'
+import { Confirmation, Failure } from '../Pages/User/Confirmation'
 import Launch from '../Pages/User/Launch'
 // Vendor imports
 // import VendorSettings from '../Pages/Vendor/Settings';
@@ -26,6 +26,7 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
+import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
 
@@ -226,6 +227,10 @@ const newRoutesArray = [
         element: <PrivateRoute element={<Confirmation />} />
       },
       {
+        path: '/failure',
+        element: <PrivateRoute element={<Failure />} />
+      },
+      {
         path: '/:vendor/*',
         children: [
           { path: '/', element: <PrivateRoute element={<Menu />} /> },
@@ -298,6 +303,10 @@ const newRoutesArray = [
             element={<SetStoreHoursPage />}
           />
         )
+      },
+      {
+        path: '/faq',
+        element: <PrivateRoute isEmployeeRoute={true} element={<FAQ />} />
       }
     ]
   },

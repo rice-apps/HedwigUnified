@@ -10,10 +10,10 @@ export const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f3725b;
+  color: #ffffff;
   height: 5vh;
   cursor: pointer;
-  background-color: #ffffff;
+  background-color: #f3725b;
   border: 1px solid #f3725b;
   border-radius: 20px;
   margin: auto;
@@ -116,6 +116,17 @@ export const Div = styled.div`
     `};
 
   ${props => props.button && css``}
+
+  ${props =>
+    props.failure &&
+    css`
+      display: flex;
+      height: 80vh;
+      background-color: white;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    `}
 `
 
 export const MessageWrapper = styled.div`

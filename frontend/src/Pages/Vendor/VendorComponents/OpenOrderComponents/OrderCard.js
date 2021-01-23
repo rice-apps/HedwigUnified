@@ -5,8 +5,9 @@ import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { FaIdCard } from 'react-icons/fa'
+import { GoVerified } from 'react-icons/go'
 import Modal from 'react-modal'
-import { useQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
 import gql from 'graphql-tag.macro'
 import { GrRestaurant } from 'react-icons/gr'
@@ -221,10 +222,14 @@ const PickedUpButton = styled(ButtonWrapper)`
 
 const ModalWrapper = styled.div`
   display: grid;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
   // font-family: 'Metropolis';
 >>>>>>> Stashed changes
+=======
+  font-family: 'Metropolis';
+>>>>>>> master
   grid-template-columns: 1fr;
   grid-template-rows: 2fr 4fr 5fr 3fr;
   grid-template-areas:
@@ -267,9 +272,15 @@ const ModalParagraphWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  text-align: center;
   font-size: 16px;
   grid-area: ModalParagraph;
   border-bottom: 1px solid grey;
+`
+
+const ModalPaymentWrapper = styled.div`
+  color: #3d3d3d;
+  font-weight: bold;
 `
 
 function isEmpty (obj) {
@@ -282,8 +293,6 @@ function isEmpty (obj) {
 
 function MakeModalParagraph (props) {
   const { paymentType, cancel, isVerified } = props
-
-  console.log(paymentType)
   if (paymentType === 'TETRA') {
     return (
       <ModalParagraphWrapper>
@@ -308,12 +317,12 @@ function MakeModalParagraph (props) {
   } else if (paymentType === 'CREDIT') {
     return (
       <ModalParagraphWrapper>
-        <div>
+        <div style={{ width: '100%' }}>
           This order is paid in <strong>Credit Card</strong>. <br />
           {isVerified ? (
-            <>
-              <div>Payment Status: Verified</div>
-            </>
+            <ModalPaymentWrapper>
+              Payment Status: Verified <GoVerified color={'#2CA1D5'} />
+            </ModalPaymentWrapper>
           ) : (
             <>
               <div>
@@ -418,18 +427,13 @@ function MakePaymentSpace (props) {
 
   const cancelOrder = props.cancelClick
 
-  const { order } = useQuery(ORDER_TRACKER, {
-    variables: { orderId: props.id }
-  })
-
-  const { data: verifyPaymentResult, loading } = useQuery(VERIFY_PAYMENT, {
-    variables: { orderId: order?.shopifyOrderId }
-  })
+  const [verify_payment, { data: verifyPaymentResult, loading }] = useLazyQuery(
+    VERIFY_PAYMENT
+  )
 
   let isVerified = false
 
-  if (!loading && verifyPaymentResult != undefined) {
-    console.log('This is the query result: ', verifyPaymentResult)
+  if (!loading && verifyPaymentResult !== undefined) {
     isVerified = verifyPaymentResult.verifyPayment
   }
 
@@ -441,19 +445,33 @@ function MakePaymentSpace (props) {
         {buttonStatus === 'NEW' ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <AcceptButton onClick={openAcceptModal}>View Payment</AcceptButton>
+            <AcceptButton
+              onClick={function () {
+                verify_payment({
+                  variables: {
+                    paymentId: props.shopifyOrderId,
+                    vendor: 'Cohen House',
+                    source: 'SHOPIFY'
+                  }
+                })
+
+                openAcceptModal()
+              }}
+            >
+              Accept
+            </AcceptButton>
           </ButtonsSpaceWrapper>
         ) : buttonStatus === 'ACCEPTED' ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <ReadyButton onClick={props.handleClick}>Order Ready</ReadyButton>
+            <ReadyButton onClick={props.handleClick}>Ready</ReadyButton>
           </ButtonsSpaceWrapper>
         ) : (
           (buttonStatus = 'READY' ? (
             <ButtonsSpaceWrapper>
               <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
               <PickedUpButton onClick={props.handleClick}>
-                Pick Up Complete
+                Picked Up
               </PickedUpButton>
             </ButtonsSpaceWrapper>
           ) : (
@@ -483,6 +501,7 @@ function MakePaymentSpace (props) {
         <MakePaymentButtons
           handleClick={props.handleClick}
           buttonStatus={props.buttonStatus}
+          shopifyOrderId={props.shopifyOrderId}
         />
       </ButtonsSpaceWrapper>
 
@@ -508,7 +527,7 @@ function MakePaymentSpace (props) {
           <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}
-            verified={isVerified}
+            isVerified={isVerified}
           />
           <MakeModalOrderDetails
             paymentType={props.paymentType}
@@ -526,7 +545,7 @@ function MakePaymentSpace (props) {
             >
               Cancel
             </CancelButton>
-            {(props.paymentType != 'CREDIT') |
+            {(props.paymentType !== 'CREDIT') |
             ((props.paymentType === 'CREDIT') & isVerified) ? (
               <AcceptButton
                 onClick={() => {
@@ -573,7 +592,7 @@ function MakePaymentSpace (props) {
           <ModalButtonsWrapper>
             <CancelButton onClick={closeCancelModal}>Back</CancelButton>
             <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
-              Cancel Order
+              Cancel
             </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
@@ -586,6 +605,7 @@ function OrderCard (props) {
   const {
     customerName,
     pickupTime,
+    submissionTime,
     items,
     orderCost,
     orderTotal,
@@ -614,13 +634,16 @@ function OrderCard (props) {
   }
 
   const pickupAt = moment(pickupTime).format('h:mm A')
+  const submittedAt = submissionTime
+    ? moment(submissionTime).format('h:mm A')
+    : 'None'
   const timeLeft = moment(pickupTime).fromNow()
 
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
-      {/* {orderTrackerData.getOrderTracker.paymentType === null ? console.log("HIII", orderTrackerData.getOrderTracker) : null} */}
+      {console.log(orderTrackerData.getOrderTracker)}
       <OrderCardWrapper>
         {/* Section of Order card with customer name, order number */}
 
@@ -629,9 +652,11 @@ function OrderCard (props) {
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
           pickupTime={pickupAt}
-          submissionTime='4:35pm'
+          submissionTime={submittedAt}
           paymentType={
-            orderTrackerData.getOrderTracker.paymentType === null
+            orderTrackerData.getOrderTracker === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType
           }
@@ -666,7 +691,9 @@ function OrderCard (props) {
           orderTotal={orderTotal}
           fulfillment={fulfillment}
           paymentType={
-            isEmpty(orderTrackerData)
+            orderTrackerData.getOrderTracker === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType
           }
@@ -674,6 +701,13 @@ function OrderCard (props) {
           customerName={customerName}
           cancelClick={cancelClick}
           id={props.id}
+          shopifyOrderId={
+            orderTrackerData.getOrderTracker == null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.shopifyOrderId
+              ? orderTrackerData.getOrderTracker.shopifyOrderId
+              : null
+          }
         />
       </OrderCardWrapper>
     </IconContext.Provider>

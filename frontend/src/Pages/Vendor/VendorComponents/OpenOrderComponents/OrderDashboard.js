@@ -20,6 +20,7 @@ const FIND_ORDERS = gql`
         id
         studentId
         cohenId
+        submissionTime
         customer {
           name
           email
@@ -300,6 +301,7 @@ function OrderDashboard () {
               studentId={order.studentId}
               cohenId={order.cohenId}
               customerName={order.customer.name}
+              submissionTime={order.submissionTime}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
               orderCost={order.total.amount / 100}
@@ -323,6 +325,7 @@ function OrderDashboard () {
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
+              submissionTime={order.submissionTime}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               handleClick={() => handleOrderClick(order, 'PREPARED')}
@@ -342,6 +345,7 @@ function OrderDashboard () {
               id={order.id}
               customerName={order.customer.name}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
+              submissionTime={order.submissionTime}
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}

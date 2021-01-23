@@ -5,6 +5,7 @@ import hedwigLogo from './HedwigLogoFinal.svg'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
 import HeadShot from './HeadShot'
 import { useNavigate } from 'react-router-dom'
+import './index.css'
 
 import Brandon from '../../../images/Brandon.jpg'
 import Newton from '../../../images/Newton.JPG'
@@ -22,7 +23,7 @@ import Helena from '../../../images/Helena.jpeg'
 const MainDiv = styled.div`
   width: 100vw;
   display: grid;
-  grid-template-rows: 3% 15% 62%; //have to use max of 50% or user width? or maybe min
+  grid-template-rows: 3% 15% 64%; //have to use max of 50% or user width? or maybe min
   text-align: center;
   align-items: center;
   justify-items: center;
@@ -33,15 +34,15 @@ const MainDiv = styled.div`
 const HeaderWrapper = styled.div`
   position: fixed;
   height: 10vh;
-  font-size: 26px;
+  font-size: 30px;
   width: 100vw;
   top: 0;
   display: flex;
   align-items: center;
   text-align: center;
   justify-content: flex-start;
-  background-color: white;
   z-index: 1;
+  background-color: white;
   padding-top: 1vh;
   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
 `
@@ -50,8 +51,8 @@ const AboutText = styled.p`
   text-align: center;
   justify-content: center;
   top: 25%;
-  left: 49%;
-  transform: translate(-49%, 0);
+  left: 47.5%;
+  transform: translate(-47.5%, 0);
   font-weight: bold;
 `
 const TitleLogoWrapper = styled.div`
@@ -71,6 +72,9 @@ const MeetHedwigText = styled.p`
   font-weight: bold;
   top: 35%;
   height: 5vh;
+
+  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
+    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 
 const HedwigLogo = styled.img`
@@ -109,6 +113,9 @@ const GoalTitle = styled.p`
   line-height: 100%;
   font-weight: bold;
   margin: 2%;
+
+  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
+    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 const GoalText = styled.p`
   margin-left: 6%;
@@ -127,6 +134,7 @@ const ContactText = styled.p`
 
 const AboutUs = () => {
   const navigate = useNavigate()
+
   return (
     <MainDiv>
       <HeaderWrapper>
@@ -139,7 +147,7 @@ const AboutUs = () => {
             left: '1%'
           }}
         />
-        <AboutText>About</AboutText>
+        <AboutText>About the Creators</AboutText>
       </HeaderWrapper>
       <TitleLogoWrapper>
         <HedwigLogo src={hedwigLogo}></HedwigLogo>

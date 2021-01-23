@@ -1,5 +1,6 @@
 import react from 'react'
 import styled from 'styled-components/macro'
+import './index.css'
 
 const MainDiv = styled.div`
   max-width: 100%;
@@ -15,12 +16,13 @@ const HeadPhoto = styled.img`
   border-radius: 50%;
   max-height: 70%;
   max-width: 80%;
+  top: 8%;
 `
 
 const Name = styled.p`
   font-weight: bold;
   margin: 0;
-  margin-top: 8%;
+  margin-top: 15%;
   padding: 0;
   line-height: 90%;
 `
@@ -32,7 +34,7 @@ const Position = styled.p`
 
 const HeadShot = ({ src, name, position }) => {
   return (
-    <MainDiv>
+    <MainDiv className='emphasize'>
       <HeadPhoto src={src} />
       <Name>{name}</Name>
       <Position>{position}</Position>

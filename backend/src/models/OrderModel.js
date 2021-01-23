@@ -102,6 +102,7 @@ const OrderTC = sc.createObjectTC({
     fulfillment: OrderFulfillmentTC.getType(),
     cohenId: 'String',
     studentId: 'String',
+    submissionTime: 'String',
     paymentType: PaymentSourceEnumTC.getType()
   }
 })
@@ -123,6 +124,7 @@ const UpdateOrderTC = sc.createInputTC({
     fulfillment: OrderFulfillmentTC.getITC().getType(),
     cohenId: 'String',
     studentId: 'String',
+    submissionTime: 'String',
     paymentType: PaymentSourceEnumTC.getType()
   }
 })
@@ -138,6 +140,7 @@ const CreateOrderInputTC = sc.createInputTC({
       .getType(),
     recipient: OrderFulfillmentRecipientTC.getITC().getType(),
     pickupTime: 'String!',
+    submissionTime: 'String!',
     cohenId: 'String',
     studentId: 'String',
     paymentType: PaymentSourceEnumTC.getType()

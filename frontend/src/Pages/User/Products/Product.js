@@ -41,6 +41,7 @@ function Product () {
   }, [])
 
   const [quantity, setQuantity] = useState(1)
+  const [requiredFilled, setRequiredFilled] = useState(true)
 
   console.log(productId)
   if (vendor_loading) {
@@ -92,11 +93,12 @@ function Product () {
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])
     const itemName = product.name
-    const image = product.image;
+    const image = product.image
     const itemDataSourceId = product.dataSourceId
     let variant
 
     if (document.querySelector('.variantSelect:checked') == null) {
+      setRequiredFilled(false)
       return false
     }
     variant = JSON.parse(document.querySelector('.variantSelect:checked').value)
@@ -105,16 +107,41 @@ function Product () {
 
     const modifierNames = []
     let modifierCost = 0
-    const modifierList = {}
     const modifierLists = document.querySelectorAll('.modifierSelect:checked')
 
+    // purpose of subList: to make modifierList match the structure of prodList
+    const modList = []
+    const prodList = product.modifierLists
+    let i = 0,
+      j = 0,
+      subList = []
+
+    // loops through product modifierLists once
+    // traverses selected modifiers once at a separate pace
+    while (i < prodList.length) {
+      // case where subList would be pushed to modList
+      if (
+        j >= modifierLists.length ||
+        prodList[i].dataSourceId !==
+          JSON.parse(modifierLists[j].value).option.parentListId
+      ) {
+        modList.push(subList)
+        subList = []
+        i++
+      }
+      // case where subList would continue being built
+      else {
+        subList.push(JSON.parse(modifierLists[j].value).option)
+        j++
+      }
+    }
+
     for (let i = 0; i < modifierLists.length; i++) {
-      const currentModifier = JSON.parse(modifierLists[i].value)
-      modifierList[i] = currentModifier.option
-      const currentModifierName = currentModifier.option.name
+      const currentModifier = JSON.parse(modifierLists[i].value).option
+      const currentModifierName = currentModifier.name
       {
-        currentModifier.option.price
-          ? (modifierCost += currentModifier.option.price.amount)
+        currentModifier.price
+          ? (modifierCost += currentModifier.price.amount)
           : (modifierCost += 0)
       }
       modifierNames.push(currentModifierName)
@@ -122,13 +149,42 @@ function Product () {
     const itemQuantity = { quantity }.quantity
     const totalPrice = (modifierCost + variantCost) * 0.01
 
+    // update modifiers validity flag, ignores check if min/max modifiers is null
+    for (let i = 0; i < prodList.length; i++) {
+      if (
+        (prodList[i].minModifiers != null &&
+          modList[i].length < prodList[i].minModifiers) ||
+        (prodList[i].maxModifiers != null && prodList[i].maxModifiers != -1 &&
+          modList[i].length > prodList[i].maxModifiers)
+      ) {
+        setRequiredFilled(false)
+        return false
+      }
+    }
+    //converts modList into an object
+    let x = 0,
+      y = 0,
+      modObject = {}
+
+    while (x < modList.length) {
+      if (modList[x].length == 0) {
+        x++
+      } else {
+        for (let j = 0; j < modList[x].length; j++) {
+          modObject[y] = modList[x][j]
+          y++
+        }
+        x++
+      }
+    }
+
     dispatch({
       type: 'ADD_ITEM',
       item: {
         name: itemName,
         Id: Date.now(),
         variant: variantObject,
-        modifierLists: modifierList,
+        modifierLists: modObject,
         quantity: itemQuantity,
         price: totalPrice,
         modDisplay: modifierNames,
@@ -136,7 +192,8 @@ function Product () {
         image: image
       }
     })
-    console.log(itemName, variantObject)
+
+    setRequiredFilled(true)
     return true
   }
 
@@ -152,7 +209,10 @@ function Product () {
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>
-          <p>{product.description}</p>
+          <p>
+            {product.description} <br/>
+            <span className='asterisk'> (* required) </span>
+          </p>
         </div>
         <div className='variantsContainer'>
           <VariantSelection variants={product.variants} />
@@ -175,16 +235,18 @@ function Product () {
             decrease={decrease}
           />
         </div>
+        {!requiredFilled && (
+          <div className='warningContainer'>Missing required selections!</div>
+        )}
         <div className='submitContainer'>
           <button
             className='submitButton'
             onClick={() => {
-              makeCartItem()
-              console.log(vendor)
-              navigate(`/eat/${vendor.slug}`, {
-                state: { currentVendor: vendor.name }
-              })
-              // navigate('/eat/cohen/cart')
+              if (makeCartItem()) {
+                navigate(`/eat/${vendor.slug}`, {
+                  state: { currentVendor: vendor.name }
+                })
+              }
             }}
           >
             Add

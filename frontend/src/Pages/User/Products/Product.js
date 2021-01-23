@@ -192,7 +192,7 @@ function Product () {
         image: image
       }
     })
-    console.log('MODIFIER LISTS', prodList)
+
     setRequiredFilled(true)
     return true
   }

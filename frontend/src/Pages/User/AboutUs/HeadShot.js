@@ -7,6 +7,7 @@ const MainDiv = styled.div`
   text-align: center;
   align-items: center;
   justify-items: center;
+  font-family: avenir;
 `
 
 const HeadPhoto = styled.img`

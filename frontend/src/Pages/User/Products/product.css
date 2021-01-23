@@ -124,7 +124,7 @@ h2 {
 /* Custom radio button */
 .optionSet input[type='radio']:checked ~ .customRadio {
   background-color: #ffffff;
-  border: 8px solid #f49f86;
+  border: 8px solid #F3725B;
 }
 
 .optionSet .customRadio {
@@ -150,8 +150,8 @@ h2 {
 
 /* Custom checkbox */
 .optionSet input[type='checkbox']:checked ~ .customCheck {
-  background-color: #f49f86;
-  border: 2px solid #f49f86;
+  background-color: #F3725B;
+  border: 2px solid #F3725B;
 }
 
 .optionSet .customCheck {
@@ -214,6 +214,7 @@ h2 {
   line-height: 35px;
   color: #5a5953;
   padding: 0px 10px;
+  margin: 0px 15px 25px 15px;
 }
 
 .submitContainer {
@@ -226,7 +227,7 @@ h2 {
 .submitButton {
   font-size: 20px;
   line-height: 27px;
-  color: #f49f86;
+  color: #F3725B;
   text-align: center;
   height: 5vh;
   width: 30vw;

@@ -127,7 +127,7 @@ function ProfilePane () {
           <div className='welcomebody'>
             <h1 className='welcometext'>
               {' '}
-              Hello, <br /> {user.name} <br />{' '}
+              Hello, <br /> {user.name.indexOf(" ") ===-1? user.name : user.name.substring(0,user.name.indexOf(" "))} <br />{' '}
             </h1>
             <h1 className='phonetext'>
               {editing ? (

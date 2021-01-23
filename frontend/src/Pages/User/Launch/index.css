@@ -1,13 +1,12 @@
-#main-div-launch{
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    max-width: 100%;
-    font-family: 'Proxima Nova';
-    background-color: white;
+#main-div-launch {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 100%;
+  background-color: white;
 }
 
 .home-btn{
@@ -26,9 +25,9 @@
 .home-btn:focus{
   outline: none;
 }
-#title{
-  color: #F3725B;
-  font-size: 2rem;
+#title {
+  color: #f3725b;
+  font-size: 2.4rem;
   font-weight: bold;
   margin-top: 0.8rem;
   margin-bottom: 0.2rem;

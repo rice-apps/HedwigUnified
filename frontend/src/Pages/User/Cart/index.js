@@ -211,7 +211,6 @@ function CartDetail () {
   })
 
   const { state } = useLocation()
-  const { vendor} = state;
 
   const handleClickCredit = async () => {
     // Get url and embed that url

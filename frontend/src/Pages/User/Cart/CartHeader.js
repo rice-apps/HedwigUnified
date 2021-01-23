@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro'
 
 import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
-import RalewayFont from '../../../fonts/GlobalFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -32,7 +31,6 @@ const HedwigLogo = styled.img`
 `
 
 const HedwigWrapper = styled.div`
-  font-family: 'avenirbold';
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -90,16 +88,10 @@ const currVendor = order ? order.vendor.name : null
 
   return (
     <HeaderWrapper>
-      <RalewayFont />
       <HedwigWrapper>
         {showBackButton ? (
           <IoMdArrowRoundBack
-// <<<<<<< HEAD:client/src/Pages/User/Cart/CartHeader.js
-//             onClick={() => handleClickNav(props)}
-// =======
-// accept master changes DEBUG
             onClick={() => navigate(backNav, {state:{ currentVendor: currVendor}})}
-// {/* >>>>>>> master:frontend/src/Pages/User/Cart/CartHeader.js */}
             style={{
               position: 'fixed',
               left: '22px',
@@ -109,12 +101,7 @@ const currVendor = order ? order.vendor.name : null
             }}
           />
         ) : null}
-{/* <<<<<<< HEAD:client/src/Pages/User/Cart/CartHeader.js
-        Checkout: {getVendorName(props.vendor)}
-======= */}
-{/* accept current changes from master DEBUG */}
         Checkout: {vendorName}
-{/* >>>>>>> master:frontend/src/Pages/User/Cart/CartHeader.js */}
       </HedwigWrapper>
     </HeaderWrapper>
   )

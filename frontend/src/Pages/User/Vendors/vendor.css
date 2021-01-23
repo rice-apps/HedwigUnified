@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  font-family: 'Proxima Nova';
 }
 
 .vendorContainer {
@@ -47,6 +48,7 @@
   justify-content: flex-end;
   align-items: center;
   flex-grow: 1;
+  font-family: 'Proxima Nova'
   /* position: relative;
 	margin-left: 82%;
 	bottom: 10vh;
@@ -63,7 +65,7 @@
 }
 
 .itemtext {
-  font-family: 'Open Sans', sans-serif;
+  /* font-family: 'Open Sans', sans-serif; */
   font-weight: 400;
 }
 
@@ -108,14 +110,14 @@
 }
 
 .vendorKeywords {
-  color: #f49f86;
+  color: #F3725B;
   margin-top: 0.5rem;
 }
 
 li {
   display: inline;
-  font-family: 'Nunito';
-  color: #f49f86;
+  /* font-family: 'Nunito'; */
+  color:#F3725B;
 }
 
 /* .vendorHeadingText {
@@ -132,9 +134,9 @@ li {
 } */
 
 .vendorName {
-  font-size: 25px;
-  font-family: 'Santana-Bold';
-  color: #5a5953;
+  font-size: 1.1rem;
+  font-family: Proxima Nova;
+  font-weight: bold;
   margin-top: 12px;
   margin-bottom: 0px;
   margin-right: 3.5px;
@@ -150,7 +152,7 @@ li {
 }
 
 p {
-  font-family: 'Nunito';
+  /* font-family: 'Nunito'; */
   margin-left: 15px;
   padding: 0px;
 }

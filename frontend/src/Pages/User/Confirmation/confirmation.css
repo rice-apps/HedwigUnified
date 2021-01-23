@@ -27,7 +27,6 @@ height: 100%;
 .orderConfirmed {
   font-size: 20pt;
   color: #5a5953;
-  font-family: 'Avenir Black', 'Arial Black', sans-serif;
   text-align: center;
   margin: 8px 16px 8px 16px;
 }
@@ -35,7 +34,6 @@ height: 100%;
 .statusUpdate {
   font-size: 15pt;
   color: #f3725b;
-  font-family: 'Avenir Book', 'Arial Book', sans-serif;
   text-align: center;
   margin: 8px 16px 8px 16px;
 }
@@ -55,7 +53,6 @@ height: 100%;
   color: #5a5953;
   position: relative;
   top: -30px;
-  font-family: 'Avenir Black', 'Arial Black', sans-serif;
   text-align: center;
 }
 
@@ -66,7 +63,6 @@ height: 100%;
   position: relative;
   top: -30px;
   text-align: center;
-  font-family: 'Avenir Book', 'Arial Book', sans-serif;
 }
 
 .buttonsContainer {
@@ -79,7 +75,7 @@ height: 100%;
 .bottomButton {
   font-size: 20px;
   line-height: 27px;
-  color: #f49f86;
+  color: #F3725B;
   height: 5vh;
   width: 40vw;
   background-color: #ffffff;

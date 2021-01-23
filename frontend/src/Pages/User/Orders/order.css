@@ -22,7 +22,7 @@ img.vendorLogo {
   border-radius: 5%;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.16);
   margin: 8px;
-  font-family: 'Avenir', Arial, Helvetica, sans-serif;
+  /* font-family: 'Avenir', Arial, Helvetica, sans-serif; */
   color: rgba(90, 89, 83, 1);
   background-color: white;
 }
@@ -57,7 +57,7 @@ p.bottom_bar_buttons {
   border-radius: 15px;
   font-size: 20px;
   border-color: #5a595326;
-  color: #f49f86;
+  color: #F3725B;
   padding: 10px;
 }
 

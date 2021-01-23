@@ -17,13 +17,13 @@ const VendorGridContainer = styled.div`
 const SideNavigationBarSpace = styled.div`
   grid-area: sidebar;
   background-color: #ffffff;
-  font-family: 'Metropolis';
+  // font-family: 'Metropolis';
 `
 
 const VendorHeaderSpace = styled.div`
   grid-area: vendor-header;
   background-color: #ffffff;
-  font-family: 'Metropolis';
+  // font-family: 'Metropolis';
 `
 
 const MainDisplaySpace = styled.div`
@@ -33,7 +33,7 @@ const MainDisplaySpace = styled.div`
   align-items: center;
   background-color: #e7e7e7;
   font-size: 150px;
-  font-family: 'Metropolis';
+  // font-family: 'Metropolis';
   text-align: center;
 `
 

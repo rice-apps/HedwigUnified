@@ -10,6 +10,7 @@ function ModifierSelection ({ modifierCategory }) {
     minModifiers,
     maxModifiers
   } = modifierCategory
+  console.log("MIN MODIFIERS ", minModifiers, "MAX MODIFIERS: ", maxModifiers)
   return (
     <div className='modifier'>
       <div className='heading'>

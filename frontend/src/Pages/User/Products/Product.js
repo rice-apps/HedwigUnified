@@ -154,7 +154,7 @@ function Product () {
       if (
         (prodList[i].minModifiers != null &&
           modList[i].length < prodList[i].minModifiers) ||
-        (prodList[i].maxModifiers != null &&
+        (prodList[i].maxModifiers != null && prodList[i].maxModifiers != -1 &&
           modList[i].length > prodList[i].maxModifiers)
       ) {
         setRequiredFilled(false)
@@ -192,7 +192,7 @@ function Product () {
         image: image
       }
     })
-    console.log('MODIFIER LISTS', modObject)
+    console.log('MODIFIER LISTS', prodList)
     setRequiredFilled(true)
     return true
   }
@@ -211,7 +211,7 @@ function Product () {
           <h2>{product.name}</h2>
           <p>
             {product.description} <br />{' '}
-            <text className='asterisk'> (* required) </text>{' '}
+            <span className='asterisk'> (* required) </span>{' '}
           </p>
         </div>
         <div className='variantsContainer'>

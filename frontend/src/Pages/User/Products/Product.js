@@ -210,8 +210,8 @@ function Product () {
         <div className='itemHeading'>
           <h2>{product.name}</h2>
           <p>
-            {product.description} <br />{' '}
-            <span className='asterisk'> (* required) </span>{' '}
+            {product.description} <br/>
+            <span className='asterisk'> (* required) </span>
           </p>
         </div>
         <div className='variantsContainer'>

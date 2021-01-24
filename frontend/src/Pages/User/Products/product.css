@@ -201,28 +201,6 @@ h2 {
   width: 100%;
 }
 
-.quantityContainer > button:first-child,
-.quantityContainer > button:last-child {
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-  background-color: #5a5953;
-  border: 0px;
-
-  text-align: center;
-  font-size: 25px;
-  line-height: 25px;
-  color: #ffffff;
-}
-
-.quantityContainer > p {
-  font-size: 25px;
-  text-align: center;
-  line-height: 35px;
-  color: #5a5953;
-  padding: 0px 10px;
-  margin: 0px 15px 25px 15px;
-}
 
 .submitContainer {
   display: flex;

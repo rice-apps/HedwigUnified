@@ -154,7 +154,8 @@ function Product () {
       if (
         (prodList[i].minModifiers != null &&
           modList[i].length < prodList[i].minModifiers) ||
-        (prodList[i].maxModifiers != null && prodList[i].maxModifiers != -1 &&
+        (prodList[i].maxModifiers != null &&
+          prodList[i].maxModifiers != -1 &&
           modList[i].length > prodList[i].maxModifiers)
       ) {
         setRequiredFilled(false)
@@ -210,7 +211,7 @@ function Product () {
         <div className='itemHeading'>
           <h2>{product.name}</h2>
           <p>
-            {product.description} <br/>
+            {product.description} <br />
             <span className='asterisk'> (* required) </span>
           </p>
         </div>

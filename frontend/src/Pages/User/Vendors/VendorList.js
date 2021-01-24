@@ -11,6 +11,7 @@ import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
 import ProfilePane from './ProfilePane.js'
 
+
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
 //         vendorMany {

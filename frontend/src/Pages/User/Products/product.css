@@ -3,6 +3,11 @@ input[type='checkbox'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .container {
@@ -10,6 +15,8 @@ input[type='checkbox'] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .heroImage {
@@ -225,14 +232,14 @@ h2 {
 }
 
 .submitButton {
-  font-size: 20px;
-  line-height: 27px;
-  color: #F3725B;
+  font-size: 2.3vh;
+  font-weight: 500;
+  color: white;
   text-align: center;
-  height: 5vh;
-  width: 30vw;
-  background-color: #ffffff;
-  border: 1px solid #5a595326;
+  height: 4.5vh;
+  width: 20vh;
+  background-color: #f3725b;
+  border: none;
   border-radius: 20px;
 }
 

@@ -118,6 +118,10 @@
   display: flex;
   flex: 1;
   height: 5vh;
+  padding-top: 2.5vh;
+  cursor: pointer;
+  grid-template-columns: 15fr 2fr;
+
   border-top: #7070701a 1px solid;
 }
 
@@ -150,21 +154,9 @@
   display: flex;
   justify-content: center;
   height: 41vh;
+  width:100%;
   background-color: #faf8f8;
   border-top: #7070701a 1px solid;
   bottom: 0px;
 }
 
-.signoutbutton {
-  border: 1px solid #5a595326;
-  background-color: #F3725B;
-  width: 70%;
-  height: 2.5rem;
-  font-family: 'proxima nova';
-  color: white;
-  font-size: 1rem;
-  align-self: flex-end;
-  margin-bottom: 5vh;
-  border-radius: 20px;
-  padding: 10px 20px;
-}

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { TextField } from '@material-ui/core'
 import gql from 'graphql-tag.macro'
+import styled from 'styled-components/macro'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 
@@ -13,6 +14,23 @@ function handleLogoutClick () {
   localStorage.removeItem('token')
   window.open(logoutURL, '_self')
 }
+
+const SignOutButton = styled.div`
+border: 1px solid #5a595326;
+  background-color: #db6142;
+  font-family: 'avenirbook';
+  color: white;
+  font-size: 3vh;
+  align-self: flex-end;
+  margin-bottom: 5vh;
+  border-radius: 30px;
+  height:8vh;
+  width:60%;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  padding: 10px 20px;
+`
 
 const GET_USER_INFO = gql`
   query GetUserInfo {
@@ -131,8 +149,7 @@ function ProfilePane () {
           {/* Body: Welcome */}
           <div className='welcomebody'>
             <h1 className='welcometext'>
-              {' '}
-              Hello, <br /> {user.name.indexOf(" ") ===-1? user.name : user.name.substring(0,user.name.indexOf(" "))} <br />{' '}
+              Hello, <br /> {user.name.split(' ')[0]} <br />
             </h1>
             <h1 className='phonetext'>
               {editing ? (
@@ -177,7 +194,8 @@ function ProfilePane () {
           {/* Body: Links;;; should map through each of the links up top and create a box */}
           <div className='contentbody'>
             {links.map(link => (
-              <div className='contentcard'>
+              <div className='contentcard'
+              onClick={() => window.open(link.path, '_self')}>
                 <p className='contenttitle'>{link.content}</p>
                 {/* Checks if path exists, if not, then don't put an arrow */}
                 {link.path ? (
@@ -197,9 +215,9 @@ function ProfilePane () {
 
           {/* Footer: SignOut */}
           <div className='profilefooter'>
-            <button className='signoutbutton' onClick={handleLogoutClick}>
+            <SignOutButton onClick={handleLogoutClick}>
               Log Out
-            </button>
+            </SignOutButton>
           </div>
         </div>
       </div>

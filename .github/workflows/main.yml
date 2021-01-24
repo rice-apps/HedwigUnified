@@ -70,8 +70,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            REACT_APP_GRAPHQL_URL=https://hedwig2.vsong.me/graphql
-            REACT_APP_GRAPHQL_WS_URL=wss://hedwig2.vsong.me/ws
+            REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.site/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.riceapps.site/ws
           context: ./frontend
           file: ./frontend/Dockerfile
           push: ${{ !env.ACT }}

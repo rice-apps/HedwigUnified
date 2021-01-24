@@ -26,6 +26,7 @@ const MainMenuItemWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   margin: 6px 0px;
+  justify-content: space-between;
 `
 
 function MainMenuItem (props) {
@@ -118,7 +119,6 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/openorders' label='Open Orders' />
-        <SubMenuItem path='/employee/closedorders' label='Closed Orders' />
       </Collapsible>
 
       <Collapsible
@@ -130,7 +130,6 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/items' label='Edit Items' />
-        <SubMenuItem path='/employee/modifiers' label='Edit Modifiers' />
       </Collapsible>
 
       <Collapsible

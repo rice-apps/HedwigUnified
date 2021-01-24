@@ -26,6 +26,7 @@ const MainMenuItemWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   margin: 6px 0px;
+  justify-content: space-between;
 `
 
 function MainMenuItem (props) {

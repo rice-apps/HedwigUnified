@@ -30,6 +30,7 @@ import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
 import HelpPage from '../Pages/User/Help'
+import TestPage from './TestPage'
 
 /**
  * Requests to verify the user's token on the backend
@@ -187,6 +188,10 @@ const newRoutesArray = [
   {
     path: '/',
     element: <Navigate to='/eat' />
+  },
+  {
+    path: '/test',
+    element: <TestPage/>
   },
   {
     path: '/404_page',

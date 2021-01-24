@@ -118,7 +118,6 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/openorders' label='Open Orders' />
-        <SubMenuItem path='/employee/closedorders' label='Closed Orders' />
       </Collapsible>
 
       <Collapsible
@@ -130,7 +129,6 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/items' label='Edit Items' />
-        <SubMenuItem path='/employee/modifiers' label='Edit Modifiers' />
       </Collapsible>
 
       <Collapsible

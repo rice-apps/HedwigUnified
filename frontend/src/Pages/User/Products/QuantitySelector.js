@@ -7,7 +7,7 @@ const QuantitySelectorWrapper = styled.div`
   grid-template-columns: 1fr 1.3fr 1fr;
   grid-template-rows: 1fr;
   width: 25vh;
-  height: 100%;
+  height: 5vh;
   align-items: center;
   justify-items: center;
   font-size: 3.9vh;

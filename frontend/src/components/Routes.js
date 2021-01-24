@@ -29,6 +29,7 @@ import VendorSelect from '../Pages/Login/VendorCheck'
 import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
+import HelpPage from '../Pages/User/Help'
 
 /**
  * Requests to verify the user's token on the backend
@@ -194,6 +195,10 @@ const newRoutesArray = [
   {
     path: '/about_us',
     element: <AboutUs />
+  },
+  {
+    path: '/help',
+    element: <HelpPage />
   },
   {
     path: '/login',

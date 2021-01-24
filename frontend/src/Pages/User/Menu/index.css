@@ -155,7 +155,7 @@
   text-align: center;
   font-size: 0.8em;
   background: white;
-  font-family: Proxima Nova;
+  font-family: 'Proxima Nova';
   z-index: 100;
   margin-left: 20px;
   margin-right: 20px;
@@ -176,7 +176,7 @@
 .openStatus {
   font-weight: bold;
   color: #F3725B;
-  font-family: proxima Nova;
+  font-family: 'Proxima Nova';
 }
 .hourDisplay {
   background-color: white;

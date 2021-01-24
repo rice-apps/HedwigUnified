@@ -11,6 +11,7 @@ const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
   font-size: 2.8vh;
+  font-weight: 600;
   width: 100vw;
   top: 0;
   display: grid;
@@ -31,7 +32,7 @@ const HedwigLogo = styled.img`
 `
 
 const HedwigWrapper = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;

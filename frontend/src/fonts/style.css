@@ -78,6 +78,7 @@ body {
   margin: 0;
   font-family: 'Proxima Nova';
   color: #333333;
+  letter-spacing:0.45px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

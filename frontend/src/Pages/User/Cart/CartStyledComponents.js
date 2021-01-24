@@ -203,7 +203,7 @@ export const Bill = styled.div`
 `
 export const SubmitButton = styled.div`
   color: white;
-  background-color: #F3725B;
+  background-color: #f3725b;
   text-align: center;
   cursor: pointer;
   display: flex;

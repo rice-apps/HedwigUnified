@@ -131,7 +131,7 @@ function ProfilePane () {
           {/* Body: Welcome */}
           <div className='welcomebody'>
             <h1 className='welcometext'>
-              Hello, <br /> {user.name.split(" ")[0]} <br />
+              Hello, <br /> {user.name.split(' ')[0]} <br />
             </h1>
             <h1 className='phonetext'>
               {editing ? (

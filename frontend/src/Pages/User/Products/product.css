@@ -16,7 +16,7 @@ input[type='checkbox'] {
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
-  overflow-y:auto;
+  overflow-y: auto;
 }
 
 .heroImage {
@@ -196,9 +196,7 @@ h2 {
   flex-direction: row;
   text-align: center;
   justify-content: center;
-  
 }
-
 
 .submitContainer {
   display: flex;
@@ -214,7 +212,7 @@ h2 {
   text-align: center;
   height: 4.5vh;
   width: 20vh;
-  background-color: #F3725B;
+  background-color: #f3725b;
   border: none;
   border-radius: 20px;
 }

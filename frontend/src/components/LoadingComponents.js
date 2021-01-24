@@ -93,8 +93,8 @@ const LoadingBar = styled.div`
   background-color: #f3725b;
   margin-left:0.4vh;
   animation-name: ${barAnimation};
-  animation-duration: 4s;
-  animation-iteration-count: infinite;
+  animation-duration: 4.3s;
+  animation-iteration-count: 1;
 `
 
 function LoadingPage () {

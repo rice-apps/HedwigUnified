@@ -68,16 +68,17 @@
 }
 
 .welcometext {
-  font-size: 4vh;
+  font-size: 4.3vh;
   color: #F3725B;
   margin-left: 1vw;
+  line-height:5.2vh;
   font-weight: bold;
   word-wrap: break-word;
   word-break: break-word;
 }
 
 .phonetext {
-  font-size: 0.9rem;
+  font-size: 2.4vh;
   margin-left: 1vw;
   /* padding-top: 2vh; */
 }
@@ -114,14 +115,11 @@
   padding-left: 4vw;
   padding-right: 4vw;
   justify-content: space-between;
-  align-content: center;
+  align-items: center;
   display: flex;
-  flex: 1;
-  height: 5vh;
-  padding-top: 2.5vh;
+  height: 7vh;
   cursor: pointer;
   grid-template-columns: 15fr 2fr;
-
   border-top: #7070701a 1px solid;
 }
 
@@ -136,11 +134,10 @@
 }
 
 .contenttitle {
-  font-family: 'proxima nova';
-  font-size: 0.8rem;
+  font-family: 'Proxima Nova';
+  font-size: 2.4vh;
   /* justify-self: flex-start; */
   align-self: center;
-  margin: 0;
 }
 
 .contentarrow {

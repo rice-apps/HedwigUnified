@@ -106,6 +106,7 @@ const LoginQuestion = styled.div`
   position: relative;
   font-weight: bold;
   font-size: 2rem;
+  letter-spacing:0rem;
   text-align: center;
   padding: 0.3rem;
 `

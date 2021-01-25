@@ -15,8 +15,7 @@
 }
 
 .vendorContainer {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding:1vh 2vh;
   max-width: 100%;
   cursor: pointer;
   border-bottom: 0.5pt solid #5a59534d;
@@ -134,7 +133,7 @@ li {
 } */
 
 .vendorName {
-  font-size: 1.1rem;
+  font-size: 3vh;
   font-family: Proxima Nova;
   font-weight: bold;
   margin-top: 12px;

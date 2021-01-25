@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom'
 
 const HeaderWrapper = styled.div`
   position: fixed;
-  letter-spacing:0.7px;
   height: 8vh;
-  font-size: 26px;
+  font-weight:600;
   width: 100vw;
   top: 0;
   display: grid;
@@ -29,7 +28,7 @@ const HedwigLogo = styled.img`
 `
 
 const HedwigWrapper = styled.div`
-  font-size: 1.6rem;
+  font-size: 3.8vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +53,7 @@ function BuyerHeader (props) {
             }}
           />
         ) : null}
-        <HedwigLogo src={HedwigLogoFinal} /> <span style={{fontWeight:'600'}}>hedwig</span>
+        <HedwigLogo src={HedwigLogoFinal} /> <span>hedwig</span>
       </HedwigWrapper>
     </HeaderWrapper>
   )

@@ -93,25 +93,23 @@ function ProfilePane ({ updateLogin }) {
   const [editing, setEditing] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
 
-  const { data, loading, error } = useQuery(GET_USER_INFO)
-
   const [
     editPhone,
     { loading: phone_loading, error: phone_error }
   ] = useMutation(EDIT_PHONE)
 
-  if (error) return <p>Error!</p>
-  if (loading) return <p>Waiting...</p>
-  if (!data) return <p> work pls </p>
-
   if (phone_error) return <p> {phone_error.message} </p>
   if (phone_loading) return <p> (Phone) Waiting... </p>
 
-  const { user } = data
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   const links = getLinks(user)
 
   if (confirmed) {
     localStorage.setItem('phone', phone)
+    localStorage.setItem(
+      'userProfile',
+      JSON.stringify(Object.assign(user, { phone: phone }))
+    )
     editPhone({
       variables: { name: user.name, phone: phone, netid: user.netid }
     })

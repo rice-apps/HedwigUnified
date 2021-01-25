@@ -45,7 +45,7 @@
   font-size: 2vh;
   margin: auto;
   font-family: 'avenir';
-  color: #F3725B;
+  color: #f3725b;
 }
 
 /* Category Select Bar */
@@ -77,7 +77,7 @@
 .categoryactive {
   font-family: 'avenirbold';
   color: #5a5953;
-  border-bottom: #F3725B solid 2px;
+  border-bottom: #f3725b solid 2px;
 }
 
 .categoryname {
@@ -174,9 +174,9 @@
   font-weight: bold;
 }
 .openStatus {
-  font-size:2vh;
+  font-size: 2vh;
   font-weight: bold;
-  color: #F3725B;
+  color: #f3725b;
   font-family: 'Proxima Nova';
 }
 .hourDisplay {

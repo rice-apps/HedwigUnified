@@ -12,7 +12,7 @@ import {
 import OrderCard from './OrderCard.js'
 import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
-import {LoadingPage} from './../../../../components/LoadingComponents'
+import { LoadingPage } from './../../../../components/LoadingComponents'
 
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!) {
@@ -254,7 +254,7 @@ function OrderDashboard () {
   })
 
   if (loading) {
-    return <LoadingPage/>
+    return <LoadingPage />
   }
   if (error) {
     return <p>Error...</p>

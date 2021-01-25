@@ -190,7 +190,7 @@ const newRoutesArray = [
   },
   {
     path: '/test',
-    element: <TestPage/>
+    element: <TestPage />
   },
   {
     path: '/404_page',

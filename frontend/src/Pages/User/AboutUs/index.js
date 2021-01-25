@@ -65,7 +65,7 @@ const TitleLogoWrapper = styled.div`
 
 const MeetHedwigText = styled.p`
   position: relative;
-  color: #F3725B;
+  color: #f3725b;
   font-size: 18pt;
   text-align: center;
   line-height: 100%;
@@ -107,7 +107,7 @@ const DescriptionBlock = styled.div`
 
 const GoalTitle = styled.p`
   position: relative;
-  color: #F3725B;
+  color: #f3725b;
   font-size: 18pt;
   text-align: center;
   line-height: 100%;

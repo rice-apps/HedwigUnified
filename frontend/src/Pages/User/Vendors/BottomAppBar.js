@@ -28,7 +28,7 @@ const BottomNavigationItem = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 700;
   &&:active {
     transform: scale(1.001);
     background-color: #fac8bb;
@@ -52,7 +52,7 @@ function BottomAppBar () {
     <BottomNavigationWrapper>
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <GrCart style={{ fontSize: '2.8vh' }} />
-        <BottomNavigationText>View Cart ({cartAmount})</BottomNavigationText>
+        <BottomNavigationText>View Cart {cartAmount === 0 ? null : ({cartAmount})}</BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>
   )

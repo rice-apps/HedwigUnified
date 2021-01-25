@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro'
-import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
+import HedwigLogoFinal from '../../../Pages/Login/HedwigLogoFinal_02.svg'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 

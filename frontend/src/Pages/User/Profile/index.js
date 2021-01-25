@@ -36,13 +36,15 @@ const getLinks = user => {
 }
 
 function Profile ({ updateLogin }) {
-  const { data, loading, error } = useQuery(GET_USER_INFO)
+  // const { data, loading, error } = useQuery(GET_USER_INFO)
 
-  if (error) return <p>Error!</p>
-  if (loading) return <p>Waiting...</p>
-  if (!data) return <p> work pls </p>
+  // if (error) return <p>Error!</p>
+  // if (loading) return <p>Waiting...</p>
+  // if (!data) return <p> work pls </p>
 
-  const { user } = data
+  // const { user } = data
+
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   const links = getLinks(user)
 
   function handleLogoutClick () {

@@ -2,7 +2,7 @@ import './ProfilePane.css'
 import { useQuery, useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { FaBars, FaTimes } from 'react-icons/fa'
+import { FaBars, FaTimes, FaChevronRight } from 'react-icons/fa'
 import { TextField } from '@material-ui/core'
 import gql from 'graphql-tag.macro'
 import styled from 'styled-components/macro'
@@ -16,7 +16,7 @@ function handleLogoutClick () {
 }
 
 const SignOutButton = styled.div`
-border: 1px solid #5a595326;
+  border: 1px solid #5a595326;
   background-color: #db6142;
   font-family: 'avenirbook';
   color: white;
@@ -24,10 +24,10 @@ border: 1px solid #5a595326;
   align-self: flex-end;
   margin-bottom: 5vh;
   border-radius: 30px;
-  height:8vh;
-  width:60%;
-  display:flex;
-  align-items:center;
+  height: 8vh;
+  width: 60%;
+  display: flex;
+  align-items: center;
   justify-content: center;
   padding: 10px 20px;
 `
@@ -194,30 +194,24 @@ function ProfilePane () {
           {/* Body: Links;;; should map through each of the links up top and create a box */}
           <div className='contentbody'>
             {links.map(link => (
-              <div className='contentcard'
-              onClick={() => window.open(link.path, '_self')}>
-                <p className='contenttitle'>{link.content}</p>
-                {/* Checks if path exists, if not, then don't put an arrow */}
-                {link.path ? (
-                  <button
-                    className='contentarrow'
-                    onClick={() => window.open(link.path, '_self')}
-                  >
-                    <FontAwesomeIcon
-                      icon={['fas', 'chevron-right']}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </button>
-                ) : null}
+              <div
+                className='contentcard'
+                onClick={() => window.open(link.path, '_self')}
+              >
+                <div className='contenttitle'>{link.content}</div>
+                
+
+                <FaChevronRight
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => window.open(link.path, '_self')}
+                />
               </div>
             ))}
           </div>
 
           {/* Footer: SignOut */}
           <div className='profilefooter'>
-            <SignOutButton onClick={handleLogoutClick}>
-              Log Out
-            </SignOutButton>
+            <SignOutButton onClick={handleLogoutClick}>Log Out</SignOutButton>
           </div>
         </div>
       </div>

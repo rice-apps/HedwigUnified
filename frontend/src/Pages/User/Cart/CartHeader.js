@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro'
 
 import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
-import RalewayFont from '../../../fonts/GlobalFont'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -12,6 +11,7 @@ const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
   font-size: 2.8vh;
+  font-weight: 600;
   width: 100vw;
   top: 0;
   display: grid;
@@ -32,8 +32,7 @@ const HedwigLogo = styled.img`
 `
 
 const HedwigWrapper = styled.div`
-  font-family: 'avenirbold';
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,7 +60,6 @@ function CartHeader ({ vendorName, backLink, showBackButton }) {
 
   return (
     <HeaderWrapper>
-      <RalewayFont />
       <HedwigWrapper>
         {showBackButton ? (
           <IoMdArrowRoundBack

@@ -47,10 +47,17 @@ function normalizeInput (value, previousValue) {
   }
 }
 
+function getFirstName(name){
+  if(name.indexOf(" ")===-1){return name;}else{
+    return name.substr(0, name.indexOf(" "));
+  }
+}
+
 function ContactForm () {
   const user = JSON.parse(localStorage.getItem('userProfile'))
   const navigate = useNavigate()
   const userName = user.name
+  const firstName = getFirstName(userName)
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
   const [format, setFormat] = useState(null)
@@ -94,7 +101,7 @@ function ContactForm () {
       <div id='elem-div'>
         <div id='greeting-container'>
           <p className='greetings'>Hello,</p>
-          <p className='greetings'>{userName}!</p>
+          <p className='greetings'>{firstName}!</p>
         </div>
         <p id='instruction'>
           Let's set up your profile with us. We'll need your phone number to

@@ -3,11 +3,6 @@ import styled from 'styled-components/macro'
 import { useNavigate } from 'react-router-dom'
 
 const BackButton = styled.button`
-  @font-face {
-    font-family: 'Proxima Nova';
-    src: local('Proxima Nova'),
-      url(../../fonts/FontsFree-Net-proxima_nova_reg-webfont.ttf);
-  }
   border-radius: 25pt;
   height: 10rem;
   width: 15rem;

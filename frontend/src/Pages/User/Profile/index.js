@@ -1,4 +1,3 @@
-import './index.css'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 import './fontawesome'

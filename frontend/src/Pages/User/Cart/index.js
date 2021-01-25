@@ -12,7 +12,7 @@ import CartProduct from './CartProducts'
 import currency from 'currency.js'
 import Select from 'react-select'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled from 'styled-components/macro'
 import {
@@ -217,6 +217,8 @@ function CartDetail () {
     variables: { productIds: product_ids },
     fetchPolicy: 'network-only'
   })
+
+  const { state } = useLocation()
 
   const handleClickCredit = async () => {
     // Get url and embed that url

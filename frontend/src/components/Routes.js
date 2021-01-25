@@ -15,7 +15,6 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
-import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
 import Product from '../Pages/User/Products/Product'
@@ -230,7 +229,6 @@ const newRoutesArray = [
     children: [
       { path: '/', element: <PrivateRoute element={<VendorList />} /> },
       { path: '/profile', element: <PrivateRoute element={<Profile />} /> },
-      { path: '/orders', element: <PrivateRoute element={<OrderList />} /> },
       { path: '/almostThere', element: <AlmostThere /> },
       {
         path: '/confirmation',

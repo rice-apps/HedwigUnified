@@ -1,13 +1,12 @@
 import styled from 'styled-components/macro'
 import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
-import RalewayFont from '../../../fonts/GlobalFont.js'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 
 const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
-  font-size: 26px;
+  font-weight:600;
   width: 100vw;
   top: 0;
   display: grid;
@@ -18,18 +17,18 @@ const HeaderWrapper = styled.div`
   z-index: 1;
   padding-top: 1vh;
   box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
+  font-family: Omnes;
 `
 
 const HedwigLogo = styled.img`
-  height: 4.5vh;
-  width: 4.5vh;
+  height: 4.6vh;
+  width: 4.6vh;
   margin-right: 5px;
   margin-top: 0.15vh;
 `
 
 const HedwigWrapper = styled.div`
-  font-family: 'Raleway';
-  font-weight: 500;
+  font-size: 3.8vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,7 +40,6 @@ function BuyerHeader (props) {
 
   return (
     <HeaderWrapper>
-      <RalewayFont />
       <HedwigWrapper>
         {props.showBackButton ? (
           <IoMdArrowRoundBack
@@ -55,7 +53,7 @@ function BuyerHeader (props) {
             }}
           />
         ) : null}
-        <HedwigLogo src={HedwigLogoFinal} /> hedwig
+        <HedwigLogo src={HedwigLogoFinal} /> <span>hedwig</span>
       </HedwigWrapper>
     </HeaderWrapper>
   )

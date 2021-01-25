@@ -42,7 +42,7 @@ export const Button = styled.div`
 export const P = styled.p`
   font-size: 12pt;
   color: #5a5953;
-  font-family: 'Avenir Book', 'Arial Book', sans-serif;
+  font-family: 'Proxima Nova';
   text-align: center;
   margin: 8px 16px 8px 16px;
 
@@ -55,7 +55,7 @@ export const P = styled.p`
       position: relative;
       top: 14px;
       line-height: 22pt;
-      font-family: 'Avenir Black', 'Arial Black', sans-serif;
+      font-family: 'Proxima Nova';
       text-align: center;
     `};
 
@@ -68,7 +68,7 @@ export const P = styled.p`
       position: relative;
       top: 15px;
       text-align: center;
-      font-family: 'Avenir Book', 'Arial Book', sans-serif;
+      font-family: 'Proxima Nova';
     `};
   ${props =>
     props.time &&

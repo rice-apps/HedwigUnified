@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro'
 import { GrCart } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
-import RalewayFont from '../../../fonts/GlobalFont.js'
 
 const BottomNavigationWrapper = styled.div`
   position: fixed;
@@ -37,7 +36,6 @@ const BottomNavigationItem = styled.div`
 `
 
 const BottomNavigationText = styled.div`
-  font-family: 'Raleway';
   margin-left: 8px;
 `
 
@@ -52,7 +50,6 @@ function BottomAppBar () {
 
   return (
     <BottomNavigationWrapper>
-      <RalewayFont />
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <GrCart style={{ fontSize: '2.8vh' }} />
         <BottomNavigationText>View Cart ({cartAmount})</BottomNavigationText>

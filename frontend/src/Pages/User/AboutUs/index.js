@@ -29,7 +29,6 @@ const MainDiv = styled.div`
   justify-items: center;
   background-color: #faf6f2;
   max-width: 100%;
-  font-family: 'Raleway', sans-serif;
 `
 
 const HeaderWrapper = styled.div`
@@ -49,7 +48,6 @@ const HeaderWrapper = styled.div`
 `
 const AboutText = styled.p`
   position: absolute;
-  font-family: 'Raleway';
   text-align: center;
   justify-content: center;
   top: 25%;
@@ -67,10 +65,9 @@ const TitleLogoWrapper = styled.div`
 
 const MeetHedwigText = styled.p`
   position: relative;
-  color: #f49f86;
+  color: #F3725B;
   font-size: 18pt;
   text-align: center;
-  font-family: 'Raleway';
   line-height: 100%;
   font-weight: bold;
   top: 35%;
@@ -110,10 +107,9 @@ const DescriptionBlock = styled.div`
 
 const GoalTitle = styled.p`
   position: relative;
-  color: #f49f86;
+  color: #F3725B;
   font-size: 18pt;
   text-align: center;
-  font-family: 'Raleway';
   line-height: 100%;
   font-weight: bold;
   margin: 2%;
@@ -122,7 +118,6 @@ const GoalTitle = styled.p`
     10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 const GoalText = styled.p`
-  font-family: 'Raleway';
   margin-left: 6%;
   margin-right: 6%;
   margin-top: 3%;
@@ -131,7 +126,6 @@ const GoalText = styled.p`
 `
 
 const ContactText = styled.p`
-  font-family: 'Raleway';
   margin-left: 6%;
   margin-right: 6%;
   margin-top: 0%;

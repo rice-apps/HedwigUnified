@@ -1,8 +1,6 @@
 import styled, { keyframes } from 'styled-components/macro'
 import HedwigLogo from './../Pages/Login/HedwigLogoFinal_02.svg'
 
-
-
 const spinAnimation = keyframes`
 30%, 85%{
     transform: rotate(0deg)
@@ -30,7 +28,7 @@ const textAnimation = keyframes`
 }
 `
 
-const barAnimation = keyframes `
+const barAnimation = keyframes`
 0%{
     width: 0%;
 }
@@ -91,7 +89,7 @@ const LoadingBar = styled.div`
   width: 95%;
   border-radius: 20px;
   background-color: #f3725b;
-  margin-left:0.4vh;
+  margin-left: 0.4vh;
   animation-name: ${barAnimation};
   animation-duration: 4.3s;
   animation-iteration-count: 1;

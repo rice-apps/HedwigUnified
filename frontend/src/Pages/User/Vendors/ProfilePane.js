@@ -199,7 +199,6 @@ function ProfilePane () {
                 onClick={() => window.open(link.path, '_self')}
               >
                 <div className='contenttitle'>{link.content}</div>
-                
 
                 <FaChevronRight
                   style={{ cursor: 'pointer' }}

@@ -15,7 +15,7 @@
 }
 
 .vendorContainer {
-  padding:1vh 2vh;
+  padding: 1vh 2vh;
   max-width: 100%;
   cursor: pointer;
   border-bottom: 0.5pt solid #5a59534d;
@@ -47,7 +47,7 @@
   justify-content: flex-end;
   align-items: center;
   flex-grow: 1;
-  font-family: 'Proxima Nova'
+  font-family: 'Proxima Nova';
   /* position: relative;
 	margin-left: 82%;
 	bottom: 10vh;
@@ -109,14 +109,14 @@
 }
 
 .vendorKeywords {
-  color: #F3725B;
+  color: #f3725b;
   margin-top: 0.5rem;
 }
 
 li {
   display: inline;
   /* font-family: 'Nunito'; */
-  color:#F3725B;
+  color: #f3725b;
 }
 
 /* .vendorHeadingText {

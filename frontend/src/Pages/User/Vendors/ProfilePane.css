@@ -69,9 +69,9 @@
 
 .welcometext {
   font-size: 4.3vh;
-  color: #F3725B;
+  color: #f3725b;
   margin-left: 1vw;
-  line-height:5.2vh;
+  line-height: 5.2vh;
   font-weight: bold;
   word-wrap: break-word;
   word-break: break-word;
@@ -151,9 +151,8 @@
   display: flex;
   justify-content: center;
   height: 41vh;
-  width:100%;
+  width: 100%;
   background-color: #faf8f8;
   border-top: #7070701a 1px solid;
   bottom: 0px;
 }
-

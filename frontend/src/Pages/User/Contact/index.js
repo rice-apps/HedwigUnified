@@ -47,9 +47,11 @@ function normalizeInput (value, previousValue) {
   }
 }
 
-function getFirstName(name){
-  if(name.indexOf(" ")===-1){return name;}else{
-    return name.substr(0, name.indexOf(" "));
+function getFirstName (name) {
+  if (name.indexOf(' ') === -1) {
+    return name
+  } else {
+    return name.substr(0, name.indexOf(' '))
   }
 }
 

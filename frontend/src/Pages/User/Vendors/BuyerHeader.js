@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
-  font-weight:600;
+  font-weight: 600;
   width: 100vw;
   top: 0;
   display: grid;

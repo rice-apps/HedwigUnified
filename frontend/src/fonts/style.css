@@ -70,8 +70,7 @@
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: local('Proxima Nova'),
-    url(./FontsFree-Net-proxima_nova_reg-webfont.ttf);
+  src: local('Proxima Nova'), url(./FontsFree-Net-proxima_nova_reg-webfont.ttf);
 }
 
 body {
@@ -81,4 +80,3 @@ body {
   /* -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
 }
-

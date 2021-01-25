@@ -6,29 +6,27 @@ const HelpHeader = styled.section`
   justify-items: center;
   align-items: center;
   height: 8vh;
-  padding-top:3vh;
-  background-color:white ;
+  padding-top: 3vh;
+  background-color: white;
   font-family: 'avenir';
   font-weight: bold;
   font-size: 3.5vh;
-
 `
 
 const BackArrowSection = styled.section`
   display: grid;
   font-size: 3.5vh;
-
 `
 
 const FAQSection = styled.section`
   padding: 0vh 5vw;
-  font-family:'avenir';
+  font-family: 'avenir';
 `
 
 const SubHeader = styled.section`
   padding: 2vh 0vw 1vh 0vw;
   font-size: 2.8vh;
-  font-weight:600;
+  font-weight: 600;
 `
 
 const QuestionSection = styled.section`
@@ -40,9 +38,8 @@ const QuestionSection = styled.section`
 `
 
 const QuestionText = styled.section`
-
   font-size: 2.5vh;
-  line-height:3vh;
+  line-height: 3vh;
   margin-right: 4vw;
 `
 
@@ -54,28 +51,26 @@ const ExpandSection = styled.section`
 const AnswerSection = styled.section`
   height: auto;
   white-space: pre-wrap;
-  color: #5A5953;
+  color: #5a5953;
   font-size: 2.2vh;
-  line-height:2.6vh;
+  line-height: 2.6vh;
   padding: 1.2vh 0vw 2vh 0vw;
-  border-bottom: #5A59534D 1px solid;
+  border-bottom: #5a59534d 1px solid;
 `
 
 const ContactSection = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  font-size:3vh;
+  font-size: 3vh;
   padding: 5vh 0vw 3vh 0vw;
 `
 
 const ContactText = styled.section`
-font-weight:bold;
+  font-weight: bold;
 `
 
 const ContactInfo = styled.section`
- 
-
   justify-self: end;
 `
 
@@ -91,4 +86,4 @@ export {
   ContactSection,
   ContactText,
   ContactInfo
-} 
+}

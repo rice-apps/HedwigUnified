@@ -278,6 +278,8 @@ OrderTC.addResolver({
 
       await updatedOrderTracker.save()
 
+      const squareClientsMap = await squareClients
+      const squareClient = squareClientsMap.get(vendor)
       const ordersApi = squareClient.ordersApi
 
       try {

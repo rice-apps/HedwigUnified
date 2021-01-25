@@ -6,8 +6,7 @@ import { Vendor } from '../models/index.js'
 //   accessToken: SQUARE_ACCESS_TOKEN
 // })
 
-const squareClients = new Promise((resolve, reject) => {
-  Vendor.find()
+const squareClients = await Vendor.find()
     .exec()
     .then(res => {
       const squareClientsMap = new Map()
@@ -20,11 +19,7 @@ const squareClients = new Promise((resolve, reject) => {
           })
         )
       })
-      return resolve(squareClientsMap)
+      return squareClientsMap
     })
-    .catch(error => {
-      reject(error)
-    })
-})
 
 export default squareClients

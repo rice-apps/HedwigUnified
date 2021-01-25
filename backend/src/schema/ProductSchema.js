@@ -15,10 +15,9 @@ ItemTC.addResolver({
   resolve: async ({ args }) => {
     // Extract vendor name from args
     const { dataSource, vendor } = args
+    
     const squareClientsMap = await squareClients
-    // console.log(squareClientsMap)
     const squareClient = squareClientsMap.get(vendor)
-
     const catalogApi = squareClient.catalogApi
 
     try {
@@ -566,6 +565,8 @@ ItemTC.addResolver({
       merchantId: 'String!'
     },
     resolve: async ({ args }) => {
+      const squareClientsMap = await squareClients
+      const squareClient = squareClientsMap.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {
@@ -607,6 +608,8 @@ ItemTC.addResolver({
     resolve: async ({ args }) => {
       const { products, availabilityId } = args
 
+      const squareClientsMap = await squareClients
+      const squareClient = squareClientsMap.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {

@@ -86,7 +86,7 @@ const getLinks = () => {
   return links
 }
 
-function ProfilePane () {
+function ProfilePane ({updateLogin}) {
   const [showProfile, setShowProfile] = useState(false)
 
   const [phone, setPhone] = useState(null)
@@ -116,6 +116,11 @@ function ProfilePane () {
       variables: { name: user.name, phone: phone, netid: user.netid }
     })
     window.location.reload(false)
+  }
+
+  function handleLogoutClick () {
+    updateLogin(false)
+    window.open(logoutURL, '_self')
   }
 
   return (

@@ -18,6 +18,7 @@ const AUTHENTICATE_USER = gql`
       isAdmin
       studentId
       type
+      studentId
     }
   }
 `
@@ -42,7 +43,7 @@ function Auth () {
   // if (error) return <Navigate to='/login' />
   if (error) return <p>{error.message}</p>
   if (loading) return <p>Loading...</p>
-  if (!authenticationData) return <p>Bad.</p>
+  if (!authenticationData) return <p>Authentication Failed.</p>
 
   const {
     _id,
@@ -54,7 +55,7 @@ function Auth () {
     vendor,
     recentUpdate,
     type,
-    token
+    token,
   } = authenticationData.authenticateUser
 
   const userData = {
@@ -69,7 +70,6 @@ function Auth () {
     type,
     token
   }
-  console.log('DATA', userData)
 
   // Set token and user data in local storage
   lstorage.setItem('token', token)

@@ -22,20 +22,20 @@ import {
   OrderDetailsSpaceWrapper,
   OrderDetailsItemWrapper,
   ItemDescriptionWrapper,
-PaymentSpaceWrapper,
-CostSpaceWrapper,
-ButtonsSpaceWrapper,
-AcceptButton,
-CancelButton,
-ReadyButton,
-PickedUpButton,
-ModalWrapper,
-ModalHeaderWrapper,
-ModalPaymentWrapper,
-ModalParagraphWrapper,
-ModalOrderDetailsWrapper,
-ModalOrderDetailRow,
-ModalButtonsWrapper
+  PaymentSpaceWrapper,
+  CostSpaceWrapper,
+  ButtonsSpaceWrapper,
+  AcceptButton,
+  CancelButton,
+  ReadyButton,
+  PickedUpButton,
+  ModalWrapper,
+  ModalHeaderWrapper,
+  ModalPaymentWrapper,
+  ModalParagraphWrapper,
+  ModalOrderDetailsWrapper,
+  ModalOrderDetailRow,
+  ModalButtonsWrapper
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -78,21 +78,44 @@ function MakeOrderTime (props) {
   )
 }
 
-
 function MakeOrderDetails (props) {
   return (
     <OrderDetailsItemWrapper>
       <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
       <ItemDescriptionWrapper>
-        <div style={{ textTransform: 'uppercase', fontWeight: 'bold', textAlign: 'left' }}>
+        <div
+          style={{
+            textTransform: 'uppercase',
+            fontWeight: 'bold',
+            textAlign: 'left'
+          }}
+        >
           {props.itemName}
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'2.5vh 1fr', alignItmes:'center', textAlign:'left'}}>
-          <BiFoodMenu style={{alignSelf:'flex-start', marginTop:'0.3vh'}} /> {props.variant}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '2.5vh 1fr',
+            alignItmes: 'center',
+            textAlign: 'left'
+          }}
+        >
+          <BiFoodMenu style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }} />{' '}
+          {props.variant}
         </div>
         {props.modifiers && (
-          <div style={{ display:'grid', gridTemplateColumns:'2.5vh 1fr',alignItems:'center', textAlign:'left'}}>
-            <IoIosAddCircleOutline style={{alignSelf:'flex-start', marginTop:'0.3vh'}} /> {props.modifiers}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2.5vh 1fr',
+              alignItems: 'center',
+              textAlign: 'left'
+            }}
+          >
+            <IoIosAddCircleOutline
+              style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }}
+            />{' '}
+            {props.modifiers}
           </div>
         )}
       </ItemDescriptionWrapper>
@@ -100,9 +123,6 @@ function MakeOrderDetails (props) {
     </OrderDetailsItemWrapper>
   )
 }
-
-
-
 
 function MakeModalHeader (props) {
   const paymentType = props.paymentType
@@ -115,7 +135,6 @@ function MakeModalHeader (props) {
     </ModalHeaderWrapper>
   )
 }
-
 
 function isEmpty (obj) {
   for (var prop in obj) {
@@ -188,7 +207,6 @@ function MakeModalParagraph (props) {
   }
 }
 
-
 function MakeModalOrderDetails (props) {
   const paymentType = props.paymentType
   return (
@@ -216,8 +234,6 @@ function MakeModalOrderDetails (props) {
     </ModalOrderDetailsWrapper>
   )
 }
-
-
 
 function MakePaymentSpace (props) {
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false)

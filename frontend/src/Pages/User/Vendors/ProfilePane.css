@@ -158,4 +158,12 @@
   width: 100%;
   position:absolute;
   bottom: 3vh;
+  
+
+}
+
+@media only screen and (max-width: 600px) {
+  .profilefooter {
+    bottom:12vh;
+  }
 }

@@ -99,7 +99,6 @@ export const PaymentSpaceWrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr;
   font-size: 14px;
-  
 `
 
 export const CostSpaceWrapper = styled.div`
@@ -117,7 +116,6 @@ export const ButtonsSpaceWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
 `
 export const ButtonWrapper = styled.button`
   border-radius: 20px;

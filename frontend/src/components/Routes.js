@@ -1,6 +1,6 @@
 // import { Switch, Route, Redirect } from 'react-router'
-import { Route, useRoutes, Navigate } from 'react-router-dom'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { Route, useRoutes, useNavigate, Navigate } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
 import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
@@ -30,46 +30,19 @@ import gql from 'graphql-tag.macro'
  * Requests to verify the user's token on the backend
  */
 const VERIFY_USER = gql`
-  query VerifyQuery($token: String!) {
+  query VerifyUser($token: String!) {
     verifyUser(idToken: $token) {
       _id
       __typename
       name
       netid
       phone
-      token
+      vendor
       recentUpdate
     }
   }
 `
 
-/**
- * This simply fetches from our cache whether a recent update has occurred
- */
-const GET_USER_INFO = gql`
-  query GetUserInfo {
-    user @client {
-      _id
-      recentUpdate
-      firstName
-      lastName
-      netid
-      phone
-      vendor
-    }
-  }
-`
-const GET_USER = gql`
-  query getUser($token: String!) {
-    userOne(filter: { token: $token }) {
-      name
-      netid
-      token
-      vendor
-      _id
-    }
-  }
-`
 const GET_VENDOR_DATA = gql`
   query GET_AVAILABILITY($name: String!) {
     getVendor(filter: { name: $name }) {
@@ -87,64 +60,53 @@ const GET_VENDOR_DATA = gql`
  * then we redirect them to the login page.
  */
 const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
+  const navigate = useNavigate()
+
   const token =
     localStorage.getItem('idToken') != null
       ? localStorage.getItem('idToken')
       : ''
 
-  const client = useApolloClient()
+  console.log(token)
 
   // Verify that the token is valid on the backend
   const { data, loading, error } = useQuery(VERIFY_USER, {
-    variables: { idToken: token },
+    variables: { token: token },
     errorPolicy: 'none'
   })
 
-  const { data: userData, loading: userLoad, error: userError } = useQuery(
-    GET_USER,
-    {
-      variables: { token: token },
-      errorPolicy: 'none'
-    }
-  )
+  // Show loading message as query runs
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
 
-  if (error || userError) {
-    // Clear the token because something is wrong with it
+  // Something went wrong, try to login again
+  if (error) {
+    localStorage.setItem('error', error)
     localStorage.removeItem('idToken')
     updateLogin(false)
-    // Redirect the user to the login page
-    return <Navigate to='/login' />
+    // Redirect to login
+    navigate('/login')
   }
-  if (loading || userLoad) return <p>Waiting...</p>
+
+  // Data is missing, try to login again
   if (!data || !data.verifyUser) {
-    // Clear the token
     localStorage.removeItem('idToken')
     updateLogin(false)
-    // Redirect the user
-    return <Navigate to='/login' />
+    navigate('/login')
   }
 
-  // Check whether any recent updates have come in
-  // let { _id, netid, recentUpdate } = data.verifyUser;
-
-  // Upon verification, store the returned information
-
-  client.writeQuery({
-    query: GET_USER_INFO,
-    data: { user: data.verifyUser }
-  })
-
-  // this route is not an employee route
-  if (!isEmployeeRoute || !(isEmployeeRoute == true)) {
-    // Everything looks good! Now let's send the user on their way
+  // Not employee route, redirect without checks
+  if (!isEmployeeRoute) {
     return <Route {...rest} element={element} />
   }
 
-  const vendor = userData.userOne.vendor
-  const netid = userData.userOne.netid
-  // this is not a vendor and we already passed the verification stage
+  const vendor = data.verifyUser.vendor
+  const netid = data.verifyUser.netid
+
+  // Not a vendor and already verified, go to buyer side
   if (!vendor) {
-    return <Navigate to='/eat' />
+    navigate('/eat')
   }
 
   return (
@@ -153,6 +115,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
 }
 
 const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
+  const navigate = useNavigate()
   const { data: vendorData, loading: vendorLoad, error: vendorErr } = useQuery(
     GET_VENDOR_DATA,
     {
@@ -163,105 +126,27 @@ const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
   // this isn't an employee because we have no vendor name
   if (vendorErr) {
     console.log('vendor', vendorData)
-    return <Navigate to='/eat' />
+    navigate('/eat')
   }
 
   if (vendorLoad) {
     return <p>Waiting...</p>
   }
 
-  console.log('DATA VENDOR', vendorData)
-  console.log('netid', netid)
   const allowedUsers = vendorData.getVendor.allowedNetid
   // have to modify this with /contact
   if (!allowedUsers.includes(netid)) {
-    return <Navigate to='/eat' />
+    navigate('/eat')
   }
 
   // this is a true employee
   return <Route {...rest} element={element} />
 }
 
-// const routesArray = [
-//     {
-//         path: "/login",
-//         component: Login,
-//         privateRoute: false
-//     },
-//     {
-//         path: "/auth",
-//         component: Auth,
-//         privateRoute: false
-//     },
-//     {
-//         path: "/home",
-//         component: Home,
-//         privateRoute: true
-//     },
-//     {
-//         path: "/user/vendors/:slug/cart",
-//         component: CartDetail,
-//         privateRoute: true
-//     },
-//     {
-//         path: "/user/vendors/:slug/products/:product",
-//         component: ProductDetail,
-//         privateRoute: true
-//     },
-//     {
-//         path: "/user/vendors/:slug",
-//         component: VendorDetail,
-//         privateRoute: true
-//     },
-//     {
-//         path: "/user/vendors",
-//         component: VendorList,
-//         privateRoute: true,
-//     },
-//     {
-//         path: "/user/orders",
-//         component: OrderList,
-//         privateRoute: true,
-//     },
-//     {
-//         path: "/vendor/orders",
-//         component: Orders,
-//         privateRoute: true
-//     },
-//     {
-//         path: "/vendor/settings",
-//         component: VendorSettings,
-//         privateRoute: true
-//     },
-//     {
-//         path: "/", // catch all handler, redirect to Home
-//         component: Home,
-//         privateRoute: true
-//     },
-// ];
-
 /**
  * Defines all the routes for our system.
- * @param {*} param0
  */
 export const RoutesComponent = ({ loginCallBack }) => {
-  // const client = useApolloClient();
-
-  // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend
-  // useEffect(
-  //     () => {
-  //         fetch(backendURL + "/deploy/service")
-  //         .then(response => {
-  //             response.text().then(service => {
-  //                 // Directly writes the service url to the cache
-  //                 client.writeQuery({
-  //                     query: gql`query GetService { service }`,
-  //                     data: { service: service }
-  //                 });
-  //             });
-  //         });
-  //     }, []
-  // );
   const newRoutesArray = [
     {
       path: '/',
@@ -308,12 +193,6 @@ export const RoutesComponent = ({ loginCallBack }) => {
               element={<Profile updateLogin={loginCallBack} />}
               updateLogin={loginCallBack}
             />
-          )
-        },
-        {
-          path: '/orders',
-          element: (
-            <PrivateRoute element={<OrderList />} updateLogin={loginCallBack} />
           )
         },
         { path: '/almostThere', element: <AlmostThere /> },
@@ -440,29 +319,3 @@ export const RoutesComponent = ({ loginCallBack }) => {
   const newRoutes = useRoutes(newRoutesArray)
   return newRoutes
 }
-
-//     return (
-//         <Switch>
-//             {/* <Route path={"/login"}>
-//                 <Login />
-//             </Route>
-//             <Route path={"/auth"}>
-//                 <Auth />
-//             </Route>
-//             <PrivateRoute path={"/home"}>
-//                 <Home />
-//             </PrivateRoute>
-//             <PrivateRoute path={"/"}>
-//                 <Home />
-//             </PrivateRoute> */}
-//             {routesArray.map(routeObject => {
-//                 let { path, component, privateRoute } = routeObject;
-//                 if (privateRoute) {
-//                     return (<PrivateRoute path={path} component={component} />);
-//                 } else {
-//                 return (<Route path={path} component={component} />);
-//                 }
-//             })}
-//         </Switch>
-//     )
-// }

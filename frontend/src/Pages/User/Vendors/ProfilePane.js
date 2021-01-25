@@ -2,11 +2,35 @@ import './ProfilePane.css'
 import { useQuery, useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { FaBars, FaTimes } from 'react-icons/fa'
+import { FaBars, FaTimes, FaChevronRight } from 'react-icons/fa'
 import { TextField } from '@material-ui/core'
 import gql from 'graphql-tag.macro'
+import styled from 'styled-components/macro'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
+
+function handleLogoutClick () {
+  localStorage.clear()
+  localStorage.removeItem('token')
+  window.open(logoutURL, '_self')
+}
+
+const SignOutButton = styled.div`
+  border: 1px solid #5a595326;
+  background-color: #db6142;
+  font-family: 'avenirbook';
+  color: white;
+  font-size: 3vh;
+  align-self: flex-end;
+  margin-bottom: 5vh;
+  border-radius: 30px;
+  height: 8vh;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+`
 
 const GET_USER_INFO = gql`
   query GetUserInfo {
@@ -39,10 +63,15 @@ const EDIT_PHONE = gql`
 const getLinks = () => {
   const links = [
     { icon: 'hands-helping', content: 'Help', path: '/help' },
-
     {
       icon: 'question-circle',
       content: 'About',
+      content: 'About the Creators',
+      path: '/about_us'
+    },
+    {
+      icon: 'question-circle',
+      content: 'About RiceApps',
       path: 'https://riceapps.org/'
     },
 
@@ -125,8 +154,7 @@ function ProfilePane ({updateLogin}) {
           {/* Body: Welcome */}
           <div className='welcomebody'>
             <h1 className='welcometext'>
-              {' '}
-              Hello, <br /> {user.name} <br />{' '}
+              Hello, <br /> {user.name.split(' ')[0]} <br />
             </h1>
             <h1 className='phonetext'>
               {editing ? (
@@ -171,26 +199,23 @@ function ProfilePane ({updateLogin}) {
           {/* Body: Links;;; should map through each of the links up top and create a box */}
           <div className='contentbody'>
             {links.map(link => (
-              <div className='contentcard'>
-                <p className='contenttitle'>{link.content}</p>
-                {/* Checks if path exists, if not, then don't put an arrow */}
-                {link.path ? (
-                  <button
-                    className='contentarrow'
-                    onClick={() => window.open(link.path, '_self')}
-                  >
-                    <FontAwesomeIcon icon={['fas', 'chevron-right']} />
-                  </button>
-                ) : null}
+              <div
+                className='contentcard'
+                onClick={() => window.open(link.path, '_self')}
+              >
+                <div className='contenttitle'>{link.content}</div>
+
+                <FaChevronRight
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => window.open(link.path, '_self')}
+                />
               </div>
             ))}
           </div>
 
           {/* Footer: SignOut */}
           <div className='profilefooter'>
-            <button className='signoutbutton' onClick={handleLogoutClick}>
-              Log Out
-            </button>
+            <SignOutButton onClick={handleLogoutClick}>Log Out</SignOutButton>
           </div>
         </div>
       </div>

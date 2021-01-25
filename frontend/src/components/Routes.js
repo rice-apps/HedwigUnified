@@ -5,8 +5,7 @@ import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
-import Confirmation from '../Pages/User/Confirmation'
-import Launch from '../Pages/User/Launch'
+import { Confirmation } from '../Pages/User/Confirmation'
 // Vendor imports
 // import VendorSettings from '../Pages/Vendor/Settings';
 import VendorList from '../Pages/User/Vendors/VendorList'
@@ -15,7 +14,6 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
-import OrderList from '../Pages/User/Orders'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
 import Product from '../Pages/User/Products/Product'
@@ -26,7 +24,6 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
-import AboutUs from '../Pages/User/AboutUs'
 import gql from 'graphql-tag.macro'
 
 /**

@@ -26,6 +26,7 @@ const MainMenuItemWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   margin: 6px 0px;
+  justify-content: space-between;
 `
 
 function MainMenuItem (props) {
@@ -52,7 +53,22 @@ const SubMenuItemWrapper = styled.div`
   width: 80%;
   padding: 0.4vh 0.4vw;
   border-radius: 20px;
+  position: relative;
 `
+
+const BottomMenuItemWrapper = styled.div`
+  text-align: left;
+  margin-left: 2vw;
+  display: grid;
+  font-size: 2.3vh;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
+
+  position: absolute;
+  bottom: 3vh;
+  left: 0px;
+`
+
 const StyledNavLink = styled(NavLink)`
   margin-left: 10px;
   text-decoration: none;
@@ -73,6 +89,24 @@ function SubMenuItem (props) {
   )
 }
 
+function BottomMenuItem (props) {
+  return (
+    <BottomMenuItemWrapper>
+      <StyledNavLink
+        to='/employee/faq'
+        activeStyle={{ color: '#EA907A', fontWeight: '700' }}
+      >
+        Help
+      </StyledNavLink>
+      {/* <StyledNavLink
+      to='/employee/about'
+      activeStyle={{ color: '#EA907A', fontWeight: '700' }}>
+        About 
+      </StyledNavLink> */}
+    </BottomMenuItemWrapper>
+  )
+}
+
 function SideBarItems () {
   return (
     <SideBarItemsWrapper>
@@ -85,7 +119,6 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/openorders' label='Open Orders' />
-        <SubMenuItem path='/employee/closedorders' label='Closed Orders' />
       </Collapsible>
 
       <Collapsible
@@ -97,7 +130,6 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/items' label='Edit Items' />
-        <SubMenuItem path='/employee/modifiers' label='Edit Modifiers' />
       </Collapsible>
 
       <Collapsible
@@ -111,6 +143,7 @@ function SideBarItems () {
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
         <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
+      <BottomMenuItem path='/employee/faq' label='Help' />
     </SideBarItemsWrapper>
   )
 }

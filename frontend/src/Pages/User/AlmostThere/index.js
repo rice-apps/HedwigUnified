@@ -10,10 +10,10 @@ export const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f3725b;
+  color: #ffffff;
   height: 5vh;
   cursor: pointer;
-  background-color: #ffffff;
+  background-color: #f3725b;
   border: 1px solid #f3725b;
   border-radius: 20px;
   margin: auto;
@@ -42,7 +42,7 @@ export const Button = styled.div`
 export const P = styled.p`
   font-size: 12pt;
   color: #5a5953;
-  font-family: 'Avenir Book', 'Arial Book', sans-serif;
+  font-family: 'Proxima Nova';
   text-align: center;
   margin: 8px 16px 8px 16px;
 
@@ -55,7 +55,7 @@ export const P = styled.p`
       position: relative;
       top: 14px;
       line-height: 22pt;
-      font-family: 'Avenir Black', 'Arial Black', sans-serif;
+      font-family: 'Proxima Nova';
       text-align: center;
     `};
 
@@ -68,7 +68,7 @@ export const P = styled.p`
       position: relative;
       top: 15px;
       text-align: center;
-      font-family: 'Avenir Book', 'Arial Book', sans-serif;
+      font-family: 'Proxima Nova';
     `};
   ${props =>
     props.time &&
@@ -116,6 +116,17 @@ export const Div = styled.div`
     `};
 
   ${props => props.button && css``}
+
+  ${props =>
+    props.failure &&
+    css`
+      display: flex;
+      height: 80vh;
+      background-color: white;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    `}
 `
 
 export const MessageWrapper = styled.div`

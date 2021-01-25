@@ -7,8 +7,13 @@ COPY package*.json ./
 
 RUN npm ci --only=production
 
-COPY . ./
+COPY . .
+
+RUN apk add --no-cache tini=~0.18.0
 
 EXPOSE 8080
+
 USER node
+
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD [ "node", "src/index.js" ]

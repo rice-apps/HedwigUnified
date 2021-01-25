@@ -65,7 +65,7 @@ function SideBarVendorProfile ({ setLogo }) {
   })
 
   useEffect(() => {
-    setVendorName(userData?.userOne.vendor)
+    setVendorName(userData?.userOne?.vendor)
   }, [userData])
 
   if (error || queryError || userError) {

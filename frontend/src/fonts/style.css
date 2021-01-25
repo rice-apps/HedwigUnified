@@ -62,3 +62,21 @@
   font-family: avenirbook;
   src: url(AvenirLTStd-Book.otf);
 }
+
+@font-face {
+  font-family: 'Omnes';
+  src: local('Omnes'), url(./Omnes-Font/Omnes/Omnes.ttf);
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima Nova'), url(./FontsFree-Net-proxima_nova_reg-webfont.ttf);
+}
+
+body {
+  margin: 0;
+  font-family: 'Proxima Nova';
+  color: #333333;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+}

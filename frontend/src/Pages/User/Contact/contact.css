@@ -5,7 +5,6 @@
   align-items: center;
   justify-content: center;
   color: #f3725b;
-  font-family: 'Proxima Nova';
 }
 
 #elem-div {
@@ -48,7 +47,6 @@
 
 .confirm-btn {
   border: none;
-  font-family: 'Raleway';
   font-size: 0.8rem;
   font-weight: 600;
   color: white;

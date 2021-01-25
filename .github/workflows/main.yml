@@ -33,7 +33,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Login to Dockerhub
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -44,7 +44,7 @@ jobs:
         with:
           context: ./backend
           file: ./backend/Dockerfile
-          push: ${{ !env.ACT }}
+          push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
           tags: riceapps/hedwig-api:latest
 
   frontend-build:
@@ -60,7 +60,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Login to Dockerhub
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -70,11 +70,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            REACT_APP_GRAPHQL_URL=https://hedwig.vsong.me/graphql
-            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.vsong.me/ws
+            REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.site/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.riceapps.site/ws
           context: ./frontend
           file: ./frontend/Dockerfile
-          push: ${{ !env.ACT }}
+          push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
           tags: riceapps/hedwig-client:latest
           secrets: |
             REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}

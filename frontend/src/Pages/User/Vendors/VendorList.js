@@ -27,7 +27,7 @@ import ProfilePane from './ProfilePane.js'
 //     }
 // `
 
-function VendorList ({}) {
+function VendorList ({ updateLogin }) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
   if (error) return <p>{error.message}</p>
@@ -41,7 +41,7 @@ function VendorList ({}) {
   // console.log("LOCAL USER AFTER", localUser)
   return (
     <>
-      <ProfilePane />
+      <ProfilePane updateLogin={updateLogin} />
       <div
         style={{ paddingTop: '10vh', paddingBottom: '10vh' }}
         className='vendorPage'

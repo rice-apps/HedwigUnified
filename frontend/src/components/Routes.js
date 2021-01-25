@@ -96,7 +96,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
 
   // Verify that the token is valid on the backend
   const { data, loading, error } = useQuery(VERIFY_USER, {
-    variables: { token: token },
+    variables: { idToken: token },
     errorPolicy: 'none'
   })
 

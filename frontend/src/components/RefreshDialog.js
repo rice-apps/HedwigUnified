@@ -49,7 +49,12 @@ export const DialogHeader = styled.h1`
   color: #ea907a;
 `
 
-export const RefreshDialog = ({display, changeTimeoutStatus, timeoutCountDown, updateToken}) => {
+export const RefreshDialog = ({
+  display,
+  changeTimeoutStatus,
+  timeoutCountDown,
+  updateToken
+}) => {
   const handleRefreshClick = () => {
     const user = firebase.auth().currentUser
     if (!user) {
@@ -69,17 +74,15 @@ export const RefreshDialog = ({display, changeTimeoutStatus, timeoutCountDown, u
     timeoutCountDown(40 * 60 * 1000, refreshResult.token)
   }
 
-  return (
-    display ? 
+  return display ? (
     <DialogPage>
       <DialogWindow>
         <DialogHeader>Alert</DialogHeader>
-        <DialogText>Your session will expire soon. 
-          Click on the button below to refresh. 
+        <DialogText>
+          Your session will expire soon. Click on the button below to refresh.
         </DialogText>
         <Button onClick={handleRefreshClick}>Refresh</Button>
       </DialogWindow>
     </DialogPage>
-    : null
-  )
+  ) : null
 }

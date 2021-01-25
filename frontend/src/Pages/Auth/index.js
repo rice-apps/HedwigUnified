@@ -55,7 +55,7 @@ function Auth () {
     vendor,
     recentUpdate,
     type,
-    token,
+    token
   } = authenticationData.authenticateUser
 
   const userData = {

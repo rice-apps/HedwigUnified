@@ -86,7 +86,7 @@ const getLinks = () => {
   return links
 }
 
-function ProfilePane ({updateLogin}) {
+function ProfilePane ({ updateLogin }) {
   const [showProfile, setShowProfile] = useState(false)
 
   const [phone, setPhone] = useState(null)

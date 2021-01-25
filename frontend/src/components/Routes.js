@@ -88,7 +88,9 @@ const GET_VENDOR_DATA = gql`
  */
 const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
   const token =
-    localStorage.getItem('idToken') != null ? localStorage.getItem('idToken') : ''
+    localStorage.getItem('idToken') != null
+      ? localStorage.getItem('idToken')
+      : ''
 
   const client = useApolloClient()
 
@@ -242,7 +244,7 @@ const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
  * Defines all the routes for our system.
  * @param {*} param0
  */
-export const RoutesComponent = ({loginCallBack}) => {
+export const RoutesComponent = ({ loginCallBack }) => {
   // const client = useApolloClient();
 
   // Initially, we need to get the "serviceURL" (used for IDP authentication) from the backend
@@ -283,14 +285,37 @@ export const RoutesComponent = ({loginCallBack}) => {
     },
     {
       path: '/vendor_choice',
-      element: <PrivateRoute element={<VendorSelect />} updateLogin={loginCallBack}/>
+      element: (
+        <PrivateRoute element={<VendorSelect />} updateLogin={loginCallBack} />
+      )
     },
     {
       path: '/eat/*',
       children: [
-        { path: '/', element: <PrivateRoute element={<VendorList updateLogin={loginCallBack} />} updateLogin={loginCallBack} /> },
-        { path: '/profile', element: <PrivateRoute element={<Profile updateLogin={loginCallBack}/>} updateLogin={loginCallBack} /> },
-        { path: '/orders', element: <PrivateRoute element={<OrderList />} updateLogin={loginCallBack} /> },
+        {
+          path: '/',
+          element: (
+            <PrivateRoute
+              element={<VendorList updateLogin={loginCallBack} />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/profile',
+          element: (
+            <PrivateRoute
+              element={<Profile updateLogin={loginCallBack} />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/orders',
+          element: (
+            <PrivateRoute element={<OrderList />} updateLogin={loginCallBack} />
+          )
+        },
         { path: '/almostThere', element: <AlmostThere /> },
         {
           path: '/confirmation',
@@ -299,12 +324,30 @@ export const RoutesComponent = ({loginCallBack}) => {
         {
           path: '/:vendor/*',
           children: [
-            { path: '/', element: <PrivateRoute element={<Menu />} updateLogin={loginCallBack} /> },
+            {
+              path: '/',
+              element: (
+                <PrivateRoute element={<Menu />} updateLogin={loginCallBack} />
+              )
+            },
             {
               path: '/:product',
-              element: <PrivateRoute element={<Product />} updateLogin={loginCallBack} />
+              element: (
+                <PrivateRoute
+                  element={<Product />}
+                  updateLogin={loginCallBack}
+                />
+              )
             },
-            { path: '/cart', element: <PrivateRoute element={<CartDetail />} updateLogin={loginCallBack} /> }
+            {
+              path: '/cart',
+              element: (
+                <PrivateRoute
+                  element={<CartDetail />}
+                  updateLogin={loginCallBack}
+                />
+              )
+            }
           ]
         }
       ]
@@ -319,19 +362,31 @@ export const RoutesComponent = ({loginCallBack}) => {
         {
           path: '/',
           element: (
-            <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} updateLogin={loginCallBack} />
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<OpenOrdersPage />}
+              updateLogin={loginCallBack}
+            />
           )
         },
         {
           path: '/openorders',
           element: (
-            <PrivateRoute isEmployeeRoute={true} element={<OpenOrdersPage />} updateLogin={loginCallBack} />
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<OpenOrdersPage />}
+              updateLogin={loginCallBack}
+            />
           )
         },
         {
           path: '/closedorders',
           element: (
-            <PrivateRoute isEmployeeRoute={true} element={<ClosedOrdersPage />} updateLogin={loginCallBack} />
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<ClosedOrdersPage />}
+              updateLogin={loginCallBack}
+            />
           )
         },
         {
@@ -357,7 +412,11 @@ export const RoutesComponent = ({loginCallBack}) => {
         {
           path: '/set-basic-info',
           element: (
-            <PrivateRoute isEmployeeRoute={true} element={<SetBasicInfoPage />} updateLogin={loginCallBack} />
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<SetBasicInfoPage />}
+              updateLogin={loginCallBack}
+            />
           )
         },
         {
@@ -377,7 +436,7 @@ export const RoutesComponent = ({loginCallBack}) => {
       element: <Navigate to={'/404_page'} />
     }
   ]
-  
+
   const newRoutes = useRoutes(newRoutesArray)
   return newRoutes
 }

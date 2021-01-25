@@ -52,7 +52,9 @@ function BottomAppBar () {
     <BottomNavigationWrapper>
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <GrCart style={{ fontSize: '2.8vh' }} />
-        <BottomNavigationText>View Cart {cartAmount === 0 ? null : ({cartAmount})}</BottomNavigationText>
+        <BottomNavigationText>
+          View Cart {cartAmount === 0 ? null : { cartAmount }}
+        </BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>
   )

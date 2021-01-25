@@ -28,10 +28,11 @@ function App () {
     if (token) {
       localStorage.setItem('idToken', token)
     }
-    timer = setTimeout(() => {console.log('timeout!'); setTimeoutStatus(true)}, time)
+    timer = setTimeout(() => {
+      console.log('timeout!')
+      setTimeoutStatus(true)
+    }, time)
   }
-
-  
 
   // If we have the initial token
   // if (currentToken && !loggedIn) {
@@ -44,7 +45,6 @@ function App () {
   //     timeoutCountDown(expTime.diff(moment(), 'seconds') * 1000)
   //   }
   // }
-
 
   const changeLoginStatus = (status, time) => {
     setLoggedIn(status)
@@ -63,8 +63,8 @@ function App () {
       clearTimeout(timer)
     }
   }
-  
-  const changeTimeoutStatus = (status) => {
+
+  const changeTimeoutStatus = status => {
     setTimeoutStatus(status)
   }
 
@@ -77,7 +77,11 @@ function App () {
       />
       {/* <Header /> */}
       <RoutesComponent loginCallBack={changeLoginStatus} />
-      <RefreshDialog display={timeoutStatus} changeTimeoutStatus={changeTimeoutStatus} timeoutCountDown={timeoutCountDown}/>
+      <RefreshDialog
+        display={timeoutStatus}
+        changeTimeoutStatus={changeTimeoutStatus}
+        timeoutCountDown={timeoutCountDown}
+      />
     </>
   )
 }

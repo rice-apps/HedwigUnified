@@ -9,7 +9,7 @@ import moment from 'moment'
 import firebase from 'firebase/app'
 import { TokenKind } from 'graphql'
 
-function Login ({updateLoginStatus}) {
+function Login ({ updateLoginStatus }) {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const navigate = useNavigate()
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')

@@ -82,4 +82,29 @@ async function checkCanUpdateVendor (resolve, source, args, context, info) {
   return new AuthenticationError("Can't update vendor because not on list")
 }
 
-export { decodeFirebaseToken, checkLoggedIn, checkCanUpdateVendor }
+/**
+ * Middleware that checks if the user authorized to edit their own information
+ *
+ * @param {(source: TSource, args: TArgs, context: TContext, info: GraphQLResolveInfo) => any} resolve the next resolver in the chain
+ * @param {TSource} source the previous object or field from which the call originated
+ * @param {TArgs} args the arguments to the resolver
+ * @param {TContext} context the global context (contains stuff like auth)
+ * @param {import('graphql').GraphQLResolveInfo} info holds field-specific information relevant to the current query as well as the schema details
+ *
+ * @return {any | AuthenticationError} returns the result of the next resolver in the sequence or an auth error
+ */
+
+function checkCanUpdateUserFilter (resolve, source, args, context, info) {
+  if (args.filter.netid === context.netid) {
+    return resolve(source, args, context, info)
+  }
+
+  return new AuthenticationError('User is not the same')
+}
+
+export {
+  decodeFirebaseToken,
+  checkLoggedIn,
+  checkCanUpdateVendor,
+  checkCanUpdateUserFilter
+}

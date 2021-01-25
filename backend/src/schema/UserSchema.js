@@ -1,7 +1,8 @@
 import { User, UserTC } from '../models/index.js'
 import {
   decodeFirebaseToken,
-  checkLoggedIn
+  checkLoggedIn,
+  checkCanUpdateUserFilter
 } from '../utils/authenticationUtils.js'
 
 import { AuthenticationError } from 'apollo-server-express'
@@ -60,20 +61,7 @@ const UserQueries = {
 const UserMutations = {
   userUpdateOne: UserTC.mongooseResolvers
     .updateOne()
-    .withMiddlewares([checkLoggedIn])
-    .wrapResolve(next => async rp => {
-      const result = await next({
-        ...rp,
-        projection: { netid: {}, ...rp.projection }
-      })
-
-      if (result.record.netid === rp.context.netid) {
-        return result
-      }
-      return new AuthenticationError(
-        "User couldn't be updated due to auth error"
-      )
-    }),
+    .withMiddlewares([checkLoggedIn, checkCanUpdateUserFilter]),
   authenticateUser: UserTC.getResolver('authenticate')
 }
 

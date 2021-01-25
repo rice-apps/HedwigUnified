@@ -92,7 +92,6 @@ function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
   const user = JSON.parse(localStorage.getItem('userProfile'))
 
-
   function toggleLogoutScreen () {
     const logoutOpen = showLogout
     setShowLogout(!logoutOpen)

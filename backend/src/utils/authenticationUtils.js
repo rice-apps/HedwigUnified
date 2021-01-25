@@ -72,7 +72,7 @@ function checkLoggedIn (resolve, source, args, context, info) {
  *
  * @return {any | AuthenticationError} returns the result of the next resolver in the sequence or an auth error
  */
-async function checkCanUpdateVendor (resolve, args, context, info) {
+async function checkCanUpdateVendor (resolve, source, args, context, info) {
   const vendor = await Vendor.findOne({ name: args.name })
 
   if (vendor.allowedNetid.includes(context.netid)) {

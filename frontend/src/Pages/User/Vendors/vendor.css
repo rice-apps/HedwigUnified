@@ -169,6 +169,7 @@ p {
   height: 15vh;
   align-content: left;
   width: 100%;
+  object-position: 50% 60%;
   object-fit: cover;
   border-radius: 10px;
 }

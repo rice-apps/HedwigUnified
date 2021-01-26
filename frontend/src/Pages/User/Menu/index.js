@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import hero from '../../../images/hero.jpg'
 import './index.css'
 import { Link } from 'react-scroll'
@@ -262,16 +262,15 @@ function Menu () {
       />
     </div>
   )
-
+  
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
-      <BuyerHeader showBackButton='true' backLink='/eat' />
-      <div style={{ paddingBottom: '8.6vh' }}>
+      <BuyerHeader  showBackButton='true' backLink='/eat' />
+      <div style={{ paddingBottom: '8.6vh', paddingTop: '8vh' }}>
         {/* Hero Image */}
         <img
-          style={{ filter: 'blur(2.5px)' }}
-          src={hero}
+          src={vendor_data.getVendor.logoUrl}
           class='hero'
           alt='hero'
         />

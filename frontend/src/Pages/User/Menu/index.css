@@ -2,6 +2,8 @@
 .hero {
   height: 20vh;
   width: 100%;
+  object-fit:cover;
+  object-position: 50% 60%;
 }
 
 /* Header at the top containing all the information */

@@ -11,12 +11,60 @@ import Schema from './schema/index.js'
 
 // Initialize connection to Square with API token
 import './utils/square.js'
+import firebaseAdmin from './utils/firebase.js'
 
 const app = express().use(cors())
 
 const server = new ApolloServer({
   schema: Schema,
-  subscriptions: { path: '/ws' }
+  context: async ({ req }) => {
+    if (!req) {
+      return
+    }
+    const token = req.headers.authorization
+      ? req.headers.authorization.split(' ')[1]
+      : ''
+
+    const decodedToken = await firebaseAdmin
+      .auth()
+      .verifyIdToken(token)
+      .catch(_ => null)
+
+    return {
+      idNumber: decodedToken
+        ? decodedToken.firebase.sign_in_attributes[
+            'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
+          ]
+        : null,
+      netid: decodedToken
+        ? decodedToken.firebase.sign_in_attributes[
+            'urn:oid:0.9.2342.19200300.100.1.1'
+          ]
+        : null
+    }
+  },
+  subscriptions: {
+    onConnect: async (connectionParams, websocket, context) => {
+      const decodedToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(connectionParams.authToken)
+        .catch(_ => null)
+
+      return {
+        idNumber: decodedToken
+          ? decodedToken.firebase.sign_in_attributes[
+              'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
+            ]
+          : null,
+        netid: decodedToken
+          ? decodedToken.firebase.sign_in_attributes[
+              'urn:oid:0.9.2342.19200300.100.1.1'
+            ]
+          : null
+      }
+    },
+    path: '/ws'
+  }
 })
 
 server.applyMiddleware({ app })

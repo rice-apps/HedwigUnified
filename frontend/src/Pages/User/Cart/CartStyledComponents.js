@@ -14,14 +14,12 @@ export const FloatCartWrapper = styled.div`
     'PaymentMethod'
     'none'
     'Footer';
-  font-family: 'avenir';
   letter-spacing: 0.97px;
 `
 
 export const SpaceWrapper = styled.div`
   height: 100%;
   width: 100%;
-  font-family: 'avenir';
   ${props =>
     props.orderSummary &&
     css`
@@ -203,7 +201,7 @@ export const Bill = styled.div`
 `
 export const SubmitButton = styled.div`
   color: white;
-  background-color: #d5573e;
+  background-color: #f3725b;
   text-align: center;
   cursor: pointer;
   display: flex;

@@ -3,7 +3,7 @@ import { P, Button, Div, MessageWrapper } from '../AlmostThere/index'
 
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as FailureSVG } from './alert-circle.svg'
-import { ReactComponent as HedwigLogoSVG } from './../../Login/HedwigLogoFinal.svg'
+import { ReactComponent as HedwigLogoSVG } from '../../Login/HedwigLogoFinal.svg'
 import { resetOrderSummary } from '../Cart/util'
 import moment from 'moment'
 
@@ -13,23 +13,24 @@ function Failure () {
     return navigate(`/eat`)
   }
   return (
-    <div className='mainDiv'>
+    <Div failure>
       <FailureSVG className='checkSvg' />
       <div>
-        <P className='orderConfirmed'>Oops!</P>
-        <P className='orderConfirmed'>An item you ordered is not available.</P>
-
-        <P className='statusUpdate'>
-          Please go back to your cart and make adjustments. Your order will{' '}
-          <strong>not</strong> be placed at this time
-        </P>
+        <P title>An item you ordered is not available.</P>
+        <MessageWrapper>
+          {' '}
+          <P message>
+            Please go back to your cart and make adjustments. Your order will{' '}
+            <strong>not</strong> be placed at this time
+          </P>
+        </MessageWrapper>
       </div>
       <Div>
-        <Button className='bottomButton' onClick={handleHomeClick}>
+        <Button primary home onClick={handleHomeClick}>
           Home
         </Button>
       </Div>
-    </div>
+    </Div>
   )
 }
 
@@ -43,7 +44,7 @@ function Confirmation () {
     return navigate(`/eat`)
   }
   return (
-    <div className='mainDiv'>
+    <div>
       <HedwigLogoSVG className='checkSvg' />
       <div>
         <P title>Order Submitted!</P>
@@ -70,4 +71,4 @@ function Confirmation () {
   )
 }
 
-export default Confirmation
+export { Confirmation, Failure }

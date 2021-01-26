@@ -10,6 +10,7 @@ import VendorCard from './VendorCard'
 import BuyerHeader from './BuyerHeader.js'
 import BottomAppBar from './BottomAppBar'
 import ProfilePane from './ProfilePane.js'
+import {SmallLoadingPage} from './../../../components/LoadingComponents'
 
 // const GET_VENDORS_QUERY = gql`
 //     query VendorList {
@@ -27,11 +28,11 @@ import ProfilePane from './ProfilePane.js'
 //     }
 // `
 
-function VendorList ({}) {
+function VendorList ({ updateLogin }) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
   if (error) return <p>{error.message}</p>
-  if (loading) return <p>Loading...</p>
+  if (loading) return <SmallLoadingPage/>
   if (!data) return <p>No data...</p>
 
   const { getVendors } = data
@@ -41,7 +42,7 @@ function VendorList ({}) {
   // console.log("LOCAL USER AFTER", localUser)
   return (
     <>
-      <ProfilePane />
+      <ProfilePane updateLogin={updateLogin} />
       <div
         style={{ paddingTop: '10vh', paddingBottom: '10vh' }}
         className='vendorPage'

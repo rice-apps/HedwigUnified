@@ -17,7 +17,7 @@ if (!localStorage.getItem('order')) {
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('idToken')
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -36,7 +36,10 @@ const httpLink = new HttpLink({
 const wsLink = new WebSocketLink({
   uri: GRAPHQL_WS_URL,
   options: {
-    reconnect: true
+    reconnect: true,
+    connectionParams: {
+      authToken: localStorage.getItem('idToken')
+    }
   }
 })
 
@@ -53,11 +56,8 @@ const splitLink = split(
   httpLink
 )
 
-// Setup cache
-export const cache = new InMemoryCache()
-
 // Initialize Client
-export const client = new ApolloClient({
+const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -73,3 +73,5 @@ export const client = new ApolloClient({
   }),
   link: authLink.concat(splitLink)
 })
+
+export { client }

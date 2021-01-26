@@ -1,6 +1,6 @@
 /* Entire pane */
 .profilepane {
-  width: 0;
+  width: 0vw;
   transition: 800ms;
   display: flex;
   margin-left: -35vw;
@@ -9,17 +9,21 @@
 }
 
 .profilepane-active {
-  width: 60vw;
-  transition: 500ms;
+  width: 100vw;
+  transition: width 500ms;
   position: fixed;
   z-index: 2;
+  backdrop-filter: blur(8px) brightness(94%);
 }
 
 /* Background Color */
 .background {
-  background-color: #faf8f8;
+  background-color: white;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  width: 60vw;
+  position: relative;
 }
 
 .close {
@@ -34,22 +38,9 @@
   grid-template-columns: 25% 75%;
   grid-template-rows: 100%;
   height: 13vh;
-
-  background-color: white;
   padding-left: 4vw;
 
   top: 0px;
-}
-
-.profilename {
-  color: #5a5953;
-  font-family: 'avenirbold';
-  place-self: center;
-
-  grid-column: 1/-1;
-  grid-row: 1/3;
-
-  font-size: 3vh;
 }
 
 .backarrow {
@@ -74,21 +65,24 @@
   height: 30vh;
   justify-content: center;
   align-items: flex-start;
-
-  font-family: 'avenir';
+  padding-left: 4vw;
+  font-family: 'Proxima Nova';
 }
 
 .welcometext {
-  font-size: 4vh;
-  color: #db6142;
+  font-size: 4.3vh;
+  color: #f3725b;
   margin-left: 1vw;
+  line-height: 5.2vh;
+  font-weight: bold;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .phonetext {
-  font-size: 3vh;
-  color: black;
+  font-size: 2.4vh;
   margin-left: 1vw;
-  padding-top: 2vh;
+  /* padding-top: 2vh; */
 }
 
 .phoneedit {
@@ -109,7 +103,7 @@
 #telinput {
   height: 2vh;
   width: 20vh;
-  font-family: 'avenir';
+  font-family: 'proxima nova';
 }
 
 /* Content */
@@ -120,14 +114,19 @@
 }
 
 .contentcard {
-  display: grid;
-  flex: 1;
-  height: 5vh;
-  padding-top: 2.5vh;
-
+  padding-left: 4vw;
+  padding-right: 4vw;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  height: 7vh;
+  cursor: pointer;
   grid-template-columns: 15fr 2fr;
-
   border-top: #7070701a 1px solid;
+}
+
+.contentcard:hover {
+  background-color: #f4f3f3;
 }
 
 .contenticon {
@@ -137,19 +136,13 @@
 }
 
 .contenttitle {
-  font-family: 'avenirbook';
-  font-size: 2.5vh;
-
-  color: darkslategray;
-  justify-self: flex-start;
-  align-self: flex-end;
-  margin-left: 0vw;
+  font-family: 'Proxima Nova';
+  font-size: 2.4vh;
+  /* justify-self: flex-start; */
+  align-self: center;
 }
 
 .contentarrow {
-  align-self: flex-start;
-  justify-self: flex-start;
-
   color: #5a5953;
   background-color: inherit;
   border: none;
@@ -157,27 +150,15 @@
 
 /* Sign Out Footer */
 .profilefooter {
-  display: grid;
-  height: 41vh;
-
-  background-color: #faf8f8;
-  border-top: #7070701a 1px solid;
-
-  bottom: 0px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: absolute;
+  bottom: 3vh;
 }
 
-.signoutbutton {
-  border: 1px solid #5a595326;
-  background-color: #db6142;
-  width: 70%;
-  height: 20%;
-
-  font-family: 'avenirbook';
-  color: white;
-  font-size: 3vh;
-
-  align-self: flex-end;
-  margin-bottom: 5vh;
-  border-radius: 20px;
-  padding: 10px 20px;
+@media only screen and (max-width: 600px) {
+  .profilefooter {
+    bottom: 12vh;
+  }
 }

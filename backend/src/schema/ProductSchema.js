@@ -53,12 +53,14 @@ ItemTC.addResolver({
           }
         } = item
 
+        console.log(baseItemName, imageId)
+        console.log(isAvailable)
         let imageData
         try {
           const response = await catalogApi.retrieveCatalogObject(imageId)
           imageData = response.result.object.imageData.url
         } catch (error) {
-          console.log('Image not found')
+          console.log('Image not found \n')
         }
 
         const categoryName = categoryId2Name(categoryId)
@@ -400,7 +402,7 @@ ItemTC.addResolver({
       try {
         const {
           result: {
-            object: { version, itemData }
+            object: { version, itemData, imageId }
           }
         } = await catalogApi.retrieveCatalogObject(productId)
 
@@ -412,6 +414,7 @@ ItemTC.addResolver({
             id: productId,
             type: 'ITEM',
             version: version,
+            imageId: imageId,
             itemData: itemData,
             customAttributeValues: {
               is_available: {

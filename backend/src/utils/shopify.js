@@ -22,7 +22,7 @@ const shopifyAdminClient = new Shopify({
   shopName: SHOPIFY_DOMAIN,
   apiKey: SHOPIFY_API_KEY,
   password: SHOPIFY_PASSWORD,
-  apiVersion: '2020-10'
+  apiVersion: '2021-01'
 })
 
 export { shopifyClient, shopifyAdminClient }

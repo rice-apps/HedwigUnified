@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro'
 
-import HedwigLogoFinal from './../../../images/HedwigLogoFinal.png'
-import RalewayFont from './../../../fonts/GlobalFont'
+import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -12,6 +11,7 @@ const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
   font-size: 2.8vh;
+  font-weight: 600;
   width: 100vw;
   top: 0;
   display: grid;
@@ -32,53 +32,39 @@ const HedwigLogo = styled.img`
 `
 
 const HedwigWrapper = styled.div`
-  font-family: 'avenirbold';
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
 `
 
-function CartHeader (props) {
+function CartHeader ({ vendorName, backLink, showBackButton }) {
   const navigate = useNavigate()
+  const cart_menu = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : null
+  const order = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('order'))
+    : null
+  console.log(order)
+  console.log(cart_menu)
 
-  //   const { state } = useLocation();
-  //   const { currVendor: vendorState } = state;
+  const backNav = !cart_menu
+    ? '/eat'
+    : order.vendor.name === 'Cohen House'
+    ? '/eat/cohen/'
+    : '/eat'
 
-  //   const {
-  //     data: vendor_data,
-  //     error: vendor_error,
-  //     loading: vendor_loading,
-  //   } = useQuery(VENDOR_QUERY, {
-  //     variables: { vendor: vendorState },
-  //     fetchPolicy: "cache-and-network",
-  //     nextFetchPolicy: "cache-first",
-  //   });
-
-  //   if (vendor_loading) {
-  //     return <p>Loading...</p>;
-  //   }
-  //   if (vendor_error) {
-  //     return <p>ErrorV...</p>;
-  //   }
-
-  function getVendorName () {
-    // const { getVendor: vendor } = vendor_data;
-    // return vendor_data.getVendor.name;
-    return 'Cohen House'
-  }
+  const currVendor = order ? order.vendor.name : null
 
   return (
     <HeaderWrapper>
-      <RalewayFont />
       <HedwigWrapper>
-        {props.showBackButton ? (
+        {showBackButton ? (
           <IoMdArrowRoundBack
             onClick={() =>
-              navigate(props.backLink, {
-                state: { currentVendor: getVendorName() }
-              })
+              navigate(backNav, { state: { currentVendor: currVendor } })
             }
             style={{
               position: 'fixed',
@@ -89,7 +75,7 @@ function CartHeader (props) {
             }}
           />
         ) : null}
-        Checkout: {getVendorName()}
+        Checkout: {vendorName}
       </HedwigWrapper>
     </HeaderWrapper>
   )

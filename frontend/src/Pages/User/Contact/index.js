@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import './contact.css'
 
-import { useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
-
-import gql from 'graphql-tag.macro'
-
+import {SmallLoadingPage} from './../../../components/LoadingComponents'
 const ADD_PHONE = gql`
   mutation($name: String!, $phone: String!, $netid: String!) {
     userUpdateOne(
@@ -49,10 +47,19 @@ function normalizeInput (value, previousValue) {
   }
 }
 
+function getFirstName (name) {
+  if (name.indexOf(' ') === -1) {
+    return name
+  } else {
+    return name.substr(0, name.indexOf(' '))
+  }
+}
+
 function ContactForm () {
   const user = JSON.parse(localStorage.getItem('userProfile'))
   const navigate = useNavigate()
   const userName = user.name
+  const firstName = getFirstName(userName)
   const [phone, setPhone] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
   const [format, setFormat] = useState(null)
@@ -74,7 +81,7 @@ function ContactForm () {
   }
   const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <SmallLoadingPage/>
   if (error) return <p>{error.message}</p>
 
   if (confirmed) {
@@ -96,7 +103,7 @@ function ContactForm () {
       <div id='elem-div'>
         <div id='greeting-container'>
           <p className='greetings'>Hello,</p>
-          <p className='greetings'>{userName}!</p>
+          <p className='greetings'>{firstName}!</p>
         </div>
         <p id='instruction'>
           Let's set up your profile with us. We'll need your phone number to

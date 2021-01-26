@@ -25,10 +25,10 @@ RUN --mount=type=secret,id=REACT_APP_FIREBASE_API_KEY \
 
 # production environment
 
-FROM nginx:stable-alpine
+FROM nginx:mainline-alpine
 
 COPY --from=build /frontend/build /var/www/html
 
 EXPOSE 80 443
-
+USER nginx
 CMD ["nginx", "-g", "daemon off;"]

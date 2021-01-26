@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import hero from '../../../images/hero.jpg'
 import './index.css'
 import { Link } from 'react-scroll'
@@ -6,8 +6,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery } from '@apollo/client'
-import BottomAppBar from './../Vendors/BottomAppBar.js'
-import BuyerHeader from './../Vendors/BuyerHeader.js'
+import BottomAppBar from '../Vendors/BottomAppBar.js'
+import BuyerHeader from '../Vendors/BuyerHeader.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
@@ -17,7 +17,8 @@ import Grow from '@material-ui/core/Grow'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
-import { convertTimeToNum } from './../Vendors/VendorCard.js'
+import { convertTimeToNum } from '../Vendors/VendorCard.js'
+import {SmallLoadingPage} from './../../../components/LoadingComponents'
 
 // add a proceed to checkout
 function Menu () {
@@ -57,17 +58,17 @@ function Menu () {
   }, [open])
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage/>
   }
   if (vendor_error) {
     return <p>ErrorV...</p>
   }
   // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage/>
   }
   if (catalog_error) {
-    console.log(catalog_error)
+    console.log('CATALOG ERROR', catalog_error)
     return <p>ErrorC...</p>
   }
 
@@ -267,14 +268,9 @@ function Menu () {
   return (
     <div>
       <BuyerHeader showBackButton='true' backLink='/eat' />
-      <div style={{ paddingBottom: '8.6vh' }}>
+      <div style={{ paddingBottom: '8.6vh', paddingTop: '8vh' }}>
         {/* Hero Image */}
-        <img
-          style={{ filter: 'blur(2.5px)' }}
-          src={hero}
-          class='hero'
-          alt='hero'
-        />
+        <img src={vendor_data.getVendor.logoUrl} class='hero' alt='hero' />
 
         {/* Vendor Info */}
         <div class='vendorinfocontainer'>
@@ -354,7 +350,7 @@ function Menu () {
               <h3 class='categoryheader'>{category}</h3>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
-                .filter(item => item.category === category)
+                .filter(item => item.category === category && item.isAvailable)
                 .map(product => (
                   <div
                     class='itemgrid'
@@ -382,7 +378,7 @@ function Menu () {
           ))}
         </div>
       </div>
-      <BottomAppBar />
+      <BottomAppBar vendor={vendor_data.getVendor} />
     </div>
   )
 }

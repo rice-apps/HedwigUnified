@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 
 import { Navigate } from 'react-router-dom'
-
+import {SmallLoadingPage} from './../../components/LoadingComponents'
 const AUTHENTICATE_USER = gql`
   mutation AuthenticateMutation($idToken: String!) {
     authenticateUser(idToken: $idToken) {
@@ -18,6 +18,7 @@ const AUTHENTICATE_USER = gql`
       isAdmin
       studentId
       type
+      studentId
     }
   }
 `
@@ -41,8 +42,8 @@ function Auth () {
 
   // if (error) return <Navigate to='/login' />
   if (error) return <p>{error.message}</p>
-  if (loading) return <p>Loading...</p>
-  if (!authenticationData) return <p>Bad.</p>
+  if (loading) return <SmallLoadingPage/>
+  if (!authenticationData) return <p>Authentication Failed.</p>
 
   const {
     _id,
@@ -69,7 +70,6 @@ function Auth () {
     type,
     token
   }
-  console.log('DATA', userData)
 
   // Set token and user data in local storage
   lstorage.setItem('token', token)

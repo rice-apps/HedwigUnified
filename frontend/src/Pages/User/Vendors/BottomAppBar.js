@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro'
 import { GrCart } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
-import RalewayFont from '../../../fonts/GlobalFont.js'
 
 const BottomNavigationWrapper = styled.div`
   position: fixed;
@@ -29,7 +28,7 @@ const BottomNavigationItem = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 700;
   &&:active {
     transform: scale(1.001);
     background-color: #fac8bb;
@@ -37,18 +36,25 @@ const BottomNavigationItem = styled.div`
 `
 
 const BottomNavigationText = styled.div`
-  font-family: 'Raleway';
   margin-left: 8px;
 `
 
 function BottomAppBar () {
   const navigate = useNavigate()
+
+  const CartItems = JSON.parse(localStorage.getItem('cartItems'))
+  let cartAmount = 0
+  if (CartItems) {
+    CartItems.forEach(item => (cartAmount += item.quantity))
+  }
+  console.log('CART AMOUNT', cartAmount)
   return (
     <BottomNavigationWrapper>
-      <RalewayFont />
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <GrCart style={{ fontSize: '2.8vh' }} />
-        <BottomNavigationText>View Cart</BottomNavigationText>
+        <BottomNavigationText>
+          View Cart {cartAmount > 0 && <span>({cartAmount})</span>}
+        </BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>
   )

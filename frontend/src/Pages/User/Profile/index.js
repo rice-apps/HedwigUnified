@@ -1,15 +1,9 @@
-import './index.css'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
-
-function handleLogoutClick () {
-  localStorage.removeItem('token')
-  window.open(logoutURL, '_self')
-}
 
 const GET_USER_INFO = gql`
   query GetUserInfo {
@@ -41,15 +35,22 @@ const getLinks = user => {
   return links
 }
 
-function Profile () {
-  const { data, loading, error } = useQuery(GET_USER_INFO)
+function Profile ({ updateLogin }) {
+  // const { data, loading, error } = useQuery(GET_USER_INFO)
 
-  if (error) return <p>Error!</p>
-  if (loading) return <p>Waiting...</p>
-  if (!data) return <p> work pls </p>
+  // if (error) return <p>Error!</p>
+  // if (loading) return <p>Waiting...</p>
+  // if (!data) return <p> work pls </p>
 
-  const { user } = data
+  // const { user } = data
+
+  const user = JSON.parse(localStorage.getItem('userProfile'))
   const links = getLinks(user)
+
+  function handleLogoutClick () {
+    updateLogin(false)
+    window.open(logoutURL, '_self')
+  }
 
   return (
     <div className='profilepane'>

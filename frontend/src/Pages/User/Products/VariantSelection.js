@@ -7,7 +7,10 @@ const VariantSelection = ({ variants }) => {
     <div className='variant'>
       <div className='heading'>
         {/* <h1>{variants[0].description}</h1> */}
-        <h1 style={{ fontSize: '19px' }}> Select your variant: </h1>
+        <h1 style={{ fontSize: '19px' }}>
+          {' '}
+          Select your variant: <span className='asterisk'> * </span>
+        </h1>
         {variants[0].description ? <p>{variants[0].description}</p> : null}
       </div>
       <div className='options'>

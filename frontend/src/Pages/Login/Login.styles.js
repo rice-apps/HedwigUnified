@@ -44,11 +44,6 @@ const Title = styled.h1`
   font-weight: 500;
 `
 const LoginButton = styled.button`
-  @font-face {
-    font-family: 'Proxima Nova';
-    src: local('Proxima Nova'),
-      url(../../fonts/FontsFree-Net-proxima_nova_reg-webfont.ttf);
-  }
   border-radius: 25pt;
   height: 2.2rem;
   width: 8.5rem;
@@ -56,7 +51,6 @@ const LoginButton = styled.button`
   font-size: 0.8rem;
   background-color: #f3725b;
   color: white;
-  font-family: Proxima Nova;
   font-weight: bold;
   :hover {
     text-decoration: underline;
@@ -70,7 +64,6 @@ const BackgroundCover = styled.div`
   color:#F3725B;
   backgound-color: white;
   }
-  font-family: 'Proxima Nova';
 `
 
 const ButtonPane = styled.div`
@@ -113,6 +106,7 @@ const LoginQuestion = styled.div`
   position: relative;
   font-weight: bold;
   font-size: 2rem;
+  letter-spacing: 0rem;
   text-align: center;
   padding: 0.3rem;
 `

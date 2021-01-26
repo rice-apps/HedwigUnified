@@ -1,9 +1,9 @@
 {
   "processors": [
-    "stylelint-processor-styled-components/macro"
+    "stylelint-processor-styled-components"
   ],
   "extends": [
     "stylelint-config-recommended",
-    "stylelint-config-styled-components/macro"
+    "stylelint-config-styled-components"
   ]
 }

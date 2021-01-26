@@ -6,8 +6,8 @@ import { BiLogOut } from 'react-icons/bi'
 import { AiOutlineUserSwitch } from 'react-icons/ai'
 import { IconContext } from 'react-icons'
 import { useApolloClient } from '@apollo/client'
-import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
+import { useNavigate } from 'react-router-dom'
 
 const VendorHeaderWrapper = styled.div`
   font-weight: 600;
@@ -91,16 +91,8 @@ const GET_USER_INFO = gql`
 `
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
-  const { data, loading, error } = useQuery(GET_USER_INFO)
-
-  if (error) return <p>Error!</p>
-  if (loading) return <p>Waiting...</p>
-  if (!data) return <p> work pls </p>
-
-  const { user } = data
-
-  // console.log("DATA", userData);
-
+  const user = JSON.parse(localStorage.getItem('userProfile'))
+  const navigate = useNavigate()
   function toggleLogoutScreen () {
     const logoutOpen = showLogout
     setShowLogout(!logoutOpen)
@@ -131,7 +123,7 @@ function VendorHeader () {
           {' '}
           <BiLogOut /> Logout of Account
         </LogoutItem>
-        <LogoutItem>
+        <LogoutItem onClick={() => navigate('/eat')}>
           {' '}
           <AiOutlineUserSwitch />
           Switch to Buyer

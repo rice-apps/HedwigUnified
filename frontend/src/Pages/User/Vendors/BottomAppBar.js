@@ -30,6 +30,7 @@ const BottomNavigationItem = styled.div`
   cursor: pointer;
   font-weight: 600;
   position:relative;
+  box-shadow: 1.5px 1.5px 5px 0.9px rgba(0,0,0,0.2);
 `
 
 const BottomNavigationText = styled.div`
@@ -40,7 +41,7 @@ background-color:#56B48E;
 border-radius:50%;
 display:flex;
 position:absolute;
-top:-1vh;
+top:-1.3vh;
 right:-1.4vh;
 align-items: center;
 justify-content: center;

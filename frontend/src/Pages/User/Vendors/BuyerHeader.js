@@ -13,10 +13,11 @@ const HeaderWrapper = styled.div`
   align-items: center;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  background-color: ${props => props.transparent ? 'transparent' : 'white'};
+  background-color: ${props => (props.transparent ? 'transparent' : 'white')};
   z-index: 1;
   padding-top: 1vh;
-  box-shadow:${props => props.transparent ? 'none': '0px 0px 15px 1px rgba(0, 0, 0, 0.2)'} ;
+  box-shadow: ${props =>
+    props.transparent ? 'none' : '0px 0px 15px 1px rgba(0, 0, 0, 0.2)'};
   font-family: Omnes;
 `
 
@@ -36,7 +37,7 @@ const HedwigWrapper = styled.div`
 `
 
 const RoundedWrapper = styled.div`
-  padding: 0.5vh 3vh ;
+  padding: 0.5vh 3vh;
   background-color: white;
   border-radius: 25px;
   display: flex;
@@ -56,7 +57,7 @@ function BuyerHeader (props) {
   const navigate = useNavigate()
 
   return (
-    <HeaderWrapper transparent = {props.transparent}>
+    <HeaderWrapper transparent={props.transparent}>
       {/* Transparent is true when you do not want a white background for header */}
       {props.transparent ? (
         <HedwigWrapper>
@@ -70,7 +71,9 @@ function BuyerHeader (props) {
               />
             </RoundedWrapper>
           ) : null}
-          <RoundedWrapper><HedwigLogo src={HedwigLogoFinal} /> <span>hedwig</span></RoundedWrapper>
+          <RoundedWrapper>
+            <HedwigLogo src={HedwigLogoFinal} /> <span>hedwig</span>
+          </RoundedWrapper>
         </HedwigWrapper>
       ) : (
         <HedwigWrapper>

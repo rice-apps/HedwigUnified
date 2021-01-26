@@ -44,6 +44,8 @@ input[type='checkbox'] {
   margin-top: 15px;
   margin-bottom: 0px;
   margin-left: 0px;
+  width: 45vh;
+  text-align:center;
 }
 
 .itemHeading > p {

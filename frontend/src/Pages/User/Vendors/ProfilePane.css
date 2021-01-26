@@ -13,7 +13,7 @@
   height:100vh;
   transition: 500ms;
   position: fixed;
-  right:0px;
+  left:0px;
   z-index: 2;
   backdrop-filter: blur(8px) brightness(94%);
 }

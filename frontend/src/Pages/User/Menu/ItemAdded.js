@@ -128,6 +128,7 @@ const StyledCheck = styled(AiOutlineCheckCircle)`
   color: green;
   position: absolute;
   bottom: 5vh;
+  font-size:4.5vh;
   animation-name: ${checkAnimation};
   animation-duration: 1.7s;
   animation-iteration-count: infinite;

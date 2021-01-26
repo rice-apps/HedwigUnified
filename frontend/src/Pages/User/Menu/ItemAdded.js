@@ -93,6 +93,9 @@ const ModalWrapper = styled.div`
   animation-name: ${appearanceAnimation};
   animation-duration: 1.7s;
   animation-iteration-count: 1;
+  @media (max-width: 700px) {
+top:18vh;
+  }
 `
 
 const PageWrapper = styled.div`

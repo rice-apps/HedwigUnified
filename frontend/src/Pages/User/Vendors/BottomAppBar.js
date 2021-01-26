@@ -47,13 +47,13 @@ function BottomAppBar () {
   if (CartItems) {
     CartItems.forEach(item => (cartAmount += item.quantity))
   }
-
+ console.log("CART AMOUNT", cartAmount)
   return (
     <BottomNavigationWrapper>
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
         <GrCart style={{ fontSize: '2.8vh' }} />
         <BottomNavigationText>
-          View Cart {cartAmount === 0 ? null : { cartAmount }}
+  View Cart {cartAmount > 0 && <span>({cartAmount})</span>}
         </BottomNavigationText>
       </BottomNavigationItem>
     </BottomNavigationWrapper>

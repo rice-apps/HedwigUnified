@@ -2,7 +2,7 @@ import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
 import { ItemTC, DataSourceEnumTC } from '../models/index.js'
-import squareClient from '../utils/square.js'
+import squareClients from '../utils/square.js'
 import { pubsub } from '../utils/pubsub.js'
 
 ItemTC.addResolver({
@@ -14,8 +14,9 @@ ItemTC.addResolver({
   type: [ItemTC],
   resolve: async ({ args }) => {
     // Extract vendor name from args
-    const { dataSource } = args
-
+    const { dataSource, vendor } = args
+    
+    const squareClient = squareClients.get(vendor)
     const catalogApi = squareClient.catalogApi
 
     try {
@@ -23,7 +24,6 @@ ItemTC.addResolver({
       const {
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
-
       // Filter objects into distinct sets
       const categories = objects.filter(object => object.type === 'CATEGORY')
       const modifierLists = objects.filter(
@@ -162,6 +162,7 @@ ItemTC.addResolver({
   .addResolver({
     name: 'getItem',
     args: {
+      vendor: 'String!',
       dataSource: DataSourceEnumTC.getTypeNonNull().getType(),
       dataSourceId: ItemTC.getFieldTC('dataSourceId')
         .getTypeNonNull()
@@ -170,8 +171,9 @@ ItemTC.addResolver({
     type: ItemTC,
     resolve: async ({ args }) => {
       // Extract data source to interact with as well as ID of product (as used inside data source)
-      const { dataSource, dataSourceId } = args
+      const { vendor, dataSource, dataSourceId } = args
 
+      const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {
@@ -318,12 +320,14 @@ ItemTC.addResolver({
   .addResolver({
     name: 'getAvailability',
     args: {
+      vendor: 'String!',
       productId: 'String!'
     },
     type: 'Boolean',
     resolve: async ({ args }) => {
-      const { productId } = args
+      const { vendor, productId } = args
 
+      const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {
@@ -348,12 +352,14 @@ ItemTC.addResolver({
   .addResolver({
     name: 'getAvailabilities',
     args: {
+      vendor: 'String!',
       productIds: '[String!]'
     },
     type: 'Boolean',
     resolve: async ({ args }) => {
-      const { productIds } = args
+      const { vendor, productIds } = args
 
+      const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {
@@ -382,14 +388,15 @@ ItemTC.addResolver({
   .addResolver({
     name: 'setAvailability',
     args: {
+      vendor: 'String!',
       productId: 'String!',
       isItemAvailable: 'Boolean!',
       dataSource: DataSourceEnumTC
     },
     type: ItemTC,
     resolve: async ({ args }) => {
-      const { productId, isItemAvailable, dataSource } = args
-
+      const { vendor, productId, isItemAvailable, dataSource } = args
+      const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {
@@ -553,9 +560,13 @@ ItemTC.addResolver({
     name: 'createAvailabilityToggle',
     type: 'String',
     args: {
+      vendor: 'String',
       merchantId: 'String!'
     },
     resolve: async ({ args }) => {
+      const { vendor } = args
+
+      const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {
@@ -592,11 +603,13 @@ ItemTC.addResolver({
     type: [ItemTC],
     args: {
       products: '[String!]!',
-      availabilityId: 'String'
+      availabilityId: 'String',
+      vendor: 'String'
     },
     resolve: async ({ args }) => {
-      const { products, availabilityId } = args
+      const { products, availabilityId, vendor } = args
 
+      const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
       try {

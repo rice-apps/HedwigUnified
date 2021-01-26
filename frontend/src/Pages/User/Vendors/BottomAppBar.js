@@ -1,42 +1,54 @@
-import styled from 'styled-components/macro'
+import styled, { keyframes } from 'styled-components/macro'
 import { GrCart } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 
 const BottomNavigationWrapper = styled.div`
   position: fixed;
   bottom: 0px;
-  height: 8.5vh;
+  height: 9.5vh;
   width: 100vw;
-  background-color: white;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  border-top: 1px solid darkgrey;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   z-index: 1;
   font-size: 2.4vh;
 `
 
 const BottomNavigationItem = styled.div`
-  height: 100%;
-  width: 100%;
-  color: #3d3d3d;
-  background-color: white;
+  height: 5vh;
+  margin-bottom: 2vh;
+  width: 23vh;
+  border-radius: 5px;
+  color: white;
+  background-color: #343330;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-weight: 700;
-  &&:active {
-    transform: scale(1.001);
-    background-color: #fac8bb;
-  }
+  font-weight: 600;
+  position: relative;
+  box-shadow: 1.5px 1.5px 5px 0.9px rgba(0, 0, 0, 0.2);
 `
 
-const BottomNavigationText = styled.div`
-  margin-left: 8px;
+const BottomNavigationText = styled.div``
+
+const Counter = styled.div`
+  background-color: #56b48e;
+  border-radius: 50%;
+  display: flex;
+  position: absolute;
+  top: -1.3vh;
+  right: -1.4vh;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.9vh;
+  color: white;
+  height: 3.2vh;
+  width: 3.2vh;
+  margin-left: 1vh;
 `
 
 function BottomAppBar () {
@@ -51,10 +63,8 @@ function BottomAppBar () {
   return (
     <BottomNavigationWrapper>
       <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
-        <GrCart style={{ fontSize: '2.8vh' }} />
-        <BottomNavigationText>
-          View Cart {cartAmount > 0 && <span>({cartAmount})</span>}
-        </BottomNavigationText>
+        <BottomNavigationText>View Cart</BottomNavigationText>
+        {cartAmount > 0 && <Counter>{cartAmount}</Counter>}
       </BottomNavigationItem>
     </BottomNavigationWrapper>
   )

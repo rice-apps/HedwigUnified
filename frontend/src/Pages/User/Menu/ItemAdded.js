@@ -9,13 +9,13 @@ const appearanceAnimation = keyframes`
     font-size:0vh;
 }
 23%{
-    width:46vh;
+    width:42vh;
     height:50vh;
     display:block;
     font-size:2.5vh;
 }
 90%{
-    width:46vh;
+    width:42vh;
     height:50vh;
     display:block;
     font-size:2.5vh;

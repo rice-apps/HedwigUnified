@@ -37,11 +37,19 @@ const barAnimation = keyframes`
 }
 `
 
+const visibilityAnimation = keyframes`
+0%{opacity:0%}
+100% {opacity:100%}
+`
+
 const LoadingWrapper = styled.div`
+  animation-name: ${visibilityAnimation};
+  animation-duration: 2s;
+  animation-iteration-count:1;
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-rows: auto ${props => props.size } 4vh auto;
+  grid-template-rows: auto ${props => props.size} 4vh auto;
   grid-template-columns: 1fr;
   grid-template-areas:
     'blank'
@@ -65,7 +73,7 @@ const LoadingText = styled.div`
   font-size: 2.5vh;
   font-family: 'avenir';
   color: #f3725b;
-  font-weight:bold;
+  font-weight: bold;
   grid-area: TextSpace;
   &:after {
     content: '';
@@ -97,16 +105,13 @@ const LoadingBar = styled.div`
   animation-iteration-count: 1;
 `
 
-
-
 function addVh (i) {
-let vhString = i.toString() + 'vh'
-return vhString
+  let vhString = i.toString() + 'vh'
+  return vhString
 }
 
 function LoadingPage () {
-
-  let size=25
+  let size = 25
   return (
     <LoadingWrapper size={addVh(size + 2)}>
       <Hedwig
@@ -123,7 +128,7 @@ function LoadingPage () {
 }
 
 function SmallLoadingPage () {
-  let size=12
+  let size = 12
   return (
     <LoadingWrapper size={addVh(size + 2)}>
       <Hedwig
@@ -132,7 +137,7 @@ function SmallLoadingPage () {
         animationName={spinAnimation}
         animationDuration='1.4s'
       />
-      <LoadingText/>
+      <LoadingText />
     </LoadingWrapper>
   )
 }

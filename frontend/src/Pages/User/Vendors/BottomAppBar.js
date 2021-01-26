@@ -22,7 +22,7 @@ const BottomNavigationItem = styled.div`
   width: 23vh;
   border-radius: 5px;
   color: white;
-  background-color: #F8ADA0;
+  background-color: #343330;
   display: flex;
   flex-direction:row;
   justify-content: center;
@@ -36,7 +36,7 @@ const BottomNavigationText = styled.div`
 `
 
 const Counter = styled.div`
-background-color:red;
+background-color:#56B48E;
 border-radius:50%;
 display:flex;
 position:absolute;
@@ -44,7 +44,7 @@ top:-1vh;
 right:-1.4vh;
 align-items: center;
 justify-content: center;
-font-size:1.7vh;
+font-size:1.9vh;
 color:white;
 height:3.2vh;
 width:3.2vh;

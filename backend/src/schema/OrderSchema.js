@@ -9,7 +9,7 @@ import {
   UpdateOrderTC
 } from '../models/index.js'
 import { pubsub } from '../utils/pubsub.js'
-import squareClients from '../utils/square.js'
+import squareClient from '../utils/square.js'
 import TwilioClient from '../utils/twilio.js'
 import { ApiError } from 'square'
 
@@ -20,7 +20,6 @@ OrderTC.addResolver({
     locations: '[String!]!',
     filter: FilterOrderInputTC,
     sort: SortOrderInputTC,
-    vendor: 'String!',
     limit: {
       type: 'Int',
       defaultValue: 1000
@@ -31,9 +30,8 @@ OrderTC.addResolver({
     }
   },
   resolve: async ({ args }) => {
-    const { vendor, locations, cursor, limit, filter, sort } = args
+    const { locations, cursor, limit, filter, sort } = args
 
-    const squareClient = squareClients.get(vendor)
     const ordersApi = squareClient.ordersApi
 
     const query = {}
@@ -131,13 +129,11 @@ OrderTC.addResolver({
     type: OrderTC,
     args: {
       locationId: 'String!',
-      vendor: 'String!',
       record: CreateOrderInputTC.getTypeNonNull().getType()
     },
     resolve: async ({ args }) => {
       const {
         locationId,
-        vendor,
         record: {
           idempotencyKey,
           lineItems,
@@ -150,7 +146,6 @@ OrderTC.addResolver({
         }
       } = args
 
-      const squareClient = squareClients.get(vendor)
       const ordersApi = squareClient.ordersApi
 
       try {
@@ -283,7 +278,6 @@ OrderTC.addResolver({
 
       await updatedOrderTracker.save()
 
-      const squareClient = squareClients.get(vendor)
       const ordersApi = squareClient.ordersApi
 
       try {

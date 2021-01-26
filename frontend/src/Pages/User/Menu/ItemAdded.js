@@ -7,7 +7,7 @@ const appearanceAnimation = keyframes`
     height:0vh;
     display:none;
 }
-5%{
+10%{
     width:46vh;
     height:50vh;
     display:block;
@@ -39,7 +39,7 @@ const ModalWrapper = styled.div`
   align-items: center;
   justify-content: center;
   animation-name: ${appearanceAnimation};
-  animation-duration:1.5s;
+  animation-duration:1.2s;
   animation-iteration-count:1;
 `
 
@@ -54,7 +54,7 @@ const PageWrapper = styled.div`
 
 function ItemAddedModal (props) {
     const [timeOut, setTimeOut] =useState(false)
-    setTimeout(function(){ setTimeOut(true) }, 1500);
+    setTimeout(function(){ setTimeOut(true) }, 1150);
   return (
     <PageWrapper timeout={timeOut}>
       <ModalWrapper>{props.item} added!</ModalWrapper>

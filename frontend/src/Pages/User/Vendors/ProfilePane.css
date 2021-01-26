@@ -10,8 +10,10 @@
 
 .profilepane-active {
   width: 100vw;
-  transition: width 500ms;
+  height:100vh;
+  transition: 500ms;
   position: fixed;
+  right:0px;
   z-index: 2;
   backdrop-filter: blur(8px) brightness(94%);
 }
@@ -20,6 +22,7 @@
 .background {
   background-color: white;
   display: flex;
+  z-index:3;
   flex-direction: column;
   height: 100vh;
   width: 60vw;

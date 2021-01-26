@@ -80,27 +80,27 @@ export const StatusDropdown = styled.select`
   font-weight: 500;
 `
 export const HoursColumn = styled.div`
-grid-area: Hours;
-width: 100%;
-height: 100%;
-display: flex;
-flex-direction: row;
-font-size: 2.8vh;
-flex-wrap: wrap;
-padding: 0px 7px;
+  grid-area: Hours;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  font-size: 2.8vh;
+  flex-wrap: wrap;
+  padding: 0px 7px;
 `
 export const HoursInterval = styled.div`
-background-color: ${props => (props.isClosed ? '#FFF7F5' : '#f8eae7')};
-opacity: ${props => (props.isClosed ? '0.6' : '1')};
-position: relative;
-border-radius: 10px;
-color: #ea907a;
-margin: 4px 5px;
-border: 2px solid #ea907a;
-/* padding: 5px 1.8vw; */
-padding: 2px 0px;
-width: 19vw;
-height: min-content;
+  background-color: ${props => (props.isClosed ? '#FFF7F5' : '#f8eae7')};
+  opacity: ${props => (props.isClosed ? '0.6' : '1')};
+  position: relative;
+  border-radius: 10px;
+  color: #ea907a;
+  margin: 4px 5px;
+  border: 2px solid #ea907a;
+  /* padding: 5px 1.8vw; */
+  padding: 2px 0px;
+  width: 19vw;
+  height: min-content;
 `
 export const AddColumn = styled.div`
   grid-area: AddHours;

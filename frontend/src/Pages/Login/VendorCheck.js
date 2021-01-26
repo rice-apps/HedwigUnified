@@ -8,7 +8,7 @@ import {
 } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
 import gql from 'graphql-tag.macro'
-import {SmallLoadingPage} from './../../components/LoadingComponents'
+import { SmallLoadingPage } from './../../components/LoadingComponents'
 const GET_VENDOR = gql`
   query GET_VENDORS($name: String!) {
     getVendor(filter: { name: $name }) {
@@ -29,7 +29,7 @@ const VendorSelect = () => {
     error: vendorError
   } = useQuery(GET_VENDOR, { variables: { name: userData.vendor } })
 
-  if (vendorLoading) return <SmallLoadingPage/>
+  if (vendorLoading) return <SmallLoadingPage />
   if (vendorError) return <p>User broken</p>
 
   const allowedUsers = vendorData.getVendor.allowedNetid

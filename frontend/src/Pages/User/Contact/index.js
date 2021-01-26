@@ -4,7 +4,7 @@ import './contact.css'
 import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
 import { useNavigate, Navigate } from 'react-router-dom'
-import {SmallLoadingPage} from './../../../components/LoadingComponents'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
 const ADD_PHONE = gql`
   mutation($name: String!, $phone: String!, $netid: String!) {
     userUpdateOne(
@@ -81,7 +81,7 @@ function ContactForm () {
   }
   const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
 
-  if (loading) return <SmallLoadingPage/>
+  if (loading) return <SmallLoadingPage />
   if (error) return <p>{error.message}</p>
 
   if (confirmed) {

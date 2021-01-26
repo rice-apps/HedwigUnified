@@ -29,7 +29,7 @@ import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import HelpPage from '../Pages/User/Help'
 import TestPage from './TestPage'
-import {SmallLoadingPage} from './LoadingComponents'
+import { SmallLoadingPage } from './LoadingComponents'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -81,7 +81,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
 
   // Show loading message as query runs
   if (loading) {
-    return <SmallLoadingPage/>
+    return <SmallLoadingPage />
   }
 
   // Something went wrong, try to login again

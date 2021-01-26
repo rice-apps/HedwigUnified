@@ -15,7 +15,7 @@ ItemTC.addResolver({
   resolve: async ({ args }) => {
     // Extract vendor name from args
     const { dataSource, vendor } = args
-    
+
     const squareClient = squareClients.get(vendor)
     const catalogApi = squareClient.catalogApi
 

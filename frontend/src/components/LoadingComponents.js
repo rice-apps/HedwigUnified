@@ -45,7 +45,7 @@ const visibilityAnimation = keyframes`
 const LoadingWrapper = styled.div`
   animation-name: ${visibilityAnimation};
   animation-duration: 2s;
-  animation-iteration-count:1;
+  animation-iteration-count: 1;
   height: 100vh;
   width: 100vw;
   display: grid;

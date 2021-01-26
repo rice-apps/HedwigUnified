@@ -10,7 +10,7 @@ import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
 import BottomAppBar from '../Vendors/BottomAppBar.js'
-import {SmallLoadingPage} from './../../../components/LoadingComponents'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
 
 function Product () {
   const navigate = useNavigate()
@@ -46,14 +46,14 @@ function Product () {
 
   console.log(productId)
   if (vendor_loading) {
-    return <SmallLoadingPage/>
+    return <SmallLoadingPage />
   }
   if (vendor_error) {
     return <p>ErrorV...</p>
   }
 
   if (product_loading) {
-    return <SmallLoadingPage/>
+    return <SmallLoadingPage />
   }
   if (product_error) {
     return <p>ErrorP...</p>

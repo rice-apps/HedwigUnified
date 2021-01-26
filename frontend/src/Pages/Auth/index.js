@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 
 import { Navigate } from 'react-router-dom'
-import {SmallLoadingPage} from './../../components/LoadingComponents'
+import { SmallLoadingPage } from './../../components/LoadingComponents'
 const AUTHENTICATE_USER = gql`
   mutation AuthenticateMutation($idToken: String!) {
     authenticateUser(idToken: $idToken) {
@@ -42,7 +42,7 @@ function Auth () {
 
   // if (error) return <Navigate to='/login' />
   if (error) return <p>{error.message}</p>
-  if (loading) return <SmallLoadingPage/>
+  if (loading) return <SmallLoadingPage />
   if (!authenticationData) return <p>Authentication Failed.</p>
 
   const {

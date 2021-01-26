@@ -31,8 +31,7 @@ PaymentTC.addResolver({
   resolve: async ({ args }) => {
     const { beginTime, endTime, sortOrder, cursor, vendor } = args
 
-    const squareClientsMap = await squareClients
-    const squareClient = squareClientsMap.get(vendor)
+    const squareClient = squareClients.get(vendor)
     const paymentsApi = squareClient.paymentsApi
 
     try {
@@ -91,8 +90,7 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
-          const squareClientsMap = await squareClients
-          const squareClient = squareClientsMap.get(vendor)
+          const squareClient = squareClients.get(vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {
@@ -212,8 +210,7 @@ PaymentTC.addResolver({
 
       switch (args.source) {
         case 'SQUARE': {
-          const squareClientsMap = await squareClients
-          const squareClient = squareClientsMap.get(args.vendor)
+          const squareClient = squareClients.get(args.vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {
@@ -339,8 +336,7 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
-          const squareClientsMap = await squareClients
-          const squareClient = squareClientsMap.get(vendor)
+          const squareClient = squareClients.get(vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {
@@ -426,8 +422,7 @@ PaymentTC.addResolver({
 
       switch (source) {
         case 'SQUARE': {
-          const squareClientsMap = await squareClients
-          const squareClient = squareClientsMap.get(vendor)
+          const squareClient = squareClients.get(vendor)
           const paymentsApi = squareClient.paymentsApi
 
           try {

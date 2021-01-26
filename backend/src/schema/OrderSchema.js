@@ -33,8 +33,7 @@ OrderTC.addResolver({
   resolve: async ({ args }) => {
     const { vendor, locations, cursor, limit, filter, sort } = args
 
-    const squareClientsMap = await squareClients
-    const squareClient = squareClientsMap.get(vendor)
+    const squareClient = squareClients.get(vendor)
     const ordersApi = squareClient.ordersApi
 
     const query = {}
@@ -149,8 +148,7 @@ OrderTC.addResolver({
         }
       } = args
 
-      const squareClientsMap = await squareClients
-      const squareClient = squareClientsMap.get(vendor)
+      const squareClient = squareClients.get(vendor)
       const ordersApi = squareClient.ordersApi
 
       try {
@@ -278,8 +276,7 @@ OrderTC.addResolver({
 
       await updatedOrderTracker.save()
 
-      const squareClientsMap = await squareClients
-      const squareClient = squareClientsMap.get(vendor)
+      const squareClient = squareClients.get(vendor)
       const ordersApi = squareClient.ordersApi
 
       try {

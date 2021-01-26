@@ -263,18 +263,14 @@ function Menu () {
       />
     </div>
   )
-  
+
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div>
-      <BuyerHeader  showBackButton='true' backLink='/eat' />
+      <BuyerHeader showBackButton='true' backLink='/eat' />
       <div style={{ paddingBottom: '8.6vh', paddingTop: '8vh' }}>
         {/* Hero Image */}
-        <img
-          src={vendor_data.getVendor.logoUrl}
-          class='hero'
-          alt='hero'
-        />
+        <img src={vendor_data.getVendor.logoUrl} class='hero' alt='hero' />
 
         {/* Vendor Info */}
         <div class='vendorinfocontainer'>

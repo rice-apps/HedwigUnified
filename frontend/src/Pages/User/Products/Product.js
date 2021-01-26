@@ -251,7 +251,7 @@ function Product () {
               }
             }}
           >
-            Add
+            Add to Cart
           </button>
         </div>
       </div>

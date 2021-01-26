@@ -18,6 +18,7 @@ import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import { convertTimeToNum } from '../Vendors/VendorCard.js'
+import {SmallLoadingPage} from './../../../components/LoadingComponents'
 
 // add a proceed to checkout
 function Menu () {
@@ -57,14 +58,14 @@ function Menu () {
   }, [open])
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage/>
   }
   if (vendor_error) {
     return <p>ErrorV...</p>
   }
   // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage/>
   }
   if (catalog_error) {
     console.log('CATALOG ERROR', catalog_error)

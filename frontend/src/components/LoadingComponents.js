@@ -41,7 +41,7 @@ const LoadingWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-rows: auto 27vh 4vh auto;
+  grid-template-rows: auto ${props => props.size } 4vh auto;
   grid-template-columns: 1fr;
   grid-template-areas:
     'blank'
@@ -53,22 +53,24 @@ const LoadingWrapper = styled.div`
 `
 
 const Hedwig = styled.img`
-  height: 25vh;
-  width: 25vh;
+  height: ${props => props.size};
+  width: ${props => props.size};
   grid-area: LogoSpace;
-  animation-name: ${spinAnimation};
-  animation-duration: 2.2s;
+  animation-name: ${props => props.animationName};
+  animation-duration: ${props => props.animationDuration};
   animation-iteration-count: infinite;
 `
 
 const LoadingText = styled.div`
   font-size: 2.5vh;
   font-family: 'avenir';
+  color: #f3725b;
+  font-weight:bold;
   grid-area: TextSpace;
   &:after {
     content: '';
     animation-name: ${textAnimation};
-    animation-duration: 3s;
+    animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
   }
@@ -95,10 +97,24 @@ const LoadingBar = styled.div`
   animation-iteration-count: 1;
 `
 
+
+
+function addVh (i) {
+let vhString = i.toString() + 'vh'
+return vhString
+}
+
 function LoadingPage () {
+
+  let size=25
   return (
-    <LoadingWrapper>
-      <Hedwig src={HedwigLogo} />
+    <LoadingWrapper size={addVh(size + 2)}>
+      <Hedwig
+        src={HedwigLogo}
+        size={addVh(size)}
+        animationName={spinAnimation}
+        animationDuration='2.2s'
+      />
       <LoadingBarWrapper>
         <LoadingBar />
       </LoadingBarWrapper>
@@ -106,4 +122,19 @@ function LoadingPage () {
   )
 }
 
-export { LoadingPage }
+function SmallLoadingPage () {
+  let size=12
+  return (
+    <LoadingWrapper size={addVh(size + 2)}>
+      <Hedwig
+        src={HedwigLogo}
+        size={addVh(size)}
+        animationName={spinAnimation}
+        animationDuration='1.4s'
+      />
+      <LoadingText/>
+    </LoadingWrapper>
+  )
+}
+
+export { LoadingPage, SmallLoadingPage }

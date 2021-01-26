@@ -2,6 +2,7 @@ import VendorsideTemplate from '../VendorComponents/VendorGridContainer.js'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'
 import ItemCatalog from '../VendorComponents/ItemsComponents/ItemCatalog.js'
+import {LoadingPage} from './../../../components/LoadingComponents'
 
 function ItemsMenuManagementPage () {
   const {
@@ -15,7 +16,7 @@ function ItemsMenuManagementPage () {
   })
 
   if (catalog_loading) {
-    return <p>Loading...</p>
+    return <LoadingPage/>
   }
   if (catalog_error) {
     return <p>ErrorC...</p>

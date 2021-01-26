@@ -1,5 +1,6 @@
-import { LoadingPage } from './LoadingComponents'
+import { LoadingPage, SmallLoadingPage } from './LoadingComponents'
+
 
 export default function TestPage () {
-  return <LoadingPage />
+  return <SmallLoadingPage />
 }

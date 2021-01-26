@@ -10,7 +10,7 @@ import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 
 import moment from 'moment'
-
+import {LoadingPage} from './../../../../components/LoadingComponents'
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
     updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
@@ -567,7 +567,7 @@ function EditHoursDashboard () {
   })
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <LoadingPage/>
   }
   if (vendor_error) {
     return <p>Error...</p>

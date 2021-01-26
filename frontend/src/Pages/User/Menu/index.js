@@ -29,7 +29,7 @@ function Menu () {
   const [] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currentVendor, slug, addedItem } = state
+  const { currentVendor, slug, addedItem, addedImage } = state
   const {
     data: catalog_info,
     error: catalog_error,
@@ -268,7 +268,7 @@ function Menu () {
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div style={{position:'relative'}}>
-      {addedItem && <ItemAddedModal item={addedItem}/>}
+      {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage}/>}
       <BuyerHeader showBackButton='true' backLink='/eat' />
       {addedItem && <div> hi </div>}
       <div style={{ paddingBottom: '8.6vh', paddingTop: '8vh', position:'relative' }}>

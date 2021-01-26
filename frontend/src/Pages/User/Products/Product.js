@@ -246,7 +246,7 @@ function Product () {
             onClick={() => {
               if (makeCartItem()) {
                 navigate(`/eat/${vendor.slug}`, {
-                  state: { currentVendor: vendor.name, addedItem:product.name }
+                  state: { currentVendor: vendor.name, addedItem:product.name, addedImage:product.image }
                 })
               }
             }}

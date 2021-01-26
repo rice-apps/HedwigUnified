@@ -1,25 +1,32 @@
 /* Entire pane */
 .profilepane {
-  width: 0;
+  width: 0vw;
   transition: 800ms;
   display: flex;
   margin-left: -35vw;
   position: fixed;
   z-index: 2;
+ 
 }
 
 .profilepane-active {
-  width: 60vw;
-  transition: 500ms;
+  width: 100vw;
+  transition: width 500ms;
   position: fixed;
   z-index: 2;
+  backdrop-filter: blur(8px) brightness(94%);
+
 }
 
 /* Background Color */
 .background {
-  background-color: #faf8f8;
+  background-color: white;
   display: flex;
   flex-direction: column;
+  height:100vh;
+  width: 60vw;
+  position:relative;
+
 }
 
 .close {
@@ -34,8 +41,6 @@
   grid-template-columns: 25% 75%;
   grid-template-rows: 100%;
   height: 13vh;
-
-  background-color: white;
   padding-left: 4vw;
 
   top: 0px;
@@ -150,9 +155,15 @@
 .profilefooter {
   display: flex;
   justify-content: center;
-  height: 41vh;
   width: 100%;
-  background-color: #faf8f8;
-  border-top: #7070701a 1px solid;
-  bottom: 0px;
+  position:absolute;
+  bottom: 3vh;
+  
+
+}
+
+@media only screen and (max-width: 600px) {
+  .profilefooter {
+    bottom:12vh;
+  }
 }

@@ -25,6 +25,10 @@ import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
 import gql from 'graphql-tag.macro'
+import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
+import AboutUs from '../Pages/User/AboutUs'
+import HelpPage from '../Pages/User/Help'
+import TestPage from './TestPage'
 
 /**
  * Requests to verify the user's token on the backend
@@ -153,6 +157,10 @@ export const RoutesComponent = ({ loginCallBack }) => {
       element: <Navigate to='/eat' />
     },
     {
+      path: '/test',
+      element: <TestPage />
+    },
+    {
       path: '/404_page',
       element: <ErrorPage />
     },
@@ -163,6 +171,14 @@ export const RoutesComponent = ({ loginCallBack }) => {
     {
       path: '/auth',
       element: <Auth />
+    },
+    {
+      path: '/help',
+      element: <HelpPage />
+    },
+    {
+      path: '/about_us',
+      element: <AboutUs />
     },
     {
       path: '/signup',
@@ -304,6 +320,16 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute={true}
               element={<SetStoreHoursPage />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/faq',
+          element: (
+            <PrivateRoute
+              isEmployeeRoute={true}
+              element={<FAQ />}
               updateLogin={loginCallBack}
             />
           )

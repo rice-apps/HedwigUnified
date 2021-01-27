@@ -146,9 +146,9 @@ export const PickedUpButton = styled(ButtonWrapper)`
 
 export const Background = styled.div`
   position: fixed;
-  height: 100vh;
+  height: 93vh;
   width: 100vw;
-  top: 0px;
+  bottom: 0px;
   left: 0px;
   backdrop-filter: blur(4px);
   z-index: 1;

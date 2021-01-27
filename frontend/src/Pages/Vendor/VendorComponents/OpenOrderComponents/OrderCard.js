@@ -198,11 +198,28 @@ function MakeModalDetails (props) {
           <div>hi</div>
         ) : props.paymentType === 'TETRA' ? (
           <div>
-            Student ID: <span style={{ fontWeight: 'bold', letterSpacing:'1px' }}> {props.studentId}</span>
+            Student ID:{' '}
+            <span style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
+              {' '}
+              {props.studentId}
+            </span>
           </div>
-        ) : null}
+        ) : props.paymentType === 'COHEN' ? (
+          <div>
+            Cohen ID:{' '}
+            <span style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
+              {props.cohenId}
+            </span>{' '}
+          </div>
+        ) : (
+          <div>Error!</div>
+        )}
       </ModalDetail>
       <ModalSubtitle>Pickup Details:</ModalSubtitle>
+      <ModalDetail>
+        <div>Submitted: <span> {props.submissionTime}</span></div>
+        <div>Pick Up: <span style={{fontWeight:'bold'}}>{props.pickupTime}</span></div>
+      </ModalDetail>
     </ModalOrderDetailsWrapper>
   )
 }
@@ -435,6 +452,8 @@ function MakePaymentSpace (props) {
               email={props.email}
               studentId={props.studentId}
               cohenId={props.cohenId}
+              submissionTime={props.submissionTime}
+              pickupTime={props.pickupTime}
             ></MakeModalDetails>
             {/* <MakeModalParagraph
             paymentType={props.paymentType}

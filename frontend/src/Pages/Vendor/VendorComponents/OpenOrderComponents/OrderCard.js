@@ -32,16 +32,15 @@ import {
   ModalWrapper,
   ModalHeaderWrapper,
   ModalPaymentWrapper,
-  ModalParagraphWrapper,
   ModalOrderDetailsWrapper,
-  ModalOrderDetailRow,
   ModalButtonsWrapper,
   Background,
   ModalOrderWrapper,
   ModalOrderItem,
   ModalItemList,
   ModalSubtitle,
-  ModalDetail
+  ModalDetail,
+  ModalCancelMessage
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -461,12 +460,15 @@ function MakePaymentSpace (props) {
               submissionTime={props.submissionTime}
               pickupTime={props.pickupTime}
             ></MakeModalDetails>
+            {/* <ModalCancelMessage>Are you sure you want to cancel?</ModalCancelMessage> */}
             <ModalButtonsWrapper>
+             
               <CancelButton onClick={closeCancelModal}>Back</CancelButton>
               <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
                 Cancel
               </AcceptButton>
             </ModalButtonsWrapper>
+            <ModalCancelMessage>Are you sure you want to cancel this order?</ModalCancelMessage>
           </ModalWrapper>
         </Background>
       )}

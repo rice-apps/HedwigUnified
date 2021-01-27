@@ -164,11 +164,11 @@ export const ModalWrapper = styled.div`
   position: fixed;
   z-index: 2;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow:  ${props => props.cancel ? '1px 1px 15px 15px rgba(255,0,0,0.3)' : '2px 2px 9px 1pxrgba(0, 0, 0, 0.2)'};
+  box-shadow:  ${props => props.cancel ? '0px 0px 150px 12px rgba(234,144,122,0.6)' : '2px 2px 9px 1pxrgba(0, 0, 0, 0.2)'};
   font-family: 'Metropolis';
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.75fr 2.8fr minmax(0fr, 1fr) 0.8fr;
+  grid-template-rows: 0.75fr 2.8fr ${props => props.cancel ?'1.2fr' :'0.8fr'};
   grid-template-areas:
     'ModalHeaderSpace ModalHeaderSpace'
     'ModalOrderSpace ModalDetailSpace'
@@ -192,17 +192,6 @@ export const ModalHeaderWrapper = styled.div`
   justify-content: center;
 `
 
-export const ModalParagraphWrapper = styled.div`
-  /* background-color: blue; */
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  font-size: 16px;
-  grid-area: ModalParagraph;
-  border-bottom: 1px solid grey;
-`
 
 export const ModalOrderWrapper = styled.div`
   grid-area: ModalOrderSpace;
@@ -262,21 +251,26 @@ flex-direction:column;
 height:100%;
 width:100%;
 align-items:flex-start;
-justify-items:flex-start:
+justify-items:flex-start;
 `
-export const ModalOrderDetailRow = styled.div`
-  width: 35%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 1.2px 0px;
-`
+
 
 export const ModalButtonsWrapper = styled.div`
   grid-area: ModalButtons;
-  margin-top: 1vh;
+  height:80%;
+  width:100%;
+  margin-bottom:2.5vh;
+  position:relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+`
+
+export const ModalCancelMessage = styled.div`
+position:absolute;
+bottom:7.5vh;
+font-size:2.6vh;
+color:#EA907A;
+font-weight:bold;
 `

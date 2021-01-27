@@ -11,9 +11,7 @@ import {
 } from './CartStyledComponents'
 import { HiMinusCircle, HiPlusCircle } from 'react-icons/hi'
 import {FaTimes} from 'react-icons/fa'
-import { BsTrashFill } from 'react-icons/bs'
-// import Dropdown from "react-dropdown";
-// import "react-dropdown/style.css";
+
 
 const QuantitySelectorWrapper = styled.div`
   display: grid;

@@ -143,8 +143,26 @@ export const PickedUpButton = styled(ButtonWrapper)`
   background-color: #deeee7;
 `
 
+export const Background = styled.div`
+position:fixed;
+height:100vh;
+width:100vw;
+top:0px;
+left:0px;
+backdrop-filter:blur(3px);
+z-index:1;
+`
+
 export const ModalWrapper = styled.div`
   display: grid;
+  background-color: white;
+  height: 44vh;
+  width: 44vw;
+  top:28%;
+  left:28%;
+  position: fixed;
+  z-index: 2;
+  border: 1px solid black;
   font-family: 'Metropolis';
   grid-template-columns: 1fr;
   grid-template-rows: 2fr 4fr 5fr 3fr;
@@ -153,9 +171,9 @@ export const ModalWrapper = styled.div`
     'ModalParagraph'
     'ModalOrderDetails'
     'ModalButtons';
-  height: 100%;
-  width: 100%;
   align-items: center;
+  border-radius: 20px;
+
   color: black;
 `
 

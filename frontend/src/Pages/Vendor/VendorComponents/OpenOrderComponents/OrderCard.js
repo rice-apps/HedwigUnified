@@ -6,7 +6,6 @@ import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { FaIdCard } from 'react-icons/fa'
 import { GoVerified } from 'react-icons/go'
-import Modal from 'react-modal'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
 import gql from 'graphql-tag.macro'
@@ -35,7 +34,8 @@ import {
   ModalParagraphWrapper,
   ModalOrderDetailsWrapper,
   ModalOrderDetailRow,
-  ModalButtonsWrapper
+  ModalButtonsWrapper,
+  Background
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -331,20 +331,8 @@ function MakePaymentSpace (props) {
         />
       </ButtonsSpaceWrapper>
 
-      <Modal
-        isOpen={acceptModalIsOpen}
-        style={{
-          content: {
-            backgroundColor: 'white',
-            height: '44vh',
-            width: '44vw',
-            position: 'absolute',
-            top: '28%',
-            left: '28%',
-            borderRadius: '20px'
-          }
-        }}
-      >
+     {acceptModalIsOpen &&
+     <Background>
         <ModalWrapper>
           <MakeModalHeader
             paymentType={props.paymentType}
@@ -388,22 +376,11 @@ function MakePaymentSpace (props) {
             )}
           </ModalButtonsWrapper>
         </ModalWrapper>
-      </Modal>
+        </Background>
+      }
 
-      <Modal
-        isOpen={cancelModalIsOpen}
-        style={{
-          content: {
-            backgroundColor: 'white',
-            height: '44vh',
-            width: '44vw',
-            position: 'absolute',
-            top: '28%',
-            left: '28%',
-            borderRadius: '20px'
-          }
-        }}
-      >
+      {cancelModalIsOpen &&
+      <Background>
         <ModalWrapper>
           <MakeModalHeader
             paymentType={props.paymentType}
@@ -422,7 +399,9 @@ function MakePaymentSpace (props) {
             </AcceptButton>
           </ModalButtonsWrapper>
         </ModalWrapper>
-      </Modal>
+        </Background>
+  
+     }
     </PaymentSpaceWrapper>
   )
 }

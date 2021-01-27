@@ -52,11 +52,9 @@ function Menu () {
     nextFetchPolicy: 'cache-first'
   })
 
-  let categoryBlocks
   let menuBar
   let horizontalMenuItem
   let headerHeight
-  let menuMargin
 
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -64,12 +62,12 @@ function Menu () {
     }
     prevOpen.current = open
     const onScroll = () => {
-      if (!categoryBlocks) {
-        categoryBlocks = document.getElementById('categorymenu')
+      if (!menuBar) {
         menuBar = document.getElementById('horizontalmenu')
         headerHeight = menuBar.getBoundingClientRect().top + menuBar.offsetHeight
+      } else {
+        horizontalMenuItem = menuBar.querySelector('.categoryactive')
       }
-      horizontalMenuItem = menuBar.querySelector('.categoryactive')
       if (horizontalMenuItem) {
         menuBar.scrollLeft = horizontalMenuItem.offsetLeft - 20
       }

@@ -250,6 +250,7 @@ display:flex;
 flex-direction:column;
 height:100%;
 width:100%;
+text-align:left;
 align-items:flex-start;
 justify-items:flex-start;
 `
@@ -259,7 +260,7 @@ export const ModalButtonsWrapper = styled.div`
   grid-area: ModalButtons;
   height:80%;
   width:100%;
-  margin-bottom:2.5vh;
+  margin-bottom:1.8vh;
   position:relative;
   display: flex;
   flex-direction: row;

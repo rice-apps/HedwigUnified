@@ -183,8 +183,8 @@ function MakeModalHeader (props) {
 }
 
 function MakeModalDetails (props) {
-  let phone =props.phone
-  let formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/,"($1) $2-$3")
+  let phone = props.phone
+  let formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
 
   return (
     <ModalOrderDetailsWrapper>
@@ -248,96 +248,7 @@ function MakeModalDetails (props) {
   )
 }
 
-function MakeModalParagraph (props) {
-  const { paymentType, cancel, isVerified } = props
-  if (paymentType === 'TETRA') {
-    return (
-      <ModalParagraphWrapper>
-        <div>
-          This order is paid in <strong>Tetra</strong>. <br />
-          Please <strong>manually</strong> enter the following buyer's
-          information into the
-          <strong> Tetra Reader</strong>.
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else if (paymentType === 'COHEN') {
-    return (
-      <ModalParagraphWrapper>
-        <div>
-          This order is paid with Cohen House <strong>Membership ID</strong>.
-          Please <strong>manually</strong> enter the following buyer's
-          information into the system.
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else if (paymentType === 'CREDIT') {
-    return (
-      <ModalParagraphWrapper>
-        <div style={{ width: '100%' }}>
-          This order is paid in <strong>Credit Card</strong>. <br />
-          {isVerified ? (
-            <ModalPaymentWrapper>
-              Payment Status: Verified <GoVerified color={'#2CA1D5'} />
-            </ModalPaymentWrapper>
-          ) : (
-            <>
-              <div>
-                Payment Status:{' '}
-                <span style={{ color: '#EA907A', fontWeight: 'bold' }}>
-                  Pending
-                </span>
-              </div>
-              <div>
-                Payment has not been completed yet. Please check back later
-              </div>
-            </>
-          )}
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else if (cancel === true) {
-    return (
-      <ModalParagraphWrapper style={{ justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', fontSize: '20px' }}>
-          Are you sure you want to <strong>cancel</strong> this order?
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else {
-    return (
-      <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
-    )
-  }
-}
 
-function MakeModalOrderDetails (props) {
-  const paymentType = props.paymentType
-  return (
-    <ModalOrderDetailsWrapper>
-      <ModalOrderDetailRow>
-        <div>Customer:</div>
-        <div>{props.customerName}</div>
-      </ModalOrderDetailRow>
-      <ModalOrderDetailRow>
-        {paymentType === 'TETRA' ? (
-          <div>Student ID:</div>
-        ) : paymentType === 'COHEN' ? (
-          <div>Membership ID:</div>
-        ) : null}
-        {paymentType === 'TETRA' ? (
-          <div>{props.studentId}</div>
-        ) : paymentType === 'COHEN' ? (
-          <div>{props.cohenId}</div>
-        ) : null}
-      </ModalOrderDetailRow>
-      <ModalOrderDetailRow>
-        <div>Amount:</div>
-        <div>{formatter.format(props.orderTotal)}</div>
-      </ModalOrderDetailRow>
-    </ModalOrderDetailsWrapper>
-  )
-}
 
 function MakePaymentSpace (props) {
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false)
@@ -479,23 +390,11 @@ function MakePaymentSpace (props) {
               submissionTime={props.submissionTime}
               pickupTime={props.pickupTime}
             ></MakeModalDetails>
-            {/* <MakeModalParagraph
-            paymentType={props.paymentType}
-            cancel={false}
-            isVerified={isVerified}
-          />
-          <MakeModalOrderDetails
-            paymentType={props.paymentType}
-            orderTotal={props.orderTotal}
-            customerName={props.customerName}
-            studentId={props.studentId}
-            cohenId={props.cohenId}
-          /> */}
             <ModalButtonsWrapper>
               <CancelButton
                 onClick={() => {
+                  openCancelModal()
                   closeAcceptModal()
-                  cancelOrder()
                 }}
               >
                 Cancel
@@ -522,8 +421,8 @@ function MakePaymentSpace (props) {
 
       {cancelModalIsOpen && (
         <Background>
-          <ModalWrapper>
-          <MakeModalHeader customerName={props.customerName} />
+          <ModalWrapper cancel>
+            <MakeModalHeader customerName={props.customerName} />
             <ModalOrderWrapper>
               <ModalItemList>
                 {items &&

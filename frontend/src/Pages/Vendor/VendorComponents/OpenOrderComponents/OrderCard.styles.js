@@ -127,7 +127,7 @@ export const ButtonWrapper = styled.button`
   align-items: center;
   padding: 5px 20px;
   margin: 0px 15px;
-  margin-bottom: 15px;
+  box-shadow: 0.6px 0.6px 3px 0.5px rgba(0,0,0,0.3);
 `
 export const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
@@ -150,7 +150,7 @@ export const Background = styled.div`
   width: 100vw;
   bottom: 0px;
   left: 0px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px) brightness(75%);
   z-index: 1;
 `
 
@@ -164,7 +164,7 @@ export const ModalWrapper = styled.div`
   position: fixed;
   z-index: 2;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: 2px 2px 9px 1px rgba(0, 0, 0, 0.2);
+  box-shadow:  ${props => props.cancel ? '1px 1px 15px 15px rgba(255,0,0,0.3)' : '2px 2px 9px 1pxrgba(0, 0, 0, 0.2)'};
   font-family: 'Metropolis';
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -175,7 +175,7 @@ export const ModalWrapper = styled.div`
     'ModalButtons ModalButtons';
   align-items: center;
   justify-items: center;
-  border-radius: 5px;
+  border-radius: 12px;
   overflow: hidden;
   color: black;
 `

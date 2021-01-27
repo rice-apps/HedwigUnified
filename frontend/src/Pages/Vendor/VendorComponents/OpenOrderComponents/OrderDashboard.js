@@ -325,6 +325,8 @@ function OrderDashboard () {
           acceptedOrders.map(order => (
             <OrderCard
               id={order.id}
+              studentId={order.studentId}
+              cohenId={order.cohenId}
               customerName={order.customer.name}
               phone={order.customer.phone}
               email={order.customer.email}
@@ -348,6 +350,8 @@ function OrderDashboard () {
           readyOrders.map(order => (
             <OrderCard
               id={order.id}
+              studentId={order.studentId}
+              cohenId={order.cohenId}
               customerName={order.customer.name}
               phone={order.customer.phone}
               email={order.customer.email}

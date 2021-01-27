@@ -158,7 +158,7 @@ export const ModalWrapper = styled.div`
   background-color: white;
   height: 54vh;
   width: 56vw;
-  top: 23vh;
+  top: 15vh;
   font-size: 1.9vh;
   left: 22vw;
   position: fixed;
@@ -182,7 +182,7 @@ export const ModalWrapper = styled.div`
 
 export const ModalHeaderWrapper = styled.div`
   grid-area: ModalHeaderSpace;
-  height: 80%;
+  height: 77%;
   width: 100%;
   font-size: 3.1vh;
   font-weight: bold;
@@ -212,7 +212,7 @@ export const ModalOrderWrapper = styled.div`
   align-items: flex-start;
   grid-template-columns: 1fr;
   grid-template-rows: 3.4fr 0.6fr;
-  overflow: auto;
+  overflow: hidden;
 `
 
 export const ModalItemList = styled.div`
@@ -249,7 +249,6 @@ export const ModalOrderDetailsWrapper = styled.div`
   justify-items: flex-start;
   grid-template-columns: 1fr 1.2fr;
   grid-template-rows: 1fr 1fr 1fr;
-  background-color: pink;
 `
 
 export const ModalSubtitle = styled.div`

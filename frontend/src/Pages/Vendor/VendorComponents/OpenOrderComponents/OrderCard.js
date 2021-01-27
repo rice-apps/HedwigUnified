@@ -12,6 +12,7 @@ import gql from 'graphql-tag.macro'
 import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
+import { AiFillCheckCircle } from 'react-icons/ai'
 import {
   OrderCardWrapper,
   OrderTitleSpaceWrapper,
@@ -182,11 +183,14 @@ function MakeModalHeader (props) {
 }
 
 function MakeModalDetails (props) {
+  let phone =props.phone
+  let formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/,"($1) $2-$3")
+
   return (
     <ModalOrderDetailsWrapper>
       <ModalSubtitle>Buyer Contact:</ModalSubtitle>
       <ModalDetail>
-        <div>Phone: {props.phone}</div>
+        <div>Phone: {formattedPhone}</div>
         <div>Email: {props.email}</div>
       </ModalDetail>
       <ModalSubtitle>Payment Details: </ModalSubtitle>
@@ -195,12 +199,27 @@ function MakeModalDetails (props) {
           Type: <span style={{ fontWeight: 'bold' }}>{props.paymentType}</span>
         </div>
         {props.paymentType === 'CREDIT' ? (
-          <div>hi</div>
+          <div>
+            Status:{' '}
+            <span
+              style={{
+                color: props.isVerified ? '#1cc57f' : '#EA907A',
+                fontWeight: 'bold'
+              }}
+            >
+              {props.isVerified ? (
+                <span>
+                  Verified <AiFillCheckCircle />{' '}
+                </span>
+              ) : (
+                <span>Pending</span>
+              )}
+            </span>
+          </div>
         ) : props.paymentType === 'TETRA' ? (
           <div>
             Student ID:{' '}
             <span style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
-              {' '}
               {props.studentId}
             </span>
           </div>
@@ -209,7 +228,7 @@ function MakeModalDetails (props) {
             Cohen ID:{' '}
             <span style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
               {props.cohenId}
-            </span>{' '}
+            </span>
           </div>
         ) : (
           <div>Error!</div>
@@ -217,8 +236,13 @@ function MakeModalDetails (props) {
       </ModalDetail>
       <ModalSubtitle>Pickup Details:</ModalSubtitle>
       <ModalDetail>
-        <div>Submitted: <span> {props.submissionTime}</span></div>
-        <div>Pick Up: <span style={{fontWeight:'bold'}}>{props.pickupTime}</span></div>
+        <div>
+          Submitted: <span> {props.submissionTime}</span>
+        </div>
+        <div>
+          Pick Up:{' '}
+          <span style={{ fontWeight: 'bold' }}>{props.pickupTime}</span>
+        </div>
       </ModalDetail>
     </ModalOrderDetailsWrapper>
   )

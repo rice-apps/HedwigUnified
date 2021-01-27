@@ -302,6 +302,8 @@ function OrderDashboard () {
               studentId={order.studentId}
               cohenId={order.cohenId}
               customerName={order.customer.name}
+              phone={order.customer.phone}
+              email={order.customer.email}
               submissionTime={order.submissionTime}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -324,6 +326,8 @@ function OrderDashboard () {
             <OrderCard
               id={order.id}
               customerName={order.customer.name}
+              phone={order.customer.phone}
+              email={order.customer.email}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
               submissionTime={order.submissionTime}
@@ -345,6 +349,8 @@ function OrderDashboard () {
             <OrderCard
               id={order.id}
               customerName={order.customer.name}
+              phone={order.customer.phone}
+              email={order.customer.email}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               submissionTime={order.submissionTime}
               items={order.items}

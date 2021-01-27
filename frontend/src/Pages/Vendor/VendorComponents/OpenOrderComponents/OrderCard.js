@@ -176,8 +176,9 @@ function MakeModalOrder (props) {
 }
 
 function MakeModalHeader (props) {
-  const paymentType = props.paymentType
-  return <ModalHeaderWrapper>New Order: Allison Smith</ModalHeaderWrapper>
+  return (
+    <ModalHeaderWrapper>New Order: {props.customerName}</ModalHeaderWrapper>
+  )
 }
 
 function MakeModalDetails (props) {
@@ -185,11 +186,22 @@ function MakeModalDetails (props) {
     <ModalOrderDetailsWrapper>
       <ModalSubtitle>Buyer Contact:</ModalSubtitle>
       <ModalDetail>
-        <div>Phone: (832) 433-4741</div>
-        <div>Email: nth8@rice.edu</div>
+        <div>Phone: {props.phone}</div>
+        <div>Email: {props.email}</div>
       </ModalDetail>
-      <ModalSubtitle>Payment Details:</ModalSubtitle>
-      <div></div>
+      <ModalSubtitle>Payment Details: </ModalSubtitle>
+      <ModalDetail>
+        <div>
+          Type: <span style={{ fontWeight: 'bold' }}>{props.paymentType}</span>
+        </div>
+        {props.paymentType === 'CREDIT' ? (
+          <div>hi</div>
+        ) : props.paymentType === 'TETRA' ? (
+          <div>
+            Student ID: <span style={{ fontWeight: 'bold', letterSpacing:'1px' }}> {props.studentId}</span>
+          </div>
+        ) : null}
+      </ModalDetail>
       <ModalSubtitle>Pickup Details:</ModalSubtitle>
     </ModalOrderDetailsWrapper>
   )
@@ -387,7 +399,7 @@ function MakePaymentSpace (props) {
       {acceptModalIsOpen && (
         <Background>
           <ModalWrapper>
-            <MakeModalHeader />
+            <MakeModalHeader customerName={props.customerName} />
             <ModalOrderWrapper>
               <ModalItemList>
                 {items &&
@@ -416,7 +428,14 @@ function MakePaymentSpace (props) {
                 </div>
               </ModalPaymentWrapper>
             </ModalOrderWrapper>
-            <MakeModalDetails></MakeModalDetails>
+            <MakeModalDetails
+              paymentType={props.paymentType}
+              isVerified={isVerified}
+              phone={props.phone}
+              email={props.email}
+              studentId={props.studentId}
+              cohenId={props.cohenId}
+            ></MakeModalDetails>
             {/* <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}
@@ -461,10 +480,7 @@ function MakePaymentSpace (props) {
       {cancelModalIsOpen && (
         <Background>
           <ModalWrapper>
-            <MakeModalHeader
-              paymentType={props.paymentType}
-              orderNumber={props.orderNumber}
-            />
+            <MakeModalHeader customerName={props.customerName} />
             <MakeModalParagraph cancel />
             <MakeModalOrderDetails
               paymentType={props.paymentType}
@@ -487,6 +503,8 @@ function MakePaymentSpace (props) {
 function OrderCard (props) {
   const {
     customerName,
+    email,
+    phone,
     pickupTime,
     submissionTime,
     items,
@@ -567,6 +585,8 @@ function OrderCard (props) {
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
           items={items}
+          email={email}
+          phone={phone}
           buttonStatus={buttonStatus}
           orderCost={orderCost}
           studentId={props.studentId}
@@ -574,6 +594,8 @@ function OrderCard (props) {
           orderTax={props.orderTotal * 0.0825}
           orderTotal={orderTotal}
           fulfillment={fulfillment}
+          pickupTime={pickupAt}
+          submissionTime={submittedAt}
           paymentType={
             orderTrackerData.getOrderTracker === null
               ? 'None'

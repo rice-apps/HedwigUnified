@@ -18,7 +18,7 @@ const HeaderWrapper = styled.div`
   padding-top: 1vh;
   box-shadow: ${props =>
     props.transparent ? 'none' : '0px 0px 15px 1px rgba(0, 0, 0, 0.2)'};
-  font-family: Omnes;
+  font-family: 'Omnes';
 `
 
 const HedwigLogo = styled.img`

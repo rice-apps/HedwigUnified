@@ -33,7 +33,7 @@ ItemTC.addResolver({
 
       // Define functions for getting category and modifier list data from id
       const categoryId2Name = id =>
-        categories.find(category => category.id === id).categoryData.name
+        categories.find(category => category.id === id)?.categoryData.name
       const modifierListId2Data = id =>
         modifierLists.find(modifierList => modifierList.id === id)
       // Get fields for GraphQL response
@@ -566,7 +566,7 @@ ItemTC.addResolver({
           object: {
             id: '#is_available',
             type: 'CUSTOM_ATTRIBUTE_DEFINITION',
-            customAttributeValues: {
+            customAttributeDefinitionData: {
               allowedObjectTypes: ['ITEM', 'ITEM_VARIATION'],
               name: 'is_available',
               type: 'BOOLEAN',

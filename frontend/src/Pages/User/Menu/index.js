@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import hero from '../../../images/hero.jpg'
 import './index.css'
 import { Link } from 'react-scroll'
@@ -18,6 +18,8 @@ import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import { convertTimeToNum } from '../Vendors/VendorCard.js'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
+import ItemAddedModal from './ItemAdded'
 
 // add a proceed to checkout
 function Menu () {
@@ -27,7 +29,7 @@ function Menu () {
   const [] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currentVendor, slug } = state
+  const { currentVendor, slug, addedItem, addedImage } = state
   const {
     data: catalog_info,
     error: catalog_error,
@@ -77,14 +79,14 @@ function Menu () {
   }, [open])
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage />
   }
   if (vendor_error) {
     return <p>ErrorV...</p>
   }
   // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage />
   }
   if (catalog_error) {
     console.log('CATALOG ERROR', catalog_error)
@@ -303,16 +305,19 @@ function Menu () {
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
+      {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage} />}
       <BuyerHeader showBackButton='true' backLink='/eat' />
-      <div style={{ paddingBottom: '8.6vh' }}>
+      {addedItem && <div> hi </div>}
+      <div
+        style={{
+          paddingBottom: '8.6vh',
+          paddingTop: '8vh',
+          position: 'relative'
+        }}
+      >
         {/* Hero Image */}
-        <img
-          style={{ filter: 'blur(2.5px)' }}
-          src={hero}
-          class='hero'
-          alt='hero'
-        />
+        <img src={vendor_data.getVendor.logoUrl} class='hero' alt='hero' />
 
         {/* Vendor Info */}
         <div class='vendorinfocontainer'>

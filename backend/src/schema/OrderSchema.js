@@ -260,11 +260,13 @@ OrderTC.addResolver({
     type: OrderTC,
     args: {
       orderId: 'String!',
+      vendor: 'String',
       record: UpdateOrderTC.getType()
     },
     resolve: async ({ args }) => {
       const {
         orderId,
+        vendor,
         record: { fulfillment }
       } = args
 

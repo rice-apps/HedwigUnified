@@ -131,7 +131,7 @@ const StyledCheck = styled(AiOutlineCheckCircle)`
   color: green;
   position: absolute;
   bottom: 5vh;
-  font-size:4.5vh;
+  font-size: 4.5vh;
   animation-name: ${checkAnimation};
   animation-duration: 1.7s;
   animation-iteration-count: infinite;
@@ -139,9 +139,9 @@ const StyledCheck = styled(AiOutlineCheckCircle)`
 
 function ItemAddedModal (props) {
   const [timeOut, setTimeOut] = useState(false)
-    setTimeout(function () {
-      setTimeOut(true)
-    }, 1650)
+  setTimeout(function () {
+    setTimeOut(true)
+  }, 1650)
   return (
     <PageWrapper timeout={timeOut}>
       <ModalWrapper>

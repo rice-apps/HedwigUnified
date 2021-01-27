@@ -267,12 +267,17 @@ function Menu () {
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
-    <div style={{position:'relative'}}>
-      {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage}/>}
+    <div style={{ position: 'relative' }}>
+      {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage} />}
       <BuyerHeader showBackButton='true' backLink='/eat' />
       {addedItem && <div> hi </div>}
-      <div style={{ paddingBottom: '8.6vh', paddingTop: '8vh', position:'relative' }}>
-      
+      <div
+        style={{
+          paddingBottom: '8.6vh',
+          paddingTop: '8vh',
+          position: 'relative'
+        }}
+      >
         {/* Hero Image */}
         <img src={vendor_data.getVendor.logoUrl} class='hero' alt='hero' />
 

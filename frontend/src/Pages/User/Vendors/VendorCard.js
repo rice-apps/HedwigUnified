@@ -55,7 +55,7 @@ function VendorCard ({ vendor }) {
     if (!dayObj) return
     // PLAY AROUND WITH CURRENTTIME FOR TESTING PURPOSES
     if (dayObj.isClosed === true) {
-      return {status: 'closed'}
+      return { status: 'closed' }
     }
     const currentTime = testMode
       ? 9

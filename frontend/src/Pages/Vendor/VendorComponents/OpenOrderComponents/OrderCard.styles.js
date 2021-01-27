@@ -87,6 +87,7 @@ export const ItemDescriptionWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-left: 6px;
+  word-break:break-word;
 `
 
 export const PaymentSpaceWrapper = styled.div`
@@ -155,24 +156,25 @@ export const Background = styled.div`
 
 export const ModalWrapper = styled.div`
   background-color: white;
-  height: 50vh;
+  height: 54vh;
   width: 56vw;
-  top: 25vh;
+  top: 23vh;
   left: 22vw;
   position: fixed;
   z-index: 2;
-  border: 1px solid black;
+  border: 1px solid rgba(0,0,0,0.3);
+  box-shadow:2px 2px 9px 1px rgba(0, 0, 0, 0.2);
   font-family: 'Metropolis';
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.7fr 3fr 1fr;
+  grid-template-rows: 0.9fr 2.8fr 0.8fr;
   grid-template-areas:
     'ModalHeaderSpace ModalHeaderSpace'
     'ModalOrderSpace ModalDetailSpace'
     'ModalButtons ModalButtons';
   align-items: center;
   justify-items: center;
-  border-radius: 20px;
+  border-radius: 5px;
   overflow: hidden;
 
   color: black;
@@ -184,7 +186,7 @@ export const ModalHeaderWrapper = styled.div`
   width: 100%;
   font-size: 3.1vh;
   font-weight: bold;
-  align-items: flex-end;
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -205,25 +207,40 @@ export const ModalParagraphWrapper = styled.div`
 export const ModalOrderWrapper = styled.div`
   grid-area: ModalOrderSpace;
   height: 90%;
-  width: 90%;
+  width: 85%;
   display:grid;
+  align-items:flex-start;
   grid-template-columns:1fr;
-  grid-template-rows:3.5fr 1fr;
+  grid-template-rows:3.4fr 0.6fr;
   overflow: auto;
-  background-color: pink;
+ 
 `
 
-
+export  const ModalItemList = styled.div`
+overflow:auto;
+height:100%;
+border-bottom: 1px solid rgba(0,0,0,0.15);
+max-height:100%;
+text-overflow:ellipsis;
+`
 
 export const ModalOrderItem = styled.div`
   display: grid;
-  grid-template-columns: 1.1fr 10fr 3fr;
+  grid-template-columns: 1.1fr 10fr 2.4fr;
   grid-template-rows: 1fr;
+  margin-bottom:1vh;
 `
 
 export const ModalPaymentWrapper = styled.div`
   color: #3d3d3d;
-  font-weight: bold;
+  width:50%;
+  text-align:right;
+  height:90%;
+  align-self:flex-end;
+  display:grid;
+  grid-template-columns:4.65fr 2.4fr;
+  grid-template-rows:1fr 1fr;
+  justify-self:flex-end;
 `
 export const ModalOrderDetailsWrapper = styled.div`
   grid-area: ModalOrderDetails;
@@ -246,7 +263,7 @@ export const ModalOrderDetailRow = styled.div`
 
 export const ModalButtonsWrapper = styled.div`
   grid-area: ModalButtons;
-  margin-top: 4vh;
+  margin-top: 1vh;
   display: flex;
   flex-direction: row;
   justify-content: center;

@@ -37,7 +37,8 @@ import {
   ModalButtonsWrapper,
   Background,
   ModalOrderWrapper,
-  ModalOrderItem
+  ModalOrderItem,
+  ModalItemList
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -130,7 +131,7 @@ function MakeOrderDetails (props) {
 function MakeModalOrder (props) {
   return (
     <ModalOrderItem>
-      <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
+      <div>{props.quantity}</div>
       <ItemDescriptionWrapper>
         <div
           style={{
@@ -166,10 +167,8 @@ function MakeModalOrder (props) {
             {props.modifiers}
           </div>
         )}
-        
       </ItemDescriptionWrapper>
-      <div>{formatter.format(props.price)}</div>
-
+      <div style={{textAlign: 'right'}}>{formatter.format(props.price)}</div>
     </ModalOrderItem>
   )
 }
@@ -384,21 +383,34 @@ function MakePaymentSpace (props) {
               orderNumber={props.orderNumber}
             />
             <ModalOrderWrapper>
-              {console.log('ITEMSSSS', items)}
-              {items &&
-                items.map(function (item) {
-                  let modifiers = item.modifiers?.map(modifier => modifier.name)
+              <ModalItemList>
+                {items &&
+                  items.map(function (item) {
+                    let modifiers = item.modifiers?.map(
+                      modifier => modifier.name
+                    )
 
-                  return (
-                    <MakeModalOrder
-                      quantity={item.quantity}
-                      itemName={item.name}
-                      price={item.totalMoney.amount / 100}
-                      variant={item.variationName}
-                      modifiers={modifiers && [...modifiers].join(', ')}
-                    />
-                  )
-                })}
+                    return (
+                      <MakeModalOrder
+                        quantity={item.quantity}
+                        itemName={item.name}
+                        price={item.totalMoney.amount / 100}
+                        variant={item.variationName}
+                        modifiers={modifiers && [...modifiers].join(', ')}
+                      />
+                    )
+                  })}
+              </ModalItemList>
+              <ModalPaymentWrapper>
+                <div>Tax:</div>
+                <div>
+                  {formatter.format(props.orderTax)}
+                </div>
+                <div> Total:</div>
+                <div style={{  fontWeight:'bold' }}>
+                  {formatter.format(props.orderTotal + props.orderTax)}
+                </div>
+              </ModalPaymentWrapper>
             </ModalOrderWrapper>
             {/* <MakeModalParagraph
             paymentType={props.paymentType}

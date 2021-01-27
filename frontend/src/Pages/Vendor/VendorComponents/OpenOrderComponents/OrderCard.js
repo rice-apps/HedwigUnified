@@ -38,7 +38,9 @@ import {
   Background,
   ModalOrderWrapper,
   ModalOrderItem,
-  ModalItemList
+  ModalItemList,
+  ModalSubtitle,
+  ModalDetail
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -168,7 +170,7 @@ function MakeModalOrder (props) {
           </div>
         )}
       </ItemDescriptionWrapper>
-      <div style={{textAlign: 'right'}}>{formatter.format(props.price)}</div>
+      <div style={{ textAlign: 'right' }}>{formatter.format(props.price)}</div>
     </ModalOrderItem>
   )
 }
@@ -178,12 +180,19 @@ function MakeModalHeader (props) {
   return <ModalHeaderWrapper>New Order: Allison Smith</ModalHeaderWrapper>
 }
 
-function isEmpty (obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false
-    }
-  }
+function MakeModalDetails (props) {
+  return (
+    <ModalOrderDetailsWrapper>
+      <ModalSubtitle>Buyer Contact:</ModalSubtitle>
+      <ModalDetail>
+        <div>Phone: (832) 433-4741</div>
+        <div>Email: nth8@rice.edu</div>
+      </ModalDetail>
+      <ModalSubtitle>Payment Details:</ModalSubtitle>
+      <div></div>
+      <ModalSubtitle>Pickup Details:</ModalSubtitle>
+    </ModalOrderDetailsWrapper>
+  )
 }
 
 function MakeModalParagraph (props) {
@@ -378,10 +387,7 @@ function MakePaymentSpace (props) {
       {acceptModalIsOpen && (
         <Background>
           <ModalWrapper>
-            <MakeModalHeader
-              paymentType={props.paymentType}
-              orderNumber={props.orderNumber}
-            />
+            <MakeModalHeader />
             <ModalOrderWrapper>
               <ModalItemList>
                 {items &&
@@ -403,15 +409,14 @@ function MakePaymentSpace (props) {
               </ModalItemList>
               <ModalPaymentWrapper>
                 <div>Tax:</div>
-                <div>
-                  {formatter.format(props.orderTax)}
-                </div>
+                <div>{formatter.format(props.orderTax)}</div>
                 <div> Total:</div>
-                <div style={{  fontWeight:'bold' }}>
+                <div style={{ fontWeight: 'bold' }}>
                   {formatter.format(props.orderTotal + props.orderTax)}
                 </div>
               </ModalPaymentWrapper>
             </ModalOrderWrapper>
+            <MakeModalDetails></MakeModalDetails>
             {/* <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}

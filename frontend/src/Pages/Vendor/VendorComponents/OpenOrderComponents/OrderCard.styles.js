@@ -144,45 +144,46 @@ export const PickedUpButton = styled(ButtonWrapper)`
 `
 
 export const Background = styled.div`
-position:fixed;
-height:100vh;
-width:100vw;
-top:0px;
-left:0px;
-backdrop-filter:blur(3px);
-z-index:1;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0px;
+  left: 0px;
+  backdrop-filter: blur(4px);
+  z-index: 1;
 `
 
 export const ModalWrapper = styled.div`
-  display: grid;
   background-color: white;
-  height: 44vh;
-  width: 44vw;
-  top:28%;
-  left:28%;
+  height: 50vh;
+  width: 56vw;
+  top: 25vh;
+  left: 22vw;
   position: fixed;
   z-index: 2;
   border: 1px solid black;
   font-family: 'Metropolis';
-  grid-template-columns: 1fr;
-  grid-template-rows: 2fr 4fr 5fr 3fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.7fr 3fr 1fr;
   grid-template-areas:
-    'ModalHeader'
-    'ModalParagraph'
-    'ModalOrderDetails'
-    'ModalButtons';
+    'ModalHeaderSpace ModalHeaderSpace'
+    'OrderSpace DetailSpace'
+    'ModalButtons ModalButtons';
   align-items: center;
   border-radius: 20px;
+  overflow: hidden;
 
   color: black;
 `
 
 export const ModalHeaderWrapper = styled.div`
-  grid-area: ModalHeader;
+  grid-area: ModalHeaderSpace;
   height: 100%;
   width: 100%;
-  font-size: 30px;
-  align-items: center;
+  font-size: 3.1vh;
+  font-weight: bold;
+  align-items: flex-end;
   display: flex;
   flex-direction: row;
   justify-content: center;

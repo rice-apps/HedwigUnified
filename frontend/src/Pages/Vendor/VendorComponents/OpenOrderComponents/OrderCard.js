@@ -128,10 +128,7 @@ function MakeModalHeader (props) {
   const paymentType = props.paymentType
   return (
     <ModalHeaderWrapper>
-      <FaIdCard style={{ marginTop: '3px', marginRight: '12px' }} />
-      {paymentType === 'TETRA' ? <div>Tetra</div> : null}
-      {paymentType === 'COHEN' ? <div>Cohen House Membership ID </div> : null}
-      {paymentType === 'CREDIT' ? <div>Credit Card </div> : null}
+   New Order: Allison Smith
     </ModalHeaderWrapper>
   )
 }
@@ -236,7 +233,7 @@ function MakeModalOrderDetails (props) {
 }
 
 function MakePaymentSpace (props) {
-  const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false)
+  const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(true)
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false)
   function openAcceptModal () {
     setAcceptModalIsOpen(true)
@@ -338,7 +335,7 @@ function MakePaymentSpace (props) {
             paymentType={props.paymentType}
             orderNumber={props.orderNumber}
           />
-          <MakeModalParagraph
+          {/* <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}
             isVerified={isVerified}
@@ -349,7 +346,7 @@ function MakePaymentSpace (props) {
             customerName={props.customerName}
             studentId={props.studentId}
             cohenId={props.cohenId}
-          />
+          /> */}
           <ModalButtonsWrapper>
             <CancelButton
               onClick={() => {

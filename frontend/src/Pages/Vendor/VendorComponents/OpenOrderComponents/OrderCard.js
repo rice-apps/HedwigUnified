@@ -320,7 +320,7 @@ function MakePaymentSpace (props) {
           </strong>
         </div>
         <div>
-          Total: <strong>{formatter.format(props.orderTotal)}</strong>
+          Total: <strong>{formatter.format(props.orderTotal + props.orderTax)}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -513,7 +513,7 @@ function OrderCard (props) {
           orderCost={orderCost}
           studentId={props.studentId}
           cohenId={props.cohenId}
-          orderTax={props.orderTax}
+          orderTax={props.orderTotal * 0.0825}
           orderTotal={orderTotal}
           fulfillment={fulfillment}
           paymentType={

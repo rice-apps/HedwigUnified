@@ -168,7 +168,7 @@ export const ModalWrapper = styled.div`
   font-family: 'Metropolis';
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.75fr 2.8fr 0.8fr;
+  grid-template-rows: 0.75fr 2.8fr minmax(0fr, 1fr) 0.8fr;
   grid-template-areas:
     'ModalHeaderSpace ModalHeaderSpace'
     'ModalOrderSpace ModalDetailSpace'

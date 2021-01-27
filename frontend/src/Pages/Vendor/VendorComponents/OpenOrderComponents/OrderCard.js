@@ -340,7 +340,7 @@ function MakeModalOrderDetails (props) {
 }
 
 function MakePaymentSpace (props) {
-  const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(true)
+  const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false)
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false)
   function openAcceptModal () {
     setAcceptModalIsOpen(true)
@@ -523,13 +523,45 @@ function MakePaymentSpace (props) {
       {cancelModalIsOpen && (
         <Background>
           <ModalWrapper>
-            <MakeModalHeader customerName={props.customerName} />
-            <MakeModalParagraph cancel />
-            <MakeModalOrderDetails
+          <MakeModalHeader customerName={props.customerName} />
+            <ModalOrderWrapper>
+              <ModalItemList>
+                {items &&
+                  items.map(function (item) {
+                    let modifiers = item.modifiers?.map(
+                      modifier => modifier.name
+                    )
+
+                    return (
+                      <MakeModalOrder
+                        quantity={item.quantity}
+                        itemName={item.name}
+                        price={item.totalMoney.amount / 100}
+                        variant={item.variationName}
+                        modifiers={modifiers && [...modifiers].join(', ')}
+                      />
+                    )
+                  })}
+              </ModalItemList>
+              <ModalPaymentWrapper>
+                <div>Tax:</div>
+                <div>{formatter.format(props.orderTax)}</div>
+                <div> Total:</div>
+                <div style={{ fontWeight: 'bold' }}>
+                  {formatter.format(props.orderTotal + props.orderTax)}
+                </div>
+              </ModalPaymentWrapper>
+            </ModalOrderWrapper>
+            <MakeModalDetails
               paymentType={props.paymentType}
-              orderTotal={props.orderTotal}
-              customerName={props.customerName}
-            />
+              isVerified={isVerified}
+              phone={props.phone}
+              email={props.email}
+              studentId={props.studentId}
+              cohenId={props.cohenId}
+              submissionTime={props.submissionTime}
+              pickupTime={props.pickupTime}
+            ></MakeModalDetails>
             <ModalButtonsWrapper>
               <CancelButton onClick={closeCancelModal}>Back</CancelButton>
               <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>

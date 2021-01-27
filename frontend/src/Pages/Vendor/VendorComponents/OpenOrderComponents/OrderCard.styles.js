@@ -69,7 +69,7 @@ export const TimeLeftSpaceWrapper = styled.div`
 `
 
 export const OrderDetailsSpaceWrapper = styled.div`
-  background-color: #fafafa;
+  background-color: white;
   grid-area: OrderDetailsSpace;
   display: flex;
   flex-direction: column;
@@ -168,9 +168,10 @@ export const ModalWrapper = styled.div`
   grid-template-rows: 0.7fr 3fr 1fr;
   grid-template-areas:
     'ModalHeaderSpace ModalHeaderSpace'
-    'OrderSpace DetailSpace'
+    'ModalOrderSpace ModalDetailSpace'
     'ModalButtons ModalButtons';
   align-items: center;
+  justify-items: center;
   border-radius: 20px;
   overflow: hidden;
 
@@ -199,6 +200,25 @@ export const ModalParagraphWrapper = styled.div`
   font-size: 16px;
   grid-area: ModalParagraph;
   border-bottom: 1px solid grey;
+`
+
+export const ModalOrderWrapper = styled.div`
+  grid-area: ModalOrderSpace;
+  height: 90%;
+  width: 90%;
+  display:grid;
+  grid-template-columns:1fr;
+  grid-template-rows:3.5fr 1fr;
+  overflow: auto;
+  background-color: pink;
+`
+
+
+
+export const ModalOrderItem = styled.div`
+  display: grid;
+  grid-template-columns: 1.1fr 10fr 3fr;
+  grid-template-rows: 1fr;
 `
 
 export const ModalPaymentWrapper = styled.div`

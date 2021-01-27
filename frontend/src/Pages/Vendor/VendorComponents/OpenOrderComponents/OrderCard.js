@@ -35,7 +35,9 @@ import {
   ModalOrderDetailsWrapper,
   ModalOrderDetailRow,
   ModalButtonsWrapper,
-  Background
+  Background,
+  ModalOrderWrapper,
+  ModalOrderItem
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -78,6 +80,7 @@ function MakeOrderTime (props) {
   )
 }
 
+// MakeOrderDetails makes the component for a single item on the order dashboard
 function MakeOrderDetails (props) {
   return (
     <OrderDetailsItemWrapper>
@@ -124,13 +127,56 @@ function MakeOrderDetails (props) {
   )
 }
 
+function MakeModalOrder (props) {
+  return (
+    <ModalOrderItem>
+      <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
+      <ItemDescriptionWrapper>
+        <div
+          style={{
+            textTransform: 'uppercase',
+            textAlign: 'left'
+          }}
+        >
+          {props.itemName}
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '2.5vh 1fr',
+            alignItmes: 'center',
+            textAlign: 'left'
+          }}
+        >
+          <BiFoodMenu style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }} />{' '}
+          {props.variant}
+        </div>
+        {props.modifiers && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2.5vh 1fr',
+              alignItems: 'center',
+              textAlign: 'left'
+            }}
+          >
+            <IoIosAddCircleOutline
+              style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }}
+            />{' '}
+            {props.modifiers}
+          </div>
+        )}
+        
+      </ItemDescriptionWrapper>
+      <div>{formatter.format(props.price)}</div>
+
+    </ModalOrderItem>
+  )
+}
+
 function MakeModalHeader (props) {
   const paymentType = props.paymentType
-  return (
-    <ModalHeaderWrapper>
-   New Order: Allison Smith
-    </ModalHeaderWrapper>
-  )
+  return <ModalHeaderWrapper>New Order: Allison Smith</ModalHeaderWrapper>
 }
 
 function isEmpty (obj) {
@@ -256,6 +302,7 @@ function MakePaymentSpace (props) {
 
   let isVerified = false
 
+  let { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
     isVerified = verifyPaymentResult.verifyPayment
   }
@@ -317,7 +364,8 @@ function MakePaymentSpace (props) {
           </strong>
         </div>
         <div>
-          Total: <strong>{formatter.format(props.orderTotal + props.orderTax)}</strong>
+          Total:{' '}
+          <strong>{formatter.format(props.orderTotal + props.orderTax)}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -328,14 +376,31 @@ function MakePaymentSpace (props) {
         />
       </ButtonsSpaceWrapper>
 
-     {acceptModalIsOpen &&
-     <Background>
-        <ModalWrapper>
-          <MakeModalHeader
-            paymentType={props.paymentType}
-            orderNumber={props.orderNumber}
-          />
-          {/* <MakeModalParagraph
+      {acceptModalIsOpen && (
+        <Background>
+          <ModalWrapper>
+            <MakeModalHeader
+              paymentType={props.paymentType}
+              orderNumber={props.orderNumber}
+            />
+            <ModalOrderWrapper>
+              {console.log('ITEMSSSS', items)}
+              {items &&
+                items.map(function (item) {
+                  let modifiers = item.modifiers?.map(modifier => modifier.name)
+
+                  return (
+                    <MakeModalOrder
+                      quantity={item.quantity}
+                      itemName={item.name}
+                      price={item.totalMoney.amount / 100}
+                      variant={item.variationName}
+                      modifiers={modifiers && [...modifiers].join(', ')}
+                    />
+                  )
+                })}
+            </ModalOrderWrapper>
+            {/* <MakeModalParagraph
             paymentType={props.paymentType}
             cancel={false}
             isVerified={isVerified}
@@ -347,58 +412,57 @@ function MakePaymentSpace (props) {
             studentId={props.studentId}
             cohenId={props.cohenId}
           /> */}
-          <ModalButtonsWrapper>
-            <CancelButton
-              onClick={() => {
-                closeAcceptModal()
-                cancelOrder()
-              }}
-            >
-              Cancel
-            </CancelButton>
-            {(props.paymentType !== 'CREDIT') |
-            ((props.paymentType === 'CREDIT') & isVerified) ? (
-              <AcceptButton
+            <ModalButtonsWrapper>
+              <CancelButton
                 onClick={() => {
-                  props.handleClick()
                   closeAcceptModal()
+                  cancelOrder()
                 }}
               >
-                Accept
-              </AcceptButton>
-            ) : (
-              <AcceptButton onClick={closeAcceptModal}>
-                Return To Home
-              </AcceptButton>
-            )}
-          </ModalButtonsWrapper>
-        </ModalWrapper>
+                Cancel
+              </CancelButton>
+              {(props.paymentType !== 'CREDIT') |
+              ((props.paymentType === 'CREDIT') & isVerified) ? (
+                <AcceptButton
+                  onClick={() => {
+                    props.handleClick()
+                    closeAcceptModal()
+                  }}
+                >
+                  Accept
+                </AcceptButton>
+              ) : (
+                <AcceptButton onClick={closeAcceptModal}>
+                  Return To Home
+                </AcceptButton>
+              )}
+            </ModalButtonsWrapper>
+          </ModalWrapper>
         </Background>
-      }
+      )}
 
-      {cancelModalIsOpen &&
-      <Background>
-        <ModalWrapper>
-          <MakeModalHeader
-            paymentType={props.paymentType}
-            orderNumber={props.orderNumber}
-          />
-          <MakeModalParagraph cancel />
-          <MakeModalOrderDetails
-            paymentType={props.paymentType}
-            orderTotal={props.orderTotal}
-            customerName={props.customerName}
-          />
-          <ModalButtonsWrapper>
-            <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
-              Cancel
-            </AcceptButton>
-          </ModalButtonsWrapper>
-        </ModalWrapper>
+      {cancelModalIsOpen && (
+        <Background>
+          <ModalWrapper>
+            <MakeModalHeader
+              paymentType={props.paymentType}
+              orderNumber={props.orderNumber}
+            />
+            <MakeModalParagraph cancel />
+            <MakeModalOrderDetails
+              paymentType={props.paymentType}
+              orderTotal={props.orderTotal}
+              customerName={props.customerName}
+            />
+            <ModalButtonsWrapper>
+              <CancelButton onClick={closeCancelModal}>Back</CancelButton>
+              <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
+                Cancel
+              </AcceptButton>
+            </ModalButtonsWrapper>
+          </ModalWrapper>
         </Background>
-  
-     }
+      )}
     </PaymentSpaceWrapper>
   )
 }
@@ -485,6 +549,7 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          items={items}
           buttonStatus={buttonStatus}
           orderCost={orderCost}
           studentId={props.studentId}

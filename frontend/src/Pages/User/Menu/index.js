@@ -54,8 +54,6 @@ function Menu () {
 
   let menuBar
   let horizontalMenuItem
-  let headerHeight
-
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus()
@@ -64,12 +62,11 @@ function Menu () {
     const onScroll = () => {
       if (!menuBar) {
         menuBar = document.getElementById('horizontalmenu')
-        headerHeight = menuBar.getBoundingClientRect().top + menuBar.offsetHeight
       } else {
         horizontalMenuItem = menuBar.querySelector('.categoryactive')
       }
       if (horizontalMenuItem) {
-        menuBar.scrollLeft = horizontalMenuItem.offsetLeft - 20
+        menuBar.scrollLeft = horizontalMenuItem.offsetLeft - horizontalMenuItem.offsetHeight/2
       }
     }
     window.addEventListener("scroll", onScroll)

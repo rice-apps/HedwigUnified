@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
@@ -478,14 +478,25 @@ function MakePaymentSpace (props) {
   )
 }
 
-function isPastPickup (pickupTime) {
+function isPastPickup (pickupTime, currentTime) {
   let pickupTimeBuffer = 0
-  let currentTime = moment()
   let pastPickup = currentTime.diff(pickupTime, 'minutes') > pickupTimeBuffer
   return pastPickup
 }
 
 function OrderCard (props) {
+  const [currentTime, setCurrentTime] = useState(moment())
+  const [livePickupTime, updateLivePickupTime] = useState(props.pickupTime)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment());
+      updateLivePickupTime(props.pickupTime);
+    }, 5000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
   const {
     customerName,
     email,
@@ -518,16 +529,15 @@ function OrderCard (props) {
   if (orderTrackerError) {
     return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
   }
-
+ 
   // pastPickup is true if current time has past an order's pickuptime + buffer
-  let pastPickup = isPastPickup(moment(pickupTime)) && newOrder
-  console.log(pastPickup)
+  let pastPickup = isPastPickup(moment(livePickupTime),currentTime) && newOrder
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
     ? moment(submissionTime).format('h:mm A')
     : 'None'
-  const timeLeft = moment(pickupTime).fromNow()
+  const timeLeft = moment(livePickupTime).fromNow()
 
   return (
     <IconContext.Provider
@@ -536,7 +546,7 @@ function OrderCard (props) {
       <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle orderNumber='12' customerName={customerName} />
+        <MakeOrderTitle  customerName={customerName} />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime

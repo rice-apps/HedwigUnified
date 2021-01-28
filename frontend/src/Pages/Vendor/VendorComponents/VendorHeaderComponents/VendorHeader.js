@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 import { FaUserCircle } from 'react-icons/fa'
 import moment from 'moment'
@@ -91,6 +91,16 @@ const GET_USER_INFO = gql`
 `
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
+  const [currentTime, setCurrentTime] = useState(
+    moment().format('dddd, MMMM Do h:mm:ss A')
+  )
+  useEffect(() => {
+    const timer = setInterval(() =>
+      {setCurrentTime(moment().format('dddd, MMMM Do h:mm:ss A'))}, 1000
+    );
+    return () => {clearInterval(timer)}
+  }, [])
+
   const user = JSON.parse(localStorage.getItem('userProfile'))
   const navigate = useNavigate()
   function toggleLogoutScreen () {
@@ -98,13 +108,13 @@ function VendorHeader () {
     setShowLogout(!logoutOpen)
   }
 
-  function UpdateTime () {
-    const clock = document.getElementById('clockdisplay')
-    const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
-    if (clock) {
-      clock.textContent = CurrentTime
-    }
-  }
+  // function UpdateTime () {
+  //   const clock = document.getElementById('clockdisplay')
+  //   const CurrentTime = moment().format('dddd, MMMM Do h:mm:ss A')
+  //   if (clock) {
+  //     clock.textContent = CurrentTime
+  //   }
+  // }
 
   function MakeLogoutPopup () {
     const client = useApolloClient()
@@ -132,7 +142,7 @@ function VendorHeader () {
     )
   }
 
-  setInterval(UpdateTime, 1000)
+  // setInterval(UpdateTime, 1000)
 
   return (
     <IconContext.Provider value={{ style: { marginRight: '7px' } }}>
@@ -143,8 +153,8 @@ function VendorHeader () {
         </StyledUserDisplayWrapper>
 
         <DateTimeDisplayWrapper>
-          <div id='clockdisplay'>Loading...</div>
-          <div hidden>{setInterval(UpdateTime, 1000)}</div>
+          <div id='clockdisplay'>{currentTime}</div>
+          {/* <div hidden>{setInterval(UpdateTime, 1000)}</div> */}
         </DateTimeDisplayWrapper>
         {showLogout ? <MakeLogoutPopup /> : null}
       </VendorHeaderWrapper>

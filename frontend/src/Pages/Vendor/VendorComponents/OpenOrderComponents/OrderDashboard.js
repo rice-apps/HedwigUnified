@@ -187,6 +187,7 @@ const ORDER_UPDATED = gql`
   }
 `
 
+
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
 
@@ -313,6 +314,7 @@ function OrderDashboard () {
               handleClick={() => handleOrderClick(order, 'RESERVED')}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}
               buttonStatus='NEW'
+              newOrder
             />
           ))}
       </NewOrderSpaceWrapper>

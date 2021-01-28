@@ -247,8 +247,6 @@ function MakeModalDetails (props) {
   )
 }
 
-
-
 function MakePaymentSpace (props) {
   const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false)
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false)
@@ -286,21 +284,23 @@ function MakePaymentSpace (props) {
         {buttonStatus === 'NEW' ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <AcceptButton
-              onClick={function () {
-                verify_payment({
-                  variables: {
-                    paymentId: props.shopifyOrderId,
-                    vendor: 'Cohen House',
-                    source: 'SHOPIFY'
-                  }
-                })
+            {props.pastPickup ? null : (
+              <AcceptButton
+                onClick={function () {
+                  verify_payment({
+                    variables: {
+                      paymentId: props.shopifyOrderId,
+                      vendor: 'Cohen House',
+                      source: 'SHOPIFY'
+                    }
+                  })
 
-                openAcceptModal()
-              }}
-            >
-              View Payment
-            </AcceptButton>
+                  openAcceptModal()
+                }}
+              >
+                View Payment
+              </AcceptButton>
+            )}
           </ButtonsSpaceWrapper>
         ) : buttonStatus === 'ACCEPTED' ? (
           <ButtonsSpaceWrapper>
@@ -344,6 +344,7 @@ function MakePaymentSpace (props) {
           handleClick={props.handleClick}
           buttonStatus={props.buttonStatus}
           shopifyOrderId={props.shopifyOrderId}
+          pastPickup={props.pastPickup}
         />
       </ButtonsSpaceWrapper>
 
@@ -462,18 +463,26 @@ function MakePaymentSpace (props) {
             ></MakeModalDetails>
             {/* <ModalCancelMessage>Are you sure you want to cancel?</ModalCancelMessage> */}
             <ModalButtonsWrapper>
-             
               <CancelButton onClick={closeCancelModal}>Back</CancelButton>
               <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
                 Cancel
               </AcceptButton>
             </ModalButtonsWrapper>
-            <ModalCancelMessage>Are you sure you want to cancel this order?</ModalCancelMessage>
+            <ModalCancelMessage>
+              Are you sure you want to cancel this order?
+            </ModalCancelMessage>
           </ModalWrapper>
         </Background>
       )}
     </PaymentSpaceWrapper>
   )
+}
+
+function isPastPickup (pickupTime) {
+  let pickupTimeBuffer = 0
+  let currentTime = moment()
+  let pastPickup = currentTime.diff(pickupTime, 'minutes') > pickupTimeBuffer
+  return pastPickup
 }
 
 function OrderCard (props) {
@@ -490,9 +499,9 @@ function OrderCard (props) {
     handleClick,
     buttonStatus,
     cancelClick,
-    id
+    id,
+    newOrder
   } = props
-  // RFC3339
 
   const {
     data: orderTrackerData,
@@ -510,6 +519,10 @@ function OrderCard (props) {
     return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
   }
 
+  // pastPickup is true if current time has past an order's pickuptime + buffer
+  let pastPickup = isPastPickup(moment(pickupTime)) && newOrder
+  console.log(pastPickup)
+
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
     ? moment(submissionTime).format('h:mm A')
@@ -520,8 +533,7 @@ function OrderCard (props) {
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
-      {console.log(orderTrackerData.getOrderTracker)}
-      <OrderCardWrapper>
+      <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
         <MakeOrderTitle orderNumber='12' customerName={customerName} />
@@ -560,6 +572,7 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          pastPickup={pastPickup}
           items={items}
           email={email}
           phone={phone}

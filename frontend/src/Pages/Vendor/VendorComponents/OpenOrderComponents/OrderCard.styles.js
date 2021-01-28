@@ -1,13 +1,12 @@
 import styled from 'styled-components/macro'
 
 export const OrderCardWrapper = styled.div`
-  background-color: white;
+  background-color: ${props => props.pastPickup ? 'rgba(90,90,90,0.05)': 'white'};
   border-radius: 20px;
   border-width: 2px;
   border-color: #cacaca;
   border-style: solid;
   justify-self: center;
-
   display: grid;
   width: 26vw;
   height: max-content;
@@ -24,7 +23,6 @@ export const OrderCardWrapper = styled.div`
 `
 
 export const OrderTitleSpaceWrapper = styled.div`
-  background-color: white;
   font-weight: bolder;
   grid-area: OrderTitleSpace;
   display: grid;
@@ -42,7 +40,6 @@ export const OrderTitleSpaceWrapper = styled.div`
 `
 
 export const OrderTimeSpaceWrapper = styled.div`
-  background-color: white;
   grid-area: OrderTimeSpace;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -69,13 +66,12 @@ export const TimeLeftSpaceWrapper = styled.div`
 `
 
 export const OrderDetailsSpaceWrapper = styled.div`
-  background-color: white;
   grid-area: OrderDetailsSpace;
   display: flex;
   flex-direction: column;
 `
 export const OrderDetailsItemWrapper = styled.div`
-  background-color: #fafafa;
+
   margin: 3px 0px;
   display: grid;
   grid-template-columns: 1.1fr 10fr 3fr;
@@ -91,7 +87,7 @@ export const ItemDescriptionWrapper = styled.div`
 `
 
 export const PaymentSpaceWrapper = styled.div`
-  background-color: white;
+
   border-top: 1px solid grey;
   width: 90%;
   justify-self: center;
@@ -120,6 +116,7 @@ export const ButtonsSpaceWrapper = styled.div`
 `
 export const ButtonWrapper = styled.button`
   border-radius: 20px;
+  opacity:1;
   cursor: pointer;
   border: 0px;
   display: flex;

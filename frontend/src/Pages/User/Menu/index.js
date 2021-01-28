@@ -66,11 +66,12 @@ function Menu () {
         horizontalMenuItem = menuBar.querySelector('.categoryactive')
       }
       if (horizontalMenuItem) {
-        menuBar.scrollLeft = horizontalMenuItem.offsetLeft - horizontalMenuItem.offsetHeight/2
+        menuBar.scrollLeft =
+          horizontalMenuItem.offsetLeft - horizontalMenuItem.offsetHeight / 2
       }
     }
-    window.addEventListener("scroll", onScroll)
-    return () => window.removeEventListener("scroll", onScroll)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [open])
 
   if (vendor_loading) {
@@ -296,7 +297,6 @@ function Menu () {
       </Link>
     </h1>
   ))
- 
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
@@ -317,7 +317,7 @@ function Menu () {
         {/* Vendor Info */}
         <div class='vendorinfocontainer'>
           {/* Vendor Name */}
-          <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
+          <div class='vendortitle'> {vendor_data.getVendor.name} </div>
 
           {/* Vendor Operating Hours */}
           <Button
@@ -327,12 +327,14 @@ function Menu () {
             style={{ backgroundColor: 'white' }}
             onClick={handleToggle}
             disableRipple
+            className='anchorButton'
           >
             {dropdownTitle}
           </Button>
           <Popper
             open={open}
             anchorEl={anchorRef.current}
+            placement='top'
             role={undefined}
             transition
           >
@@ -364,18 +366,20 @@ function Menu () {
         </div>
 
         {/* Category Select Bar */}
-       <div class='categoryselect' id='horizontalmenu'>
-         {horizontalMenu}
-       </div>
- 
-       {/* Products */}
-       <div class='itemlist' id='categorymenu'>
+        <div class='categoryselect' id='horizontalmenu'>
+          {horizontalMenu}
+        </div>
 
+        {/* Products */}
+        <div class='itemlist' id='categorymenu'>
           {/* Appending each category to the list */}
           {categories.map(category => (
-            <div id={category}>
+            <div
+              id={category}
+              // class='categorycontianer'
+            >
               {/* Giving each category a header */}
-              <h3 class='categoryheader'>{category}</h3>
+              <div class='categoryheader'>{category}</div>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
                 .filter(item => item.category === category && item.isAvailable)
@@ -392,14 +396,14 @@ function Menu () {
                       class='itemimage'
                       alt={product.name}
                     />
-                    <h1 class='itemname'>{product.name}</h1>
-                    <p class='itemprice'>
-                      {product.isAvailable
-                        ? formatter.format(
-                            product.variants[0].price.amount / 100
-                          ) + '+'
-                        : 'Unavailable'}
-                    </p>
+                    <div class='itemcontainer'>
+                      <h1 class='itemname'>{product.name}</h1>
+                      <p class='itemprice'>
+                        {formatter.format(
+                          product.variants[0].price.amount / 100
+                        )}
+                      </p>
+                    </div>
                   </div>
                 ))}
             </div>

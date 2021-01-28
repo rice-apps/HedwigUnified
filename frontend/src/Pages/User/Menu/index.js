@@ -126,11 +126,13 @@ function Menu () {
     return navigate(`${product.name}`, {
       state: {
         currProduct: `${product.dataSourceId}`,
-        currVendor: currentVendor,
+        currentVendor: currentVendor,
         slug: slug
       }
     })
   }
+
+  
 
   const current_date = new Date()
 
@@ -300,7 +302,9 @@ function Menu () {
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
+    
     <div style={{ position: 'relative' }}>
+      {console.log(currentVendor)}
       {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage} />}
       <BuyerHeader showBackButton='true' backLink='/eat' />
       {addedItem && <div> hi </div>}

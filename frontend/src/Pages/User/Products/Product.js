@@ -15,7 +15,7 @@ import { SmallLoadingPage } from './../../../components/LoadingComponents'
 function Product () {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currProduct: productId, currVendor: vendorState } = state
+  const { currProduct: productId, currentVendor: currentVendor } = state
 
   const {
     data: product_data,
@@ -23,16 +23,18 @@ function Product () {
     loading: product_loading
   } = useQuery(GET_ITEM, {
     variables: {
-      dataSourceId: productId
+      dataSourceId: productId,
+      vendor: currentVendor
     }
   })
+  // console.log(vnedorState, "CURRENT")
 
   const {
     data: vendor_data,
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: vendorState },
+    variables: { vendor: currentVendor },
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
   })
@@ -49,14 +51,14 @@ function Product () {
     return <SmallLoadingPage />
   }
   if (vendor_error) {
-    return <p>ErrorV...</p>
+    return <p>ErrorV...{vendor_error.message}</p>
   }
 
   if (product_loading) {
     return <SmallLoadingPage />
   }
   if (product_error) {
-    return <p>ErrorP...</p>
+    return <p>ErrorP...{product_error.message}</p>
   }
 
   const { getItem: product } = product_data

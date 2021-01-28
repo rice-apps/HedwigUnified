@@ -37,8 +37,8 @@ const Div = styled.div`
 `
 
 const GET_AVAILABILITIES = gql`
-  query GET_AVAILABILITIES($productIds: [String!]) {
-    getAvailabilities(productIds: $productIds)
+  query GET_AVAILABILITIES($productIds: [String!], $vendor: String!) {
+    getAvailabilities(productIds: $productIds, vendor: $vendor)
   }
 `
 
@@ -183,9 +183,15 @@ function CartDetail () {
     { value: 'COHEN', label: 'Cohen House' }
   ]
   // const defaultPaymentOption = options[0];
+  const cart_menu = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('cartItems'))
+  : null
+const order = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('order'))
+  : null
 
   const { loading, error, data } = useQuery(GET_VENDOR, {
-    variables: { filter: { name: 'Cohen House' } }
+    variables: { filter: { name: order.vendor.name } }
   })
   const [
     createOrder,
@@ -198,12 +204,7 @@ function CartDetail () {
 
   const navigate = useNavigate()
   // add catch statement
-  const cart_menu = localStorage.getItem('cartItems')
-    ? JSON.parse(localStorage.getItem('cartItems'))
-    : null
-  const order = localStorage.getItem('cartItems')
-    ? JSON.parse(localStorage.getItem('order'))
-    : null
+ 
 
   console.log(cart_menu)
 
@@ -214,7 +215,7 @@ function CartDetail () {
     : null
 
   const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
-    variables: { productIds: product_ids },
+    variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
   })
 
@@ -254,6 +255,7 @@ function CartDetail () {
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
+          vendor: order.vendor.name,
           sourceId: 'cnon:card-nonce-ok',
           orderId: orderJson.id,
           location: order.vendor.locationIds[0],

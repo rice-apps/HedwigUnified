@@ -14,9 +14,11 @@ import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 import { LoadingPage } from './../../../../components/LoadingComponents'
 
+const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+
 const FIND_ORDERS = gql`
-  query FIND_ORDERS($location: [String!]!) {
-    findOrders(locations: $location) {
+  query FIND_ORDERS($location: [String!]!, $vendor: String!) {
+    findOrders(locations: $location, vendor: $vendor) {
       orders {
         id
         studentId
@@ -72,9 +74,11 @@ const UPDATE_ORDER = gql`
     $orderId: String!
     $uid: String!
     $state: FulFillmentStatusEnum!
+    $vendor:String!
   ) {
     updateOrder(
       orderId: $orderId
+      vendor: $vendor
       record: { fulfillment: { uid: $uid, state: $state } }
     ) {
       fulfillment {
@@ -187,14 +191,13 @@ const ORDER_UPDATED = gql`
   }
 `
 
-
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId }
+      variables: { location: vendorId, vendor: currentUser.vendor }
     }
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
@@ -264,6 +267,7 @@ function OrderDashboard () {
   const handleOrderClick = (order, orderState) => {
     updateOrder({
       variables: {
+        vendor: currentUser.vendor,
         orderId: order.id,
         uid: order.fulfillment.uid,
         state: orderState

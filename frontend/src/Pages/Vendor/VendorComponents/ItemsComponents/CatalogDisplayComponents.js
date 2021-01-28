@@ -8,6 +8,8 @@ import { useQuery, useMutation } from '@apollo/client'
 import uuid from 'react-uuid'
 import ClipLoader from 'react-spinners/ClipLoader'
 
+const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+
 const DisplayWrapper = styled.div`
   font-size: 25px;
   color: #0f0f0f;

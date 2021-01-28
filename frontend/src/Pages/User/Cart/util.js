@@ -34,9 +34,11 @@ export const CREATE_ORDER = gql`
     $type: PaymentSourceEnum!
     $cohenId: String
     $email: String!
+    $vendor: String!
   ) {
     createOrder(
       locationId: $location
+      vendor: $vendor
       record: {
         studentId: $studentId
         idempotencyKey: $key
@@ -84,8 +86,10 @@ export const CREATE_PAYMENT = gql`
     $subtotal: Int!
     $currency: String!
     $location: String!
+    $vendor: String!
   ) {
     createPayment(
+      vendor: $vendor
       record: {
         source: SHOPIFY
         sourceId: "cnon:card-nonce-ok"
@@ -149,6 +153,7 @@ export const createRecord = (items, paymentType, cohenId) => {
   const user = JSON.parse(localStorage.getItem('userProfile'))
   const order = JSON.parse(localStorage.getItem('order'))
   return {
+    vendor: order.vendor.name,
     studentId: user.studentId,
     key: uuidv4(),
     lineItems: getLineItems(items),

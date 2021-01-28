@@ -51,11 +51,26 @@ function Menu () {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
   })
+
+  let menuBar
+  let horizontalMenuItem
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus()
     }
     prevOpen.current = open
+    const onScroll = () => {
+      if (!menuBar) {
+        menuBar = document.getElementById('horizontalmenu')
+      } else {
+        horizontalMenuItem = menuBar.querySelector('.categoryactive')
+      }
+      if (horizontalMenuItem) {
+        menuBar.scrollLeft = horizontalMenuItem.offsetLeft - horizontalMenuItem.offsetHeight/2
+      }
+    }
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
   }, [open])
 
   if (vendor_loading) {
@@ -265,6 +280,24 @@ function Menu () {
     </div>
   )
 
+  const horizontalMenu = categories.map(category => (
+    // smooth scrolling feature
+    <h1 class='categoryname' category={category}>
+      <Link
+        activeClass='categoryactive'
+        style={{ textDecoration: 'none', color: 'black' }}
+        to={category}
+        smooth
+        spy
+        duration={500}
+        offset={-20}
+      >
+        {category}
+      </Link>
+    </h1>
+  ))
+ 
+
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div style={{ position: 'relative' }}>
@@ -331,27 +364,13 @@ function Menu () {
         </div>
 
         {/* Category Select Bar */}
-        <div class='categoryselect'>
-          {categories.map(category => (
-            // smooth scrolling feature
-            <h1 class='categoryname'>
-              <Link
-                activeClass='categoryactive'
-                style={{ textDecoration: 'none', color: 'black' }}
-                to={category}
-                smooth
-                spy
-                duration={500}
-                offset={-20}
-              >
-                {category}
-              </Link>
-            </h1>
-          ))}
-        </div>
+       <div class='categoryselect' id='horizontalmenu'>
+         {horizontalMenu}
+       </div>
+ 
+       {/* Products */}
+       <div class='itemlist' id='categorymenu'>
 
-        {/* Products */}
-        <div class='itemlist'>
           {/* Appending each category to the list */}
           {categories.map(category => (
             <div id={category}>

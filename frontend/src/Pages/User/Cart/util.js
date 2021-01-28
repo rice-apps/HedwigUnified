@@ -80,32 +80,6 @@ export const CREATE_ORDER = gql`
   }
 `
 
-export const CREATE_SQUARE_PAYMENT = gql`
-  mutation(
-    $orderId: String!
-    $subtotal: Int!
-    $currency: String!
-    $location: String!
-  ) {
-    createPayment(
-      record: {
-        source: SQUARE
-        sourceId: "cnon:card-nonce-ok"
-        orderId: $orderId
-        locationId: $location
-        subtotal: { amount: $subtotal, currency: $currency }
-      }
-    ) {
-      id
-      url
-      total {
-        amount
-        currency
-      }
-    }
-  }
-`
-
 export const CREATE_PAYMENT = gql`
   mutation(
     $orderId: String!

@@ -15,6 +15,7 @@ import {
 } from 'react-square-payment-form';
 import 'react-square-payment-form/lib/default.css';
 
+
 const SquarePayment = () => {
   const [errorMessages, setErrorMessages] = useState([]);
   const navigate = useNavigate();
@@ -27,7 +28,6 @@ const SquarePayment = () => {
     return <p>{payment_error.message}</p>
   }
 
-
   const userProfile = JSON.parse(localStorage.getItem('userProfile'));
   const order = JSON.parse(localStorage.getItem("order"));
   const cartItems = JSON.parse(localStorage.getItem("cartItems"));
@@ -39,7 +39,6 @@ const SquarePayment = () => {
 
     setErrorMessages([]);
 
-    console.log(nonce)
     const createPaymentResponse = await createPayment({
         variables: {
           vendor: order.vendor.name,
@@ -49,11 +48,11 @@ const SquarePayment = () => {
           location: order.vendor.locationIds[0],
           subtotal: order.totals.subtotal*100,
           currency: 'USD',
+          token: buyerVerificationToken
         }
     })
     console.log(createPaymentResponse);
     console.log('payment created as above');
-    // TO DO: check if payment is successfully created
     navigate('/eat/confirmation');
 }
 

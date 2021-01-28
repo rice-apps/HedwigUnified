@@ -294,11 +294,13 @@ function CartDetail () {
         }
       }
       if (paymentMethod === 'COHEN') {
+        setLocalStorage();
         // navigate to order confirmation page
         return navigate('/eat/confirmation')
       }
       if (paymentMethod === 'TETRA') {
         // navigate to order confirmation page
+        setLocalStorage();
         return navigate('/eat/confirmation')
       }
     }
@@ -424,7 +426,6 @@ function CartDetail () {
     )
     console.log('NEW PICKUP TIME', order)
   }
-  console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
     <div>
       <CartHeader

@@ -6,7 +6,7 @@ const OrderDashboardWrapper = styled.div`
   background-color: #f7f7f7;
 
   overflow: hidden;
-
+position:relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 45px auto;

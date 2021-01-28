@@ -4,10 +4,7 @@ import styled from 'styled-components/macro'
  *  Need to override font for element inside of MainDiv!
  */
 const MainDiv = styled.div`
-  @font-face {
-    font-family: 'Omnes';
-    src: local('Omnes'), url(../../fonts/Omnes-Font/Omnes/Omnes.ttf);
-  }
+font-family:'Omnes';
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -39,7 +36,7 @@ const Title = styled.h1`
   color: #f3725b;
   font-size: 3.3rem;
   margin: 0.1rem;
-  font-family: Omnes;
+  font-family: 'Omnes';
   font-style: normal;
   font-weight: 500;
 `

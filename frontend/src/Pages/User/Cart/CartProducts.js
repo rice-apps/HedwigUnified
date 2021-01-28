@@ -10,9 +10,8 @@ import {
   ShelfItemProduct
 } from './CartStyledComponents'
 import { HiMinusCircle, HiPlusCircle } from 'react-icons/hi'
-import { BsTrashFill } from 'react-icons/bs'
-// import Dropdown from "react-dropdown";
-// import "react-dropdown/style.css";
+import {FaTimes} from 'react-icons/fa'
+
 
 const QuantitySelectorWrapper = styled.div`
   display: grid;
@@ -30,13 +29,13 @@ function QuantitySelector ({ quantity, decrease, increase }) {
     <QuantitySelectorWrapper>
       <HiMinusCircle
         onClick={quantity === 1 ? null : decrease}
-        style={{ opacity: '0.85', cursor: 'pointer' }}
+        style={{ opacity: quantity === 1 ? '0.35' : '0.85', cursor: 'pointer', fontSize:'2.3vh' }}
       />
 
       <div style={{ margin: '0px 7px' }}>{quantity}</div>
       <HiPlusCircle
         onClick={increase}
-        style={{ opacity: '0.85', cursor: 'pointer' }}
+        style={{ opacity: '0.85', cursor: 'pointer', fontSize:'2.3vh' }}
       />
     </QuantitySelectorWrapper>
   )
@@ -112,8 +111,8 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   console.log(product)
   return (
     <ShelfItemWrapper>
-      <BsTrashFill
-        style={{ cursor: 'pointer', fontSize: '2vh' }}
+      <FaTimes
+        style={{ cursor: 'pointer', fontSize: '2.5vh', opacity: '0.8' , color:'#E05B5B'}}
         onClick={() => {
           deleteCartItem()
           forceUpdate(date.getTime())

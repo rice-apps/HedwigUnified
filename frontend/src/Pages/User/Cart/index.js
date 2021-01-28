@@ -254,7 +254,7 @@ function CartDetail () {
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
-          source: 'SQUARE', // FOR TESTING PURPOSES
+          source: 'SHOPIFY', // FOR TESTING PURPOSES
           sourceId: 'cnon:card-nonce-ok',
           orderId: orderJson.id,
           location: order.vendor.locationIds[0],
@@ -262,11 +262,16 @@ function CartDetail () {
           currency: 'USD'
         }
       })
-      localStorage.setItem(
-        'order',
+      function setLocalStorage(source){
+        var paymentUrl;
+        if (source === 'SHOPIFY'){ 
+          paymentUrl = createPaymentResponse.data.createPayment.url;
+        }
+        localStorage.setItem('order',
         JSON.stringify(
           Object.assign(order, {
             orderId: orderJson.id,
+            subtotal: totals.subtotal,
             pickupInstruction: data.getVendor.pickupInstruction,
             fulfillment: {
               uid: orderJson.fulfillment.uid,
@@ -274,21 +279,29 @@ function CartDetail () {
               pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
               placedAt: orderJson.fulfillment.pickupDetails.placedAt
             },
-            url: createPaymentResponse.data.createPayment.url
+            url: paymentUrl,
           })
         )
-      )
+        )
+      }
       if (paymentMethod === 'CREDIT') {
-        // navigate to Almost there page
-        return navigate('/eat/square')
-        //return handleClickCredit()
+        // if (order.vendor.name === 'Cohen House'){ 
+        //   setLocalStorage('SHOPIFY');
+        //   return handleClickCredit();
+        // }
+        // else if (order.vendor.name === 'East West Tea'){
+          setLocalStorage();
+          return navigate('/eat/square') // FOR TESTING PURPOSES
+        // }
       }
       if (paymentMethod === 'COHEN') {
+        setLocalStorage();
         // navigate to order confirmation page
         return navigate('/eat/confirmation')
       }
       if (paymentMethod === 'TETRA') {
         // navigate to order confirmation page
+        setLocalStorage();
         return navigate('/eat/confirmation')
       }
     }
@@ -414,7 +427,6 @@ function CartDetail () {
     )
     console.log('NEW PICKUP TIME', order)
   }
-  console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
     <div>
       <CartHeader

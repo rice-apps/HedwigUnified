@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-
+import { useMutation } from '@apollo/client'
+import { CREATE_PAYMENT } from './util';
+import { useNavigate } from 'react-router-dom'
 import {
   SquarePaymentForm,
   ApplePayButton,
@@ -13,13 +15,28 @@ import {
 } from 'react-square-payment-form';
 import 'react-square-payment-form/lib/default.css';
 
+// get these two id's from backend
 const APPLICATION_ID = 'REPLACE-ME';
 const LOCATION_ID = 'REPLACE-ME';
 
+
 const SquarePayment = () => {
   const [errorMessages, setErrorMessages] = useState([]);
-
-  function cardNonceResponseReceived(errors, nonce, cardData, buyerVerificationToken) {
+  const navigate = useNavigate();
+  const [
+    createPayment,
+    { loading: payment_loading, error: payment_error }
+  ] = useMutation(CREATE_PAYMENT)
+  if (payment_loading) return <p>Creating new payment. Please wait ...</p>
+  if (payment_error) {
+    return <p>{payment_error.message}</p>
+  }
+  
+  
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  const order = JSON.parse(localStorage.getItem("order"));
+  const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+  async function cardNonceResponseReceived(errors, nonce, cardData, buyerVerificationToken) {
     if (errors) {
       setErrorMessages(errors.map(error => error.message));
       return;
@@ -28,8 +45,23 @@ const SquarePayment = () => {
     setErrorMessages([]);
 
     alert('nonce created: ' + nonce + ', buyerVerificationToken: ' + buyerVerificationToken);
-    // API.post('/payments', data: { nonce: nonce, buyerVerificationToken: buyerVerificationToken }) // implement this
-  }
+    console.log(order)
+    const createPaymentResponse = await createPayment({
+        variables: {
+          source: 'SQUARE',
+          sourceId: nonce,
+          orderId: order.orderId,
+          location: order.vendor.locationIds[0],
+          subtotal: order.subtotal,
+          currency: 'USD',
+          token: buyerVerificationToken
+        }
+    })
+    console.log(createPaymentResponse);
+    console.log('payment created as above');
+    // TO DO: check if payment is successfully created   
+    navigate('/eat/confirmation');
+}
 
   function createPaymentRequest() {
     return {
@@ -38,34 +70,25 @@ const SquarePayment = () => {
       currencyCode: 'USD',
       countryCode: 'US',
       total: {
-        label: 'MERCHANT NAME',
-        amount: '1',
+        label: order.vendor.name,
+        amount: JSON.stringify(parseInt(order.subtotal) * 100),
         pending: false,
       },
-      lineItems: [
-        {
-          label: 'Subtotal',
-          amount: '1',
-          pending: false,
-        },
-      ],
+      lineItems: cartItems
     };
   }
 
   function createVerificationDetails() {
-    return {
-      amount: '100.00',
+      return {
+      amount: JSON.stringify(parseInt(order.subtotal) * 100),
       currencyCode: 'USD',
       intent: 'CHARGE',
       billingContact: {
-        familyName: 'Smith',
-        givenName: 'John',
-        email: 'jsmith@example.com',
-        country: 'GB',
-        city: 'London',
-        addressLines: ["1235 Emperor's Gate"],
-        postalCode: 'SW7 4JA',
-        phone: '020 7946 0532',
+        familyName: userProfile.name.split(" ")[0],
+        givenName: userProfile.name.split(" ")[1],
+        country: 'US',
+        city: 'Houston',
+        phone: userProfile.phone
       },
     };
   }
@@ -92,7 +115,7 @@ const SquarePayment = () => {
       applicationId={"sandbox-sq0idb-hBUTdIbzD347gzqVsdgIyw"}
       locationId= {"LBBZPB7F5A100"}
       cardNonceResponseReceived={cardNonceResponseReceived}
-      createPaymentRequest={createPaymentRequest}
+      createPaymentRequest={createPaymentRequest} //Invoked when a digital wallet payment button is clicked.
       createVerificationDetails={createVerificationDetails}
       postalCode={postalCode}
       focusField={focusField}

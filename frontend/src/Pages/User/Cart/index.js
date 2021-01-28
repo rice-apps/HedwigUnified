@@ -254,6 +254,7 @@ function CartDetail () {
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
+          source: 'SQUARE', // FOR TESTING PURPOSES
           sourceId: 'cnon:card-nonce-ok',
           orderId: orderJson.id,
           location: order.vendor.locationIds[0],
@@ -279,7 +280,8 @@ function CartDetail () {
       )
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
-        return handleClickCredit()
+        return navigate('/eat/square')
+        //return handleClickCredit()
       }
       if (paymentMethod === 'COHEN') {
         // navigate to order confirmation page

@@ -1,5 +1,5 @@
-import { LoadingPage, SmallLoadingPage } from './LoadingComponents'
+import SquarePayment from '../Pages/User/Cart/SquarePayment'
 
 export default function TestPage () {
-  return <SmallLoadingPage />
+  return <SquarePayment />
 }

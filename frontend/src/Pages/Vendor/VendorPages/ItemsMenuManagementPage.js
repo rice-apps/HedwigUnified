@@ -5,13 +5,14 @@ import ItemCatalog from '../VendorComponents/ItemsComponents/ItemCatalog.js'
 import { LoadingPage } from './../../../components/LoadingComponents'
 
 function ItemsMenuManagementPage () {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const {
     data: catalog_info,
     error: catalog_error,
     loading: catalog_loading
   } = useQuery(GET_CATALOG, {
     variables: {
-      vendor: 'East West Tea'
+      vendor: currentUser.vendor
     }
   })
 

@@ -140,13 +140,14 @@ function isEmpty (obj) {
 }
 
 function BasicInfoDashboard () {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const [updateBasicInfo, { data, loading, error }] = useMutation(UPDATE_VENDOR)
   const {
     data: vendorData,
     loading: vendorLoading,
     error: vendorError
   } = useQuery(GET_VENDOR_INFO, {
-    variables: { name: 'Cohen House' }
+    variables: { name: currentUser.vendor }
   })
   const [updatedInfo, setUpdatedInfo] = useState({})
 

@@ -42,6 +42,7 @@ const UPDATE_VENDOR = gql`
 `
 
 function CreateStatusDropdown (props) {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
   async function onChangeIsClosed (value) {
@@ -65,7 +66,7 @@ function CreateStatusDropdown (props) {
 
     await toggleIsClosed({
       variables: {
-        name: 'Cohen House',
+        name: currentUser.vendor,
         hours: updatedHours
       }
     })
@@ -100,7 +101,7 @@ function CreateStatusDropdown (props) {
           <option value='CLOSED'>Closed</option>
         </StatusDropdown>
       )}
-      <IoMdArrowDropdown style={{ position: 'absolute', right: '1.0vw' }} />
+      <IoMdArrowDropdown style={{ position: 'absolute', right: '2.95vh' }} />
     </StatusColumn>
   )
 }
@@ -111,6 +112,7 @@ function HoursItem (props) {
   const [updateDeleteTime, { data, loading, error }] = useMutation(
     UPDATE_VENDOR
   )
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
 
   async function deleteStartEndTime () {
     const originalHours = props.currentHours
@@ -151,7 +153,7 @@ function HoursItem (props) {
 
     await updateDeleteTime({
       variables: {
-        name: 'Cohen House',
+        name: currentUser.vendor,
         hours: updatedHours
       }
     })
@@ -187,6 +189,7 @@ function formatTime (timeString) {
 }
 
 function MakeTimeInput (props) {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
   let startTime = null
@@ -220,7 +223,7 @@ function MakeTimeInput (props) {
 
       toggleIsClosed({
         variables: {
-          name: 'Cohen House',
+          name: currentUser.vendor,
           hours: updatedHours
         }
       })
@@ -231,6 +234,7 @@ function MakeTimeInput (props) {
   }
   // This function formats the time so that it is not in 24h format
   function updateAddedTime (addedTime) {
+    const currentUser = JSON.parse(localStorage.getItem('userProfile'))
     const updateHourState = props.setHours
     let halfOfDay = ''
     let formattedHour = ''
@@ -272,6 +276,7 @@ function MakeTimeInput (props) {
 }
 
 function MakeAddHoursButton (props) {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -320,7 +325,7 @@ function MakeAddHoursButton (props) {
 
     await toggleIsClosed({
       variables: {
-        name: 'Cohen House',
+        name: currentUser.vendor,
         hours: updatedHours
       }
     })
@@ -394,6 +399,7 @@ function MakeAddHoursButton (props) {
 }
 
 function EditHoursDashboard () {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
 
   const {
@@ -401,7 +407,7 @@ function EditHoursDashboard () {
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: 'Cohen House' }
+    variables: { vendor: currentUser.vendor }
   })
 
   if (vendor_loading) {
@@ -461,7 +467,7 @@ function EditHoursDashboard () {
 
     await toggleIsClosed({
       variables: {
-        name: 'Cohen House',
+        name: currentUser.vendor,
         hours: updatedHours
       }
     })

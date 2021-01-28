@@ -8,7 +8,7 @@ import { useQuery, useMutation } from '@apollo/client'
 import uuid from 'react-uuid'
 import ClipLoader from 'react-spinners/ClipLoader'
 
-const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+
 
 const DisplayWrapper = styled.div`
   font-size: 25px;
@@ -54,6 +54,7 @@ const ItemPrice = styled.div`
 `
 
 function MakeCatalogItems (props) {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
@@ -66,6 +67,7 @@ function MakeCatalogItems (props) {
     loading: availability_loading
   } = useQuery(GET_ITEM_AVAILABILITY, {
     variables: {
+      vendor: currentUser.vendor,
       productId: props.itemId
     },
     fetchPolicy: 'network-only'
@@ -90,6 +92,7 @@ function MakeCatalogItems (props) {
           onChange={e => {
             setAvailability({
               variables: {
+                vendor: currentUser.vendor,
                 productId: props.itemId,
                 isItemAvailable: e.target.checked
               }

@@ -112,17 +112,18 @@ const DescriptionBlock = styled.div`
 const GoalTitle = styled.p`
   position: relative;
   color: #f3725b;
-  font-size: 18pt;
+  font-size: 4vh;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
   margin: 2%;
+  padding: 2vh 0vw 1vh 0vw;
 `
 const GoalText = styled.p`
   margin-left: 6%;
   margin-right: 6%;
   margin-top: 3%;
-  font-size: 12pt;
+  font-size: 2.2vh;
   text-align: justify;
 `
 
@@ -130,7 +131,8 @@ const ContactText = styled.p`
   margin-left: 6%;
   margin-right: 6%;
   margin-top: 0%;
-  font-size: 12pt;
+  font-size: 2.2vh;
+  padding-bottom: 2vh;
 `
 
 const AboutUs = () => {
@@ -179,18 +181,16 @@ const AboutUs = () => {
         <HeadShot src={Helena} name='Helena Hu' position='Developer' />
       </PhotoGrid>
       <DescriptionBlock>
-        <GoalTitle>What is Hedwig?</GoalTitle>
+        <GoalTitle>Our Goal</GoalTitle>
         <GoalText>
-          Hedwig is a web application built by RiceApps that enables members of
-          the Rice community to order food for pickup on campus from Rice
-          vendors such as Cohen House and East West Tea. In just a few clicks,
-          any member of the Rice community can place an order for pickup, pay
-          using credit card or Rice specific forms of payment such as Tetra or
-          Cohen House Club Card, and receive updates on its status in real-time.
-          Similarly, vendors can view and interact with orders in real-time,
-          with a comprehensive order management solution backed by a powerful
-          publicly-traded company. Hedwig currently only services breakfast and
-          lunch from Cohen House Curbside at the Club.
+        A revolutionary project designed from the ground up by Rice students for the Rice Community. 
+        In this challenging time, it is imperative that we take all necessary precautions as we begin 
+        to navigate life inside the “new normal” of the post COVID-19 era. That is why we have built Hedwig, 
+        a web experience which enables Rice students, faculty, and staff to engage with campus food 
+        establishments in a safe and frictionless manner. In just a few clicks, any member of the Rice 
+        community can place an order and receive updates on its status in real-time; similarly, vendors 
+        can view and interact with new orders in real-time, with a comprehensive order management solution 
+        backed by a powerful publicly-traded company.
         </GoalText>
         <GoalTitle>Contact us</GoalTitle>
         <ContactText>

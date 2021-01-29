@@ -23,7 +23,7 @@ import Helena from '../../../images/Helena.jpeg'
 const MainDiv = styled.div`
   width: 100vw;
   display: grid;
-  grid-template-rows: 3% 15% 64%; //have to use max of 50% or user width? or maybe min
+  grid-template-rows: 6vh auto auto; //have to use max of 50% or user width? or maybe min
   text-align: center;
   align-items: center;
   justify-items: center;
@@ -49,6 +49,7 @@ const HeaderWrapper = styled.div`
 const AboutText = styled.p`
   position: absolute;
   text-align: center;
+  font-family: Proxima Nova;
   justify-content: center;
   top: 25%;
   left: 47.5%;
@@ -66,15 +67,13 @@ const TitleLogoWrapper = styled.div`
 const MeetHedwigText = styled.p`
   position: relative;
   color: #f3725b;
+  font-family: Proxima Nova;
   font-size: 18pt;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
   top: 35%;
   height: 5vh;
-
-  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
-    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 
 const HedwigLogo = styled.img`
@@ -89,7 +88,7 @@ const PhotoGrid = styled.div`
   background-color: #faf6f2;
   grid-row: 3/4;
   width: 100%;
-  height: 100%;
+  height: auto;
 
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -113,9 +112,6 @@ const GoalTitle = styled.p`
   line-height: 100%;
   font-weight: bold;
   margin: 2%;
-
-  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
-    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 const GoalText = styled.p`
   margin-left: 6%;
@@ -147,7 +143,7 @@ const AboutUs = () => {
             left: '1%'
           }}
         />
-        <AboutText>About the Creators</AboutText>
+        <AboutText>About Us</AboutText>
       </HeaderWrapper>
       <TitleLogoWrapper>
         <HedwigLogo src={hedwigLogo}></HedwigLogo>

@@ -52,7 +52,7 @@ const SquarePayment = () => {
           sourceId: nonce,
           orderId: order.orderId,
           location: order.vendor.locationIds[0],
-          subtotal: order.subtotal,
+          subtotal: JSON.stringify(parseInt(order.subtotal) * 100),
           currency: 'USD',
           token: buyerVerificationToken
         }

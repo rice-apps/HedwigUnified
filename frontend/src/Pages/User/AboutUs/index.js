@@ -23,7 +23,7 @@ import Helena from '../../../images/Helena.jpeg'
 const MainDiv = styled.div`
   width: 100vw;
   display: grid;
-  grid-template-rows: 6vh auto auto; //have to use max of 50% or user width? or maybe min
+  grid-template-rows: auto auto auto; //have to use max of 50% or user width? or maybe min
   text-align: center;
   align-items: center;
   justify-items: center;
@@ -33,34 +33,42 @@ const MainDiv = styled.div`
 
 const HeaderWrapper = styled.div`
   position: fixed;
-  height: 10vh;
-  font-size: 30px;
+  height: 11vh;
+  font-size: 4vh;
   width: 100vw;
   top: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 10% 1fr 10%;
+  grid-template-areas: 'back text .';
   align-items: center;
+  justify-items: center;
   text-align: center;
-  justify-content: flex-start;
   z-index: 1;
   background-color: white;
-  padding-top: 1vh;
   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
 `
-const AboutText = styled.p`
+
+const BackSection = styled.div`
+  grid-area: back;
+  justify-self: start;
+  padding-left: 3vh;
+`
+
+const AboutText = styled.div`
   position: absolute;
+  grid-area: text;
   text-align: center;
   font-family: Proxima Nova;
-  justify-content: center;
-  top: 25%;
-  left: 47.5%;
-  transform: translate(-47.5%, 0);
+  justify-self: center;
+  top: 20%;
   font-weight: bold;
 `
 const TitleLogoWrapper = styled.div`
   grid-row: 2/3;
   background-color: #faf6f2;
+  padding-top: 5vh;
   width: 100%;
-  height: 100%;
+  height: 40vh;
   text-align: center;
 `
 
@@ -68,7 +76,7 @@ const MeetHedwigText = styled.p`
   position: relative;
   color: #f3725b;
   font-family: Proxima Nova;
-  font-size: 18pt;
+  font-size: 4vh;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
@@ -93,8 +101,7 @@ const PhotoGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  padding-left: 4%;
-  padding-right: 4%;
+  padding: 0vh 4% 2vh 4%;
 `
 const DescriptionBlock = styled.div`
   position: relative;
@@ -134,15 +141,17 @@ const AboutUs = () => {
   return (
     <MainDiv>
       <HeaderWrapper>
-        <IoMdArrowRoundBack
-          onClick={() => navigate('/')}
-          style={{
-            position: 'relative',
-            fontSize: '25px',
-            cursor: 'pointer',
-            left: '1%'
-          }}
-        />
+        <BackSection>
+          <IoMdArrowRoundBack
+            onClick={() => navigate('/')}
+            style={{
+              position: 'relative',
+              fontSize: '4vh',
+              cursor: 'pointer',
+              left: '1%'
+            }}
+          />
+        </BackSection>
         <AboutText>About Us</AboutText>
       </HeaderWrapper>
       <TitleLogoWrapper>

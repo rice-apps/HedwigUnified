@@ -1,5 +1,5 @@
 import './ProfilePane.css'
-import { useQuery, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { FaBars, FaTimes, FaChevronRight } from 'react-icons/fa'
@@ -8,12 +8,6 @@ import gql from 'graphql-tag.macro'
 import styled from 'styled-components/macro'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
-
-function handleLogoutClick () {
-  localStorage.clear()
-  localStorage.removeItem('token')
-  window.open(logoutURL, '_self')
-}
 
 const SignOutButton = styled.div`
   border: 1px solid #5a595326;
@@ -30,18 +24,6 @@ const SignOutButton = styled.div`
   align-items: center;
   justify-content: center;
   padding: 10px 20px;
-`
-
-const GET_USER_INFO = gql`
-  query GetUserInfo {
-    user @client {
-      _id
-      recentUpdate
-      name
-      netid
-      phone
-    }
-  }
 `
 
 const EDIT_PHONE = gql`
@@ -65,7 +47,6 @@ const getLinks = () => {
     { icon: 'hands-helping', content: 'Help', path: '/help' },
     {
       icon: 'question-circle',
-      content: 'About',
       content: 'About the Creators',
       path: '/about_us'
     },
@@ -163,8 +144,7 @@ function ProfilePane ({ updateLogin }) {
                 />
               ) : (
                 <>
-                  ({user.phone.substring(0, 3)}) {user.phone.substring(3, 6)}
-                  {'-'}
+                  ({user.phone.substring(0, 3)}) {user.phone.substring(3, 6)}-
                   {user.phone.substring(6)}
                 </>
               )}

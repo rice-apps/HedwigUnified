@@ -122,7 +122,7 @@ OrderTC.addResolver({
         )
       }
 
-      return new ApolloError(`Something went wrong finding orders`)
+      return new ApolloError('Something went wrong finding orders')
     }
   }
 })

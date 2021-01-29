@@ -1,11 +1,7 @@
 import styled from 'styled-components/macro'
 
-import HedwigLogoFinal from '../../../images/HedwigLogoFinal.png'
 import { IoMdArrowRoundBack } from 'react-icons/io'
-import { useNavigate, useLocation } from 'react-router-dom'
-
-import { useQuery } from '@apollo/client'
-import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
+import { useNavigate } from 'react-router-dom'
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -24,13 +20,6 @@ const HeaderWrapper = styled.div`
   box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
 `
 
-const HedwigLogo = styled.img`
-  height: 4.5vh;
-  width: 4.5vh;
-  margin-right: 5px;
-  margin-top: 0l5vh;
-`
-
 const HedwigWrapper = styled.div`
   font-weight: 600;
   display: flex;
@@ -39,7 +28,7 @@ const HedwigWrapper = styled.div`
   color: black;
 `
 
-function CartHeader ({ vendorName, backLink, showBackButton }) {
+function CartHeader ({ vendorName, showBackButton }) {
   const navigate = useNavigate()
   const cart_menu = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))

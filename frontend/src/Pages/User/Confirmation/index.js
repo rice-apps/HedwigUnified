@@ -10,7 +10,7 @@ import moment from 'moment'
 function Failure () {
   const navigate = useNavigate()
   const handleHomeClick = () => {
-    return navigate(`/eat`)
+    return navigate('/eat')
   }
   return (
     <Div failure>
@@ -41,7 +41,7 @@ function Confirmation () {
   localStorage.setItem('cartItems', JSON.stringify([]))
   const handleHomeClick = () => {
     resetOrderSummary()
-    return navigate(`/eat`)
+    return navigate('/eat')
   }
   return (
     <div>

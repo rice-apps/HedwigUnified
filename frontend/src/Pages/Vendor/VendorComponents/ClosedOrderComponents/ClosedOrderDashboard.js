@@ -13,11 +13,6 @@ import gql from 'graphql-tag.macro'
 import 'react-dropdown/style.css'
 import styled from 'styled-components/macro'
 
-const DropDownContainer = styled('div')`
-  width: 10vh;
-  margin: 0 auto;
-`
-
 const DropdownWrapper = styled('div')`
   margin-bottom: 0.8em;
   margin-left: 10vw;
@@ -26,28 +21,6 @@ const DropdownWrapper = styled('div')`
   font-size: 1.2vh;
   color: #3faffa;
   background: #ffffff;
-`
-
-const DropDownListContainer = styled('div')``
-
-const DropDownList = styled('ul')`
-  padding: 0;
-  margin: 0;
-  padding-left: 1em;
-  background: #ffffff;
-  border: 2px solid #e5e5e5;
-  box-sizing: border-box;
-  color: #3faffa;
-  font-size: 1.3rem;
-  font-weight: 500;
-  &:first-child {
-    padding-top: 0.8em;
-  }
-`
-
-const ListItem = styled('li')`
-  list-style: none;
-  margin-bottom: 0.8em;
 `
 
 const HeaderWrapper = styled.div`

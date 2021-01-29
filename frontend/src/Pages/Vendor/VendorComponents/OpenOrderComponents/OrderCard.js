@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components/macro'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
-import { FaIdCard } from 'react-icons/fa'
-import { GoVerified } from 'react-icons/go'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
-import gql from 'graphql-tag.macro'
 import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
@@ -182,8 +178,8 @@ function MakeModalHeader (props) {
 }
 
 function MakeModalDetails (props) {
-  let phone = props.phone
-  let formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
+  const phone = props.phone
+  const formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
 
   return (
     <ModalOrderDetailsWrapper>
@@ -271,7 +267,7 @@ function MakePaymentSpace (props) {
 
   let isVerified = false
 
-  let { items } = props
+  const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
     isVerified = verifyPaymentResult.verifyPayment
   }
@@ -356,7 +352,7 @@ function MakePaymentSpace (props) {
               <ModalItemList>
                 {items &&
                   items.map(function (item) {
-                    let modifiers = item.modifiers?.map(
+                    const modifiers = item.modifiers?.map(
                       modifier => modifier.name
                     )
 
@@ -389,7 +385,7 @@ function MakePaymentSpace (props) {
               cohenId={props.cohenId}
               submissionTime={props.submissionTime}
               pickupTime={props.pickupTime}
-            ></MakeModalDetails>
+            />
             <ModalButtonsWrapper>
               <CancelButton
                 onClick={() => {
@@ -427,7 +423,7 @@ function MakePaymentSpace (props) {
               <ModalItemList>
                 {items &&
                   items.map(function (item) {
-                    let modifiers = item.modifiers?.map(
+                    const modifiers = item.modifiers?.map(
                       modifier => modifier.name
                     )
 
@@ -460,7 +456,7 @@ function MakePaymentSpace (props) {
               cohenId={props.cohenId}
               submissionTime={props.submissionTime}
               pickupTime={props.pickupTime}
-            ></MakeModalDetails>
+            />
             {/* <ModalCancelMessage>Are you sure you want to cancel?</ModalCancelMessage> */}
             <ModalButtonsWrapper>
               <CancelButton onClick={closeCancelModal}>Back</CancelButton>
@@ -479,8 +475,8 @@ function MakePaymentSpace (props) {
 }
 
 function isPastPickup (pickupTime, currentTime) {
-  let pickupTimeBuffer = 0
-  let pastPickup = currentTime.diff(pickupTime, 'minutes') > pickupTimeBuffer
+  const pickupTimeBuffer = 0
+  const pastPickup = currentTime.diff(pickupTime, 'minutes') > pickupTimeBuffer
   return pastPickup
 }
 
@@ -531,7 +527,8 @@ function OrderCard (props) {
   }
 
   // pastPickup is true if current time has past an order's pickuptime + buffer
-  let pastPickup = isPastPickup(moment(livePickupTime), currentTime) && newOrder
+  const pastPickup =
+    isPastPickup(moment(livePickupTime), currentTime) && newOrder
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
@@ -568,7 +565,7 @@ function OrderCard (props) {
 
           {items &&
             items.map(function (item) {
-              let modifiers = item.modifiers?.map(modifier => modifier.name)
+              const modifiers = item.modifiers?.map(modifier => modifier.name)
 
               return (
                 <MakeOrderDetails

@@ -78,17 +78,6 @@ const LogoutItem = styled.div`
   align-items: center;
   justify-content: center;
 `
-const GET_USER_INFO = gql`
-  query GetUserInfo {
-    user @client {
-      _id
-      recentUpdate
-      name
-      netid
-      phone
-    }
-  }
-`
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
   const [currentTime, setCurrentTime] = useState(

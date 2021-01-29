@@ -106,12 +106,11 @@ const LoadingBar = styled.div`
 `
 
 function addVh (i) {
-  let vhString = i.toString() + 'vh'
-  return vhString
+  return i.toString() + 'vh'
 }
 
 function LoadingPage () {
-  let size = 25
+  const size = 25
   return (
     <LoadingWrapper size={addVh(size + 2)}>
       <Hedwig
@@ -128,7 +127,7 @@ function LoadingPage () {
 }
 
 function SmallLoadingPage () {
-  let size = 12
+  const size = 12
   return (
     <LoadingWrapper size={addVh(size + 2)}>
       <Hedwig

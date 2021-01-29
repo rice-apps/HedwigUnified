@@ -1,8 +1,6 @@
-import react from 'react'
 import styled from 'styled-components/macro'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import hedwigLogo from './HedwigLogoFinal.svg'
-import BuyerHeader from '../Vendors/BuyerHeader.js'
 import HeadShot from './HeadShot'
 import { useNavigate } from 'react-router-dom'
 import './index.css'
@@ -150,34 +148,30 @@ const AboutUs = () => {
         <AboutText>About the Creators</AboutText>
       </HeaderWrapper>
       <TitleLogoWrapper>
-        <HedwigLogo src={hedwigLogo}></HedwigLogo>
+        <HedwigLogo src={hedwigLogo} />
         <MeetHedwigText>Meet the Hedwig Team!</MeetHedwigText>
       </TitleLogoWrapper>
       <PhotoGrid>
         <HeadShot
           src={Nikhita}
-          name={'Nikhita Gangla'}
-          position={'Project Manager'}
+          name='Nikhita Gangla'
+          position='Project Manager'
         />
         <HeadShot
           src={Melinda}
-          name={'Melinda Ding'}
-          position={'Project Manager'}
+          name='Melinda Ding'
+          position='Project Manager'
         />
-        <HeadShot src={Victor} name={'Victor Song'} position={'Team Lead'} />
-        <HeadShot src={Newton} name={'Newton Huynh'} position={'Team Lead'} />
-        <HeadShot src={Riley} name={'Riley Holmes'} position={'Designer'} />
-        <HeadShot src={Henry} name={'Henry Qin'} position={'Developer'} />
-        <HeadShot src={Lorraine} name={'Lorraine Lyu'} position={'Developer'} />
-        <HeadShot src={Brandon} name={'Brandon Zhang'} position={'Developer'} />
-        <HeadShot src={Ananya} name={'Ananya Vaidya'} position={'Developer'} />
-        <HeadShot
-          src={Vinay}
-          name={'Vinay Tummarakota'}
-          position={'Developer'}
-        />
-        <HeadShot src={Angus} name={'Angus Jelinek'} position={'Developer'} />
-        <HeadShot src={Helena} name={'Helena Hu'} position={'Developer'} />
+        <HeadShot src={Victor} name='Victor Song' position='Team Lead' />
+        <HeadShot src={Newton} name='Newton Huynh' position='Team Lead' />
+        <HeadShot src={Riley} name='Riley Holmes' position='Designer' />
+        <HeadShot src={Henry} name='Henry Qin' position='Developer' />
+        <HeadShot src={Lorraine} name='Lorraine Lyu' position='Developer' />
+        <HeadShot src={Brandon} name='Brandon Zhang' position='Developer' />
+        <HeadShot src={Ananya} name='Ananya Vaidya' position='Developer' />
+        <HeadShot src={Vinay} name='Vinay Tummarakota' position='Developer' />
+        <HeadShot src={Angus} name='Angus Jelinek' position='Developer' />
+        <HeadShot src={Helena} name='Helena Hu' position='Developer' />
       </PhotoGrid>
       <DescriptionBlock>
         <GoalTitle>What is Hedwig?</GoalTitle>

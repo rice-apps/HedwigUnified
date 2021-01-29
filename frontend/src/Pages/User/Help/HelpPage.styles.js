@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 
 const HelpHeader = styled.section`
   display: grid;

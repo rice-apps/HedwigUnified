@@ -1,13 +1,6 @@
-import { useState } from 'react'
-import { jsx } from '@emotion/react'
-import { gql } from '@apollo/client'
-import styled, { css } from 'styled-components/macro'
 import { useNavigate } from 'react-router-dom'
 
 import { IoMdArrowRoundBack } from 'react-icons/io'
-import { IoMdAdd } from 'react-icons/io'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import FAQCard from './FAQCard'
 import {
@@ -129,38 +122,37 @@ function HelpPage () {
         <BackArrowSection>
           <IoMdArrowRoundBack onClick={() => navigate('/eat')} />
         </BackArrowSection>
-
-        {'Help'}
+        Help
       </HelpHeader>
 
       <FAQSection>
-        <SubHeader> {'Vendor FAQ'} </SubHeader>
+        <SubHeader> Vendor FAQ </SubHeader>
 
         {VendorFAQ.map(faq => (
           <FAQCard question={faq.question} answer={faq.answer} />
         ))}
 
-        <SubHeader> {'Checkout FAQ'} </SubHeader>
+        <SubHeader> Checkout FAQ </SubHeader>
 
         {CheckoutFAQ.map(faq => (
           <FAQCard question={faq.question} answer={faq.answer} />
         ))}
 
-        <SubHeader> {'Pickup FAQ'} </SubHeader>
+        <SubHeader> Pickup FAQ </SubHeader>
 
         {PickupFAQ.map(faq => (
           <FAQCard question={faq.question} answer={faq.answer} />
         ))}
 
-        <SubHeader> {'Account FAQ'} </SubHeader>
+        <SubHeader> Account FAQ </SubHeader>
 
         {AccountFAQ.map(faq => (
           <FAQCard question={faq.question} answer={faq.answer} />
         ))}
 
         <ContactSection>
-          <ContactText> {'Contact Us:'} </ContactText>
-          <ContactInfo> {'********@rice.edu'} </ContactInfo>
+          <ContactText> Contact Us: </ContactText>
+          <ContactInfo> ********@rice.edu </ContactInfo>
         </ContactSection>
       </FAQSection>
     </>

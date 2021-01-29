@@ -5,7 +5,6 @@ import {
   SET_ITEM_AVAILABILITY
 } from '../../../../graphql/ProductQueries.js'
 import { useQuery, useMutation } from '@apollo/client'
-import uuid from 'react-uuid'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 const DisplayWrapper = styled.div`

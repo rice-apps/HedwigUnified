@@ -7,7 +7,6 @@ import moment from 'moment'
 
 // This import loads the firebase namespace along with all its type information.
 import firebase from 'firebase/app'
-import { TokenKind } from 'graphql'
 
 function Login ({ updateLoginStatus }) {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");

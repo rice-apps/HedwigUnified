@@ -36,7 +36,7 @@ const VendorSelect = () => {
 
   // have to modify this with /contact
   if (!allowedUsers.includes(userData.netid)) {
-    var pattern = /^[0-9]{10}$/
+    const pattern = /^[0-9]{10}$/
     if (pattern.test(userData.phone)) {
       navigate('/eat')
     } else {

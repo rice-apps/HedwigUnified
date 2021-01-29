@@ -15,7 +15,7 @@ import { SmallLoadingPage } from './../../../components/LoadingComponents'
 function Product () {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currProduct: productId, currentVendor: currentVendor } = state
+  const { currProduct: productId, currentVendor } = state
 
   const {
     data: product_data,
@@ -88,7 +88,7 @@ function Product () {
         })
       )
     )
-    if (order.vendor && vendor.name != order.vendor.name) {
+    if (order.vendor && vendor.name !== order.vendor.name) {
       console.log('Order is not from the same vendor! ERROR')
       return // todo: add warning window.
     }
@@ -115,9 +115,9 @@ function Product () {
     // purpose of subList: to make modifierList match the structure of prodList
     const modList = []
     const prodList = product.modifierLists
-    let i = 0,
-      j = 0,
-      subList = []
+    let i = 0
+    let j = 0
+    let subList = []
 
     // loops through product modifierLists once
     // traverses selected modifiers once at a separate pace
@@ -158,20 +158,20 @@ function Product () {
         (prodList[i].minModifiers != null &&
           modList[i].length < prodList[i].minModifiers) ||
         (prodList[i].maxModifiers != null &&
-          prodList[i].maxModifiers != -1 &&
+          prodList[i].maxModifiers !== -1 &&
           modList[i].length > prodList[i].maxModifiers)
       ) {
         setRequiredFilled(false)
         return false
       }
     }
-    //converts modList into an object
-    let x = 0,
-      y = 0,
-      modObject = {}
+    // converts modList into an object
+    let x = 0
+    let y = 0
+    const modObject = {}
 
     while (x < modList.length) {
-      if (modList[x].length == 0) {
+      if (modList[x].length === 0) {
         x++
       } else {
         for (let j = 0; j < modList[x].length; j++) {
@@ -204,7 +204,7 @@ function Product () {
   return (
     <div>
       <BuyerHeader
-        showBackButton={true}
+        showBackButton
         backLink={`/eat/${vendor.slug}`}
         state={{ currentVendor: vendor.name }}
       />
@@ -221,7 +221,7 @@ function Product () {
         <div className='variantsContainer'>
           <VariantSelection variants={product.variants} />
         </div>
-        {product.modifierLists.length == 0 && null}
+        {product.modifierLists.length === 0 && null}
         <div className='modifiersContainer'>
           {product.modifierLists.map(modifier => {
             return (

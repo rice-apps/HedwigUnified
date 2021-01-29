@@ -3,7 +3,6 @@ import dispatch from '../Products/FunctionalCart'
 import './cart.css'
 import styled from 'styled-components/macro'
 import {
-  Title,
   ShelfItemWrapper,
   ShelfItemImage,
   ShelfItem,
@@ -45,14 +44,7 @@ function QuantitySelector ({ quantity, decrease, increase }) {
 }
 
 const CartProduct = ({ product, forceUpdate, updateTotal }) => {
-  const [isMouseOver, setIsMouseOver] = useState(false)
   const [quantity, setQuantity] = useState(product.quantity)
-  const handleMouseOver = () => {
-    setIsMouseOver(true)
-  }
-  const handleMouseOut = () => {
-    setIsMouseOver(false)
-  }
 
   const increase = () => {
     setQuantity(quantity + 1)
@@ -104,7 +96,6 @@ const CartProduct = ({ product, forceUpdate, updateTotal }) => {
   }
 
   const date = new Date()
-  const options = ['ASAP', '30 Minutes', '1 Hour']
 
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',

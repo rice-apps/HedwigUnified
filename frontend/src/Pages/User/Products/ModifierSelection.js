@@ -3,12 +3,10 @@ import currency from 'currency.js'
 function ModifierSelection ({ modifierCategory }) {
   const {
     modifiers: options,
-    question,
     description,
     selectionType,
     name,
-    minModifiers,
-    maxModifiers
+    minModifiers
   } = modifierCategory
 
   return (

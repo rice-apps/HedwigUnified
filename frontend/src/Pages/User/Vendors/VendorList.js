@@ -36,7 +36,7 @@ function VendorList ({ updateLogin }) {
   if (!data) return <p>No data...</p>
 
   const { getVendors } = data
-  let localUser = JSON.parse(localStorage.getItem('userProfile'))
+  const localUser = JSON.parse(localStorage.getItem('userProfile'))
   console.log('LOCAL USER BEFORE', localUser)
   // Object.assign(localUser, {name: "Test"})
   // console.log("LOCAL USER AFTER", localUser)

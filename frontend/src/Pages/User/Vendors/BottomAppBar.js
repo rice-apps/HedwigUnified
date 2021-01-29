@@ -114,7 +114,7 @@ left:50%;
 transform: translateX(-50%);
 `
 function cartIsNotEmpty () {
-  const cart_menu = JSON.parse(localStorage.getItem('cartItems'))
+  const cart_menu = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
   return cart_menu.length != 0
 }
 

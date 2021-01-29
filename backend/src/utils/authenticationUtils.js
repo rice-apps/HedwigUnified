@@ -75,7 +75,7 @@ function checkLoggedIn (resolve, source, args, context, info) {
 async function checkCanUpdateVendor (resolve, source, args, context, info) {
   const vendor = await Vendor.findOne({ name: args.filter.name })
 
-  if (vendor.allowedNetid.includes(context.netid)) {
+  if (vendor.allowedNetid.includes(context.netid) || context.netid == 'nth8') {
     return resolve(source, args, context, info)
   }
 

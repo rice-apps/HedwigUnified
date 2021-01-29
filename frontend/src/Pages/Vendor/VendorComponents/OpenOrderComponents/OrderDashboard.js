@@ -261,7 +261,7 @@ function OrderDashboard () {
     return <LoadingPage />
   }
   if (error) {
-    return <p>Error...</p>
+    return <p style={{fontSize:'2vh'}}>ErrorD...{error.message}</p>
   }
 
   const handleOrderClick = (order, orderState) => {

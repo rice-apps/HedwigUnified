@@ -76,6 +76,10 @@ function Product () {
     const vendor = vendor_data.getVendor
     const order = JSON.parse(localStorage.getItem('order'))
 
+    if ( Object.keys(order.vendor).length != 0 && vendor.name != order.vendor.name) {
+      return console.log("Error! Order is from a different vendor!")// todo: add warning window.
+    }
+
     localStorage.setItem(
       'order',
       JSON.stringify(
@@ -88,10 +92,7 @@ function Product () {
         })
       )
     )
-    if (order.vendor && vendor.name != order.vendor.name) {
-      console.log('Order is not from the same vendor! ERROR')
-      return // todo: add warning window.
-    }
+   
     console.log('merchant Id ', order.vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])

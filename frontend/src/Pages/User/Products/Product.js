@@ -11,8 +11,38 @@ import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
 import BottomAppBar from '../Vendors/BottomAppBar.js'
 import { SmallLoadingPage } from './../../../components/LoadingComponents'
+import {
+  Modal,
+  ModalBackground,
+  ModalMessage,
+  StyledCancel
+} from './../Vendors/BottomAppBar'
+import { BiErrorCircle } from 'react-icons/bi'
+
+function MakeDiffItemModal (props) {
+  return (
+    <ModalBackground>
+      <Modal>
+        <BiErrorCircle
+          style={{
+            fontSize: '13vh',
+            color: '#F3725A',
+            marginTop: '-4.7vh',
+            marginBottom: '1.2vh',
+            opacity: '0.77'
+          }}
+        />
+        <ModalMessage>You can't add items from different vendors to the same cart!</ModalMessage>
+        <StyledCancel onClick={() => props.changeModal(false)}>
+          close
+        </StyledCancel>
+      </Modal>
+    </ModalBackground>
+  )
+}
 
 function Product () {
+  const [showErrorModal, setShowErrorModal] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
   const { currProduct: productId, currentVendor } = state
@@ -78,12 +108,11 @@ function Product () {
     const order = JSON.parse(localStorage.getItem('order'))
 
     if (Object.keys(order.vendor).length != 0) {
-    
       if (cart_menu.length === 0) {
         console.log('SUCCESS')
-      }
-      else if (vendor.name != order.vendor.name) {
-        return console.log('Error! Order is from a different vendor!')
+      } else if (vendor.name != order.vendor.name) {
+        setShowErrorModal(true)
+        return
       } // todo: add warning window.
     }
 
@@ -270,6 +299,7 @@ function Product () {
         </div>
       </div>
       <BottomAppBar />
+      {showErrorModal && <MakeDiffItemModal changeModal={setShowErrorModal} />}
     </div>
   )
 }

@@ -55,7 +55,7 @@ const Counter = styled.div`
   width: 3.2vh;
   margin-left: 1vh;
 `
-const ModalBackground = styled.div`
+export const ModalBackground = styled.div`
   position: fixed;
   height: 92vh;
   width: 100vw;
@@ -77,7 +77,7 @@ opacity:0;
   height:40vh;
 }
 `
-const Modal = styled.div`
+export const Modal = styled.div`
   position: fixed;
   z-index: 4;
   left: 50%;
@@ -96,17 +96,19 @@ const Modal = styled.div`
   animation-iteration-count:1;
   animation-duration:0.2s;
 `
-const ModalMessage = styled.div`
+export const ModalMessage = styled.div`
   font-size: 2.5vh;
   text-align: center;
   width: 80%;
   line-height: 3vh;
 `
-const StyledCancel = styled.div`
+export const StyledCancel = styled.div`
 position:absolute;
+cursor: pointer;
 bottom:3vh;
 color:white;
 border-radius:20px;
+font-size:2vh;
 letter-spacing:0.2vh;
 background-color:#F3725B;
 padding:0.2vh 1.9vh;

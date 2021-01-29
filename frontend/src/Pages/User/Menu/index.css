@@ -17,8 +17,8 @@
 }
 
 .vendortitle {
-  font-family:'Proxima Nova';
-  font-weight:bold;
+  font-family: 'Proxima Nova';
+  font-weight: bold;
   font-size: 4vh;
 }
 
@@ -100,7 +100,6 @@
   padding-left: 5vw;
 }
 
-
 /* Item Display */
 .itemlist {
   display: flex;
@@ -115,26 +114,21 @@
   width: 95vw;
   grid-template-columns: 3fr 7fr;
   grid-template-rows: 1fr;
-  grid-template-areas: 
-  'ImageSpace NameSpace';
+  grid-template-areas: 'ImageSpace NameSpace';
 }
 @media (min-width: 800px) {
-
-.itemgrid{
-  width:100vw;
-  grid-template-columns:4fr 3fr 7fr 4fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: 
-  'blank ImageSpace NameSpace blank2';
+  .itemgrid {
+    width: 100vw;
+    grid-template-columns: 4fr 3fr 7fr 4fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'blank ImageSpace NameSpace blank2';
+  }
+  .categoryheader {
+    width: 100vw;
+    text-align: center;
+    padding-left: 0vh;
+  }
 }
-.categoryheader{
-  width:100vw;
-  text-align:center;
-  padding-left:0vh;
-}
-}
-
-
 
 .itemimage {
   grid-area: ImageSpace;
@@ -146,12 +140,12 @@
   border-radius: 50%;
 }
 
-.itemcontainer{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
+.itemcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  grid-area:NameSpace;
+  grid-area: NameSpace;
 }
 .itemname {
   font-family: 'avenirmedium';
@@ -167,7 +161,6 @@
 
   margin: 0;
   padding-top: 3px;
-
 }
 .storeHourBox {
   flex-direction: column;

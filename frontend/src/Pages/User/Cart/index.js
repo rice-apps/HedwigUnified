@@ -184,11 +184,11 @@ function CartDetail () {
   ]
   // const defaultPaymentOption = options[0];
   const cart_menu = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
-  : null
-const order = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('order'))
-  : null
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : null
+  const order = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('order'))
+    : null
 
   const { loading, error, data } = useQuery(GET_VENDOR, {
     variables: { filter: { name: order.vendor.name } }
@@ -204,7 +204,6 @@ const order = localStorage.getItem('cartItems')
 
   const navigate = useNavigate()
   // add catch statement
- 
 
   console.log(cart_menu)
 

@@ -16,7 +16,7 @@ const VendorQueries = {
       })
 
       // if (vendor.allowedNetid.includes(rp.context.netid)) {
-        return vendor
+      return vendor
       // }
 
       return new AuthenticationError('Not on approved vendor list')

@@ -14,7 +14,6 @@ import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 import { LoadingPage } from './../../../../components/LoadingComponents'
 
-
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!, $vendor: String!) {
     findOrders(locations: $location, vendor: $vendor) {
@@ -73,7 +72,7 @@ const UPDATE_ORDER = gql`
     $orderId: String!
     $uid: String!
     $state: FulFillmentStatusEnum!
-    $vendor:String!
+    $vendor: String!
   ) {
     updateOrder(
       orderId: $orderId

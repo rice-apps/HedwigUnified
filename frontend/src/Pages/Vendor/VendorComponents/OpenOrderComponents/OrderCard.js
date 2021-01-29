@@ -490,8 +490,8 @@ function OrderCard (props) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(moment());
-      updateLivePickupTime(props.pickupTime);
+      setCurrentTime(moment())
+      updateLivePickupTime(props.pickupTime)
     }, 5000)
     return () => {
       clearInterval(timer)
@@ -529,9 +529,9 @@ function OrderCard (props) {
   if (orderTrackerError) {
     return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
   }
- 
+
   // pastPickup is true if current time has past an order's pickuptime + buffer
-  let pastPickup = isPastPickup(moment(livePickupTime),currentTime) && newOrder
+  let pastPickup = isPastPickup(moment(livePickupTime), currentTime) && newOrder
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
@@ -546,7 +546,7 @@ function OrderCard (props) {
       <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle  customerName={customerName} />
+        <MakeOrderTitle customerName={customerName} />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime

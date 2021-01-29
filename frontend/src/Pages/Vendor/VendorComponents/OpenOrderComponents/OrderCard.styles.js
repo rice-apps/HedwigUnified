@@ -1,7 +1,8 @@
 import styled from 'styled-components/macro'
 
 export const OrderCardWrapper = styled.div`
-  background-color: ${props => props.pastPickup ? 'rgba(90,90,90,0.05)': 'white'};
+  background-color: ${props =>
+    props.pastPickup ? 'rgba(90,90,90,0.05)' : 'white'};
   border-radius: 20px;
   border-width: 2px;
   border-color: #cacaca;
@@ -71,7 +72,6 @@ export const OrderDetailsSpaceWrapper = styled.div`
   flex-direction: column;
 `
 export const OrderDetailsItemWrapper = styled.div`
-
   margin: 3px 0px;
   display: grid;
   grid-template-columns: 1.1fr 10fr 3fr;
@@ -87,7 +87,6 @@ export const ItemDescriptionWrapper = styled.div`
 `
 
 export const PaymentSpaceWrapper = styled.div`
-
   border-top: 1px solid grey;
   width: 90%;
   justify-self: center;
@@ -116,7 +115,7 @@ export const ButtonsSpaceWrapper = styled.div`
 `
 export const ButtonWrapper = styled.button`
   border-radius: 20px;
-  opacity:1;
+  opacity: 1;
   cursor: pointer;
   border: 0px;
   display: flex;
@@ -124,7 +123,7 @@ export const ButtonWrapper = styled.button`
   align-items: center;
   padding: 5px 20px;
   margin: 0px 15px;
-  box-shadow: 0.6px 0.6px 3px 0.5px rgba(0,0,0,0.3);
+  box-shadow: 0.6px 0.6px 3px 0.5px rgba(0, 0, 0, 0.3);
 `
 export const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
@@ -161,11 +160,15 @@ export const ModalWrapper = styled.div`
   position: fixed;
   z-index: 2;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow:  ${props => props.cancel ? '0px 0px 150px 12px rgba(234,144,122,0.6)' : '2px 2px 9px 1pxrgba(0, 0, 0, 0.2)'};
+  box-shadow: ${props =>
+    props.cancel
+      ? '0px 0px 150px 12px rgba(234,144,122,0.6)'
+      : '2px 2px 9px 1pxrgba(0, 0, 0, 0.2)'};
   font-family: 'Metropolis';
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.75fr 2.8fr ${props => props.cancel ?'1.2fr' :'0.8fr'};
+  grid-template-rows: 0.75fr 2.8fr ${props =>
+      props.cancel ? '1.2fr' : '0.8fr'};
   grid-template-areas:
     'ModalHeaderSpace ModalHeaderSpace'
     'ModalOrderSpace ModalDetailSpace'
@@ -188,7 +191,6 @@ export const ModalHeaderWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
 `
-
 
 export const ModalOrderWrapper = styled.div`
   grid-area: ModalOrderSpace;
@@ -243,22 +245,21 @@ export const ModalSubtitle = styled.div`
 `
 
 export const ModalDetail = styled.div`
-display:flex;
-flex-direction:column;
-height:100%;
-width:100%;
-text-align:left;
-align-items:flex-start;
-justify-items:flex-start;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  align-items: flex-start;
+  justify-items: flex-start;
 `
-
 
 export const ModalButtonsWrapper = styled.div`
   grid-area: ModalButtons;
-  height:80%;
-  width:100%;
-  margin-bottom:1.8vh;
-  position:relative;
+  height: 80%;
+  width: 100%;
+  margin-bottom: 1.8vh;
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -266,9 +267,9 @@ export const ModalButtonsWrapper = styled.div`
 `
 
 export const ModalCancelMessage = styled.div`
-position:absolute;
-bottom:7.5vh;
-font-size:2.6vh;
-color:#EA907A;
-font-weight:bold;
+  position: absolute;
+  bottom: 7.5vh;
+  font-size: 2.6vh;
+  color: #ea907a;
+  font-weight: bold;
 `

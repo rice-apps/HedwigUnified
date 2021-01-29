@@ -95,10 +95,12 @@ function VendorHeader () {
     moment().format('dddd, MMMM Do h:mm:ss A')
   )
   useEffect(() => {
-    const timer = setInterval(() =>
-      {setCurrentTime(moment().format('dddd, MMMM Do h:mm:ss A'))}, 1000
-    );
-    return () => {clearInterval(timer)}
+    const timer = setInterval(() => {
+      setCurrentTime(moment().format('dddd, MMMM Do h:mm:ss A'))
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
   }, [])
 
   const user = JSON.parse(localStorage.getItem('userProfile'))

@@ -11,11 +11,11 @@ const SideBarWrapper = styled.div`
 
 const VendorPicture = styled.img`
   height: 20vh;
-  border-radius:50%;
-  object-fit:cover;
+  border-radius: 50%;
+  object-fit: cover;
   width: 20vh;
   margin-top: 6.7vh;
-  object-position:80% 100%;
+  object-position: 80% 100%;
 `
 
 function SideNavBar () {

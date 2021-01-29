@@ -132,8 +132,6 @@ function Menu () {
     })
   }
 
-  
-
   const current_date = new Date()
 
   const currentDay = current_date.getDay()
@@ -302,7 +300,6 @@ function Menu () {
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
-    
     <div style={{ position: 'relative' }}>
       {console.log(currentVendor)}
       {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage} />}

@@ -74,10 +74,17 @@ function Product () {
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
+    const cart_menu = JSON.parse(localStorage.getItem('cartItems'))
     const order = JSON.parse(localStorage.getItem('order'))
 
-    if ( Object.keys(order.vendor).length != 0 && vendor.name != order.vendor.name) {
-      return console.log("Error! Order is from a different vendor!")// todo: add warning window.
+    if (Object.keys(order.vendor).length != 0) {
+    
+      if (cart_menu.length === 0) {
+        console.log('SUCCESS')
+      }
+      else if (vendor.name != order.vendor.name) {
+        return console.log('Error! Order is from a different vendor!')
+      } // todo: add warning window.
     }
 
     localStorage.setItem(
@@ -92,7 +99,7 @@ function Product () {
         })
       )
     )
-   
+
     console.log('merchant Id ', order.vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])

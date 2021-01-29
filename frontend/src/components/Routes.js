@@ -203,6 +203,15 @@ export const RoutesComponent = ({ loginCallBack }) => {
           )
         },
         {
+          path: '/cart',
+          element: (
+            <PrivateRoute
+              element={<CartDetail />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
           path: '/profile',
           element: (
             <PrivateRoute
@@ -233,16 +242,8 @@ export const RoutesComponent = ({ loginCallBack }) => {
                   updateLogin={loginCallBack}
                 />
               )
-            },
-            {
-              path: '/cart',
-              element: (
-                <PrivateRoute
-                  element={<CartDetail />}
-                  updateLogin={loginCallBack}
-                />
-              )
             }
+         
           ]
         }
       ]

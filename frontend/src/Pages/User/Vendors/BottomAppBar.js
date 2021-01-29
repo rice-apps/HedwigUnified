@@ -61,7 +61,7 @@ function BottomAppBar () {
   console.log('CART AMOUNT', cartAmount)
   return (
     <BottomNavigationWrapper>
-      <BottomNavigationItem onClick={() => navigate('/eat/cohen/cart')}>
+      <BottomNavigationItem onClick={() => navigate('/eat/cart')}>
         <BottomNavigationText>View Cart</BottomNavigationText>
         {cartAmount > 0 && <Counter>{cartAmount}</Counter>}
       </BottomNavigationItem>

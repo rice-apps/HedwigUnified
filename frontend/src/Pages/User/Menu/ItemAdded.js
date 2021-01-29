@@ -7,24 +7,28 @@ const appearanceAnimation = keyframes`
     height:0vh;
     display:none;
     font-size:0vh;
+    opacity:0;
 }
 23%{
     width:42vh;
     height:50vh;
     display:block;
     font-size:2.5vh;
+    opacity:1;
 }
 90%{
     width:42vh;
     height:50vh;
     display:block;
     font-size:2.5vh;
+    opacity:1;
 }
 95%{
     width:0vh;
     height:0vh;
     display:none;
     font-size:0vh;
+    opacity:0;
 }
 `
 

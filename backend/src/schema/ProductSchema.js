@@ -155,7 +155,7 @@ ItemTC.addResolver({
         )
       }
       console.log(error)
-      return new ApolloError(`Something went wrong when getting Square catalog`)
+      return new ApolloError('Something went wrong when getting Square catalog')
     }
   }
 })
@@ -380,7 +380,7 @@ ItemTC.addResolver({
         }
 
         return new ApolloError(
-          `Something went wrong batch retrieving availabilities`
+          'Something went wrong batch retrieving availabilities'
         )
       }
     }
@@ -552,7 +552,7 @@ ItemTC.addResolver({
           )
         }
 
-        return new ApolloError(`Something went wrong setting availability`)
+        return new ApolloError('Something went wrong setting availability')
       }
     }
   })
@@ -594,7 +594,7 @@ ItemTC.addResolver({
           )
         }
 
-        return new ApolloError(`Something went wrong creating availability`)
+        return new ApolloError('Something went wrong creating availability')
       }
     }
   })
@@ -766,7 +766,7 @@ ItemTC.addResolver({
           )
         }
 
-        return new ApolloError(`Something went wrong creating availability`)
+        return new ApolloError('Something went wrong creating availability')
       }
     }
   })

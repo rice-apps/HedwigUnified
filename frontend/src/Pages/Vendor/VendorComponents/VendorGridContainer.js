@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 import SideNavBar from './SidebarComponents/SideNavBar.js'
 import VendorHeader from './VendorHeaderComponents/VendorHeader.js'
 import MetropolisFont from '../../../fonts/GlobalFont.js'

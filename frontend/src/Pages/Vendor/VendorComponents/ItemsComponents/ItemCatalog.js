@@ -117,11 +117,7 @@ function TabPanel (props) {
 function ItemCatalog (props) {
   const [value, setValue] = useState(props.category)
 
-  const items = props.catalog.filter(item => {
-    if (item.category === value) {
-      return item
-    }
-  })
+  const items = props.catalog.filter(item => item.category === value)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)

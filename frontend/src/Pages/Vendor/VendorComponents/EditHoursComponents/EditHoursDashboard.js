@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import styled from 'styled-components/macro'
 import { IoMdClose, IoMdArrowDropdown } from 'react-icons/io'
 import { CgMathPlus } from 'react-icons/cg'
 import Modal from 'react-modal'
@@ -43,11 +42,11 @@ const UPDATE_VENDOR = gql`
 
 function CreateStatusDropdown (props) {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
   async function onChangeIsClosed (value) {
     window.location.reload()
-    let inputIsClosed = value === 'OPEN' ? false : true
+    const inputIsClosed = value !== 'OPEN'
     // const originalHours = props.vendor_data.getVendor.hours;
     const originalHours = props.currentHours
     const updatedHours = [...originalHours]
@@ -60,7 +59,7 @@ function CreateStatusDropdown (props) {
     updatedHours[props.index] = updatedDay
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
+      delete dayCopy.__typename
       updatedHours[index] = dayCopy
     })
 
@@ -109,9 +108,7 @@ function CreateStatusDropdown (props) {
 const DaysofTheWeek = ['MON', 'TUE', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']
 
 function HoursItem (props) {
-  const [updateDeleteTime, { data, loading, error }] = useMutation(
-    UPDATE_VENDOR
-  )
+  const [updateDeleteTime] = useMutation(UPDATE_VENDOR)
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
 
   async function deleteStartEndTime () {
@@ -147,7 +144,7 @@ function HoursItem (props) {
     updatedHours[props.index] = updatedDay
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
+      delete dayCopy.__typename
       updatedHours[index] = dayCopy
     })
 
@@ -178,63 +175,16 @@ function HoursItem (props) {
   )
 }
 
-//FUTURE MVP, safari does not support input type of time so we have to code it ourselves
-function formatTime (timeString) {
-  var cleaned = ('' + timeString).replace(/\D/g, '')
-  var match = cleaned.match(/^(\d{2})(\d{2})$/)
-  if (match) {
-    return match[1] + ':' + match[2]
-  }
-  return null
-}
+// FUTURE MVP, safari does not support input type of time so we have to code it ourselves
 
 function MakeTimeInput (props) {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
-  let startTime = null
+  const startTime = null
 
-  function onChangeHourModal (inputTime) {
-    if (props.id === 'addedStartTime') {
-      startTime = inputTime
-    }
-
-    if (props.id === 'addedEndTime') {
-      const originalHours = props.currentHours
-      const updatedHours = [...originalHours]
-      const updatedDay = { ...updatedHours[props.index] }
-
-      const updatedStartTime = updatedDay.start.concat(startTime)
-      console.log('start time after ', updatedStartTime)
-      updatedDay.start = updatedStartTime
-
-      console.log('end time before: ', updatedDay.end)
-
-      const updatedEndTime = updatedDay.end.concat(inputTime)
-      console.log('end time after: ', updatedEndTime)
-      updatedDay.end = updatedEndTime
-
-      updatedHours[props.index] = updatedDay
-      updatedHours.map((day, index) => {
-        const dayCopy = { ...updatedHours[index] }
-        delete dayCopy['__typename']
-        updatedHours[index] = dayCopy
-      })
-
-      toggleIsClosed({
-        variables: {
-          name: currentUser.vendor,
-          hours: updatedHours
-        }
-      })
-    }
-    // window.location.reload();
-
-    // props.updateCurrentHours(updatedHours);
-  }
   // This function formats the time so that it is not in 24h format
   function updateAddedTime (addedTime) {
-    const currentUser = JSON.parse(localStorage.getItem('userProfile'))
     const updateHourState = props.setHours
     let halfOfDay = ''
     let formattedHour = ''
@@ -270,14 +220,14 @@ function MakeTimeInput (props) {
         // onChange={e => onChangeHourModal(e.target.value)}
         onChange={e => updateAddedTime(e.target.value)}
         type='time'
-      ></TimeModal>
+      />
     </div>
   )
 }
 
 function MakeAddHoursButton (props) {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [addedStartTime, setAddedStartTime] = useState('')
@@ -301,7 +251,7 @@ function MakeAddHoursButton (props) {
   }
 
   async function ConfirmOnClick () {
-    let timesToAdd = [addedStartTime, addedEndTime]
+    const timesToAdd = [addedStartTime, addedEndTime]
     console.log(timesToAdd)
 
     const originalHours = props.currentHours
@@ -319,7 +269,7 @@ function MakeAddHoursButton (props) {
     updatedHours[props.index] = updatedDay
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
+      delete dayCopy.__typename
       updatedHours[index] = dayCopy
     })
 
@@ -400,7 +350,7 @@ function MakeAddHoursButton (props) {
 
 function EditHoursDashboard () {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
-  const [toggleIsClosed, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [toggleIsClosed] = useMutation(UPDATE_VENDOR)
 
   const {
     data: vendor_data,
@@ -422,7 +372,7 @@ function EditHoursDashboard () {
   console.log('hours: ', hours)
 
   function getIndex (day) {
-    let dayName =
+    const dayName =
       day === 'MON'
         ? 'Monday'
         : day === 'TUE'
@@ -459,7 +409,7 @@ function EditHoursDashboard () {
     updatedHours[index] = updatedDay
     updatedHours.map((day, index) => {
       const dayCopy = { ...updatedHours[index] }
-      delete dayCopy['__typename']
+      delete dayCopy.__typename
       updatedHours[index] = dayCopy
     })
 
@@ -499,7 +449,7 @@ function EditHoursDashboard () {
                       currentHours={hours}
                       startTime={hours[index].start[timeIndex]}
                       endTime={hours[index].end[timeIndex]}
-                    ></HoursItem>
+                    />
                   )
                 })}
               </HoursColumn>

@@ -1,5 +1,4 @@
-import styled, { keyframes } from 'styled-components/macro'
-import { GrCart } from 'react-icons/gr'
+import styled from 'styled-components/macro'
 import { useNavigate } from 'react-router-dom'
 
 const BottomNavigationWrapper = styled.div`

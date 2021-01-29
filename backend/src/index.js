@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import cors from 'cors'
 import express from 'express'
 import http from 'http'
@@ -44,24 +44,24 @@ const server = new ApolloServer({
     }
   },
   subscriptions: {
-    onConnect: async (connectionParams, websocket, context) => {
-      const decodedToken = await firebaseAdmin
-        .auth()
-        .verifyIdToken(connectionParams.authToken)
-        .catch(_ => null)
-
-      return {
-        idNumber: decodedToken
-          ? decodedToken.firebase.sign_in_attributes[
-              'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
-            ]
-          : null,
-        netid: decodedToken
-          ? decodedToken.firebase.sign_in_attributes[
-              'urn:oid:0.9.2342.19200300.100.1.1'
-            ]
-          : null
+    onConnect: connectionParams => {
+      if (connectionParams.authToken) {
+        return firebaseAdmin
+          .auth()
+          .verifyIdToken(connectionParams.authToken)
+          .then(decodedToken => ({
+            idNumber:
+              decodedToken.firebase.sign_in_attributes[
+                'urn:oid:1.3.6.1.4.1.134.1.1.1.1.19'
+              ],
+            netid:
+              decodedToken.firebase.sign_in_attributes[
+                'urn:oid:0.9.2342.19200300.100.1.1'
+              ]
+          }))
       }
+
+      throw new AuthenticationError('Missing auth token!')
     },
     path: '/ws'
   }

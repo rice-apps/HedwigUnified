@@ -78,27 +78,18 @@ const LogoutItem = styled.div`
   align-items: center;
   justify-content: center;
 `
-const GET_USER_INFO = gql`
-  query GetUserInfo {
-    user @client {
-      _id
-      recentUpdate
-      name
-      netid
-      phone
-    }
-  }
-`
 function VendorHeader () {
   const [showLogout, setShowLogout] = useState(false)
   const [currentTime, setCurrentTime] = useState(
     moment().format('dddd, MMMM Do h:mm:ss A')
   )
   useEffect(() => {
-    const timer = setInterval(() =>
-      {setCurrentTime(moment().format('dddd, MMMM Do h:mm:ss A'))}, 1000
-    );
-    return () => {clearInterval(timer)}
+    const timer = setInterval(() => {
+      setCurrentTime(moment().format('dddd, MMMM Do h:mm:ss A'))
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
   }, [])
 
   const user = JSON.parse(localStorage.getItem('userProfile'))

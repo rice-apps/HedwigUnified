@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components/macro'
-import { useState, useEffect } from 'react'
-import { useQuery, useMutation, useApolloClient } from '@apollo/client'
+import { useState } from 'react'
+import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 
 const GET_VENDOR_INFO = gql`
@@ -126,13 +126,13 @@ function BasicInfoDetail (props) {
         type='text'
         placeholder={props.placeholder}
         onChange={e => console.log(e.target.value)}
-      ></Input>
+      />
     </Div>
   )
 }
 
 function isEmpty (obj) {
-  for (var prop in obj) {
+  for (const prop in obj) {
     if (obj.hasOwnProperty(prop)) return false
   }
 
@@ -141,7 +141,7 @@ function isEmpty (obj) {
 
 function BasicInfoDashboard () {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
-  const [updateBasicInfo, { data, loading, error }] = useMutation(UPDATE_VENDOR)
+  const [] = useMutation(UPDATE_VENDOR)
   const {
     data: vendorData,
     loading: vendorLoading,

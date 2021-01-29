@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './index.css'
 import logo from '../../Login/HedwigLogoFinal_02.svg'
-import { MainDiv, ElemDiv, Logo } from '../../Login/Login.styles'
+import { ElemDiv, Logo } from '../../Login/Login.styles'
 import { Navigate } from 'react-router-dom'
 
 function Launch () {

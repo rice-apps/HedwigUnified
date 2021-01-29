@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
-import hero from '../../../images/hero.jpg'
+import React, { useState, useRef } from 'react'
 import './index.css'
 import { Link } from 'react-scroll'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -10,7 +9,7 @@ import BottomAppBar from '../Vendors/BottomAppBar.js'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
+
 import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -132,8 +131,6 @@ function Menu () {
     })
   }
 
-  
-
   const current_date = new Date()
 
   const currentDay = current_date.getDay()
@@ -198,9 +195,9 @@ function Menu () {
 
   // display start - end time of a specific day
   function dayDisplay (dayItem) {
-    let start = dayItem.start
-    let end = dayItem.end
-    let time = start.map(function (e, i) {
+    const start = dayItem.start
+    const end = dayItem.end
+    const time = start.map(function (e, i) {
       return [e, end[i]]
     })
     if (dayItem.start.length === 0) {
@@ -234,7 +231,7 @@ function Menu () {
 
   // display day name and its hours
   function hourDisplay () {
-    let hourItems = vendor_data.getVendor.hours
+    const hourItems = vendor_data.getVendor.hours
     return (
       <div>
         {console.log('HourItems', hourItems)}
@@ -245,22 +242,7 @@ function Menu () {
     )
   }
 
-  {
-    /* {isClosed ? (
-            <p class="vendorinfo">Closed for the Day</p>
-          ) : (
-            times.map(time => {
-              return (
-                <p class="vendorinfo">
-                  {time[0]} - {time[1]}
-                </p>
-              );
-            })
-          )}
-          <button class="readmore"> More Info </button> */
-  }
-
-  let dropdownTitle = (
+  const dropdownTitle = (
     <div className='statusTitleWrapper'>
       <span className='openStatus'>
         {' '}
@@ -302,7 +284,6 @@ function Menu () {
 
   // we have to change these returns because vendor.name is outdated - brandon
   return (
-    
     <div style={{ position: 'relative' }}>
       {console.log(currentVendor)}
       {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage} />}

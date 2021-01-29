@@ -1,11 +1,6 @@
 import { Client, Environment } from 'square'
 import { Vendor } from '../models/index.js'
 
-// const squareClient = new Client({
-//   environment: Environment.Sandbox,
-//   accessToken: SQUARE_ACCESS_TOKEN
-// })
-
 const squareClients = await Vendor.find()
   .exec()
   .then(res => {

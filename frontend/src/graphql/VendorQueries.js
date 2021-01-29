@@ -5,6 +5,7 @@ const VENDOR_QUERY = gql`
     getVendor(filter: { name: $vendor }) {
       name
       slug
+      logoUrl
       hours {
         start
         end

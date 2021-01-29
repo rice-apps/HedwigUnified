@@ -1,18 +1,14 @@
-import { useState } from 'react'
-import styled from 'styled-components/macro'
+import { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
-import { FaIdCard } from 'react-icons/fa'
-import { GoVerified } from 'react-icons/go'
-import Modal from 'react-modal'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
-import gql from 'graphql-tag.macro'
 import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
+import { AiFillCheckCircle } from 'react-icons/ai'
 import {
   OrderCardWrapper,
   OrderTitleSpaceWrapper,
@@ -32,10 +28,15 @@ import {
   ModalWrapper,
   ModalHeaderWrapper,
   ModalPaymentWrapper,
-  ModalParagraphWrapper,
   ModalOrderDetailsWrapper,
-  ModalOrderDetailRow,
-  ModalButtonsWrapper
+  ModalButtonsWrapper,
+  Background,
+  ModalOrderWrapper,
+  ModalOrderItem,
+  ModalItemList,
+  ModalSubtitle,
+  ModalDetail,
+  ModalCancelMessage
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -78,6 +79,7 @@ function MakeOrderTime (props) {
   )
 }
 
+// MakeOrderDetails makes the component for a single item on the order dashboard
 function MakeOrderDetails (props) {
   return (
     <OrderDetailsItemWrapper>
@@ -124,113 +126,119 @@ function MakeOrderDetails (props) {
   )
 }
 
-function MakeModalHeader (props) {
-  const paymentType = props.paymentType
+function MakeModalOrder (props) {
   return (
-    <ModalHeaderWrapper>
-      <FaIdCard style={{ marginTop: '3px', marginRight: '12px' }} />
-      {paymentType === 'TETRA' ? <div>Tetra</div> : null}
-      {paymentType === 'COHEN' ? <div>Cohen House Membership ID </div> : null}
-      {paymentType === 'CREDIT' ? <div>Credit Card </div> : null}
-    </ModalHeaderWrapper>
+    <ModalOrderItem>
+      <div>{props.quantity}</div>
+      <ItemDescriptionWrapper>
+        <div
+          style={{
+            textTransform: 'uppercase',
+            textAlign: 'left'
+          }}
+        >
+          {props.itemName}
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '2.5vh 1fr',
+            alignItmes: 'center',
+            textAlign: 'left'
+          }}
+        >
+          <BiFoodMenu style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }} />{' '}
+          {props.variant}
+        </div>
+        {props.modifiers && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2.5vh 1fr',
+              alignItems: 'center',
+              textAlign: 'left'
+            }}
+          >
+            <IoIosAddCircleOutline
+              style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }}
+            />{' '}
+            {props.modifiers}
+          </div>
+        )}
+      </ItemDescriptionWrapper>
+      <div style={{ textAlign: 'right' }}>{formatter.format(props.price)}</div>
+    </ModalOrderItem>
   )
 }
 
-function isEmpty (obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false
-    }
-  }
+function MakeModalHeader (props) {
+  return (
+    <ModalHeaderWrapper>New Order: {props.customerName}</ModalHeaderWrapper>
+  )
 }
 
-function MakeModalParagraph (props) {
-  const { paymentType, cancel, isVerified } = props
-  if (paymentType === 'TETRA') {
-    return (
-      <ModalParagraphWrapper>
-        <div>
-          This order is paid in <strong>Tetra</strong>. <br />
-          Please <strong>manually</strong> enter the following buyer's
-          information into the
-          <strong> Tetra Reader</strong>.
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else if (paymentType === 'COHEN') {
-    return (
-      <ModalParagraphWrapper>
-        <div>
-          This order is paid with Cohen House <strong>Membership ID</strong>.
-          Please <strong>manually</strong> enter the following buyer's
-          information into the system.
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else if (paymentType === 'CREDIT') {
-    return (
-      <ModalParagraphWrapper>
-        <div style={{ width: '100%' }}>
-          This order is paid in <strong>Credit Card</strong>. <br />
-          {isVerified ? (
-            <ModalPaymentWrapper>
-              Payment Status: Verified <GoVerified color={'#2CA1D5'} />
-            </ModalPaymentWrapper>
-          ) : (
-            <>
-              <div>
-                Payment Status:{' '}
-                <span style={{ color: '#EA907A', fontWeight: 'bold' }}>
-                  Pending
-                </span>
-              </div>
-              <div>
-                Payment has not been completed yet. Please check back later
-              </div>
-            </>
-          )}
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else if (cancel === true) {
-    return (
-      <ModalParagraphWrapper style={{ justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', fontSize: '20px' }}>
-          Are you sure you want to <strong>cancel</strong> this order?
-        </div>
-      </ModalParagraphWrapper>
-    )
-  } else {
-    return (
-      <ModalParagraphWrapper>PaymentType is not defined.</ModalParagraphWrapper>
-    )
-  }
-}
+function MakeModalDetails (props) {
+  const phone = props.phone
+  const formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
 
-function MakeModalOrderDetails (props) {
-  const paymentType = props.paymentType
   return (
     <ModalOrderDetailsWrapper>
-      <ModalOrderDetailRow>
-        <div>Customer:</div>
-        <div>{props.customerName}</div>
-      </ModalOrderDetailRow>
-      <ModalOrderDetailRow>
-        {paymentType === 'TETRA' ? (
-          <div>Student ID:</div>
-        ) : paymentType === 'COHEN' ? (
-          <div>Membership ID:</div>
-        ) : null}
-        {paymentType === 'TETRA' ? (
-          <div>{props.studentId}</div>
-        ) : paymentType === 'COHEN' ? (
-          <div>{props.cohenId}</div>
-        ) : null}
-      </ModalOrderDetailRow>
-      <ModalOrderDetailRow>
-        <div>Amount:</div>
-        <div>{formatter.format(props.orderTotal)}</div>
-      </ModalOrderDetailRow>
+      <ModalSubtitle>Buyer Contact:</ModalSubtitle>
+      <ModalDetail>
+        <div>Phone: {formattedPhone}</div>
+        <div>Email: {props.email}</div>
+      </ModalDetail>
+      <ModalSubtitle>Payment Details: </ModalSubtitle>
+      <ModalDetail>
+        <div>
+          Type: <span style={{ fontWeight: 'bold' }}>{props.paymentType}</span>
+        </div>
+        {props.paymentType === 'CREDIT' ? (
+          <div>
+            Status:{' '}
+            <span
+              style={{
+                color: props.isVerified ? '#1cc57f' : '#EA907A',
+                fontWeight: 'bold'
+              }}
+            >
+              {props.isVerified ? (
+                <span>
+                  Verified <AiFillCheckCircle />{' '}
+                </span>
+              ) : (
+                <span>Pending</span>
+              )}
+            </span>
+          </div>
+        ) : props.paymentType === 'TETRA' ? (
+          <div>
+            Student ID:{' '}
+            <span style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
+              {props.studentId}
+            </span>
+          </div>
+        ) : props.paymentType === 'COHEN' ? (
+          <div>
+            Cohen ID:{' '}
+            <span style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
+              {props.cohenId}
+            </span>
+          </div>
+        ) : (
+          <div>Error!</div>
+        )}
+      </ModalDetail>
+      <ModalSubtitle>Pickup Details:</ModalSubtitle>
+      <ModalDetail>
+        <div>
+          Submitted: <span> {props.submissionTime}</span>
+        </div>
+        <div>
+          Pick Up:{' '}
+          <span style={{ fontWeight: 'bold' }}>{props.pickupTime}</span>
+        </div>
+      </ModalDetail>
     </ModalOrderDetailsWrapper>
   )
 }
@@ -259,6 +267,7 @@ function MakePaymentSpace (props) {
 
   let isVerified = false
 
+  const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
     isVerified = verifyPaymentResult.verifyPayment
   }
@@ -271,33 +280,35 @@ function MakePaymentSpace (props) {
         {buttonStatus === 'NEW' ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <AcceptButton
-              onClick={function () {
-                verify_payment({
-                  variables: {
-                    paymentId: props.shopifyOrderId,
-                    vendor: 'Cohen House',
-                    source: 'SHOPIFY'
-                  }
-                })
+            {props.pastPickup ? null : (
+              <AcceptButton
+                onClick={function () {
+                  verify_payment({
+                    variables: {
+                      paymentId: props.shopifyOrderId,
+                      vendor: 'Cohen House',
+                      source: 'SHOPIFY'
+                    }
+                  })
 
-                openAcceptModal()
-              }}
-            >
-              Accept
-            </AcceptButton>
+                  openAcceptModal()
+                }}
+              >
+                View Payment
+              </AcceptButton>
+            )}
           </ButtonsSpaceWrapper>
         ) : buttonStatus === 'ACCEPTED' ? (
           <ButtonsSpaceWrapper>
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
-            <ReadyButton onClick={props.handleClick}>Ready</ReadyButton>
+            <ReadyButton onClick={props.handleClick}>Order Ready</ReadyButton>
           </ButtonsSpaceWrapper>
         ) : (
           (buttonStatus = 'READY' ? (
             <ButtonsSpaceWrapper>
               <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
               <PickedUpButton onClick={props.handleClick}>
-                Picked Up
+                Pick Up Complete
               </PickedUpButton>
             </ButtonsSpaceWrapper>
           ) : (
@@ -320,7 +331,8 @@ function MakePaymentSpace (props) {
           </strong>
         </div>
         <div>
-          Total: <strong>{formatter.format(props.orderTotal)}</strong>
+          Total:{' '}
+          <strong>{formatter.format(props.orderTotal + props.orderTax)}</strong>
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -328,108 +340,163 @@ function MakePaymentSpace (props) {
           handleClick={props.handleClick}
           buttonStatus={props.buttonStatus}
           shopifyOrderId={props.shopifyOrderId}
+          pastPickup={props.pastPickup}
         />
       </ButtonsSpaceWrapper>
 
-      <Modal
-        isOpen={acceptModalIsOpen}
-        style={{
-          content: {
-            backgroundColor: 'white',
-            height: '44vh',
-            width: '44vw',
-            position: 'absolute',
-            top: '28%',
-            left: '28%',
-            borderRadius: '20px'
-          }
-        }}
-      >
-        <ModalWrapper>
-          <MakeModalHeader
-            paymentType={props.paymentType}
-            orderNumber={props.orderNumber}
-          />
-          <MakeModalParagraph
-            paymentType={props.paymentType}
-            cancel={false}
-            isVerified={isVerified}
-          />
-          <MakeModalOrderDetails
-            paymentType={props.paymentType}
-            orderTotal={props.orderTotal}
-            customerName={props.customerName}
-            studentId={props.studentId}
-            cohenId={props.cohenId}
-          />
-          <ModalButtonsWrapper>
-            <CancelButton
-              onClick={() => {
-                closeAcceptModal()
-                cancelOrder()
-              }}
-            >
-              Cancel
-            </CancelButton>
-            {(props.paymentType !== 'CREDIT') |
-            ((props.paymentType === 'CREDIT') & isVerified) ? (
-              <AcceptButton
+      {acceptModalIsOpen && (
+        <Background>
+          <ModalWrapper>
+            <MakeModalHeader customerName={props.customerName} />
+            <ModalOrderWrapper>
+              <ModalItemList>
+                {items &&
+                  items.map(function (item) {
+                    const modifiers = item.modifiers?.map(
+                      modifier => modifier.name
+                    )
+
+                    return (
+                      <MakeModalOrder
+                        quantity={item.quantity}
+                        itemName={item.name}
+                        price={item.totalMoney.amount / 100}
+                        variant={item.variationName}
+                        modifiers={modifiers && [...modifiers].join(', ')}
+                      />
+                    )
+                  })}
+              </ModalItemList>
+              <ModalPaymentWrapper>
+                <div>Tax:</div>
+                <div>{formatter.format(props.orderTax)}</div>
+                <div> Total:</div>
+                <div style={{ fontWeight: 'bold' }}>
+                  {formatter.format(props.orderTotal + props.orderTax)}
+                </div>
+              </ModalPaymentWrapper>
+            </ModalOrderWrapper>
+            <MakeModalDetails
+              paymentType={props.paymentType}
+              isVerified={isVerified}
+              phone={props.phone}
+              email={props.email}
+              studentId={props.studentId}
+              cohenId={props.cohenId}
+              submissionTime={props.submissionTime}
+              pickupTime={props.pickupTime}
+            />
+            <ModalButtonsWrapper>
+              <CancelButton
                 onClick={() => {
-                  props.handleClick()
+                  openCancelModal()
                   closeAcceptModal()
                 }}
               >
-                Accept
-              </AcceptButton>
-            ) : (
-              <AcceptButton onClick={closeAcceptModal}>
-                Return To Home
-              </AcceptButton>
-            )}
-          </ModalButtonsWrapper>
-        </ModalWrapper>
-      </Modal>
+                Cancel
+              </CancelButton>
+              {(props.paymentType !== 'CREDIT') |
+              ((props.paymentType === 'CREDIT') & isVerified) ? (
+                <AcceptButton
+                  onClick={() => {
+                    props.handleClick()
+                    closeAcceptModal()
+                  }}
+                >
+                  Accept
+                </AcceptButton>
+              ) : (
+                <AcceptButton onClick={closeAcceptModal}>
+                  Return To Home
+                </AcceptButton>
+              )}
+            </ModalButtonsWrapper>
+          </ModalWrapper>
+        </Background>
+      )}
 
-      <Modal
-        isOpen={cancelModalIsOpen}
-        style={{
-          content: {
-            backgroundColor: 'white',
-            height: '44vh',
-            width: '44vw',
-            position: 'absolute',
-            top: '28%',
-            left: '28%',
-            borderRadius: '20px'
-          }
-        }}
-      >
-        <ModalWrapper>
-          <MakeModalHeader
-            paymentType={props.paymentType}
-            orderNumber={props.orderNumber}
-          />
-          <MakeModalParagraph cancel />
-          <MakeModalOrderDetails
-            paymentType={props.paymentType}
-            orderTotal={props.orderTotal}
-            customerName={props.customerName}
-          />
-          <ModalButtonsWrapper>
-            <CancelButton onClick={closeCancelModal}>Back</CancelButton>
-            <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
-              Cancel
-            </AcceptButton>
-          </ModalButtonsWrapper>
-        </ModalWrapper>
-      </Modal>
+      {cancelModalIsOpen && (
+        <Background>
+          <ModalWrapper cancel>
+            <MakeModalHeader customerName={props.customerName} />
+            <ModalOrderWrapper>
+              <ModalItemList>
+                {items &&
+                  items.map(function (item) {
+                    const modifiers = item.modifiers?.map(
+                      modifier => modifier.name
+                    )
+
+                    return (
+                      <MakeModalOrder
+                        quantity={item.quantity}
+                        itemName={item.name}
+                        price={item.totalMoney.amount / 100}
+                        variant={item.variationName}
+                        modifiers={modifiers && [...modifiers].join(', ')}
+                      />
+                    )
+                  })}
+              </ModalItemList>
+              <ModalPaymentWrapper>
+                <div>Tax:</div>
+                <div>{formatter.format(props.orderTax)}</div>
+                <div> Total:</div>
+                <div style={{ fontWeight: 'bold' }}>
+                  {formatter.format(props.orderTotal + props.orderTax)}
+                </div>
+              </ModalPaymentWrapper>
+            </ModalOrderWrapper>
+            <MakeModalDetails
+              paymentType={props.paymentType}
+              isVerified={isVerified}
+              phone={props.phone}
+              email={props.email}
+              studentId={props.studentId}
+              cohenId={props.cohenId}
+              submissionTime={props.submissionTime}
+              pickupTime={props.pickupTime}
+            />
+            {/* <ModalCancelMessage>Are you sure you want to cancel?</ModalCancelMessage> */}
+            <ModalButtonsWrapper>
+              <CancelButton onClick={closeCancelModal}>Back</CancelButton>
+              <AcceptButton onClick={() => (closeCancelModal(), cancelOrder())}>
+                Cancel
+              </AcceptButton>
+            </ModalButtonsWrapper>
+            <ModalCancelMessage>
+              Are you sure you want to cancel this order?
+            </ModalCancelMessage>
+          </ModalWrapper>
+        </Background>
+      )}
     </PaymentSpaceWrapper>
   )
 }
 
+function isPastPickup (pickupTime, currentTime) {
+  const pickupTimeBuffer = 0
+  const pastPickup = currentTime.diff(pickupTime, 'minutes') > pickupTimeBuffer
+  return pastPickup
+}
+
 function OrderCard (props) {
+  const [currentTime, setCurrentTime] = useState(moment())
+  const [livePickupTime, updateLivePickupTime] = useState(props.pickupTime)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment())
+      updateLivePickupTime(props.pickupTime)
+    }, 5000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
   const {
     customerName,
+    email,
+    phone,
     pickupTime,
     submissionTime,
     items,
@@ -439,9 +506,9 @@ function OrderCard (props) {
     handleClick,
     buttonStatus,
     cancelClick,
-    id
+    id,
+    newOrder
   } = props
-  // RFC3339
 
   const {
     data: orderTrackerData,
@@ -459,21 +526,24 @@ function OrderCard (props) {
     return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
   }
 
+  // pastPickup is true if current time has past an order's pickuptime + buffer
+  const pastPickup =
+    isPastPickup(moment(livePickupTime), currentTime) && newOrder
+
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
     ? moment(submissionTime).format('h:mm A')
     : 'None'
-  const timeLeft = moment(pickupTime).fromNow()
+  const timeLeft = moment(livePickupTime).fromNow()
 
   return (
     <IconContext.Provider
       value={{ style: { verticalAlign: 'middle', marginBottom: '2px' } }}
     >
-      {console.log(orderTrackerData.getOrderTracker)}
-      <OrderCardWrapper>
+      <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle orderNumber='12' customerName={customerName} />
+        <MakeOrderTitle customerName={customerName} />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
@@ -495,7 +565,7 @@ function OrderCard (props) {
 
           {items &&
             items.map(function (item) {
-              let modifiers = item.modifiers?.map(modifier => modifier.name)
+              const modifiers = item.modifiers?.map(modifier => modifier.name)
 
               return (
                 <MakeOrderDetails
@@ -509,13 +579,19 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          pastPickup={pastPickup}
+          items={items}
+          email={email}
+          phone={phone}
           buttonStatus={buttonStatus}
           orderCost={orderCost}
           studentId={props.studentId}
           cohenId={props.cohenId}
-          orderTax={props.orderTax}
+          orderTax={props.orderTotal * 0.0825}
           orderTotal={orderTotal}
           fulfillment={fulfillment}
+          pickupTime={pickupAt}
+          submissionTime={submittedAt}
           paymentType={
             orderTrackerData.getOrderTracker === null
               ? 'None'

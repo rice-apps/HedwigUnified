@@ -2,20 +2,22 @@ import VendorsideTemplate from '../VendorComponents/VendorGridContainer.js'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'
 import ItemCatalog from '../VendorComponents/ItemsComponents/ItemCatalog.js'
+import { LoadingPage } from './../../../components/LoadingComponents'
 
 function ItemsMenuManagementPage () {
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const {
     data: catalog_info,
     error: catalog_error,
     loading: catalog_loading
   } = useQuery(GET_CATALOG, {
     variables: {
-      vendor: 'East West Tea'
+      vendor: currentUser.vendor
     }
   })
 
   if (catalog_loading) {
-    return <p>Loading...</p>
+    return <LoadingPage />
   }
   if (catalog_error) {
     return <p>ErrorC...</p>

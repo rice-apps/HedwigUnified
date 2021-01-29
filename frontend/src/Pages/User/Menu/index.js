@@ -1,5 +1,4 @@
-import { useState, useRef } from 'react'
-import hero from '../../../images/hero.jpg'
+import React, { useState, useRef } from 'react'
 import './index.css'
 import { Link } from 'react-scroll'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -10,7 +9,7 @@ import BottomAppBar from '../Vendors/BottomAppBar.js'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
+
 import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -18,6 +17,8 @@ import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import { convertTimeToNum } from '../Vendors/VendorCard.js'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
+import ItemAddedModal from './ItemAdded'
 
 // add a proceed to checkout
 function Menu () {
@@ -27,7 +28,7 @@ function Menu () {
   const [] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currentVendor, slug } = state
+  const { currentVendor, slug, addedItem, addedImage } = state
   const {
     data: catalog_info,
     error: catalog_error,
@@ -49,22 +50,38 @@ function Menu () {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
   })
+
+  let menuBar
+  let horizontalMenuItem
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus()
     }
     prevOpen.current = open
+    const onScroll = () => {
+      if (!menuBar) {
+        menuBar = document.getElementById('horizontalmenu')
+      } else {
+        horizontalMenuItem = menuBar.querySelector('.categoryactive')
+      }
+      if (horizontalMenuItem) {
+        menuBar.scrollLeft =
+          horizontalMenuItem.offsetLeft - horizontalMenuItem.offsetHeight / 2
+      }
+    }
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [open])
 
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage />
   }
   if (vendor_error) {
     return <p>ErrorV...</p>
   }
   // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage />
   }
   if (catalog_error) {
     console.log('CATALOG ERROR', catalog_error)
@@ -108,7 +125,7 @@ function Menu () {
     return navigate(`${product.name}`, {
       state: {
         currProduct: `${product.dataSourceId}`,
-        currVendor: currentVendor,
+        currentVendor: currentVendor,
         slug: slug
       }
     })
@@ -178,9 +195,9 @@ function Menu () {
 
   // display start - end time of a specific day
   function dayDisplay (dayItem) {
-    let start = dayItem.start
-    let end = dayItem.end
-    let time = start.map(function (e, i) {
+    const start = dayItem.start
+    const end = dayItem.end
+    const time = start.map(function (e, i) {
       return [e, end[i]]
     })
     if (dayItem.start.length === 0) {
@@ -214,7 +231,7 @@ function Menu () {
 
   // display day name and its hours
   function hourDisplay () {
-    let hourItems = vendor_data.getVendor.hours
+    const hourItems = vendor_data.getVendor.hours
     return (
       <div>
         {console.log('HourItems', hourItems)}
@@ -225,22 +242,7 @@ function Menu () {
     )
   }
 
-  {
-    /* {isClosed ? (
-            <p class="vendorinfo">Closed for the Day</p>
-          ) : (
-            times.map(time => {
-              return (
-                <p class="vendorinfo">
-                  {time[0]} - {time[1]}
-                </p>
-              );
-            })
-          )}
-          <button class="readmore"> More Info </button> */
-  }
-
-  let dropdownTitle = (
+  const dropdownTitle = (
     <div className='statusTitleWrapper'>
       <span className='openStatus'>
         {' '}
@@ -263,23 +265,44 @@ function Menu () {
     </div>
   )
 
+  const horizontalMenu = categories.map(category => (
+    // smooth scrolling feature
+    <h1 class='categoryname' category={category}>
+      <Link
+        activeClass='categoryactive'
+        style={{ textDecoration: 'none', color: 'black' }}
+        to={category}
+        smooth
+        spy
+        duration={500}
+        offset={-20}
+      >
+        {category}
+      </Link>
+    </h1>
+  ))
+
   // we have to change these returns because vendor.name is outdated - brandon
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
+      {console.log(currentVendor)}
+      {addedItem && <ItemAddedModal item={addedItem} itemImage={addedImage} />}
       <BuyerHeader showBackButton='true' backLink='/eat' />
-      <div style={{ paddingBottom: '8.6vh' }}>
+      {addedItem && <div> hi </div>}
+      <div
+        style={{
+          paddingBottom: '8.6vh',
+          paddingTop: '8vh',
+          position: 'relative'
+        }}
+      >
         {/* Hero Image */}
-        <img
-          style={{ filter: 'blur(2.5px)' }}
-          src={hero}
-          class='hero'
-          alt='hero'
-        />
+        <img src={vendor_data.getVendor.logoUrl} class='hero' alt='hero' />
 
         {/* Vendor Info */}
         <div class='vendorinfocontainer'>
           {/* Vendor Name */}
-          <h1 class='vendortitle'> {vendor_data.getVendor.name} </h1>
+          <div class='vendortitle'> {vendor_data.getVendor.name} </div>
 
           {/* Vendor Operating Hours */}
           <Button
@@ -289,12 +312,14 @@ function Menu () {
             style={{ backgroundColor: 'white' }}
             onClick={handleToggle}
             disableRipple
+            className='anchorButton'
           >
             {dropdownTitle}
           </Button>
           <Popper
             open={open}
             anchorEl={anchorRef.current}
+            placement='top'
             role={undefined}
             transition
           >
@@ -326,32 +351,20 @@ function Menu () {
         </div>
 
         {/* Category Select Bar */}
-        <div class='categoryselect'>
-          {categories.map(category => (
-            // smooth scrolling feature
-            <h1 class='categoryname'>
-              <Link
-                activeClass='categoryactive'
-                style={{ textDecoration: 'none', color: 'black' }}
-                to={category}
-                smooth
-                spy
-                duration={500}
-                offset={-20}
-              >
-                {category}
-              </Link>
-            </h1>
-          ))}
+        <div class='categoryselect' id='horizontalmenu'>
+          {horizontalMenu}
         </div>
 
         {/* Products */}
-        <div class='itemlist'>
+        <div class='itemlist' id='categorymenu'>
           {/* Appending each category to the list */}
           {categories.map(category => (
-            <div id={category}>
+            <div
+              id={category}
+              // class='categorycontianer'
+            >
               {/* Giving each category a header */}
-              <h3 class='categoryheader'>{category}</h3>
+              <div class='categoryheader'>{category}</div>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
                 .filter(item => item.category === category && item.isAvailable)
@@ -368,14 +381,14 @@ function Menu () {
                       class='itemimage'
                       alt={product.name}
                     />
-                    <h1 class='itemname'>{product.name}</h1>
-                    <p class='itemprice'>
-                      {product.isAvailable
-                        ? formatter.format(
-                            product.variants[0].price.amount / 100
-                          ) + '+'
-                        : 'Unavailable'}
-                    </p>
+                    <div class='itemcontainer'>
+                      <h1 class='itemname'>{product.name}</h1>
+                      <p class='itemprice'>
+                        {formatter.format(
+                          product.variants[0].price.amount / 100
+                        )}
+                      </p>
+                    </div>
                   </div>
                 ))}
             </div>

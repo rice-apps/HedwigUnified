@@ -1,21 +1,7 @@
-import { useQuery } from '@apollo/client'
-import gql from 'graphql-tag.macro'
 import './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
-
-const GET_USER_INFO = gql`
-  query GetUserInfo {
-    user @client {
-      _id
-      recentUpdate
-      name
-      netid
-      phone
-    }
-  }
-`
 
 const getLinks = user => {
   const links = [

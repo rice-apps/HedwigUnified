@@ -12,7 +12,7 @@ import CartProduct from './CartProducts'
 import currency from 'currency.js'
 import Select from 'react-select'
 import moment from 'moment'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import CartHeader from './CartHeader'
 import styled from 'styled-components/macro'
 import {
@@ -37,8 +37,8 @@ const Div = styled.div`
 `
 
 const GET_AVAILABILITIES = gql`
-  query GET_AVAILABILITIES($productIds: [String!]) {
-    getAvailabilities(productIds: $productIds)
+  query GET_AVAILABILITIES($productIds: [String!], $vendor: String!) {
+    getAvailabilities(productIds: $productIds, vendor: $vendor)
   }
 `
 
@@ -55,7 +55,7 @@ function generatePickupTimes (
   endMinute,
   isFirst
 ) {
-  let pickupTimes = []
+  const pickupTimes = []
   let pickupMinute = Math.ceil(currMinute / 15) * 15
   let pickupHour = currHour
   while (pickupHour <= endHour) {
@@ -128,13 +128,13 @@ function calculateNextHours (
   while (currTime >= startTimes[idx]) {
     idx += 1
   }
-  let timeIntervals = []
+  const timeIntervals = []
   let newIdx = 0
-  //When restaurant is closed for the day
+  // When restaurant is closed for the day
   if (idx === endTimes.length && currTime >= endTimes[idx - 1]) {
     return [[0, 0, 0, 0]]
   }
-  //When restaurant is not open currently for orders, but open later in the day
+  // When restaurant is not open currently for orders, but open later in the day
   else if (
     idx === 0 ||
     (idx > 0 && currTime >= endTimes[idx - 1]) ||
@@ -148,7 +148,7 @@ function calculateNextHours (
     ])
     newIdx = idx + 1
   }
-  //When the restaurant is currently open for orders
+  // When the restaurant is currently open for orders
   else {
     timeIntervals.push([
       currHour,
@@ -183,9 +183,15 @@ function CartDetail () {
     { value: 'COHEN', label: 'Cohen House' }
   ]
   // const defaultPaymentOption = options[0];
+  const cart_menu = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : null
+  const order = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('order'))
+    : null
 
   const { loading, error, data } = useQuery(GET_VENDOR, {
-    variables: { filter: { name: 'Cohen House' } }
+    variables: { filter: { name: order.vendor.name } }
   })
   const [
     createOrder,
@@ -198,12 +204,6 @@ function CartDetail () {
 
   const navigate = useNavigate()
   // add catch statement
-  const cart_menu = localStorage.getItem('cartItems')
-    ? JSON.parse(localStorage.getItem('cartItems'))
-    : null
-  const order = localStorage.getItem('cartItems')
-    ? JSON.parse(localStorage.getItem('order'))
-    : null
 
   console.log(cart_menu)
 
@@ -214,15 +214,13 @@ function CartDetail () {
     : null
 
   const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
-    variables: { productIds: product_ids },
+    variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
   })
 
-  const { state } = useLocation()
-
   const handleClickCredit = async () => {
     // Get url and embed that url
-    return navigate(`/eat/almostThere`)
+    return navigate('/eat/almostThere')
   }
 
   const handleConfirmClick = async () => {
@@ -240,7 +238,7 @@ function CartDetail () {
     while (newRes.loading) {}
     if (newRes.data.getAvailabilities === false) {
       console.log('Availability: ', newRes.data.getAvailabilities)
-      return navigate(`/eat/failure`)
+      return navigate('/eat/failure')
     } else {
       const rec = {
         variables: createRecord(cart_menu, paymentMethod, cohenId)
@@ -254,6 +252,7 @@ function CartDetail () {
       const orderJson = orderResponse.data.createOrder
       const createPaymentResponse = await createPayment({
         variables: {
+          vendor: order.vendor.name,
           sourceId: 'cnon:card-nonce-ok',
           orderId: orderJson.id,
           location: order.vendor.locationIds[0],
@@ -299,7 +298,7 @@ function CartDetail () {
           0
         )
       : 0
-    if (newSubtotal != totals.subtotal) {
+    if (newSubtotal !== totals.subtotal) {
       setTotals({
         subtotal: newSubtotal,
         tax: newSubtotal * 0.0825
@@ -469,7 +468,7 @@ function CartDetail () {
           <Title>Pick Up Time:</Title>
           <Select
             options={pickupTimes}
-            placeholder={'Select...'}
+            placeholder='Select...'
             onChange={changePickupTime}
             clearable={false}
             style={styles.select}
@@ -481,7 +480,7 @@ function CartDetail () {
           <Select
             options={options}
             onChange={changePaymentType}
-            placeholder={'Select...'}
+            placeholder='Select...'
             clearable={false}
             style={styles.select}
             className='float-cart__dropdown'
@@ -489,7 +488,7 @@ function CartDetail () {
           {paymentMethod === 'COHEN' && (
             <Div>
               <label>Enter your Cohen House Membership ID: </label>
-              <input onChange={e => setCohenId(e.target.value)}></input>
+              <input onChange={e => setCohenId(e.target.value)} />
             </Div>
           )}
           {nullError && (

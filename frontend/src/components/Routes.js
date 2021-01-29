@@ -29,7 +29,7 @@ import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import HelpPage from '../Pages/User/Help'
 import TestPage from './TestPage'
-
+import { SmallLoadingPage } from './LoadingComponents'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -81,7 +81,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
 
   // Show loading message as query runs
   if (loading) {
-    return <h1>Loading...</h1>
+    return <SmallLoadingPage />
   }
 
   // Something went wrong, try to login again
@@ -203,6 +203,15 @@ export const RoutesComponent = ({ loginCallBack }) => {
           )
         },
         {
+          path: '/cart',
+          element: (
+            <PrivateRoute
+              element={<CartDetail />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
           path: '/profile',
           element: (
             <PrivateRoute
@@ -233,16 +242,8 @@ export const RoutesComponent = ({ loginCallBack }) => {
                   updateLogin={loginCallBack}
                 />
               )
-            },
-            {
-              path: '/cart',
-              element: (
-                <PrivateRoute
-                  element={<CartDetail />}
-                  updateLogin={loginCallBack}
-                />
-              )
             }
+         
           ]
         }
       ]
@@ -258,7 +259,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<OpenOrdersPage />}
               updateLogin={loginCallBack}
             />
@@ -268,7 +269,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/openorders',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<OpenOrdersPage />}
               updateLogin={loginCallBack}
             />
@@ -278,7 +279,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/closedorders',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<ClosedOrdersPage />}
               updateLogin={loginCallBack}
             />
@@ -288,7 +289,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/items',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<ItemsMenuManagementPage />}
               updateLogin={loginCallBack}
             />
@@ -298,7 +299,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/modifiers',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<ModifiersMenuManagementPage />}
               updateLogin={loginCallBack}
             />
@@ -308,7 +309,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/set-basic-info',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<SetBasicInfoPage />}
               updateLogin={loginCallBack}
             />
@@ -318,7 +319,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/set-store-hours',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<SetStoreHoursPage />}
               updateLogin={loginCallBack}
             />
@@ -328,7 +329,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/faq',
           element: (
             <PrivateRoute
-              isEmployeeRoute={true}
+              isEmployeeRoute
               element={<FAQ />}
               updateLogin={loginCallBack}
             />
@@ -338,7 +339,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
     },
     {
       path: '/*',
-      element: <Navigate to={'/404_page'} />
+      element: <Navigate to='/404_page' />
     }
   ]
 

@@ -22,25 +22,23 @@ const BackButton = styled.button`
 `
 
 function ErrorPage (props) {
-  {
-    const navigate = useNavigate()
-    const goBack = () => {
-      navigate(-1)
-      navigate(-1)
-    }
-    return (
-      <div className='errorPage'>
-        <h1 style={{ 'font-size': '52px' }}>
-          Page doesn't exist... How did you get here?
-        </h1>
-        {/* <p>Page not found. Try a different URL!</p> */}
-        <p>{props.errMessage} Try a different URL!</p>
-        <BackButton onClick={goBack} style={{ cursor: 'pointer' }}>
-          Go Back
-        </BackButton>
-      </div>
-    )
+  const navigate = useNavigate()
+  const goBack = () => {
+    navigate(-1)
+    navigate(-1)
   }
+  return (
+    <div className='errorPage'>
+      <h1 style={{ 'font-size': '52px' }}>
+        Page doesn't exist... How did you get here?
+      </h1>
+      {/* <p>Page not found. Try a different URL!</p> */}
+      <p>{props.errMessage} Try a different URL!</p>
+      <BackButton onClick={goBack} style={{ cursor: 'pointer' }}>
+        Go Back
+      </BackButton>
+    </div>
+  )
 }
 
 export default ErrorPage

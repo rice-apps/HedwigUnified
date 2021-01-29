@@ -3,8 +3,8 @@ import './contact.css'
 
 import { gql, useMutation } from '@apollo/client'
 import { TextField } from '@material-ui/core'
-import { useNavigate, Navigate } from 'react-router-dom'
-
+import { Navigate } from 'react-router-dom'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
 const ADD_PHONE = gql`
   mutation($name: String!, $phone: String!, $netid: String!) {
     userUpdateOne(
@@ -21,8 +21,6 @@ const ADD_PHONE = gql`
   }
 `
 
-const sStorage = window.localStorage
-
 function normalizeInput (value, previousValue) {
   // return nothing if no value
   if (!value) return value
@@ -36,8 +34,9 @@ function normalizeInput (value, previousValue) {
     if (cvLength < 4) return currentValue
 
     // returns: "xxx", "xxx-x", "xxx-xx", "xxx-xxx",
-    if (cvLength < 7)
+    if (cvLength < 7) {
       return `${currentValue.slice(0, 3)}-${currentValue.slice(3)}`
+    }
 
     // returns: "xxx-xxx-", xxx-xxx-x", "xxx-xxx-xx", "xxx-xxx-xxx", "xxx-xxx-xxxx"
     return `${currentValue.slice(0, 3)}-${currentValue.slice(
@@ -57,7 +56,6 @@ function getFirstName (name) {
 
 function ContactForm () {
   const user = JSON.parse(localStorage.getItem('userProfile'))
-  const navigate = useNavigate()
   const userName = user.name
   const firstName = getFirstName(userName)
   const [phone, setPhone] = useState(null)
@@ -69,19 +67,9 @@ function ContactForm () {
     setFormat(prevState => normalizeInput(target.value, prevState))
     setErrorState(false)
   }
-  const record = {
-    name: userName,
-    netid: user.netid,
-    phone: phone,
-    token: user.token,
-    recentUpdate: user.recentUpdate,
-    type: user.type,
-    vendor: user.vendor,
-    isAdmin: user.isAdmin
-  }
   const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <SmallLoadingPage />
   if (error) return <p>{error.message}</p>
 
   if (confirmed) {
@@ -120,7 +108,7 @@ function ContactForm () {
             }}
             value={format === null ? '' : format}
             error={errorState}
-            fullWidth={true}
+            fullWidth
             onChange={e => {
               handleChange(e.target)
             }}
@@ -129,7 +117,7 @@ function ContactForm () {
         <div id='btn-container'>
           <div
             className='confirm-btn'
-            onClick={event => {
+            onClick={() => {
               if (phone && phone.length === 10) {
                 setConfirmed(true)
               } else {

@@ -21,8 +21,8 @@ const GET_CATALOG = gql`
 `
 
 const GET_ITEM = gql`
-  query GET_ITEM($dataSourceId: String!) {
-    getItem(dataSource: SQUARE, dataSourceId: $dataSourceId) {
+  query GET_ITEM($dataSourceId: String!, $vendor: String!) {
+    getItem(dataSource: SQUARE, dataSourceId: $dataSourceId, vendor: $vendor) {
       name
       description
       dataSourceId
@@ -62,17 +62,19 @@ const GET_ITEM = gql`
 `
 
 const GET_ITEM_AVAILABILITY = gql`
-  query GET_ITEM_AVAILABILITY($productId: String!) {
-    getAvailability(productId: $productId)
+  query GET_ITEM_AVAILABILITY($productId: String!, $vendor: String!) {
+    getAvailability(productId: $productId, vendor: $vendor)
   }
 `
 
 const SET_ITEM_AVAILABILITY = gql`
   mutation SET_ITEM_AVAILABILITY(
+    $vendor: String!
     $productId: String!
     $isItemAvailable: Boolean!
   ) {
     setAvailability(
+      vendor: $vendor
       productId: $productId
       isItemAvailable: $isItemAvailable
       dataSource: SQUARE

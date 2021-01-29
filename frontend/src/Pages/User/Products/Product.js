@@ -10,11 +10,12 @@ import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
 import BottomAppBar from '../Vendors/BottomAppBar.js'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
 
 function Product () {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currProduct: productId, currVendor: vendorState } = state
+  const { currProduct: productId, currentVendor } = state
 
   const {
     data: product_data,
@@ -22,16 +23,18 @@ function Product () {
     loading: product_loading
   } = useQuery(GET_ITEM, {
     variables: {
-      dataSourceId: productId
+      dataSourceId: productId,
+      vendor: currentVendor
     }
   })
+  // console.log(vnedorState, "CURRENT")
 
   const {
     data: vendor_data,
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: vendorState },
+    variables: { vendor: currentVendor },
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
   })
@@ -45,17 +48,17 @@ function Product () {
 
   console.log(productId)
   if (vendor_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage />
   }
   if (vendor_error) {
-    return <p>ErrorV...</p>
+    return <p>ErrorV...{vendor_error.message}</p>
   }
 
   if (product_loading) {
-    return <p>Loading...</p>
+    return <SmallLoadingPage />
   }
   if (product_error) {
-    return <p>ErrorP...</p>
+    return <p>ErrorP...{product_error.message}</p>
   }
 
   const { getItem: product } = product_data
@@ -71,7 +74,18 @@ function Product () {
 
   function makeCartItem () {
     const vendor = vendor_data.getVendor
+    const cart_menu = JSON.parse(localStorage.getItem('cartItems'))
     const order = JSON.parse(localStorage.getItem('order'))
+
+    if (Object.keys(order.vendor).length != 0) {
+    
+      if (cart_menu.length === 0) {
+        console.log('SUCCESS')
+      }
+      else if (vendor.name != order.vendor.name) {
+        return console.log('Error! Order is from a different vendor!')
+      } // todo: add warning window.
+    }
 
     localStorage.setItem(
       'order',
@@ -85,10 +99,7 @@ function Product () {
         })
       )
     )
-    if (order.vendor && vendor.name != order.vendor.name) {
-      console.log('Order is not from the same vendor! ERROR')
-      return // todo: add warning window.
-    }
+
     console.log('merchant Id ', order.vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])
@@ -112,9 +123,9 @@ function Product () {
     // purpose of subList: to make modifierList match the structure of prodList
     const modList = []
     const prodList = product.modifierLists
-    let i = 0,
-      j = 0,
-      subList = []
+    let i = 0
+    let j = 0
+    let subList = []
 
     // loops through product modifierLists once
     // traverses selected modifiers once at a separate pace
@@ -155,20 +166,20 @@ function Product () {
         (prodList[i].minModifiers != null &&
           modList[i].length < prodList[i].minModifiers) ||
         (prodList[i].maxModifiers != null &&
-          prodList[i].maxModifiers != -1 &&
+          prodList[i].maxModifiers !== -1 &&
           modList[i].length > prodList[i].maxModifiers)
       ) {
         setRequiredFilled(false)
         return false
       }
     }
-    //converts modList into an object
-    let x = 0,
-      y = 0,
-      modObject = {}
+    // converts modList into an object
+    let x = 0
+    let y = 0
+    const modObject = {}
 
     while (x < modList.length) {
-      if (modList[x].length == 0) {
+      if (modList[x].length === 0) {
         x++
       } else {
         for (let j = 0; j < modList[x].length; j++) {
@@ -201,7 +212,7 @@ function Product () {
   return (
     <div>
       <BuyerHeader
-        showBackButton={true}
+        showBackButton
         backLink={`/eat/${vendor.slug}`}
         state={{ currentVendor: vendor.name }}
       />
@@ -218,7 +229,7 @@ function Product () {
         <div className='variantsContainer'>
           <VariantSelection variants={product.variants} />
         </div>
-        {product.modifierLists.length == 0 && null}
+        {product.modifierLists.length === 0 && null}
         <div className='modifiersContainer'>
           {product.modifierLists.map(modifier => {
             return (
@@ -245,12 +256,16 @@ function Product () {
             onClick={() => {
               if (makeCartItem()) {
                 navigate(`/eat/${vendor.slug}`, {
-                  state: { currentVendor: vendor.name }
+                  state: {
+                    currentVendor: vendor.name,
+                    addedItem: product.name,
+                    addedImage: product.image
+                  }
                 })
               }
             }}
           >
-            Add
+            Add to Cart
           </button>
         </div>
       </div>

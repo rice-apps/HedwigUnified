@@ -15,8 +15,8 @@ import gql from 'graphql-tag.macro'
 import { LoadingPage } from './../../../../components/LoadingComponents'
 
 const FIND_ORDERS = gql`
-  query FIND_ORDERS($location: [String!]!) {
-    findOrders(locations: $location) {
+  query FIND_ORDERS($location: [String!]!, $vendor: String!) {
+    findOrders(locations: $location, vendor: $vendor) {
       orders {
         id
         studentId
@@ -72,9 +72,11 @@ const UPDATE_ORDER = gql`
     $orderId: String!
     $uid: String!
     $state: FulFillmentStatusEnum!
+    $vendor: String!
   ) {
     updateOrder(
       orderId: $orderId
+      vendor: $vendor
       record: { fulfillment: { uid: $uid, state: $state } }
     ) {
       fulfillment {
@@ -189,11 +191,12 @@ const ORDER_UPDATED = gql`
 
 function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId }
+      variables: { location: vendorId, vendor: currentUser.vendor }
     }
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
@@ -257,12 +260,13 @@ function OrderDashboard () {
     return <LoadingPage />
   }
   if (error) {
-    return <p>Error...</p>
+    return <p style={{fontSize:'2vh'}}>ErrorD...{error.message}</p>
   }
 
   const handleOrderClick = (order, orderState) => {
     updateOrder({
       variables: {
+        vendor: currentUser.vendor,
         orderId: order.id,
         uid: order.fulfillment.uid,
         state: orderState
@@ -302,6 +306,8 @@ function OrderDashboard () {
               studentId={order.studentId}
               cohenId={order.cohenId}
               customerName={order.customer.name}
+              phone={order.customer.phone}
+              email={order.customer.email}
               submissionTime={order.submissionTime}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
@@ -311,6 +317,7 @@ function OrderDashboard () {
               handleClick={() => handleOrderClick(order, 'RESERVED')}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}
               buttonStatus='NEW'
+              newOrder
             />
           ))}
       </NewOrderSpaceWrapper>
@@ -323,7 +330,11 @@ function OrderDashboard () {
           acceptedOrders.map(order => (
             <OrderCard
               id={order.id}
+              studentId={order.studentId}
+              cohenId={order.cohenId}
               customerName={order.customer.name}
+              phone={order.customer.phone}
+              email={order.customer.email}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               items={order.items}
               submissionTime={order.submissionTime}
@@ -344,7 +355,11 @@ function OrderDashboard () {
           readyOrders.map(order => (
             <OrderCard
               id={order.id}
+              studentId={order.studentId}
+              cohenId={order.cohenId}
               customerName={order.customer.name}
+              phone={order.customer.phone}
+              email={order.customer.email}
               pickupTime={order.fulfillment.pickupDetails.pickupAt}
               submissionTime={order.submissionTime}
               items={order.items}

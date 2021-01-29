@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import styled from 'styled-components/macro'
 import { FaAngleRight, FaAngleDown } from 'react-icons/fa'
-import { IconContext } from 'react-icons'
 import moment from 'moment'
 import Collapsible from 'react-collapsible'
 import './ClosedOrderCollapsible.css'
@@ -9,7 +7,6 @@ import {
   MakeOrderTimeDetails,
   MakeCustomerDetails,
   ClosedOrderDetailsWrapper,
-  MakeOrderItem,
   ItemDetailsWrapper
 } from './ClosedOrderDetailsComponents.js'
 

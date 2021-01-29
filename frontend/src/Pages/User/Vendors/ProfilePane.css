@@ -6,27 +6,27 @@
   margin-left: -35vw;
   position: fixed;
   z-index: 2;
- 
 }
 
 .profilepane-active {
   width: 100vw;
-  transition: width 500ms;
+  height: 100vh;
+  transition: 500ms;
   position: fixed;
+  left: 0px;
   z-index: 2;
   backdrop-filter: blur(8px) brightness(94%);
-
 }
 
 /* Background Color */
 .background {
   background-color: white;
   display: flex;
+  z-index: 3;
   flex-direction: column;
-  height:100vh;
+  height: 100vh;
   width: 60vw;
-  position:relative;
-
+  position: relative;
 }
 
 .close {
@@ -156,14 +156,12 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  position:absolute;
+  position: absolute;
   bottom: 3vh;
-  
-
 }
 
 @media only screen and (max-width: 600px) {
   .profilefooter {
-    bottom:12vh;
+    bottom: 12vh;
   }
 }

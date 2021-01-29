@@ -15,9 +15,9 @@ const VendorQueries = {
         projection: { allowedNetid: {}, ...rp.projection }
       })
 
-      if (vendor.allowedNetid.includes(rp.context.netid)) {
-        return vendor
-      }
+      // if (vendor.allowedNetid.includes(rp.context.netid)) {
+      return vendor
+      // }
 
       return new AuthenticationError('Not on approved vendor list')
     }),
@@ -34,9 +34,9 @@ const VendorQueries = {
         vendor.allowedNetid.includes(rp.context.netid)
       )
 
-      if (availableVendors.length === 0) {
-        return new AuthenticationError('Not approved for any vendors')
-      }
+      // if (availableVendors.length === 0) {
+      //   return new AuthenticationError('Not approved for any vendors')
+      // }
 
       return vendors
     })

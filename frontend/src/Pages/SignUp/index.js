@@ -41,7 +41,7 @@ function SignUp () {
   // we just use an empty string. If you don't do this, React will yell
   // at you.
 
-  const [createUser, { error }] = useMutation(CREATE_USER)
+  const [createUser] = useMutation(CREATE_USER)
 
   return (
     <div>

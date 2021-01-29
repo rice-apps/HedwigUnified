@@ -135,12 +135,12 @@ export const MessageWrapper = styled.div`
   align-items: center;
 `
 
-const AlmostThere = ({}) => {
+const AlmostThere = () => {
   localStorage.setItem('cartItems', JSON.stringify([]))
   const navigate = useNavigate()
   const handleHomeClick = () => {
     resetOrderSummary()
-    return navigate(`/eat`)
+    return navigate('/eat')
   }
 
   const order = JSON.parse(localStorage.getItem('order'))

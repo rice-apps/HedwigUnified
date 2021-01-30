@@ -294,13 +294,13 @@ function CartDetail () {
         }
       }
       if (paymentMethod === 'COHEN') {
-        setLocalStorage();
+        await setLocalStorage();
         // navigate to order confirmation page
         return navigate('/eat/confirmation')
       }
       if (paymentMethod === 'TETRA') {
         // navigate to order confirmation page
-        setLocalStorage();
+        await setLocalStorage();
         return navigate('/eat/confirmation')
       }
     }

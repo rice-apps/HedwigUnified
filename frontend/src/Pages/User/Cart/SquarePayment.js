@@ -48,7 +48,7 @@ const SquarePayment = () => {
           location: order.vendor.locationIds[0],
           subtotal: order.totals.subtotal*100,
           currency: 'USD',
-          token: buyerVerificationToken
+        //   token: buyerVerificationToken
         }
     })
     console.log(createPaymentResponse);

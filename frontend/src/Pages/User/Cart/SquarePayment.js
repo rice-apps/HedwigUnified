@@ -44,8 +44,11 @@ const SquarePayment = () => {
 
     setErrorMessages([]);
 
-    alert('nonce created: ' + nonce + ', buyerVerificationToken: ' + buyerVerificationToken);
+    // alert('nonce created: ' + nonce + ', buyerVerificationToken: ' + buyerVerificationToken);
     console.log(order)
+    console.log(nonce)
+    console.log(buyerVerificationToken)
+    alert("wait")
     const createPaymentResponse = await createPayment({
         variables: {
           source: 'SQUARE',
@@ -54,8 +57,11 @@ const SquarePayment = () => {
           location: order.vendor.locationIds[0],
           subtotal: JSON.stringify(parseInt(order.subtotal) * 100),
           currency: 'USD',
-          token: buyerVerificationToken
+        //   token: buyerVerificationToken
         }
+    }).catch(error =>{ 
+        console.log("create payment not working");
+        console.log(error);
     })
     console.log(createPaymentResponse);
     console.log('payment created as above');

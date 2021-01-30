@@ -252,19 +252,19 @@ function CartDetail () {
       }
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
-      const createPaymentResponse = await createPayment({
-        variables: {
-          source: 'SHOPIFY', // FOR TESTING PURPOSES
-          sourceId: 'cnon:card-nonce-ok',
-          orderId: orderJson.id,
-          location: order.vendor.locationIds[0],
-          subtotal: totals.subtotal * 100,
-          currency: 'USD'
-        }
-      })
-      function setLocalStorage(source){
+      async function setLocalStorage(source){
         var paymentUrl;
-        if (source === 'SHOPIFY'){ 
+        if (source !== 'SQUARE'){ 
+          const createPaymentResponse = await createPayment({
+            variables: {
+              source: 'SHOPIFY', // FOR TESTING PURPOSES
+              sourceId: 'cnon:card-nonce-ok',
+              orderId: orderJson.id,
+              location: order.vendor.locationIds[0],
+              subtotal: totals.subtotal * 100,
+              currency: 'USD'
+            }
+          })
           paymentUrl = createPaymentResponse.data.createPayment.url;
         }
         localStorage.setItem('order',
@@ -286,22 +286,22 @@ function CartDetail () {
       }
       if (paymentMethod === 'CREDIT') {
         // if (order.vendor.name === 'Cohen House'){ 
-        //   setLocalStorage('SHOPIFY');
+        //   await setLocalStorage('SHOPIFY');
         //   return handleClickCredit();
         // }
         // else if (order.vendor.name === 'East West Tea'){
-          setLocalStorage();
+          await setLocalStorage();
           return navigate('/eat/square') // FOR TESTING PURPOSES
         // }
       }
       if (paymentMethod === 'COHEN') {
-        setLocalStorage();
+        await setLocalStorage();
         // navigate to order confirmation page
         return navigate('/eat/confirmation')
       }
       if (paymentMethod === 'TETRA') {
         // navigate to order confirmation page
-        setLocalStorage();
+        await setLocalStorage();
         return navigate('/eat/confirmation')
       }
     }

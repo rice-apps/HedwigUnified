@@ -80,7 +80,8 @@ PaymentTC.addResolver({
           orderId,
           customerId,
           locationId,
-          source
+          source,
+          token
         }
       } = args
 
@@ -101,7 +102,8 @@ PaymentTC.addResolver({
               tipMoney: tip,
               orderId: orderId,
               customerId: customerId,
-              autocomplete: false
+              autocomplete: false,
+              verificationToken: token
             })
 
             response = {

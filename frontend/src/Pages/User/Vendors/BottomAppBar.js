@@ -1,9 +1,7 @@
-import styled, {keyframes} from 'styled-components/macro'
+import styled, { keyframes } from 'styled-components/macro'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { FcCancel } from 'react-icons/fc'
-
-
 
 const BottomNavigationWrapper = styled.div`
   position: fixed;
@@ -92,9 +90,9 @@ export const Modal = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation-name:${appearanceAnimation};
-  animation-iteration-count:1;
-  animation-duration:0.2s;
+  animation-name: ${appearanceAnimation};
+  animation-iteration-count: 1;
+  animation-duration: 0.2s;
 `
 export const ModalMessage = styled.div`
   font-size: 2.5vh;
@@ -103,27 +101,29 @@ export const ModalMessage = styled.div`
   line-height: 3vh;
 `
 export const StyledCancel = styled.div`
-position:absolute;
-cursor: pointer;
-bottom:3vh;
-color:white;
-border-radius:20px;
-font-size:2vh;
-letter-spacing:0.2vh;
-background-color:#F3725B;
-padding:0.2vh 1.9vh;
-left:50%;
-transform: translateX(-50%);
+  position: absolute;
+  cursor: pointer;
+  bottom: 3vh;
+  color: white;
+  border-radius: 20px;
+  font-size: 2vh;
+  letter-spacing: 0.2vh;
+  background-color: #f3725b;
+  padding: 0.2vh 1.9vh;
+  left: 50%;
+  transform: translateX(-50%);
 `
 function cartIsNotEmpty () {
-  const cart_menu = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
+  const cart_menu = localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('cartItems'))
+    : []
   return cart_menu.length != 0
 }
 
 function BottomAppBar () {
   const [showWarning, setShowWarning] = useState(false)
   const navigate = useNavigate()
-  let cartExists = cartIsNotEmpty()
+  const cartExists = cartIsNotEmpty()
   console.log(cartExists)
   const CartItems = JSON.parse(localStorage.getItem('cartItems'))
   let cartAmount = 0
@@ -149,12 +149,20 @@ function BottomAppBar () {
       {showWarning && (
         <ModalBackground>
           <Modal>
-            <FcCancel style={{ fontSize: '15.5vh', marginTop: '-4.7vh', opacity:'0.6'}} />
+            <FcCancel
+              style={{
+                fontSize: '15.5vh',
+                marginTop: '-4.7vh',
+                opacity: '0.6'
+              }}
+            />
             <ModalMessage>
-              Your cart is empty! <br/>
+              Your cart is empty! <br />
               Add items to your cart to checkout.
             </ModalMessage>
-            <StyledCancel onClick={() => setShowWarning(false)}>close</StyledCancel>
+            <StyledCancel onClick={() => setShowWarning(false)}>
+              close
+            </StyledCancel>
           </Modal>
         </ModalBackground>
       )}

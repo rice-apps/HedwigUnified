@@ -9,14 +9,14 @@ import ModifierSelection from './ModifierSelection'
 import { GET_ITEM } from '../../../graphql/ProductQueries'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries'
 import BuyerHeader from '../Vendors/BuyerHeader.js'
-import BottomAppBar from '../Vendors/BottomAppBar.js'
-import { SmallLoadingPage } from './../../../components/LoadingComponents'
-import {
+import BottomAppBar, {
   Modal,
   ModalBackground,
   ModalMessage,
   StyledCancel
-} from './../Vendors/BottomAppBar'
+} from '../Vendors/BottomAppBar.js'
+import { SmallLoadingPage } from './../../../components/LoadingComponents'
+
 import { BiErrorCircle } from 'react-icons/bi'
 
 function MakeDiffItemModal (props) {
@@ -32,7 +32,9 @@ function MakeDiffItemModal (props) {
             opacity: '0.77'
           }}
         />
-        <ModalMessage>You can't add items from different vendors to the same cart!</ModalMessage>
+        <ModalMessage>
+          You can't add items from different vendors to the same cart!
+        </ModalMessage>
         <StyledCancel onClick={() => props.changeModal(false)}>
           close
         </StyledCancel>

@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  api-build:
+  backend-build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -33,7 +33,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Login to Dockerhub
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -42,12 +42,12 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
-          context: ./api
-          file: ./api/Dockerfile
-          push: ${{ !env.ACT }}
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
           tags: riceapps/hedwig-api:latest
 
-  client-build:
+  frontend-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Files
@@ -60,7 +60,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Login to Dockerhub
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -70,13 +70,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            REACT_APP_SERVICE_URL=http://64.225.55.156:3000/auth
-            REACT_APP_BACKEND_URL=http://64.225.55.156:8080/api
-            REACT_APP_GRAPHQL_URL=http://64.225.55.156:8080/graphql
-            REACT_APP_GRAPHQL_WS_URL=ws://64.225.55.156:8080/graphql
-          context: ./client
-          file: ./client/Dockerfile
-          push: ${{ !env.ACT }}
+            REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.site/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.riceapps.site/ws
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
           tags: riceapps/hedwig-client:latest
           secrets: |
             REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}

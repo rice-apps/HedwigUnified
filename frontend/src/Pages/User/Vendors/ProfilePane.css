@@ -1,0 +1,167 @@
+/* Entire pane */
+.profilepane {
+  width: 0vw;
+  transition: 800ms;
+  display: flex;
+  margin-left: -35vw;
+  position: fixed;
+  z-index: 2;
+}
+
+.profilepane-active {
+  width: 100vw;
+  height: 100vh;
+  transition: 500ms;
+  position: fixed;
+  left: 0px;
+  z-index: 2;
+  backdrop-filter: blur(8px) brightness(94%);
+}
+
+/* Background Color */
+.background {
+  background-color: white;
+  display: flex;
+  z-index: 3;
+  flex-direction: column;
+  height: 100vh;
+  width: 60vw;
+  position: relative;
+}
+
+.close {
+  height: 4vh;
+  align-self: flex-end;
+  padding: 2vh 3vw;
+}
+
+/* Header */
+.profileheader {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  grid-template-rows: 100%;
+  height: 13vh;
+  padding-left: 4vw;
+
+  top: 0px;
+}
+
+.backarrow {
+  font-size: 16px;
+  color: #5a5953;
+  background-color: inherit;
+  border: none;
+
+  grid-column: 1/2;
+  grid-row: 1/2;
+
+  justify-self: start;
+  align-self: center;
+}
+
+/* Body */
+
+/* Welcome portion */
+.welcomebody {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 4vw;
+  font-family: 'Proxima Nova';
+}
+
+.welcometext {
+  font-size: 4.3vh;
+  color: #f3725b;
+  margin-left: 1vw;
+  line-height: 5.2vh;
+  font-weight: bold;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.phonetext {
+  font-size: 2.4vh;
+  margin-left: 1vw;
+  /* padding-top: 2vh; */
+}
+
+.phoneedit {
+  background-color: inherit;
+  border: none;
+  color: lightgray;
+  margin-left: 2vw;
+  font-size: 2.5vh;
+}
+
+.phoneconfirm {
+  background-color: inherit;
+  border: none;
+  margin-left: 2vw;
+  font-size: 2.5vh;
+}
+
+#telinput {
+  height: 2vh;
+  width: 20vh;
+  font-family: 'proxima nova';
+}
+
+/* Content */
+.contentbody {
+  display: flex;
+  flex-direction: column;
+  height: 25vh;
+}
+
+.contentcard {
+  padding-left: 4vw;
+  padding-right: 4vw;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  height: 7vh;
+  cursor: pointer;
+  grid-template-columns: 15fr 2fr;
+  border-top: #7070701a 1px solid;
+}
+
+.contentcard:hover {
+  background-color: #f4f3f3;
+}
+
+.contenticon {
+  align-self: center;
+  color: #5a5953;
+  font-size: 2vh;
+}
+
+.contenttitle {
+  font-family: 'Proxima Nova';
+  font-size: 2.4vh;
+  /* justify-self: flex-start; */
+  align-self: center;
+}
+
+.contentarrow {
+  color: #5a5953;
+  background-color: inherit;
+  border: none;
+}
+
+/* Sign Out Footer */
+.profilefooter {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: absolute;
+  bottom: 3vh;
+}
+
+@media only screen and (max-width: 600px) {
+  .profilefooter {
+    bottom: 12vh;
+  }
+}

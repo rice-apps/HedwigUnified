@@ -30,6 +30,10 @@ import AboutUs from '../Pages/User/AboutUs'
 import HelpPage from '../Pages/User/Help'
 import TestPage from './TestPage'
 import { SmallLoadingPage } from './LoadingComponents'
+
+import OAuthLink from '/Users/Ananya/HedwigUnified/frontend/src/OAuthLink.jsx'
+import ReceiveOAuth from '/Users/Ananya/HedwigUnified/frontend/src/ReceiveOAuth.jsx'
+
 /**
  * Requests to verify the user's token on the backend
  */
@@ -260,6 +264,26 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<OpenOrdersPage />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/onboard',
+          element: (
+            <PrivateRoute
+              // isEmployeeRoute
+              element={<OAuthLink />}
+              updateLogin={loginCallBack}
+            />
+          )
+        },
+        {
+          path: '/onboard-redirect',
+          element: (
+            <PrivateRoute
+              // isEmployeeRoute
+              element={<ReceiveOAuth />}
               updateLogin={loginCallBack}
             />
           )

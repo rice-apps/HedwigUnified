@@ -100,7 +100,6 @@ function CreateStatusDropdown (props) {
           <option value='CLOSED'>Closed</option>
         </StatusDropdown>
       )}
-      <IoMdArrowDropdown style={{ position: 'absolute', right: '2.95vh' }} />
     </StatusColumn>
   )
 }

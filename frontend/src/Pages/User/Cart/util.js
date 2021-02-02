@@ -85,11 +85,12 @@ export const CREATE_PAYMENT = gql`
     $currency: String!
     $location: String!
     $source: DataSourceEnum!
+    $sourceId: String!
   ) {
     createPayment(
       record: {
         source: $source
-        sourceId: "cnon:card-nonce-ok"
+        sourceId: $sourceId
         orderId: $orderId
         locationId: $location
         subtotal: { amount: $subtotal, currency: $currency }

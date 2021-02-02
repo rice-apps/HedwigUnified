@@ -48,7 +48,7 @@ const SquarePayment = () => {
     console.log(order)
     console.log(nonce)
     console.log(buyerVerificationToken)
-    alert("wait")
+    // alert("wait")
     const createPaymentResponse = await createPayment({
         variables: {
           source: 'SQUARE',
@@ -100,7 +100,7 @@ const SquarePayment = () => {
   }
 
   function postalCode() {
-    const postalCode = '12345'; // your logic here
+    const postalCode = ''; // your logic here
     return postalCode;
   }
 
@@ -119,7 +119,7 @@ const SquarePayment = () => {
     <SquarePaymentForm
       sandbox={true}
       applicationId={"sandbox-sq0idb-hBUTdIbzD347gzqVsdgIyw"}
-      locationId= {"LBBZPB7F5A100"}
+      locationId= {order.vendor.locationIds[0]}
       cardNonceResponseReceived={cardNonceResponseReceived}
       createPaymentRequest={createPaymentRequest} //Invoked when a digital wallet payment button is clicked.
       createVerificationDetails={createVerificationDetails}

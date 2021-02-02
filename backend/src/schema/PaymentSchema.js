@@ -75,6 +75,7 @@ PaymentTC.addResolver({
     type: PaymentTC,
     resolve: async ({ args }) => {
       const {
+        vendor,
         record: {
           sourceId,
           subtotal,
@@ -82,8 +83,7 @@ PaymentTC.addResolver({
           orderId,
           customerId,
           locationId,
-          source,
-          vendor
+          source
         }
       } = args
 
@@ -93,7 +93,6 @@ PaymentTC.addResolver({
         case 'SQUARE': {
           const squareClient = squareClients.get(vendor)
           const paymentsApi = squareClient.paymentsApi
-
           try {
             const {
               result: { payment }
@@ -107,7 +106,6 @@ PaymentTC.addResolver({
               customerId: customerId,
               autocomplete: false
             })
-
             response = {
               id: payment.id,
               order: payment.orderId,

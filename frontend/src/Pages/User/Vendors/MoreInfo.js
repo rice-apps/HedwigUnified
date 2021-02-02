@@ -6,12 +6,14 @@ import { IoMdClose } from 'react-icons/io'
 const appearanceAnimation = keyframes`
 
 0%{height:10vh;
-width:10vh;}
+width:10vh;
+opacity:0;}
 
 100%{
 height: max-content;
 max-height:55vh;
-width:40vh;}
+width:40vh;
+opacity:1;}
 `
 const StyledCross = styled(IoMdClose)`
   position: fixed;
@@ -29,16 +31,21 @@ const Modal = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
-  align-items: center;
+  
   width: 40vh;
   height: max-content;
   max-height: 55vh;
   justify-content: flex-start;
+  align-items: center;
   animation-name: ${appearanceAnimation};
   animation-iteration-count: 1;
   animation-duration: 0.2s;
   padding: 4vh 0vh 5vh 0vh;
   overflow: auto;
+  &::-webkit-scrollbar {
+      -webkit-appearance:none;
+      width:0vh;
+  }
   text-align: center;
 `
 

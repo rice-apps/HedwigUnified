@@ -141,7 +141,7 @@ function VendorCard ({ vendor }) {
       )
     }
   }
-
+  console.log(hours)
   return (
     <div className='vendorContainer'>
       {showStatusDetail()}

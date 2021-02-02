@@ -14,7 +14,7 @@ max-height:55vh;
 width:40vh;}
 `
 const StyledCross = styled(IoMdClose)`
-  position: absolute;
+  position: fixed;
   top: 3vh;
   right: 3vh;
   font-size: 2.7vh;
@@ -78,8 +78,100 @@ const ModalPickupMessage = styled.div`
   width: 85%;
 `
 
+const DayHourRow = styled.div`
+display:grid;
+width:90%;
+grid-template-columns:20% 85%;
+justify-content:center;
+align-items:center;
+text-transform: uppercase;
+margin:0.45vh 0vh;
+`
+const DayInitials = styled.div`
+width:100%;
+margin-right:1.5vh;
+font-weight: bold;
+`
+const HoursWrapper = styled.div`
+height:max-content;
+width:68%;
+display:flex;
+flex-direction:column;
+align-items:center;
+margin:2vh 0vh 0.2vh 0vh;
+justify-content: center;
+
+`
+function dayDisplay (dayItem) {
+    const start = dayItem.start
+    const end = dayItem.end
+    const time = start.map(function (e, i) {
+      return [e, end[i]]
+    })
+    if (dayItem.start.length === 0) {
+      return (
+        <DayHourRow>
+          <DayInitials>{dayItem.day.substring(0,3)} </DayInitials>
+          <span>Closed</span>{' '}
+        </DayHourRow>
+      )
+    } else {
+      return (
+        <DayHourRow>
+          {' '}
+          <DayInitials> {dayItem.day.substring(0,3)} </DayInitials>
+          <span>
+            {time.map(startend => {
+              return (
+                <div style={{lineHeight:'2.35vh', opacity:'0.7'}}>
+                  <span>
+                    {startend[0].replace('.', '').replace('.', '')} -{' '}
+                    {startend[1].replace('.', '').replace('.', '')}
+                  </span>
+                </div>
+              )
+            })}
+          </span>
+          </DayHourRow>
+      )
+    }
+  }
+
+
+function SortHoursArray (currentDay, hours) {
+    // let currentDay = props.currentDay
+    // let hours = props.hours
+    let hoursArray = []
+    for (let i = 0; i < 7; i++){
+        hoursArray.push(hours[currentDay])
+        if (currentDay == 6){
+            currentDay = 0
+        }
+        else {
+            currentDay += 1
+        }
+    }
+    console.log(hoursArray)
+    return hoursArray
+}
+
+
+
+function DisplayWeekHours (props) {
+    let currentDay = props.currentDay
+    let hours = props.hours
+    let hoursArray = SortHoursArray(currentDay, hours)
+    return (
+        <HoursWrapper>
+        {hoursArray.map(dayItem => {return dayDisplay(dayItem)})}
+        </HoursWrapper>
+    )
+}
+
 function MoreInfo (props) {
   const [showHours, setShowHours] = useState(false)
+  const current_date = new Date()
+  const currentDay = current_date.getDay()
   return (
     <ModalBackground>
       <Modal>
@@ -87,6 +179,8 @@ function MoreInfo (props) {
         <ModalTitle>{props.name}</ModalTitle>
         <ModalSubTitle>{props.phone}</ModalSubTitle>
         <ModalSubTitle>{props.email}</ModalSubTitle>
+      
+        <DisplayWeekHours currentDay={currentDay} hours={props.hours}/>
         <ModalCutOff>
           New orders cannot be placed {props.cutoffTime} minutes before closing
           time.

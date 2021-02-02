@@ -74,7 +74,7 @@ const MeetHedwigText = styled.p`
   position: relative;
   color: #f3725b;
   font-family: Proxima Nova;
-  font-size: 4vh;
+  font-size: 3.5vh;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
@@ -98,7 +98,7 @@ const PhotoGrid = styled.div`
 
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   padding: 0vh 4% 2vh 4%;
 `
 const DescriptionBlock = styled.div`
@@ -162,12 +162,12 @@ const AboutUs = () => {
         <HeadShot
           src={Nikhita}
           name='Nikhita Gangla'
-          position='Project Manager'
+          position='Product Manager'
         />
         <HeadShot
           src={Melinda}
           name='Melinda Ding'
-          position='Project Manager'
+          position='Product Manager'
         />
         <HeadShot src={Victor} name='Victor Song' position='Team Lead' />
         <HeadShot src={Newton} name='Newton Huynh' position='Team Lead' />

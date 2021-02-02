@@ -24,7 +24,7 @@ const Name = styled.p`
   font-size: 2.5vh;
   margin: 0;
   margin-top: 15%;
-  padding: 1vh;
+  padding: 2vh 0;
   line-height: 90%;
 `
 
@@ -33,6 +33,7 @@ const Position = styled.p`
   font-size: 2vh;
   margin: 0;
   padding: 0;
+  line-height: 90%;
 `
 
 const HeadShot = ({ src, name, position }) => {

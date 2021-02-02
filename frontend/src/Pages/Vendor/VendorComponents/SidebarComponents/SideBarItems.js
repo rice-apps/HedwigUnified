@@ -70,8 +70,8 @@ const BottomMenuItemWrapper = styled.div`
 `
 
 const StyledNavLink = styled(NavLink)`
-  margin-left: 10px;
   text-decoration: none;
+  text-align:left;
   color: black;
 `
 

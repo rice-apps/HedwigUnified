@@ -83,8 +83,7 @@ PaymentTC.addResolver({
           orderId,
           customerId,
           locationId,
-          source,
-          // token
+          source
         }
       } = args
 

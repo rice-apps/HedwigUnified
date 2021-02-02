@@ -13,8 +13,12 @@ import {
   GooglePayButton,
   MasterpassButton,
 } from 'react-square-payment-form';
-import 'react-square-payment-form/lib/default.css';
+import './square.css';
+import styled, { css } from 'styled-components/macro'
 
+const PaymentWrapper = styled.div`
+  height: 100vh;
+`
 
 const SquarePayment = () => {
   const [errorMessages, setErrorMessages] = useState([]);
@@ -38,7 +42,7 @@ const SquarePayment = () => {
     }
 
     setErrorMessages([]);
-
+    console.log(nonce)
     const createPaymentResponse = await createPayment({
         variables: {
           vendor: order.vendor.name,
@@ -48,11 +52,9 @@ const SquarePayment = () => {
           location: order.vendor.locationIds[0],
           subtotal: order.totals.subtotal*100,
           currency: 'USD',
-        //   token: buyerVerificationToken
         }
     })
     console.log(createPaymentResponse);
-    console.log('payment created as above');
     navigate('/eat/confirmation');
 }
 
@@ -87,12 +89,7 @@ const SquarePayment = () => {
   }
 
   function postalCode() {
-<<<<<<< HEAD
     return ''
-=======
-    const postalCode = ''; // your logic here
-    return postalCode;
->>>>>>> 74ed8dbc... fixed nonce
   }
 
   function focusField() {
@@ -107,49 +104,51 @@ const SquarePayment = () => {
   const unavailableMasterpass = <div className="sq-wallet-unavailable">Masterpass unavailable.</div>;
 
   return (
-    <SquarePaymentForm
-      sandbox={true}
-      applicationId={"sandbox-sq0idb-hBUTdIbzD347gzqVsdgIyw"}
-      locationId= {order.vendor.locationIds[0]}
-      cardNonceResponseReceived={cardNonceResponseReceived}
-      createPaymentRequest={createPaymentRequest} //Invoked when a digital wallet payment button is clicked.
-      createVerificationDetails={createVerificationDetails}
-      postalCode={postalCode}
-      focusField={focusField}
-    >
-      <ApplePayButton loadingView={loadingView} unavailableView={unavailableApple} />
-      <GooglePayButton loadingView={loadingView} unavailableView={unavailableGoogle} />
-      <MasterpassButton loadingView={loadingView} unavailableView={unavailableMasterpass} />
+    <PaymentWrapper>
+      <SquarePaymentForm
+        sandbox={true}
+        applicationId={"sandbox-sq0idb-hBUTdIbzD347gzqVsdgIyw"}
+        locationId= {order.vendor.locationIds[0]}
+        cardNonceResponseReceived={cardNonceResponseReceived}
+        createPaymentRequest={createPaymentRequest} //Invoked when a digital wallet payment button is clicked.
+        createVerificationDetails={createVerificationDetails}
+        postalCode={postalCode}
+        focusField={focusField}
+      >
+        <ApplePayButton loadingView={loadingView} unavailableView={unavailableApple} />
+        <GooglePayButton loadingView={loadingView} unavailableView={unavailableGoogle} />
+        <MasterpassButton loadingView={loadingView} unavailableView={unavailableMasterpass} />
 
-      <div className="sq-divider">
-        <span className="sq-divider-label">Or</span>
-        <hr className="sq-divider-hr" />
-      </div>
-
-      <fieldset className="sq-fieldset">
-        <CreditCardNumberInput />
-
-        <div className="sq-form-third">
-          <CreditCardExpirationDateInput />
+        <div className="sq-divider">
+          <span className="sq-divider-label">Or</span>
+          <hr className="sq-divider-hr" />
         </div>
 
-        <div className="sq-form-third">
-          <CreditCardPostalCodeInput />
+        <fieldset className="sq-fieldset">
+          <CreditCardNumberInput />
+
+          <div className="sq-form-third">
+            <CreditCardExpirationDateInput />
+          </div>
+
+          <div className="sq-form-third">
+            <CreditCardPostalCodeInput />
+          </div>
+
+          <div className="sq-form-third">
+            <CreditCardCVVInput />
+          </div>
+        </fieldset>
+
+        <CreditCardSubmitButton>Submit Payment</CreditCardSubmitButton>
+
+        <div className="sq-error-message">
+          {errorMessages.map(errorMessage => (
+            <li key={`sq-error-${errorMessage}`}>{errorMessage}</li>
+          ))}
         </div>
-
-        <div className="sq-form-third">
-          <CreditCardCVVInput />
-        </div>
-      </fieldset>
-
-      <CreditCardSubmitButton>Submit Payment</CreditCardSubmitButton>
-
-      <div className="sq-error-message">
-        {errorMessages.map(errorMessage => (
-          <li key={`sq-error-${errorMessage}`}>{errorMessage}</li>
-        ))}
-      </div>
-    </SquarePaymentForm>
+      </SquarePaymentForm>
+    </PaymentWrapper>
   );
 };
 

@@ -10,7 +10,7 @@ width:10vh;
 opacity:0;}
 
 100%{
-height: max-content;
+height: 55vh;
 max-height:55vh;
 width:40vh;
 opacity:1;}
@@ -33,7 +33,7 @@ const Modal = styled.div`
   background-color: white;
   
   width: 40vh;
-  height: max-content;
+  height: 55vh;
   max-height: 55vh;
   justify-content: flex-start;
   align-items: center;

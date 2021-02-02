@@ -6,7 +6,7 @@ import gql from 'graphql-tag.macro'
 
 const VendorName = styled.div`
   font-size: 4.1vh;
-  line-height:4.3vh;
+  line-height: 4.3vh;
   margin-top: 10px;
   font-weight: 700;
   text-align: center;

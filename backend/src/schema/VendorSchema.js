@@ -1,4 +1,3 @@
-import { AuthenticationError } from 'apollo-server-express'
 import { VendorTC } from '../models/index.js'
 import {
   checkLoggedIn,
@@ -15,11 +14,12 @@ const VendorQueries = {
         projection: { allowedNetid: {}, ...rp.projection }
       })
 
-      // if (vendor.allowedNetid.includes(rp.context.netid)) {
-      return vendor
-      // }
+      if (!vendor.allowedNetid.includes(rp.context.netid)) {
+        vendor.squareInfo = null
+        vendor.allowedNetid = null
+      }
 
-      return new AuthenticationError('Not on approved vendor list')
+      return vendor
     }),
   getVendors: VendorTC.mongooseResolvers
     .findMany()
@@ -30,15 +30,13 @@ const VendorQueries = {
         projection: { allowedNetid: {}, ...rp.projection }
       })
 
-      const availableVendors = vendors.filter(vendor =>
-        vendor.allowedNetid.includes(rp.context.netid)
-      )
-
-      // if (availableVendors.length === 0) {
-      //   return new AuthenticationError('Not approved for any vendors')
-      // }
-
-      return vendors
+      return vendors.map(vendor => {
+        if (!vendor.allowedNetid.includes(rp.context.netid)) {
+          vendor.squareInfo = null
+          vendor.allowedNetid = null
+        }
+        return vendor
+      })
     })
 }
 

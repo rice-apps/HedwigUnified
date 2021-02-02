@@ -39,6 +39,11 @@ const GET_ALL_VENDORS = gql`
         isClosed
       }
       _id
+      facebook
+      phone
+      cutoffTime
+      pickupInstruction
+      email
     }
   }
 `

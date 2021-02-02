@@ -243,7 +243,6 @@ export const RoutesComponent = ({ loginCallBack }) => {
                 />
               )
             }
-         
           ]
         }
       ]

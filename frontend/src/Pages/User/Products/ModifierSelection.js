@@ -14,7 +14,7 @@ function ModifierSelection ({ modifierCategory }) {
       <div className='heading'>
         {description ? <p>{description}</p> : null}
         <h1>
-          {name}:{minModifiers && <span className='asterisk'> * </span>}
+          {name}:{minModifiers > 0 && <span className='asterisk'> * </span>}
         </h1>
       </div>
       <div className='options'>

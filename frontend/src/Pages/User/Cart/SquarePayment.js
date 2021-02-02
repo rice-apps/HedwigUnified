@@ -87,7 +87,12 @@ const SquarePayment = () => {
   }
 
   function postalCode() {
+<<<<<<< HEAD
     return ''
+=======
+    const postalCode = ''; // your logic here
+    return postalCode;
+>>>>>>> 74ed8dbc... fixed nonce
   }
 
   function focusField() {

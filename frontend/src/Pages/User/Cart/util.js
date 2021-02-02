@@ -89,6 +89,7 @@ export const CREATE_PAYMENT = gql`
     $vendor: String!
     $sourceId: String!
     $source: DataSourceEnum!
+    $sourceId: String!
   ) {
     createPayment(
       vendor: $vendor

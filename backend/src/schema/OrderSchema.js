@@ -143,6 +143,7 @@ OrderTC.addResolver({
           lineItems,
           recipient,
           pickupTime,
+          roomNumber,
           submissionTime,
           cohenId,
           studentId,
@@ -187,6 +188,7 @@ OrderTC.addResolver({
         await OrderTracker.create({
           status: 'PROPOSED',
           pickupTime: pickupTime,
+          roomNumber: roomNumber,
           submissionTime: submissionTime,
           locationId: locationId,
           orderId: order.id,
@@ -222,6 +224,7 @@ OrderTC.addResolver({
           orderStatus: order.state,
           cohenId: order.metadata?.cohenId,
           studentId: order.metadata?.studentId,
+          roomNumber: roomNumber,
           fulfillment: {
             uid: order.fulfillments[0].uid,
             state: order.fulfillments[0].state,

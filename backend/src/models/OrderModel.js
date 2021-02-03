@@ -140,6 +140,7 @@ const CreateOrderInputTC = sc.createInputTC({
       .getType(),
     recipient: OrderFulfillmentRecipientTC.getITC().getType(),
     pickupTime: 'String!',
+    roomNumber: 'String!',
     submissionTime: 'String!',
     cohenId: 'String',
     studentId: 'String',

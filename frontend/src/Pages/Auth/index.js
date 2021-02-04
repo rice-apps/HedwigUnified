@@ -45,7 +45,7 @@ function Auth () {
   if (loading) return <SmallLoadingPage />
   if (!authenticationData) return <p>Authentication Failed.</p>
 
-  const {
+  let {
     _id,
     name,
     netid,
@@ -57,6 +57,14 @@ function Auth () {
     type,
     token
   } = authenticationData.authenticateUser
+
+
+  function insertSpaces(string) {
+    string = string.replace(/([a-z])([A-Z])/g, '$1 $2');
+    string = string.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+    return string;
+  }
+  name = insertSpaces(name)
 
   const userData = {
     netid,

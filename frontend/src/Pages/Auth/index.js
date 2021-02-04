@@ -58,13 +58,13 @@ function Auth () {
     token
   } = authenticationData.authenticateUser
 
-
-  function insertSpaces(string) {
+//This helps issue if first and last name in backend are not seperated by a space
+  function formatName(string) {
     string = string.replace(/([a-z])([A-Z])/g, '$1 $2');
     string = string.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
     return string;
   }
-  name = insertSpaces(name)
+  name = formatName(name)
 
   const userData = {
     netid,

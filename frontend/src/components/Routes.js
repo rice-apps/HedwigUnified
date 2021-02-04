@@ -30,6 +30,7 @@ import AboutUs from '../Pages/User/AboutUs'
 import HelpPage from '../Pages/User/Help'
 import TestPage from './TestPage'
 import { SmallLoadingPage } from './LoadingComponents'
+import Launch from './../Pages/User/Launch'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -175,6 +176,10 @@ export const RoutesComponent = ({ loginCallBack }) => {
     {
       path: '/help',
       element: <HelpPage />
+    },
+    {
+      path: '/launch',
+      element: <Launch />
     },
     {
       path: '/about_us',

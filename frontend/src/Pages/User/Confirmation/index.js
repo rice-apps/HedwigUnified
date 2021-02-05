@@ -36,7 +36,7 @@ function Failure () {
 
 function Confirmation () {
   const order = JSON.parse(localStorage.getItem('order'))
-  const time = moment(order.fulfillment.pickupAt).format('h:mm A')
+  const time = moment(order.pickupTime).format('h:mm A')
   const navigate = useNavigate()
   localStorage.setItem('cartItems', JSON.stringify([]))
   const handleHomeClick = () => {

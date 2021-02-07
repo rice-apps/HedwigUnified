@@ -9,9 +9,6 @@ import { BrowserRouter } from 'react-router-dom'
 // Setup history
 // //import { createBrowserHistory } from 'history';
 
-// Setup Toast for Notifications
-import { ToastProvider } from 'react-toast-notifications'
-
 // Import apollo client for graphql
 import { client } from './apollo'
 import { ApolloProvider } from '@apollo/client'
@@ -25,9 +22,7 @@ import './firebase'
 render(
   <ApolloProvider client={client}>
     <BrowserRouter>
-      <ToastProvider>
-        <App />
-      </ToastProvider>
+      <App />
     </BrowserRouter>
   </ApolloProvider>,
   document.querySelector('#app')

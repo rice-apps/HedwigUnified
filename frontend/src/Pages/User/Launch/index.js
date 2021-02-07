@@ -12,7 +12,7 @@ function Launch () {
   return (
     <div id='main-div-launch'>
       <ElemDiv>
-        <Logo style={{ marginTop: '30%' }} src={logo} />
+        <Logo style={{ marginTop: '40%' }} src={logo} />
         <h1 id='title'>Thank you!</h1>
         <h2 id='sub-title'> Let's start your first order</h2>
       </ElemDiv>

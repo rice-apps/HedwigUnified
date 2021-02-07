@@ -45,7 +45,7 @@ function Auth () {
   if (loading) return <SmallLoadingPage />
   if (!authenticationData) return <p>Authentication Failed.</p>
 
-  const {
+  let {
     _id,
     name,
     netid,
@@ -57,6 +57,14 @@ function Auth () {
     type,
     token
   } = authenticationData.authenticateUser
+
+//This helps issue if first and last name in backend are not seperated by a space
+  function formatName(string) {
+    string = string.replace(/([a-z])([A-Z])/g, '$1 $2');
+    string = string.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+    return string;
+  }
+  name = formatName(name)
 
   const userData = {
     netid,

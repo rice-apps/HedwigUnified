@@ -112,7 +112,7 @@ export const ButtonsSpaceWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding:0vh 0vh 1.1vh;
+  padding: 0vh 0vh 1.1vh;
 `
 export const ButtonWrapper = styled.button`
   border-radius: 20px;

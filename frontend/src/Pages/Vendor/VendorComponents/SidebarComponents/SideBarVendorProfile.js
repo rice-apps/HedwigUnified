@@ -65,8 +65,10 @@ function SideBarVendorProfile ({ setLogo }) {
     variables: { name: 'Cohen House' }
   })
 
+  console.log("USERDATA", userData);
+
   useEffect(() => {
-    setVendorName(userData?.userOne?.vendor)
+    setVendorName(userData?.userOne?.vendor[0])
   }, [userData])
 
   if (error || queryError || userError) {

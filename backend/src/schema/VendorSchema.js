@@ -1,8 +1,23 @@
-import { VendorTC } from '../models/index.js'
+import { Vendor, VendorTC } from '../models/index.js'
 import {
   checkLoggedIn,
   checkCanUpdateVendor
 } from '../utils/authenticationUtils.js'
+
+
+VendorTC.addResolver({
+  name: 'getAllowedVendors',
+  type: [VendorTC],
+  args: { name: 'String!'},
+  resolve: async ({ args }) => {
+    const vendors = await Vendor.find({});
+    const userVendors = vendors.filter(vendor => {
+      const allowedNetId = vendor.allowedNetid;
+      return allowedNetId.includes(args.name);
+    });
+    return userVendors;
+  }
+});
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers
@@ -37,7 +52,8 @@ const VendorQueries = {
         }
         return vendor
       })
-    })
+    }),
+    getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
 }
 
 const VendorMutations = {

@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
-import { ItemTC, DataSourceEnumTC } from '../models/index.js'
+import { ItemTC, DataSourceEnumTC, Vendor, VendorTC } from '../models/index.js'
 import squareClients from '../utils/square.js'
 import { pubsub } from '../utils/pubsub.js'
 
@@ -387,6 +387,27 @@ ItemTC.addResolver({
   })
   .addResolver({
     name: 'setAvailability',
+    args: {
+      vendor: 'String!',
+      productId: 'String!',
+      isItemAvailable: 'Boolean!',
+      dataSource: DataSourceEnumTC
+    },
+    type: VendorTC,
+    resolve: async ({ args }) => {
+      const { vendor, productId, isItemAvailable, dataSource } = args
+      const vendorData = await Vendor.findOne({
+        name: vendor
+      })
+      availability = vendorData.availableItems;
+      var idx = availability.indexOf(productId); // initialize the index to find the item
+      if (isItemAvailable && (idx === -1)) {availability.push(productId); availability.save()}
+      if (!isItemAvailable && (idx !== -1)) {availability.splice(idx, 1); availability.save()}
+      return vendorData
+    }
+  })
+  .addResolver({
+    name: 'setAvailabilityBK',
     args: {
       vendor: 'String!',
       productId: 'String!',

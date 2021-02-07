@@ -209,6 +209,9 @@ function OrderDashboard () {
           return prev
         }
 
+        console.log(prev)
+        console.log(subscriptionData)
+
         const newOrderItem = subscriptionData.data.orderCreated
         return Object.assign({}, prev, {
           findOrders: {
@@ -223,7 +226,28 @@ function OrderDashboard () {
     })
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
-      document: ORDER_UPDATED
+      document: ORDER_UPDATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        const updatedOrderItem = {
+          __typename: 'Order',
+          ...subscriptionData.data.orderUpdated
+        }
+
+        const updatedOrders = prev.findOrders.orders.map(order =>
+          order.id === updatedOrderItem.id ? updatedOrderItem : order
+        )
+
+        return Object.assign({}, prev, {
+          findOrders: {
+            __typename: 'FindManyOrderPayload',
+            orders: updatedOrders
+          }
+        })
+      }
     })
 
     return () => {

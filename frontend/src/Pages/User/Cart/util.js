@@ -7,6 +7,7 @@ export const GET_VENDOR = gql`
     getVendor(filter: $filter) {
       name
       pickupInstruction
+      dataSource
       hours {
         start
         end

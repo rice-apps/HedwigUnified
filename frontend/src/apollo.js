@@ -68,6 +68,15 @@ const client = new ApolloClient({
             }
           }
         }
+      },
+      Subscription: {
+        fields: {
+          orderUpdated: {
+            merge (incoming) {
+              return incoming
+            }
+          }
+        }
       }
     }
   }),

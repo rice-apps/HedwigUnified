@@ -226,28 +226,7 @@ function OrderDashboard () {
     })
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
-      document: ORDER_UPDATED,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) {
-          return prev
-        }
-
-        const updatedOrderItem = {
-          __typename: 'Order',
-          ...subscriptionData.data.orderUpdated
-        }
-
-        const updatedOrders = prev.findOrders.orders.map(order =>
-          order.id === updatedOrderItem.id ? updatedOrderItem : order
-        )
-
-        return Object.assign({}, prev, {
-          findOrders: {
-            __typename: 'FindManyOrderPayload',
-            orders: updatedOrders
-          }
-        })
-      }
+      document: ORDER_UPDATED
     })
 
     return () => {

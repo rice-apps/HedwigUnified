@@ -1,0 +1,199 @@
+/* Hero Image */
+.hero {
+  height: 20vh;
+  width: 100%;
+}
+
+/* Header at the top containing all the information */
+.vendorinfocontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+  width: 100%;
+}
+
+.vendortitle {
+  font-size: 4vh;
+  font-family: 'santana';
+  margin-bottom: 5px;
+  /* color: #f49f86; */
+}
+
+.vendorinfo {
+  font-size: 1.8vh;
+  font-family: 'avenir';
+  color: #5a5953;
+  margin: 0 5px 0 10px;
+  line-height: 2.4vh;
+}
+
+.statusTitleWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.statusTitleWrapper div {
+  display: flex;
+  flex-direction: column;
+}
+
+.readmore {
+  border: none;
+  background-color: inherit;
+  font-size: 2vh;
+  margin: auto;
+  font-family: 'avenir';
+  color: #f49f86;
+}
+
+/* Category Select Bar */
+.categoryselect {
+  height: 5vh;
+  display: flex;
+  /* What I want to do: if on web, use space-evenly; if on phone, use space-between */
+  justify-content: space-between;
+  overflow-x: auto;
+
+  list-style: none;
+  text-indent: 0;
+
+  position: sticky;
+  top: 7.9vh;
+
+  background: white;
+  border-bottom: solid 1px #5a5953;
+  /* margin-top: 0em; */
+}
+
+/* if on web */
+@media (min-width: 800px) {
+  .categoryselect {
+    justify-content: space-evenly;
+  }
+}
+
+.categoryactive {
+  font-family: 'avenirbold';
+  color: #5a5953;
+  border-bottom: #f49f86 solid 2px;
+}
+
+.categoryname {
+  font-size: 2vh;
+  font-family: 'avenir';
+  color: #5a5953;
+
+  white-space: nowrap;
+  margin: auto 20px;
+}
+
+/* Category Header */
+.categoryheader {
+  font-family: 'avenirbold';
+  font-size: 3vh;
+  color: #5a5953;
+
+  border-bottom-style: solid;
+  border-color: #5a5953;
+  border-width: 1px;
+  margin-bottom: 0;
+  padding-left: 2vw;
+}
+
+/* Item Display */
+.itemlist {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #ffffff;
+}
+
+.itemgrid {
+  display: grid;
+  height: 16vh;
+  width: 100%;
+
+  grid-template-columns: 3fr 7fr;
+  grid-template-rows: 5fr 5fr;
+  border-bottom-style: solid;
+  border-color: #7070704d;
+  border-width: 1px;
+}
+.itemimage {
+  grid-area: 1/1/3/2;
+  align-self: center;
+  justify-self: center;
+  width: 12vh;
+  height: 12vh;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.itemname {
+  font-family: 'avenirmedium';
+  font-size: 3vh;
+
+  margin: 0;
+  color: #5a5953;
+
+  align-self: end;
+}
+.itemprice {
+  font-family: 'avenir';
+  font-size: 2vh;
+  color: #5a5953;
+
+  margin: 0;
+  padding-top: 3px;
+
+  align-self: start;
+}
+.storeHourBox {
+  flex-direction: column;
+  display: flex;
+  text-align: center;
+  font-size: 0.8em;
+  background: white;
+  z-index: 100;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.dayHourRow {
+  display: grid;
+  grid-template-columns: 15% 85%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0px;
+}
+.dayInitial {
+  margin: 10px;
+  margin-right: 5.5vw;
+  font-weight: bold;
+}
+.openStatus {
+  font-weight: bold;
+  color: #f49f86;
+}
+.hourDisplay {
+  background-color: white;
+  display: block;
+  font-size: 0.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.arrowIcon {
+  margin-left: 10px;
+}
+.menuItem {
+  background-color: transparent;
+  padding: 0;
+}
+/* .menuItem{
+  background-color: transparent;
+}
+.menuItem:selected{
+  background-color: transparent;
+} */

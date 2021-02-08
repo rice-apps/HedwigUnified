@@ -114,6 +114,11 @@ export const ButtonsSpaceWrapper = styled.div`
   align-items: center;
   padding: 0vh 0vh 1.1vh;
 `
+
+export const HiddenOrderTicket = styled.div`
+  display: none; !important
+`
+
 export const ButtonWrapper = styled.button`
   border-radius: 20px;
   opacity: 1;
@@ -126,6 +131,7 @@ export const ButtonWrapper = styled.button`
   margin: 0px 15px;
   box-shadow: 0.6px 0.6px 3px 0.5px rgba(0, 0, 0, 0.3);
 `
+
 export const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
 `

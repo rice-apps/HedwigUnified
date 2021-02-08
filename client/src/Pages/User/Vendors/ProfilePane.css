@@ -1,0 +1,183 @@
+/* Entire pane */
+.profilepane {
+  width: 0;
+  transition: 800ms;
+  display: flex;
+  margin-left: -35vw;
+  position: fixed;
+  z-index: 2;
+}
+
+.profilepane-active {
+  width: 60vw;
+  transition: 500ms;
+  position: fixed;
+  z-index: 2;
+}
+
+/* Background Color */
+.background {
+  background-color: #faf8f8;
+  display: flex;
+  flex-direction: column;
+}
+
+.close {
+  height: 4vh;
+  align-self: flex-end;
+  padding: 2vh 3vw;
+}
+
+/* Header */
+.profileheader {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  grid-template-rows: 100%;
+  height: 13vh;
+
+  background-color: white;
+  padding-left: 4vw;
+
+  top: 0px;
+}
+
+.profilename {
+  color: #5a5953;
+  font-family: 'avenirbold';
+  place-self: center;
+
+  grid-column: 1/-1;
+  grid-row: 1/3;
+
+  font-size: 3vh;
+}
+
+.backarrow {
+  font-size: 16px;
+  color: #5a5953;
+  background-color: inherit;
+  border: none;
+
+  grid-column: 1/2;
+  grid-row: 1/2;
+
+  justify-self: start;
+  align-self: center;
+}
+
+/* Body */
+
+/* Welcome portion */
+.welcomebody {
+  display: flex;
+  flex-direction: column;
+  height: 30vh;
+  justify-content: center;
+  align-items: flex-start;
+
+  font-family: 'avenir';
+}
+
+.welcometext {
+  font-size: 4vh;
+  color: #db6142;
+  margin-left: 1vw;
+}
+
+.phonetext {
+  font-size: 3vh;
+  color: black;
+  margin-left: 1vw;
+  padding-top: 2vh;
+}
+
+.phoneedit {
+  background-color: inherit;
+  border: none;
+  color: lightgray;
+  margin-left: 2vw;
+  font-size: 2.5vh;
+}
+
+.phoneconfirm {
+  background-color: inherit;
+  border: none;
+  margin-left: 2vw;
+  font-size: 2.5vh;
+}
+
+#telinput {
+  height: 2vh;
+  width: 20vh;
+  font-family: 'avenir';
+}
+
+/* Content */
+.contentbody {
+  display: flex;
+  flex-direction: column;
+  height: 25vh;
+}
+
+.contentcard {
+  display: grid;
+  flex: 1;
+  height: 5vh;
+  padding-top: 2.5vh;
+
+  grid-template-columns: 15fr 2fr;
+
+  border-top: #7070701a 1px solid;
+}
+
+.contenticon {
+  align-self: center;
+  color: #5a5953;
+  font-size: 2vh;
+}
+
+.contenttitle {
+  font-family: 'avenirbook';
+  font-size: 2.5vh;
+
+  color: darkslategray;
+  justify-self: flex-start;
+  align-self: flex-end;
+  margin-left: 0vw;
+}
+
+.contentarrow {
+  align-self: flex-start;
+  justify-self: flex-start;
+
+  color: #5a5953;
+  background-color: inherit;
+  border: none;
+}
+
+/* Sign Out Footer */
+.profilefooter {
+  display: grid;
+  height: 41vh;
+
+  background-color: #faf8f8;
+  border-top: #7070701a 1px solid;
+
+  bottom: 0px;
+}
+
+.signoutbutton {
+  border: 1px solid #5a595326;
+  background-color: #db6142;
+  width: 70%;
+  height: 20%;
+
+  font-family: 'avenirbook';
+  color: white;
+  font-size: 3vh;
+
+  align-self: flex-end;
+  margin-bottom: 5vh;
+  border-radius: 20px;
+  padding: 10px 20px;
+}

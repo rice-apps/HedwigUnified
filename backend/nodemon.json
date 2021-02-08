@@ -1,5 +1,0 @@
-{
-  "watch": ["src"],
-  "exec": "node --trace-warnings src/index.js",
-  "ext": "js"
-}

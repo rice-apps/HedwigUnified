@@ -1,0 +1,49 @@
+.errorPage {
+  display: flex;
+  flex-direction: column;
+  animation-name: errorPage1, errorPage2;
+  animation-delay: 0, 2.5s;
+  animation-fill-mode: forwards;
+  animation-duration: 2.25s, 12s;
+  animation-iteration-count: 1, infinite;
+  transition: 1s;
+  text-align: center;
+  font-size: 30px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  color: black;
+}
+
+@keyframes errorPage1 {
+  0% {
+    opacity: 0;
+    left: -100px;
+    color: black;
+  }
+  100% {
+    left: 0px;
+    opacity: 1;
+  }
+}
+
+@keyframes errorPage2 {
+  0% {
+    color: green;
+  }
+
+  33% {
+    color: blue;
+  }
+
+  66% {
+    color: black;
+  }
+  100% {
+    color: green;
+  }
+}
+
+.pickupDropdownControl {
+  border: 0px;
+}

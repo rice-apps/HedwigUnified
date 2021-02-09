@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
-import { GrRestaurant } from 'react-icons/gr'
+import { BiArrowToBottom } from 'react-icons/bi'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
 import { AiFillCheckCircle } from 'react-icons/ai'
+import { useReactToPrint } from 'react-to-print'
 import {
   OrderCardWrapper,
   OrderTitleSpaceWrapper,
@@ -36,7 +37,8 @@ import {
   ModalItemList,
   ModalSubtitle,
   ModalDetail,
-  ModalCancelMessage
+  ModalCancelMessage,
+  HiddenOrderTicket
 } from './OrderCard.styles'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -47,7 +49,10 @@ const formatter = new Intl.NumberFormat('en-US', {
 function MakeOrderTitle (props) {
   return (
     <OrderTitleSpaceWrapper>
-      <GrRestaurant />
+      <BiArrowToBottom 
+        onClick={props.handlePrintTrigger} 
+        onMouseOver={'print ticket'}
+      />
       <div>{props.customerName}</div>
       <BsFillClockFill />
     </OrderTitleSpaceWrapper>
@@ -474,6 +479,57 @@ function MakePaymentSpace (props) {
   )
 }
 
+function OrderTicketToPrint(props) {
+  const items = props.items;
+  return (
+    <PaymentSpaceWrapper>
+      <Background>
+          <ModalWrapper>
+            <MakeModalHeader customerName={props.customerName} />
+            <ModalOrderWrapper>
+              <ModalItemList>
+                {items &&
+                  items.map(function (item) {
+                    const modifiers = item.modifiers?.map(
+                      modifier => modifier.name
+                    )
+
+                    return (
+                      <MakeModalOrder
+                        quantity={item.quantity}
+                        itemName={item.name}
+                        price={item.totalMoney.amount / 100}
+                        variant={item.variationName}
+                        modifiers={modifiers && [...modifiers].join(', ')}
+                      />
+                    )
+                  })}
+              </ModalItemList>
+              <ModalPaymentWrapper>
+                <div>Tax:</div>
+                <div>{formatter.format(props.orderTax)}</div>
+                <div> Total:</div>
+                <div style={{ fontWeight: 'bold' }}>
+                  {formatter.format(props.orderTotal + props.orderTax)}
+                </div>
+              </ModalPaymentWrapper>
+            </ModalOrderWrapper>
+            <MakeModalDetails
+              paymentType={props.paymentType}
+              isVerified={true}
+              phone={props.phone}
+              email={props.email}
+              studentId={props.studentId}
+              cohenId={props.cohenId}
+              submissionTime={props.submissionTime}
+              pickupTime={props.pickupTime}
+            />
+          </ModalWrapper>
+        </Background>
+    </PaymentSpaceWrapper>
+  )
+}
+
 function isPastPickup (pickupTime, currentTime) {
   const pickupTimeBuffer = 0
   const pastPickup = currentTime.diff(pickupTime, 'minutes') > pickupTimeBuffer
@@ -493,6 +549,16 @@ function OrderCard (props) {
       clearInterval(timer)
     }
   }, [])
+
+  const componentRef = useRef();
+  const printConfig = { 
+    documentTitle: "testPrint",
+    onAfterPrint: () => console.log("printing ends."),
+    onPrintError: (e) => console.log(e),
+    content: () => componentRef.current,
+  }
+  const handlePrint = useReactToPrint(printConfig)
+
   const {
     customerName,
     email,
@@ -543,7 +609,7 @@ function OrderCard (props) {
       <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle customerName={customerName} />
+        <MakeOrderTitle customerName={customerName} handlePrintTrigger={handlePrint}/>
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
@@ -612,6 +678,52 @@ function OrderCard (props) {
           }
         />
       </OrderCardWrapper>
+      <HiddenOrderTicket>
+        <div  ref={componentRef}>
+        <OrderTicketToPrint
+          customerName={customerName} 
+          pickupTime={pickupAt}
+          submissionTime={submittedAt}
+          paymentType={
+            orderTrackerData.getOrderTracker === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
+          }
+          items={items}
+          isVerified={true}
+          email={email}
+          phone={phone}
+          buttonStatus={buttonStatus}
+          orderCost={orderCost}
+          studentId={props.studentId}
+          cohenId={props.cohenId}
+          orderTax={props.orderTotal * 0.0825}
+          orderTotal={orderTotal}
+          fulfillment={fulfillment}
+          pickupTime={pickupAt}
+          submissionTime={submittedAt}
+          paymentType={
+            orderTrackerData.getOrderTracker === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType === null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
+          }
+          customerName={customerName}
+          cancelClick={cancelClick}
+          id={props.id}
+          shopifyOrderId={
+            orderTrackerData.getOrderTracker == null
+              ? 'None'
+              : orderTrackerData.getOrderTracker.shopifyOrderId
+              ? orderTrackerData.getOrderTracker.shopifyOrderId
+              : null
+          }
+        />
+        </div>
+      </HiddenOrderTicket>
     </IconContext.Provider>
   )
 }

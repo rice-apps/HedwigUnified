@@ -114,6 +114,11 @@ export const ButtonsSpaceWrapper = styled.div`
   align-items: center;
   padding: 0vh 0vh 1.1vh;
 `
+
+export const HiddenOrderTicket = styled.div`
+  display: none; !important
+`
+
 export const ButtonWrapper = styled.button`
   border-radius: 20px;
   opacity: 1;

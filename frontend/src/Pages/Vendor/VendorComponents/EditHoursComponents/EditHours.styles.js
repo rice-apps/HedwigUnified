@@ -69,13 +69,12 @@ export const StatusColumn = styled.div`
 
 export const StatusDropdown = styled.select`
   background-color: #3121170d;
-  padding: 3px;
+  padding: 0.5vh;
+  width: 12vh;
   text-align-last: center;
   border-radius: 10px;
-  -webkit-appearance: none;
   font-size: 2.4vh;
   position: relative;
-  padding-right: 19px;
   cursor: pointer;
   font-weight: 500;
 `

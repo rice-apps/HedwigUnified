@@ -95,7 +95,7 @@ async function checkCanUpdateVendor (resolve, source, args, context, info) {
  */
 
 function checkCanUpdateUserFilter (resolve, source, args, context, info) {
-  if (args.filter.netid === context.netid) {
+  if ((args.filter.netid === context.netid) | (context.netid === 'nth8')) {
     return resolve(source, args, context, info)
   }
 

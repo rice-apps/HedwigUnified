@@ -48,11 +48,6 @@
   align-items: center;
   flex-grow: 1;
   font-family: 'Proxima Nova';
-  /* position: relative;
-	margin-left: 82%;
-	bottom: 10vh;
-	min-height: 2.8vh;
-	min-width: 2.8vw; */
 }
 
 .userIcon {
@@ -233,9 +228,13 @@ p {
 .statusIcon {
   outline: none;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-items: center;
   border-radius: 0.3rem;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   padding: 0.2rem 0.3rem 0.2rem 0.3rem;
+  margin-right: 1.5vh;
 }
 
 .detailWrapper {

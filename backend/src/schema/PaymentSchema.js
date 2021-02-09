@@ -9,7 +9,7 @@ import {
   FetchPaymentPayloadTC,
   DataSourceEnumTC
 } from '../models/index.js'
-import squareClients from '../utils/square.js'
+import { squareClients } from '../utils/square.js'
 import { shopifyClient, shopifyAdminClient } from '../utils/shopify.js'
 import { ApiError } from 'square'
 

@@ -34,6 +34,7 @@ import { SmallLoadingPage } from './LoadingComponents'
 import OAuthLink from '/Users/Ananya/HedwigUnified/frontend/src/OAuthLink.jsx'
 import ReceiveOAuth from '/Users/Ananya/HedwigUnified/frontend/src/ReceiveOAuth.jsx'
 
+import Launch from './../Pages/User/Launch'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -179,6 +180,10 @@ export const RoutesComponent = ({ loginCallBack }) => {
     {
       path: '/help',
       element: <HelpPage />
+    },
+    {
+      path: '/launch',
+      element: <Launch />
     },
     {
       path: '/about_us',

@@ -2,7 +2,7 @@ import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
 import { ItemTC, DataSourceEnumTC } from '../models/index.js'
-import squareClients from '../utils/square.js'
+import { squareClients } from '../utils/square.js'
 import { pubsub } from '../utils/pubsub.js'
 
 ItemTC.addResolver({
@@ -53,8 +53,6 @@ ItemTC.addResolver({
           }
         } = item
 
-        console.log(baseItemName, imageId)
-        console.log(isAvailable)
         let imageData
         try {
           const response = await catalogApi.retrieveCatalogObject(imageId)
@@ -201,8 +199,6 @@ ItemTC.addResolver({
         } catch (error) {
           console.log('Image not found')
         }
-
-        console.log(imageData)
 
         const returnedVariants = variations.map(variant => {
           const {

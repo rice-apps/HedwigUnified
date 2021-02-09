@@ -40,6 +40,7 @@ function VendorList ({ updateLogin }) {
   console.log('LOCAL USER BEFORE', localUser)
   // Object.assign(localUser, {name: "Test"})
   // console.log("LOCAL USER AFTER", localUser)
+
   return (
     <>
       <ProfilePane updateLogin={updateLogin} />

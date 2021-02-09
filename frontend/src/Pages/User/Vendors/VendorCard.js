@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import './vendor.css'
 import { IoIosClose } from 'react-icons/io'
+import { AiOutlineInfoCircle } from 'react-icons/ai'
+import MoreInfo from './MoreInfo'
 
 export const convertTimeToNum = time => {
   const [timeNum, halfOfDay] = time.split(' ')
@@ -18,8 +20,18 @@ export const convertTimeToNum = time => {
 }
 
 function VendorCard ({ vendor }) {
-  const { name, hours, logoUrl } = vendor
+  const {
+    name,
+    hours,
+    logoUrl,
+    facebook,
+    phone,
+    cutoffTime,
+    pickupInstruction,
+    email
+  } = vendor
   const [statusDetail, setStatusDetail] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
 
   // make testMode true if you want the store to be open
@@ -49,6 +61,10 @@ function VendorCard ({ vendor }) {
   const times = []
   for (let i = 0; i < startTimes.length; i++) {
     times.push([startTimes[i], endTimes[i]])
+  }
+
+  const handleClickInfo = () => {
+    setShowInfo(!showInfo)
   }
 
   const determineIfClosed = (current_date, dayObj) => {
@@ -134,11 +150,11 @@ function VendorCard ({ vendor }) {
       )
     }
   }
-
+  console.log(hours)
   return (
-    <div className='vendorContainer' onClick={() => handleClick()}>
+    <div className='vendorContainer'>
       {showStatusDetail()}
-      <div className='vendorImageContainer'>
+      <div className='vendorImageContainer' onClick={() => handleClick()}>
         <img
           className={
             openStatus.status === 'openning'
@@ -149,7 +165,7 @@ function VendorCard ({ vendor }) {
         />
       </div>
       <div className='vendorHeading'>
-        <div className='vendorHeadingText'>
+        <div className='vendorHeadingText' onClick={() => handleClick()}>
           <h3 className='vendorName'>{name}</h3>
           {/* Case for two start/end times */}
           {dayObj && dayObj.start.length >= 1 && (
@@ -170,11 +186,19 @@ function VendorCard ({ vendor }) {
           )}
         </div>
         <div className='vendorHoursIcon'>
-          <button className={'statusIcon ' + openStatus.status}>
+          <button
+            className={'statusIcon ' + openStatus.status}
+            onClick={() => handleClick()}
+          >
             {openStatusText[openStatus.status]}
           </button>
+          <AiOutlineInfoCircle
+            onClick={() => handleClickInfo()}
+            style={{ marginRight: '1.2vh', fontSize: '2.3vh' }}
+          />
         </div>
       </div>
+      {showInfo && <MoreInfo {...vendor} changeStatus={setShowInfo} />}
     </div>
   )
 }

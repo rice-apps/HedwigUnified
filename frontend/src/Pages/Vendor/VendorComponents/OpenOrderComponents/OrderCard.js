@@ -49,7 +49,7 @@ function MakeOrderTitle (props) {
     <OrderTitleSpaceWrapper>
       <GrRestaurant />
       <div>{props.customerName}</div>
-      <BsFillClockFill />
+      <BsFillClockFill color={props.buttonStatus === "NEW" ? "#EA907A" : props.buttonStatus === "READY" ? "#91C6B0" : "#EF9429"}/>
     </OrderTitleSpaceWrapper>
   )
 }
@@ -543,7 +543,7 @@ function OrderCard (props) {
       <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle customerName={customerName} />
+        <MakeOrderTitle customerName={customerName} buttonStatus={buttonStatus}/>
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime

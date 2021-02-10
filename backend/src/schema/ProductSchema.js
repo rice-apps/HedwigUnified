@@ -53,8 +53,7 @@ ItemTC.addResolver({
           }
         } = item
 
-        console.log(baseItemName, imageId)
-        console.log(isAvailable)
+
         let imageData
         try {
           const response = await catalogApi.retrieveCatalogObject(imageId)
@@ -463,7 +462,6 @@ ItemTC.addResolver({
         name: vendor,
       })
       var availability = vendorData.availableItems;
-      alert(productId);
       var idx = availability.indexOf(productId); // initialize the index to find the item
       if (isItemAvailable && (idx === -1)) {
         availability.push(productId);
@@ -471,7 +469,6 @@ ItemTC.addResolver({
       if (!isItemAvailable && (idx !== -1)) {
         availability.splice(idx, 1); 
         await vendorData.save()}
-      alert(vendorData);
       return vendorData;
     }
   })

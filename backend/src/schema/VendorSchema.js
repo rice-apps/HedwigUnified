@@ -16,7 +16,6 @@ const VendorQueries = {
         ...rp,
         projection: { allowedNetid: {}, ...rp.projection }
       })
-      console.log(vendor);
       if (!vendor.allowedNetid.includes(rp.context.netid)) {
         vendor.squareInfo = null
         vendor.allowedNetid = null
@@ -68,7 +67,6 @@ VendorTC.addResolver({
         // extract name and id
         availability.push(items[i].id)
       }
-      // console.log(availability)
 
       const vendorData = await Vendor.findOne({
         name: vendor

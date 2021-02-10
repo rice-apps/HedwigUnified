@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
-import { BiFoodMenu } from 'react-icons/bi'
+import { BiFoodMenu, BiFontColor } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
@@ -61,7 +61,7 @@ function MakeOrderTitle (props) {
         />
       )}</div>
       
-      <BsFillClockFill color={props.buttonStatus === "NEW" ? "#EA907A" : props.buttonStatus === "READY" ? "#91C6B0" : "#EF9429"}/>
+      <BsFillClockFill color={props.buttonStatus === 'NEW' ? '#EA907A' : props.buttonStatus === 'READY' ? '#91C6B0' : '#EF9429'}/>
     </OrderTitleSpaceWrapper>
   )
 }
@@ -73,7 +73,7 @@ function MakeOrderTime (props) {
         <div> Pick up time: {props.pickupTime}</div>
         <div> Order Submitted: {props.submissionTime}</div>
         <div style={{ marginTop: '4px' }}>
-          Payment: <strong>{props.paymentType}</strong>
+          Payment: <strong>{props.paymentType === 'TETRA' ? 'Tetra' : props.paymentType === 'COHEN' ? 'Cohen' : props.paymentType === 'CREDIT' ? 'Credit' : ''}</strong>
         </div>
       </ExactTimeSpaceWrapper>
       <TimeLeftSpaceWrapper>
@@ -81,10 +81,13 @@ function MakeOrderTime (props) {
           style={{
             marginTop: '8px',
             marginRight: '20px',
-            textDecoration: 'underline'
+            textDecoration: 'underline',
+            fontWeight: 'bold',
+            color: '#9D9D9D'
           }}
         >
-          Pickup time <br /> {props.pickupCountdown}
+          {/* Pickup time <br /> {props.pickupCountdown} */}
+          {props.pickupCountdown}
         </div>
       </TimeLeftSpaceWrapper>
     </OrderTimeSpaceWrapper>
@@ -629,7 +632,6 @@ function OrderCard (props) {
                 : null
             }
           />
-          {console.log(orderTrackerData.getOrderTracker)}
         </Collapsible>
       </OrderCardWrapper>
     </IconContext.Provider>

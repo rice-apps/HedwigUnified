@@ -38,6 +38,8 @@ import {
   ModalDetail,
   ModalCancelMessage
 } from './OrderCard.styles'
+import Collapsible from 'react-collapsible';
+import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -47,8 +49,18 @@ const formatter = new Intl.NumberFormat('en-US', {
 function MakeOrderTitle (props) {
   return (
     <OrderTitleSpaceWrapper>
+      {/* Possibly add order number here from 1-n */}
       <GrRestaurant />
-      <div>{props.customerName}</div>
+      <div>{props.customerName}{props.IsClosed ? (
+        <IoIosArrowDown
+          style={{ color: 'black', marginTop: '3px', marginLeft: '1px' }}
+        />
+      ) : (
+        <IoIosArrowUp
+          style={{ color: 'black', marginTop: '3px', marginLeft: '1px' }}
+        />
+      )}</div>
+      
       <BsFillClockFill color={props.buttonStatus === "NEW" ? "#EA907A" : props.buttonStatus === "READY" ? "#91C6B0" : "#EF9429"}/>
     </OrderTitleSpaceWrapper>
   )
@@ -543,74 +555,82 @@ function OrderCard (props) {
       <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle customerName={customerName} buttonStatus={buttonStatus}/>
-
-        {/* Section of order card with pick up time, order submission time, and payment method */}
-        <MakeOrderTime
-          pickupTime={pickupAt}
-          submissionTime={submittedAt}
-          paymentType={
-            orderTrackerData.getOrderTracker === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+        <Collapsible 
+          open
+          trigger={<MakeOrderTitle customerName={customerName} buttonStatus={buttonStatus} IsClosed/>}
+          triggerWhenOpen={
+            <MakeOrderTitle customerName={customerName} buttonStatus={buttonStatus} />
           }
-          pickupCountdown={timeLeft}
-        />
-        {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
-        <OrderDetailsSpaceWrapper>
-          {/* Call MakeOrderDetails function for each unique item in the cart,
-          can be called multiple times if multiple items are in order */}
+          >
 
-          {items &&
-            items.map(function (item) {
-              const modifiers = item.modifiers?.map(modifier => modifier.name)
+          {/* Section of order card with pick up time, order submission time, and payment method */}
+          <MakeOrderTime
+            pickupTime={pickupAt}
+            submissionTime={submittedAt}
+            paymentType={
+              orderTrackerData.getOrderTracker === null
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType === null
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
+            }
+            pickupCountdown={timeLeft}
+          />
+          {/* Section of order card with items ordered by customer with modifiers and variants listed as well as price */}
+          <OrderDetailsSpaceWrapper>
+            {/* Call MakeOrderDetails function for each unique item in the cart,
+            can be called multiple times if multiple items are in order */}
 
-              return (
-                <MakeOrderDetails
-                  quantity={item.quantity}
-                  itemName={item.name}
-                  price={item.totalMoney.amount / 100}
-                  variant={item.variationName}
-                  modifiers={modifiers && [...modifiers].join(', ')}
-                />
-              )
-            })}
-        </OrderDetailsSpaceWrapper>
-        <MakePaymentSpace
-          pastPickup={pastPickup}
-          items={items}
-          email={email}
-          phone={phone}
-          buttonStatus={buttonStatus}
-          orderCost={orderCost}
-          studentId={props.studentId}
-          cohenId={props.cohenId}
-          orderTax={props.orderTotal * 0.0825}
-          orderTotal={orderTotal}
-          fulfillment={fulfillment}
-          pickupTime={pickupAt}
-          submissionTime={submittedAt}
-          paymentType={
-            orderTrackerData.getOrderTracker === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
-          }
-          handleClick={handleClick}
-          customerName={customerName}
-          cancelClick={cancelClick}
-          id={props.id}
-          shopifyOrderId={
-            orderTrackerData.getOrderTracker == null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.shopifyOrderId
-              ? orderTrackerData.getOrderTracker.shopifyOrderId
-              : null
-          }
-        />
+            {items &&
+              items.map(function (item) {
+                const modifiers = item.modifiers?.map(modifier => modifier.name)
+
+                return (
+                  <MakeOrderDetails
+                    quantity={item.quantity}
+                    itemName={item.name}
+                    price={item.totalMoney.amount / 100}
+                    variant={item.variationName}
+                    modifiers={modifiers && [...modifiers].join(', ')}
+                  />
+                )
+              })}
+          </OrderDetailsSpaceWrapper>
+          <MakePaymentSpace
+            pastPickup={pastPickup}
+            items={items}
+            email={email}
+            phone={phone}
+            buttonStatus={buttonStatus}
+            orderCost={orderCost}
+            studentId={props.studentId}
+            cohenId={props.cohenId}
+            orderTax={props.orderTotal * 0.0825}
+            orderTotal={orderTotal}
+            fulfillment={fulfillment}
+            pickupTime={pickupAt}
+            submissionTime={submittedAt}
+            paymentType={
+              orderTrackerData.getOrderTracker === null
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType === null
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
+            }
+            handleClick={handleClick}
+            customerName={customerName}
+            cancelClick={cancelClick}
+            id={props.id}
+            shopifyOrderId={
+              orderTrackerData.getOrderTracker == null
+                ? 'None'
+                : orderTrackerData.getOrderTracker.shopifyOrderId
+                ? orderTrackerData.getOrderTracker.shopifyOrderId
+                : null
+            }
+          />
+          {console.log(orderTrackerData.getOrderTracker)}
+        </Collapsible>
       </OrderCardWrapper>
     </IconContext.Provider>
   )

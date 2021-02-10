@@ -115,7 +115,7 @@ function SideBarItems () {
         open
         trigger={<MainMenuItem name='Order Processing' IsClosed />}
         triggerWhenOpen={
-          <MainMenuItem name='Order Processing' isClosed={false} />
+          <MainMenuItem name='Order Processing' />
         }
       >
         <SubMenuItem path='/employee/openorders' label='Open Orders' />
@@ -126,7 +126,7 @@ function SideBarItems () {
         open
         trigger={<MainMenuItem name='Menu Management' IsClosed />}
         triggerWhenOpen={
-          <MainMenuItem name='Menu Management' isClosed={false} />
+          <MainMenuItem name='Menu Management' />
         }
       >
         <SubMenuItem path='/employee/items' label='Edit Items' />
@@ -137,7 +137,7 @@ function SideBarItems () {
         open
         trigger={<MainMenuItem name='Store Information' IsClosed />}
         triggerWhenOpen={
-          <MainMenuItem name='Store Information' isClosed={false} />
+          <MainMenuItem name='Store Information' />
         }
       >
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />

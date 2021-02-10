@@ -109,35 +109,36 @@ function MakeOrderDetails (props) {
         >
           {props.itemName}
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '2.5vh 1fr',
-            alignItmes: 'center',
-            textAlign: 'left'
-          }}
-        >
-          <BiFoodMenu style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }} />{' '}
-          {props.variant}
-        </div>
-        {props.modifiers && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '2.5vh 1fr',
-              alignItems: 'center',
-              textAlign: 'left'
-            }}
-          >
-            <IoIosAddCircleOutline
-              style={{ alignSelf: 'flex-start', marginTop: '0.3vh' }}
-            />{' '}
-            {props.modifiers}
-          </div>
-        )}
+        {/* <div>{props.variant}</div> */}
+        <div>{props.modifiers}</div>
       </ItemDescriptionWrapper>
       <div style={{ fontWeight: 'bold' }}>{formatter.format(props.price)}</div>
     </OrderDetailsItemWrapper>
+    // hello
+  )
+}
+
+// Make tax component
+function MakeTax (props) {
+  return (
+    <OrderDetailsItemWrapper>
+      <div style={{ fontWeight: 'bold' }}>{props.quantity}</div>
+      <ItemDescriptionWrapper>
+        <div
+          style={{
+            textTransform: 'uppercase',
+            fontWeight: 'bold',
+            textAlign: 'left'
+          }}
+        >
+          {"TAX"}
+        </div>
+      </ItemDescriptionWrapper>
+      <div style={{ fontWeight: 'bold' }}>{props.orderTax
+              ? formatter.format(props.orderTax)
+              : formatter.format(0)}</div>
+    </OrderDetailsItemWrapper>
+    // hello
   )
 }
 
@@ -337,17 +338,13 @@ function MakePaymentSpace (props) {
   return (
     <PaymentSpaceWrapper>
       <CostSpaceWrapper>
-        <div>
-          Tax:{' '}
-          <strong>
-            {props.orderTax
-              ? formatter.format(props.orderTax)
-              : formatter.format(0)}
-          </strong>
-        </div>
-        <div>
-          Total:{' '}
-          <strong>{formatter.format(props.orderTotal + props.orderTax)}</strong>
+        <div style={{display: "flex"}}>
+          <div style={{paddingRight: '5vh'}}>
+            Total:{' '}
+          </div>
+          {/* <div> */}
+            <strong>{formatter.format(props.orderTotal + props.orderTax)}</strong>
+          {/* </div> */}
         </div>
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
@@ -598,6 +595,12 @@ function OrderCard (props) {
                   />
                 )
               })}
+            <MakeTax 
+              quantity={1}
+              orderTax={props.orderTotal * 0.0825}
+              orderTotal={orderTotal}
+            />
+
           </OrderDetailsSpaceWrapper>
           <MakePaymentSpace
             pastPickup={pastPickup}

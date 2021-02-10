@@ -87,7 +87,7 @@ export const ItemDescriptionWrapper = styled.div`
 `
 
 export const PaymentSpaceWrapper = styled.div`
-  border-top: 1px solid grey;
+  border-top: 1px solid #DEDEDE;
   width: 90%;
   justify-self: center;
   grid-area: PaymentSpace;
@@ -110,7 +110,7 @@ export const CostSpaceWrapper = styled.div`
 export const ButtonsSpaceWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   padding: 0vh 0vh 1.1vh;
 `

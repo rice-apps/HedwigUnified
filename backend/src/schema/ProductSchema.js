@@ -398,6 +398,47 @@ ItemTC.addResolver({
     type: 'Boolean',
     resolve: async ({ args }) => {
       const { vendor, productId } = args
+      const vendorData = await Vendor.findOne({
+        name: vendor
+      })
+      try{
+        if (vendorData.availableItems.includes(productId)) {
+          return true;
+        }
+        else return false;
+      } catch (error) {
+        return new ApolloError(
+          `Something went wrong getting availability for item ${productId}`
+        )
+      }
+      
+      // const squareClient = squareClients.get(vendor)
+      // const catalogApi = squareClient.catalogApi
+
+      // try {
+      //   const {
+      //     result: { object }
+      //   } = await catalogApi.retrieveCatalogObject(productId)
+
+      //   return object.customAttributeValues.is_available.booleanValue
+      // } catch (error) {
+      //   if (error instanceof ApiError) {
+      //     return new ApolloError(
+      //       `Getting availability for item ${productId} failed because ${error.result}`
+      //     )
+      //   }
+      // }
+    }
+  })
+  .addResolver({
+    name: 'getAvailabilityBK',
+    args: {
+      vendor: 'String!',
+      productId: 'String!'
+    },
+    type: 'Boolean',
+    resolve: async ({ args }) => {
+      const { vendor, productId } = args
 
       const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
@@ -423,6 +464,28 @@ ItemTC.addResolver({
   })
   .addResolver({
     name: 'getAvailabilities',
+    args: {
+      vendor: 'String!',
+      productIds: '[String!]'
+    },
+    type: 'Boolean',
+    resolve: async ({ args }) => {
+      const { vendor, productIds } = args
+
+        const vendorData = await Vendor.findOne ({
+          name: vendor
+        });
+
+        for ( var i = 0; i < productIds.length; i ++ ) {
+          if ( !vendorData.availableItems.includes(productIds[i]) ) {
+             return false;
+          }
+        }
+        return true;
+    }
+  })
+  .addResolver({
+    name: 'getAvailabilitiesBK',
     args: {
       vendor: 'String!',
       productIds: '[String!]'
@@ -459,6 +522,33 @@ ItemTC.addResolver({
   })
   .addResolver({
     name: 'setAvailability',
+    args: {
+      vendor: 'String!',
+      productId: 'String!',
+      isItemAvailable: 'Boolean!',
+      dataSource: DataSourceEnumTC
+    },
+    type: VendorTC,
+    resolve: async ({ args }) => {
+      const { vendor, productId, isItemAvailable, dataSource } = args
+      const vendorData = await Vendor.findOne({
+        name: vendor,
+      })
+      var availability = vendorData.availableItems;
+      alert(productId);
+      var idx = availability.indexOf(productId); // initialize the index to find the item
+      if (isItemAvailable && (idx === -1)) {
+        availability.push(productId);
+        await vendorData.save()}
+      if (!isItemAvailable && (idx !== -1)) {
+        availability.splice(idx, 1); 
+        await vendorData.save()}
+      alert(vendorData);
+      return vendorData;
+    }
+  })
+  .addResolver({
+    name: 'setAvailabilityBK',
     args: {
       vendor: 'String!',
       productId: 'String!',

@@ -16,7 +16,7 @@ const VendorQueries = {
         ...rp,
         projection: { allowedNetid: {}, ...rp.projection }
       })
-
+      console.log(vendor);
       if (!vendor.allowedNetid.includes(rp.context.netid)) {
         vendor.squareInfo = null
         vendor.allowedNetid = null

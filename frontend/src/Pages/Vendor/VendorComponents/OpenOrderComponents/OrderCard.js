@@ -542,9 +542,9 @@ function OrderCard (props) {
   const pastPickup =
     isPastPickup(moment(livePickupTime), currentTime) && newOrder
 
-  const pickupAt = moment(pickupTime).format('h:mm A')
+  const pickupAt = moment(pickupTime).format('h:mm a')
   const submittedAt = submissionTime
-    ? moment(submissionTime).format('h:mm A')
+    ? moment(submissionTime).format('h:mm a')
     : 'None'
   const timeLeft = moment(livePickupTime).fromNow()
 

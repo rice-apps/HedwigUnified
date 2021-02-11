@@ -2,6 +2,9 @@ import { ApolloError } from 'apollo-server-express'
 import { ApiError, Client, Environment } from 'square'
 import { Vendor } from '../models/index.js'
 
+/**
+ * @type {Map<string, import('square').Client>}
+ */
 const squareClients = await Vendor.find()
   .exec()
   .then(res => {
@@ -22,7 +25,7 @@ const squareClients = await Vendor.find()
  * Fetches order by ID and parses it into
  * our GraphQL data format
  *
- * @param {Client} squareClient
+ * @param {import('square').Client} squareClient
  * @param {string} orderId
  */
 async function orderFetchAndParse (squareClient, orderId) {
@@ -52,7 +55,7 @@ async function orderFetchAndParse (squareClient, orderId) {
  * Parses a Square Order into our GraphQL data
  * format
  *
- * @param {Order} order
+ * @param {import('square').Order} order
  */
 function orderParse (order) {
   return {

@@ -4,6 +4,9 @@ import Redis from 'ioredis'
 
 import { REDIS_OPTIONS } from '../config.js'
 
+/**
+ * @type {PubSub | RedisPubSub}
+ */
 let pubsub
 
 if (process.env.NODE_ENV === 'production') {

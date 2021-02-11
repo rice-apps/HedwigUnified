@@ -271,6 +271,8 @@ function OrderDashboard () {
     order => order.fulfillment.state === 'PREPARED'
   )
 
+  console.log('NEWORDERS', newOrders)
+
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>

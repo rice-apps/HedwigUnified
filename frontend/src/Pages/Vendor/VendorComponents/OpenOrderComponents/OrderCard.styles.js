@@ -45,6 +45,9 @@ export const OrderTitleSpaceWrapper = styled.div`
 export const OrderTitleContactHidden = styled.div`
   grid-area: namecontact;
   padding-top: 0.5vh;
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 export const OrderTitleContactShown = styled.div`
@@ -53,6 +56,9 @@ export const OrderTitleContactShown = styled.div`
   opacity: 1;
   padding: 0.5vh 0.5vh 0vh 1vh;
   border-radius: 2vh;
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 export const OrderTitleIconOneDiv = styled.div`

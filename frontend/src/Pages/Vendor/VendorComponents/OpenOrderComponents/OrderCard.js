@@ -533,13 +533,13 @@ function isPastPickup (pickupTime, currentTime) {
 
 function OrderCard (props) {
   const [currentTime, setCurrentTime] = useState(moment())
-  const [livePickupTime, updateLivePickupTime] = useState(props.pickupTime)
+
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(moment())
-      updateLivePickupTime(props.pickupTime)
-    }, 5000)
+  
+    }, 1000)
     return () => {
       clearInterval(timer)
     }
@@ -579,13 +579,13 @@ function OrderCard (props) {
 
   // pastPickup is true if current time has past an order's pickuptime + buffer
   const pastPickup =
-    isPastPickup(moment(livePickupTime), currentTime) && newOrder
+    isPastPickup(pickupTime, currentTime) && newOrder
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
     ? moment(submissionTime).format('h:mm A')
     : 'None'
-  const timeLeft = moment(livePickupTime).fromNow()
+  const timeLeft = moment(pickupTime).fromNow()
 
   return (
     <IconContext.Provider

@@ -86,6 +86,7 @@ function MakeCatalogItems (props) {
         <Toggle
           icons={false}
           defaultChecked={availability}
+          
           onChange={e => {
             setAvailability({
               variables: {
@@ -96,6 +97,7 @@ function MakeCatalogItems (props) {
             })
             setTimeout(500, window.location.reload())
           }}
+          
         />
       </ItemAvailability>
       <ItemPrice>{formatter.format(props.itemPrice / 100)}</ItemPrice>

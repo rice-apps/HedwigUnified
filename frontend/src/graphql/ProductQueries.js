@@ -84,4 +84,29 @@ const SET_ITEM_AVAILABILITY = gql`
   }
 `
 
-export { GET_CATALOG, GET_ITEM, GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY }
+const GET_MODIFIER_LISTS = gql`
+  query GET_MODIFIER_LISTS($vendor: String!) {
+    getModifierLists(dataSource: SQUARE, vendor: $vendor) {
+      dataSourceId
+      name
+      selectionType
+      modifiers {
+        dataSourceId
+        parentListId
+        price {
+          amount
+          currency
+        }
+        name
+        description
+        dataSource
+        merchant
+        image
+      }
+      minModifiers
+      maxModifiers
+    }
+  }
+`
+
+export { GET_CATALOG, GET_ITEM, GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY, GET_MODIFIER_LISTS }

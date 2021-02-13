@@ -15,7 +15,8 @@ const theme = createMuiTheme({
     }
   }
 })
-const PageWrapper = styled.div`
+
+export const PageWrapper = styled.div`
   background-color: #f7f7f7;
   height: 100%;
   width: 100%;
@@ -24,7 +25,7 @@ const PageWrapper = styled.div`
   justify-content: center;
 `
 
-const CatalogWrapper = styled.div`
+export const CatalogWrapper = styled.div`
   display: grid;
   border-radius: 7px;
   height: 85%;
@@ -39,7 +40,7 @@ const CatalogWrapper = styled.div`
     'TabSpace ItemDisplaySpace';
 `
 
-const LabelWrapper = styled.div`
+export const LabelWrapper = styled.div`
   background-color: #6b6b6b;
   width: 100%;
   height: 100%;
@@ -53,14 +54,14 @@ const LabelWrapper = styled.div`
   align-items: center;
 `
 
-const TabWrapper = styled.div`
+export const TabWrapper = styled.div`
   background-color: #d7d7d7;
   width: 100%;
   height: 100%;
   grid-area: TabSpace;
 `
 
-const ItemDisplayWrapper = styled.div`
+export const ItemDisplayWrapper = styled.div`
   background-color: white;
   width: 100%;
   height: 100%;
@@ -73,6 +74,22 @@ const ItemDisplayWrapper = styled.div`
   overflow-x: hidden;
 `
 
+export const StyledTabs = styled(Tabs)`
+  && {
+    background-color: #7b7b7b;
+    width: 100%;
+    color: black;
+  }
+`
+
+export const StyledTab = styled(Tab)`
+  && {
+    background-color: white;
+    font-weight: 700;
+    width: 100%;
+  }
+`
+
 function MakeLabelWrapper () {
   return (
     <LabelWrapper>
@@ -83,22 +100,6 @@ function MakeLabelWrapper () {
     </LabelWrapper>
   )
 }
-
-const StyledTabs = styled(Tabs)`
-  && {
-    background-color: #7b7b7b;
-    width: 100%;
-    color: black;
-  }
-`
-
-const StyledTab = styled(Tab)`
-  && {
-    background-color: white;
-    font-weight: 700;
-    width: 100%;
-  }
-`
 
 function TabPanel (props) {
   const { children, value, category } = props
@@ -121,7 +122,7 @@ function ItemCatalog (props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
-    console.log(value)
+    console.log('value', value)
   }
 
   return (

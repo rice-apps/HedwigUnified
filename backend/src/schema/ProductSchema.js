@@ -2,7 +2,7 @@ import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
 import { ItemTC, DataSourceEnumTC, Vendor, VendorTC } from '../models/index.js'
-import squareClients from '../utils/square.js'
+import {squareClients} from '../utils/square.js'
 import { pubsub } from '../utils/pubsub.js'
 
 ItemTC.addResolver({

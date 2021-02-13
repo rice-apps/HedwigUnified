@@ -5,7 +5,7 @@ import {
 } from '../utils/authenticationUtils.js'
 import { ApiError } from 'square'
 import { ApolloError } from 'apollo-server-express'
-import squareClients from '../utils/square.js'
+import {squareClients} from '../utils/square.js'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers

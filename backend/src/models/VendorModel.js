@@ -53,7 +53,8 @@ const VendorSchema = new mongoose.Schema({
   cutoffTime: { type: Number, required: false },
   website: { type: String, required: false },
   facebook: { type: String, required: false },
-  availableItems: {type: [String], required: false}
+  availableItems: {type: [String], required: false},
+  availableModifiers: {type: [String], required: false}
 })
 
 const Vendor = mongoose.model('Vendors', VendorSchema)

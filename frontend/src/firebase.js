@@ -6,7 +6,6 @@ import firebase from 'firebase/app'
 
 // These imports load individual services into the firebase namespace.
 import 'firebase/auth'
-import 'firebase/database'
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -14,5 +13,13 @@ const firebaseConfig = {
 }
 
 firebase.initializeApp(firebaseConfig)
+
+firebase.auth().onIdTokenChanged(async user => {
+  if (user) {
+    localStorage.setItem('token', await user.getIdToken())
+  } else {
+    localStorage.removeItem('token')
+  }
+})
 
 export default firebase

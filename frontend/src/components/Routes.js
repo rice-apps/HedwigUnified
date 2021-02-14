@@ -4,7 +4,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 
 import { Route, useRoutes, useNavigate, Navigate } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 
 import gql from 'graphql-tag.macro'
 
@@ -70,22 +70,32 @@ const GET_VENDOR_DATA = gql`
 const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
   const navigate = useNavigate()
   const [token, setToken] = useState('')
+  const [tokenLoading, setTokenLoading] = useState(true)
+  const [verifyUser, { data, loading, error }] = useLazyQuery(VERIFY_USER, {
+    errorPolicy: 'none'
+  })
 
   useEffect(() => {
     async function getFirebaseToken () {
-      if (firebase.auth().currentUser) {
-        setToken(await firebase.auth().currentUser.getIdToken())
+      let currToken = null
+
+      while (!currToken) {
+        currToken = await firebase.auth().currentUser?.getIdToken()
+      }
+
+      if (currToken) {
+        setTokenLoading(false)
+        setToken(currToken)
       }
     }
 
     getFirebaseToken()
   })
 
+  if (tokenLoading) return <SmallLoadingPage />
+
   // Verify that the token is valid on the backend
-  const { data, loading, error } = useQuery(VERIFY_USER, {
-    variables: { token: token },
-    errorPolicy: 'none'
-  })
+  verifyUser({ variables: { token: token } })
 
   // Show loading message as query runs
   if (loading) {
@@ -94,7 +104,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
 
   // Something went wrong, try to login again
   if (error) {
-    navigate('/login')
+    return <p>{error.message}</p>
   }
 
   // Data is missing, try to login again
@@ -177,7 +187,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
     },
     {
       path: '/login',
-      element: <Login updateLoginStatus={loginCallBack} />
+      element: <Login  />
     },
     {
       path: '/auth',
@@ -197,12 +207,12 @@ export const RoutesComponent = ({ loginCallBack }) => {
     },
     {
       path: '/signup',
-      element: <PrivateRoute element={<SignUp />} updateLogin={loginCallBack} />
+      element: <PrivateRoute element={<SignUp />}  />
     },
     {
       path: '/vendor_choice',
       element: (
-        <PrivateRoute element={<VendorSelect />} updateLogin={loginCallBack} />
+        <PrivateRoute element={<VendorSelect />}  />
       )
     },
     {
@@ -212,8 +222,8 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/',
           element: (
             <PrivateRoute
-              element={<VendorList updateLogin={loginCallBack} />}
-              updateLogin={loginCallBack}
+              element={<VendorList  />}
+              
             />
           )
         },
@@ -222,7 +232,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
           element: (
             <PrivateRoute
               element={<CartDetail />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -230,8 +240,8 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/profile',
           element: (
             <PrivateRoute
-              element={<Profile updateLogin={loginCallBack} />}
-              updateLogin={loginCallBack}
+              element={<Profile  />}
+              
             />
           )
         },
@@ -246,7 +256,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             {
               path: '/',
               element: (
-                <PrivateRoute element={<Menu />} updateLogin={loginCallBack} />
+                <PrivateRoute element={<Menu />}  />
               )
             },
             {
@@ -254,7 +264,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
               element: (
                 <PrivateRoute
                   element={<Product />}
-                  updateLogin={loginCallBack}
+                  
                 />
               )
             }
@@ -275,7 +285,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<OpenOrdersPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -285,7 +295,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<OpenOrdersPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -295,7 +305,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<ClosedOrdersPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -305,7 +315,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<ItemsMenuManagementPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -315,7 +325,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<ModifiersMenuManagementPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -325,7 +335,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<SetBasicInfoPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -335,7 +345,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<SetStoreHoursPage />}
-              updateLogin={loginCallBack}
+              
             />
           )
         },
@@ -345,7 +355,7 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<FAQ />}
-              updateLogin={loginCallBack}
+              
             />
           )
         }

@@ -20,6 +20,7 @@ function Login () {
   firebase
     .auth()
     .getRedirectResult()
+    .then(result => result.user.getIdTokenResult())
     .then(() => {
       navigate('/auth')
     })

@@ -1,9 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 
 import gql from 'graphql-tag.macro'
 
 import { Navigate } from 'react-router-dom'
+
+import firebase from 'firebase/app'
+
 import { SmallLoadingPage } from './../../components/LoadingComponents'
 const AUTHENTICATE_USER = gql`
   mutation AuthenticateMutation($idToken: String!) {
@@ -23,26 +26,38 @@ const AUTHENTICATE_USER = gql`
   }
 `
 
-// const allowedUsers = ['byz2']
-const lstorage = localStorage
-
 function Auth () {
-  const idToken = lstorage.getItem('idToken')
-
-  // Run query against backend to authenticate user
+  const [token, setToken] = useState('')
+  const [tokenLoading, setTokenLoading] = useState(true)
   const [
     authenticateUser,
     { data: authenticationData, loading, error }
-  ] = useMutation(AUTHENTICATE_USER, { variables: { idToken: idToken } })
+  ] = useMutation(AUTHENTICATE_USER)
 
   useEffect(() => {
-    // We only want this mutation to run once; if we hit any errors we redirect to login
-    authenticateUser().catch(err => <p>{err.message}</p>)
-  }, [authenticateUser])
+    async function getFirebaseToken () {
+      const token = await firebase.auth().currentUser?.getIdToken()
 
-  // if (error) return <Navigate to='/login' />
-  if (error) return <p>{error.message}</p>
+      if (token) {
+        setTokenLoading(false)
+        setToken(token)
+      }
+    }
+
+    getFirebaseToken()
+  })
+
+  console.log('here')
+
+  if (tokenLoading) return <SmallLoadingPage />
+
+  console.log(token)
+
+  // Run query against backend to authenticate user
+  authenticateUser({ variables: { idToken: token } }).catch(err => console.log(err))
+
   if (loading) return <SmallLoadingPage />
+  if (error) return <p>{error.message}</p>
   if (!authenticationData) return <p>Authentication Failed.</p>
 
   let {
@@ -54,8 +69,7 @@ function Auth () {
     isAdmin,
     vendor,
     recentUpdate,
-    type,
-    token
+    type
   } = authenticationData.authenticateUser
 
   // This helps issue if first and last name in backend are not seperated by a space
@@ -80,8 +94,7 @@ function Auth () {
   }
 
   // Set token and user data in local storage
-  lstorage.setItem('token', token)
-  lstorage.setItem('userProfile', JSON.stringify(userData))
+  localStorage.setItem('userProfile', JSON.stringify(userData))
 
   // Set recent update in client state -- currently broken with wrong navigation
   // if (!employer || employer === 0) {

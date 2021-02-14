@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
-import { ItemTC, DataSourceEnumTC, ItemModifierListTC } from '../models/index.js'
+import { ItemTC, DataSourceEnumTC, ItemModifierListTC, Vendor, VendorTC } from '../models/index.js'
 import { squareClients } from '../utils/square.js'
 import { pubsub } from '../utils/pubsub.js'
 

@@ -62,6 +62,9 @@ VendorTC.addResolver({
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
       const items = objects.filter(object => object.type === 'ITEM')
+      const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
+      console.log("modifiers")
+      console.log(modifiers)
       var availability = [];
       for(var i=0; i<items.length; i++){ 
         // extract name and id
@@ -86,6 +89,51 @@ VendorTC.addResolver({
       return new ApolloError('Something went wrong when getting Square catalog')
     }
   }
+}).addResolver({
+  name: 'initAvailableModifiers',
+  args: {
+    vendor: 'String!',
+    dataSource: DataSourceEnumTC.getTypeNonNull().getType()
+  },
+  type: VendorTC,
+  resolve: async ({ args }) => {
+    // Extract vendor name from args
+    const { dataSource, vendor } = args
+
+    const squareClient = squareClients.get(vendor)
+    const catalogApi = squareClient.catalogApi
+
+    try {
+      // Make Square request for catalog
+      const {
+        result: { objects }
+      } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
+      const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
+      var availability = [];
+
+      for(var i=0; i<modifiers.length; i++){ 
+        // extract name and id
+        availability.push(modifiers[i].id)
+      }
+
+      const vendorData = await Vendor.findOne({
+        name: vendor
+      })
+
+      vendorData.availableModifiers = availability;
+      await vendorData.save();
+      return vendorData;
+
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return new ApolloError(
+          `Getting Square catalog failed because ${error.result}`
+        )
+      }
+      console.log(error)
+      return new ApolloError('Something went wrong when getting Square catalog')
+    }
+  }
 })
 
 const VendorMutations = {
@@ -94,7 +142,9 @@ const VendorMutations = {
     .withMiddlewares([checkLoggedIn]),
   updateVendor: VendorTC.mongooseResolvers
     .updateOne()
-    .withMiddlewares([checkLoggedIn, checkCanUpdateVendor])
+    .withMiddlewares([checkLoggedIn, checkCanUpdateVendor]),
+  initAvailableItems: VendorTC.getResolver('initAvailableItems'),
+  initAvailableModifiers: VendorTC.getResolver('initAvailableModifiers')
 }
 
 export { VendorQueries, VendorMutations }

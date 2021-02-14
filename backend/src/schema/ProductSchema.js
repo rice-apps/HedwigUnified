@@ -393,19 +393,26 @@ ItemTC.addResolver({
     name: 'getAvailability',
     args: {
       vendor: 'String!',
-      productId: 'String!'
+      productId: 'String!',
+      type: 'String!'
     },
     type: 'Boolean',
     resolve: async ({ args }) => {
-      const { vendor, productId } = args
+      const { vendor, productId, type } = args
       const vendorData = await Vendor.findOne({
         name: vendor
       })
       try{
-        if (vendorData.availableItems.includes(productId)) {
-          return true;
+        if (type === "item") { // querying item
+          if (vendorData.availableItems.includes(productId)) {
+            return true;
+          }
+        } else { // querying modifiers
+          if (vendorData.availableModifiers.includes(productId)) {
+            return true;
+          }
         }
-        else return false;
+        return false;
       } catch (error) {
         return new ApolloError(
           `Something went wrong getting availability for item ${productId}`
@@ -466,19 +473,27 @@ ItemTC.addResolver({
     name: 'getAvailabilities',
     args: {
       vendor: 'String!',
-      productIds: '[String!]'
+      productIds: '[String!]',
+      type: 'String!'
     },
     type: 'Boolean',
     resolve: async ({ args }) => {
-      const { vendor, productIds } = args
+      const { vendor, productIds, type } = args
 
         const vendorData = await Vendor.findOne ({
           name: vendor
         });
 
         for ( var i = 0; i < productIds.length; i ++ ) {
-          if ( !vendorData.availableItems.includes(productIds[i]) ) {
-             return false;
+          if (type === "item") {
+            if ( !vendorData.availableItems.includes(productIds[i]) ) {
+              return false;
+            }
+          }
+          else {
+            if ( !vendorData.availableModifiers.includes(productIds[i]) ) {
+              return false;
+            }
           }
         }
         return true;
@@ -526,15 +541,21 @@ ItemTC.addResolver({
       vendor: 'String!',
       productId: 'String!',
       isItemAvailable: 'Boolean!',
-      dataSource: DataSourceEnumTC
+      dataSource: DataSourceEnumTC,
+      type: 'String!'
     },
     type: VendorTC,
     resolve: async ({ args }) => {
-      const { vendor, productId, isItemAvailable, dataSource } = args
+      const { vendor, productId, isItemAvailable, dataSource, type } = args
       const vendorData = await Vendor.findOne({
         name: vendor,
       })
-      var availability = vendorData.availableItems;
+      if (type === "item") {
+        var availability = vendorData.availableItems;
+      }
+      else {
+        var availability = vendorData.availableModifiers;
+      }
       var idx = availability.indexOf(productId); // initialize the index to find the item
       if (isItemAvailable && (idx === -1)) {
         availability.push(productId);

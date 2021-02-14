@@ -5,6 +5,10 @@ import { setContext } from '@apollo/client/link/context'
 
 // Apollo Subscriptions Setup
 import { WebSocketLink } from '@apollo/client/link/ws'
+
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
 import { GRAPHQL_URL, GRAPHQL_WS_URL } from './config'
 
 import { resetOrderSummary } from './Pages/User/Cart/util'
@@ -15,9 +19,9 @@ if (!localStorage.getItem('order')) {
 
 // Wraps our requests with a token if one exists
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('idToken')
+  const token = await firebase.auth().currentUser.getIdToken()
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -37,9 +41,9 @@ const wsLink = new WebSocketLink({
   uri: GRAPHQL_WS_URL,
   options: {
     reconnect: true,
-    connectionParams: {
-      authToken: localStorage.getItem('idToken')
-    }
+    connectionParams: async () => ({
+      authToken: await firebase.auth().currentUser.getIdToken()
+    })
   }
 })
 
@@ -72,7 +76,7 @@ const client = new ApolloClient({
       Subscription: {
         fields: {
           orderUpdated: {
-            merge (existing, incoming) {
+            merge (_existing, incoming) {
               return incoming
             }
           }

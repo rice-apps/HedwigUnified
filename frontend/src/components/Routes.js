@@ -1,16 +1,19 @@
-// import { Switch, Route, Redirect } from 'react-router'
+import { useEffect, useState } from 'react'
+
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
 import { Route, useRoutes, useNavigate, Navigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
+
+import gql from 'graphql-tag.macro'
+
 import Login from '../Pages/Login'
 import Auth from '../Pages/Auth'
 import SignUp from '../Pages/SignUp'
 import Profile from '../Pages/User/Profile'
 import { Confirmation } from '../Pages/User/Confirmation'
-// Vendor imports
-// import VendorSettings from '../Pages/Vendor/Settings';
 import VendorList from '../Pages/User/Vendors/VendorList'
-// import VendorDetail from "../Pages/User/Vendors/VendorDetail";
-// import ProductDetail from "../Pages/User/Products/ProductDetail";
 import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
 import ContactForm from '../Pages/User/Contact'
@@ -24,13 +27,13 @@ import ModifiersMenuManagementPage from '../Pages/Vendor/VendorPages/ModifiersMe
 import SetBasicInfoPage from '../Pages/Vendor/VendorPages/SetBasicInfoPage.js'
 import SetStoreHoursPage from '../Pages/Vendor/VendorPages/SetStoreHoursPage.js'
 import VendorSelect from '../Pages/Login/VendorCheck'
-import gql from 'graphql-tag.macro'
 import FAQ from '../Pages/Vendor/VendorPages/FAQ/index'
 import AboutUs from '../Pages/User/AboutUs'
 import HelpPage from '../Pages/User/Help'
 import TestPage from './TestPage'
 import { SmallLoadingPage } from './LoadingComponents'
 import Launch from './../Pages/User/Launch'
+
 /**
  * Requests to verify the user's token on the backend
  */
@@ -66,13 +69,17 @@ const GET_VENDOR_DATA = gql`
  */
 const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
   const navigate = useNavigate()
+  const [token, setToken] = useState('')
 
-  const token =
-    localStorage.getItem('idToken') != null
-      ? localStorage.getItem('idToken')
-      : ''
+  useEffect(() => {
+    async function getFirebaseToken () {
+      if (firebase.auth().currentUser) {
+        setToken(await firebase.auth().currentUser.getIdToken())
+      }
+    }
 
-  console.log(token)
+    getFirebaseToken()
+  })
 
   // Verify that the token is valid on the backend
   const { data, loading, error } = useQuery(VERIFY_USER, {
@@ -87,17 +94,11 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
 
   // Something went wrong, try to login again
   if (error) {
-    localStorage.setItem('error', error)
-    localStorage.removeItem('idToken')
-    updateLogin(false)
-    // Redirect to login
     navigate('/login')
   }
 
   // Data is missing, try to login again
-  if (!data || !data.verifyUser) {
-    localStorage.removeItem('idToken')
-    updateLogin(false)
+  if (!data || !data.verifyUser || data === undefined) {
     navigate('/login')
   }
 
@@ -106,17 +107,26 @@ const PrivateRoute = ({ element, isEmployeeRoute, updateLogin, ...rest }) => {
     return <Route {...rest} element={element} />
   }
 
-  const vendor = data.verifyUser.vendor
-  const netid = data.verifyUser.netid
+  try {
+    const vendor = data.verifyUser.vendor
+    const netid = data.verifyUser.netid
 
-  // Not a vendor and already verified, go to buyer side
-  if (!vendor) {
-    navigate('/eat')
+    // Not a vendor and already verified, go to buyer side
+    if (!vendor) {
+      navigate('/eat')
+    }
+
+    return (
+      <EmployeeRoute
+        netid={netid}
+        vendor={vendor}
+        element={element}
+        {...rest}
+      />
+    )
+  } catch (error) {
+    return <Navigate to='/login' />
   }
-
-  return (
-    <EmployeeRoute netid={netid} vendor={vendor} element={element} {...rest} />
-  )
 }
 
 const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {

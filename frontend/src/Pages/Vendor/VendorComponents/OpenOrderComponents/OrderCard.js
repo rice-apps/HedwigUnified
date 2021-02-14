@@ -405,11 +405,11 @@ function MakePaymentSpace (props) {
                 >
                   Accept
                 </AcceptButton>
-              ) : (
-                <AcceptButton onClick={closeAcceptModal}>
-                  Return To Home
-                </AcceptButton>
-              )}
+                  ) : (
+                    <AcceptButton onClick={closeAcceptModal}>
+                      Return To Home
+                    </AcceptButton>
+                  )}
             </ModalButtonsWrapper>
           </ModalWrapper>
         </Background>
@@ -483,11 +483,9 @@ function isPastPickup (pickupTime, currentTime) {
 function OrderCard (props) {
   const [currentTime, setCurrentTime] = useState(moment())
 
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(moment())
-  
     }, 1000)
     return () => {
       clearInterval(timer)
@@ -553,8 +551,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
           }
           pickupCountdown={timeLeft}
         />
@@ -569,6 +567,7 @@ function OrderCard (props) {
 
               return (
                 <MakeOrderDetails
+                  key={id + item.name}
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}
@@ -596,8 +595,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
           customerName={customerName}
@@ -607,8 +606,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker == null
               ? 'None'
               : orderTrackerData.getOrderTracker.shopifyOrderId
-              ? orderTrackerData.getOrderTracker.shopifyOrderId
-              : null
+                ? orderTrackerData.getOrderTracker.shopifyOrderId
+                : null
           }
         />
       </OrderCardWrapper>

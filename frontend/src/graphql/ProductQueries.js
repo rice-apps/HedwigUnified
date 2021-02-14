@@ -63,7 +63,12 @@ const GET_ITEM = gql`
 
 const GET_ITEM_AVAILABILITY = gql`
   query GET_ITEM_AVAILABILITY($productId: String!, $vendor: String!) {
-    getAvailability(productId: $productId, vendor: $vendor)
+    getAvailability(productId: $productId, vendor: $vendor, type: "item")
+  }
+`
+const GET_MODIFIER_AVAILABILITY = gql`
+  query GET_ITEM_AVAILABILITY($productId: String!, $vendor: String!) {
+    getAvailability(productId: $productId, vendor: $vendor, type: "modifier")
   }
 `
 
@@ -78,6 +83,25 @@ const SET_ITEM_AVAILABILITY = gql`
       productId: $productId
       isItemAvailable: $isItemAvailable
       dataSource: SQUARE
+      type: "item"
+    ) {
+      name
+      availableItems
+    }
+  }
+`
+const SET_MODIFIER_AVAILABILITY = gql`
+  mutation SET_ITEM_AVAILABILITY(
+    $vendor: String!
+    $productId: String!
+    $isItemAvailable: Boolean!
+  ) {
+    setAvailability(
+      vendor: $vendor
+      productId: $productId
+      isItemAvailable: $isItemAvailable
+      dataSource: SQUARE
+      type: "modifier"
     ) {
       name
       availableItems
@@ -110,4 +134,4 @@ const GET_MODIFIER_LISTS = gql`
   }
 `
 
-export { GET_CATALOG, GET_ITEM, GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY, GET_MODIFIER_LISTS }
+export { GET_CATALOG, GET_ITEM, GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY, GET_MODIFIER_AVAILABILITY, SET_MODIFIER_AVAILABILITY, GET_MODIFIER_LISTS}

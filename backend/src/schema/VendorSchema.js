@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   checkCanUpdateVendor
 } from '../utils/authenticationUtils.js'
+import { squareClients } from '../utils/square.js'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers

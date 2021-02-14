@@ -79,7 +79,8 @@ const SET_ITEM_AVAILABILITY = gql`
       isItemAvailable: $isItemAvailable
       dataSource: SQUARE
     ) {
-      isAvailable
+      name
+      availableItems
     }
   }
 `

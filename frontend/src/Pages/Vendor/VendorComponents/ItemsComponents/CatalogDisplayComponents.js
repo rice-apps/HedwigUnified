@@ -88,14 +88,11 @@ function MakeCatalogItems (props) {
           defaultChecked={availability}
           
           onChange={e => {
-            setAvailability({
-              variables: {
-                vendor: currentUser.vendor,
-                productId: props.itemId,
-                isItemAvailable: e.target.checked
-              }
-            })
-            setTimeout(500, window.location.reload())
+            setAvailability({ variables:{vendor: currentUser.vendor,
+              productId: props.itemId,
+              isItemAvailable: e.target.checked}
+            }).then(data=>console.log(data))
+            // setTimeout(500, window.location.reload())
           }}
           
         />

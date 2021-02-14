@@ -535,7 +535,6 @@ ItemTC.addResolver({
         name: vendor,
       })
       var availability = vendorData.availableItems;
-      alert(productId);
       var idx = availability.indexOf(productId); // initialize the index to find the item
       if (isItemAvailable && (idx === -1)) {
         availability.push(productId);
@@ -543,7 +542,6 @@ ItemTC.addResolver({
       if (!isItemAvailable && (idx !== -1)) {
         availability.splice(idx, 1); 
         await vendorData.save()}
-      alert(vendorData);
       return vendorData;
     }
   })

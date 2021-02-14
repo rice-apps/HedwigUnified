@@ -13,7 +13,6 @@ const VendorQueries = {
         ...rp,
         projection: { allowedNetid: {}, ...rp.projection }
       })
-      console.log(vendor);
       if (!vendor.allowedNetid.includes(rp.context.netid)) {
         vendor.squareInfo = null
         vendor.allowedNetid = null
@@ -39,6 +38,52 @@ const VendorQueries = {
       })
     })
 }
+
+VendorTC.addResolver({
+  name: 'initAvailableItems',
+  args: {
+    vendor: 'String!',
+    dataSource: DataSourceEnumTC.getTypeNonNull().getType()
+  },
+  type: VendorTC,
+  resolve: async ({ args }) => {
+    // Extract vendor name from args
+    const { dataSource, vendor } = args
+
+    const squareClient = squareClients.get(vendor)
+    const catalogApi = squareClient.catalogApi
+
+    try {
+      // Make Square request for catalog
+      const {
+        result: { objects }
+      } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
+      const items = objects.filter(object => object.type === 'ITEM')
+      var availability = [];
+      for(var i=0; i<items.length; i++){ 
+        // extract name and id
+        availability.push(items[i].id)
+      }
+
+      const vendorData = await Vendor.findOne({
+        name: vendor
+      })
+
+      vendorData.availableItems = availability;
+      await vendorData.save();
+      return vendorData;
+
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return new ApolloError(
+          `Getting Square catalog failed because ${error.result}`
+        )
+      }
+      console.log(error)
+      return new ApolloError('Something went wrong when getting Square catalog')
+    }
+  }
+})
 
 const VendorMutations = {
   createVendor: VendorTC.mongooseResolvers

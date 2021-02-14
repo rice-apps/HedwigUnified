@@ -1,9 +1,11 @@
-import { VendorTC } from '../models/index.js'
+import { VendorTC, DataSourceEnumTC, Vendor } from '../models/index.js'
 import {
   checkLoggedIn,
   checkCanUpdateVendor
 } from '../utils/authenticationUtils.js'
 import { squareClients } from '../utils/square.js'
+import { ApiError } from 'square'
+import { ApolloError } from 'apollo-server-express'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers

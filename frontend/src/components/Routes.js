@@ -257,8 +257,16 @@ export const RoutesComponent = ({ loginCallBack }) => {
                   updateLogin={loginCallBack}
                 />
               )
+            },
+            {
+              path: '/*',
+              element: <Navigate to='/404_page' />
             }
           ]
+        },
+        {
+          path: '/*',
+          element: <Navigate to='/404_page' />
         }
       ]
     },
@@ -348,6 +356,10 @@ export const RoutesComponent = ({ loginCallBack }) => {
               updateLogin={loginCallBack}
             />
           )
+        },
+        {
+          path: '/*',
+          element: <Navigate to='/404_page' />
         }
       ]
     },

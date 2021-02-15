@@ -525,8 +525,7 @@ function OrderCard (props) {
   }
 
   // pastPickup is true if current time has past an order's pickuptime + buffer
-  const pastPickup =
-    isPastPickup(pickupTime, currentTime) && newOrder
+  const pastPickup = isPastPickup(pickupTime, currentTime) && newOrder
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime

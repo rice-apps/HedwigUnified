@@ -464,7 +464,13 @@ function CartDetail () {
             </Bill>
           </Bill>
         </SpaceWrapper>
+        
         <SpaceWrapper pickUpTime>
+          <Title>Room Number:</Title>
+          <input placeholder='Select...'
+          className='float-cart__dropdown'/>
+        </SpaceWrapper>
+        {/* <SpaceWrapper pickUpTime>
           <Title>Pick Up Time:</Title>
           <Select
             options={pickupTimes}
@@ -498,7 +504,7 @@ function CartDetail () {
               complete your profile and order.{' '}
             </Div>
           )}
-        </SpaceWrapper>
+        </SpaceWrapper> */}
         <SpaceWrapper footer>
           <SubmitButton
             onClick={cart_menu?.length === 0 ? null : handleConfirmClick}

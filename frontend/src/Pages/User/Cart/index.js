@@ -6,7 +6,8 @@ import {
   createRecord,
   CREATE_ORDER,
   CREATE_PAYMENT,
-  GET_VENDOR
+  GET_VENDOR,
+  UPDATE_ORDER_TRACKER
 } from './util'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
@@ -201,11 +202,14 @@ function CartDetail () {
     createPayment,
     { loading: payment_loading, error: payment_error }
   ] = useMutation(CREATE_PAYMENT)
+  const [
+    updateOrderTracker,
+    { loading: tracker_loading, error: tracker_error }
+  ] = useMutation(UPDATE_ORDER_TRACKER)
+
 
   const navigate = useNavigate()
   // add catch statement
-
-  console.log(cart_menu)
 
   const product_ids = cart_menu
     ? cart_menu.map(item => {
@@ -281,7 +285,14 @@ function CartDetail () {
             currency: 'USD'
           }
         })
-        setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
+        await updateOrderTracker({
+          variables: {
+            paymentId: createPaymentResponse.data.createPayment.id,
+            orderId: orderJson.id
+          }
+        })
+      }
+      setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
       }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -336,6 +347,10 @@ function CartDetail () {
   if (payment_loading) return <p>Creating new payment. Please wait ...</p>
   if (payment_error) {
     return <p>{payment_error.message}</p>
+  }
+  if (tracker_loading) return <p>Creating new order tracker. Please wait ...</p>
+  if (tracker_error) {
+    return <p>{tracker_error.message}</p>
   }
 
   // if (avail_loading) return <p>'Loading availabilities...'</p>;

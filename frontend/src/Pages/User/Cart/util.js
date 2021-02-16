@@ -112,9 +112,9 @@ export const CREATE_PAYMENT = gql`
 `
 
 export const UPDATE_ORDER_TRACKER = gql`
-  mutation($paymentType: String!, $orderId: String!) {
+  mutation($paymentId: String!, $orderId: String!) {
     updateOrderTracker(
-      record: { paymentType: $paymentType }
+      record: { paymentId: $paymentId }
       filter: { orderId: $orderId }
     ) {
       recordId

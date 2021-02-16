@@ -28,7 +28,8 @@ const OrderTrackerSchema = new mongoose.Schema({
     type: String,
     required: false,
     enum: ['SQUARE', 'SHOPIFY', 'EXCEL']
-  }
+  },
+  note: 'String',
 })
 
 const OrderTracker = mongoose.model('OrderTracker', OrderTrackerSchema)

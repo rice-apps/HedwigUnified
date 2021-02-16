@@ -108,7 +108,8 @@ OrderTC.addResolver({
           submissionTime,
           cohenId,
           studentId,
-          paymentType
+          paymentType,
+          note
         }
       } = args
 
@@ -151,7 +152,8 @@ OrderTC.addResolver({
           submissionTime: submissionTime,
           locationId: locationId,
           orderId: newOrder.id,
-          paymentType: paymentType
+          paymentType: paymentType,
+          note: note
         })
 
         const order = orderParse(newOrder)

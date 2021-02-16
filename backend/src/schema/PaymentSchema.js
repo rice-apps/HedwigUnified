@@ -129,6 +129,11 @@ PaymentTC.addResolver({
             }
           }
 
+          OrderTracker.findOneAndUpdate(
+            { orderId: orderId },
+            { dataSource: 'SQUARE'}
+          ).exec()
+
           break
         }
         case 'SHOPIFY': {
@@ -181,9 +186,8 @@ PaymentTC.addResolver({
           // not sure if this is correct !!! --- Lorraine
           OrderTracker.findOneAndUpdate(
             { orderId: orderId },
-            { shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
+            { dataSource: 'SHOPIFY', shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
           ).exec()
-
           break
         }
 
@@ -208,7 +212,6 @@ PaymentTC.addResolver({
     type: PaymentTC,
     resolve: async ({ args }) => {
       let response
-
       switch (args.source) {
         case 'SQUARE': {
           const squareClient = squareClients.get(args.vendor)
@@ -277,7 +280,6 @@ PaymentTC.addResolver({
             )
             break
           }
-
           const transactions = await shopifyAdminClient.graphql(
             transactionQuery,
             {
@@ -298,7 +300,6 @@ PaymentTC.addResolver({
               }
             }
           `
-
           const completeResponse = await shopifyAdminClient.graphql(
             completePayment,
             {
@@ -310,14 +311,10 @@ PaymentTC.addResolver({
               }
             }
           )
-
-          console.log(completeResponse.orderCapture.userErrors)
-
           response = {
             id: checkout.data.node.id,
             order: checkout.data.node.order.id
           }
-
           break
         }
 
@@ -327,7 +324,6 @@ PaymentTC.addResolver({
           )
         }
       }
-
       return response
     }
   })

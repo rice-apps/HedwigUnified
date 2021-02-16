@@ -13,6 +13,7 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
+import SquarePayment from '../Pages/User/Cart/SquarePayment'
 import ContactForm from '../Pages/User/Contact'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
@@ -227,6 +228,10 @@ export const RoutesComponent = ({ loginCallBack }) => {
           path: '/confirmation',
           element: <PrivateRoute element={<Confirmation />} />
         },
+        {
+          path: '/square', 
+          element: <PrivateRoute element={<SquarePayment />} />
+        }, 
         {
           path: '/:vendor/*',
           children: [

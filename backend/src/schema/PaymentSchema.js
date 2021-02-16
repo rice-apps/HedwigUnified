@@ -75,6 +75,7 @@ PaymentTC.addResolver({
     type: PaymentTC,
     resolve: async ({ args }) => {
       const {
+        vendor,
         record: {
           sourceId,
           subtotal,
@@ -82,8 +83,7 @@ PaymentTC.addResolver({
           orderId,
           customerId,
           locationId,
-          source,
-          vendor
+          source
         }
       } = args
 
@@ -93,7 +93,6 @@ PaymentTC.addResolver({
         case 'SQUARE': {
           const squareClient = squareClients.get(vendor)
           const paymentsApi = squareClient.paymentsApi
-
           try {
             const {
               result: { payment }
@@ -105,9 +104,9 @@ PaymentTC.addResolver({
               tipMoney: tip,
               orderId: orderId,
               customerId: customerId,
-              autocomplete: false
+              autocomplete: false,
+              // verificationToken: token
             })
-
             response = {
               id: payment.id,
               order: payment.orderId,
@@ -119,6 +118,7 @@ PaymentTC.addResolver({
             }
           } catch (error) {
             if (error instanceof ApiError) {
+              console.log(error.result);
               response = new ApolloError(
                 `Creating payment in Square failed because ${error.result}`
               )

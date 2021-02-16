@@ -49,6 +49,7 @@ const FIND_ORDERS = gql`
         }
         total {
           amount
+          currency
         }
         totalTax {
           amount
@@ -67,6 +68,17 @@ const FIND_ORDERS = gql`
     }
   }
 `
+
+const GET_ORDER_TRACKERS = gql`
+  query GET_ORDER_TRACKERS($sort:SortFindManyOrderTrackerInput){
+    getOrderTrackers(sort:$sort){
+      paymentId
+      dataSource
+      orderId
+    }
+  }
+`
+
 const UPDATE_ORDER = gql`
   mutation UPDATE_ORDER(
     $orderId: String!
@@ -82,6 +94,29 @@ const UPDATE_ORDER = gql`
       fulfillment {
         uid
         state
+      }
+    }
+  }
+`
+
+const COMPLETE_PAYMENT = gql`
+  mutation COMPLETE_PAYMENT(
+    $vendor: String!
+    $paymentId: String!
+    $source: DataSourceEnum!
+    $money: MoneyInput!
+  ){
+    completePayment(
+      vendor: $vendor
+      paymentId: $paymentId
+      source: $source
+      money: $money
+    ){
+      order
+      customer
+      total {
+        amount
+        currency
       }
     }
   }
@@ -199,7 +234,11 @@ function OrderDashboard () {
       variables: { location: vendorId, vendor: currentUser.vendor }
     }
   )
+  const { data: order_data, loading: order_loading, error: order_error } = useQuery(GET_ORDER_TRACKERS, {
+    variables: {sort: "_ID_DESC"}
+  })
   const [updateOrder] = useMutation(UPDATE_ORDER)
+  const [completePayment] = useMutation(COMPLETE_PAYMENT)
 
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
@@ -262,8 +301,14 @@ function OrderDashboard () {
   if (error) {
     return <p style={{ fontSize: '2vh' }}>ErrorD...{error.message}</p>
   }
+  if(order_loading) {
+    return <LoadingPage />
+  }
+  if (order_error) {
+    return <p style={{fontSize: '2vh'}}>Error...{order_error.message}</p>
+  }
 
-  const handleOrderClick = (order, orderState) => {
+  const handleOrderClick = (order, orderState, orderTrackers=null) => {
     updateOrder({
       variables: {
         vendor: currentUser.vendor,
@@ -272,7 +317,22 @@ function OrderDashboard () {
         state: orderState
       }
     })
-    console.log(order.name, order.id)
+    if(orderTrackers){
+      const orderTracker = orderTrackers.filter(orderTracker => orderTracker.orderId === order.id)[0]
+      if(orderTracker){
+        completePayment({
+          variables: {
+            vendor: currentUser.vendor,
+            paymentId: orderTracker.paymentId,
+            source: orderTracker.dataSource,
+            money: {amount: order.total.amount, currency: order.total.currency}
+          }
+        })
+      }
+      else{
+        console.log("Order Tracker not found!")
+      }
+    }
   }
   // if (!loading && orders) {
   //     const { order } = orders.items
@@ -314,7 +374,7 @@ function OrderDashboard () {
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               fulfillment={order.fulfillment.state}
-              handleClick={() => handleOrderClick(order, 'RESERVED')}
+              handleClick={() => handleOrderClick(order, 'RESERVED', order_data.getOrderTrackers)}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}
               buttonStatus='NEW'
               newOrder

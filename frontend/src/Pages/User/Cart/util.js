@@ -35,6 +35,7 @@ export const CREATE_ORDER = gql`
     $cohenId: String
     $email: String!
     $vendor: String!
+    $note: String
   ) {
     createOrder(
       locationId: $location
@@ -48,6 +49,7 @@ export const CREATE_ORDER = gql`
         submissionTime: $submissionTime
         paymentType: $type
         cohenId: $cohenId
+        note: $note
       }
     ) {
       id
@@ -148,7 +150,7 @@ const getLineItems = items => {
   return rtn
 }
 
-export const createRecord = (items, paymentType, cohenId) => {
+export const createRecord = (items, paymentType, cohenId, note) => {
   const recipient = getRecipient()
   const user = JSON.parse(localStorage.getItem('userProfile'))
   const order = JSON.parse(localStorage.getItem('order'))
@@ -164,7 +166,8 @@ export const createRecord = (items, paymentType, cohenId) => {
     submissionTime: moment().toISOString(),
     location: order.vendor.locationIds[0],
     type: paymentType,
-    cohenId: cohenId
+    cohenId: cohenId,
+    note: note
   }
 }
 

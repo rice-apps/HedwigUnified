@@ -175,6 +175,7 @@ function CartDetail () {
   const [pickupTime, setPickupTime] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState(null)
   const [cohenId, setCohenId] = useState(null)
+  const [note, setNote] = useState(null)
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -241,7 +242,7 @@ function CartDetail () {
       return navigate('/eat/failure')
     } else {
       const rec = {
-        variables: createRecord(cart_menu, paymentMethod, cohenId)
+        variables: createRecord(cart_menu, paymentMethod, cohenId, note)
       }
       const emptyField = checkNullFields(rec)
       if (checkNullFields(rec)) {
@@ -489,6 +490,12 @@ function CartDetail () {
             <Div>
               <label>Enter your Cohen House Membership ID: </label>
               <input onChange={e => setCohenId(e.target.value)} />
+            </Div>
+          )}
+          {order.vendor.name === 'Cohen House' && (
+            <Div>
+              <label>Leave note for vendor: </label>
+              <input onChange={e => setNote(e.target.value)} />
             </Div>
           )}
           {nullError && (

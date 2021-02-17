@@ -1,7 +1,7 @@
 import VendorsideTemplate from '../VendorComponents/VendorGridContainer.js'
 import { GET_MODIFIER_LISTS } from '../../../graphql/ProductQueries.js'
 import { useQuery } from '@apollo/client'
-import ModifierCatalog from '../VendorComponents/ItemsComponents/ModifierCatalog.js'
+import ItemCatalog from '../VendorComponents/ItemsComponents/ItemCatalog.js'
 import { LoadingPage } from './../../../components/LoadingComponents'
 
 function ModifiersMenuManagementPage () {
@@ -52,22 +52,37 @@ function ModifiersMenuManagementPage () {
     let modifiers = []
     data.forEach(modifierList => {
       modifierList.modifiers.forEach(modifier => {
-        modifiers.push(modifier)
+        // construct modifier Info that matches ItemCatalog template
+        const modifierInfo = {
+          _typename: "Modifier",
+          image: modifier.image,
+          dataSourceId: modifier.dataSourceId,
+          category: modifierList.name,
+          name: modifier.name,
+          variants: [{price: modifier.price}]
+        }
+        // modifier.category = modifier.name
+        modifiers.push(modifierInfo)
       })
     })
     return [...modifiers]
   }
+
 
   const categories = compileCategories(modifierLists)
   const modifiers = compileModifiers(modifierLists)
 
   return <VendorsideTemplate
       page={
-        <ModifierCatalog
-          modifierLists={modifierLists}
-          modifierListNames={categories}
-          modifierListName={categories[0]}
-          allModifiers={modifiers}
+        <ItemCatalog
+        // <ModifierCatalog
+          // modifierLists={modifierLists}
+          // modifierListNames={categories}
+          // modifierListName={categories[0]}
+          // allModifiers={modifiers}
+          catalog={modifiers}
+          categories={categories}
+          category={categories[0]}
         />
       }
     />

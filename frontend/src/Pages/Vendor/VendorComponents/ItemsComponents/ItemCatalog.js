@@ -90,11 +90,11 @@ export const StyledTab = styled(Tab)`
   }
 `
 
-function MakeLabelWrapper () {
+function MakeLabelWrapper (props) {
   return (
     <LabelWrapper>
       <div>Category</div>
-      <div>Item</div>
+      <div>{props._typename}</div>
       <div>Availability</div>
       <div>Price</div>
     </LabelWrapper>
@@ -129,7 +129,7 @@ function ItemCatalog (props) {
     <ThemeProvider theme={theme}>
       <PageWrapper>
         <CatalogWrapper>
-          <MakeLabelWrapper />
+          <MakeLabelWrapper _typename = {props.catalog[0]._typename || "Item"}/>
           <TabWrapper>
             <StyledTabs
               orientation='vertical'
@@ -154,6 +154,7 @@ function ItemCatalog (props) {
                           itemImage={item.image}
                           itemName={item.name}
                           itemPrice={item.variants[0].price.amount}
+                          itemType={props.catalog[0]._typename || "Item"}
                         />
                       )
                     })}

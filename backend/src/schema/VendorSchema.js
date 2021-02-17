@@ -63,8 +63,6 @@ VendorTC.addResolver({
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
       const items = objects.filter(object => object.type === 'ITEM')
       const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
-      console.log("modifiers")
-      console.log(modifiers)
       var availability = [];
       for(var i=0; i<items.length; i++){ 
         // extract name and id
@@ -108,12 +106,15 @@ VendorTC.addResolver({
       const {
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
-      const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
+      const modifierList = objects.filter(object => object.type === 'MODIFIER_LIST')
       var availability = [];
 
-      for(var i=0; i<modifiers.length; i++){ 
-        // extract name and id
-        availability.push(modifiers[i].id)
+      for (var i = 0; i < modifierList.length; i++) { 
+        const modifiers = modifierList[i].modifierListData.modifiers;
+        for (var j = 0; j < modifiers.length; j ++) {
+          availability.push(modifiers[j].id)
+        }
+        
       }
 
       const vendorData = await Vendor.findOne({

@@ -780,7 +780,7 @@ ItemTC.addResolver({
     }
   })
   .addResolver({
-    name: 'batchAddAvailability',
+    name: 'batchAddAvailability', // didn't use the vendor fild property
     type: [ItemTC],
     args: {
       products: '[String!]!',

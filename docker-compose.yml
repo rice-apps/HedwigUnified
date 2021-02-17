@@ -1,15 +1,16 @@
-version: "3.8"
+version: "3.9"
 
 services:
   backend:
     image: riceapps/hedwig-api:latest
 
-    container_name: backend
-
     restart: unless-stopped
 
     env_file:
       - ./env
+
+    volumes:
+      - $PWD/firebase.json:/firebase.json
 
     networks:
       - app-network
@@ -69,7 +70,7 @@ services:
     depends_on:
       - frontend
 
-    command: certonly --webroot --webroot-path=/var/www/html --email vms2@rice.edu --agree-tos --no-eff-email --force-renewal -d hedwig.vsong.me
+    command: certonly --webroot --webroot-path=/var/www/html --email team.riceapps@gmail.com --agree-tos --no-eff-email --force-renewal -d hedwig.riceapps.site
 
   watchtower:
     image: containrrr/watchtower

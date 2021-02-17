@@ -43,6 +43,7 @@ const VendorSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   slug: { type: String, min: 3, max: 5, unique: true, required: true }, // short 3-5 letter slug that identifies this vendor
   phone: String,
+  dataSource: { type: String, required: true},
   email: { type: String, required: false },
   logoUrl: String,
   squareInfo: SquareInfo,

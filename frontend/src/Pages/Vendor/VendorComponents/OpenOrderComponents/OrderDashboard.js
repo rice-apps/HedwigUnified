@@ -281,6 +281,7 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}
@@ -308,6 +309,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}
@@ -333,6 +335,7 @@ function OrderDashboard () {
         {allOrders &&
           readyOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}

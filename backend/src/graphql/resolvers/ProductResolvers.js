@@ -1,11 +1,12 @@
-import { ItemTC } from '../schema/index.js'
+import { DataSourceEnumTC, ItemTC } from '../schema/index.js'
 import pubsub from '../../utils/pubsub.js'
 import getSquare from '../../utils/square.js'
 
 ItemTC.addResolver({
   name: 'getCatalog',
   args: {
-    vendor: 'String!'
+    vendor: 'String!',
+    dataSource: DataSourceEnumTC,
   },
   type: [ItemTC],
   resolve: async ({ args }) => {
@@ -19,6 +20,7 @@ ItemTC.addResolver({
   name: 'getItem',
   args: {
     vendor: 'String!',
+    dataSource: DataSourceEnumTC,
     dataSourceId: ItemTC.getFieldTC('dataSourceId')
       .getTypeNonNull()
       .getType()

@@ -45,6 +45,7 @@ const VendorSchema = new mongoose.Schema({
   phone: String,
   email: { type: String, required: false },
   logoUrl: String,
+  dataSource: { type: String, required: true},
   squareInfo: SquareInfo,
   hours: { type: [BusinessHours], required: true },
   isOpen: { type: Boolean, required: false },

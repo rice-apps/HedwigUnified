@@ -1,4 +1,4 @@
-import { OrderTrackerTC, UserTC } from '../models/index.js'
+import { OrderTrackerTC, UserTC } from '../schema/index.js'
 
 OrderTrackerTC.addRelation('customer', {
   resolver: () => UserTC.mongooseResolvers.dataLoader(),

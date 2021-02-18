@@ -1,7 +1,7 @@
 import firebaseAdmin from './firebase.js'
 import log from 'loglevel'
 import { AuthenticationError } from 'apollo-server-express'
-import { Vendor } from '../models/index.js'
+import { Vendor } from '../graphql/schema/index.js'
 
 /**
  * Decodes an ID token and returns the SAML attributes of said user

@@ -1,28 +1,23 @@
-import Client from 'shopify-buy/index.unoptimized.umd.js'
-import fetch from 'node-fetch'
-
-import Shopify from 'shopify-api-node'
-
 import {
   SHOPIFY_DOMAIN,
   SHOPIFY_STOREFRONT_TOKEN,
   SHOPIFY_API_KEY,
   SHOPIFY_PASSWORD
 } from '../config.js'
+import ShopifyController from '../controllers/ShopifyController.js'
 
-const shopifyClient = Client.buildClient(
-  {
-    domain: SHOPIFY_DOMAIN,
-    storefrontAccessToken: SHOPIFY_STOREFRONT_TOKEN
-  },
-  fetch
+const shopifyController = new ShopifyController(
+  'Cohen House',
+  SHOPIFY_DOMAIN,
+  SHOPIFY_API_KEY,
+  SHOPIFY_PASSWORD,
+  SHOPIFY_STOREFRONT_TOKEN
 )
 
-const shopifyAdminClient = new Shopify({
-  shopName: SHOPIFY_DOMAIN,
-  apiKey: SHOPIFY_API_KEY,
-  password: SHOPIFY_PASSWORD,
-  apiVersion: '2021-01'
-})
+/**
+ *
+ * @param {string} _vendorName The name of the vendor to get Shopify controller for
+ */
+const getShopify = _vendorName => shopifyController
 
-export { shopifyClient, shopifyAdminClient }
+export default getShopify

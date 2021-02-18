@@ -1,9 +1,9 @@
-import { User, UserTC } from '../models/index.js'
+import { User, UserTC } from '../schema/index.js'
 import {
   decodeFirebaseToken,
   checkLoggedIn,
   checkCanUpdateUserFilter
-} from '../utils/authenticationUtils.js'
+} from '../../utils/authenticationUtils.js'
 
 import { AuthenticationError } from 'apollo-server-express'
 

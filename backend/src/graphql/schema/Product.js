@@ -1,6 +1,6 @@
 import { sc } from 'graphql-compose'
 
-import { DataSourceEnumTC, MoneyTC } from './CommonModels.js'
+import { DataSourceEnumTC, MoneyTC } from './Common.js'
 
 const SelectionTypeEnumTC = sc.createEnumTC({
   name: 'SelectionTypeEnum',

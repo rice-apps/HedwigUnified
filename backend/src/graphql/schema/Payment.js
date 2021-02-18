@@ -1,5 +1,5 @@
 import { sc } from 'graphql-compose'
-import { DataSourceEnumTC, MoneyTC, UrlTC } from './CommonModels.js'
+import { DataSourceEnumTC, MoneyTC, UrlTC } from './Common.js'
 
 const PaymentTC = sc.createObjectTC({
   name: 'Payment',

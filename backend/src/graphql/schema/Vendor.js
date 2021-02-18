@@ -5,7 +5,7 @@ import {
 
 import { sc } from 'graphql-compose'
 
-import '../utils/db.js'
+import '../../utils/db.js'
 
 import mongoose from 'mongoose'
 

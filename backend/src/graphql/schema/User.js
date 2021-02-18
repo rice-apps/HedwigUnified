@@ -1,6 +1,6 @@
 import { composeMongoose } from 'graphql-compose-mongoose'
 
-import '../utils/db.js'
+import '../../utils/db.js'
 
 import mongoose from 'mongoose'
 

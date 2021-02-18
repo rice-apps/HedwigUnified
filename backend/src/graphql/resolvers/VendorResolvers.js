@@ -1,8 +1,8 @@
-import { VendorTC } from '../models/index.js'
+import { VendorTC } from '../schema/index.js'
 import {
   checkLoggedIn,
   checkCanUpdateVendor
-} from '../utils/authenticationUtils.js'
+} from '../../utils/authenticationUtils.js'
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers

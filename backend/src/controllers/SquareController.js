@@ -170,6 +170,40 @@ class SquareController {
   }
 
   /**
+   * Checks if all the products are available
+   *
+   * @param {string[]} productIds The products to get availabilities for
+   * @returns {boolean} whether all the products are available
+   */
+  async getAvailability (productIds) {
+    try {
+      const {
+        result: { objects }
+      } = await this.squareClient.catalogApi.batchRetrieveCatalogObjects({
+        objectIds: productIds
+      })
+
+      return objects.every(
+        object => object.customAttributeValues.is_available.booleanValue
+      )
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw new ApolloError(
+          `Retrieving item availability for ${JSON.stringify(
+            productIds
+          )} failed because ${JSON.stringify(error.result)}`
+        )
+      }
+
+      throw new ApolloError(
+        `Something went wrong when retrieving item availability: ${JSON.stringify(
+          error
+        )}`
+      )
+    }
+  }
+
+  /**
    * Gets the last 500 orders for this merchant
    * @param {string} cursor The cursor to the last order viewed
    * @param {string[]} locations The locations IDs to view orders for

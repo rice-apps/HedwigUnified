@@ -10,7 +10,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon",
-    "lint": "prettier-standard --lint",
+    "lint": "standard --verbose --fix | snazzy",
     "start": "node src/index.js"
   },
   "author": "team.riceapps@gmail.com",
@@ -33,7 +33,8 @@
   "devDependencies": {
     "@types/qs": "6.9.4",
     "nodemon": "^2.0.7",
-    "prettier-standard": "^16.4.1",
+    "snazzy": "^9.0.0",
+    "standard": "^16.0.3",
     "typescript": "^4.1.3"
   }
 }

@@ -92,6 +92,8 @@ class ShopifyController {
       { shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
     ).exec()
 
+    console.log(checkout)
+
     return {
       id: checkout.data.checkoutCreate.checkout.id,
       total: subtotal,

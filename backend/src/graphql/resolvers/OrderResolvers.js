@@ -43,7 +43,31 @@ OrderTC.addResolver({
       query.sort = sort
     }
 
-    return squareController.getOrders(cursor, locations, query)
+    const orderResponse = await squareController.getOrders(
+      cursor,
+      locations,
+      query
+    )
+
+    const orderIds = orderResponse.orders.map(order => order.id)
+    const orderTrackers = await OrderTracker.find(
+      {
+        orderId: {
+          $in: orderIds
+        }
+      },
+      { orderId: 1, status: 1 }
+    ).exec()
+
+    orderResponse.orders = orderResponse.orders.map(order => ({
+      ...order,
+      fulfillment: {
+        ...order.fulfillment,
+        state: orderTrackers.find(ot => ot.orderId === order.id).status
+      }
+    }))
+
+    return orderResponse
   }
 })
   .addResolver({

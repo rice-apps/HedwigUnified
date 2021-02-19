@@ -62,7 +62,7 @@ ItemTC.addResolver({
 
       const squareController = getSquare(vendor)
 
-      return squareController.getAvailability([productIds])
+      return squareController.getAvailability(productIds)
     }
   })
 

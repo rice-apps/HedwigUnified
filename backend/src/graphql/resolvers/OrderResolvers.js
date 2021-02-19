@@ -57,7 +57,7 @@ OrderTC.addResolver({
         }
       },
       { orderId: 1, status: 1 }
-    ).exec()
+    ).lean().exec()
 
     orderResponse.orders = orderResponse.orders.map(order => ({
       ...order,

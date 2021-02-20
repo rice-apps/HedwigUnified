@@ -229,9 +229,9 @@ export const RoutesComponent = ({ loginCallBack }) => {
           element: <PrivateRoute element={<Confirmation />} />
         },
         {
-          path: '/square', 
+          path: '/square',
           element: <PrivateRoute element={<SquarePayment />} />
-        }, 
+        },
         {
           path: '/:vendor/*',
           children: [

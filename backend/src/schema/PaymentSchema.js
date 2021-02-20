@@ -104,7 +104,7 @@ PaymentTC.addResolver({
               tipMoney: tip,
               orderId: orderId,
               customerId: customerId,
-              autocomplete: false,
+              autocomplete: false
               // verificationToken: token
             })
             response = {
@@ -118,7 +118,7 @@ PaymentTC.addResolver({
             }
           } catch (error) {
             if (error instanceof ApiError) {
-              console.log(error.result);
+              console.log(error.result)
               response = new ApolloError(
                 `Creating payment in Square failed because ${error.result}`
               )

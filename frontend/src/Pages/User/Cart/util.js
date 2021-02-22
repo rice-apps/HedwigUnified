@@ -7,6 +7,7 @@ export const GET_VENDOR = gql`
     getVendor(filter: $filter) {
       name
       pickupInstruction
+      dataSource
       hours {
         start
         end
@@ -87,12 +88,14 @@ export const CREATE_PAYMENT = gql`
     $currency: String!
     $location: String!
     $vendor: String!
+    $sourceId: String!
+    $source: DataSourceEnum!
   ) {
     createPayment(
       vendor: $vendor
       record: {
-        source: SHOPIFY
-        sourceId: "cnon:card-nonce-ok"
+        source: $source
+        sourceId: $sourceId
         orderId: $orderId
         locationId: $location
         subtotal: { amount: $subtotal, currency: $currency }

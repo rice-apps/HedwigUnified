@@ -62,7 +62,7 @@ const Div = styled.div`
       border-radius: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.5fr 2fr 1.2fr;
+      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.2fr 2.3fr 1.2fr;
       grid-template-areas:
         'ImageSpace ImageSpace'
         'Name Website'
@@ -104,6 +104,48 @@ const Div = styled.div`
        font-size: 2.1vh;
        opacity: ${props => (props.disabled ? '0.3' : '1')};
      `}
+    ${props =>
+      props.flexWrapper &&
+      css`
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        grid-area: ${props => props.gridArea};
+      `}
+    ${props =>
+      props.bottomTitle &&
+      css`
+        display: flex;
+        margin-left:4.2rem;
+        /* grid-template-columns: ${props =>
+          props.pickup ? '1.0fr 3.6fr' : '0.6fr 4.6fr'}; */
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        font-size: 2.35vh;
+        font-weight: 500;
+        text-align: left;
+        margin-top: 1vh;
+      `}
+ 
+      ${props =>
+        props.bottomSubtitle &&
+        css`
+          font-size: 2.1vh;
+          text-align: left;
+          margin-left: 2vh;
+        `}
+
+      ${props =>
+        props.warning &&
+        css`
+          font-size: 1.8vh;
+          opacity: 0.5;
+          margin-top: 0.3rem;
+          margin-left: 4.2rem;
+        `}
 `
 
 const Img = styled.img`
@@ -128,6 +170,32 @@ const Input = styled.input`
   font-size: 2.2vh;
   padding-left: 15px;
   font-weight: 600;
+
+  ${props =>
+    props.number &&
+    css`
+      width: 7.6vh;
+      margin-left: 0px;
+      margin-right: 0.5rem;
+    `}
+
+`
+
+const TextArea = styled.textarea`
+  border-radius: 20px;
+  background-color: #f1f1f1;
+  width: 60%;
+  height: 10vh;
+  margin-top: 0.2rem;
+  margin-left: 4.2rem;
+  margin-right: 0.5rem;
+  text-align: left;
+  font-size: 2.2vh;
+  padding-left: 15px;
+  font-weight: 600;
+  line-height:2.2vh;
+  padding-top:1vh;
+  border:none;
 `
 
 const Button = styled.div`
@@ -199,11 +267,15 @@ function BasicInfoDashboard () {
 
   function clearInputs () {
     var elements = document.getElementsByTagName('input')
+    var areaelements = document.getElementsByTagName('textarea')
     for (var ii = 0; ii < elements.length; ii++) {
       if (elements[ii].type == 'text') {
         elements[ii].value = ''
+      } else if (elements[ii].type == 'number') {
+        elements[ii].value = ''
       }
     }
+    areaelements[0].value=''
   }
 
   function updateInfo (updatedField) {
@@ -230,11 +302,10 @@ function BasicInfoDashboard () {
   }
 
   const handleConfirmClick = async () => {
-    
-    //updates placeholders for input 
+    //updates placeholders for input
     let updatedPlaceholder = Object.assign(placeholderInfo, updatedInfo)
     setPlaceholderInfo(updatedPlaceholder)
-    // adds vendor name to the mutation 
+    // adds vendor name to the mutation
     let vendorField = { name: currentUser.vendor }
     updateInfo(vendorField)
     await updateVendor({ variables: updatedInfo })
@@ -244,28 +315,6 @@ function BasicInfoDashboard () {
   }
 
   console.log('PLACEHOLDERS', placeholderInfo)
-
-  // All fields are filled
-
-  // Click save button
-
-  // Add variables to the mutation:
-  // updateBasicInfo({
-  //   variables: {
-  //     name: updatedInfo.name,
-  //     website: updatedInfo.website,
-  //     email: updatedInfo.email,
-  //     facebook: updatedInfo.facebook,
-  //     phone: updatedInfo.phone,
-  //     cutoffTime: updatedInfo.cutoffTime,
-  //     pickupInstruction: updatedInfo.pickupInstruction,
-  //   },
-  // });
-
-  // Reload window
-  // window.location.reload();
-
-  //changeStatus is true when changes haven't been made
 
   return (
     <Div wrapper>
@@ -296,6 +345,37 @@ function BasicInfoDashboard () {
         placeholder={placeholderInfo.phone}
         onChange={e => updateInfo({ phone: e.target.value })}
       />
+
+      {/* the cutoff section for set basic info  */}
+      <Div flexWrapper gridArea='Cutoff'>
+        <Div bottomTitle>
+          <div>Cutoff Time:</div>
+          <Div bottomSubtitle>
+            <Input
+              number
+              class='input'
+              type='number'
+              min='0'
+              placeholder={placeholderInfo.cutoffTime}
+              onChange={e =>
+                updateInfo({ cutoffTime: parseInt(e.target.value) })
+              }
+            />
+            minutes before closing time{' '}
+          </Div>
+        </Div>
+        <Div warning>*Orders will not be accepted after this time</Div>
+      </Div>
+
+      <Div flexWrapper gridArea='Pickup'>
+        <Div bottomTitle pickup>
+          Pickup Instructions:
+        </Div>
+        <Div warning>
+          *These instructions are sent to the buyer when an order is submitted
+        </Div>
+        <TextArea placeholder={placeholderInfo.pickupInstruction}></TextArea>
+      </Div>
 
       <Div buttonwrapper disabled={isDisabled}>
         <Button

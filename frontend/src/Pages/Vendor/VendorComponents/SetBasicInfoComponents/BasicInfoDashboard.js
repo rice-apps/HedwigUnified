@@ -223,7 +223,7 @@ function BasicInfoDetail (props) {
 }
 
 function isEmpty (obj) {
-  for (var prop in obj) {
+  for (const prop in obj) {
     if (obj.hasOwnProperty(prop)) {
       return false
     }
@@ -266,27 +266,27 @@ function BasicInfoDashboard () {
   } = vendorData.getVendor
 
   function clearInputs () {
-    var elements = document.getElementsByTagName('input')
-    var areaelements = document.getElementsByTagName('textarea')
-    for (var ii = 0; ii < elements.length; ii++) {
+    const elements = document.getElementsByTagName('input')
+    const areaelements = document.getElementsByTagName('textarea')
+    for (let ii = 0; ii < elements.length; ii++) {
       if (elements[ii].type == 'text') {
         elements[ii].value = ''
       } else if (elements[ii].type == 'number') {
         elements[ii].value = ''
       }
     }
-    areaelements[0].value=''
+    areaelements[0].value = ''
   }
 
   function updateInfo (updatedField) {
     const orig = updatedInfo
-    let updated = Object.assign(orig, updatedField)
+    const updated = Object.assign(orig, updatedField)
     setUpdatedInfo(updated)
     console.log('UPDATED INFO CHANGED', updatedInfo)
     setIsDisabled(false)
   }
 
-  let originalInfo = {
+  const originalInfo = {
     name: name,
     logoUrl: logoUrl,
     website: website,
@@ -302,15 +302,15 @@ function BasicInfoDashboard () {
   }
 
   const handleConfirmClick = async () => {
-    //updates placeholders for input
-    let updatedPlaceholder = Object.assign(placeholderInfo, updatedInfo)
+    // updates placeholders for input
+    const updatedPlaceholder = Object.assign(placeholderInfo, updatedInfo)
     setPlaceholderInfo(updatedPlaceholder)
     // adds vendor name to the mutation
-    let vendorField = { name: currentUser.vendor }
+    const vendorField = { name: currentUser.vendor }
     updateInfo(vendorField)
     await updateVendor({ variables: updatedInfo })
 
-    //make buttons disabled
+    // make buttons disabled
     setIsDisabled(true)
   }
 
@@ -358,8 +358,7 @@ function BasicInfoDashboard () {
               min='0'
               placeholder={placeholderInfo.cutoffTime}
               onChange={e =>
-                updateInfo({ cutoffTime: parseInt(e.target.value) })
-              }
+                updateInfo({ cutoffTime: parseInt(e.target.value) })}
             />
             minutes before closing time{' '}
           </Div>
@@ -374,7 +373,7 @@ function BasicInfoDashboard () {
         <Div warning>
           *These instructions are sent to the buyer when an order is submitted
         </Div>
-        <TextArea placeholder={placeholderInfo.pickupInstruction}></TextArea>
+        <TextArea placeholder={placeholderInfo.pickupInstruction} />
       </Div>
 
       <Div buttonwrapper disabled={isDisabled}>

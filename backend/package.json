@@ -25,6 +25,7 @@
     "ioredis": "^4.22.0",
     "loglevel": "^1.7.1",
     "mongoose": "^5.11.15",
+    "node-vault": "^0.9.21",
     "shopify-api-node": "^3.6.5",
     "shopify-buy": "^2.11.0",
     "square": "^8.1.1",

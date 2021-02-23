@@ -27,7 +27,7 @@ const AUTHENTICATE_USER = gql`
 const lstorage = localStorage
 
 function Auth () {
-  const idToken = lstorage.getItem('idToken')
+  const idToken = lstorage.getItem('token')
 
   // Run query against backend to authenticate user
   const [
@@ -54,8 +54,7 @@ function Auth () {
     isAdmin,
     vendor,
     recentUpdate,
-    type,
-    token
+    type
   } = authenticationData.authenticateUser
 
   // This helps issue if first and last name in backend are not seperated by a space
@@ -75,12 +74,10 @@ function Auth () {
     isAdmin,
     vendor,
     recentUpdate,
-    type,
-    token
+    type
   }
 
-  // Set token and user data in local storage
-  lstorage.setItem('token', token)
+  // Set user data in local storage
   lstorage.setItem('userProfile', JSON.stringify(userData))
 
   // Set recent update in client state -- currently broken with wrong navigation

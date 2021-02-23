@@ -42,8 +42,8 @@ function CartHeader ({ vendorName, showBackButton }) {
   const backNav = !cart_menu
     ? '/eat'
     : order.vendor.name === 'Cohen House'
-    ? '/eat/cohen/'
-    : '/eat'
+      ? '/eat/cohen/'
+      : '/eat'
 
   const currVendor = order ? order.vendor.name : null
 
@@ -53,8 +53,7 @@ function CartHeader ({ vendorName, showBackButton }) {
         {showBackButton ? (
           <IoMdArrowRoundBack
             onClick={() =>
-              navigate(backNav, { state: { currentVendor: currVendor } })
-            }
+              navigate(backNav, { state: { currentVendor: currVendor } })}
             style={{
               position: 'fixed',
               left: '22px',

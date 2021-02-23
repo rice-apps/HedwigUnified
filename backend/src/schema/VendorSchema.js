@@ -7,7 +7,7 @@ import {
 } from '../utils/authenticationUtils.js'
 import vault from '../utils/vault.js'
 
-import { SQUARE_APPLICATION_ID, SQUARE_APPLICATION_SECRET } from '../config'
+import { SQUARE_APPLICATION_ID, SQUARE_APPLICATION_SECRET } from '../config.js'
 import { ApolloError } from 'apollo-server-errors'
 
 VendorTC.addResolver({
@@ -21,10 +21,10 @@ VendorTC.addResolver({
   resolve: async ({ args }) => {
     const { vendorName, slug, code } = args
 
-    await Vendor.create({
-      name: vendorName,
-      slug: slug
-    })
+    // await Vendor.create({
+    //   name: vendorName,
+    //   slug: slug
+    // })
 
     try {
       const squareClient = new Client({ environment: Environment.Sandbox })
@@ -38,15 +38,9 @@ VendorTC.addResolver({
         code: code
       })
 
-      await vault.write(`cubbyhole/${slug}`, {
-        key: 'square-access',
-        value: accessToken,
-        lease: '1h'
-      })
-      await vault.write(`cubbyhole/${slug}`, {
-        key: 'square-refresh',
-        vaule: refreshToken,
-        lease: '1h'
+      await vault.write(`cubbyhole/${slug.toLowerCase()}`, {
+        'square-access': accessToken,
+        'square-refresh': refreshToken
       })
 
       return [accessToken, refreshToken]
@@ -91,10 +85,9 @@ VendorTC.addResolver({
           .then(res => res.data['square-refresh'])
       })
 
-      await vault.write(`cubbyhole/${vendor.slug}`, {
-        key: 'square-access',
-        value: accessToken,
-        lease: '1h'
+      await vault.write(`cubbyhole/${vendor.slug.toLowerCase()}`, {
+        'square-access': accessToken,
+        'square-refresh': refreshToken
       })
 
       return [accessToken, refreshToken]
@@ -157,7 +150,7 @@ const VendorMutations = {
   setupSquareTokens: VendorTC.getResolver('setupSquareTokens'),
   refreshSquareToken: VendorTC.getResolver(
     'refreshSquareToken'
-  ).withMiddlewares([checkLoggedIn, checkCanUpdateVendor])
+  ).withMiddlewares([checkLoggedIn])
 }
 
 export { VendorQueries, VendorMutations }

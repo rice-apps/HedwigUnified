@@ -473,7 +473,7 @@ function CartDetail () {
             </Bill>
           </Bill>
         </SpaceWrapper>
-        
+
         <SpaceWrapper pickUpTime>
           <Title>Pick Up Time:</Title>
           <Select

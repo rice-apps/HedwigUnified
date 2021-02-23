@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-express'
 import { ApiError, Client, Environment } from 'square'
 import { Vendor } from '../models/index.js'
+import vault from './vault.js'
 
 /**
  * @type {Map<string, import('square').Client>}
@@ -9,12 +10,12 @@ const squareClients = await Vendor.find()
   .exec()
   .then(res => {
     const squareClientsMap = new Map()
-    res.forEach(vendor => {
+    res.forEach(async vendor => {
       squareClientsMap.set(
         vendor.name,
         new Client({
           environment: Environment.Sandbox,
-          accessToken: vendor.squareInfo.accessToken
+          accessToken: await vault.read(`cubbyhole/${vendor.slug.toLowerCase()}`).then(res => res.data['square-access'])
         })
       )
     })

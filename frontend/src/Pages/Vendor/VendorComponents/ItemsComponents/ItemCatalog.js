@@ -59,6 +59,7 @@ export const TabWrapper = styled.div`
   width: 100%;
   height: 100%;
   grid-area: TabSpace;
+  overflow: scroll;
 `
 
 export const ItemDisplayWrapper = styled.div`

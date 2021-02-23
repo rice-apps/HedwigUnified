@@ -293,9 +293,11 @@ function CartDetail () {
         }
       }
       if (paymentMethod === 'COHEN') {
+        setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
       if (paymentMethod === 'TETRA') {
+        setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
     }

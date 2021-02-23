@@ -243,7 +243,7 @@ function BasicInfoDashboard () {
     loading: vendorLoading,
     error: vendorError
   } = useQuery(GET_VENDOR_INFO, {
-    variables: { name: currentUser.vendor }
+    variables: { name: currentUser.vendor[0] }
   })
   const [updatedInfo, setUpdatedInfo] = useState({})
   const [isDisabled, setIsDisabled] = useState(true)
@@ -306,7 +306,7 @@ function BasicInfoDashboard () {
     const updatedPlaceholder = Object.assign(placeholderInfo, updatedInfo)
     setPlaceholderInfo(updatedPlaceholder)
     // adds vendor name to the mutation
-    const vendorField = { name: currentUser.vendor }
+    const vendorField = { name: currentUser.vendor[0] }
     updateInfo(vendorField)
     await updateVendor({ variables: updatedInfo })
 

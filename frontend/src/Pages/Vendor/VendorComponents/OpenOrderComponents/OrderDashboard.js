@@ -196,7 +196,7 @@ function OrderDashboard () {
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId, vendor: currentUser.vendor }
+      variables: { location: vendorId, vendor: currentUser.vendor[0] }
     }
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
@@ -245,7 +245,7 @@ function OrderDashboard () {
   const handleOrderClick = (order, orderState) => {
     updateOrder({
       variables: {
-        vendor: currentUser.vendor,
+        vendor: currentUser.vendor[0],
         orderId: order.id,
         uid: order.fulfillment.uid,
         state: orderState

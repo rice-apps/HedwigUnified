@@ -8,7 +8,7 @@ import {
 import vault from '../utils/vault.js'
 
 import { SQUARE_APPLICATION_ID, SQUARE_APPLICATION_SECRET } from '../config.js'
-import { ApolloError } from 'apollo-server-errors'
+import { ApolloError } from 'apollo-server-express'
 
 VendorTC.addResolver({
   name: 'setupSquareTokens',
@@ -21,13 +21,19 @@ VendorTC.addResolver({
   resolve: async ({ args }) => {
     const { vendorName, slug, code } = args
 
-    // await Vendor.create({
-    //   name: vendorName,
-    //   slug: slug
-    // })
+    await Vendor.create({
+      name: vendorName,
+      slug: slug,
+      dataSource: 'SQUARE'
+    })
 
     try {
-      const squareClient = new Client({ environment: Environment.Sandbox })
+      const squareClient = new Client({
+        environment:
+          process.env.NODE_ENV === 'production'
+            ? Environment.Production
+            : Environment.Sandbox
+      })
 
       const {
         result: { accessToken, refreshToken }
@@ -72,7 +78,12 @@ VendorTC.addResolver({
       .exec()
 
     try {
-      const squareClient = new Client({ environment: Environment.Sandbox })
+      const squareClient = new Client({
+        environment:
+          process.env.NODE_ENV === 'production'
+            ? Environment.Production
+            : Environment.Sandbox
+      })
 
       const {
         result: { accessToken, refreshToken }

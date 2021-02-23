@@ -14,8 +14,13 @@ const squareClients = await Vendor.find()
       squareClientsMap.set(
         vendor.name,
         new Client({
-          environment: Environment.Sandbox,
-          accessToken: await vault.read(`cubbyhole/${vendor.slug.toLowerCase()}`).then(res => res.data['square-access'])
+          environment:
+            process.env.NODE_ENV === 'production'
+              ? Environment.Production
+              : Environment.Sandbox,
+          accessToken: await vault
+            .read(`cubbyhole/${vendor.slug.toLowerCase()}`)
+            .then(res => res.data['square-access'])
         })
       )
     })

@@ -47,7 +47,7 @@ const VendorSchema = new mongoose.Schema({
   email: { type: String, required: false },
   logoUrl: String,
   squareInfo: SquareInfo,
-  hours: { type: [BusinessHours], required: true },
+  hours: { type: [BusinessHours], required: false },
   isOpen: { type: Boolean, required: false },
   allowedNetid: { type: [String], required: false }, // change this to required true later on
   pickupInstruction: { type: String, required: false },

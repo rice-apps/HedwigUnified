@@ -226,28 +226,7 @@ function OrderDashboard () {
     })
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
-      document: ORDER_UPDATED,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) {
-          return prev
-        }
-
-        const updatedOrderItem = {
-          __typename: 'Order',
-          ...subscriptionData.data.orderUpdated
-        }
-
-        const updatedOrders = prev.findOrders.orders.map(order =>
-          order.id === updatedOrderItem.id ? updatedOrderItem : order
-        )
-
-        return Object.assign({}, prev, {
-          findOrders: {
-            __typename: 'FindManyOrderPayload',
-            orders: updatedOrders
-          }
-        })
-      }
+      document: ORDER_UPDATED
     })
 
     return () => {
@@ -302,6 +281,7 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}
@@ -329,6 +309,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}
@@ -354,6 +335,7 @@ function OrderDashboard () {
         {allOrders &&
           readyOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}

@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro'
 import { IoMdArrowRoundBack } from 'react-icons/io'
-import hedwigLogo from './HedwigLogoFinal.svg'
+import hedwigLogo from './../../Login/HedwigLogoFinal_02.svg'
 import HeadShot from './HeadShot'
 import { useNavigate } from 'react-router-dom'
 import './index.css'
@@ -19,115 +19,127 @@ import Angus from '../../../images/angus.png'
 import Helena from '../../../images/Helena.jpeg'
 
 const MainDiv = styled.div`
-  width: 100vw;
+  width: 100%;
   display: grid;
-  grid-template-rows: 3% 15% 64%; //have to use max of 50% or user width? or maybe min
+  grid-template-rows: auto auto auto;
   text-align: center;
   align-items: center;
   justify-items: center;
-  background-color: #faf6f2;
-  max-width: 100%;
+  background-color: #faf8f8;
 `
 
 const HeaderWrapper = styled.div`
   position: fixed;
-  height: 10vh;
-  font-size: 30px;
+  height: 8vh;
+  font-size: 3.1vh;
   width: 100vw;
   top: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 10vh 1fr 10vh;
+  grid-template-areas: 'back text .';
   align-items: center;
+  justify-items: center;
   text-align: center;
-  justify-content: flex-start;
   z-index: 1;
+  font-family: 'avenir';
   background-color: white;
-  padding-top: 1vh;
-  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);
 `
-const AboutText = styled.p`
+
+const BackSection = styled.div`
+  grid-area: back;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
+`
+
+const AboutText = styled.div`
   position: absolute;
+  grid-area: text;
   text-align: center;
-  justify-content: center;
-  top: 25%;
-  left: 47.5%;
-  transform: translate(-47.5%, 0);
+  font-family: Proxima Nova;
+  justify-self: center;
+  top: 20%;
   font-weight: bold;
 `
 const TitleLogoWrapper = styled.div`
   grid-row: 2/3;
-  background-color: #faf6f2;
+  padding-top: 10vh;
   width: 100%;
-  height: 100%;
+  height: 30vh;
   text-align: center;
 `
 
 const MeetHedwigText = styled.p`
   position: relative;
   color: #f3725b;
-  font-size: 18pt;
+  font-family: Proxima Nova;
+  font-size: 3vh;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
-  top: 35%;
   height: 5vh;
-
-  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
-    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
 `
 
 const HedwigLogo = styled.img`
   position: relative;
-  max-height: 40%;
-  max-width: 40%;
-  top: 50%;
-  transform: translateY(-50%);
+  height: 12vh;
+  width: 12vh;
+  margin: 1.2vh 0vh;
 `
 const PhotoGrid = styled.div`
   position: relative;
-  background-color: #faf6f2;
   grid-row: 3/4;
-  width: 100%;
-  height: 100%;
-
+  width: 90%;
+  height: auto;
+  padding: 0vh 1vh;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  padding-left: 4%;
-  padding-right: 4%;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  @media (min-width: 750px) {
+    width: 40%;
+  }
 `
 const DescriptionBlock = styled.div`
   position: relative;
-  background-color: #faf6f2;
   width: 100%;
   height: 100%;
   grid-row: 4/5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
 `
 
 const GoalTitle = styled.p`
   position: relative;
   color: #f3725b;
-  font-size: 18pt;
+  font-size: 4vh;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
-  margin: 2%;
-
-  text-shadow: 0px 15px 5px rgba(0, 0, 0, 0.1),
-    10px 20px 5px rgba(0, 0, 0, 0.05), -10px 20px 5px rgba(0, 0, 0, 0.05);
+  margin: 3vh 1vh 1vh 1vh;
+  padding: 2vh 0vw 1vh 0vw;
 `
-const GoalText = styled.p`
-  margin-left: 6%;
-  margin-right: 6%;
-  margin-top: 3%;
-  font-size: 12pt;
-  text-align: justify;
+const GoalText = styled.div`
+  font-size: 2.5vh;
+  line-height:3vh;
+  margin-bottom:2.8vh;
+  text-align: left;
+  width:85%;
+  @media(min-width: 750px) {
+    width:40%;
+  }
 `
 
 const ContactText = styled.p`
   margin-left: 6%;
   margin-right: 6%;
   margin-top: 0%;
-  font-size: 12pt;
+  font-size: 2.2vh;
+  padding-bottom: 2vh;
 `
 
 const AboutUs = () => {
@@ -136,16 +148,10 @@ const AboutUs = () => {
   return (
     <MainDiv>
       <HeaderWrapper>
-        <IoMdArrowRoundBack
-          onClick={() => navigate('/')}
-          style={{
-            position: 'relative',
-            fontSize: '25px',
-            cursor: 'pointer',
-            left: '1%'
-          }}
-        />
-        <AboutText>About the Creators</AboutText>
+        <BackSection>
+          <IoMdArrowRoundBack onClick={() => navigate('/eat')} />
+        </BackSection>
+        <AboutText>About Us</AboutText>
       </HeaderWrapper>
       <TitleLogoWrapper>
         <HedwigLogo src={hedwigLogo} />
@@ -155,12 +161,12 @@ const AboutUs = () => {
         <HeadShot
           src={Nikhita}
           name='Nikhita Gangla'
-          position='Project Manager'
+          position='Product Manager'
         />
         <HeadShot
           src={Melinda}
           name='Melinda Ding'
-          position='Project Manager'
+          position='Product Manager'
         />
         <HeadShot src={Victor} name='Victor Song' position='Team Lead' />
         <HeadShot src={Newton} name='Newton Huynh' position='Team Lead' />
@@ -174,18 +180,24 @@ const AboutUs = () => {
         <HeadShot src={Helena} name='Helena Hu' position='Developer' />
       </PhotoGrid>
       <DescriptionBlock>
-        <GoalTitle>What is Hedwig?</GoalTitle>
+        <GoalTitle>Our Goal</GoalTitle>
         <GoalText>
-          Hedwig is a web application built by RiceApps that enables members of
-          the Rice community to order food for pickup on campus from Rice
-          vendors such as Cohen House and East West Tea. In just a few clicks,
-          any member of the Rice community can place an order for pickup, pay
-          using credit card or Rice specific forms of payment such as Tetra or
-          Cohen House Club Card, and receive updates on its status in real-time.
-          Similarly, vendors can view and interact with orders in real-time,
-          with a comprehensive order management solution backed by a powerful
-          publicly-traded company. Hedwig currently only services breakfast and
-          lunch from Cohen House Curbside at the Club.
+          A revolutionary project designed from the ground up by Rice students
+          for the Rice Community.
+        </GoalText>
+        <GoalText>
+          In this challenging time, it is imperative that we take all necessary
+          precautions as we begin to navigate life inside the “new normal” of
+          the post COVID-19 era. That is why we have built Hedwig, a web
+          experience which enables Rice students, faculty, and staff to engage
+          with campus food establishments in a safe and frictionless manner.{' '}
+        </GoalText>{' '}
+        <GoalText>
+          In just a few clicks, any member of the Rice community can place an
+          order and receive updates on its status in real-time; similarly,
+          vendors can view and interact with new orders in real-time, with a
+          comprehensive order management solution backed by a powerful
+          publicly-traded company.
         </GoalText>
         <GoalTitle>Contact us</GoalTitle>
         <ContactText>

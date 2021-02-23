@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-server-express'
+import { ApolloError, withFilter } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
 import { ItemTC, DataSourceEnumTC } from '../models/index.js'
@@ -533,7 +533,8 @@ ItemTC.addResolver({
           name: baseItemName,
           description: baseItemDescription,
           merchant: '',
-          isAvailable: isAvailable
+          isAvailable: isAvailable,
+          vendor: vendor
         }
 
         pubsub.publish('availabilityChanged', {
@@ -781,10 +782,25 @@ const ItemMutations = {
 }
 
 const ItemSubscriptions = {
+
   availabilityChanged: {
     type: ItemTC,
 
-    subscribe: () => pubsub.asyncIterator('availabilityChanged')
+    args: {
+      vendor: 'String!'
+    },
+
+    variables: {
+      vendor: 'String!'
+    },
+
+    subscribe: withFilter(
+      () =>
+        pubsub.asyncIterator('availabilityChanged'),
+      (payload, variables) => {
+        return (String(payload.availabilityChanged.vendor) === String(variables.vendor))
+      }
+    )
   }
 }
 

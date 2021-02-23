@@ -88,8 +88,8 @@ const UPDATE_ORDER = gql`
 `
 
 const ORDER_CREATED = gql`
-  subscription {
-    orderCreated {
+  subscription ($vendor: String!) {
+    orderCreated (vendor: $vendor)  {
       id
       studentId
       cohenId
@@ -139,8 +139,8 @@ const ORDER_CREATED = gql`
 `
 
 const ORDER_UPDATED = gql`
-  subscription {
-    orderUpdated {
+  subscription ($vendor: String!) {
+    orderUpdated (vendor: $vendor) {
       id
       studentId
       cohenId
@@ -193,6 +193,8 @@ function OrderDashboard () {
   const vendorId = ['LBBZPB7F5A100']
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
 
+  console.log('current user', currentUser)
+  const merchantId = localStorage.getItem('merchantId')
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
@@ -204,12 +206,13 @@ function OrderDashboard () {
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
       document: ORDER_CREATED,
+      variables: { vendor: currentUser.vendor },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
           return prev
         }
 
-        console.log(prev)
+        console.log('current user', currentUser)
         console.log(subscriptionData)
 
         const newOrderItem = subscriptionData.data.orderCreated
@@ -226,7 +229,8 @@ function OrderDashboard () {
     })
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
-      document: ORDER_UPDATED
+      document: ORDER_UPDATED,
+      variables: { vendor: currentUser.vendor },
     })
 
     return () => {

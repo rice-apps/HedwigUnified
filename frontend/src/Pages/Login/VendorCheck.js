@@ -15,6 +15,9 @@ const GET_VENDOR = gql`
       name
       _id
       allowedNetid
+      squareInfo {
+        merchantId
+      }
     }
   }
 `
@@ -33,6 +36,7 @@ const VendorSelect = () => {
   if (vendorError) return <p>User broken</p>
 
   const allowedUsers = vendorData.getVendor.allowedNetid
+  localStorage.setItem('merchantId', vendorData.getVendor.squareInfo.merchantId)
 
   // have to modify this with /contact
   if (!allowedUsers.includes(userData.netid)) {

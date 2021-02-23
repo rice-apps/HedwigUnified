@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-server-express'
+import { ApolloError, withFilter } from 'apollo-server-express'
 import {
   CreateOrderInputTC,
   OrderTC,
@@ -122,6 +122,7 @@ OrderTC.addResolver({
           order: {
             locationId: locationId,
             lineItems: lineItems,
+            vendor: vendor,
             metadata: {
               cohenId: cohenId || 'N/A',
               studentId: studentId || 'N/A',
@@ -151,7 +152,7 @@ OrderTC.addResolver({
           submissionTime: submissionTime,
           locationId: locationId,
           orderId: newOrder.id,
-          paymentType: paymentType
+          paymentType: paymentType,
         })
 
         const order = orderParse(newOrder)
@@ -159,7 +160,8 @@ OrderTC.addResolver({
         console.log(order.fulfillment.pickupDetails.recipient)
 
         pubsub.publish('orderCreated', {
-          orderCreated: order
+          vendor,
+          orderCreated: order,
         })
 
         TwilioClient.messages.create({
@@ -215,6 +217,7 @@ OrderTC.addResolver({
       await updatedOrderTracker.save()
 
       pubsub.publish('orderUpdated', {
+        vendor,
         orderUpdated: order
       })
 
@@ -269,13 +272,41 @@ const OrderSubscriptions = {
   orderCreated: {
     type: OrderTC,
 
-    subscribe: () => pubsub.asyncIterator('orderCreated')
+    args: {
+      vendor: 'String!'
+    },
+
+    variables: {
+      vendor: 'String!'
+    },
+
+    subscribe: withFilter(
+      () =>
+        pubsub.asyncIterator('orderCreated'),
+      (payload, variables) => {
+        return (String(payload.vendor) === String(variables.vendor))
+      }
+    )
   },
 
   orderUpdated: {
     type: OrderTC,
 
-    subscribe: () => pubsub.asyncIterator('orderUpdated')
+    args: {
+      vendor: 'String!'
+    },
+
+    variables: {
+      vendor: 'String!'
+    },
+
+    subscribe: withFilter(
+      () =>
+        pubsub.asyncIterator('orderUpdated'),
+      (payload, variables) => {
+        return (String(payload.vendor) === String(variables.vendor))
+      }
+    )
   }
 }
 

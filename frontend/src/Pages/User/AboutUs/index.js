@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro'
 import { IoMdArrowRoundBack } from 'react-icons/io'
-import hedwigLogo from './HedwigLogoFinal.svg'
+import hedwigLogo from './../../Login/HedwigLogoFinal_02.svg'
 import HeadShot from './HeadShot'
 import { useNavigate } from 'react-router-dom'
 import './index.css'
@@ -19,37 +19,40 @@ import Angus from '../../../images/angus.png'
 import Helena from '../../../images/Helena.jpeg'
 
 const MainDiv = styled.div`
-  width: 100vw;
+  width: 100%;
   display: grid;
-  grid-template-rows: auto auto auto; //have to use max of 50% or user width? or maybe min
+  grid-template-rows: auto auto auto;
   text-align: center;
   align-items: center;
   justify-items: center;
-  background-color: #faf6f2;
-  max-width: 100%;
+  background-color: #faf8f8;
 `
 
 const HeaderWrapper = styled.div`
   position: fixed;
-  height: 11vh;
-  font-size: 4vh;
+  height: 8vh;
+  font-size: 3.1vh;
   width: 100vw;
   top: 0;
   display: grid;
-  grid-template-columns: 10% 1fr 10%;
+  grid-template-columns: 10vh 1fr 10vh;
   grid-template-areas: 'back text .';
   align-items: center;
   justify-items: center;
   text-align: center;
   z-index: 1;
+  font-family: 'avenir';
   background-color: white;
-  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);
 `
 
 const BackSection = styled.div`
   grid-area: back;
-  justify-self: start;
-  padding-left: 3vh;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
 `
 
 const AboutText = styled.div`
@@ -63,10 +66,9 @@ const AboutText = styled.div`
 `
 const TitleLogoWrapper = styled.div`
   grid-row: 2/3;
-  background-color: #faf6f2;
-  padding-top: 5vh;
+  padding-top: 10vh;
   width: 100%;
-  height: 40vh;
+  height: 30vh;
   text-align: center;
 `
 
@@ -74,39 +76,41 @@ const MeetHedwigText = styled.p`
   position: relative;
   color: #f3725b;
   font-family: Proxima Nova;
-  font-size: 3.5vh;
+  font-size: 3vh;
   text-align: center;
   line-height: 100%;
   font-weight: bold;
-  top: 35%;
   height: 5vh;
 `
 
 const HedwigLogo = styled.img`
   position: relative;
-  max-height: 40%;
-  max-width: 40%;
-  top: 50%;
-  transform: translateY(-50%);
+  height: 12vh;
+  width: 12vh;
+  margin: 1.2vh 0vh;
 `
 const PhotoGrid = styled.div`
   position: relative;
-  background-color: #faf6f2;
   grid-row: 3/4;
-  width: 100%;
+  width: 90%;
   height: auto;
-
+  padding: 0vh 1vh;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  padding: 0vh 4% 2vh 4%;
+  @media (min-width: 750px) {
+    width: 40%;
+  }
 `
 const DescriptionBlock = styled.div`
   position: relative;
-  background-color: #faf6f2;
   width: 100%;
   height: 100%;
   grid-row: 4/5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
 `
 
 const GoalTitle = styled.p`
@@ -116,15 +120,18 @@ const GoalTitle = styled.p`
   text-align: center;
   line-height: 100%;
   font-weight: bold;
-  margin: 2%;
+  margin: 3vh 1vh 1vh 1vh;
   padding: 2vh 0vw 1vh 0vw;
 `
-const GoalText = styled.p`
-  margin-left: 6%;
-  margin-right: 6%;
-  margin-top: 3%;
-  font-size: 2.2vh;
-  text-align: justify;
+const GoalText = styled.div`
+  font-size: 2.5vh;
+  line-height:3vh;
+  margin-bottom:2.8vh;
+  text-align: left;
+  width:85%;
+  @media(min-width: 750px) {
+    width:40%;
+  }
 `
 
 const ContactText = styled.p`
@@ -142,15 +149,7 @@ const AboutUs = () => {
     <MainDiv>
       <HeaderWrapper>
         <BackSection>
-          <IoMdArrowRoundBack
-            onClick={() => navigate('/')}
-            style={{
-              position: 'relative',
-              fontSize: '4vh',
-              cursor: 'pointer',
-              left: '1%'
-            }}
-          />
+          <IoMdArrowRoundBack onClick={() => navigate('/eat')} />
         </BackSection>
         <AboutText>About Us</AboutText>
       </HeaderWrapper>
@@ -183,14 +182,22 @@ const AboutUs = () => {
       <DescriptionBlock>
         <GoalTitle>Our Goal</GoalTitle>
         <GoalText>
-        A revolutionary project designed from the ground up by Rice students for the Rice Community. 
-        In this challenging time, it is imperative that we take all necessary precautions as we begin 
-        to navigate life inside the “new normal” of the post COVID-19 era. That is why we have built Hedwig, 
-        a web experience which enables Rice students, faculty, and staff to engage with campus food 
-        establishments in a safe and frictionless manner. In just a few clicks, any member of the Rice 
-        community can place an order and receive updates on its status in real-time; similarly, vendors 
-        can view and interact with new orders in real-time, with a comprehensive order management solution 
-        backed by a powerful publicly-traded company.
+          A revolutionary project designed from the ground up by Rice students
+          for the Rice Community.
+        </GoalText>
+        <GoalText>
+          In this challenging time, it is imperative that we take all necessary
+          precautions as we begin to navigate life inside the “new normal” of
+          the post COVID-19 era. That is why we have built Hedwig, a web
+          experience which enables Rice students, faculty, and staff to engage
+          with campus food establishments in a safe and frictionless manner.{' '}
+        </GoalText>{' '}
+        <GoalText>
+          In just a few clicks, any member of the Rice community can place an
+          order and receive updates on its status in real-time; similarly,
+          vendors can view and interact with new orders in real-time, with a
+          comprehensive order management solution backed by a powerful
+          publicly-traded company.
         </GoalText>
         <GoalTitle>Contact us</GoalTitle>
         <ContactText>

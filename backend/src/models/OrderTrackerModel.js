@@ -9,7 +9,7 @@ const OrderTrackerSchema = new mongoose.Schema({
   paymentType: {
     type: String,
     required: false,
-    enum: ['COHEN', 'TETRA', 'CREDIT']
+    enum: ['COHEN', 'TETRA', 'CREDIT', 'None']
   },
   pickupTime: { type: Date, required: false },
   submissionTime: { type: Date, required: false },
@@ -30,6 +30,7 @@ const OrderTrackerSchema = new mongoose.Schema({
     enum: ['SQUARE', 'SHOPIFY', 'EXCEL']
   },
   note: 'String',
+  roomNumber: 'String'
 })
 
 const OrderTracker = mongoose.model('OrderTracker', OrderTrackerSchema)

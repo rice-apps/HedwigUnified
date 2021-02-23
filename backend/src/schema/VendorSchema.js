@@ -1,5 +1,3 @@
-import { ApiError, Client, Environment } from 'square'
-
 import { Vendor, VendorTC } from '../models/index.js'
 import {
   checkLoggedIn,
@@ -118,6 +116,21 @@ VendorTC.addResolver({
   }
 })
 
+
+VendorTC.addResolver({
+  name: 'getAllowedVendors',
+  type: [VendorTC],
+  args: { name: 'String!'},
+  resolve: async ({ args }) => {
+    const vendors = await Vendor.find({});
+    const userVendors = vendors.filter(vendor => {
+      const allowedNetId = vendor.allowedNetid;
+      return allowedNetId.includes(args.name);
+    });
+    return userVendors;
+  }
+});
+
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers
     .findOne()
@@ -151,7 +164,8 @@ const VendorQueries = {
         }
         return vendor
       })
-    })
+    }),
+    getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
 }
 
 const VendorMutations = {

@@ -514,7 +514,9 @@ function CartDetail () {
           <SpaceWrapper note>
             <div>
               <Title isolation note>Leave Notes: </Title>
-              <TextArea note onChange={e => setNote(e.target.value)} />
+              <TextArea note onChange={e => setNote(e.target.value)} maxlength='200'
+                defaultValue = 'Type any additional dietary restrictions or concerns here (200 character limit)'
+              />
             </div>
           </SpaceWrapper>
         )}

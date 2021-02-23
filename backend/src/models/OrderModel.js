@@ -145,7 +145,6 @@ const CreateOrderInputTC = sc.createInputTC({
     studentId: 'String',
     paymentType: PaymentSourceEnumTC.getType(),
     note: 'String',
-    college: 'String',
     roomNumber: 'String'
   }
 })

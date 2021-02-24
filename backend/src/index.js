@@ -5,13 +5,15 @@ import http from 'http'
 import log from 'loglevel'
 
 import { DEV_PORT } from './config.js'
-import './utils/db.js'
 
-import Schema from './schema/index.js'
+import './utils/db.js'
+import './utils/vault.js'
 
 // Initialize connection to Square with API token
 import './utils/square.js'
 import firebaseAdmin from './utils/firebase.js'
+
+import Schema from './schema/index.js'
 
 const app = express().use(cors())
 

@@ -9,7 +9,11 @@ import {
   UpdateOrderTC
 } from '../models/index.js'
 import { pubsub } from '../utils/pubsub.js'
-import squareClients from '../utils/square.js'
+import {
+  squareClients,
+  orderFetchAndParse,
+  orderParse
+} from '../utils/square.js'
 import TwilioClient from '../utils/twilio.js'
 import { ApiError } from 'square'
 
@@ -34,7 +38,6 @@ OrderTC.addResolver({
     const { vendor, locations, cursor, limit, filter, sort } = args
 
     const squareClient = squareClients.get(vendor)
-    const ordersApi = squareClient.ordersApi
 
     const query = {}
 
@@ -49,7 +52,7 @@ OrderTC.addResolver({
     try {
       const {
         result: { cursor: newCursor, orders }
-      } = await ordersApi.searchOrders({
+      } = await squareClient.ordersApi.searchOrders({
         locationIds: locations,
         cursor,
         limit,
@@ -61,54 +64,22 @@ OrderTC.addResolver({
         order => typeof order.fulfillments !== 'undefined'
       )
 
-      const returnedOrders = filteredOrders.map(async order => {
-        const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+      const orderIds = filteredOrders.map(order => order.id)
+      const orderTrackers = await OrderTracker.find({
+        orderId: { $in: orderIds }
+      })
+        .lean()
+        .exec()
 
-        return {
-          id: order.id,
-          merchant: order.locationId,
-          customer: {
-            name: order.fulfillments[0].pickupDetails.recipient.displayName,
-            email: order.fulfillments[0].pickupDetails.recipient.emailAddress,
-            phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-          },
-          items: order.lineItems.map(lineItem => ({
-            name: lineItem.name,
-            quantity: lineItem.quantity,
-            catalogObjectId: lineItem.catalogObjectId,
-            variationName: lineItem.variationName,
-            totalMoney: lineItem.totalMoney,
-            totalTax: lineItem.totalTaxMoney,
-            modifiers: lineItem.modifiers?.map(modifier => ({
-              uid: modifier.uid,
-              catalogObjectId: modifier.catalogObjectId,
-              name: modifier.name,
-              basePriceMoney: modifier.basePriceMoney,
-              totalPriceMoney: modifier.totalPriceMoney
-            }))
-          })),
-          totalTax: order.totalTaxMoney,
-          totalDiscount: order.totalDiscountMoney,
-          total: order.totalMoney,
-          orderStatus: order.state,
-          cohenId: order.metadata?.cohenId,
-          studentId: order.metadata?.studentId,
-          submissionTime: order.metadata?.submissionTime,
-          fulfillment: {
-            uid: order.fulfillments[0].uid,
-            state: orderTracker?.status || order.fulfillments[0].state,
-            pickupDetails: {
-              pickupAt: order.fulfillments[0].pickupDetails.pickupAt,
-              placedAt: order.fulfillments[0].pickupDetails.placedAt,
-              recipient: {
-                name: order.fulfillments[0].pickupDetails.recipient.displayName,
-                email:
-                  order.fulfillments[0].pickupDetails.recipient.emailAddress,
-                phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-              }
-            }
-          }
-        }
+      const returnedOrders = filteredOrders.map(async order => {
+        const orderTracker = orderTrackers.filter(
+          obj => obj.orderId === order.id
+        )[0]
+
+        const parsedOrder = orderParse(order)
+        parsedOrder.fulfillment.state = orderTracker.status
+
+        return parsedOrder
       })
 
       return {
@@ -151,12 +122,11 @@ OrderTC.addResolver({
       } = args
 
       const squareClient = squareClients.get(vendor)
-      const ordersApi = squareClient.ordersApi
 
       try {
         const {
-          result: { order }
-        } = await ordersApi.createOrder({
+          result: { order: newOrder }
+        } = await squareClient.ordersApi.createOrder({
           idempotencyKey: idempotencyKey,
           order: {
             locationId: locationId,
@@ -189,74 +159,36 @@ OrderTC.addResolver({
           pickupTime: pickupTime,
           submissionTime: submissionTime,
           locationId: locationId,
-          orderId: order.id,
-          paymentType: paymentType
+          orderId: newOrder.id,
+          paymentType: paymentType,
+          vendor: vendor
         })
 
-        const CDMOrder = {
-          id: order.id,
-          merchant: order.locationId,
-          customer: {
-            name: order.fulfillments[0].pickupDetails.recipient.displayName,
-            email: order.fulfillments[0].pickupDetails.recipient.emailAddress,
-            phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-          },
-          items: order.lineItems.map(lineItem => ({
-            name: lineItem.name,
-            quantity: lineItem.quantity,
-            catalogObjectId: lineItem.catalogObjectId,
-            variationName: lineItem.variationName,
-            totalMoney: lineItem.totalMoney,
-            totalTax: lineItem.totalTaxMoney,
-            modifiers: lineItem.modifiers?.map(modifier => ({
-              uid: modifier.uid,
-              catalogObjectId: modifier.catalogObjectId,
-              name: modifier.name,
-              basePriceMoney: modifier.basePriceMoney,
-              totalPriceMoney: modifier.totalPriceMoney
-            }))
-          })),
-          totalTax: order.totalTaxMoney,
-          totalDiscount: order.totalDiscountMoney,
-          total: order.totalMoney,
-          orderStatus: order.state,
-          cohenId: order.metadata?.cohenId,
-          studentId: order.metadata?.studentId,
-          fulfillment: {
-            uid: order.fulfillments[0].uid,
-            state: order.fulfillments[0].state,
-            pickupDetails: {
-              pickupAt: order.fulfillments[0].pickupDetails.pickupAt,
-              placedAt: order.fulfillments[0].pickupDetails.placedAt,
-              recipient: {
-                name: order.fulfillments[0].pickupDetails.recipient.displayName,
-                email:
-                  order.fulfillments[0].pickupDetails.recipient.emailAddress,
-                phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-              }
-            }
-          }
-        }
+        const order = orderParse(newOrder)
+
+        console.log(order.fulfillment.pickupDetails.recipient)
 
         pubsub.publish('orderCreated', {
-          orderCreated: CDMOrder
+          orderCreated: order
         })
 
         TwilioClient.messages.create({
           body: 'Your order has been placed.',
           from: '+13466667153',
-          to: order.fulfillments[0].pickupDetails.recipient.phoneNumber
+          to: order.fulfillment.pickupDetails.recipient.phone
         })
 
-        return CDMOrder
+        return order
       } catch (error) {
         if (error instanceof ApiError) {
-          console.log('Error:', error.result)
-          return new ApolloError(
-            `Creating new order on Square failed because ${error.result}`
+          throw new ApolloError(
+            `Creating new order on Square failed because ${JSON.stringify(
+              error.result
+            )}`
           )
         }
-        return new ApolloError('Something went wrong when creating new order')
+
+        throw new ApolloError('Something went wrong when creating new order')
       }
     }
   })
@@ -279,112 +211,58 @@ OrderTC.addResolver({
         orderId: orderId
       })
 
+      const squareClient = squareClients.get(vendor)
+
+      const order = await orderFetchAndParse(squareClient, orderId)
+      order.fulfillment.state = fulfillment.state
+
+      if (updatedOrderTracker.status === fulfillment.state) {
+        return order
+      }
+
       updatedOrderTracker.status = fulfillment.state
 
       await updatedOrderTracker.save()
 
-      const squareClient = squareClients.get(vendor)
-      const ordersApi = squareClient.ordersApi
+      pubsub.publish('orderUpdated', {
+        orderUpdated: order
+      })
 
-      try {
-        const {
-          result: { order }
-        } = await ordersApi.retrieveOrder(orderId)
-
-        const CDMOrder = {
-          id: order.id,
-          merchant: order.locationId,
-          customer: {
-            name: order.fulfillments[0].pickupDetails.recipient.displayName,
-            email: order.fulfillments[0].pickupDetails.recipient.emailAddress,
-            phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-          },
-          items: order.lineItems.map(lineItem => ({
-            name: lineItem.name,
-            quantity: lineItem.quantity,
-            catalogObjectId: lineItem.catalogObjectId,
-            variationName: lineItem.variationName,
-            totalMoney: lineItem.totalMoney,
-            totalTax: lineItem.totalTaxMoney,
-            modifiers: lineItem.modifiers?.map(modifier => ({
-              uid: modifier.uid,
-              catalogObjectId: modifier.catalogObjectId,
-              name: modifier.name,
-              basePriceMoney: modifier.basePriceMoney,
-              totalPriceMoney: modifier.totalPriceMoney
-            }))
-          })),
-          totalTax: order.totalTaxMoney,
-          totalDiscount: order.totalDiscountMoney,
-          total: order.totalMoney,
-          orderStatus: order.state,
-          cohenId: order.metadata?.cohenId,
-          studentId: order.metadata?.studentId,
-          fulfillment: {
-            uid: order.fulfillments[0].uid,
-            state: updatedOrderTracker.status,
-            pickupDetails: {
-              pickupAt: order.fulfillments[0].pickupDetails.pickupAt,
-              placedAt: order.fulfillments[0].pickupDetails.placedAt,
-              recipient: {
-                name: order.fulfillments[0].pickupDetails.recipient.displayName,
-                email:
-                  order.fulfillments[0].pickupDetails.recipient.emailAddress,
-                phone: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-              }
-            }
-          }
-        }
-
-        pubsub.publish('orderUpdated', {
-          orderUpdated: CDMOrder
-        })
-
-        switch (updatedOrderTracker.status) {
-          case 'PREPARED':
-            TwilioClient.messages.create({
-              body:
-                'Your recent order has been prepared. Please go to the pickup location',
-              from: '+13466667153',
-              to: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-            })
-            break
-          case 'COMPLETED':
-            TwilioClient.messages.create({
-              body:
-                'Your order has been picked up. If you did not do this, please contact the vendor directly.',
-              from: '+13466667153',
-              to: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-            })
-            break
-          case 'CANCELED':
-            TwilioClient.messages.create({
-              body:
-                'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
-              from: '+13466667153',
-              to: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-            })
-            break
-          default:
-            TwilioClient.messages.create({
-              body:
-                'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
-              from: '+13466667153',
-              to: order.fulfillments[0].pickupDetails.recipient.phoneNumber
-            })
-        }
-
-        return CDMOrder
-      } catch (error) {
-        if (error instanceof ApiError) {
-          return new ApolloError(
-            `Updating order ${orderId} using Square failed because ${error.result}`
-          )
-        }
-        return new ApolloError(
-          `Something went wrong when updating order ${orderId}`
-        )
+      switch (updatedOrderTracker.status) {
+        case 'PREPARED':
+          TwilioClient.messages.create({
+            body:
+              'Your recent order has been prepared. Please go to the pickup location',
+            from: '+13466667153',
+            to: order.fulfillment.pickupDetails.recipient.phone
+          })
+          break
+        case 'COMPLETED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been picked up. If you did not do this, please contact the vendor directly.',
+            from: '+13466667153',
+            to: order.fulfillment.pickupDetails.recipient.phone
+          })
+          break
+        case 'CANCELED':
+          TwilioClient.messages.create({
+            body:
+              'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
+            from: '+13466667153',
+            to: order.fulfillment.pickupDetails.recipient.phone
+          })
+          break
+        default:
+          TwilioClient.messages.create({
+            body:
+              'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
+            from: '+13466667153',
+            to: order.fulfillment.pickupDetails.recipient.phone
+          })
       }
+
+      return order
     }
   })
 

@@ -64,7 +64,7 @@ function MakeCatalogItems (props) {
     loading: availability_loading
   } = useQuery(GET_ITEM_AVAILABILITY, {
     variables: {
-      vendor: currentUser.vendor,
+      vendor: currentUser.vendor[0],
       productId: props.itemId
     },
     fetchPolicy: 'network-only'
@@ -87,7 +87,7 @@ function MakeCatalogItems (props) {
           icons={false}
           defaultChecked={availability}
           onChange={e => {
-            setAvailability({ variables:{vendor: currentUser.vendor,
+            setAvailability({ variables:{vendor: currentUser.vendor[0],
               productId: props.itemId,
               isItemAvailable: e.target.checked}
             }).then(data=>console.log(data))

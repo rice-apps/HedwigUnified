@@ -66,6 +66,14 @@ const GET_ITEM_AVAILABILITY = gql`
     getAvailability(productId: $productId, vendor: $vendor, type: "item")
   }
 `
+
+
+const GET_ITEM_AVAILABILITIES = gql`
+  query GET_ITEM_AVAILABILITIES($productIds: [String!], $vendor: String!) {
+    getAvailabilities(productIds: $productIds, vendor: $vendor, type: "item")
+  }
+`
+
 const GET_MODIFIER_AVAILABILITY = gql`
   query GET_ITEM_AVAILABILITY($productId: String!, $vendor: String!) {
     getAvailability(productId: $productId, vendor: $vendor, type: "modifier")
@@ -109,4 +117,4 @@ const SET_MODIFIER_AVAILABILITY = gql`
   }
 `
 
-export { GET_CATALOG, GET_ITEM, GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY, GET_MODIFIER_AVAILABILITY, SET_MODIFIER_AVAILABILITY}
+export { GET_CATALOG, GET_ITEM_AVAILABILITIES, GET_ITEM, GET_ITEM_AVAILABILITY, SET_ITEM_AVAILABILITY, GET_MODIFIER_AVAILABILITY, SET_MODIFIER_AVAILABILITY}

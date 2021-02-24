@@ -90,6 +90,11 @@
   margin: auto 20px;
 }
 
+.categoryname:hover{
+  font-weight: bold;
+  border-bottom: #f3725b solid 2px;
+}
+
 /* Category Header */
 .categoryheader {
   font-family: 'avenirbold';
@@ -115,7 +120,14 @@
   grid-template-columns: 3fr 7fr;
   grid-template-rows: 1fr;
   grid-template-areas: 'ImageSpace NameSpace';
+  cursor: pointer;
 }
+
+.itemgrid:hover{
+  box-shadow: 0 0 2px rgba(33, 33, 33, 0.2);
+  background-color: #f5e7da;  
+}
+
 @media (min-width: 800px) {
   .itemgrid {
     width: 100vw;

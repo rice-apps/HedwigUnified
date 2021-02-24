@@ -53,7 +53,6 @@ ItemTC.addResolver({
           }
         } = item
 
-
         let imageData
         try {
           const response = await catalogApi.retrieveCatalogObject(imageId)
@@ -200,8 +199,6 @@ ItemTC.addResolver({
         } catch (error) {
           console.log('Image not found')
         }
-
-        console.log(imageData)
 
         const returnedVariants = variations.map(variant => {
           const {

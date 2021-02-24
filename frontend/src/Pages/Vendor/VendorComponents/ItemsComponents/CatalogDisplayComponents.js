@@ -5,6 +5,7 @@ import {
 } from '../../../../graphql/ProductQueries.js'
 import { useQuery, useMutation } from '@apollo/client'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { useState, useEffect } from 'react'
 
 const DisplayWrapper = styled.div`
   font-size: 25px;
@@ -57,26 +58,26 @@ const ToggleSwitch = styled.label`
 `
 
 const ToggleInput = styled.input`
- &{
-   opacity: 0;
-   width: 0;
-   height: 0;
- }
- &:checked + .slider {
-   background-color: #EA907A;
- }
- &:focus + .slider {
-   box-shadow: 0 0 1px #EA907a;
- }
- &:checked + .slider:before {
-   -webkit-transform: translateX(26px);
-   -ms-transform: translateX(26px);
-   transform: translateX(26px);
- }
+  & {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  &:checked + .slider {
+    background-color: #ea907a;
+  }
+  &:focus + .slider {
+    box-shadow: 0 0 1px #ea907a;
+  }
+  &:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
 `
 
 const ToggleSlider = styled.span`
-  &{
+  & {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -84,20 +85,20 @@ const ToggleSlider = styled.span`
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
     border-radius: 20px;
   }
-  &:before{
+  &:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 26px;
     width: 26px;
     left: 4px;
     bottom: 4px;
     background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
     border-radius: 50%;
   }
 `
@@ -122,13 +123,26 @@ function MakeCatalogItems (props) {
     fetchPolicy: 'network-only'
   })
 
+  const [isChecked, setIsChecked] = useState()
+
+  useEffect(() => {
+    if (availability_info) {
+      setIsChecked(availability_info.getAvailability)
+    }
+  }, [availability_info])
+  
+  function ToggleCheck () {
+    let e = !isChecked
+    setIsChecked(e)
+  }
+
   if (availability_loading) {
     return <ClipLoader size={100} color='#0f0f0f' loading />
   }
   if (availability_error) {
     return <p>Error...</p>
   }
-  const { getAvailability: availability } = availability_info
+ 
 
   return (
     <DisplayWrapper>
@@ -136,9 +150,10 @@ function MakeCatalogItems (props) {
       <ItemName>{props.itemName}</ItemName>
       <ItemAvailability>
         <ToggleSwitch>
-          <ToggleInput type="checkbox" checked={availability ? "checked" : ""} 
-          onChange={
-            e => {
+          <ToggleInput
+            type='checkbox'
+            checked={isChecked}
+            onChange={e => {
               setAvailability({
                 variables: {
                   vendor: currentUser.vendor[0],
@@ -146,12 +161,11 @@ function MakeCatalogItems (props) {
                   isItemAvailable: e.target.checked
                 }
               })
-              setTimeout(500, window.location.reload())
+              ToggleCheck()
             }}
-            />
-          <ToggleSlider className="slider"></ToggleSlider>
+          />
+          <ToggleSlider className='slider'></ToggleSlider>
         </ToggleSwitch>
-    
       </ItemAvailability>
       <ItemPrice>{formatter.format(props.itemPrice / 100)}</ItemPrice>
     </DisplayWrapper>

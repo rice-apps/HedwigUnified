@@ -118,6 +118,8 @@ function ItemCatalog (props) {
   const [value, setValue] = useState(props.category)
 
   const items = props.catalog.filter(item => item.category === value)
+  const itemIds = items.map(item => item.dataSourceId)
+  console.log(itemIds)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)

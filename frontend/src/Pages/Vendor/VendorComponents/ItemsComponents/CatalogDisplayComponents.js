@@ -1,5 +1,4 @@
 import styled from 'styled-components/macro'
-import Toggle from 'react-toggle'
 import {
   GET_ITEM_AVAILABILITY,
   SET_ITEM_AVAILABILITY
@@ -50,6 +49,59 @@ const ItemPrice = styled.div`
   font-weight: 100;
 `
 
+const ToggleSwitch = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+`
+
+const ToggleInput = styled.input`
+ &{
+   opacity: 0;
+   width: 0;
+   height: 0;
+ }
+ &:checked + .slider {
+   background-color: #EA907A;
+ }
+ &:focus + .slider {
+   box-shadow: 0 0 1px #EA907a;
+ }
+ &:checked + .slider:before {
+   -webkit-transform: translateX(26px);
+   -ms-transform: translateX(26px);
+   transform: translateX(26px);
+ }
+`
+
+const ToggleSlider = styled.span`
+  &{
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 20px;
+  }
+  &:before{
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+  }
+`
+
 function MakeCatalogItems (props) {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const formatter = new Intl.NumberFormat('en-US', {
@@ -83,17 +135,23 @@ function MakeCatalogItems (props) {
       <ItemPicture src={props.itemImage} />
       <ItemName>{props.itemName}</ItemName>
       <ItemAvailability>
-        <Toggle
-          icons={false}
-          defaultChecked={availability}
-          onChange={e => {
-            setAvailability({ variables:{vendor: currentUser.vendor[0],
-              productId: props.itemId,
-              isItemAvailable: e.target.checked}
-            }).then(data=>console.log(data))
-            // setTimeout(500, window.location.reload())
-          }}
-        />
+        <ToggleSwitch>
+          <ToggleInput type="checkbox" checked={availability ? "checked" : ""} 
+          onChange={
+            e => {
+              setAvailability({
+                variables: {
+                  vendor: currentUser.vendor[0],
+                  productId: props.itemId,
+                  isItemAvailable: e.target.checked
+                }
+              })
+              setTimeout(500, window.location.reload())
+            }}
+            />
+          <ToggleSlider className="slider"></ToggleSlider>
+        </ToggleSwitch>
+    
       </ItemAvailability>
       <ItemPrice>{formatter.format(props.itemPrice / 100)}</ItemPrice>
     </DisplayWrapper>

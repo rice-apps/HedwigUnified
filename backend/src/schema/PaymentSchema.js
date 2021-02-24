@@ -131,7 +131,7 @@ PaymentTC.addResolver({
 
           OrderTracker.findOneAndUpdate(
             { orderId: orderId },
-            { dataSource: 'SQUARE'}
+            { dataSource: 'SQUARE', paymentId: response.id}
           ).exec()
 
           break
@@ -186,7 +186,7 @@ PaymentTC.addResolver({
           // not sure if this is correct !!! --- Lorraine
           OrderTracker.findOneAndUpdate(
             { orderId: orderId },
-            { dataSource: 'SHOPIFY', shopifyOrderId: checkout.data.checkoutCreate.checkout.id }
+            { dataSource: 'SHOPIFY', shopifyOrderId: response.id, paymentId: response.id}
           ).exec()
           break
         }
@@ -434,7 +434,7 @@ PaymentTC.addResolver({
           )
         }
       }
-
+      console.log(response)
       return response
     }
   })

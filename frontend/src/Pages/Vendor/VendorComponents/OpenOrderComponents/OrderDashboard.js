@@ -75,6 +75,7 @@ const GET_ORDER_TRACKERS = gql`
       paymentId
       dataSource
       orderId
+      paymentType
     }
   }
 `
@@ -225,7 +226,7 @@ const ORDER_UPDATED = gql`
 `
 
 function OrderDashboard () {
-  const vendorId = ['LBBZPB7F5A100']
+  const vendorId = ["L2N8DA44TZK8E"]
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
@@ -298,7 +299,7 @@ function OrderDashboard () {
     })
     if(orderTrackers){
       const orderTracker = orderTrackers.filter(orderTracker => orderTracker.orderId === order.id)[0]
-      if(orderTracker){
+      if(orderTracker.paymentType === 'CREDIT'){
         completePayment({
           variables: {
             vendor: currentUser.vendor,

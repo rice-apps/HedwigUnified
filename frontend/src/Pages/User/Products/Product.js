@@ -124,6 +124,7 @@ function Product () {
         Object.assign(order, {
           vendor: {
             name: vendor.name,
+            dataSource: vendor.dataSource,
             merchantId: vendor.squareInfo.merchantId,
             locationIds: vendor.squareInfo.locationIds
           }
@@ -134,6 +135,7 @@ function Product () {
     console.log('merchant Id ', order.vendor.merchantId)
     console.log('vendor square info ', vendor.squareInfo)
     console.log('location Id ', order.vendor.locationIds[0])
+    console.log('vendor datasource', order.vendor.dataSource)
     const itemName = product.name
     const image = product.image
     const itemDataSourceId = product.dataSourceId

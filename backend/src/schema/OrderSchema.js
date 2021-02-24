@@ -88,6 +88,7 @@ OrderTC.addResolver({
       }
     } catch (error) {
       if (error instanceof ApiError) {
+        console.log(error.result)
         return new ApolloError(
           `Finding orders using Square failed because ${error.result}`
         )

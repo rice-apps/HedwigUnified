@@ -148,6 +148,7 @@ ItemTC.addResolver({
       })
     } catch (error) {
       if (error instanceof ApiError) {
+        console.log(error.result)
         return new ApolloError(
           `Getting Square catalog failed because ${error.result}`
         )

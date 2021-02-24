@@ -272,6 +272,7 @@ function CartDetail () {
         return
       }
       const orderResponse = await createOrder(rec)
+      console.log("Order Response", orderResponse)
       const orderJson = orderResponse.data.createOrder
       if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod !== 'CREDIT') {
         const createPaymentResponse = await createPayment({
@@ -285,21 +286,17 @@ function CartDetail () {
             currency: 'USD'
           }
         })
-        await updateOrderTracker({
-          variables: {
-            paymentId: createPaymentResponse.data.createPayment.id,
-            orderId: orderJson.id
-          }
-        })
-      }
-      setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
+        setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
       }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
         if (order.vendor.name === 'Cohen House') {
           return handleClickCredit()
-        } else {
-          setLocalStorage(order, orderJson, '', totals)
+        }
+        else {
+          console.log("Order JSON", orderJson)
+          setLocalStorage(order, orderJson, "", totals)
+          console.log("Navigating to Square Payment")
           return navigate('/eat/square')
         }
       }

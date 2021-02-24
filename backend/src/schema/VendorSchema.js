@@ -1,10 +1,14 @@
+
 import { VendorTC, DataSourceEnumTC, Vendor } from '../models/index.js'
+
+import { ApolloError } from 'apollo-server-express'
+import { ApiError, Client, Environment } from 'square'
+
 import {
   checkLoggedIn,
   checkCanUpdateVendor
 } from '../utils/authenticationUtils.js'
-import { ApiError } from 'square'
-import { ApolloError } from 'apollo-server-express'
+
 import {squareClients} from '../utils/square.js'
 import vault from '../utils/vault.js'
 
@@ -12,7 +16,7 @@ import { SQUARE_APPLICATION_ID, SQUARE_APPLICATION_SECRET } from '../config.js'
 
 VendorTC.addResolver({
   name: 'setupSquareTokens',
-  type: '[String]',
+  type: '[String!]!',
   args: {
     vendorName: 'String!',
     slug: 'String!',
@@ -66,7 +70,7 @@ VendorTC.addResolver({
   }
 }).addResolver({
   name: 'refreshSquareToken',
-  type: '[String]',
+  type: '[String!]!',
   args: {
     vendorName: 'String!'
   },
@@ -118,20 +122,19 @@ VendorTC.addResolver({
   }
 })
 
-
 VendorTC.addResolver({
   name: 'getAllowedVendors',
   type: [VendorTC],
-  args: { name: 'String!'},
+  args: { name: 'String!' },
   resolve: async ({ args }) => {
-    const vendors = await Vendor.find({});
+    const vendors = await Vendor.find({})
     const userVendors = vendors.filter(vendor => {
-      const allowedNetId = vendor.allowedNetid;
-      return allowedNetId.includes(args.name);
-    });
-    return userVendors;
+      const allowedNetId = vendor.allowedNetid
+      return allowedNetId.includes(args.name)
+    })
+    return userVendors
   }
-});
+})
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers
@@ -166,7 +169,7 @@ const VendorQueries = {
         return vendor
       })
     }),
-    getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
+  getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
 }
 
 VendorTC.addResolver({

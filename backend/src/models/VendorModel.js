@@ -14,7 +14,7 @@ const SquareInfo = new mongoose.Schema({
   refreshToken: { type: String, required: false },
   accessToken: { type: String, required: true },
   locationIds: { type: [String], required: true },
-  loyaltyId: { type: String, unique: true }
+  loyaltyId: { type: String }
 })
 
 const BusinessHours = new mongoose.Schema({

@@ -10,7 +10,7 @@ import { ApolloError } from 'apollo-server-express'
 
 VendorTC.addResolver({
   name: 'setupSquareTokens',
-  type: '[String]',
+  type: '[String!]!',
   args: {
     vendorName: 'String!',
     slug: 'String!',
@@ -64,7 +64,7 @@ VendorTC.addResolver({
   }
 }).addResolver({
   name: 'refreshSquareToken',
-  type: '[String]',
+  type: '[String!]!',
   args: {
     vendorName: 'String!'
   },
@@ -116,20 +116,19 @@ VendorTC.addResolver({
   }
 })
 
-
 VendorTC.addResolver({
   name: 'getAllowedVendors',
   type: [VendorTC],
-  args: { name: 'String!'},
+  args: { name: 'String!' },
   resolve: async ({ args }) => {
-    const vendors = await Vendor.find({});
+    const vendors = await Vendor.find({})
     const userVendors = vendors.filter(vendor => {
-      const allowedNetId = vendor.allowedNetid;
-      return allowedNetId.includes(args.name);
-    });
-    return userVendors;
+      const allowedNetId = vendor.allowedNetid
+      return allowedNetId.includes(args.name)
+    })
+    return userVendors
   }
-});
+})
 
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers
@@ -165,7 +164,7 @@ const VendorQueries = {
         return vendor
       })
     }),
-    getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
+  getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
 }
 
 const VendorMutations = {

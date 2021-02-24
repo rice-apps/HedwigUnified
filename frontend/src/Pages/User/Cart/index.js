@@ -274,7 +274,7 @@ function CartDetail () {
       const orderResponse = await createOrder(rec)
       console.log("Order Response", orderResponse)
       const orderJson = orderResponse.data.createOrder
-      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod !== 'CREDIT') {
+      if(order.vendor.dataSource==='SHOPIFY' && paymentMethod === 'CREDIT'){
         const createPaymentResponse = await createPayment({
           variables: {
             vendor: order.vendor.name,

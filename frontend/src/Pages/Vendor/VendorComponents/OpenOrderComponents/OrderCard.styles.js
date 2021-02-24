@@ -52,8 +52,8 @@ export const OrderTitleContactHidden = styled.div`
 
 export const OrderTitleContactShown = styled.div`
   grid-area: namecontact;
-  background: #FFEAEA;
   opacity: 1;
+  width:100%;
   padding: 0.5vh 0.5vh 0vh 1vh;
   border-radius: 2vh;
   &:hover {
@@ -79,10 +79,10 @@ export const OrderTitleContact = styled.div`
   align-items: center;
   justify-items: start;
   line-height: 3.5vh;
-  background: #FFEAEA;
-  color: #7B7B7B;
+  background: #F1F1F1;
+  color: black;
   font-weight: normal;
-  font-size: 2.25vh;
+  font-size: 2vh;
   opacity: 1;
   border-radius: 2vh;
   padding-top: 0.5vh;

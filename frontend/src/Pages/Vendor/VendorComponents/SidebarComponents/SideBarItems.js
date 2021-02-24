@@ -5,7 +5,6 @@ import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'
 
 import { CSVLink, CSVDownload } from "react-csv"
-// import FIND_ORDERS from '/Users/Ananya/HedwigUnified/frontend/src/Pages/Vendor/VendorComponents/OpenOrderComponents/OrderDashboard.js'
 import { gql, useQuery } from '@apollo/client'
 
 const FIND_ORDERS = gql`
@@ -86,6 +85,21 @@ const MainMenuItemWrapper = styled.div`
   margin: 6px 0px;
   justify-content: space-between;
 `
+
+const DownloadWrapper = styled.div`
+  background-color: #ffc8ba;
+  color: black;
+  width: 100%;
+  padding: 0.5vh 0.5vw;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 6px 0px;
+  justify-content: space-between;
+`;
 
 function MainMenuItem (props) {
   // Make IsExpanded prop true when the menu item is expanded by the user
@@ -185,6 +199,47 @@ function SideBarItems () {
     return <p style={{ fontSize: '2vh' }}>ErrorD...{error.message}</p>
   }
 
+  // Creates the order data to populate a CSV file
+  function createCsvString(orderArray) {
+    const csvString = [
+      [
+        "Cohen Id",
+        "Customer Email",
+        "Customer Name",
+        "Customer Phone",
+        "Pickup Time",
+        "Fulfilled Status",
+        "ID",
+        "Items",
+        "Student Id",
+        "Submission Time",
+        "Total",
+        "Total Discount",
+        "Total Tax"
+      ],
+      ...orderArray.map(order => [
+        order.cohenId,
+        order.customer.email, 
+        order.customer.name, 
+        order.customer.phone, 
+        order.fulfillment.pickupDetails.pickupAt,
+        order.fulfillment.state,
+        order.id,
+        [...order.items.map(order => order.name)],
+        order.studentId,
+        order.submissionTime,
+        order.total.amount,
+        order.totalDiscount.amount,
+        order.totalTax.amount
+      ]
+      )
+    ]
+    .map(e => e.join(",")) 
+    .join("\n");
+
+    return csvString;
+  }
+
   const newOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PROPOSED'
   )
@@ -195,6 +250,10 @@ function SideBarItems () {
 
   const readyOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PREPARED'
+  )
+
+  const completedOrders = allOrders.findOrders.orders.filter(
+    order => order.fulfillment.state === 'COMPLETED'
   )
   /* END NEW */
 
@@ -235,9 +294,10 @@ function SideBarItems () {
       </Collapsible>
 
       {/* NEW FOR TURNING ORDERS INTO CSV in feature/orders-to-array */ }
-      <CSVLink data={newOrders}>Download New Orders</CSVLink>
+      {/* <CSVLink data={newOrders}>Download New Orders</CSVLink>
       <CSVLink data={acceptedOrders}>Download Accepted Orders</CSVLink>
-      <CSVLink data={readyOrders}>Download Ready Orders</CSVLink>
+      <CSVLink data={readyOrders}>Download Ready Orders</CSVLink> */}
+      <DownloadWrapper><CSVLink data={createCsvString(completedOrders)}>Download Completed Orders</CSVLink></DownloadWrapper>
       {/* END NEW */ }
 
       <BottomMenuItem path='/employee/faq' label='Help' />

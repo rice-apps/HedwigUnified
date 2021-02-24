@@ -85,7 +85,7 @@ function Menu () {
   }
   if (catalog_error) {
     console.log('CATALOG ERROR', catalog_error)
-    return <p>ErrorC...</p>
+    return <p>ErrorC... {catalog_error.message}</p>
   }
 
   const { getCatalog: catalog_data } = catalog_info

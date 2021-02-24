@@ -64,8 +64,17 @@ OrderTC.addResolver({
         order => typeof order.fulfillments !== 'undefined'
       )
 
+      const orderIds = filteredOrders.map(order => order.id)
+      const orderTrackers = await OrderTracker.find({
+        orderId: { $in: orderIds }
+      })
+        .lean()
+        .exec()
+
       const returnedOrders = filteredOrders.map(async order => {
-        const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+        const orderTracker = orderTrackers.filter(
+          obj => obj.orderId === order.id
+        )[0]
 
         const parsedOrder = orderParse(order)
         parsedOrder.fulfillment.state = orderTracker.status
@@ -156,6 +165,7 @@ OrderTC.addResolver({
           paymentType,
           status: 'PROPOSED',
           orderId: newOrder.id,
+          vendor: vendor
         })
 
         const order = orderParse(newOrder)

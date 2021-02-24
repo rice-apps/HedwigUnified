@@ -144,7 +144,7 @@ const AlmostThere = () => {
   }
 
   const order = JSON.parse(localStorage.getItem('order'))
-  const time = moment(order.fulfillment.pickupAt).format('h:mm A')
+  const time = moment(order.pickupTime).format('h:mm A')
   const handlePayment = () => {
     window.open(order.url)
   }

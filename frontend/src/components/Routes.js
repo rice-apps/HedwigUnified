@@ -13,6 +13,7 @@ import VendorList from '../Pages/User/Vendors/VendorList'
 // import ProductDetail from "../Pages/User/Products/ProductDetail";
 import AlmostThere from '../Pages/User/AlmostThere'
 import CartDetail from '../Pages/User/Cart'
+import SquarePayment from '../Pages/User/Cart/SquarePayment'
 import ContactForm from '../Pages/User/Contact'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
@@ -31,6 +32,8 @@ import HelpPage from '../Pages/User/Help'
 import TestPage from './TestPage'
 import { SmallLoadingPage } from './LoadingComponents'
 import Launch from './../Pages/User/Launch'
+import Onboard from './../Pages/Onboard/Onboard'
+import ReturnOnboard from './../Pages/Onboard/ReturnOnboard'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -68,9 +71,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   const navigate = useNavigate()
 
   const token =
-    localStorage.getItem('token') != null
-      ? localStorage.getItem('token')
-      : ''
+    localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
 
   console.log(token)
 
@@ -103,7 +104,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
     return <Route {...rest} element={element} />
   }
 
-  const vendor = data.verifyUser.vendor
+  const vendor = data.verifyUser.vendor[0];
   const netid = data.verifyUser.netid
 
   // Not a vendor and already verified, go to buyer side
@@ -148,11 +149,19 @@ const EmployeeRoute = ({ vendor, netid, element, ...rest }) => {
 /**
  * Defines all the routes for our system.
  */
-export const RoutesComponent = ({ loginCallBack }) => {
+export const RoutesComponent = () => {
   const newRoutesArray = [
     {
       path: '/',
       element: <Navigate to='/eat' />
+    },
+    {
+      path: '/onboard',
+      element: <Onboard />
+    },
+    {
+      path: '/receive',
+      element: <ReturnOnboard />
     },
     {
       path: '/test',
@@ -188,39 +197,22 @@ export const RoutesComponent = ({ loginCallBack }) => {
     },
     {
       path: '/vendor_choice',
-      element: (
-        <PrivateRoute element={<VendorSelect />} />
-      )
+      element: <PrivateRoute element={<VendorSelect />} />
     },
     {
       path: '/eat/*',
       children: [
         {
           path: '/',
-          element: (
-            <PrivateRoute
-              element={<VendorList />}
-
-            />
-          )
+          element: <PrivateRoute element={<VendorList />} />
         },
         {
           path: '/cart',
-          element: (
-            <PrivateRoute
-              element={<CartDetail />}
-
-            />
-          )
+          element: <PrivateRoute element={<CartDetail />} />
         },
         {
           path: '/profile',
-          element: (
-            <PrivateRoute
-              element={<Profile />}
-
-            />
-          )
+          element: <PrivateRoute element={<Profile />} />
         },
         { path: '/almostThere', element: <AlmostThere /> },
         {
@@ -228,22 +220,19 @@ export const RoutesComponent = ({ loginCallBack }) => {
           element: <PrivateRoute element={<Confirmation />} />
         },
         {
+          path: '/square',
+          element: <PrivateRoute element={<SquarePayment />} />
+        },
+        {
           path: '/:vendor/*',
           children: [
             {
               path: '/',
-              element: (
-                <PrivateRoute element={<Menu />} />
-              )
+              element: <PrivateRoute element={<Menu />} />
             },
             {
               path: '/:product',
-              element: (
-                <PrivateRoute
-                  element={<Product />}
-
-                />
-              )
+              element: <PrivateRoute element={<Product />} />
             }
           ]
         }
@@ -258,32 +247,16 @@ export const RoutesComponent = ({ loginCallBack }) => {
       children: [
         {
           path: '/',
-          element: (
-            <PrivateRoute
-              isEmployeeRoute
-              element={<OpenOrdersPage />}
-
-            />
-          )
+          element: <PrivateRoute isEmployeeRoute element={<OpenOrdersPage />} />
         },
         {
           path: '/openorders',
-          element: (
-            <PrivateRoute
-              isEmployeeRoute
-              element={<OpenOrdersPage />}
-
-            />
-          )
+          element: <PrivateRoute isEmployeeRoute element={<OpenOrdersPage />} />
         },
         {
           path: '/closedorders',
           element: (
-            <PrivateRoute
-              isEmployeeRoute
-              element={<ClosedOrdersPage />}
-
-            />
+            <PrivateRoute isEmployeeRoute element={<ClosedOrdersPage />} />
           )
         },
         {
@@ -292,7 +265,6 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<ItemsMenuManagementPage />}
-
             />
           )
         },
@@ -302,39 +274,24 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<ModifiersMenuManagementPage />}
-
             />
           )
         },
         {
           path: '/set-basic-info',
           element: (
-            <PrivateRoute
-              isEmployeeRoute
-              element={<SetBasicInfoPage />}
-
-            />
+            <PrivateRoute isEmployeeRoute element={<SetBasicInfoPage />} />
           )
         },
         {
           path: '/set-store-hours',
           element: (
-            <PrivateRoute
-              isEmployeeRoute
-              element={<SetStoreHoursPage />}
-
-            />
+            <PrivateRoute isEmployeeRoute element={<SetStoreHoursPage />} />
           )
         },
         {
           path: '/faq',
-          element: (
-            <PrivateRoute
-              isEmployeeRoute
-              element={<FAQ />}
-
-            />
-          )
+          element: <PrivateRoute isEmployeeRoute element={<FAQ />} />
         }
       ]
     },

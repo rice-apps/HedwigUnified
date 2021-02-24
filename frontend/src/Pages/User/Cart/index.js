@@ -231,6 +231,26 @@ function CartDetail () {
     return navigate('/eat/almostThere')
   }
 
+  const setLocalStorage = (order, orderJson, url, totals) => {
+    localStorage.setItem(
+      'order',
+      JSON.stringify(
+        Object.assign(order, {
+          orderId: orderJson.id,
+          pickupInstruction: data.getVendor.pickupInstruction,
+          fulfillment: {
+            uid: orderJson.fulfillment.uid,
+            state: orderJson.fulfillment.state,
+            pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
+            placedAt: orderJson.fulfillment.pickupDetails.placedAt
+          },
+          url: url,
+          totals: totals
+        })
+      )
+    )
+  }
+
   const handleConfirmClick = async () => {
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
@@ -258,42 +278,35 @@ function CartDetail () {
       }
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
-      const createPaymentResponse = await createPayment({
-        variables: {
-          vendor: order.vendor.name,
-          sourceId: 'cnon:card-nonce-ok',
-          orderId: orderJson.id,
-          location: order.vendor.locationIds[0],
-          subtotal: totals.subtotal * 100,
-          currency: 'USD'
-        }
-      })
-      localStorage.setItem(
-        'order',
-        JSON.stringify(
-          Object.assign(order, {
+      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod !== 'CREDIT') {
+        const createPaymentResponse = await createPayment({
+          variables: {
+            vendor: order.vendor.name,
+            source: 'SHOPIFY',
+            sourceId: 'cnon:card-nonce-ok',
             orderId: orderJson.id,
-            pickupInstruction: data.getVendor.pickupInstruction,
-            fulfillment: {
-              uid: orderJson.fulfillment.uid,
-              state: orderJson.fulfillment.state,
-              pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
-              placedAt: orderJson.fulfillment.pickupDetails.placedAt
-            },
-            url: createPaymentResponse.data.createPayment.url
-          })
-        )
-      )
+            location: order.vendor.locationIds[0],
+            subtotal: totals.subtotal * 100,
+            currency: 'USD'
+          }
+        })
+        setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
+      }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
-        return handleClickCredit()
+        if (order.vendor.name === 'Cohen House') {
+          return handleClickCredit()
+        } else {
+          setLocalStorage(order, orderJson, '', totals)
+          return navigate('/eat/square')
+        }
       }
       if (paymentMethod === 'COHEN') {
-        // navigate to order confirmation page
+        setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
       if (!paymentMethod || paymentMethod === 'TETRA') {
-        // navigate to order confirmation page
+        setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
     }
@@ -419,7 +432,6 @@ function CartDetail () {
     )
     console.log('NEW PICKUP TIME', order)
   }
-  console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
     <div>
       <CartHeader

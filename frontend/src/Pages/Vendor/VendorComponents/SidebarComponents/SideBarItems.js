@@ -4,6 +4,64 @@ import './SidebarCollapsible.css'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'
 
+import { CSVLink, CSVDownload } from "react-csv"
+// import FIND_ORDERS from '/Users/Ananya/HedwigUnified/frontend/src/Pages/Vendor/VendorComponents/OpenOrderComponents/OrderDashboard.js'
+import { gql, useQuery } from '@apollo/client'
+
+const FIND_ORDERS = gql`
+  query FIND_ORDERS($location: [String!]!, $vendor: String!) {
+    findOrders(locations: $location, vendor: $vendor) {
+      orders {
+        id
+        studentId
+        cohenId
+        submissionTime
+        customer {
+          name
+          email
+          phone
+        }
+        items {
+          name
+          quantity
+          variationName
+          modifiers {
+            name
+            basePriceMoney {
+              amount
+            }
+            totalPriceMoney {
+              amount
+            }
+          }
+          totalMoney {
+            amount
+          }
+          totalTax {
+            amount
+          }
+        }
+        total {
+          amount
+        }
+        totalTax {
+          amount
+        }
+        totalDiscount {
+          amount
+        }
+        fulfillment {
+          uid
+          state
+          pickupDetails {
+            pickupAt
+          }
+        }
+      }
+    }
+  }
+`
+
 const SideBarItemsWrapper = styled.div`
   display: flex;
   height: 100%;
@@ -108,6 +166,38 @@ function BottomMenuItem (props) {
 }
 
 function SideBarItems () {
+
+  /* NEW FOR TURNING ORDERS INTO CSV in feature/orders-to-array */
+  const vendorId = ['LBBZPB7F5A100']
+  const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+
+  const { data: allOrders, loading, error, subscribeToMore } = useQuery(
+    FIND_ORDERS,
+    {
+      variables: { location: vendorId, vendor: currentUser.vendor }
+    }
+  )
+
+  if (loading) {
+    return "Loading..."
+  }
+  if (error) {
+    return <p style={{ fontSize: '2vh' }}>ErrorD...{error.message}</p>
+  }
+
+  const newOrders = allOrders.findOrders.orders.filter(
+    order => order.fulfillment.state === 'PROPOSED'
+  )
+
+  const acceptedOrders = allOrders.findOrders.orders.filter(
+    order => order.fulfillment.state === 'RESERVED'
+  )
+
+  const readyOrders = allOrders.findOrders.orders.filter(
+    order => order.fulfillment.state === 'PREPARED'
+  )
+  /* END NEW */
+
   return (
     <SideBarItemsWrapper>
       <Collapsible
@@ -143,6 +233,13 @@ function SideBarItems () {
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
         <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
+
+      {/* NEW FOR TURNING ORDERS INTO CSV in feature/orders-to-array */ }
+      <CSVLink data={newOrders}>Download New Orders</CSVLink>
+      <CSVLink data={acceptedOrders}>Download Accepted Orders</CSVLink>
+      <CSVLink data={readyOrders}>Download Ready Orders</CSVLink>
+      {/* END NEW */ }
+
       <BottomMenuItem path='/employee/faq' label='Help' />
     </SideBarItemsWrapper>
   )

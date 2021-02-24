@@ -14,6 +14,8 @@ import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 import { LoadingPage } from './../../../../components/LoadingComponents'
 
+import { CSVLink, CSVDownload } from "react-csv";
+
 const FIND_ORDERS = gql`
   query FIND_ORDERS($location: [String!]!, $vendor: String!) {
     findOrders(locations: $location, vendor: $vendor) {
@@ -201,6 +203,8 @@ function OrderDashboard () {
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
 
+  // allOrders.map((order) => console.log("order: ", order));
+
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
       document: ORDER_CREATED,
@@ -271,10 +275,45 @@ function OrderDashboard () {
     order => order.fulfillment.state === 'PREPARED'
   )
 
+  function createCsvString(orderArray) {
+    const csvString = [
+      [
+        "Cohen Id",
+        "Customer",
+        "Fulfillment",
+        "ID",
+        "Items",
+        "Student Id",
+        "Submission Time",
+        "Total",
+        "Total Discount",
+        "Total Tax"
+      ],
+      ...orderArray.map(order => [
+        order.cohenId,
+        order.customer, 
+        order.fulfillment,
+        order.id,
+        order.items,
+        order.studentId,
+        order.submissionTime,
+        order.total,
+        order.totalDiscount,
+        order.totalTax
+      ]
+      )
+    ]
+    .map(e => e.join(",")) 
+    .join("\n");
+
+    return csvString;
+  }
+
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>
         <MakeDashboardTitle name='New' quantity={newOrders.length} />
+        {/* <CSVLink data={csvData}>Download me</CSVLink> */}
       </NewOrderTitleWrapper>
 
       <NewOrderSpaceWrapper>
@@ -325,7 +364,7 @@ function OrderDashboard () {
             />
           ))}
       </AcceptedOrderSpaceWrapper>
-
+      
       <ReadyOrderTitleWrapper>
         <MakeDashboardTitle name='Ready' quantity={readyOrders.length} />
       </ReadyOrderTitleWrapper>
@@ -346,7 +385,7 @@ function OrderDashboard () {
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
               handleClick={() => handleOrderClick(order, 'COMPLETED')}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}
-              buttonStatus='READY'
+              buttonStatus='READY' 
             />
           ))}
       </ReadyOrderSpaceWrapper>

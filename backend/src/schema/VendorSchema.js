@@ -1,3 +1,6 @@
+import { ApolloError } from 'apollo-server-express'
+import { ApiError, Client, Environment } from 'square'
+
 import { Vendor, VendorTC } from '../models/index.js'
 import {
   checkLoggedIn,
@@ -6,7 +9,6 @@ import {
 import vault from '../utils/vault.js'
 
 import { SQUARE_APPLICATION_ID, SQUARE_APPLICATION_SECRET } from '../config.js'
-import { ApolloError } from 'apollo-server-express'
 
 VendorTC.addResolver({
   name: 'setupSquareTokens',

@@ -3,6 +3,8 @@ import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
+import { IoIosArrowUp, IoIosArrowDown, IoMdMail } from 'react-icons/io'
+import { ImPhone } from 'react-icons/im'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
 import { GrRestaurant } from 'react-icons/gr'
@@ -12,6 +14,12 @@ import { AiFillCheckCircle } from 'react-icons/ai'
 import {
   OrderCardWrapper,
   OrderTitleSpaceWrapper,
+  OrderTitleContactHidden,
+  OrderTitleContactShown,
+  OrderTitleContact,
+  OrderTitleIconOneDiv,
+  OrderTitleIconTwoDiv,
+  OrderTitleContactIcon,
   OrderTimeSpaceWrapper,
   ExactTimeSpaceWrapper,
   TimeLeftSpaceWrapper,
@@ -45,12 +53,55 @@ const formatter = new Intl.NumberFormat('en-US', {
 })
 
 function MakeOrderTitle (props) {
+  const [showContact, setShowContact] = useState(false)
+
   return (
-    <OrderTitleSpaceWrapper>
-      <GrRestaurant />
-      <div>{props.customerName}</div>
-      <BsFillClockFill />
-    </OrderTitleSpaceWrapper>
+    <>
+      <OrderTitleSpaceWrapper>
+        <OrderTitleIconOneDiv>
+          <GrRestaurant />
+        </OrderTitleIconOneDiv>
+
+          {showContact 
+            ?
+              <OrderTitleContactShown
+                onClick={() => {
+                  setShowContact(!showContact)
+                }}
+              >
+                <div>
+                  {props.customerName} {' '}
+                  <IoIosArrowUp />
+                </div>
+
+                <OrderTitleContact>
+                  <OrderTitleContactIcon> <ImPhone /> </OrderTitleContactIcon>
+                  <>
+                    ({props.customerPhone.substring(0, 3)}) {props.customerPhone.substring(3, 6)}
+                    -{props.customerPhone.substring(6)}
+                  </>
+                  <OrderTitleContactIcon> <IoMdMail /> </OrderTitleContactIcon>
+                  {props.customerEmail}
+                </OrderTitleContact>
+
+              </OrderTitleContactShown>
+            :  
+              <OrderTitleContactHidden
+                onClick={() => {
+                  setShowContact(!showContact)
+                }}
+              >
+                {props.customerName} {' '}
+                <IoIosArrowDown />
+              </OrderTitleContactHidden>
+          }
+
+        <OrderTitleIconTwoDiv>
+          <BsFillClockFill />
+        </OrderTitleIconTwoDiv>
+        
+      </OrderTitleSpaceWrapper>
+    </>
   )
 }
 
@@ -405,11 +456,11 @@ function MakePaymentSpace (props) {
                 >
                   Accept
                 </AcceptButton>
-              ) : (
-                <AcceptButton onClick={closeAcceptModal}>
-                  Return To Home
-                </AcceptButton>
-              )}
+                  ) : (
+                    <AcceptButton onClick={closeAcceptModal}>
+                      Return To Home
+                    </AcceptButton>
+                  )}
             </ModalButtonsWrapper>
           </ModalWrapper>
         </Background>
@@ -482,13 +533,11 @@ function isPastPickup (pickupTime, currentTime) {
 
 function OrderCard (props) {
   const [currentTime, setCurrentTime] = useState(moment())
-  const [livePickupTime, updateLivePickupTime] = useState(props.pickupTime)
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(moment())
-      updateLivePickupTime(props.pickupTime)
-    }, 5000)
+    }, 1000)
     return () => {
       clearInterval(timer)
     }
@@ -527,14 +576,13 @@ function OrderCard (props) {
   }
 
   // pastPickup is true if current time has past an order's pickuptime + buffer
-  const pastPickup =
-    isPastPickup(moment(livePickupTime), currentTime) && newOrder
+  const pastPickup = isPastPickup(pickupTime, currentTime) && newOrder
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
     ? moment(submissionTime).format('h:mm A')
     : 'None'
-  const timeLeft = moment(livePickupTime).fromNow()
+  const timeLeft = moment(pickupTime).fromNow()
 
   return (
     <IconContext.Provider
@@ -543,7 +591,11 @@ function OrderCard (props) {
       <OrderCardWrapper pastPickup={pastPickup}>
         {/* Section of Order card with customer name, order number */}
 
-        <MakeOrderTitle customerName={customerName} />
+        <MakeOrderTitle
+         customerName={customerName}
+         customerPhone={phone}
+         customerEmail={email}
+        />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
@@ -553,8 +605,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
           }
           pickupCountdown={timeLeft}
         />
@@ -569,6 +621,7 @@ function OrderCard (props) {
 
               return (
                 <MakeOrderDetails
+                  key={id + item.name}
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}
@@ -596,8 +649,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
           customerName={customerName}
@@ -607,8 +660,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker == null
               ? 'None'
               : orderTrackerData.getOrderTracker.shopifyOrderId
-              ? orderTrackerData.getOrderTracker.shopifyOrderId
-              : null
+                ? orderTrackerData.getOrderTracker.shopifyOrderId
+                : null
           }
         />
       </OrderCardWrapper>

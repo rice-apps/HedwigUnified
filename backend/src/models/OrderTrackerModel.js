@@ -28,6 +28,10 @@ const OrderTrackerSchema = new mongoose.Schema({
     type: String,
     required: false,
     enum: ['SQUARE', 'SHOPIFY', 'EXCEL']
+  },
+  vendor: {
+    type: String,
+    required: false
   }
 })
 

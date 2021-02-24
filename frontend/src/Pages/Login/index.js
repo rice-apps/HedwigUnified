@@ -3,12 +3,12 @@ import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
 
 // import './Transitions.css';
 import { useNavigate } from 'react-router-dom'
-import moment from 'moment'
 
 // This import loads the firebase namespace along with all its type information.
 import firebase from 'firebase/app'
+import 'firebase/auth'
 
-function Login ({ updateLoginStatus }) {
+function Login () {
   // const provider = new firebase.auth.SAMLAuthProvider("saml.jumpcloud-demo");
   const navigate = useNavigate()
   const provider = new firebase.auth.SAMLAuthProvider('saml.rice-shibboleth')
@@ -22,10 +22,7 @@ function Login ({ updateLoginStatus }) {
     .getRedirectResult()
     .then(result => result.user.getIdTokenResult(true))
     .then(idTokenResult => {
-      const expTime = idTokenResult.expirationTime
-      localStorage.setItem('idToken', idTokenResult.token)
-      localStorage.setItem('expireTime', moment(expTime))
-      updateLoginStatus(true, /* sets expiration alert timer */ 40 * 60 * 1000)
+      localStorage.setItem('token', idTokenResult.token)
       navigate('/auth')
     })
     .catch(error => console.log(error))

@@ -25,12 +25,12 @@ UserTC.addResolver({
             studentId: authRes.idNumber
           })
         : User.findOne({ netid: authRes.netid }).then(doc => {
-            if (doc.token !== authRes.token) {
-              doc.token = authRes.token
-            }
+          if (doc.token !== authRes.token) {
+            doc.token = authRes.token
+          }
 
-            return doc.save()
-          })
+          return doc.save()
+        })
     }
 
     return new AuthenticationError('User login failed!')

@@ -116,7 +116,7 @@ function MakeCatalogItems (props) {
     loading: availability_loading
   } = useQuery(GET_ITEM_AVAILABILITY, {
     variables: {
-      vendor: currentUser.vendor,
+      vendor: currentUser.vendor[0],
       productId: props.itemId
     },
     fetchPolicy: 'network-only'
@@ -136,19 +136,22 @@ function MakeCatalogItems (props) {
       <ItemName>{props.itemName}</ItemName>
       <ItemAvailability>
         <ToggleSwitch>
-          <ToggleInput type="checkbox" checked={availability ? "checked" : ""} onChange={
+          <ToggleInput type="checkbox" checked={availability ? "checked" : ""} 
+          onChange={
             e => {
               setAvailability({
                 variables: {
-                  vendor: currentUser.vendor,
+                  vendor: currentUser.vendor[0],
                   productId: props.itemId,
                   isItemAvailable: e.target.checked
                 }
               })
               setTimeout(500, window.location.reload())
-            }}/>
+            }}
+            />
           <ToggleSlider className="slider"></ToggleSlider>
         </ToggleSwitch>
+    
       </ItemAvailability>
       <ItemPrice>{formatter.format(props.itemPrice / 100)}</ItemPrice>
     </DisplayWrapper>

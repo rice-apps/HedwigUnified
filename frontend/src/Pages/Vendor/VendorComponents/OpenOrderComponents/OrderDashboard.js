@@ -190,13 +190,19 @@ const ORDER_UPDATED = gql`
 `
 
 function OrderDashboard () {
-  const vendorId = ['LBBZPB7F5A100']
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+  const vendorId =
+    currentUser.vendor[0] == 'Cohen House'
+      ? ['LBBZPB7F5A100']
+      : currentUser.vendor[0] == 'Test Account CMT'
+      ? ['L2N8DA44TZK8E']
+      : null
+ 
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId, vendor: currentUser.vendor }
+      variables: { location: vendorId, vendor: currentUser.vendor[0] }
     }
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
@@ -226,28 +232,7 @@ function OrderDashboard () {
     })
 
     const unsubscribeToUpdatedOrders = subscribeToMore({
-      document: ORDER_UPDATED,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) {
-          return prev
-        }
-
-        const updatedOrderItem = {
-          __typename: 'Order',
-          ...subscriptionData.data.orderUpdated
-        }
-
-        const updatedOrders = prev.findOrders.orders.map(order =>
-          order.id === updatedOrderItem.id ? updatedOrderItem : order
-        )
-
-        return Object.assign({}, prev, {
-          findOrders: {
-            __typename: 'FindManyOrderPayload',
-            orders: updatedOrders
-          }
-        })
-      }
+      document: ORDER_UPDATED
     })
 
     return () => {
@@ -266,7 +251,7 @@ function OrderDashboard () {
   const handleOrderClick = (order, orderState) => {
     updateOrder({
       variables: {
-        vendor: currentUser.vendor,
+        vendor: currentUser.vendor[0],
         orderId: order.id,
         uid: order.fulfillment.uid,
         state: orderState
@@ -292,6 +277,8 @@ function OrderDashboard () {
     order => order.fulfillment.state === 'PREPARED'
   )
 
+  console.log('NEWORDERS', newOrders)
+
   return (
     <OrderDashboardWrapper>
       <NewOrderTitleWrapper>
@@ -302,6 +289,7 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}
@@ -329,6 +317,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}
@@ -354,6 +343,7 @@ function OrderDashboard () {
         {allOrders &&
           readyOrders.map(order => (
             <OrderCard
+              key={order.id}
               id={order.id}
               studentId={order.studentId}
               cohenId={order.cohenId}

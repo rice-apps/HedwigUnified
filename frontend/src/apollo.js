@@ -17,7 +17,7 @@ if (!localStorage.getItem('order')) {
 // Copied from: https://www.apollographql.com/docs/react/v3.0-beta/networking/authentication/
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('idToken')
+  const token = localStorage.getItem('token')
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -37,9 +37,7 @@ const wsLink = new WebSocketLink({
   uri: GRAPHQL_WS_URL,
   options: {
     reconnect: true,
-    connectionParams: {
-      authToken: localStorage.getItem('idToken')
-    }
+    connectionParams: () => ({ authToken: localStorage.getItem('token') })
   }
 })
 
@@ -65,6 +63,15 @@ const client = new ApolloClient({
           cartItems: {
             read () {
               return localStorage.getItem('cartItems')
+            }
+          }
+        }
+      },
+      Subscription: {
+        fields: {
+          orderUpdated: {
+            merge (existing, incoming) {
+              return incoming
             }
           }
         }

@@ -1,17 +1,26 @@
 import { ApolloError } from 'apollo-server-express'
 import { ApiError, Client, Environment } from 'square'
 import { Vendor } from '../models/index.js'
+import vault from './vault.js'
 
+/**
+ * @type {Map<string, import('square').Client>}
+ */
 const squareClients = await Vendor.find()
   .exec()
   .then(res => {
     const squareClientsMap = new Map()
-    res.forEach(vendor => {
+    res.forEach(async vendor => {
       squareClientsMap.set(
         vendor.name,
         new Client({
-          environment: Environment.Sandbox,
-          accessToken: vendor.squareInfo.accessToken
+          environment:
+            process.env.NODE_ENV === 'production'
+              ? Environment.Production
+              : Environment.Sandbox,
+          accessToken: await vault
+            .read(`cubbyhole/${vendor.slug.toLowerCase()}`)
+            .then(res => res.data['square-access'])
         })
       )
     })
@@ -22,7 +31,7 @@ const squareClients = await Vendor.find()
  * Fetches order by ID and parses it into
  * our GraphQL data format
  *
- * @param {Client} squareClient
+ * @param {import('square').Client} squareClient
  * @param {string} orderId
  */
 async function orderFetchAndParse (squareClient, orderId) {
@@ -52,7 +61,7 @@ async function orderFetchAndParse (squareClient, orderId) {
  * Parses a Square Order into our GraphQL data
  * format
  *
- * @param {Order} order
+ * @param {import('square').Order} order
  */
 function orderParse (order) {
   return {

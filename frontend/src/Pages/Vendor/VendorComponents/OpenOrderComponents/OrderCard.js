@@ -333,6 +333,9 @@ function MakePaymentSpace (props) {
 
   let isVerified = false
   const isIsolation = props.isIsolation
+  const paymentId = props.orderTracker
+  console.log(paymentId)
+
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
     isVerified = verifyPaymentResult.verifyPayment
@@ -656,6 +659,7 @@ function OrderCard (props) {
           items={items}
           email={email}
           phone={phone}
+          orderTracker={orderTrackerData.getOrderTracker}
           buttonStatus={buttonStatus}
           orderCost={orderCost}
           studentId={props.studentId}

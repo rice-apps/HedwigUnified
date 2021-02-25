@@ -6,7 +6,8 @@ import {
   FilterOrderInputTC,
   SortOrderInputTC,
   FindManyOrderPayloadTC,
-  UpdateOrderTC
+  UpdateOrderTC,
+  Vendor
 } from '../models/index.js'
 import { pubsub } from '../utils/pubsub.js'
 import {
@@ -137,6 +138,8 @@ OrderTC.addResolver({
 
       const squareClient = squareClients.get(vendor)
 
+      const vendorDoc = await Vendor.findOne({ name: vendor }).lean().exec()
+
       try {
         const {
           result: { order: newOrder }
@@ -175,6 +178,7 @@ OrderTC.addResolver({
           submissionTime,
           locationId,
           paymentType,
+          dataSource: vendorDoc.dataSource,
           status: 'PROPOSED',
           orderId: newOrder.id,
           vendor: vendor

@@ -98,7 +98,6 @@ function ProfilePane ({ updateLogin }) {
   }
 
   function handleLogoutClick () {
-    updateLogin(false)
     window.open(logoutURL, '_self')
   }
 

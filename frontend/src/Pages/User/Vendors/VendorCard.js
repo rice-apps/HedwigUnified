@@ -79,9 +79,9 @@ function VendorCard ({ vendor }) {
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
       const endTime = convertTimeToNum(dayObj.end[i])
-      if (currentTime >= startTime && currentTime <= endTime - 0.25) {
+      if (currentTime >= startTime && currentTime <= endTime - (cutoffTime/60)) {
         return { status: 'openning' }
-      } else if (currentTime > endTime - 0.25 && currentTime <= endTime) {
+      } else if (currentTime > endTime - (cutoffTime/60) && currentTime <= endTime) {
         return { status: 'kitchenClosed', nextClose: dayObj.end[i] }
       } else if (currentTime < startTime) {
         return { status: 'closed', nextOpen: dayObj.start[i], restOfDay: true }

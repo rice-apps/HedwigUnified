@@ -117,7 +117,6 @@ export const TextArea = styled.textarea`
   height: 8vh;
   display: block;
   margin: auto;
-  radio: 2vh;
   border-color: #dddddd;
   resize: none;
   :focus{
@@ -137,10 +136,10 @@ export const Input = styled.input`
       display: inline-block;
       margin-right: 5vw;
       margin-bottom: 1vw;
-      border-top: 0;
-      border-left: 0;
       border-right: 0;
-      border-weight: 0.2px;
+      border-left: 0;
+      border-top:0;
+      border-width:0.1px;
     `}
 `
 

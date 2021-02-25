@@ -379,7 +379,7 @@ function Menu () {
                   >
                     {/* Displaying the item: image, name, and price */}
                     <img
-                      src={product.image}
+                      src={product.image ? product.image : 'https://scontent.fhou1-1.fna.fbcdn.net/v/t1.0-9/56770720_2496620450358466_4855511062713204736_n.jpg?_nc_cat=100&ccb=3&_nc_sid=09cbfe&_nc_ohc=ljQCn12JvCAAX-x41HR&_nc_ht=scontent.fhou1-1.fna&oh=416fce9b15a0cc371a6560ca6316d9e4&oe=605B92F8'}
                       class='itemimage'
                       alt={product.name}
                     />

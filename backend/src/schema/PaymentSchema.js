@@ -107,6 +107,14 @@ PaymentTC.addResolver({
               autocomplete: false
               // verificationToken: token
             })
+
+            await OrderTracker.findOneAndUpdate(
+              {
+                orderId: payment.orderId
+              },
+              { paymentId: payment.id }
+            )
+
             response = {
               id: payment.id,
               order: payment.orderId,

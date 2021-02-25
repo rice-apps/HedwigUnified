@@ -127,7 +127,8 @@ function Product () {
           vendor: {
             name: vendor.name,
             merchantId: vendor.squareInfo.merchantId,
-            locationIds: vendor.squareInfo.locationIds
+            locationIds: vendor.squareInfo.locationIds,
+            dataSource: vendor.dataSource
           }
         })
       )

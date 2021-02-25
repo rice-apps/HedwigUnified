@@ -64,8 +64,17 @@ OrderTC.addResolver({
         order => typeof order.fulfillments !== 'undefined'
       )
 
+      const orderIds = filteredOrders.map(order => order.id)
+      const orderTrackers = await OrderTracker.find({
+        orderId: { $in: orderIds }
+      })
+        .lean()
+        .exec()
+
       const returnedOrders = filteredOrders.map(async order => {
-        const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+        const orderTracker = orderTrackers.filter(
+          obj => obj.orderId === order.id
+        )[0]
 
         const parsedOrder = orderParse(order)
         parsedOrder.fulfillment.state = orderTracker.status
@@ -108,7 +117,9 @@ OrderTC.addResolver({
           submissionTime,
           cohenId,
           studentId,
-          paymentType
+          paymentType,
+          note,
+          roomNumber
         }
       } = args
 
@@ -146,12 +157,15 @@ OrderTC.addResolver({
         })
 
         await OrderTracker.create({
+          note,
+          roomNumber,
+          pickupTime,
+          submissionTime,
+          locationId,
+          paymentType,
           status: 'PROPOSED',
-          pickupTime: pickupTime,
-          submissionTime: submissionTime,
-          locationId: locationId,
           orderId: newOrder.id,
-          paymentType: paymentType
+          vendor: vendor
         })
 
         const order = orderParse(newOrder)

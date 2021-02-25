@@ -190,13 +190,19 @@ const ORDER_UPDATED = gql`
 `
 
 function OrderDashboard () {
-  const vendorId = ['LBBZPB7F5A100']
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+  const vendorId =
+    currentUser.vendor[0] === 'Cohen House'
+      ? ['LBBZPB7F5A100']
+      : currentUser.vendor[0] === 'Test Account CMT'
+      ? ['L2N8DA44TZK8E']
+      : currentUser.vendor[0] === 'East West Tea'
+ 
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId, vendor: currentUser.vendor }
+      variables: { location: vendorId, vendor: currentUser.vendor[0] }
     }
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
@@ -245,7 +251,7 @@ function OrderDashboard () {
   const handleOrderClick = (order, orderState) => {
     updateOrder({
       variables: {
-        vendor: currentUser.vendor,
+        vendor: currentUser.vendor[0],
         orderId: order.id,
         uid: order.fulfillment.uid,
         state: orderState
@@ -270,6 +276,8 @@ function OrderDashboard () {
   const readyOrders = allOrders.findOrders.orders.filter(
     order => order.fulfillment.state === 'PREPARED'
   )
+
+  console.log('NEWORDERS', newOrders)
 
   return (
     <OrderDashboardWrapper>

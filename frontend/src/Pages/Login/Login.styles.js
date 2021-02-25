@@ -81,6 +81,10 @@ const CheckButton = styled.button`
   width: 10rem;
   margin: 0.5rem;
   outline: none;
+
+  :hover{
+   background-color:  #ffe6cc; 
+  }
 `
 
 const ExitButton = styled.button`

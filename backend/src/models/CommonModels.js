@@ -16,7 +16,8 @@ const PaymentSourceEnumTC = sc.createEnumTC({
   values: {
     COHEN: { value: 'COHEN' },
     TETRA: { value: 'TETRA' },
-    CREDIT: { value: 'CREDIT' }
+    CREDIT: { value: 'CREDIT' },
+    None: { value: 'None' }
   }
 })
 

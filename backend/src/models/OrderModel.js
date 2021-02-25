@@ -143,7 +143,9 @@ const CreateOrderInputTC = sc.createInputTC({
     submissionTime: 'String!',
     cohenId: 'String',
     studentId: 'String',
-    paymentType: PaymentSourceEnumTC.getType()
+    paymentType: PaymentSourceEnumTC.getType(),
+    note: 'String',
+    roomNumber: 'String'
   }
 })
 

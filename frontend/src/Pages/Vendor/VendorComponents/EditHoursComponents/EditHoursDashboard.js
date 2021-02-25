@@ -65,7 +65,7 @@ function CreateStatusDropdown (props) {
 
     await toggleIsClosed({
       variables: {
-        name: currentUser.vendor,
+        name: currentUser.vendor[0],
         hours: updatedHours
       }
     })
@@ -149,7 +149,7 @@ function HoursItem (props) {
 
     await updateDeleteTime({
       variables: {
-        name: currentUser.vendor,
+        name: currentUser.vendor[0],
         hours: updatedHours
       }
     })
@@ -274,7 +274,7 @@ function MakeAddHoursButton (props) {
 
     await toggleIsClosed({
       variables: {
-        name: currentUser.vendor,
+        name: currentUser.vendor[0],
         hours: updatedHours
       }
     })
@@ -356,7 +356,7 @@ function EditHoursDashboard () {
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
-    variables: { vendor: currentUser.vendor }
+    variables: { vendor: currentUser.vendor[0] }
   })
 
   if (vendor_loading) {
@@ -416,7 +416,7 @@ function EditHoursDashboard () {
 
     await toggleIsClosed({
       variables: {
-        name: currentUser.vendor,
+        name: currentUser.vendor[0],
         hours: updatedHours
       }
     })

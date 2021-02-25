@@ -19,6 +19,10 @@ ItemTC.addResolver({
     const squareClient = squareClients.get(vendor)
     const catalogApi = squareClient.catalogApi
 
+    const vendorData = await Vendor.findOne({
+      name: vendor
+    })
+
     try {
       // Make Square request for catalog
       const {
@@ -47,9 +51,6 @@ ItemTC.addResolver({
             variations,
             modifierListInfo,
             categoryId
-          },
-          customAttributeValues: {
-            is_available: { booleanValue: isAvailable }
           }
         } = item
 
@@ -143,7 +144,7 @@ ItemTC.addResolver({
           name: baseItemName,
           description: baseItemDescription,
           merchant: '',
-          isAvailable: isAvailable
+          isAvailable: vendorData.availableItems.includes(itemId)
         }
       })
     } catch (error) {
@@ -250,6 +251,10 @@ ItemTC.addResolver({
       const squareClient = squareClients.get(vendor)
       const catalogApi = squareClient.catalogApi
 
+      const vendorData = await Vendor.findOne({
+        name: vendor
+      })
+
       try {
         const {
           result: { object }
@@ -262,9 +267,6 @@ ItemTC.addResolver({
             description: baseItemDescription,
             variations,
             modifierListInfo
-          },
-          customAttributeValues: {
-            is_available: { booleanValue: isAvailable }
           }
         } = object
 
@@ -374,7 +376,7 @@ ItemTC.addResolver({
           name: baseItemName,
           description: baseItemDescription,
           merchant: '',
-          isAvailable: isAvailable
+          isAvailable: vendorData.availableItems.includes(dataSourceId)
         }
       } catch (error) {
         if (error instanceof ApiError) {
@@ -402,23 +404,22 @@ ItemTC.addResolver({
       const vendorData = await Vendor.findOne({
         name: vendor
       })
-      try{
-        if (type === "item") { // querying item
+      try {
+        if (type === 'item') { // querying item
           if (vendorData.availableItems.includes(productId)) {
-            return true;
+            return true
           }
         } else { // querying modifiers
           if (vendorData.availableModifiers.includes(productId)) {
-            return true;
+            return true
           }
         }
-        return false;
+        return false
       } catch (error) {
         return new ApolloError(
           `Something went wrong getting availability for item ${productId}`
         )
       }
-      
       // const squareClient = squareClients.get(vendor)
       // const catalogApi = squareClient.catalogApi
 
@@ -480,23 +481,22 @@ ItemTC.addResolver({
     resolve: async ({ args }) => {
       const { vendor, productIds, type } = args
 
-        const vendorData = await Vendor.findOne ({
-          name: vendor
-        });
+      const vendorData = await Vendor.findOne({
+        name: vendor
+      })
 
-        for ( var i = 0; i < productIds.length; i ++ ) {
-          if (type === "item") {
-            if ( !vendorData.availableItems.includes(productIds[i]) ) {
-              return false;
-            }
+      for (let i = 0; i < productIds.length; i++) {
+        if (type === 'item') {
+          if (!vendorData.availableItems.includes(productIds[i])) {
+            return false
           }
-          else {
-            if ( !vendorData.availableModifiers.includes(productIds[i]) ) {
-              return false;
-            }
+        } else {
+          if (!vendorData.availableModifiers.includes(productIds[i])) {
+            return false
           }
         }
-        return true;
+      }
+      return true
     }
   })
   .addResolver({
@@ -546,24 +546,26 @@ ItemTC.addResolver({
     },
     type: VendorTC,
     resolve: async ({ args }) => {
-      const { vendor, productId, isItemAvailable, dataSource, type } = args
+      const { vendor, productId, isItemAvailable, type } = args
       const vendorData = await Vendor.findOne({
-        name: vendor,
+        name: vendor
       })
-      if (type === "item") {
-        var availability = vendorData.availableItems;
+      let availability
+      if (type === 'item') {
+        availability = vendorData.availableItems
+      } else {
+        availability = vendorData.availableModifiers
       }
-      else {
-        var availability = vendorData.availableModifiers;
-      }
-      var idx = availability.indexOf(productId); // initialize the index to find the item
+      const idx = availability.indexOf(productId) // initialize the index to find the item
       if (isItemAvailable && (idx === -1)) {
-        availability.push(productId);
-        await vendorData.save()}
+        availability.push(productId)
+        await vendorData.save()
+      }
       if (!isItemAvailable && (idx !== -1)) {
-        availability.splice(idx, 1); 
-        await vendorData.save()}
-      return vendorData;
+        availability.splice(idx, 1)
+        await vendorData.save()
+      }
+      return vendorData
     }
   })
   .addResolver({

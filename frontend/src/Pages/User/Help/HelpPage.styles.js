@@ -10,7 +10,7 @@ const HelpHeader = styled.section`
   background-color: white;
   font-family: 'avenir';
   font-weight: bold;
-  font-size: 3.5vh;
+  font-size: 3.1vh;
 `
 
 const BackArrowSection = styled.section`

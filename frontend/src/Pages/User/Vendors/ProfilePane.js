@@ -98,7 +98,6 @@ function ProfilePane ({ updateLogin }) {
   }
 
   function handleLogoutClick () {
-    updateLogin(false)
     window.open(logoutURL, '_self')
   }
 
@@ -116,7 +115,8 @@ function ProfilePane ({ updateLogin }) {
           verticalAlign: 'middle',
           fontSize: '2.8vh',
           top: '2.8vh',
-          zIndex: '2'
+          zIndex: '2',
+          cursor: 'pointer'
         }}
       />
       <div className={showProfile ? 'profilepane-active' : 'profilepane'}>
@@ -126,6 +126,10 @@ function ProfilePane ({ updateLogin }) {
               onClick={() => {
                 setShowProfile(!showProfile)
                 console.log(showProfile)
+              }}
+
+              style = {{
+                cursor: 'pointer'
               }}
             />
           </div>

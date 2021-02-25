@@ -373,7 +373,8 @@ function BasicInfoDashboard () {
         <Div warning>
           *These instructions are sent to the buyer when an order is submitted
         </Div>
-        <TextArea placeholder={placeholderInfo.pickupInstruction} />
+        <TextArea placeholder={placeholderInfo.pickupInstruction}
+        onChange={e => updateInfo({ pickupInstruction: e.target.value })} />
       </Div>
 
       <Div buttonwrapper disabled={isDisabled}>

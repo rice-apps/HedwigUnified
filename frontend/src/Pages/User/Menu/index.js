@@ -97,6 +97,7 @@ function Menu () {
   const compileCategories = data => {
     let categories = []
     data.forEach(product => {
+      product.isAvailable &&
       categories.push(product.category)
     })
     categories = new Set(categories)

@@ -12,7 +12,7 @@ function ModifiersMenuManagementPage () {
     loading: modifierLists_loading
   } = useQuery(GET_MODIFIER_LISTS, {
     variables: {
-      vendor: currentUser.vendor
+      vendor: currentUser.vendor[0]
     }
   })
 

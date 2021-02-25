@@ -45,7 +45,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
-          tags: riceapps/hedwig-api:latest
+          tags: riceapps/hedwig-backend:latest
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -70,14 +70,14 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.org/graphql
-            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.riceapps.org/ws
+            REACT_APP_GRAPHQL_URL=https://hedwig-dev.riceapps.org/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig-dev.riceapps.org/ws
             REACT_APP_HEDWIG_VENDOR_PERMISSIONS=CUSTOMERS_READ;CUSTOMERS_WRITE;ITEMS_READ;ITEMS_WRITE;LOYALTY_READ;LOYALTY_WRITE;MERCHANT_PROFILE_READ;MERCHANT_PROFILE_WRITE;PAYMENTS_READ;PAYMENTS_WRITE;PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS;
           context: ./frontend
           file: ./frontend/Dockerfile
           push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
-          tags: riceapps/hedwig-client:latest
+          tags: riceapps/hedwig-frontend:latest
           secrets: |
             REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}
             REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
-            REACT_APP_SQUARE_CLIENT_ID=${{ secrets.REACT_APP_SQUARE_CLIENT_ID }}
+            REACT_APP_SQUARE_CLIENT_ID=${{ secrets.REACT_APP_SQUARE_CLIENT_ID_DEV }}

@@ -149,6 +149,8 @@ const AlmostThere = () => {
     window.open(order.url)
   }
 
+  console.log(order)
+
   return (
     <div className='mainDiv'>
       <WarningSVG className='checkSvg' />

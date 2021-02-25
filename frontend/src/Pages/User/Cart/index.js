@@ -17,7 +17,9 @@ import CartHeader from './CartHeader'
 import styled from 'styled-components/macro'
 import {
   FloatCartWrapper,
+  Input,
   SpaceWrapper,
+  TextArea,
   Title,
   Bill,
   SubmitButton
@@ -26,7 +28,10 @@ import {GET_ITEM_AVAILABILITIES} from './../../../graphql/ProductQueries'
 // new dropdown imports:
 
 const styles = {
-  color: 'blue'
+  color: 'blue',
+  select: {
+    display: 'inline-block'
+  }
 }
 const Div = styled.div`
   text-align: right;
@@ -172,6 +177,8 @@ function CartDetail () {
   const [pickupTime, setPickupTime] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState(null)
   const [cohenId, setCohenId] = useState(null)
+  const [room, setRoom] = useState(null)
+  const [note, setNote] = useState(null)
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -179,6 +186,7 @@ function CartDetail () {
     { value: 'TETRA', label: 'Tetra' },
     { value: 'COHEN', label: 'Cohen House' }
   ]
+
   // const defaultPaymentOption = options[0];
   const cart_menu = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
@@ -257,10 +265,11 @@ function CartDetail () {
       return navigate('/eat/failure')
     } else {
       const rec = {
-        variables: createRecord(cart_menu, paymentMethod, cohenId)
+        variables: createRecord(cart_menu, paymentMethod, cohenId, note, room)
       }
-      const emptyField = checkNullFields(rec)
-      if (checkNullFields(rec)) {
+      console.log(rec)
+      const emptyField = checkNullFields(rec, order.vendor.name)
+      if (emptyField) {
         setNullError(emptyField)
         return
       }
@@ -293,7 +302,7 @@ function CartDetail () {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
-      if (paymentMethod === 'TETRA') {
+      if (!paymentMethod || paymentMethod === 'TETRA') {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
@@ -472,7 +481,7 @@ function CartDetail () {
             </Bill>
           </Bill>
         </SpaceWrapper>
-
+        {order.vendor.name != 'Test Account CMT' && (
         <SpaceWrapper pickUpTime>
           <Title>Pick Up Time:</Title>
           <Select
@@ -484,6 +493,8 @@ function CartDetail () {
             className='float-cart__dropdown'
           />
         </SpaceWrapper>
+        )}
+        {order.vendor.name != 'Test Account CMT' && (
         <SpaceWrapper paymentMethod>
           <Title>Payment Method:</Title>
           <Select
@@ -500,14 +511,31 @@ function CartDetail () {
               <input onChange={e => setCohenId(e.target.value)} />
             </Div>
           )}
-          {nullError && (
-            <Div css={{ alignSelf: 'center', color: 'red' }}>
+        </SpaceWrapper>
+        )}
+        {order.vendor.name === 'Test Account CMT' && (
+          <SpaceWrapper college>
+            <Title isolation>Room Number: </Title>
+            <Input roomNumber onChange={e => setRoom(e.target.value)} />
+          </SpaceWrapper>
+        )}
+        {order.vendor.name === 'Test Account CMT' && (
+          <SpaceWrapper note>
+            <div>
+              <Title isolation note>Leave Notes: </Title>
+              <TextArea note onChange={e => setNote(e.target.value)} maxlength='200'
+                defaultValue = 'Type any additional dietary restrictions or concerns here (200 character limit)'
+              />
+            </div>
+          </SpaceWrapper>
+        )}
+        {nullError && (
+            <SpaceWrapper warning css={{ alignSelf: 'center', color: 'red' }}>
               {' '}
               Error! Submission form contains null value for {nullError}. Please
               complete your profile and order.{' '}
-            </Div>
+            </SpaceWrapper>
           )}
-        </SpaceWrapper>
         <SpaceWrapper footer>
           <SubmitButton
             onClick={cart_menu?.length === 0 ? null : handleConfirmClick}

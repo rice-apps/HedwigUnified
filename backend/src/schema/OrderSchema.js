@@ -117,7 +117,9 @@ OrderTC.addResolver({
           submissionTime,
           cohenId,
           studentId,
-          paymentType
+          paymentType,
+          note,
+          roomNumber
         }
       } = args
 
@@ -155,12 +157,14 @@ OrderTC.addResolver({
         })
 
         await OrderTracker.create({
+          note,
+          roomNumber,
+          pickupTime,
+          submissionTime,
+          locationId,
+          paymentType,
           status: 'PROPOSED',
-          pickupTime: pickupTime,
-          submissionTime: submissionTime,
-          locationId: locationId,
           orderId: newOrder.id,
-          paymentType: paymentType,
           vendor: vendor
         })
 

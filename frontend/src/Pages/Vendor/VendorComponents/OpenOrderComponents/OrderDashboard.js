@@ -192,11 +192,11 @@ const ORDER_UPDATED = gql`
 function OrderDashboard () {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
   const vendorId =
-    currentUser.vendor[0] == 'Cohen House'
+    currentUser.vendor[0] === 'Cohen House'
       ? ['LBBZPB7F5A100']
-      : currentUser.vendor[0] == 'Test Account CMT'
+      : currentUser.vendor[0] === 'Test Account CMT'
       ? ['L2N8DA44TZK8E']
-      : null
+      : currentUser.vendor[0] === 'East West Tea'
  
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(

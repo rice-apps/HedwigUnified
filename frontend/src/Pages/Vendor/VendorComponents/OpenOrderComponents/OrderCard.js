@@ -333,9 +333,9 @@ function MakePaymentSpace (props) {
 
   let isVerified = false
   const isIsolation = props.isIsolation
-  const paymentId = props.orderTracker.paymentId
+  const paymentId = props.orderTracker.dataSource === 'SQUARE' ? props.orderTracker.paymentId : props.shopifyOrderId
   const vendor = props.vendor
-  
+  console.log(paymentId, vendor, props.orderTracker.dataSource)
   
 
   const { items } = props
@@ -355,9 +355,9 @@ function MakePaymentSpace (props) {
                 onClick={function () {
                   verify_payment({
                     variables: {
-                      paymentId: props.shopifyOrderId,
-                      vendor: 'Cohen House',
-                      source: 'SHOPIFY'
+                      paymentId: paymentId,
+                      vendor: vendor,
+                      source: props.orderTracker.dataSource
                     }
                   })
 

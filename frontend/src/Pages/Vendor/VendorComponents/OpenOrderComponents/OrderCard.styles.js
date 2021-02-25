@@ -11,8 +11,7 @@ export const OrderCardWrapper = styled.div`
   display: grid;
   width: 26vw;
   height: max-content;
-  margin: 10px;
-  margin-right: 14px;
+  margin: 1vh;
   overflow: visible;
   grid-template-columns: 1fr;
   grid-template-rows: max-content max-content max-content min-content;
@@ -96,7 +95,7 @@ export const OrderTitleContactIcon = styled.div`
 export const OrderTimeSpaceWrapper = styled.div`
   grid-area: OrderTimeSpace;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   grid-template-rows: 1fr;
   font-size: 14px;
   grid-template-areas: 'ExactTimeSpace TimeLeftSpace';
@@ -178,14 +177,15 @@ export const ButtonWrapper = styled.button`
   align-items: center;
   padding: 5px 20px;
   margin: 0px 15px;
-  box-shadow: 0.6px 0.6px 3px 0.5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0.6px 0.6px 35px 0.5px rgba(0, 0, 0, 0.1);
 `
 export const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
 `
 
 export const CancelButton = styled(ButtonWrapper)`
-  background-color: #dedede;
+  background-color: white;
+  border: 1px solid rgba(0,0,0,0.6);
 `
 
 export const ReadyButton = styled(ButtonWrapper)`

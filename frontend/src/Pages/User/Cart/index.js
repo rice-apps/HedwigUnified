@@ -177,6 +177,7 @@ function CartDetail () {
   const [cohenId, setCohenId] = useState(null)
   const [room, setRoom] = useState(null)
   const [note, setNote] = useState(null)
+  const [characterCount, setCharacterCount] = useState(0)
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -520,10 +521,11 @@ function CartDetail () {
         {order.vendor.name === 'Test Account CMT' && (
           <SpaceWrapper note>
             <div>
-              <Title isolation note>Leave Notes: </Title>
+              <Title isolation note>Order Notes: <span style={{opacity:'0.6', fontStyle:'italic', fontSize:'2vh'}}>({characterCount.toString()}/100)</span> </Title>
               <TextArea
-                note onChange={e => setNote(e.target.value)} maxlength='200'
-                defaultValue='Type any additional dietary restrictions or concerns here (200 character limit)'
+                maxLength='150'
+                note onChange={(e) => {setNote(e.target.value); setCharacterCount(e.target.value.length)}} 
+                placeholder='Type any additional dietary restrictions or concerns here (100 character limit)'
               />
             </div>
           </SpaceWrapper>

@@ -104,7 +104,7 @@ const SET_MODIFIER_AVAILABILITY = gql`
       type: "modifier"
     ) {
       name
-      availableItems
+      availableModifiers
     }
   }
 `

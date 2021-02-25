@@ -75,11 +75,6 @@ function ModifiersMenuManagementPage () {
   return <VendorsideTemplate
       page={
         <ItemCatalog
-        // <ModifierCatalog
-          // modifierLists={modifierLists}
-          // modifierListNames={categories}
-          // modifierListName={categories[0]}
-          // allModifiers={modifiers}
           catalog={modifiers}
           categories={categories}
           category={categories[0]}

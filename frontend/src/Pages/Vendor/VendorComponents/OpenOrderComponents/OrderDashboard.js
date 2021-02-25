@@ -198,6 +198,8 @@ function OrderDashboard () {
       ? ['L2N8DA44TZK8E']
       : currentUser.vendor[0] === 'East West Tea'
       ? ['CF05Q06RWXA1D']
+      : currentUser.vendor[0] === 'East West Test'
+      ? ['LCW8P8CZEVNMQ']
       : null
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(

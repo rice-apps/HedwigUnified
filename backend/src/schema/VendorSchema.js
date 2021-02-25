@@ -9,7 +9,7 @@ import {
   checkCanUpdateVendor
 } from '../utils/authenticationUtils.js'
 
-import {squareClients} from '../utils/square.js'
+import { squareClients } from '../utils/square.js'
 import vault from '../utils/vault.js'
 
 import { SQUARE_APPLICATION_ID, SQUARE_APPLICATION_SECRET } from '../config.js'
@@ -181,7 +181,7 @@ VendorTC.addResolver({
   type: VendorTC,
   resolve: async ({ args }) => {
     // Extract vendor name from args
-    const { dataSource, vendor } = args
+    const { vendor } = args
 
     const squareClient = squareClients.get(vendor)
     const catalogApi = squareClient.catalogApi
@@ -193,10 +193,10 @@ VendorTC.addResolver({
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
       const items = objects.filter(object => object.type === 'ITEM')
       const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
-      console.log("modifiers")
+      console.log('modifiers')
       console.log(modifiers)
-      var availability = [];
-      for(var i=0; i<items.length; i++){ 
+      const availability = []
+      for (let i = 0; i < items.length; i++) {
         // extract name and id
         availability.push(items[i].id)
       }
@@ -205,10 +205,9 @@ VendorTC.addResolver({
         name: vendor
       })
 
-      vendorData.availableItems = availability;
-      await vendorData.save();
-      return vendorData;
-
+      vendorData.availableItems = availability
+      await vendorData.save()
+      return vendorData
     } catch (error) {
       if (error instanceof ApiError) {
         return new ApolloError(
@@ -228,7 +227,7 @@ VendorTC.addResolver({
   type: VendorTC,
   resolve: async ({ args }) => {
     // Extract vendor name from args
-    const { dataSource, vendor } = args
+    const { vendor } = args
 
     const squareClient = squareClients.get(vendor)
     const catalogApi = squareClient.catalogApi
@@ -239,9 +238,9 @@ VendorTC.addResolver({
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
       const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
-      var availability = [];
+      const availability = []
 
-      for(var i=0; i<modifiers.length; i++){ 
+      for (let i = 0; i < modifiers.length; i++) {
         // extract name and id
         availability.push(modifiers[i].id)
       }
@@ -250,10 +249,9 @@ VendorTC.addResolver({
         name: vendor
       })
 
-      vendorData.availableModifiers = availability;
-      await vendorData.save();
-      return vendorData;
-
+      vendorData.availableModifiers = availability
+      await vendorData.save()
+      return vendorData
     } catch (error) {
       if (error instanceof ApiError) {
         return new ApolloError(

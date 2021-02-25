@@ -35,18 +35,28 @@ OrderTC.addResolver({
     }
   },
   resolve: async ({ args }) => {
-    const { vendor, locations, cursor, limit, filter, sort } = args
+    const { vendor, locations, cursor, limit } = args
 
     const squareClient = squareClients.get(vendor)
 
-    const query = {}
+    const today = new Date()
+    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
 
-    if (filter) {
-      query.filter = filter
-    }
-
-    if (sort) {
-      query.sort = sort
+    const query = {
+      filter: {
+        dateTimeFilter: {
+          createdAt: {
+            endAt: today.toISOString(),
+            startAt: yesterday.toISOString()
+          }
+        },
+        fulfillmentFilter: {
+          fulfillmentTypes: ['PICKUP']
+        }
+      },
+      sort: {
+        sortField: 'CREATED_AT'
+      }
     }
 
     try {
@@ -72,12 +82,12 @@ OrderTC.addResolver({
         .exec()
 
       const returnedOrders = filteredOrders.map(async order => {
-        const orderTracker = orderTrackers.filter(
-          obj => obj.orderId === order.id
-        )[0]
+        const orderTracker = orderTrackers.find(obj => obj.orderId === order.id)
 
         const parsedOrder = orderParse(order)
-        parsedOrder.fulfillment.state = orderTracker.status
+        parsedOrder.fulfillment.state = orderTracker
+          ? orderTracker.status
+          : order.fulfillments[0].state
 
         return parsedOrder
       })
@@ -89,11 +99,13 @@ OrderTC.addResolver({
     } catch (error) {
       if (error instanceof ApiError) {
         return new ApolloError(
-          `Finding orders using Square failed because ${error.result}`
+          `Finding orders using Square failed because ${JSON.stringify(error)}`
         )
       }
 
-      return new ApolloError('Something went wrong finding orders')
+      return new ApolloError(
+        `Something went wrong finding orders: ${JSON.stringify(error)}`
+      )
     }
   }
 })

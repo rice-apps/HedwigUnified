@@ -71,6 +71,7 @@ jobs:
             REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.org/graphql
             REACT_APP_GRAPHQL_WS_URL=wss://hedwig.riceapps.org/ws
             REACT_APP_HEDWIG_VENDOR_PERMISSIONS=ORDERS_READ;ORDERS_WRITE;CUSTOMERS_READ;CUSTOMERS_WRITE;ITEMS_READ;ITEMS_WRITE;LOYALTY_READ;LOYALTY_WRITE;MERCHANT_PROFILE_READ;MERCHANT_PROFILE_WRITE;PAYMENTS_READ;PAYMENTS_WRITE;PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS;
+            REACT_APP_SQUARE_ENV=production
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true

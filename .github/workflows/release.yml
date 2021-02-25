@@ -1,0 +1,75 @@
+name: Hedwig Release Deployment
+
+# Controls when the action will run
+on:
+  # Triggers the workflow when we push a tag (for releases)
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  # Build the backend
+  backend-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out our repo so we can build. Also set the release version
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Login to Dockerhub so we can actually push our images
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      # Build our Docker images and push them with the appropriate tag
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          tags: riceapps/hedwig-backend:stable,riceapps/hedwig-backend:${{ env.RELEASE_VERSION }}
+
+  frontend-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Files
+        uses: actions/checkout@v2
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.org/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig.riceapps.org/ws
+            REACT_APP_HEDWIG_VENDOR_PERMISSIONS=CUSTOMERS_READ;CUSTOMERS_WRITE;ITEMS_READ;ITEMS_WRITE;LOYALTY_READ;LOYALTY_WRITE;MERCHANT_PROFILE_READ;MERCHANT_PROFILE_WRITE;PAYMENTS_READ;PAYMENTS_WRITE;PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS;
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          tags: riceapps/hedwig-frontend:stable,riceapps/hedwig-frontend:${{ env.RELEASE_VERSION }}
+          secrets: |
+            REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}
+            REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+            REACT_APP_SQUARE_CLIENT_ID=${{ secrets.REACT_APP_SQUARE_CLIENT_ID }}

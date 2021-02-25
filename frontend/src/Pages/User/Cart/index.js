@@ -24,6 +24,7 @@ import {
   Bill,
   SubmitButton
 } from './CartStyledComponents'
+import {GET_ITEM_AVAILABILITIES} from './../../../graphql/ProductQueries'
 // new dropdown imports:
 
 const styles = {
@@ -41,11 +42,7 @@ const Div = styled.div`
   padding-bottom: 10px;
 `
 
-const GET_AVAILABILITIES = gql`
-  query GET_AVAILABILITIES($productIds: [String!], $vendor: String!) {
-    getAvailabilities(productIds: $productIds, vendor: $vendor)
-  }
-`
+
 
 const defaultTotals = {
   subtotal: 0,
@@ -221,7 +218,7 @@ function CartDetail () {
       })
     : null
 
-  const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
+  const {refetch: avail_refetch } = useQuery(GET_ITEM_AVAILABILITIES, {
     variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
   })

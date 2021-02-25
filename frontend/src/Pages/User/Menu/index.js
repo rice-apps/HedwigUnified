@@ -282,6 +282,7 @@ function Menu () {
     </h1>
   ))
 
+  console.log(vendor_data.getVendor.availableItems)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div style={{ position: 'relative' }}>
@@ -367,12 +368,12 @@ function Menu () {
               <div class='categoryheader'>{category}</div>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
-                .filter(item => item.category === category && item.isAvailable)
+                .filter(item => item.category === category && vendor_data.getVendor.availableItems.includes(item.dataSourceId))
                 .map(product => (
                   <div
                     class='itemgrid'
                     onClick={
-                      product.isAvailable ? () => handleClick(product) : null
+                      () => handleClick(product)
                     }
                   >
                     {/* Displaying the item: image, name, and price */}

@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
-import { IoIosAddCircleOutline, IoIosArrowUp, IoIosArrowDown, IoMdMail } from 'react-icons/io'
+import {
+  IoIosAddCircleOutline,
+  IoIosArrowUp,
+  IoIosArrowDown,
+  IoMdMail
+} from 'react-icons/io'
 
 import { ImPhone } from 'react-icons/im'
 import { useQuery, useLazyQuery } from '@apollo/client'
@@ -62,48 +67,61 @@ function MakeOrderTitle (props) {
           <GrRestaurant />
         </OrderTitleIconOneDiv>
 
-        {showContact
-          ? <OrderTitleContactShown
-              onClick={() => {
-                setShowContact(!showContact)
-              }}
-            >
+        {showContact ? (
+          <OrderTitleContactShown
+            onClick={() => {
+              setShowContact(!showContact)
+            }}
+          >
             <div>
-              {props.customerName} {' '}
-              <IoIosArrowUp />
+              {props.customerName} <IoIosArrowUp />
             </div>
 
             <OrderTitleContact>
-              <OrderTitleContactIcon> <ImPhone /> </OrderTitleContactIcon>
+              <OrderTitleContactIcon>
+                {' '}
+                <ImPhone />{' '}
+              </OrderTitleContactIcon>
               <>
-                ({props.customerPhone.substring(0, 3)}) {props.customerPhone.substring(3, 6)}
-                -{props.customerPhone.substring(6)}
+                ({props.customerPhone.substring(0, 3)}){' '}
+                {props.customerPhone.substring(3, 6)}-
+                {props.customerPhone.substring(6)}
               </>
-              <OrderTitleContactIcon> <IoMdMail /> </OrderTitleContactIcon>
+              <OrderTitleContactIcon>
+                {' '}
+                <IoMdMail />{' '}
+              </OrderTitleContactIcon>
               {props.customerEmail}
             </OrderTitleContact>
-
-            </OrderTitleContactShown>
-          : <OrderTitleContactHidden
-              onClick={() => {
-                setShowContact(!showContact)
-              }}
-            >
-            {props.customerName} {' '}
-            <IoIosArrowDown />
-          </OrderTitleContactHidden>}
+          </OrderTitleContactShown>
+        ) : (
+          <OrderTitleContactHidden
+            onClick={() => {
+              setShowContact(!showContact)
+            }}
+          >
+            {props.customerName} <IoIosArrowDown />
+          </OrderTitleContactHidden>
+        )}
 
         <OrderTitleIconTwoDiv>
           <BsFillClockFill />
         </OrderTitleIconTwoDiv>
-
       </OrderTitleSpaceWrapper>
     </>
   )
 }
 
 function MakeOrderTime (props) {
+  const isIsolation = props.isIsolation
   return (
+    isIsolation ? 
+    <OrderTimeSpaceWrapper>
+<ExactTimeSpaceWrapper>
+  <div>Room Number: {props.orderTracker.roomNumber}</div>
+  <div>Order Notes: {props.orderTracker.note ? <strong> {props.orderTracker.note} </strong>: 'None'}</div>
+</ExactTimeSpaceWrapper>
+    </OrderTimeSpaceWrapper> :
     <OrderTimeSpaceWrapper>
       <ExactTimeSpaceWrapper>
         <div> Pick up time: {props.pickupTime}</div>
@@ -314,7 +332,7 @@ function MakePaymentSpace (props) {
   )
 
   let isVerified = false
-
+  const isIsolation = props.isIsolation
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
     isVerified = verifyPaymentResult.verifyPayment
@@ -385,6 +403,7 @@ function MakePaymentSpace (props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
         <MakePaymentButtons
+          isIsolation={isIsolation}
           handleClick={props.handleClick}
           buttonStatus={props.buttonStatus}
           shopifyOrderId={props.shopifyOrderId}
@@ -453,11 +472,11 @@ function MakePaymentSpace (props) {
                 >
                   Accept
                 </AcceptButton>
-                  ) : (
-                    <AcceptButton onClick={closeAcceptModal}>
-                      Return To Home
-                    </AcceptButton>
-                  )}
+              ) : (
+                <AcceptButton onClick={closeAcceptModal}>
+                  Return To Home
+                </AcceptButton>
+              )}
             </ModalButtonsWrapper>
           </ModalWrapper>
         </Background>
@@ -534,7 +553,7 @@ function OrderCard (props) {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(moment())
-    }, 1000)
+    }, 3000)
     return () => {
       clearInterval(timer)
     }
@@ -553,7 +572,8 @@ function OrderCard (props) {
     buttonStatus,
     cancelClick,
     id,
-    newOrder
+    newOrder,
+    isIsolation
   } = props
 
   const {
@@ -572,8 +592,9 @@ function OrderCard (props) {
     return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
   }
 
-  // pastPickup is true if current time has past an order's pickuptime + buffer
-  const pastPickup = isPastPickup(pickupTime, currentTime) && newOrder
+  // pastPickup is true if current time has past an order's pickuptime + buffer, must be non-isolation housing vendor
+  const pastPickup =
+    isPastPickup(pickupTime, currentTime) && newOrder && !isIsolation
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
@@ -596,14 +617,16 @@ function OrderCard (props) {
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
+          isIsolation={isIsolation}
           pickupTime={pickupAt}
           submissionTime={submittedAt}
+          orderTracker={orderTrackerData.getOrderTracker}
           paymentType={
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-                ? 'None'
-                : orderTrackerData.getOrderTracker.paymentType
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
           }
           pickupCountdown={timeLeft}
         />
@@ -618,7 +641,6 @@ function OrderCard (props) {
 
               return (
                 <MakeOrderDetails
-                  key={id + item.name}
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}
@@ -629,6 +651,7 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          isIsolation={isIsolation}
           pastPickup={pastPickup}
           items={items}
           email={email}
@@ -646,8 +669,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-                ? 'None'
-                : orderTrackerData.getOrderTracker.paymentType
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
           customerName={customerName}
@@ -657,8 +680,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker == null
               ? 'None'
               : orderTrackerData.getOrderTracker.shopifyOrderId
-                ? orderTrackerData.getOrderTracker.shopifyOrderId
-                : null
+              ? orderTrackerData.getOrderTracker.shopifyOrderId
+              : null
           }
         />
       </OrderCardWrapper>

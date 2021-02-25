@@ -5,6 +5,8 @@ const ORDER_TRACKER = gql`
     getOrderTracker(filter: { orderId: $orderId }) {
       shopifyOrderId
       paymentType
+      note
+      roomNumber
     }
   }
 `

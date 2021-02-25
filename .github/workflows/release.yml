@@ -39,6 +39,7 @@ jobs:
         with:
           context: ./backend
           file: ./backend/Dockerfile
+          push: true
           tags: riceapps/hedwig-backend:stable,riceapps/hedwig-backend:${{ env.RELEASE_VERSION }}
 
   frontend-build:
@@ -72,6 +73,7 @@ jobs:
             REACT_APP_HEDWIG_VENDOR_PERMISSIONS=CUSTOMERS_READ;CUSTOMERS_WRITE;ITEMS_READ;ITEMS_WRITE;LOYALTY_READ;LOYALTY_WRITE;MERCHANT_PROFILE_READ;MERCHANT_PROFILE_WRITE;PAYMENTS_READ;PAYMENTS_WRITE;PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS;
           context: ./frontend
           file: ./frontend/Dockerfile
+          push: true
           tags: riceapps/hedwig-frontend:stable,riceapps/hedwig-frontend:${{ env.RELEASE_VERSION }}
           secrets: |
             REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}

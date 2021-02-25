@@ -425,6 +425,7 @@ function MakePaymentSpace (props) {
 
                     return (
                       <MakeModalOrder
+                        key={item.name + item.quantity}
                         quantity={item.quantity}
                         itemName={item.name}
                         price={item.totalMoney.amount / 100}
@@ -641,6 +642,7 @@ function OrderCard (props) {
 
               return (
                 <MakeOrderDetails
+                  key={item.name + item.quantity}
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}

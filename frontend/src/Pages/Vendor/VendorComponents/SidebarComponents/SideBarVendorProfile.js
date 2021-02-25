@@ -49,7 +49,7 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
 
 function SideBarVendorProfile ({ setLogo }) {
   const token = localStorage.getItem('token')
-  const vendorName = JSON.parse(localStorage.getItem("userProfile")).vendor[0];
+  const vendorName = JSON.parse(localStorage.getItem('userProfile')).vendor[0]
 
   const [, { error }] = useMutation(UPDATE_VENDOR_AVAILABILITY)
 
@@ -59,7 +59,7 @@ function SideBarVendorProfile ({ setLogo }) {
     variables: { name: vendorName }
   })
 
-  console.log("NO", data);
+  console.log('NO', data)
 
   if (error || queryError) {
     return <p>Error</p>

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
-import { IoIosAddCircleOutline } from 'react-icons/io'
-import { IoIosArrowUp, IoIosArrowDown, IoMdMail } from 'react-icons/io'
+import { IoIosAddCircleOutline, IoIosArrowUp, IoIosArrowDown, IoMdMail } from 'react-icons/io'
+
 import { ImPhone } from 'react-icons/im'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import moment from 'moment'
@@ -62,44 +62,41 @@ function MakeOrderTitle (props) {
           <GrRestaurant />
         </OrderTitleIconOneDiv>
 
-          {showContact 
-            ?
-              <OrderTitleContactShown
-                onClick={() => {
-                  setShowContact(!showContact)
-                }}
-              >
-                <div>
-                  {props.customerName} {' '}
-                  <IoIosArrowUp />
-                </div>
+        {showContact
+          ? <OrderTitleContactShown
+              onClick={() => {
+                setShowContact(!showContact)
+              }}
+            >
+            <div>
+              {props.customerName} {' '}
+              <IoIosArrowUp />
+            </div>
 
-                <OrderTitleContact>
-                  <OrderTitleContactIcon> <ImPhone /> </OrderTitleContactIcon>
-                  <>
-                    ({props.customerPhone.substring(0, 3)}) {props.customerPhone.substring(3, 6)}
-                    -{props.customerPhone.substring(6)}
-                  </>
-                  <OrderTitleContactIcon> <IoMdMail /> </OrderTitleContactIcon>
-                  {props.customerEmail}
-                </OrderTitleContact>
+            <OrderTitleContact>
+              <OrderTitleContactIcon> <ImPhone /> </OrderTitleContactIcon>
+              <>
+                ({props.customerPhone.substring(0, 3)}) {props.customerPhone.substring(3, 6)}
+                -{props.customerPhone.substring(6)}
+              </>
+              <OrderTitleContactIcon> <IoMdMail /> </OrderTitleContactIcon>
+              {props.customerEmail}
+            </OrderTitleContact>
 
-              </OrderTitleContactShown>
-            :  
-              <OrderTitleContactHidden
-                onClick={() => {
-                  setShowContact(!showContact)
-                }}
-              >
-                {props.customerName} {' '}
-                <IoIosArrowDown />
-              </OrderTitleContactHidden>
-          }
+            </OrderTitleContactShown>
+          : <OrderTitleContactHidden
+              onClick={() => {
+                setShowContact(!showContact)
+              }}
+            >
+            {props.customerName} {' '}
+            <IoIosArrowDown />
+          </OrderTitleContactHidden>}
 
         <OrderTitleIconTwoDiv>
           <BsFillClockFill />
         </OrderTitleIconTwoDiv>
-        
+
       </OrderTitleSpaceWrapper>
     </>
   )
@@ -592,9 +589,9 @@ function OrderCard (props) {
         {/* Section of Order card with customer name, order number */}
 
         <MakeOrderTitle
-         customerName={customerName}
-         customerPhone={phone}
-         customerEmail={email}
+          customerName={customerName}
+          customerPhone={phone}
+          customerEmail={email}
         />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}

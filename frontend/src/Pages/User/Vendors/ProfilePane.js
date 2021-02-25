@@ -129,7 +129,7 @@ function ProfilePane ({ updateLogin }) {
                 console.log(showProfile)
               }}
 
-              style = {{
+              style={{
                 cursor: 'pointer'
               }}
             />

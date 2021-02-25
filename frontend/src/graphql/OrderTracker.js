@@ -7,6 +7,8 @@ const ORDER_TRACKER = gql`
       paymentType
       note
       roomNumber
+      paymentId
+      dataSource
     }
   }
 `

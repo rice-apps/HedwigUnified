@@ -333,8 +333,10 @@ function MakePaymentSpace (props) {
 
   let isVerified = false
   const isIsolation = props.isIsolation
-  const paymentId = props.orderTracker
-  console.log(paymentId)
+  const paymentId = props.orderTracker.paymentId
+  const vendor = props.vendor
+  
+  
 
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
@@ -343,7 +345,6 @@ function MakePaymentSpace (props) {
 
   function MakePaymentButtons (props) {
     let buttonStatus = props.buttonStatus
-
     return (
       <div>
         {buttonStatus === 'NEW' ? (
@@ -406,6 +407,7 @@ function MakePaymentSpace (props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
         <MakePaymentButtons
+          orderTracker={props.orderTracker}
           isIsolation={isIsolation}
           handleClick={props.handleClick}
           buttonStatus={props.buttonStatus}
@@ -577,7 +579,8 @@ function OrderCard (props) {
     cancelClick,
     id,
     newOrder,
-    isIsolation
+    isIsolation, 
+    vendor
   } = props
 
   const {
@@ -656,6 +659,7 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          vendor={vendor}
           isIsolation={isIsolation}
           pastPickup={pastPickup}
           items={items}

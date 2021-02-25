@@ -292,6 +292,7 @@ function OrderDashboard () {
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
+              vendor={currentUser.vendor[0]}
               key={order.id}
               id={order.id}
               studentId={order.studentId}
@@ -321,6 +322,7 @@ function OrderDashboard () {
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
+              vendor={currentUser.vendor[0]}
               key={order.id}
               id={order.id}
               studentId={order.studentId}
@@ -350,6 +352,7 @@ function OrderDashboard () {
           {allOrders &&
             readyOrders.map(order => (
               <OrderCard
+                vendor={currentUser.vendor[0]}
                 key={order.id}
                 id={order.id}
                 studentId={order.studentId}

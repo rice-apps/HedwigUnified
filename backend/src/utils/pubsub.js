@@ -9,7 +9,7 @@ import { REDIS_OPTIONS } from '../config.js'
  */
 let pubsub
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.REDISHOST === 'redis') {
   pubsub = new RedisPubSub({
     publisher: new Redis(REDIS_OPTIONS),
     subscriber: new Redis(REDIS_OPTIONS)

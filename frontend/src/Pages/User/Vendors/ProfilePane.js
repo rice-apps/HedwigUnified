@@ -98,6 +98,7 @@ function ProfilePane ({ updateLogin }) {
   }
 
   function handleLogoutClick () {
+    window.localStorage.clear()
     window.open(logoutURL, '_self')
   }
 

@@ -21,7 +21,7 @@ const GET_VENDOR = gql`
     }
   }
 `
-const GET_ALLOWED_VENDORS = gql`
+export const GET_ALLOWED_VENDORS = gql`
   query GET_ALLOWED_VENDORS($name: String!){
     getAllowedVendors(name: $name){
       name

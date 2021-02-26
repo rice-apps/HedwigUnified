@@ -103,9 +103,9 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   if (!isEmployeeRoute) {
     return <Route {...rest} element={element} />
   }
-console.log("VERIFY USER",data.verifyUser)
-  const vendor = data.verifyUser.vendor[0]
-  const netid = data.verifyUser.netid
+
+  const vendor = data != null ? data.verifyUser.vendor[0] : null 
+  const netid = data != null ? data.verifyUser.netid : null
 
   // Not a vendor and already verified, go to buyer side
   if (!vendor) {

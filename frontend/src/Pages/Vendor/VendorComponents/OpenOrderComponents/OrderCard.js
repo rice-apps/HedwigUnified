@@ -327,13 +327,14 @@ function MakePaymentSpace (props) {
 
   const cancelOrder = props.cancelClick
 
-  const [verify_payment, { data: verifyPaymentResult, loading }] = useLazyQuery(
+  let [verify_payment, { data: verifyPaymentResult, loading }] = useLazyQuery(
     VERIFY_PAYMENT
   )
 
   let isVerified = false
   const isIsolation = props.isIsolation
-  const paymentId = props.orderTracker.dataSource === 'SQUARE' ? props.orderTracker.paymentId : props.shopifyOrderId
+  const refetch = () => props.refetch
+  let paymentId = props.orderTracker.dataSource === 'SQUARE' ? props.orderTracker.paymentId : props.shopifyOrderId
   const vendor = props.vendor
   console.log(paymentId, vendor, props.orderTracker.dataSource)
   
@@ -360,7 +361,7 @@ function MakePaymentSpace (props) {
                       source: props.orderTracker.dataSource
                     }
                   })
-
+                  refetch()
                   openAcceptModal()
                 }}
               >
@@ -586,7 +587,7 @@ function OrderCard (props) {
   const {
     data: orderTrackerData,
     loading: orderTrackerLoading,
-    error: orderTrackerError
+    error: orderTrackerError, refetch
   } = useQuery(ORDER_TRACKER, {
     variables: { orderId: id }
   })
@@ -683,7 +684,7 @@ function OrderCard (props) {
               : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
-          customerName={customerName}
+          refetch={refetch}
           cancelClick={cancelClick}
           id={props.id}
           shopifyOrderId={

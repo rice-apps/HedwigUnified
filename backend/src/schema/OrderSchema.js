@@ -260,7 +260,7 @@ OrderTC.addResolver({
         return orderParse(order)
       }
 
-      if (vendorData.dataSource === 'SQUARE') {
+      if (vendorData.dataSource === 'SQUARE' && updatedOrderTracker.paymentType === 'CREDIT') {
         try {
           order = (
             await squareClient.ordersApi.updateOrder(orderId, {

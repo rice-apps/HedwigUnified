@@ -2,7 +2,7 @@ import styled from 'styled-components/macro'
 
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
-import {VENDOR_QUERY} from './../../../graphql/VendorQueries'
+import { VENDOR_QUERY } from './../../../graphql/VendorQueries'
 import { useQuery } from '@apollo/client'
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -46,7 +46,7 @@ function CartHeader ({ vendorName, showBackButton }) {
   }
 
   console.log(vendor_data)
-  
+
   const cart_menu = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
     : null
@@ -65,19 +65,19 @@ function CartHeader ({ vendorName, showBackButton }) {
   return (
     <HeaderWrapper>
       <HedwigWrapper>
-        
-          <IoMdArrowRoundBack
-            onClick={() =>
-              navigate(backNav, { state: { currentVendor: currVendor } })}
-            style={{
-              position: 'fixed',
-              left: '22px',
-              fontSize: '25px',
-              verticalAlign: 'middle',
-              cursor: 'pointer'
-            }}
-          />
-    
+
+        <IoMdArrowRoundBack
+          onClick={() =>
+            navigate(backNav, { state: { currentVendor: currVendor } })}
+          style={{
+            position: 'fixed',
+            left: '22px',
+            fontSize: '25px',
+            verticalAlign: 'middle',
+            cursor: 'pointer'
+          }}
+        />
+
         Checkout: {vendorName}
       </HedwigWrapper>
     </HeaderWrapper>

@@ -1,4 +1,4 @@
-import styled, {css} from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 
 const OrderDashboardWrapper = styled.div`
   height: 100%;
@@ -68,7 +68,7 @@ const AcceptedOrderSpaceWrapper = styled(GeneralSpaceWrapper)`
   grid-area: AcceptedOrderSpace;
   /* background-color: #FAFAFA; */
   /* background-color: yellow; */
-  border-right: ${props => props.isIsolation ? '': '1px solid #adadad'};
+  border-right: ${props => props.isIsolation ? '' : '1px solid #adadad'};
 `
 
 const ReadyOrderSpaceWrapper = styled(GeneralSpaceWrapper)`

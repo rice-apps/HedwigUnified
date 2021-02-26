@@ -10,11 +10,7 @@ import {
   Vendor
 } from '../models/index.js'
 import { pubsub } from '../utils/pubsub.js'
-import {
-  squareClients,
-  orderFetchAndParse,
-  orderParse
-} from '../utils/square.js'
+import { squareClients, orderParse } from '../utils/square.js'
 import TwilioClient from '../utils/twilio.js'
 import { ApiError } from 'square'
 
@@ -188,8 +184,6 @@ OrderTC.addResolver({
 
         const order = orderParse(newOrder)
 
-        console.log(order.fulfillment.pickupDetails.recipient)
-
         pubsub.publish('orderCreated', {
           orderCreated: order
         })
@@ -234,21 +228,79 @@ OrderTC.addResolver({
         orderId: orderId
       })
 
+      const vendorData = await Vendor.findOne({ name: vendor })
+        .lean()
+        .exec()
+
       const squareClient = squareClients.get(vendor)
 
-      const order = await orderFetchAndParse(squareClient, orderId)
-      order.fulfillment.state = fulfillment.state
+      /** @type {import('square').Order} */
+      let order
+
+      try {
+        order = (await squareClient.ordersApi.retrieveOrder(orderId)).result
+          .order
+      } catch (error) {
+        if (error instanceof ApiError) {
+          throw new ApolloError(
+            `Can't retrive existing order from Square: ${JSON.stringify(
+              error.result
+            )}`
+          )
+        }
+
+        throw new ApolloError(
+          `Something went wrong retrieving existing order: ${JSON.stringify(
+            error
+          )}`
+        )
+      }
 
       if (updatedOrderTracker.status === fulfillment.state) {
-        return order
+        return orderParse(order)
+      }
+
+      if (vendorData.dataSource === 'SQUARE') {
+        try {
+          order = (
+            await squareClient.ordersApi.updateOrder(orderId, {
+              order: {
+                version: order.version,
+                fulfillments: [
+                  {
+                    uid: order.fulfillments[0].uid,
+                    state: fulfillment.state
+                  }
+                ],
+                state:
+                  fulfillment.state === 'COMPLETED' ||
+                  fulfillment.state === 'CANCELED'
+                    ? fulfillment.state
+                    : 'OPEN'
+              }
+            })
+          ).result.order
+        } catch (error) {
+          if (error instanceof ApiError) {
+            throw new ApolloError(
+              `Updating order in Square failed: ${JSON.stringify(error.result)}`
+            )
+          }
+
+          throw new ApolloError(
+            `Something went wrong updating order on Square: ${JSON.stringify(error)}`
+          )
+        }
       }
 
       updatedOrderTracker.status = fulfillment.state
 
-      await updatedOrderTracker.save()
+      updatedOrderTracker.save()
+
+      const parsedOrder = orderParse(order)
 
       pubsub.publish('orderUpdated', {
-        orderUpdated: order
+        orderUpdated: parsedOrder
       })
 
       switch (updatedOrderTracker.status) {
@@ -257,7 +309,7 @@ OrderTC.addResolver({
             body:
               'Your order with East-West Tea is ready for pickup. Please wait in the RMC courtyard for an employee to bring the order to you. Remember to wear a mask and socially distance! ',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
           break
         case 'COMPLETED':
@@ -265,7 +317,7 @@ OrderTC.addResolver({
             body:
               'Your order with East-West Tea has been picked up. If you did not pick up the order, please contact East-West Tea immediately via Facebook. Tell us how your ordering and food experience was by filling out the survey here: https://forms.gle/BzW3C8JAnXD7N6Jz7 ',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
           break
         case 'CANCELED':
@@ -273,7 +325,7 @@ OrderTC.addResolver({
             body:
               'You order with East-West Tea has been cancelled. If you would like to contact East-West Tea about your order, please message them on Facebook.',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
           break
         default:
@@ -281,11 +333,11 @@ OrderTC.addResolver({
             body:
               'Your order with East-West Tea has been accepted and is being prepared. Please do not come to pick up your order until you receive a text asking you to do so.',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
       }
 
-      return order
+      return parsedOrder
     }
   })
 

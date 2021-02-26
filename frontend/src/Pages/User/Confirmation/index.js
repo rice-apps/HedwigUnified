@@ -55,12 +55,11 @@ function Confirmation () {
       <Div vendorCard>
         <P header>{order.vendor.name}</P>
         <P header>Pick Up Instruction:</P>
-        {order.vendor.name != 'Test Account CMT' ? 
-        <P pickup time style={{ fontWeight: 'bold' }}>
-          {' '}
-          Pickup Time: {time}
-        </P> : null
-        }
+        {order.vendor.name != 'Test Account CMT'
+          ? <P pickup time style={{ fontWeight: 'bold' }}>
+            {' '}
+            Pickup Time: {time}
+          </P> : null}
         <P pickup>{order.pickupInstruction}</P>
       </Div>
 

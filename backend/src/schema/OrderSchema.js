@@ -300,6 +300,8 @@ OrderTC.addResolver({
 
       const parsedOrder = orderParse(order)
 
+      parsedOrder.fulfillment.state = fulfillment.state
+
       pubsub.publish('orderUpdated', {
         orderUpdated: parsedOrder
       })

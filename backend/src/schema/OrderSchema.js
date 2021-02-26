@@ -266,6 +266,7 @@ OrderTC.addResolver({
             await squareClient.ordersApi.updateOrder(orderId, {
               order: {
                 version: order.version,
+                locationId: order.locationId,
                 fulfillments: [
                   {
                     uid: order.fulfillments[0].uid,

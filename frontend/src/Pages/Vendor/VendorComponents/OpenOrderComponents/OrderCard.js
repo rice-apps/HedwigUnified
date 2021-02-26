@@ -114,14 +114,21 @@ function MakeOrderTitle (props) {
 
 function MakeOrderTime (props) {
   const isIsolation = props.isIsolation
-  return (
-    isIsolation ? 
+  return isIsolation ? (
     <OrderTimeSpaceWrapper>
-<ExactTimeSpaceWrapper>
-  <div>Room Number: {props.orderTracker.roomNumber}</div>
-  <div>Order Notes: {props.orderTracker.note ? <strong> {props.orderTracker.note} </strong>: 'None'}</div>
-</ExactTimeSpaceWrapper>
-    </OrderTimeSpaceWrapper> :
+      <ExactTimeSpaceWrapper>
+        <div>Room Number: {props.orderTracker.roomNumber}</div>
+        <div>
+          Order Notes:{' '}
+          {props.orderTracker.note ? (
+            <strong> {props.orderTracker.note} </strong>
+          ) : (
+            'None'
+          )}
+        </div>
+      </ExactTimeSpaceWrapper>
+    </OrderTimeSpaceWrapper>
+  ) : (
     <OrderTimeSpaceWrapper>
       <ExactTimeSpaceWrapper>
         <div> Pick up time: {props.pickupTime}</div>
@@ -327,17 +334,19 @@ function MakePaymentSpace (props) {
 
   const cancelOrder = props.cancelClick
 
-  let [verify_payment, { data: verifyPaymentResult, loading }] = useLazyQuery(
+  const [verify_payment, { data: verifyPaymentResult, loading }] = useLazyQuery(
     VERIFY_PAYMENT
   )
 
   let isVerified = false
   const isIsolation = props.isIsolation
-  const refetch = () => props.refetch
-  let paymentId = props.orderTracker.dataSource === 'SQUARE' ? props.orderTracker.paymentId : props.shopifyOrderId
+  const refetch = props.refetch
+  const paymentId =
+    props.orderTracker.dataSource === 'SQUARE'
+      ? props.orderTracker.paymentId
+      : props.shopifyOrderId
   const vendor = props.vendor
   console.log(paymentId, vendor, props.orderTracker.dataSource)
-  
 
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
@@ -353,7 +362,8 @@ function MakePaymentSpace (props) {
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
             {props.pastPickup ? null : (
               <AcceptButton
-                onClick={function () {
+                onClick={async function () {
+                  await refetch()
                   verify_payment({
                     variables: {
                       paymentId: paymentId,
@@ -361,7 +371,6 @@ function MakePaymentSpace (props) {
                       source: props.orderTracker.dataSource
                     }
                   })
-                  refetch()
                   openAcceptModal()
                 }}
               >
@@ -479,11 +488,11 @@ function MakePaymentSpace (props) {
                 >
                   Accept
                 </AcceptButton>
-              ) : (
-                <AcceptButton onClick={closeAcceptModal}>
-                  Return To Home
-                </AcceptButton>
-              )}
+                  ) : (
+                    <AcceptButton onClick={closeAcceptModal}>
+                      Return To Home
+                    </AcceptButton>
+                  )}
             </ModalButtonsWrapper>
           </ModalWrapper>
         </Background>
@@ -503,6 +512,7 @@ function MakePaymentSpace (props) {
 
                     return (
                       <MakeModalOrder
+                        key={item.name + item.quantity}
                         quantity={item.quantity}
                         itemName={item.name}
                         price={item.totalMoney.amount / 100}
@@ -580,14 +590,15 @@ function OrderCard (props) {
     cancelClick,
     id,
     newOrder,
-    isIsolation, 
+    isIsolation,
     vendor
   } = props
 
   const {
     data: orderTrackerData,
     loading: orderTrackerLoading,
-    error: orderTrackerError, refetch
+    error: orderTrackerError,
+    refetch
   } = useQuery(ORDER_TRACKER, {
     variables: { orderId: id }
   })
@@ -633,8 +644,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
           }
           pickupCountdown={timeLeft}
         />
@@ -680,8 +691,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-              ? 'None'
-              : orderTrackerData.getOrderTracker.paymentType
+                ? 'None'
+                : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
           refetch={refetch}
@@ -691,8 +702,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker == null
               ? 'None'
               : orderTrackerData.getOrderTracker.shopifyOrderId
-              ? orderTrackerData.getOrderTracker.shopifyOrderId
-              : null
+                ? orderTrackerData.getOrderTracker.shopifyOrderId
+                : null
           }
         />
       </OrderCardWrapper>

@@ -97,8 +97,8 @@ function Auth () {
   // else, if employee is a buyer, then we redirect them automatically to /eat and restrict
   // their access to /employee
 
-  if(phone == null) {
-    return <Navigate to='/contact'/>
+  if (phone == null) {
+    return <Navigate to='/contact' />
   }
 
   if (vendor.length > 0) {

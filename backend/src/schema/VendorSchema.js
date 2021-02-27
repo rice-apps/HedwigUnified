@@ -146,7 +146,6 @@ const VendorQueries = {
         projection: { allowedNetid: {}, ...rp.projection }
       })
       if (!vendor.allowedNetid.includes(rp.context.netid)) {
-        vendor.squareInfo = null
         vendor.allowedNetid = null
       }
 
@@ -163,7 +162,6 @@ const VendorQueries = {
 
       return vendors.map(vendor => {
         if (!vendor.allowedNetid.includes(rp.context.netid)) {
-          vendor.squareInfo = null
           vendor.allowedNetid = null
         }
         return vendor

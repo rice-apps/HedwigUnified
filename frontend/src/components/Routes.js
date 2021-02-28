@@ -340,13 +340,12 @@ export const RoutesComponent = ({ loginCallBack }) => {
             <PrivateRoute
               isEmployeeRoute
               element={<FAQ />}
-
             />
           )
         },
         {
           path: '/*',
-          element: <Navigate to='/404_page' />
+          element: <Navigate to='/employee' />
         }
       ]
     },

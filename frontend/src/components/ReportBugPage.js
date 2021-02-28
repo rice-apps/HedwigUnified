@@ -21,14 +21,14 @@ const ReportPageButton = styled.button`
     outline: none;
   }
 `
-
+ 
 function ReportBugPage () {
   const navigate = useNavigate()
   const reportBug = () => {
     window.open("https://forms.gle/QJgMDKxCoT19jHbF9", "_blank")
   }
   const goBack = () => {
-    navigate('/login')
+    window.open(window.location.origin + "/login", "_blank")
   }
   return (
     <div className='errorPage'>

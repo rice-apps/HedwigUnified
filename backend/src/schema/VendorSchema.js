@@ -145,9 +145,7 @@ const VendorQueries = {
         ...rp,
         projection: { allowedNetid: {}, ...rp.projection }
       })
-      if (!vendor.allowedNetid.includes(rp.context.netid)) {
-        vendor.allowedNetid = null
-      }
+   
 
       return vendor
     }),

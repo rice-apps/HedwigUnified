@@ -346,7 +346,7 @@ function MakePaymentSpace (props) {
       ? props.orderTracker.paymentId
       : props.shopifyOrderId
   const vendor = props.vendor
-  console.log(paymentId, vendor, props.orderTracker.dataSource)
+
 
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
@@ -417,6 +417,7 @@ function MakePaymentSpace (props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
         <MakePaymentButtons
+          id={props.id}
           orderTracker={props.orderTracker}
           isIsolation={isIsolation}
           handleClick={props.handleClick}
@@ -440,7 +441,7 @@ function MakePaymentSpace (props) {
 
                     return (
                       <MakeModalOrder
-                        key={item.name + item.quantity}
+                        key={props.id + 'acceptmodal'}
                         quantity={item.quantity}
                         itemName={item.name}
                         price={item.totalMoney.amount / 100}
@@ -488,11 +489,11 @@ function MakePaymentSpace (props) {
                 >
                   Accept
                 </AcceptButton>
-                  ) : (
-                    <AcceptButton onClick={closeAcceptModal}>
-                      Return To Home
-                    </AcceptButton>
-                  )}
+              ) : (
+                <AcceptButton onClick={closeAcceptModal}>
+                  Return To Home
+                </AcceptButton>
+              )}
             </ModalButtonsWrapper>
           </ModalWrapper>
         </Background>
@@ -512,7 +513,7 @@ function MakePaymentSpace (props) {
 
                     return (
                       <MakeModalOrder
-                        key={item.name + item.quantity}
+                        key={props.id + 'cancelmodal'}
                         quantity={item.quantity}
                         itemName={item.name}
                         price={item.totalMoney.amount / 100}
@@ -644,8 +645,8 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-                ? 'None'
-                : orderTrackerData.getOrderTracker.paymentType
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
           }
           pickupCountdown={timeLeft}
         />
@@ -655,12 +656,12 @@ function OrderCard (props) {
           can be called multiple times if multiple items are in order */}
 
           {items &&
-            items.map(function (item) {
+            items.map(function (item, index) {
               const modifiers = item.modifiers?.map(modifier => modifier.name)
-
+      
               return (
                 <MakeOrderDetails
-                  key={item.name + item.quantity}
+                  key={id + 'orderdetails' + index}
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}
@@ -671,6 +672,7 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          id={id}
           vendor={vendor}
           isIsolation={isIsolation}
           pastPickup={pastPickup}
@@ -691,19 +693,18 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-                ? 'None'
-                : orderTrackerData.getOrderTracker.paymentType
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
           refetch={refetch}
           cancelClick={cancelClick}
-          id={props.id}
           shopifyOrderId={
             orderTrackerData.getOrderTracker == null
               ? 'None'
               : orderTrackerData.getOrderTracker.shopifyOrderId
-                ? orderTrackerData.getOrderTracker.shopifyOrderId
-                : null
+              ? orderTrackerData.getOrderTracker.shopifyOrderId
+              : null
           }
         />
       </OrderCardWrapper>

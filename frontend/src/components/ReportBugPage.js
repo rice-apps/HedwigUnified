@@ -22,7 +22,7 @@ const ReportPageButton = styled.button`
   }
 `
 
-function ReportBugPage (props) {
+function ReportBugPage () {
   const navigate = useNavigate()
   const reportBug = () => {
     window.open("https://forms.gle/QJgMDKxCoT19jHbF9", "_blank")

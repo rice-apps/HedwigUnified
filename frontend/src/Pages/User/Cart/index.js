@@ -6,8 +6,7 @@ import {
   createRecord,
   CREATE_ORDER,
   CREATE_PAYMENT,
-  GET_VENDOR,
-  UPDATE_ORDER_TRACKER
+  GET_VENDOR
 } from './util'
 import CartProduct from './CartProducts'
 import currency from 'currency.js'
@@ -18,15 +17,21 @@ import CartHeader from './CartHeader'
 import styled from 'styled-components/macro'
 import {
   FloatCartWrapper,
+  Input,
   SpaceWrapper,
+  TextArea,
   Title,
   Bill,
   SubmitButton
 } from './CartStyledComponents'
+import { GET_ITEM_AVAILABILITIES } from './../../../graphql/ProductQueries'
 // new dropdown imports:
 
 const styles = {
-  color: 'blue'
+  color: 'blue',
+  select: {
+    display: 'inline-block'
+  }
 }
 const Div = styled.div`
   text-align: right;
@@ -35,12 +40,6 @@ const Div = styled.div`
   margin-right: 5vw;
   grid-column-start: 2;
   padding-bottom: 10px;
-`
-
-const GET_AVAILABILITIES = gql`
-  query GET_AVAILABILITIES($productIds: [String!], $vendor: String!) {
-    getAvailabilities(productIds: $productIds, vendor: $vendor)
-  }
 `
 
 const defaultTotals = {
@@ -176,6 +175,9 @@ function CartDetail () {
   const [pickupTime, setPickupTime] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState(null)
   const [cohenId, setCohenId] = useState(null)
+  const [room, setRoom] = useState(null)
+  const [note, setNote] = useState(null)
+  const [characterCount, setCharacterCount] = useState(0)
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -183,6 +185,7 @@ function CartDetail () {
     { value: 'TETRA', label: 'Tetra' },
     { value: 'COHEN', label: 'Cohen House' }
   ]
+
   // const defaultPaymentOption = options[0];
   const cart_menu = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
@@ -202,14 +205,11 @@ function CartDetail () {
     createPayment,
     { loading: payment_loading, error: payment_error }
   ] = useMutation(CREATE_PAYMENT)
-  const [
-    updateOrderTracker,
-    { loading: tracker_loading, error: tracker_error }
-  ] = useMutation(UPDATE_ORDER_TRACKER)
-
 
   const navigate = useNavigate()
   // add catch statement
+
+  console.log(cart_menu)
 
   const product_ids = cart_menu
     ? cart_menu.map(item => {
@@ -217,7 +217,7 @@ function CartDetail () {
       })
     : null
 
-  const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
+  const { refetch: avail_refetch } = useQuery(GET_ITEM_AVAILABILITIES, {
     variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
   })
@@ -264,17 +264,17 @@ function CartDetail () {
       return navigate('/eat/failure')
     } else {
       const rec = {
-        variables: createRecord(cart_menu, paymentMethod, cohenId)
+        variables: createRecord(cart_menu, paymentMethod, cohenId, note, room)
       }
-      const emptyField = checkNullFields(rec)
-      if (checkNullFields(rec)) {
+      console.log(rec)
+      const emptyField = checkNullFields(rec, order.vendor.name)
+      if (emptyField) {
         setNullError(emptyField)
         return
       }
       const orderResponse = await createOrder(rec)
-      console.log("Order Response", orderResponse)
       const orderJson = orderResponse.data.createOrder
-      if(order.vendor.dataSource==='SHOPIFY' && paymentMethod === 'CREDIT'){
+      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod === 'CREDIT') {
         const createPaymentResponse = await createPayment({
           variables: {
             vendor: order.vendor.name,
@@ -290,13 +290,11 @@ function CartDetail () {
       }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
-        if (order.vendor.name === 'Cohen House') {
+        if (order.vendor.dataSource === 'SHOPIFY') {
           return handleClickCredit()
         }
-        else {
-          console.log("Order JSON", orderJson)
-          setLocalStorage(order, orderJson, "", totals)
-          console.log("Navigating to Square Payment")
+        else if (order.vendor.dataSource === 'SQUARE') {
+          setLocalStorage(order, orderJson, '', totals)
           return navigate('/eat/square')
         }
       }
@@ -304,7 +302,7 @@ function CartDetail () {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
-      if (paymentMethod === 'TETRA') {
+      if (!paymentMethod || paymentMethod === 'TETRA') {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
@@ -344,10 +342,6 @@ function CartDetail () {
   if (payment_loading) return <p>Creating new payment. Please wait ...</p>
   if (payment_error) {
     return <p>{payment_error.message}</p>
-  }
-  if (tracker_loading) return <p>Creating new order tracker. Please wait ...</p>
-  if (tracker_error) {
-    return <p>{tracker_error.message}</p>
   }
 
   // if (avail_loading) return <p>'Loading availabilities...'</p>;
@@ -487,42 +481,63 @@ function CartDetail () {
             </Bill>
           </Bill>
         </SpaceWrapper>
-
-        <SpaceWrapper pickUpTime>
-          <Title>Pick Up Time:</Title>
-          <Select
-            options={pickupTimes}
-            placeholder='Select...'
-            onChange={changePickupTime}
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-        </SpaceWrapper>
-        <SpaceWrapper paymentMethod>
-          <Title>Payment Method:</Title>
-          <Select
-            options={options}
-            onChange={changePaymentType}
-            placeholder='Select...'
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-          {paymentMethod === 'COHEN' && (
-            <Div>
-              <label>Enter your Cohen House Membership ID: </label>
-              <input onChange={e => setCohenId(e.target.value)} />
-            </Div>
-          )}
-          {nullError && (
-            <Div css={{ alignSelf: 'center', color: 'red' }}>
-              {' '}
-              Error! Submission form contains null value for {nullError}. Please
-              complete your profile and order.{' '}
-            </Div>
-          )}
-        </SpaceWrapper>
+        {order.vendor.name != 'Test Account CMT' && (
+          <SpaceWrapper pickUpTime>
+            <Title>Pick Up Time:</Title>
+            <Select
+              options={pickupTimes}
+              placeholder='Select...'
+              onChange={changePickupTime}
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+          </SpaceWrapper>
+        )}
+        {order.vendor.name != 'Test Account CMT' && (
+          <SpaceWrapper paymentMethod>
+            <Title>Payment Method:</Title>
+            <Select
+              options={options}
+              onChange={changePaymentType}
+              placeholder='Select...'
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+            {paymentMethod === 'COHEN' && (
+              <Div>
+                <label>Enter your Cohen House Membership ID: </label>
+                <input onChange={e => setCohenId(e.target.value)} />
+              </Div>
+            )}
+          </SpaceWrapper>
+        )}
+        {order.vendor.name === 'Test Account CMT' && (
+          <SpaceWrapper college>
+            <Title isolation>Room Number: </Title>
+            <Input roomNumber onChange={e => setRoom(e.target.value)} />
+          </SpaceWrapper>
+        )}
+        {order.vendor.name === 'Test Account CMT' && (
+          <SpaceWrapper note>
+            <div>
+              <Title isolation note>Order Notes: <span style={{ opacity: '0.6', fontStyle: 'italic', fontSize: '2vh' }}>({characterCount.toString()}/100)</span> </Title>
+              <TextArea
+                maxLength='150'
+                note onChange={(e) => { setNote(e.target.value); setCharacterCount(e.target.value.length) }}
+                placeholder='Type any additional dietary restrictions or concerns here (100 character limit)'
+              />
+            </div>
+          </SpaceWrapper>
+        )}
+        {nullError && (
+          <SpaceWrapper warning css={{ alignSelf: 'center', color: 'red' }}>
+            {' '}
+            Error! Submission form contains null value for {nullError}. Please
+            complete your profile and order.{' '}
+          </SpaceWrapper>
+        )}
         <SpaceWrapper footer>
           <SubmitButton
             onClick={cart_menu?.length === 0 ? null : handleConfirmClick}

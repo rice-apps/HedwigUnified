@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "lint": "prettier-standard --lint",
+    "lint": "standard --fix --verbose | snazzy",
     "start": "node src/index.js"
   },
   "author": "vms2@rice.edu",
@@ -25,6 +25,7 @@
     "ioredis": "^4.22.0",
     "loglevel": "^1.7.1",
     "mongoose": "^5.11.15",
+    "node-vault": "^0.9.21",
     "shopify-api-node": "^3.6.5",
     "shopify-buy": "^2.11.0",
     "square": "^8.1.1",
@@ -33,7 +34,8 @@
   "devDependencies": {
     "@types/qs": "6.9.4",
     "nodemon": "^2.0.7",
-    "prettier-standard": "^16.4.1",
+    "snazzy": "^9.0.0",
+    "standard": "^16.0.3",
     "typescript": "^4.1.5"
   }
 }

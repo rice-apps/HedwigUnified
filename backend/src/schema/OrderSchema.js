@@ -6,14 +6,11 @@ import {
   FilterOrderInputTC,
   SortOrderInputTC,
   FindManyOrderPayloadTC,
-  UpdateOrderTC
+  UpdateOrderTC,
+  Vendor
 } from '../models/index.js'
 import { pubsub } from '../utils/pubsub.js'
-import {
-  squareClients,
-  orderFetchAndParse,
-  orderParse
-} from '../utils/square.js'
+import { squareClients, orderParse } from '../utils/square.js'
 import TwilioClient from '../utils/twilio.js'
 import { ApiError } from 'square'
 
@@ -35,18 +32,28 @@ OrderTC.addResolver({
     }
   },
   resolve: async ({ args }) => {
-    const { vendor, locations, cursor, limit, filter, sort } = args
+    const { vendor, locations, cursor, limit } = args
 
     const squareClient = squareClients.get(vendor)
 
-    const query = {}
+    const today = new Date()
+    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
 
-    if (filter) {
-      query.filter = filter
-    }
-
-    if (sort) {
-      query.sort = sort
+    const query = {
+      filter: {
+        dateTimeFilter: {
+          createdAt: {
+            endAt: today.toISOString(),
+            startAt: yesterday.toISOString()
+          }
+        },
+        fulfillmentFilter: {
+          fulfillmentTypes: ['PICKUP']
+        }
+      },
+      sort: {
+        sortField: 'CREATED_AT'
+      }
     }
 
     try {
@@ -64,11 +71,20 @@ OrderTC.addResolver({
         order => typeof order.fulfillments !== 'undefined'
       )
 
+      const orderIds = filteredOrders.map(order => order.id)
+      const orderTrackers = await OrderTracker.find({
+        orderId: { $in: orderIds }
+      })
+        .lean()
+        .exec()
+
       const returnedOrders = filteredOrders.map(async order => {
-        const orderTracker = await OrderTracker.findOne({ orderId: order.id })
+        const orderTracker = orderTrackers.find(obj => obj.orderId === order.id)
 
         const parsedOrder = orderParse(order)
-        parsedOrder.fulfillment.state = orderTracker.status
+        parsedOrder.fulfillment.state = orderTracker
+          ? orderTracker.status
+          : order.fulfillments[0].state
 
         return parsedOrder
       })
@@ -80,11 +96,13 @@ OrderTC.addResolver({
     } catch (error) {
       if (error instanceof ApiError) {
         return new ApolloError(
-          `Finding orders using Square failed because ${error.result}`
+          `Finding orders using Square failed because ${JSON.stringify(error)}`
         )
       }
 
-      return new ApolloError('Something went wrong finding orders')
+      return new ApolloError(
+        `Something went wrong finding orders: ${JSON.stringify(error)}`
+      )
     }
   }
 })
@@ -108,11 +126,17 @@ OrderTC.addResolver({
           submissionTime,
           cohenId,
           studentId,
-          paymentType
+          paymentType,
+          note,
+          roomNumber
         }
       } = args
 
       const squareClient = squareClients.get(vendor)
+
+      const vendorDoc = await Vendor.findOne({ name: vendor })
+        .lean()
+        .exec()
 
       try {
         const {
@@ -146,24 +170,27 @@ OrderTC.addResolver({
         })
 
         await OrderTracker.create({
+          note,
+          roomNumber,
+          pickupTime,
+          submissionTime,
+          locationId,
+          paymentType,
+          dataSource: vendorDoc.dataSource,
           status: 'PROPOSED',
-          pickupTime: pickupTime,
-          submissionTime: submissionTime,
-          locationId: locationId,
           orderId: newOrder.id,
-          paymentType: paymentType
+          vendor: vendor
         })
 
         const order = orderParse(newOrder)
-
-        console.log(order.fulfillment.pickupDetails.recipient)
 
         pubsub.publish('orderCreated', {
           orderCreated: order
         })
 
         TwilioClient.messages.create({
-          body: 'Your order has been placed.',
+          body:
+            'Your order with East-West Tea has been placed. If you need to contact East-West Tea, please message them on Facebook.',
           from: '+13466667153',
           to: order.fulfillment.pickupDetails.recipient.phone
         })
@@ -201,58 +228,119 @@ OrderTC.addResolver({
         orderId: orderId
       })
 
+      const vendorData = await Vendor.findOne({ name: vendor })
+        .lean()
+        .exec()
+
       const squareClient = squareClients.get(vendor)
 
-      const order = await orderFetchAndParse(squareClient, orderId)
-      order.fulfillment.state = fulfillment.state
+      /** @type {import('square').Order} */
+      let order
+
+      try {
+        order = (await squareClient.ordersApi.retrieveOrder(orderId)).result
+          .order
+      } catch (error) {
+        if (error instanceof ApiError) {
+          throw new ApolloError(
+            `Can't retrive existing order from Square: ${JSON.stringify(
+              error.result
+            )}`
+          )
+        }
+
+        throw new ApolloError(
+          `Something went wrong retrieving existing order: ${JSON.stringify(
+            error
+          )}`
+        )
+      }
 
       if (updatedOrderTracker.status === fulfillment.state) {
-        return order
+        return orderParse(order)
+      }
+
+      if (vendorData.dataSource === 'SQUARE' && updatedOrderTracker.paymentType === 'CREDIT') {
+        try {
+          order = (
+            await squareClient.ordersApi.updateOrder(orderId, {
+              order: {
+                version: order.version,
+                locationId: order.locationId,
+                fulfillments: [
+                  {
+                    uid: order.fulfillments[0].uid,
+                    state: fulfillment.state
+                  }
+                ],
+                state:
+                  fulfillment.state === 'COMPLETED' ||
+                  fulfillment.state === 'CANCELED'
+                    ? fulfillment.state
+                    : 'OPEN'
+              }
+            })
+          ).result.order
+        } catch (error) {
+          if (error instanceof ApiError) {
+            throw new ApolloError(
+              `Updating order in Square failed: ${JSON.stringify(error.result)}`
+            )
+          }
+
+          throw new ApolloError(
+            `Something went wrong updating order on Square: ${JSON.stringify(error)}`
+          )
+        }
       }
 
       updatedOrderTracker.status = fulfillment.state
 
-      await updatedOrderTracker.save()
+      updatedOrderTracker.save()
+
+      const parsedOrder = orderParse(order)
+
+      parsedOrder.fulfillment.state = fulfillment.state
 
       pubsub.publish('orderUpdated', {
-        orderUpdated: order
+        orderUpdated: parsedOrder
       })
 
       switch (updatedOrderTracker.status) {
         case 'PREPARED':
           TwilioClient.messages.create({
             body:
-              'Your recent order has been prepared. Please go to the pickup location',
+              'Your order with East-West Tea is ready for pickup. Please wait in the RMC courtyard for an employee to bring the order to you. Remember to wear a mask and socially distance! ',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
           break
         case 'COMPLETED':
           TwilioClient.messages.create({
             body:
-              'Your order has been picked up. If you did not do this, please contact the vendor directly.',
+              'Your order with East-West Tea has been picked up. If you did not pick up the order, please contact East-West Tea immediately via Facebook. Tell us how your ordering and food experience was by filling out the survey here: https://forms.gle/BzW3C8JAnXD7N6Jz7 ',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
           break
         case 'CANCELED':
           TwilioClient.messages.create({
             body:
-              'Your order has been cancelled. To reorder, please visit https://hedwig.riceapps.org/',
+              'You order with East-West Tea has been cancelled. If you would like to contact East-West Tea about your order, please message them on Facebook.',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
           break
         default:
           TwilioClient.messages.create({
             body:
-              'Your order has been updated. Please check https://hedwig.riceapps.org/ for more details',
+              'Your order with East-West Tea has been accepted and is being prepared. Please do not come to pick up your order until you receive a text asking you to do so.',
             from: '+13466667153',
-            to: order.fulfillment.pickupDetails.recipient.phone
+            to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
       }
 
-      return order
+      return parsedOrder
     }
   })
 

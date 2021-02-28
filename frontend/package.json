@@ -21,6 +21,7 @@
     "graphql-tag.macro": "^2.0.1",
     "history": "^5.0.0",
     "immer": "^8.0.1",
+    "js-cookie": "^2.2.1",
     "moment": "^2.29.1",
     "omit-deep-lodash": "^1.1.5",
     "react": "^17.0.1",
@@ -49,7 +50,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "prettier-standard --lint",
+    "lint": "standard --fix --verbose | snazzy",
     "lint:css": "stylelint './src/**/*.js'"
   },
   "eslintConfig": {
@@ -68,7 +69,8 @@
     ]
   },
   "devDependencies": {
-    "prettier-standard": "^16.4.1",
+    "snazzy": "^9.0.0",
+    "standard": "^16.0.3",
     "stylelint": "^13.10.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-styled-components": "^0.1.1",

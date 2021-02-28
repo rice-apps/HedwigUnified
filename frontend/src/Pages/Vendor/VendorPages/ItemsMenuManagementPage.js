@@ -12,7 +12,7 @@ function ItemsMenuManagementPage () {
     loading: catalog_loading
   } = useQuery(GET_CATALOG, {
     variables: {
-      vendor: currentUser.vendor
+      vendor: currentUser.vendor[0]
     }
   })
 

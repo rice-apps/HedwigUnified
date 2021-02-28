@@ -49,30 +49,22 @@ const UPDATE_VENDOR_AVAILABILITY = gql`
 
 function SideBarVendorProfile ({ setLogo }) {
   const token = localStorage.getItem('token')
-  const [vendorName, setVendorName] = useState('Cohen House')
+  const vendorName = JSON.parse(localStorage.getItem('userProfile')).vendor[0]
 
   const [, { error }] = useMutation(UPDATE_VENDOR_AVAILABILITY)
 
   // query to get the vendor... is it worth to cache the vendor merchant ID?
-  const { data: userData, loading: userLoading, error: userError } = useQuery(
-    GET_USER,
-    {
-      variables: { token: token }
-    }
-  )
 
-  const { data, loading, error: queryError } = useQuery(GET_VENDOR_DATA, {
-    variables: { name: 'Cohen House' }
+  const { data, loading, error: queryError, refetch } = useQuery(GET_VENDOR_DATA, {
+    variables: { name: vendorName }
   })
 
-  useEffect(() => {
-    setVendorName(userData?.userOne?.vendor)
-  }, [userData])
+  console.log('NO', data)
 
-  if (error || queryError || userError) {
+  if (error || queryError) {
     return <p>Error</p>
   }
-  if (loading || userLoading) return <p>Waiting...</p>
+  if (loading) return <p>Waiting...</p>
 
   setLogo(data.getVendor.logoUrl)
 

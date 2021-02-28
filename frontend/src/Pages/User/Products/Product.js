@@ -109,6 +109,8 @@ function Product () {
     setQuantity(quantity - 1)
   }
 
+  const alternatePhoto = 'https://scontent.fhou1-1.fna.fbcdn.net/v/t1.0-9/56770720_2496620450358466_4855511062713204736_n.jpg?_nc_cat=100&ccb=3&_nc_sid=09cbfe&_nc_ohc=ljQCn12JvCAAX-x41HR&_nc_ht=scontent.fhou1-1.fna&oh=416fce9b15a0cc371a6560ca6316d9e4&oe=605B92F8'
+
   function makeCartItem () {
     const vendor = vendor_data.getVendor
     const cart_menu = JSON.parse(localStorage.getItem('cartItems'))
@@ -130,7 +132,8 @@ function Product () {
           vendor: {
             name: vendor.name,
             merchantId: vendor.squareInfo.merchantId,
-            locationIds: vendor.squareInfo.locationIds
+            locationIds: vendor.squareInfo.locationIds,
+            dataSource: vendor.dataSource
           }
         })
       )
@@ -253,7 +256,15 @@ function Product () {
         state={{ currentVendor: vendor.name }}
       />
       <div className='container'>
-        <img className='heroImage' src={product.image} alt={product.name} />
+        <img
+          className='heroImage'
+          src={
+            product.image
+              ? product.image
+              : alternatePhoto
+          }
+          alt={product.name}
+        />
 
         <div className='itemHeading'>
           <h2>{product.name}</h2>
@@ -295,7 +306,7 @@ function Product () {
                   state: {
                     currentVendor: vendor.name,
                     addedItem: product.name,
-                    addedImage: product.image
+                    addedImage: product.image ? product.image : alternatePhoto
                   }
                 })
               }

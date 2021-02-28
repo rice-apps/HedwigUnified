@@ -7,6 +7,7 @@ export const GET_VENDOR = gql`
     getVendor(filter: $filter) {
       name
       pickupInstruction
+      dataSource
       hours {
         start
         end
@@ -35,6 +36,8 @@ export const CREATE_ORDER = gql`
     $cohenId: String
     $email: String!
     $vendor: String!
+    $note: String
+    $roomNumber: String
   ) {
     createOrder(
       locationId: $location
@@ -48,6 +51,8 @@ export const CREATE_ORDER = gql`
         submissionTime: $submissionTime
         paymentType: $type
         cohenId: $cohenId
+        note: $note
+        roomNumber: $roomNumber
       }
     ) {
       id
@@ -87,12 +92,14 @@ export const CREATE_PAYMENT = gql`
     $currency: String!
     $location: String!
     $vendor: String!
+    $sourceId: String!
+    $source: DataSourceEnum!
   ) {
     createPayment(
       vendor: $vendor
       record: {
-        source: SHOPIFY
-        sourceId: "cnon:card-nonce-ok"
+        source: $source
+        sourceId: $sourceId
         orderId: $orderId
         locationId: $location
         subtotal: { amount: $subtotal, currency: $currency }
@@ -148,10 +155,15 @@ const getLineItems = items => {
   return rtn
 }
 
-export const createRecord = (items, paymentType, cohenId) => {
+export const createRecord = (items, paymentType, cohenId, note, room) => {
   const recipient = getRecipient()
   const user = JSON.parse(localStorage.getItem('userProfile'))
   const order = JSON.parse(localStorage.getItem('order'))
+  let timePlaceHolder = null
+  if (order.vendor.name === 'Test Account CMT') {
+    paymentType = 'None'
+    timePlaceHolder = moment().format()
+  }
   return {
     vendor: order.vendor.name,
     studentId: user.studentId,
@@ -160,15 +172,18 @@ export const createRecord = (items, paymentType, cohenId) => {
     name: recipient.name,
     phone: recipient.phone,
     email: recipient.email,
-    pickupTime: order.pickupTime ? moment(order.pickupTime).format() : null,
+    pickupTime: order.pickupTime
+      ? moment(order.pickupTime).format() : timePlaceHolder,
     submissionTime: moment().toISOString(),
     location: order.vendor.locationIds[0],
     type: paymentType,
-    cohenId: cohenId
+    cohenId: cohenId,
+    note: note,
+    roomNumber: room
   }
 }
 
-export const checkNullFields = source => {
+export const checkNullFields = (source, vendorName) => {
   const fields = ['name', 'phone', 'studentId', 'type', 'pickupTime']
   const detailedInfo = [
     'name',
@@ -185,8 +200,10 @@ export const checkNullFields = source => {
     }
   }
   if (source.variables.type === 'COHEN' && !source.variables.cohenId) {
-    console.log('no cohen id')
     return 'cohen id'
+  }
+  if (vendorName === 'Test Account CMT' && !source.variables.roomNumber) {
+    return 'room number'
   }
   return null
 }

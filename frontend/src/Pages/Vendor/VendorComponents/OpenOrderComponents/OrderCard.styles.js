@@ -11,8 +11,7 @@ export const OrderCardWrapper = styled.div`
   display: grid;
   width: 26vw;
   height: max-content;
-  margin: 10px;
-  margin-right: 14px;
+  margin: 1vh;
   overflow: visible;
   grid-template-columns: 1fr;
   grid-template-rows: max-content max-content max-content min-content;
@@ -27,27 +26,81 @@ export const OrderTitleSpaceWrapper = styled.div`
   font-weight: bolder;
   grid-area: OrderTitleSpace;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 'icon1 namecontact icon2'
+                       '. namecontact .';
   font-size: 22px;
   line-height: 23.5px;
   justify-content: center;
   justify-items: center;
-  padding-top: 8px;
+  padding-top: 1vh;
   align-items: center;
   overflow: hidden;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
 `
 
+export const OrderTitleContactHidden = styled.div`
+  grid-area: namecontact;
+  padding-top: 0.5vh;
+  &:hover {
+    cursor: pointer;
+  }
+`
+
+export const OrderTitleContactShown = styled.div`
+  grid-area: namecontact;
+  opacity: 1;
+  width:100%;
+  padding: 0.5vh 0.5vh 0vh 1vh;
+  border-radius: 2vh;
+  &:hover {
+    cursor: pointer;
+  }
+`
+
+export const OrderTitleIconOneDiv = styled.div`
+  grid-area: icon1;
+`
+
+export const OrderTitleIconTwoDiv = styled.div`
+  grid-area: icon2;
+`
+
+export const OrderTitleContact = styled.div`
+  grid-area: namecontact;  
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  column-gap: 1vh;
+  justify-self: center;
+  align-items: center;
+  justify-items: start;
+  line-height: 3.5vh;
+  background: #F1F1F1;
+  color: black;
+  font-weight: normal;
+  font-size: 2vh;
+  opacity: 1;
+  border-radius: 2vh;
+  padding-top: 0.5vh;
+  z-index: 2;
+`
+
+export const OrderTitleContactIcon = styled.div`
+  justify-self: end;
+`
+
 export const OrderTimeSpaceWrapper = styled.div`
   grid-area: OrderTimeSpace;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   grid-template-rows: 1fr;
   font-size: 14px;
   grid-template-areas: 'ExactTimeSpace TimeLeftSpace';
   font-weight: 500;
+  position: relative;
 `
 
 export const ExactTimeSpaceWrapper = styled.div`
@@ -124,14 +177,15 @@ export const ButtonWrapper = styled.button`
   align-items: center;
   padding: 5px 20px;
   margin: 0px 15px;
-  box-shadow: 0.6px 0.6px 3px 0.5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0.6px 0.6px 35px 0.5px rgba(0, 0, 0, 0.1);
 `
 export const AcceptButton = styled(ButtonWrapper)`
   background-color: #f9ddd7;
 `
 
 export const CancelButton = styled(ButtonWrapper)`
-  background-color: #dedede;
+  background-color: white;
+  border: 1px solid rgba(0,0,0,0.6);
 `
 
 export const ReadyButton = styled(ButtonWrapper)`

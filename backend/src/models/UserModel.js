@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     default: 'Undergraduate'
   },
   isAdmin: { type: Boolean, default: false },
-  vendor: { type: String, required: false }
+  vendor: { type: [String], required: false }
 })
 
 const User = mongoose.model('Users', UserSchema)

@@ -20,13 +20,13 @@ const GET_VENDOR_INFO = gql`
 
 const UPDATE_VENDOR = gql`
   mutation UPDATE_VENDOR(
-    $name: String!
-    $website: String!
-    $email: String!
-    $facebook: String!
-    $phone: String!
-    $cutoffTime: Float!
-    $pickupInstruction: String!
+    $name: String
+    $website: String
+    $email: String
+    $facebook: String
+    $phone: String
+    $cutoffTime: Float
+    $pickupInstruction: String
   ) {
     updateVendor(
       record: {
@@ -62,7 +62,7 @@ const Div = styled.div`
       border-radius: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.5fr 2fr 1.2fr;
+      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.2fr 2.3fr 1.2fr;
       grid-template-areas:
         'ImageSpace ImageSpace'
         'Name Website'
@@ -92,6 +92,60 @@ const Div = styled.div`
      font-weight: 500;
      text-align: right;
    `}
+   ${props =>
+     props.buttonwrapper &&
+     css`
+       grid-area: Button;
+       height: 100%;
+       width: 100%;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       font-size: 2.1vh;
+       opacity: ${props => (props.disabled ? '0.3' : '1')};
+     `}
+    ${props =>
+      props.flexWrapper &&
+      css`
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        grid-area: ${props => props.gridArea};
+      `}
+    ${props =>
+      props.bottomTitle &&
+      css`
+        display: flex;
+        margin-left:4.2rem;
+        /* grid-template-columns: ${props =>
+          props.pickup ? '1.0fr 3.6fr' : '0.6fr 4.6fr'}; */
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        font-size: 2.35vh;
+        font-weight: 500;
+        text-align: left;
+        margin-top: 1vh;
+      `}
+ 
+      ${props =>
+        props.bottomSubtitle &&
+        css`
+          font-size: 2.1vh;
+          text-align: left;
+          margin-left: 2vh;
+        `}
+
+      ${props =>
+        props.warning &&
+        css`
+          font-size: 1.8vh;
+          opacity: 0.5;
+          margin-top: 0.3rem;
+          margin-left: 4.2rem;
+        `}
 `
 
 const Img = styled.img`
@@ -116,6 +170,42 @@ const Input = styled.input`
   font-size: 2.2vh;
   padding-left: 15px;
   font-weight: 600;
+
+  ${props =>
+    props.number &&
+    css`
+      width: 7.6vh;
+      margin-left: 0px;
+      margin-right: 0.5rem;
+    `}
+
+`
+
+const TextArea = styled.textarea`
+  border-radius: 20px;
+  background-color: #f1f1f1;
+  width: 60%;
+  height: 10vh;
+  margin-top: 0.2rem;
+  margin-left: 4.2rem;
+  margin-right: 0.5rem;
+  text-align: left;
+  font-size: 2.2vh;
+  padding-left: 15px;
+  font-weight: 600;
+  line-height:2.2vh;
+  padding-top:1vh;
+  border:none;
+`
+
+const Button = styled.div`
+  border-radius: 16px;
+  background-color: ${props => (props.filled ? '#F3725B' : null)};
+  color: ${props => (props.filled ? 'white' : '#F3725B')};
+  border: ${props => (props.filled ? null : '1px solid #F3725B')};
+  padding: 0.2vh 4vh;
+  margin: 0vh 2vh;
+  cursor: pointer;
 `
 
 function BasicInfoDetail (props) {
@@ -123,9 +213,10 @@ function BasicInfoDetail (props) {
     <Div detail gridArea={props.gridArea}>
       <Div detailTitle>{props.gridArea}:</Div>
       <Input
+        class='input'
         type='text'
         placeholder={props.placeholder}
-        onChange={e => console.log(e.target.value)}
+        onChange={props.onChange}
       />
     </Div>
   )
@@ -133,28 +224,34 @@ function BasicInfoDetail (props) {
 
 function isEmpty (obj) {
   for (const prop in obj) {
-    if (obj.hasOwnProperty(prop)) return false
+    if (obj.hasOwnProperty(prop)) {
+      return false
+    }
   }
 
-  return true
+  return JSON.stringify(obj) === JSON.stringify({})
 }
 
 function BasicInfoDashboard () {
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
-  const [] = useMutation(UPDATE_VENDOR)
+  const [
+    updateVendor,
+    { loading: vendor_loading, error: vendor_error }
+  ] = useMutation(UPDATE_VENDOR)
   const {
     data: vendorData,
     loading: vendorLoading,
     error: vendorError
   } = useQuery(GET_VENDOR_INFO, {
-    variables: { name: currentUser.vendor }
+    variables: { name: currentUser.vendor[0] }
   })
   const [updatedInfo, setUpdatedInfo] = useState({})
-
-  if (vendorError) {
-    return <p>Error</p>
+  const [isDisabled, setIsDisabled] = useState(true)
+  const [placeholderInfo, setPlaceholderInfo] = useState({})
+  if (vendorError | vendor_error) {
+    return <p>ErrorVendor...</p>
   }
-  if (vendorLoading) {
+  if (vendorLoading | vendor_loading) {
     return <p>Waiting...</p>
   }
   const {
@@ -168,17 +265,26 @@ function BasicInfoDashboard () {
     pickupInstruction
   } = vendorData.getVendor
 
-  console.log(
-    'vendorData ',
-    name,
-    logoUrl,
-    website,
-    email,
-    facebook,
-    phone,
-    cutoffTime,
-    pickupInstruction
-  )
+  function clearInputs () {
+    const elements = document.getElementsByTagName('input')
+    const areaelements = document.getElementsByTagName('textarea')
+    for (let ii = 0; ii < elements.length; ii++) {
+      if (elements[ii].type == 'text') {
+        elements[ii].value = ''
+      } else if (elements[ii].type == 'number') {
+        elements[ii].value = ''
+      }
+    }
+    areaelements[0].value = ''
+  }
+
+  function updateInfo (updatedField) {
+    const orig = updatedInfo
+    const updated = Object.assign(orig, updatedField)
+    setUpdatedInfo(updated)
+    console.log('UPDATED INFO CHANGED', updatedInfo)
+    setIsDisabled(false)
+  }
 
   const originalInfo = {
     name: name,
@@ -191,55 +297,102 @@ function BasicInfoDashboard () {
     pickupInstruction: pickupInstruction
   }
 
-  if (isEmpty(updatedInfo)) {
-    setUpdatedInfo(originalInfo)
+  if (isEmpty(placeholderInfo)) {
+    setPlaceholderInfo(originalInfo)
   }
 
-  console.log('UPDATED', updatedInfo)
+  const handleConfirmClick = async () => {
+    // updates placeholders for input
+    const updatedPlaceholder = Object.assign(placeholderInfo, updatedInfo)
+    setPlaceholderInfo(updatedPlaceholder)
+    // adds vendor name to the mutation
+    const vendorField = { name: currentUser.vendor[0] }
+    updateInfo(vendorField)
+    await updateVendor({ variables: updatedInfo })
 
-  // All fields are filled
+    // make buttons disabled
+    setIsDisabled(true)
+  }
 
-  // Click save button
+  console.log('PLACEHOLDERS', placeholderInfo)
 
-  // Add variables to the mutation:
-  // updateBasicInfo({
-  //   variables: {
-  //     name: updatedInfo.name,
-  //     website: updatedInfo.website,
-  //     email: updatedInfo.email,
-  //     facebook: updatedInfo.facebook,
-  //     phone: updatedInfo.phone,
-  //     cutoffTime: updatedInfo.cutoffTime,
-  //     pickupInstruction: updatedInfo.pickupInstruction,
-  //   },
-  // });
-
-  // Reload window
-  // window.location.reload();
-
-  // ------------------------
-  // Original data (TEST):
-  //   updateBasicInfo({
-  //     variables: {
-  //       name: 'Cohen House',
-  //       website: 'https://facultyclub.rice.edu/contact-us',
-  //       email: 'club@rice.edu',
-  //       facebook: 'facebook.com/rice',
-  //       phone: '713-348-4000',
-  //       cutoffTime: 15,
-  //       pickupInstruction: 'test'
-  //     }
-  //   })
-  //   console.log(data)
-  // ------------------------
   return (
     <Div wrapper>
+      {console.log(isDisabled)}
       <Img logo src={vendorData.getVendor.logoUrl} />
-      <BasicInfoDetail gridArea='Name' placeholder={updatedInfo.name} />
-      <BasicInfoDetail gridArea='Website' placeholder={updatedInfo.website} />
-      <BasicInfoDetail gridArea='Email' placeholder={updatedInfo.email} />
-      <BasicInfoDetail gridArea='Facebook' placeholder={updatedInfo.facebook} />
-      <BasicInfoDetail gridArea='Phone' placeholder={updatedInfo.phone} />
+      <BasicInfoDetail
+        gridArea='Name'
+        placeholder={placeholderInfo.name}
+        onChange={e => console.log(e.target.value)}
+      />
+      <BasicInfoDetail
+        gridArea='Website'
+        placeholder={placeholderInfo.website}
+        onChange={e => updateInfo({ website: e.target.value })}
+      />
+      <BasicInfoDetail
+        gridArea='Email'
+        placeholder={placeholderInfo.email}
+        onChange={e => updateInfo({ email: e.target.value })}
+      />
+      <BasicInfoDetail
+        gridArea='Facebook'
+        placeholder={placeholderInfo.facebook}
+        onChange={e => updateInfo({ facebook: e.target.value })}
+      />
+      <BasicInfoDetail
+        gridArea='Phone'
+        placeholder={placeholderInfo.phone}
+        onChange={e => updateInfo({ phone: e.target.value })}
+      />
+
+      {/* the cutoff section for set basic info  */}
+      <Div flexWrapper gridArea='Cutoff'>
+        <Div bottomTitle>
+          <div>Cutoff Time:</div>
+          <Div bottomSubtitle>
+            <Input
+              number
+              class='input'
+              type='number'
+              min='0'
+              placeholder={placeholderInfo.cutoffTime}
+              onChange={e =>
+                updateInfo({ cutoffTime: parseInt(e.target.value) })}
+            />
+            minutes before closing time{' '}
+          </Div>
+        </Div>
+        <Div warning>*Orders will not be accepted after this time</Div>
+      </Div>
+
+      <Div flexWrapper gridArea='Pickup'>
+        <Div bottomTitle pickup>
+          Pickup Instructions:
+        </Div>
+        <Div warning>
+          *These instructions are sent to the buyer when an order is submitted
+        </Div>
+        <TextArea
+          placeholder={placeholderInfo.pickupInstruction}
+          onChange={e => updateInfo({ pickupInstruction: e.target.value })}
+        />
+      </Div>
+
+      <Div buttonwrapper disabled={isDisabled}>
+        <Button
+          onClick={() => {
+            clearInputs()
+            setUpdatedInfo({})
+            setIsDisabled(true)
+          }}
+        >
+          Discard
+        </Button>
+        <Button filled onClick={() => handleConfirmClick()}>
+          Save
+        </Button>
+      </Div>
     </Div>
   )
 }

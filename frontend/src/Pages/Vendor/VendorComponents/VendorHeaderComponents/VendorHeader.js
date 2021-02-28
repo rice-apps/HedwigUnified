@@ -8,6 +8,7 @@ import { IconContext } from 'react-icons'
 import { useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 import { useNavigate } from 'react-router-dom'
+import ChooseVendor from '../../../../components/ChooseVendor'
 
 const VendorHeaderWrapper = styled.div`
   font-weight: 600;
@@ -53,7 +54,7 @@ const DateTimeDisplayWrapper = styled.div`
 `
 const LogoutPopup = styled.div`
   background-color: #d0d0d0;
-  height: 16vh;
+  height: 25vh;
   width: 20vw;
   position: absolute;
   right: 15px;
@@ -128,6 +129,9 @@ function VendorHeader () {
           {' '}
           <AiOutlineUserSwitch />
           Switch to Buyer
+        </LogoutItem>
+        <LogoutItem onClick={() => navigate('/vendor_choice')}>
+          Switch Vendors
         </LogoutItem>
       </LogoutPopup>
     )

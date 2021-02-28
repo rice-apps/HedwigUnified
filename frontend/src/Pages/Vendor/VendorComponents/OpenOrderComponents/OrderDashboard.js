@@ -190,17 +190,27 @@ const ORDER_UPDATED = gql`
 `
 
 function OrderDashboard () {
-  const vendorId = ['LBBZPB7F5A100']
   const currentUser = JSON.parse(localStorage.getItem('userProfile'))
+  const vendorId =
+    currentUser.vendor[0] === 'Cohen House'
+      ? ['LBBZPB7F5A100']
+      : currentUser.vendor[0] === 'Test Account CMT'
+        ? ['L2N8DA44TZK8E']
+        : currentUser.vendor[0] === 'East West Tea'
+          ? ['CF05Q06RWXA1D']
+          : currentUser.vendor[0] === 'East West Test'
+            ? ['LCW8P8CZEVNMQ']
+            : null
 
   const { data: allOrders, loading, error, subscribeToMore } = useQuery(
     FIND_ORDERS,
     {
-      variables: { location: vendorId, vendor: currentUser.vendor }
+      variables: { location: vendorId, vendor: currentUser.vendor[0] }
     }
   )
   const [updateOrder] = useMutation(UPDATE_ORDER)
-
+  const isIsolation = currentUser.vendor[0] == 'Test Account CMT'
+  console.log(isIsolation)
   useEffect(() => {
     const unsubscribeToNewOrders = subscribeToMore({
       document: ORDER_CREATED,
@@ -245,7 +255,7 @@ function OrderDashboard () {
   const handleOrderClick = (order, orderState) => {
     updateOrder({
       variables: {
-        vendor: currentUser.vendor,
+        vendor: currentUser.vendor[0],
         orderId: order.id,
         uid: order.fulfillment.uid,
         state: orderState
@@ -271,16 +281,18 @@ function OrderDashboard () {
     order => order.fulfillment.state === 'PREPARED'
   )
 
+  console.log('NEWORDERS', newOrders)
+
   return (
-    <OrderDashboardWrapper>
+    <OrderDashboardWrapper isIsolation={isIsolation}>
       <NewOrderTitleWrapper>
         <MakeDashboardTitle name='New' quantity={newOrders.length} />
       </NewOrderTitleWrapper>
-
       <NewOrderSpaceWrapper>
         {allOrders &&
           newOrders.map(order => (
             <OrderCard
+              vendor={currentUser.vendor[0]}
               key={order.id}
               id={order.id}
               studentId={order.studentId}
@@ -297,6 +309,7 @@ function OrderDashboard () {
               handleClick={() => handleOrderClick(order, 'RESERVED')}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}
               buttonStatus='NEW'
+              isIsolation={isIsolation}
               newOrder
             />
           ))}
@@ -305,10 +318,11 @@ function OrderDashboard () {
       <AcceptedOrderTitleWrapper>
         <MakeDashboardTitle name='Accepted' quantity={acceptedOrders.length} />
       </AcceptedOrderTitleWrapper>
-      <AcceptedOrderSpaceWrapper>
+      <AcceptedOrderSpaceWrapper isIsolation={isIsolation}>
         {allOrders &&
           acceptedOrders.map(order => (
             <OrderCard
+              vendor={currentUser.vendor[0]}
               key={order.id}
               id={order.id}
               studentId={order.studentId}
@@ -324,35 +338,41 @@ function OrderDashboard () {
               handleClick={() => handleOrderClick(order, 'PREPARED')}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}
               buttonStatus='ACCEPTED'
+              isIsolation={isIsolation}
             />
           ))}
       </AcceptedOrderSpaceWrapper>
-
-      <ReadyOrderTitleWrapper>
-        <MakeDashboardTitle name='Ready' quantity={readyOrders.length} />
-      </ReadyOrderTitleWrapper>
-      <ReadyOrderSpaceWrapper>
-        {allOrders &&
-          readyOrders.map(order => (
-            <OrderCard
-              key={order.id}
-              id={order.id}
-              studentId={order.studentId}
-              cohenId={order.cohenId}
-              customerName={order.customer.name}
-              phone={order.customer.phone}
-              email={order.customer.email}
-              pickupTime={order.fulfillment.pickupDetails.pickupAt}
-              submissionTime={order.submissionTime}
-              items={order.items}
-              orderCost={order.total.amount / 100}
-              orderTotal={(order.total.amount + order.totalTax.amount) / 100}
-              handleClick={() => handleOrderClick(order, 'COMPLETED')}
-              cancelClick={() => handleOrderClick(order, 'CANCELED')}
-              buttonStatus='READY'
-            />
-          ))}
-      </ReadyOrderSpaceWrapper>
+      {isIsolation ? null : (
+        <ReadyOrderTitleWrapper>
+          <MakeDashboardTitle name='Ready' quantity={readyOrders.length} />
+        </ReadyOrderTitleWrapper>
+      )}
+      {isIsolation ? null : (
+        <ReadyOrderSpaceWrapper>
+          {allOrders &&
+            readyOrders.map(order => (
+              <OrderCard
+                vendor={currentUser.vendor[0]}
+                key={order.id}
+                id={order.id}
+                studentId={order.studentId}
+                cohenId={order.cohenId}
+                customerName={order.customer.name}
+                phone={order.customer.phone}
+                email={order.customer.email}
+                pickupTime={order.fulfillment.pickupDetails.pickupAt}
+                submissionTime={order.submissionTime}
+                items={order.items}
+                orderCost={order.total.amount / 100}
+                orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+                handleClick={() => handleOrderClick(order, 'COMPLETED')}
+                cancelClick={() => handleOrderClick(order, 'CANCELED')}
+                buttonStatus='READY'
+                isIsolation={isIsolation}
+              />
+            ))}
+        </ReadyOrderSpaceWrapper>
+      )}
     </OrderDashboardWrapper>
   )
 }

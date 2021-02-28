@@ -17,15 +17,21 @@ import CartHeader from './CartHeader'
 import styled from 'styled-components/macro'
 import {
   FloatCartWrapper,
+  Input,
   SpaceWrapper,
+  TextArea,
   Title,
   Bill,
   SubmitButton
 } from './CartStyledComponents'
+import { GET_ITEM_AVAILABILITIES } from './../../../graphql/ProductQueries'
 // new dropdown imports:
 
 const styles = {
-  color: 'blue'
+  color: 'blue',
+  select: {
+    display: 'inline-block'
+  }
 }
 const Div = styled.div`
   text-align: right;
@@ -34,12 +40,6 @@ const Div = styled.div`
   margin-right: 5vw;
   grid-column-start: 2;
   padding-bottom: 10px;
-`
-
-const GET_AVAILABILITIES = gql`
-  query GET_AVAILABILITIES($productIds: [String!], $vendor: String!) {
-    getAvailabilities(productIds: $productIds, vendor: $vendor)
-  }
 `
 
 const defaultTotals = {
@@ -175,6 +175,9 @@ function CartDetail () {
   const [pickupTime, setPickupTime] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState(null)
   const [cohenId, setCohenId] = useState(null)
+  const [room, setRoom] = useState(null)
+  const [note, setNote] = useState(null)
+  const [characterCount, setCharacterCount] = useState(0)
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -182,6 +185,7 @@ function CartDetail () {
     { value: 'TETRA', label: 'Tetra' },
     { value: 'COHEN', label: 'Cohen House' }
   ]
+
   // const defaultPaymentOption = options[0];
   const cart_menu = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
@@ -213,7 +217,7 @@ function CartDetail () {
       })
     : null
 
-  const { refetch: avail_refetch } = useQuery(GET_AVAILABILITIES, {
+  const { refetch: avail_refetch } = useQuery(GET_ITEM_AVAILABILITIES, {
     variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
   })
@@ -223,8 +227,27 @@ function CartDetail () {
     return navigate('/eat/almostThere')
   }
 
+  const setLocalStorage = (order, orderJson, url, totals) => {
+    localStorage.setItem(
+      'order',
+      JSON.stringify(
+        Object.assign(order, {
+          orderId: orderJson.id,
+          pickupInstruction: data.getVendor.pickupInstruction,
+          fulfillment: {
+            uid: orderJson.fulfillment.uid,
+            state: orderJson.fulfillment.state,
+            pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
+            placedAt: orderJson.fulfillment.pickupDetails.placedAt
+          },
+          url: url,
+          totals: totals
+        })
+      )
+    )
+  }
+
   const handleConfirmClick = async () => {
-    console.log('HI')
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
@@ -241,51 +264,45 @@ function CartDetail () {
       return navigate('/eat/failure')
     } else {
       const rec = {
-        variables: createRecord(cart_menu, paymentMethod, cohenId)
+        variables: createRecord(cart_menu, paymentMethod, cohenId, note, room)
       }
-      const emptyField = checkNullFields(rec)
-      if (checkNullFields(rec)) {
+      console.log(rec)
+      const emptyField = checkNullFields(rec, order.vendor.name)
+      if (emptyField) {
         setNullError(emptyField)
         return
       }
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
-      const createPaymentResponse = await createPayment({
-        variables: {
-          vendor: order.vendor.name,
-          sourceId: 'cnon:card-nonce-ok',
-          orderId: orderJson.id,
-          location: order.vendor.locationIds[0],
-          subtotal: totals.subtotal * 100,
-          currency: 'USD'
-        }
-      })
-      localStorage.setItem(
-        'order',
-        JSON.stringify(
-          Object.assign(order, {
+      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod === 'CREDIT') {
+        const createPaymentResponse = await createPayment({
+          variables: {
+            vendor: order.vendor.name,
+            source: 'SHOPIFY',
+            sourceId: 'cnon:card-nonce-ok',
             orderId: orderJson.id,
-            pickupInstruction: data.getVendor.pickupInstruction,
-            fulfillment: {
-              uid: orderJson.fulfillment.uid,
-              state: orderJson.fulfillment.state,
-              pickupAt: orderJson.fulfillment.pickupDetails.pickupAt,
-              placedAt: orderJson.fulfillment.pickupDetails.placedAt
-            },
-            url: createPaymentResponse.data.createPayment.url
-          })
-        )
-      )
+            location: order.vendor.locationIds[0],
+            subtotal: totals.subtotal * 100,
+            currency: 'USD'
+          }
+        })
+        setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
+      }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
-        return handleClickCredit()
+        if (order.vendor.name === 'Cohen House') {
+          return handleClickCredit()
+        } else {
+          setLocalStorage(order, orderJson, '', totals)
+          return navigate('/eat/square')
+        }
       }
       if (paymentMethod === 'COHEN') {
-        // navigate to order confirmation page
+        setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
-      if (paymentMethod === 'TETRA') {
-        // navigate to order confirmation page
+      if (!paymentMethod || paymentMethod === 'TETRA') {
+        setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
     }
@@ -411,7 +428,6 @@ function CartDetail () {
     )
     console.log('NEW PICKUP TIME', order)
   }
-  console.log(JSON.parse(localStorage.getItem('userProfile')))
   return (
     <div>
       <CartHeader
@@ -464,41 +480,63 @@ function CartDetail () {
             </Bill>
           </Bill>
         </SpaceWrapper>
-        <SpaceWrapper pickUpTime>
-          <Title>Pick Up Time:</Title>
-          <Select
-            options={pickupTimes}
-            placeholder='Select...'
-            onChange={changePickupTime}
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-        </SpaceWrapper>
-        <SpaceWrapper paymentMethod>
-          <Title>Payment Method:</Title>
-          <Select
-            options={options}
-            onChange={changePaymentType}
-            placeholder='Select...'
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-          {paymentMethod === 'COHEN' && (
-            <Div>
-              <label>Enter your Cohen House Membership ID: </label>
-              <input onChange={e => setCohenId(e.target.value)} />
-            </Div>
-          )}
-          {nullError && (
-            <Div css={{ alignSelf: 'center', color: 'red' }}>
-              {' '}
-              Error! Submission form contains null value for {nullError}. Please
-              complete your profile and order.{' '}
-            </Div>
-          )}
-        </SpaceWrapper>
+        {order.vendor.name != 'Test Account CMT' && (
+          <SpaceWrapper pickUpTime>
+            <Title>Pick Up Time:</Title>
+            <Select
+              options={pickupTimes}
+              placeholder='Select...'
+              onChange={changePickupTime}
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+          </SpaceWrapper>
+        )}
+        {order.vendor.name != 'Test Account CMT' && (
+          <SpaceWrapper paymentMethod>
+            <Title>Payment Method:</Title>
+            <Select
+              options={options}
+              onChange={changePaymentType}
+              placeholder='Select...'
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+            {paymentMethod === 'COHEN' && (
+              <Div>
+                <label>Enter your Cohen House Membership ID: </label>
+                <input onChange={e => setCohenId(e.target.value)} />
+              </Div>
+            )}
+          </SpaceWrapper>
+        )}
+        {order.vendor.name === 'Test Account CMT' && (
+          <SpaceWrapper college>
+            <Title isolation>Room Number: </Title>
+            <Input roomNumber onChange={e => setRoom(e.target.value)} />
+          </SpaceWrapper>
+        )}
+        {order.vendor.name === 'Test Account CMT' && (
+          <SpaceWrapper note>
+            <div>
+              <Title isolation note>Order Notes: <span style={{ opacity: '0.6', fontStyle: 'italic', fontSize: '2vh' }}>({characterCount.toString()}/100)</span> </Title>
+              <TextArea
+                maxLength='150'
+                note onChange={(e) => { setNote(e.target.value); setCharacterCount(e.target.value.length) }}
+                placeholder='Type any additional dietary restrictions or concerns here (100 character limit)'
+              />
+            </div>
+          </SpaceWrapper>
+        )}
+        {nullError && (
+          <SpaceWrapper warning css={{ alignSelf: 'center', color: 'red' }}>
+            {' '}
+            Error! Submission form contains null value for {nullError}. Please
+            complete your profile and order.{' '}
+          </SpaceWrapper>
+        )}
         <SpaceWrapper footer>
           <SubmitButton
             onClick={cart_menu?.length === 0 ? null : handleConfirmClick}

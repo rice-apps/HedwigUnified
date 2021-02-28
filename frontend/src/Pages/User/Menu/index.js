@@ -96,7 +96,7 @@ function Menu () {
   }
   if (catalog_error) {
     console.log('CATALOG ERROR', catalog_error)
-    return <p>ErrorC...</p>
+    return <p>ErrorC... {catalog_error.message}</p>
   }
 
   const { getCatalog: catalog_data } = catalog_info
@@ -108,6 +108,7 @@ function Menu () {
   const compileCategories = data => {
     let categories = []
     data.forEach(product => {
+      product.isAvailable &&
       categories.push(product.category)
     })
     categories = new Set(categories)
@@ -293,6 +294,7 @@ function Menu () {
     </h1>
   ))
 
+  console.log(vendor_data.getVendor.availableItems)
   // we have to change these returns because vendor.name is outdated - brandon
   return (
     <div style={{ position: 'relative' }}>
@@ -378,17 +380,17 @@ function Menu () {
               <div class='categoryheader'>{category}</div>
               {/*  Filtering out all items that fall under the category */}
               {catalog_data
-                .filter(item => item.category === category && item.isAvailable)
+                .filter(item => item.category === category && vendor_data.getVendor.availableItems.includes(item.dataSourceId))
                 .map(product => (
                   <div
                     class='itemgrid'
                     onClick={
-                      product.isAvailable ? () => handleClick(product) : null
+                      () => handleClick(product)
                     }
                   >
                     {/* Displaying the item: image, name, and price */}
                     <img
-                      src={product.image}
+                      src={product.image ? product.image : 'https://scontent.fhou1-1.fna.fbcdn.net/v/t1.0-9/56770720_2496620450358466_4855511062713204736_n.jpg?_nc_cat=100&ccb=3&_nc_sid=09cbfe&_nc_ohc=ljQCn12JvCAAX-x41HR&_nc_ht=scontent.fhou1-1.fna&oh=416fce9b15a0cc371a6560ca6316d9e4&oe=605B92F8'}
                       class='itemimage'
                       alt={product.name}
                     />

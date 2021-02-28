@@ -27,7 +27,6 @@ export const SpaceWrapper = styled.div`
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 4vh minmax(8vh, min-content) min-content;
-
       padding-top: 2.5vh;
     `};
   ${props =>
@@ -41,6 +40,24 @@ export const SpaceWrapper = styled.div`
       align-items: center;
     `};
   ${props =>
+    props.college &&
+    css`
+      grid-area: PickUpTime;
+      border-top: 1px #dddddd solid;
+      display: grid;
+      grid-template-columns: 1.3fr 1.4fr;
+      grid-template-rows: 4fr;
+      align-items: center;
+    `};
+  ${props =>
+    props.note &&
+    css`
+      grid-area: PaymentMethod;
+      display: grid;
+      border-top: 1px #dddddd solid;
+      grid-template-rows: 16vh minmax(0px, min-content);
+    `};
+  ${props =>
     props.paymentMethod &&
     css`
       grid-area: PaymentMethod;
@@ -49,6 +66,15 @@ export const SpaceWrapper = styled.div`
       grid-template-columns: 1.2fr 1.3fr;
       grid-template-rows: 10vh minmax(0px, min-content);
       align-items: center;
+    `};
+  ${props =>
+    props.warning &&
+    css`
+      grid-area: none;
+      display: grid;
+      grid-template-rows: 10vh minmax(0px, min-content);
+      align-items: center;
+      margin: 1vh;
     `};
   ${props =>
     props.footer &&
@@ -68,9 +94,53 @@ export const SpaceWrapper = styled.div`
 
 export const Title = styled.div`
   font-size: 2.6vh;
-
   font-weight: 600;
-  margin-left: 3vw;
+  margin-left: 5vw;
+  ${props =>
+    props.isolation &&
+    css`
+      font-size: 2.2vh;
+      display: inline-block;
+      margin-bottom: 1vh;
+    `}
+  ${props =>
+    props.note &&
+    css`
+      margin-top:1.5vh;
+      font-size: 2.2vh;
+      display: block;
+    `}
+`
+
+export const TextArea = styled.textarea`
+  width: 90vw;
+  height: 8vh;
+  display: block;
+  margin: auto;
+  border-color: #dddddd;
+  resize: none;
+  :focus{
+    outline: none;
+  }
+`
+
+export const Input = styled.input`
+  margin-right: 5vw;
+  text-align: center;
+  :focus{
+    outline: none;
+  }
+  ${props =>
+    props.roomNumber &&
+    css`
+      display: inline-block;
+      margin-right: 5vw;
+      margin-bottom: 1vw;
+      border-right: 0;
+      border-left: 0;
+      border-top:0;
+      border-width:0.1px;
+    `}
 `
 
 export const ShelfItemWrapper = styled.div`

@@ -1,6 +1,5 @@
 import {React, Component} from 'react';
-
-const navigate = useNavigate()
+import ReportBugPage from './ReportBugPage'
 
 class ErrorBoundary extends Component {
   
@@ -18,7 +17,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      nagivate('/report_bug')
+      return <ReportBugPage />
     }
 
     return this.props.children; 

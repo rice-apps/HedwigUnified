@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import './product.css'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Navigate } from 'react-router-dom'
 import dispatch from './FunctionalCart'
 import VariantSelection from './VariantSelection'
 import QuantitySelector from './QuantitySelector'
@@ -47,13 +47,16 @@ function Product () {
   const [showErrorModal, setShowErrorModal] = useState(false)
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { currProduct: productId, currentVendor } = state
+
+  const productId = state?.currProduct;
+  const currentVendor = state?.currentVendor;
 
   const {
     data: product_data,
     error: product_error,
     loading: product_loading
   } = useQuery(GET_ITEM, {
+    skip: state === null,
     variables: {
       dataSourceId: productId,
       vendor: currentVendor
@@ -66,6 +69,7 @@ function Product () {
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
+    skip: state === null,
     variables: { vendor: currentVendor },
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
@@ -79,6 +83,7 @@ function Product () {
   const [requiredFilled, setRequiredFilled] = useState(true)
 
   console.log(productId)
+  if (state === null) return <Navigate to='/eat' />
   if (vendor_loading) {
     return <SmallLoadingPage />
   }

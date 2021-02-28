@@ -1,14 +1,10 @@
 .errorPage {
   display: flex;
-  flex-direction: column;
-  animation-name: errorPage1, errorPage2;
-  animation-delay: 0, 2.5s;
-  animation-fill-mode: forwards;
-  animation-duration: 2.25s, 12s;
-  animation-iteration-count: 1, infinite;
+  height: 100vh;
+  flex-direction: row;
   transition: 1s;
   text-align: center;
-  font-size: 30px;
+  font-size: 26px;
   position: relative;
   justify-content: center;
   align-items: center;

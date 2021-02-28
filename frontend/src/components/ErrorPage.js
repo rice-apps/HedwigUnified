@@ -1,13 +1,16 @@
 import './components.css'
 import styled from 'styled-components/macro'
+import logo from '../Pages/Login/HedwigLogoFinal_02.svg'
+import SadOwl from '../images/SadOwl.jpg'
 import { useNavigate } from 'react-router-dom'
 
 const BackButton = styled.button`
   border-radius: 25pt;
-  height: 10rem;
-  width: 15rem;
+  height: 5rem;
+  margin: 2%;
+  width: 10rem;
   border: none;
-  font-size: 3rem;
+  font-size: 2rem;
   background-color: #f3725b;
   color: white;
   font-family: Proxima Nova;
@@ -21,6 +24,53 @@ const BackButton = styled.button`
   }
 `
 
+const Logo = styled.img`
+  width: 2rem;
+  margin: 0.25em;  
+`
+
+const SadOwlPic = styled.img`
+  width: 30rem;
+  height: 20rem;
+  padding: 3%;
+  border-radius: 10%;
+`
+
+const TextPane = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50vw;
+`
+
+const Text = styled.p`
+  padding: 0;
+  margin: 0; 
+`
+
+const Footer = styled.div`
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #de8359;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+`
+
+const FooterText = styled.p`
+  margin-top: 1%;
+  font-size: 12px;
+`
+
+const LinkPane = styled.div`
+  display: flex;
+`
+
 function ErrorPage (props) {
   const navigate = useNavigate()
   const goBack = () => {
@@ -28,16 +78,27 @@ function ErrorPage (props) {
     navigate(-1)
   }
   return (
-    <div className='errorPage'>
-      <h1 style={{ 'font-size': '52px' }}>
-        Page doesn't exist... How did you get here?
-      </h1>
-      {/* <p>Page not found. Try a different URL!</p> */}
-      <p>{props.errMessage} Try a different URL!</p>
-      <BackButton onClick={goBack} style={{ cursor: 'pointer' }}>
-        Go Back
-      </BackButton>
-    </div>
+    <div>
+      <div className='errorPage'>
+        {/* <Logo src={logo} /> */}
+        <SadOwlPic src={SadOwl} />
+        <TextPane>
+          <Text>The page you were looking for does not exist :(</Text>
+          <Text>Error Code: 404</Text>
+          <BackButton onClick={goBack} style={{ cursor: 'pointer' }}>
+            Go Back
+          </BackButton>
+        </TextPane>
+        </div>
+        <Footer>
+          <Logo src={logo} />
+          <FooterText>
+            Hedwig © 2021 
+          </FooterText>
+            
+        </Footer>
+      </div>
+
   )
 }
 

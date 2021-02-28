@@ -236,9 +236,22 @@ export const RoutesComponent = () => {
             },
             {
               path: '/:product',
-              element: <PrivateRoute element={<Product />} />
+              element: (
+                <PrivateRoute
+                  element={<Product />}
+
+                />
+              )
+            },
+            {
+              path: '/*',
+              element: <Navigate to='/404_page' />
             }
           ]
+        },
+        {
+          path: '/*',
+          element: <Navigate to='/404_page' />
         }
       ]
     },
@@ -295,7 +308,16 @@ export const RoutesComponent = () => {
         },
         {
           path: '/faq',
-          element: <PrivateRoute isEmployeeRoute element={<FAQ />} />
+          element: (
+            <PrivateRoute
+              isEmployeeRoute
+              element={<FAQ />}
+            />
+          )
+        },
+        {
+          path: '/*',
+          element: <Navigate to='/employee' />
         }
       ]
     },

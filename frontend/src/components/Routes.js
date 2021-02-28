@@ -17,6 +17,7 @@ import SquarePayment from '../Pages/User/Cart/SquarePayment'
 import ContactForm from '../Pages/User/Contact'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
+import ReportBugPage from './ReportBugPage'
 import Product from '../Pages/User/Products/Product'
 import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
 import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
@@ -170,6 +171,10 @@ export const RoutesComponent = () => {
     {
       path: '/404_page',
       element: <ErrorPage />
+    },
+    {
+      path: '/report_bug',
+      element: <ReportBugPage />
     },
     {
       path: '/login',

@@ -252,8 +252,8 @@ function OrderDashboard () {
     return <p style={{ fontSize: '2vh' }}>ErrorD...{error.message}</p>
   }
 
-  const handleOrderClick = (order, orderState) => {
-    updateOrder({
+  const handleOrderClick = async (order, orderState) => {
+    await updateOrder({
       variables: {
         vendor: currentUser.vendor[0],
         orderId: order.id,
@@ -305,6 +305,7 @@ function OrderDashboard () {
               items={order.items}
               orderCost={order.total.amount / 100}
               orderTotal={(order.total.amount + order.totalTax.amount) / 100}
+              orderSquareTotal={order.total}
               fulfillment={order.fulfillment.state}
               handleClick={() => handleOrderClick(order, 'RESERVED')}
               cancelClick={() => handleOrderClick(order, 'CANCELED')}

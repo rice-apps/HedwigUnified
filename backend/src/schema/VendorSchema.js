@@ -1,4 +1,3 @@
-
 import { VendorTC, DataSourceEnumTC, Vendor } from '../models/index.js'
 
 import { ApolloError } from 'apollo-server-express'
@@ -139,30 +138,10 @@ VendorTC.addResolver({
 const VendorQueries = {
   getVendor: VendorTC.mongooseResolvers
     .findOne()
-    .withMiddlewares([checkLoggedIn])
-    .wrapResolve(next => async rp => {
-      const vendor = await next({
-        ...rp,
-        projection: { allowedNetid: {}, ...rp.projection }
-      })
-   
-
-      return vendor
-    }),
+    .withMiddlewares([checkLoggedIn]),
   getVendors: VendorTC.mongooseResolvers
     .findMany()
-    .withMiddlewares([checkLoggedIn])
-    .wrapResolve(next => async rp => {
-      const vendors = await next({
-        ...rp,
-        projection: { allowedNetid: {}, ...rp.projection }
-      })
-
-      return vendors.map(vendor => {
-      
-        return vendor
-      })
-    }),
+    .withMiddlewares([checkLoggedIn]),
   getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
 }
 
@@ -186,7 +165,9 @@ VendorTC.addResolver({
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
       const items = objects.filter(object => object.type === 'ITEM')
-      const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
+      const modifiers = objects.filter(
+        object => object.type === 'MODIFIER_LIST'
+      )
       console.log('modifiers')
       console.log(modifiers)
       const availability = []
@@ -231,7 +212,9 @@ VendorTC.addResolver({
       const {
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
-      const modifiers = objects.filter(object => object.type === 'MODIFIER_LIST')
+      const modifiers = objects.filter(
+        object => object.type === 'MODIFIER_LIST'
+      )
       const availability = []
 
       for (let i = 0; i < modifiers.length; i++) {

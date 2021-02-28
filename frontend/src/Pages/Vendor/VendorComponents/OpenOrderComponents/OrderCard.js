@@ -10,11 +10,12 @@ import {
 } from 'react-icons/io'
 
 import { ImPhone } from 'react-icons/im'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
 import moment from 'moment'
 import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
+import { COMPLETE_PAYMENT } from '../../../../graphql/Mutations'
 import { AiFillCheckCircle } from 'react-icons/ai'
 import {
   OrderCardWrapper,
@@ -338,6 +339,8 @@ function MakePaymentSpace (props) {
     VERIFY_PAYMENT
   )
 
+  const [completePayment] = useMutation(COMPLETE_PAYMENT)
+
   let isVerified = false
   const isIsolation = props.isIsolation
   const refetch = props.refetch
@@ -346,7 +349,6 @@ function MakePaymentSpace (props) {
       ? props.orderTracker.paymentId
       : props.shopifyOrderId
   const vendor = props.vendor
-
 
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
@@ -482,8 +484,21 @@ function MakePaymentSpace (props) {
               {(props.paymentType !== 'CREDIT') |
               ((props.paymentType === 'CREDIT') & isVerified) ? (
                 <AcceptButton
-                  onClick={() => {
-                    props.handleClick()
+                  onClick={async () => {
+                    if (props.paymentType === 'CREDIT') {
+                      await completePayment({
+                        variables: {
+                          paymentId: paymentId,
+                          vendor: vendor,
+                          source: props.orderTracker.dataSource,
+                          money: {
+                            amount: props.orderSquareTotal.amount,
+                            currency: 'USD'
+                          }
+                        }
+                      })
+                    }
+                    await props.handleClick()
                     closeAcceptModal()
                   }}
                 >
@@ -585,6 +600,7 @@ function OrderCard (props) {
     items,
     orderCost,
     orderTotal,
+    orderSquareTotal,
     fulfillment,
     handleClick,
     buttonStatus,
@@ -658,7 +674,7 @@ function OrderCard (props) {
           {items &&
             items.map(function (item, index) {
               const modifiers = item.modifiers?.map(modifier => modifier.name)
-      
+
               return (
                 <MakeOrderDetails
                   key={id + 'orderdetails' + index}
@@ -686,6 +702,7 @@ function OrderCard (props) {
           cohenId={props.cohenId}
           orderTax={props.orderTotal * 0.0825}
           orderTotal={orderTotal}
+          orderSquareTotal={orderSquareTotal}
           fulfillment={fulfillment}
           pickupTime={pickupAt}
           submissionTime={submittedAt}

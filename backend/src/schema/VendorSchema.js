@@ -161,9 +161,7 @@ const VendorQueries = {
       })
 
       return vendors.map(vendor => {
-        if (!vendor.allowedNetid.includes(rp.context.netid)) {
-          vendor.allowedNetid = null
-        }
+      
         return vendor
       })
     }),

@@ -13,6 +13,7 @@ const GET_VENDOR_INFO = gql`
       facebook
       phone
       cutoffTime
+      asapTime
       pickupInstruction
     }
   }
@@ -26,6 +27,7 @@ const UPDATE_VENDOR = gql`
     $facebook: String
     $phone: String
     $cutoffTime: Float
+    $asapTime: Float
     $pickupInstruction: String
   ) {
     updateVendor(
@@ -35,6 +37,7 @@ const UPDATE_VENDOR = gql`
         facebook: $facebook
         phone: $phone
         cutoffTime: $cutoffTime
+        asapTime: $asapTime
         pickupInstruction: $pickupInstruction
       }
       filter: { name: $name }
@@ -45,6 +48,7 @@ const UPDATE_VENDOR = gql`
         facebook
         phone
         cutoffTime
+        asapTime
         pickupInstruction
       }
     }
@@ -62,13 +66,14 @@ const Div = styled.div`
       border-radius: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.2fr 2.3fr 1.2fr;
+      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.2fr 1.2fr 2.3fr 1.2fr;
       grid-template-areas:
         'ImageSpace ImageSpace'
         'Name Website'
         'Email Facebook'
         'Phone Blank'
         'Cutoff Cutoff'
+        'Asap Asap'
         'Pickup Pickup'
         'Button Button';
       justify-items: center;
@@ -129,7 +134,7 @@ const Div = styled.div`
         text-align: left;
         margin-top: 1vh;
       `}
- 
+
       ${props =>
         props.bottomSubtitle &&
         css`
@@ -262,6 +267,7 @@ function BasicInfoDashboard () {
     facebook,
     phone,
     cutoffTime,
+    asapTime,
     pickupInstruction
   } = vendorData.getVendor
 
@@ -294,6 +300,7 @@ function BasicInfoDashboard () {
     facebook: facebook,
     phone: phone,
     cutoffTime: cutoffTime,
+    asapTime: asapTime,
     pickupInstruction: pickupInstruction
   }
 
@@ -364,6 +371,26 @@ function BasicInfoDashboard () {
           </Div>
         </Div>
         <Div warning>*Orders will not be accepted after this time</Div>
+      </Div>
+
+      {/* the cutoff section for set basic info  */}
+      <Div flexWrapper gridArea='Asap'>
+        <Div bottomTitle>
+          <div>ASAP Time:</div>
+          <Div bottomSubtitle>
+            <Input
+              number
+              class='input'
+              type='number'
+              min='0'
+              placeholder={placeholderInfo.asapTime}
+              onChange={e =>
+                updateInfo({ asapTime: parseInt(e.target.value) })}
+            />
+            minutes timeframe to complete orders that need to be picked up ASAP{' '}
+          </Div>
+        </Div>
+        <Div warning>*Orders must be completed within ASAP minutes after receiving the order</Div>
       </Div>
 
       <Div flexWrapper gridArea='Pickup'>

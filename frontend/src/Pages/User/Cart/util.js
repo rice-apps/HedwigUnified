@@ -8,6 +8,7 @@ export const GET_VENDOR = gql`
       name
       pickupInstruction
       dataSource
+      asapTime
       hours {
         start
         end

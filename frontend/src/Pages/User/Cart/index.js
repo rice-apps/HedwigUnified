@@ -52,8 +52,7 @@ function generatePickupTimes (
   currHour,
   currMinute,
   endHour,
-  endMinute,
-  isFirst
+  endMinute
 ) {
   const pickupTimes = []
   let pickupMinute = Math.ceil(currMinute / 15) * 15
@@ -101,9 +100,6 @@ function generatePickupTimes (
     }
     return { value: moment(time, 'h:mm a').format(), label: time }
   })
-  if (isFirst && pickupObjs.length > 0) {
-    pickupObjs.unshift({ value: moment().add(15, 'minutes'), label: 'ASAP' })
-  }
   return pickupObjs
 }
 
@@ -269,7 +265,7 @@ function CartDetail () {
       }
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
-      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod !== 'CREDIT') {
+      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod === 'CREDIT') {
         const createPaymentResponse = await createPayment({
           variables: {
             vendor: order.vendor.name,
@@ -379,31 +375,37 @@ function CartDetail () {
     endMinutes
   )
   let pickupTimes = []
+  const asapDuration = data.getVendor.asapTime
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i]
-    i === 0
-      ? (pickupTimes = [
+    if(i === 0){
+      const asapTime = moment().add(asapDuration, 'minutes')
+      const pickupIntervalHour = asapTime.hour()
+      const pickupIntervalMinute = Math.floor(asapTime.minute() / 15) * 15
+      const asapDisplay = { value: moment(asapTime, 'h:mm a').format(), label: 'ASAP'}
+      pickupTimes = [
+          asapDisplay, 
+          ...generatePickupTimes(
+            pickupIntervalHour,
+            pickupIntervalMinute,
+            interval[2],
+            interval[3]
+          )
+        ]
+    }
+    else{
+      pickupTimes = [
           ...pickupTimes,
           ...generatePickupTimes(
             interval[0],
             interval[1],
             interval[2],
-            interval[3],
-            true
+            interval[3]
           )
-        ])
-      : (pickupTimes = [
-          ...pickupTimes,
-          ...generatePickupTimes(
-            interval[0],
-            interval[1],
-            interval[2],
-            interval[3],
-            false
-          )
-        ])
+        ]
+    }
   }
-
+  console.log("Pickup Times: ", pickupTimes)
   // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
   //   {'year': moment().year(),
   //   'month': moment().month(),

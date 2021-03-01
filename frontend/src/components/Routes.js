@@ -36,7 +36,7 @@ import Launch from './../Pages/User/Launch'
 import Onboard from './../Pages/Onboard/Onboard'
 import ReturnOnboard from './../Pages/Onboard/ReturnOnboard'
 
-import Counter from '/Users/Ananya/HedwigUnified/frontend/src/components/Counter.js'
+import Counter from './Counter.js'
 /**
  * Requests to verify the user's token on the backend
  */

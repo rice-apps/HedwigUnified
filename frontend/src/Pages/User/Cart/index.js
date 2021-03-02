@@ -172,6 +172,7 @@ function CartDetail () {
   const [paymentMethod, setPaymentMethod] = useState(null)
   const [cohenId, setCohenId] = useState(null)
   const [nullError, setNullError] = useState(null)
+  const [currentTime, setCurrentTime] = useState(moment())
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
     { value: 'CREDIT', label: 'Credit Card' },
@@ -239,11 +240,11 @@ function CartDetail () {
     )
   }
 
-  const handleConfirmClick = async () => {
+  const handleConfirmClick = async (asapTime) => {
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
-    if (pickupTimeVal < currTimeVal + 0.25) {
+    if (pickupTimeVal < currTimeVal + asapTime/60) {
       alert(
         'The time you have selected is no longer valid. Please choose a later time.'
       )
@@ -318,6 +319,15 @@ function CartDetail () {
     updateTotal()
   }, [cart_menu])
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment())
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
   const [, setDummyDelete] = useState(0)
@@ -339,8 +349,8 @@ function CartDetail () {
   //   return <p>`Error! ${avail_error.message}`</p>;
 
   const currDay = moment().day()
-  const currHour = moment().hour()
-  const currMinute = moment().minutes()
+  const currHour = moment(currentTime).hour()
+  const currMinute = moment(currentTime).minutes()
 
   const {
     getVendor: { hours: businessHours }
@@ -381,10 +391,10 @@ function CartDetail () {
     if(i === 0){
       const asapTime = moment().add(asapDuration, 'minutes')
       const pickupIntervalHour = asapTime.hour()
-      const pickupIntervalMinute = Math.floor(asapTime.minute() / 15) * 15
+      const pickupIntervalMinute = Math.floor(asapTime.minutes() / 15) * 15
       const asapDisplay = { value: moment(asapTime, 'h:mm a').format(), label: 'ASAP'}
       pickupTimes = [
-          asapDisplay, 
+          asapDisplay,
           ...generatePickupTimes(
             pickupIntervalHour,
             pickupIntervalMinute,
@@ -515,7 +525,7 @@ function CartDetail () {
         </SpaceWrapper>
         <SpaceWrapper footer>
           <SubmitButton
-            onClick={cart_menu?.length === 0 ? null : handleConfirmClick}
+            onClick={cart_menu?.length === 0 ? null : () => {handleConfirmClick(asapDuration)}}
           >
             Submit Order
           </SubmitButton>

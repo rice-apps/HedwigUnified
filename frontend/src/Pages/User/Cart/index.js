@@ -216,7 +216,6 @@ function CartDetail () {
         return item.dataSourceId
       })
     : null
-
   const { refetch: avail_refetch } = useQuery(GET_ITEM_AVAILABILITIES, {
     variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
@@ -266,7 +265,7 @@ function CartDetail () {
       const rec = {
         variables: createRecord(cart_menu, paymentMethod, cohenId, note, room)
       }
-      console.log(rec)
+      console.log("Rec: ", rec)
       const emptyField = checkNullFields(rec, order.vendor.name)
       if (emptyField) {
         setNullError(emptyField)

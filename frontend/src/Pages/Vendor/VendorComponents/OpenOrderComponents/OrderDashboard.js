@@ -70,8 +70,8 @@ const FIND_ORDERS = gql`
 `
 
 const GET_ORDER_TRACKERS = gql`
-  query GET_ORDER_TRACKERS($sort:SortFindManyOrderTrackerInput){
-    getOrderTrackers(sort:$sort){
+  query GET_ORDER_TRACKERS($sort:SortFindManyOrderTrackerInput, $filter: FilterFindManyOrderTrackerInput){
+    getOrderTrackers(sort:$sort, filter:$filter){
       paymentId
       dataSource
       orderId
@@ -236,7 +236,7 @@ function OrderDashboard () {
     }
   )
   const { data: order_data, loading: order_loading, error: order_error } = useQuery(GET_ORDER_TRACKERS, {
-    variables: {sort: "_ID_DESC"}
+    variables: {sort: "_ID_DESC", filter:{"paymentType":"CREDIT"}}
   })
   const [updateOrder] = useMutation(UPDATE_ORDER)
   const [completePayment] = useMutation(COMPLETE_PAYMENT)
@@ -299,19 +299,14 @@ function OrderDashboard () {
     })
     if(orderTrackers){
       const orderTracker = orderTrackers.filter(orderTracker => orderTracker.orderId === order.id)[0]
-      if(orderTracker.paymentType === 'CREDIT'){
-        completePayment({
-          variables: {
-            vendor: currentUser.vendor,
-            paymentId: orderTracker.paymentId,
-            source: orderTracker.dataSource,
-            money: {amount: order.total.amount, currency: order.total.currency}
-          }
-        })
-      }
-      else{
-        console.log("Order Tracker not found!")
-      }
+      completePayment({
+        variables: {
+          vendor: currentUser.vendor,
+          paymentId: orderTracker.paymentId,
+          source: orderTracker.dataSource,
+          money: {amount: order.total.amount, currency: order.total.currency}
+        }
+      })
     }
   }
   // if (!loading && orders) {

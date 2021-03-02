@@ -249,7 +249,7 @@ function OrderDashboard () {
     return <LoadingPage />
   }
   if (error) {
-    return <p style={{ fontSize: '2vh' }}>ErrorD...{error.message}</p>
+    throw new Error("Error Detected!")
   }
 
   const handleOrderClick = (order, orderState) => {

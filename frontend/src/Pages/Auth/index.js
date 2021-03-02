@@ -41,7 +41,8 @@ function Auth () {
   }, [authenticateUser])
 
   // if (error) return <Navigate to='/login' />
-  if (error) return <p>{error.message}</p>
+  // if (error) return <p>{error.message}</p>
+  if (error) throw new Error("Error Detected!");
   if (loading) return <SmallLoadingPage />
   if (!authenticationData) return <p>Authentication Failed.</p>
 

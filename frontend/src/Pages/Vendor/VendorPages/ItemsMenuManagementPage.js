@@ -20,7 +20,7 @@ function ItemsMenuManagementPage () {
     return <LoadingPage />
   }
   if (catalog_error) {
-    return <p>ErrorC...</p>
+    throw new Error("Error Detected!")
   }
 
   const { getCatalog: catalog } = catalog_info

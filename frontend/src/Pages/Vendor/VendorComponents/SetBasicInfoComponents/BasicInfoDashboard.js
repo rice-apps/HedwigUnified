@@ -249,7 +249,7 @@ function BasicInfoDashboard () {
   const [isDisabled, setIsDisabled] = useState(true)
   const [placeholderInfo, setPlaceholderInfo] = useState({})
   if (vendorError | vendor_error) {
-    return <p>ErrorVendor...</p>
+    throw new Error("Error Detected!")
   }
   if (vendorLoading | vendor_loading) {
     return <p>Waiting...</p>

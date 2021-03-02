@@ -363,7 +363,7 @@ function EditHoursDashboard () {
     return <LoadingPage />
   }
   if (vendor_error) {
-    return <p>Error...</p>
+    throw new Error("Error Detected!")
   }
 
   const hours = vendor_data.getVendor.hours

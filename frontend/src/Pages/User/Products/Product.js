@@ -83,14 +83,14 @@ function Product () {
     return <SmallLoadingPage />
   }
   if (vendor_error) {
-    return <p>ErrorV...{vendor_error.message}</p>
+    throw new Error("Error Detected!")
   }
 
   if (product_loading) {
     return <SmallLoadingPage />
   }
   if (product_error) {
-    return <p>ErrorP...{product_error.message}</p>
+    throw new Error("Error Detected!")
   }
 
   const { getItem: product } = product_data

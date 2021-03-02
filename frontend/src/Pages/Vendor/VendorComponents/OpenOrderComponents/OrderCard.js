@@ -597,7 +597,7 @@ function OrderCard (props) {
   }
 
   if (orderTrackerError) {
-    return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
+    throw new Error("Error Detected!")
   }
 
   // pastPickup is true if current time has past an order's pickuptime + buffer, must be non-isolation housing vendor

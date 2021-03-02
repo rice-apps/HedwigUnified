@@ -29,7 +29,7 @@ const SquarePayment = () => {
   ] = useMutation(CREATE_PAYMENT)
   if (payment_loading) return <p>Creating new payment. Please wait ...</p>
   if (payment_error) {
-    return <p>{payment_error.message}</p>
+    throw new Error("Error Detected!")
   }
 
   const userProfile = JSON.parse(localStorage.getItem('userProfile'))

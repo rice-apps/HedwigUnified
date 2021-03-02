@@ -77,7 +77,7 @@ function Menu () {
     return <SmallLoadingPage />
   }
   if (vendor_error) {
-    return <p>ErrorV...</p>
+    throw new Error("Error Detected!")
   }
   // const vendor_data = vendor_info.getVendor;
   if (catalog_loading) {
@@ -85,7 +85,7 @@ function Menu () {
   }
   if (catalog_error) {
     console.log('CATALOG ERROR', catalog_error)
-    return <p>ErrorC... {catalog_error.message}</p>
+    throw new Error("Error Detected!")
   }
 
   const { getCatalog: catalog_data } = catalog_info

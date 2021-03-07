@@ -28,8 +28,8 @@ import {
 } from './EditHours.styles'
 
 const UPDATE_VENDOR = gql`
-  mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!) {
-    updateVendor(record: { hours: $hours }, filter: { name: "Cohen House" }) {
+  mutation UPDATE_VENDOR($hours: [UpdateOneVendorBusinessHoursInput]!, $name: String!) {
+    updateVendor(record: { hours: $hours }, filter: { name: $name }) {
       record {
         hours {
           start

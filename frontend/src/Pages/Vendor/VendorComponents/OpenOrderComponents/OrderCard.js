@@ -2,14 +2,20 @@ import { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons'
 import { BsFillClockFill } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
-import { IoIosAddCircleOutline } from 'react-icons/io'
-import { IoIosArrowUp, IoIosArrowDown, IoMdMail } from 'react-icons/io'
+import {
+  IoIosAddCircleOutline,
+  IoIosArrowUp,
+  IoIosArrowDown,
+  IoMdMail
+} from 'react-icons/io'
+
 import { ImPhone } from 'react-icons/im'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
 import moment from 'moment'
 import { GrRestaurant } from 'react-icons/gr'
 import ORDER_TRACKER from '../../../../graphql/OrderTracker'
 import VERIFY_PAYMENT from '../../../../graphql/VerifyPayment'
+import { COMPLETE_PAYMENT } from '../../../../graphql/Mutations'
 import { AiFillCheckCircle } from 'react-icons/ai'
 import {
   OrderCardWrapper,
@@ -62,51 +68,68 @@ function MakeOrderTitle (props) {
           <GrRestaurant />
         </OrderTitleIconOneDiv>
 
-          {showContact 
-            ?
-              <OrderTitleContactShown
-                onClick={() => {
-                  setShowContact(!showContact)
-                }}
-              >
-                <div>
-                  {props.customerName} {' '}
-                  <IoIosArrowUp />
-                </div>
+        {showContact ? (
+          <OrderTitleContactShown
+            onClick={() => {
+              setShowContact(!showContact)
+            }}
+          >
+            <div>
+              {props.customerName} <IoIosArrowUp />
+            </div>
 
-                <OrderTitleContact>
-                  <OrderTitleContactIcon> <ImPhone /> </OrderTitleContactIcon>
-                  <>
-                    ({props.customerPhone.substring(0, 3)}) {props.customerPhone.substring(3, 6)}
-                    -{props.customerPhone.substring(6)}
-                  </>
-                  <OrderTitleContactIcon> <IoMdMail /> </OrderTitleContactIcon>
-                  {props.customerEmail}
-                </OrderTitleContact>
-
-              </OrderTitleContactShown>
-            :  
-              <OrderTitleContactHidden
-                onClick={() => {
-                  setShowContact(!showContact)
-                }}
-              >
-                {props.customerName} {' '}
-                <IoIosArrowDown />
-              </OrderTitleContactHidden>
-          }
+            <OrderTitleContact>
+              <OrderTitleContactIcon>
+                {' '}
+                <ImPhone />{' '}
+              </OrderTitleContactIcon>
+              <>
+                ({props.customerPhone.substring(0, 3)}){' '}
+                {props.customerPhone.substring(3, 6)}-
+                {props.customerPhone.substring(6)}
+              </>
+              <OrderTitleContactIcon>
+                {' '}
+                <IoMdMail />{' '}
+              </OrderTitleContactIcon>
+              {props.customerEmail}
+            </OrderTitleContact>
+          </OrderTitleContactShown>
+        ) : (
+          <OrderTitleContactHidden
+            onClick={() => {
+              setShowContact(!showContact)
+            }}
+          >
+            {props.customerName} <IoIosArrowDown />
+          </OrderTitleContactHidden>
+        )}
 
         <OrderTitleIconTwoDiv>
           <BsFillClockFill />
         </OrderTitleIconTwoDiv>
-        
       </OrderTitleSpaceWrapper>
     </>
   )
 }
 
 function MakeOrderTime (props) {
-  return (
+  const isIsolation = props.isIsolation
+  return isIsolation ? (
+    <OrderTimeSpaceWrapper>
+      <ExactTimeSpaceWrapper>
+        <div>Room Number: {props.orderTracker.roomNumber}</div>
+        <div>
+          Order Notes:{' '}
+          {props.orderTracker.note ? (
+            <strong> {props.orderTracker.note} </strong>
+          ) : (
+            'None'
+          )}
+        </div>
+      </ExactTimeSpaceWrapper>
+    </OrderTimeSpaceWrapper>
+  ) : (
     <OrderTimeSpaceWrapper>
       <ExactTimeSpaceWrapper>
         <div> Pick up time: {props.pickupTime}</div>
@@ -316,7 +339,16 @@ function MakePaymentSpace (props) {
     VERIFY_PAYMENT
   )
 
+  const [completePayment] = useMutation(COMPLETE_PAYMENT)
+
   let isVerified = false
+  const isIsolation = props.isIsolation
+  const refetch = props.refetch
+  const paymentId =
+    props.orderTracker.dataSource === 'SQUARE'
+      ? props.orderTracker.paymentId
+      : props.shopifyOrderId
+  const vendor = props.vendor
 
   const { items } = props
   if (!loading && verifyPaymentResult !== undefined) {
@@ -325,7 +357,6 @@ function MakePaymentSpace (props) {
 
   function MakePaymentButtons (props) {
     let buttonStatus = props.buttonStatus
-
     return (
       <div>
         {buttonStatus === 'NEW' ? (
@@ -333,15 +364,15 @@ function MakePaymentSpace (props) {
             <CancelButton onClick={openCancelModal}>Cancel</CancelButton>
             {props.pastPickup ? null : (
               <AcceptButton
-                onClick={function () {
+                onClick={async function () {
+                  await refetch()
                   verify_payment({
                     variables: {
-                      paymentId: props.shopifyOrderId,
-                      vendor: 'Cohen House',
-                      source: 'SHOPIFY'
+                      paymentId: paymentId,
+                      vendor: vendor,
+                      source: props.orderTracker.dataSource
                     }
                   })
-
                   openAcceptModal()
                 }}
               >
@@ -388,6 +419,9 @@ function MakePaymentSpace (props) {
       </CostSpaceWrapper>
       <ButtonsSpaceWrapper>
         <MakePaymentButtons
+          id={props.id}
+          orderTracker={props.orderTracker}
+          isIsolation={isIsolation}
           handleClick={props.handleClick}
           buttonStatus={props.buttonStatus}
           shopifyOrderId={props.shopifyOrderId}
@@ -409,6 +443,7 @@ function MakePaymentSpace (props) {
 
                     return (
                       <MakeModalOrder
+                        key={props.id + 'acceptmodal'}
                         quantity={item.quantity}
                         itemName={item.name}
                         price={item.totalMoney.amount / 100}
@@ -449,18 +484,31 @@ function MakePaymentSpace (props) {
               {(props.paymentType !== 'CREDIT') |
               ((props.paymentType === 'CREDIT') & isVerified) ? (
                 <AcceptButton
-                  onClick={() => {
-                    props.handleClick()
+                  onClick={async () => {
+                    if (props.paymentType === 'CREDIT') {
+                      await completePayment({
+                        variables: {
+                          paymentId: paymentId,
+                          vendor: vendor,
+                          source: props.orderTracker.dataSource,
+                          money: {
+                            amount: props.orderSquareTotal.amount,
+                            currency: 'USD'
+                          }
+                        }
+                      })
+                    }
+                    await props.handleClick()
                     closeAcceptModal()
                   }}
                 >
                   Accept
                 </AcceptButton>
-                  ) : (
-                    <AcceptButton onClick={closeAcceptModal}>
-                      Return To Home
-                    </AcceptButton>
-                  )}
+              ) : (
+                <AcceptButton onClick={closeAcceptModal}>
+                  Return To Home
+                </AcceptButton>
+              )}
             </ModalButtonsWrapper>
           </ModalWrapper>
         </Background>
@@ -480,6 +528,7 @@ function MakePaymentSpace (props) {
 
                     return (
                       <MakeModalOrder
+                        key={props.id + 'cancelmodal'}
                         quantity={item.quantity}
                         itemName={item.name}
                         price={item.totalMoney.amount / 100}
@@ -537,7 +586,7 @@ function OrderCard (props) {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(moment())
-    }, 1000)
+    }, 3000)
     return () => {
       clearInterval(timer)
     }
@@ -551,18 +600,22 @@ function OrderCard (props) {
     items,
     orderCost,
     orderTotal,
+    orderSquareTotal,
     fulfillment,
     handleClick,
     buttonStatus,
     cancelClick,
     id,
-    newOrder
+    newOrder,
+    isIsolation,
+    vendor
   } = props
 
   const {
     data: orderTrackerData,
     loading: orderTrackerLoading,
-    error: orderTrackerError
+    error: orderTrackerError,
+    refetch
   } = useQuery(ORDER_TRACKER, {
     variables: { orderId: id }
   })
@@ -575,8 +628,9 @@ function OrderCard (props) {
     return <p style={{ fontSize: '10px' }}> {orderTrackerError.message}.</p>
   }
 
-  // pastPickup is true if current time has past an order's pickuptime + buffer
-  const pastPickup = isPastPickup(pickupTime, currentTime) && newOrder
+  // pastPickup is true if current time has past an order's pickuptime + buffer, must be non-isolation housing vendor
+  const pastPickup =
+    isPastPickup(pickupTime, currentTime) && newOrder && !isIsolation
 
   const pickupAt = moment(pickupTime).format('h:mm A')
   const submittedAt = submissionTime
@@ -592,21 +646,23 @@ function OrderCard (props) {
         {/* Section of Order card with customer name, order number */}
 
         <MakeOrderTitle
-         customerName={customerName}
-         customerPhone={phone}
-         customerEmail={email}
+          customerName={customerName}
+          customerPhone={phone}
+          customerEmail={email}
         />
 
         {/* Section of order card with pick up time, order submission time, and payment method */}
         <MakeOrderTime
+          isIsolation={isIsolation}
           pickupTime={pickupAt}
           submissionTime={submittedAt}
+          orderTracker={orderTrackerData.getOrderTracker}
           paymentType={
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-                ? 'None'
-                : orderTrackerData.getOrderTracker.paymentType
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
           }
           pickupCountdown={timeLeft}
         />
@@ -616,12 +672,12 @@ function OrderCard (props) {
           can be called multiple times if multiple items are in order */}
 
           {items &&
-            items.map(function (item) {
+            items.map(function (item, index) {
               const modifiers = item.modifiers?.map(modifier => modifier.name)
 
               return (
                 <MakeOrderDetails
-                  key={id + item.name}
+                  key={id + 'orderdetails' + index}
                   quantity={item.quantity}
                   itemName={item.name}
                   price={item.totalMoney.amount / 100}
@@ -632,16 +688,21 @@ function OrderCard (props) {
             })}
         </OrderDetailsSpaceWrapper>
         <MakePaymentSpace
+          id={id}
+          vendor={vendor}
+          isIsolation={isIsolation}
           pastPickup={pastPickup}
           items={items}
           email={email}
           phone={phone}
+          orderTracker={orderTrackerData.getOrderTracker}
           buttonStatus={buttonStatus}
           orderCost={orderCost}
           studentId={props.studentId}
           cohenId={props.cohenId}
           orderTax={props.orderTotal * 0.0825}
           orderTotal={orderTotal}
+          orderSquareTotal={orderSquareTotal}
           fulfillment={fulfillment}
           pickupTime={pickupAt}
           submissionTime={submittedAt}
@@ -649,19 +710,18 @@ function OrderCard (props) {
             orderTrackerData.getOrderTracker === null
               ? 'None'
               : orderTrackerData.getOrderTracker.paymentType === null
-                ? 'None'
-                : orderTrackerData.getOrderTracker.paymentType
+              ? 'None'
+              : orderTrackerData.getOrderTracker.paymentType
           }
           handleClick={handleClick}
-          customerName={customerName}
+          refetch={refetch}
           cancelClick={cancelClick}
-          id={props.id}
           shopifyOrderId={
             orderTrackerData.getOrderTracker == null
               ? 'None'
               : orderTrackerData.getOrderTracker.shopifyOrderId
-                ? orderTrackerData.getOrderTracker.shopifyOrderId
-                : null
+              ? orderTrackerData.getOrderTracker.shopifyOrderId
+              : null
           }
         />
       </OrderCardWrapper>

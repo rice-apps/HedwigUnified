@@ -138,9 +138,9 @@ function MakeCatalogItems (props) {
       setIsChecked(availability_info.getAvailability)
     }
   }, [availability_info])
-  
+
   function ToggleCheck () {
-    let e = !isChecked
+    const e = !isChecked
     setIsChecked(e)
   }
 
@@ -150,7 +150,6 @@ function MakeCatalogItems (props) {
   if (availability_error) {
     return <p>Error...</p>
   }
- 
 
   return (
     <DisplayWrapper>
@@ -172,7 +171,7 @@ function MakeCatalogItems (props) {
               ToggleCheck()
             }}
           />
-          <ToggleSlider className='slider'></ToggleSlider>
+          <ToggleSlider className='slider' />
         </ToggleSwitch>
       </ItemAvailability>
       <ItemPrice>{formatter.format(props.itemPrice / 100)}</ItemPrice>

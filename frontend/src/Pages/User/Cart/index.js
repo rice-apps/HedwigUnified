@@ -24,7 +24,7 @@ import {
   Bill,
   SubmitButton
 } from './CartStyledComponents'
-import {GET_ITEM_AVAILABILITIES} from './../../../graphql/ProductQueries'
+import { GET_ITEM_AVAILABILITIES } from './../../../graphql/ProductQueries'
 // new dropdown imports:
 
 const styles = {
@@ -41,8 +41,6 @@ const Div = styled.div`
   grid-column-start: 2;
   padding-bottom: 10px;
 `
-
-
 
 const defaultTotals = {
   subtotal: 0,
@@ -179,6 +177,7 @@ function CartDetail () {
   const [cohenId, setCohenId] = useState(null)
   const [room, setRoom] = useState(null)
   const [note, setNote] = useState(null)
+  const [characterCount, setCharacterCount] = useState(0)
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
@@ -218,7 +217,7 @@ function CartDetail () {
       })
     : null
 
-  const {refetch: avail_refetch } = useQuery(GET_ITEM_AVAILABILITIES, {
+  const { refetch: avail_refetch } = useQuery(GET_ITEM_AVAILABILITIES, {
     variables: { productIds: product_ids, vendor: order.vendor.name },
     fetchPolicy: 'network-only'
   })
@@ -275,7 +274,7 @@ function CartDetail () {
       }
       const orderResponse = await createOrder(rec)
       const orderJson = orderResponse.data.createOrder
-      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod !== 'CREDIT') {
+      if (order.vendor.dataSource === 'SHOPIFY' && paymentMethod === 'CREDIT') {
         const createPaymentResponse = await createPayment({
           variables: {
             vendor: order.vendor.name,
@@ -482,36 +481,36 @@ function CartDetail () {
           </Bill>
         </SpaceWrapper>
         {order.vendor.name != 'Test Account CMT' && (
-        <SpaceWrapper pickUpTime>
-          <Title>Pick Up Time:</Title>
-          <Select
-            options={pickupTimes}
-            placeholder='Select...'
-            onChange={changePickupTime}
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-        </SpaceWrapper>
+          <SpaceWrapper pickUpTime>
+            <Title>Pick Up Time:</Title>
+            <Select
+              options={pickupTimes}
+              placeholder='Select...'
+              onChange={changePickupTime}
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+          </SpaceWrapper>
         )}
         {order.vendor.name != 'Test Account CMT' && (
-        <SpaceWrapper paymentMethod>
-          <Title>Payment Method:</Title>
-          <Select
-            options={options}
-            onChange={changePaymentType}
-            placeholder='Select...'
-            clearable={false}
-            style={styles.select}
-            className='float-cart__dropdown'
-          />
-          {paymentMethod === 'COHEN' && (
-            <Div>
-              <label>Enter your Cohen House Membership ID: </label>
-              <input onChange={e => setCohenId(e.target.value)} />
-            </Div>
-          )}
-        </SpaceWrapper>
+          <SpaceWrapper paymentMethod>
+            <Title>Payment Method:</Title>
+            <Select
+              options={options}
+              onChange={changePaymentType}
+              placeholder='Select...'
+              clearable={false}
+              style={styles.select}
+              className='float-cart__dropdown'
+            />
+            {paymentMethod === 'COHEN' && (
+              <Div>
+                <label>Enter your Cohen House Membership ID: </label>
+                <input onChange={e => setCohenId(e.target.value)} />
+              </Div>
+            )}
+          </SpaceWrapper>
         )}
         {order.vendor.name === 'Test Account CMT' && (
           <SpaceWrapper college>
@@ -522,20 +521,22 @@ function CartDetail () {
         {order.vendor.name === 'Test Account CMT' && (
           <SpaceWrapper note>
             <div>
-              <Title isolation note>Leave Notes: </Title>
-              <TextArea note onChange={e => setNote(e.target.value)} maxlength='200'
-                defaultValue = 'Type any additional dietary restrictions or concerns here (200 character limit)'
+              <Title isolation note>Order Notes: <span style={{ opacity: '0.6', fontStyle: 'italic', fontSize: '2vh' }}>({characterCount.toString()}/100)</span> </Title>
+              <TextArea
+                maxLength='150'
+                note onChange={(e) => { setNote(e.target.value); setCharacterCount(e.target.value.length) }}
+                placeholder='Type any additional dietary restrictions or concerns here (100 character limit)'
               />
             </div>
           </SpaceWrapper>
         )}
         {nullError && (
-            <SpaceWrapper warning css={{ alignSelf: 'center', color: 'red' }}>
-              {' '}
-              Error! Submission form contains null value for {nullError}. Please
-              complete your profile and order.{' '}
-            </SpaceWrapper>
-          )}
+          <SpaceWrapper warning css={{ alignSelf: 'center', color: 'red' }}>
+            {' '}
+            Error! Submission form contains null value for {nullError}. Please
+            complete your profile and order.{' '}
+          </SpaceWrapper>
+        )}
         <SpaceWrapper footer>
           <SubmitButton
             onClick={cart_menu?.length === 0 ? null : handleConfirmClick}

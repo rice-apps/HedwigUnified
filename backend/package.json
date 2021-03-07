@@ -22,20 +22,20 @@
     "graphql-compose": "^7.25.0",
     "graphql-compose-mongoose": "^9.1.0",
     "graphql-redis-subscriptions": "^2.3.1",
-    "ioredis": "^4.22.0",
+    "ioredis": "^4.23.0",
     "loglevel": "^1.7.1",
-    "mongoose": "^5.11.15",
+    "mongoose": "^5.11.18",
     "node-vault": "^0.9.21",
     "shopify-api-node": "^3.6.5",
     "shopify-buy": "^2.11.0",
     "square": "^8.1.1",
-    "twilio": "^3.56.0"
+    "twilio": "^3.57.0"
   },
   "devDependencies": {
     "@types/qs": "6.9.4",
     "nodemon": "^2.0.7",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
-    "typescript": "^4.1.5"
+    "typescript": "^4.2.2"
   }
 }

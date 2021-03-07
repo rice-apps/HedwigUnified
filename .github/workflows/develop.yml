@@ -1,0 +1,84 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Hedwig Staging Deployment
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  backend-build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Files
+        uses: actions/checkout@v2
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Dockerhub
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
+          tags: riceapps/hedwig-backend:latest
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Files
+        uses: actions/checkout@v2
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Dockerhub
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            REACT_APP_GRAPHQL_URL=https://hedwig-dev.riceapps.org/graphql
+            REACT_APP_GRAPHQL_WS_URL=wss://hedwig-dev.riceapps.org/ws
+            REACT_APP_HEDWIG_VENDOR_PERMISSIONS=ORDERS_READ;ORDERS_WRITE;CUSTOMERS_READ;CUSTOMERS_WRITE;ITEMS_READ;ITEMS_WRITE;LOYALTY_READ;LOYALTY_WRITE;MERCHANT_PROFILE_READ;MERCHANT_PROFILE_WRITE;PAYMENTS_READ;PAYMENTS_WRITE;PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS;
+            REACT_APP_SQUARE_ENV=development
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: ${{ !env.ACT && github.ref == 'refs/heads/master'}}
+          tags: riceapps/hedwig-frontend:latest
+          secrets: |
+            REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}
+            REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+            REACT_APP_SQUARE_CLIENT_ID=${{ secrets.REACT_APP_SQUARE_CLIENT_ID_DEV }}

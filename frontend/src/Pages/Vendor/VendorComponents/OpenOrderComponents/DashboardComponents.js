@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 
 const OrderDashboardWrapper = styled.div`
   height: 100%;
@@ -13,6 +13,13 @@ const OrderDashboardWrapper = styled.div`
   grid-template-areas:
     'NewOrderTitle AcceptedOrderTitle ReadyOrderTitle'
     'NewOrderSpace AcceptedOrderSpace ReadyOrderSpace';
+  ${props => props.isIsolation && css`
+  grid-template-columns: 0.4fr 1fr 1fr 0.4fr;
+  grid-template-rows: 45px auto;
+  grid-template-areas:
+    'Blank NewOrderTitle AcceptedOrderTitle Blank2'
+    'Blank NewOrderSpace AcceptedOrderSpace Blank2';
+  `}
 `
 
 const GeneralTitleWrapper = styled.div`
@@ -61,7 +68,7 @@ const AcceptedOrderSpaceWrapper = styled(GeneralSpaceWrapper)`
   grid-area: AcceptedOrderSpace;
   /* background-color: #FAFAFA; */
   /* background-color: yellow; */
-  border-right: 1px solid #adadad;
+  border-right: ${props => props.isIsolation ? '' : '1px solid #adadad'};
 `
 
 const ReadyOrderSpaceWrapper = styled(GeneralSpaceWrapper)`

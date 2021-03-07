@@ -7,6 +7,7 @@ const VENDOR_QUERY = gql`
       availableItems
       slug
       logoUrl
+      dataSource
       hours {
         start
         end

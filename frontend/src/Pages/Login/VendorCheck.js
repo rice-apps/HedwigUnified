@@ -9,7 +9,7 @@ import {
 } from './Login.styles'
 import { useNavigate } from 'react-router-dom'
 import gql from 'graphql-tag.macro'
-import { SmallLoadingPage  } from './../../components/LoadingComponents'
+import { SmallLoadingPage } from './../../components/LoadingComponents'
 import ChooseVendor from './../../components/ChooseVendor'
 
 const GET_VENDOR = gql`
@@ -21,7 +21,7 @@ const GET_VENDOR = gql`
     }
   }
 `
-const GET_ALLOWED_VENDORS = gql`
+export const GET_ALLOWED_VENDORS = gql`
   query GET_ALLOWED_VENDORS($name: String!){
     getAllowedVendors(name: $name){
       name
@@ -31,8 +31,8 @@ const GET_ALLOWED_VENDORS = gql`
 
 const VendorSelect = () => {
   const navigate = useNavigate()
-  const [selectVendor, setSelectVendor] = useState(false);
-  const [vendors, setVendors] = useState();
+  const [selectVendor, setSelectVendor] = useState(false)
+  const [vendors, setVendors] = useState()
   const userData = JSON.parse(localStorage.getItem('userProfile'))
 
   // const {
@@ -50,7 +50,7 @@ const VendorSelect = () => {
   if (vendorLoading) return <SmallLoadingPage />
   if (vendorError) return <p>User broken</p>
 
-  const allowedVendors = vendorData.getAllowedVendors.map(vendor => vendor.name);
+  const allowedVendors = vendorData.getAllowedVendors.map(vendor => vendor.name)
 
   // have to modify this with /contact
   if (allowedVendors.length === 0) {
@@ -62,8 +62,8 @@ const VendorSelect = () => {
     }
   }
 
-  if (selectVendor === true){
-    return <ChooseVendor vendors = {vendors}/>
+  if (selectVendor === true) {
+    return <ChooseVendor vendors={vendors} />
   }
 
   const clientLogin = () => {
@@ -75,10 +75,9 @@ const VendorSelect = () => {
   // }
 
   const vendorLogin = () => {
-    setSelectVendor(true);
-    setVendors(allowedVendors);
+    setSelectVendor(true)
+    setVendors(allowedVendors)
   }
-
 
   return (
     <MainDiv>

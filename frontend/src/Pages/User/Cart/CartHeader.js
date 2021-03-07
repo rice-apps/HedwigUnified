@@ -2,7 +2,8 @@ import styled from 'styled-components/macro'
 
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
-
+import { VENDOR_QUERY } from './../../../graphql/VendorQueries'
+import { useQuery } from '@apollo/client'
 const HeaderWrapper = styled.div`
   position: fixed;
   height: 8vh;
@@ -29,7 +30,23 @@ const HedwigWrapper = styled.div`
 `
 
 function CartHeader ({ vendorName, showBackButton }) {
+  const {
+    data: vendor_data,
+    error: vendor_error,
+    loading: vendor_loading
+  } = useQuery(VENDOR_QUERY, {
+    variables: { vendor: vendorName }
+  })
   const navigate = useNavigate()
+  if (vendor_loading) {
+    return <p>Loading...</p>
+  }
+  if (vendor_error) {
+    return <p>ErrorV...</p>
+  }
+
+  console.log(vendor_data)
+
   const cart_menu = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
     : null
@@ -41,28 +58,26 @@ function CartHeader ({ vendorName, showBackButton }) {
 
   const backNav = !cart_menu
     ? '/eat'
-    : order.vendor.name === 'Cohen House'
-      ? '/eat/cohen/'
-      : '/eat'
+    : '/eat/' + vendor_data.getVendor.slug
 
   const currVendor = order ? order.vendor.name : null
 
   return (
     <HeaderWrapper>
       <HedwigWrapper>
-        {showBackButton ? (
-          <IoMdArrowRoundBack
-            onClick={() =>
-              navigate(backNav, { state: { currentVendor: currVendor } })}
-            style={{
-              position: 'fixed',
-              left: '22px',
-              fontSize: '25px',
-              verticalAlign: 'middle',
-              cursor: 'pointer'
-            }}
-          />
-        ) : null}
+
+        <IoMdArrowRoundBack
+          onClick={() =>
+            navigate(backNav, { state: { currentVendor: currVendor } })}
+          style={{
+            position: 'fixed',
+            left: '22px',
+            fontSize: '25px',
+            verticalAlign: 'middle',
+            cursor: 'pointer'
+          }}
+        />
+
         Checkout: {vendorName}
       </HedwigWrapper>
     </HeaderWrapper>

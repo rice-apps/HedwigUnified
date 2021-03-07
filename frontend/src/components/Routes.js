@@ -72,7 +72,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
 
   const token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
-
+  const localUser = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : false
   console.log(token)
 
   // Verify that the token is valid on the backend
@@ -94,7 +94,7 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
   }
 
   // Data is missing, try to login again
-  if (!data || !data.verifyUser) {
+  if (!data || !data.verifyUser || !localUser) {
     localStorage.removeItem('token')
     navigate('/login')
   }
@@ -104,8 +104,8 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
     return <Route {...rest} element={element} />
   }
 
-  const vendor = data.verifyUser.vendor[0];
-  const netid = data.verifyUser.netid
+  const vendor = data != null ? data.verifyUser.vendor[0] : null
+  const netid = data != null ? data.verifyUser.netid : null
 
   // Not a vendor and already verified, go to buyer side
   if (!vendor) {

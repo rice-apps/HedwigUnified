@@ -108,7 +108,6 @@ function VendorHeader () {
   //   }
   // }
 
-
   function MakeLogoutPopup () {
     const client = useApolloClient()
     const handleLogout = () => {
@@ -131,7 +130,7 @@ function VendorHeader () {
           <AiOutlineUserSwitch />
           Switch to Buyer
         </LogoutItem>
-        <LogoutItem onClick = {() => navigate('/vendor_choice')}>
+        <LogoutItem onClick={() => navigate('/vendor_choice')}>
           Switch Vendors
         </LogoutItem>
       </LogoutPopup>

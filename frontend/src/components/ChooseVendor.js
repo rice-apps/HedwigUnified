@@ -60,79 +60,79 @@ const UPDATE_USER = gql`
         }
     }
 `
-const ChooseVendor = ({vendors}) => {
-    const navigate = useNavigate();
-    const [back, setBack] = useState(false);
-    const [updateUser, {data}] = useMutation(UPDATE_USER);
+const ChooseVendor = ({ vendors }) => {
+  const navigate = useNavigate()
+  const [back, setBack] = useState(false)
+  const [updateUser, { data }] = useMutation(UPDATE_USER)
 
-    if (back === true){
-        return <VendorSelect />
+  if (back === true) {
+    return <VendorSelect />
+  }
+
+  const vendorLogin = currVendor => {
+    const vendorsCopy = [...vendors]
+    const index = vendorsCopy.indexOf(currVendor)
+    vendorsCopy.splice(index, 1)
+    const vendor = [currVendor, ...vendorsCopy]
+    updateUser({
+      variables: {
+        vendor: vendor,
+        netid: JSON.parse(localStorage.getItem('userProfile')).netid
+      }
+    })
+
+    const {
+      netid,
+      name,
+      phone,
+      studentId,
+      _id,
+      isAdmin,
+      recentUpdate,
+      type,
+      token
+    } = JSON.parse(localStorage.getItem('userProfile'))
+
+    const updated = {
+      netid,
+      name,
+      phone,
+      studentId,
+      _id,
+      isAdmin,
+      vendor,
+      recentUpdate,
+      type,
+      token
     }
 
-    const vendorLogin = currVendor => {
-        const vendorsCopy = [...vendors];
-        const index = vendorsCopy.indexOf(currVendor);
-        vendorsCopy.splice(index, 1);
-        const vendor = [currVendor, ...vendorsCopy];
-        updateUser({ variables: { 
-            vendor: vendor,
-            netid: JSON.parse(localStorage.getItem("userProfile")).netid 
-        } });
+    localStorage.setItem('userProfile', JSON.stringify(updated))
 
-        const {
-            netid,
-            name,
-            phone,
-            studentId,
-            _id,
-            isAdmin,
-            recentUpdate,
-            type,
-            token
-          } = JSON.parse(localStorage.getItem("userProfile"));
+    // localStorage.setItem("userProfile", JSON.stringify(updated));
+    // we have to push the selected vendor to the very front of the array, and then we can
+    // get the first element in the /employee page to get the correct vendor
 
-          const updated = {
-            netid,
-            name,
-            phone,
-            studentId,
-            _id,
-            isAdmin,
-            vendor,
-            recentUpdate,
-            type,
-            token
-          }
+    // do we have to run this mutation as well?.. YES
 
-          localStorage.setItem("userProfile", JSON.stringify(updated));
+    navigate('/employee')
+  }
 
-        // localStorage.setItem("userProfile", JSON.stringify(updated));
-        // we have to push the selected vendor to the very front of the array, and then we can 
-        // get the first element in the /employee page to get the correct vendor
+  const vendorList = vendors.map(vendor => <CheckButton onClick={() => vendorLogin(vendor)}>{vendor}</CheckButton>)
 
-        // do we have to run this mutation as well?.. YES
+  const goBack = () => {
+    setBack(true)
+  }
 
-        navigate('/employee');
-    }
-    
-    const vendorList = vendors.map(vendor => <CheckButton onClick = {() => vendorLogin(vendor)}>{vendor}</CheckButton>);
-    
+  // const vendorList = <CheckButton onClick = {vendorLogin}>{vendors}</CheckButton>
+  return (
+    <MainDiv>
+      <ButtonPane>
+        {vendorList}
+      </ButtonPane>
+      <CheckButton onClick={goBack}>Go Back</CheckButton>
+    </MainDiv>
 
-    const goBack = () => {
-        setBack(true);
-    }
-
-    // const vendorList = <CheckButton onClick = {vendorLogin}>{vendors}</CheckButton>
-    return (
-        <MainDiv>
-            <ButtonPane>
-                {vendorList}
-            </ButtonPane>
-            <CheckButton onClick = {goBack}>Go Back</CheckButton>
-        </MainDiv>
-
-    );
-
+  )
 }
 
-export default ChooseVendor;
+export default ChooseVendor

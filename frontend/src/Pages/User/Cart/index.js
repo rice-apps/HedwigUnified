@@ -170,6 +170,43 @@ function calculateNextHours (
   return timeIntervals
 }
 
+function generateAllPickupTimes(currHour, currMinute, startHours, startMinutes, endHours, endMinutes){
+  const timeIntervals = calculateNextHours(
+    currHour,
+    currMinute,
+    startHours,
+    startMinutes,
+    endHours,
+    endMinutes
+  )
+  let pickupTimes = []
+  for (let i = 0; i < timeIntervals.length; i++) {
+    const interval = timeIntervals[i]
+    i === 0
+      ? (pickupTimes = [
+          ...pickupTimes,
+          ...generatePickupTimes(
+            interval[0],
+            interval[1],
+            interval[2],
+            interval[3],
+            true
+          )
+        ])
+      : (pickupTimes = [
+          ...pickupTimes,
+          ...generatePickupTimes(
+            interval[0],
+            interval[1],
+            interval[2],
+            interval[3],
+            false
+          )
+        ])
+  }
+  return pickupTimes
+}
+
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
@@ -374,8 +411,7 @@ function CartDetail () {
   const endMinutes = businessHour.end.map(endHour => {
     return parseInt(endHour.split(' ')[0].split(':')[1])
   })
-
-  const timeIntervals = calculateNextHours(
+  let pickupTimes = generateAllPickupTimes(
     currHour,
     currMinute,
     startHours,
@@ -383,31 +419,6 @@ function CartDetail () {
     endHours,
     endMinutes
   )
-  let pickupTimes = []
-  for (let i = 0; i < timeIntervals.length; i++) {
-    const interval = timeIntervals[i]
-    i === 0
-      ? (pickupTimes = [
-          ...pickupTimes,
-          ...generatePickupTimes(
-            interval[0],
-            interval[1],
-            interval[2],
-            interval[3],
-            true
-          )
-        ])
-      : (pickupTimes = [
-          ...pickupTimes,
-          ...generatePickupTimes(
-            interval[0],
-            interval[1],
-            interval[2],
-            interval[3],
-            false
-          )
-        ])
-  }
 
   // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
   //   {'year': moment().year(),

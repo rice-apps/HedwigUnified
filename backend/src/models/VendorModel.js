@@ -84,6 +84,11 @@ const defaultHours = [
   }
 ]
 
+const OrderLimits = new mongoose.Schema({
+  timeInterval: {type: String, required: true},
+  numOrders: {type: Number, required: true}
+})
+
 const VendorSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   slug: { type: String, min: 3, max: 5, unique: true, required: true }, // short 3-5 letter slug that identifies this vendor
@@ -100,7 +105,9 @@ const VendorSchema = new mongoose.Schema({
   website: { type: String, required: false },
   facebook: { type: String, required: false },
   availableItems: { type: [String], required: false },
-  availableModifiers: { type: [String], required: false }
+  availableModifiers: { type: [String], required: false },
+  maxOrders: {type: Number, required: true},
+  orderLimits: {type: [OrderLimits], required: true }
 })
 
 const Vendor = mongoose.model('Vendors', VendorSchema)

@@ -3,6 +3,10 @@ import { useMutation } from '@apollo/client'
 
 import gql from 'graphql-tag.macro'
 
+// This import loads the firebase namespace along with all its type information.
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
 import { Navigate } from 'react-router-dom'
 import { SmallLoadingPage } from './../../components/LoadingComponents'
 const AUTHENTICATE_USER = gql`
@@ -28,6 +32,7 @@ const lstorage = localStorage
 
 function Auth () {
   const idToken = lstorage.getItem('token')
+
 
   // Run query against backend to authenticate user
   const [

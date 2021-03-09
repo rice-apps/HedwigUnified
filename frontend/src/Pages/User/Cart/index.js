@@ -332,15 +332,15 @@ function CartDetail () {
   const [, setDummyDelete] = useState(0)
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
-  if (error) return <p>`Error! ${error.message}`</p>
+  if (error) throw new Error("Error Detected!");
 
   if (order_loading) return <p>Creating new order. Please wait ...</p>
   if (order_error) {
-    return <p>{order_error.message}</p>
+    throw new Error("Error Detected!");
   }
   if (payment_loading) return <p>Creating new payment. Please wait ...</p>
   if (payment_error) {
-    return <p>{payment_error.message}</p>
+    throw new Error("Error Detected!");
   }
 
   // if (avail_loading) return <p>'Loading availabilities...'</p>;

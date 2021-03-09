@@ -17,6 +17,7 @@ import SquarePayment from '../Pages/User/Cart/SquarePayment'
 import ContactForm from '../Pages/User/Contact'
 import Menu from '../Pages/User/Menu'
 import ErrorPage from './ErrorPage'
+import ReportBugPage from './ReportBugPage'
 import Product from '../Pages/User/Products/Product'
 import ClosedOrdersPage from '../Pages/Vendor/VendorPages/ClosedOrdersPage.js'
 import OpenOrdersPage from '../Pages/Vendor/VendorPages/OpenOrdersPage.js'
@@ -34,6 +35,8 @@ import { SmallLoadingPage } from './LoadingComponents'
 import Launch from './../Pages/User/Launch'
 import Onboard from './../Pages/Onboard/Onboard'
 import ReturnOnboard from './../Pages/Onboard/ReturnOnboard'
+
+import Counter from './Counter.js'
 /**
  * Requests to verify the user's token on the backend
  */
@@ -156,6 +159,10 @@ export const RoutesComponent = () => {
       element: <Navigate to='/eat' />
     },
     {
+      path: '/counter',
+      element: <Counter />
+    },
+    {
       path: '/onboard',
       element: <Onboard />
     },
@@ -170,6 +177,10 @@ export const RoutesComponent = () => {
     {
       path: '/404_page',
       element: <ErrorPage />
+    },
+    {
+      path: '/report_bug',
+      element: <ReportBugPage />
     },
     {
       path: '/login',

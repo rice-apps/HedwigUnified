@@ -140,7 +140,7 @@ function MakeCatalogItems (props) {
     return <ClipLoader size={100} color='#0f0f0f' loading />
   }
   if (availability_error) {
-    return <p>Error...</p>
+    throw new Error("Error Detected!")
   }
 
   return (

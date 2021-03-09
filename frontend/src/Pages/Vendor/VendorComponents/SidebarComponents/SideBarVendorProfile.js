@@ -62,7 +62,7 @@ function SideBarVendorProfile ({ setLogo }) {
   console.log('NO', data)
 
   if (error || queryError) {
-    return <p>Error</p>
+    throw new Error("Error Detected!")
   }
   if (loading) return <p>Waiting...</p>
 

@@ -1,5 +1,6 @@
 import './App.css'
 import { RoutesComponent } from './components/Routes'
+import ErrorBoundary from '../src/components/ErrorBoundary.js'
 
 function App () {
   return (
@@ -9,7 +10,9 @@ function App () {
         content='width=device-width, initial-scale=1.0, maximum-scale=1.0,
      user-scalable=0'
       />
-      <RoutesComponent />
+      <ErrorBoundary>
+        <RoutesComponent />
+      </ErrorBoundary>
     </>
   )
 }

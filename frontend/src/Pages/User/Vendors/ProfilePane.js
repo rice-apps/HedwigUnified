@@ -79,7 +79,7 @@ function ProfilePane ({ updateLogin }) {
     { loading: phone_loading, error: phone_error }
   ] = useMutation(EDIT_PHONE)
 
-  if (phone_error) return <p> {phone_error.message} </p>
+  if (phone_error) throw new Error("Error Detected!")
   if (phone_loading) return <p> (Phone) Waiting... </p>
 
   const user = JSON.parse(localStorage.getItem('userProfile'))

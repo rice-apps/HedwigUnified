@@ -70,7 +70,7 @@ function ContactForm () {
   const [addPhone, { loading, error }] = useMutation(ADD_PHONE)
 
   if (loading) return <SmallLoadingPage />
-  if (error) return <p>{error.message}</p>
+  if (error) throw new Error("Error Detected!")
 
   if (confirmed) {
     Object.assign(user, { phone: phone.replaceAll('-', '') })

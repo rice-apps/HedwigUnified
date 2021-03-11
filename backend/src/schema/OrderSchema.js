@@ -138,6 +138,17 @@ OrderTC.addResolver({
         .lean()
         .exec()
 
+      // Lorraine's scratch for checking max items limit.
+      // Get the number of max number of items available to place
+      // at pickup time.
+      if (vendorDoc.maxOrders) {
+        const orderLimitAtPickupTime = vendorDoc.orderLimit.get(pickupTime)
+        if (lineItems.length() > orderLimitAtPickupTime) {
+          throw new error("The pickup time interval is not available.")
+        }
+        vendorDoc.update()
+      }
+
       try {
         const {
           result: { order: newOrder }
@@ -190,7 +201,7 @@ OrderTC.addResolver({
 
         TwilioClient.messages.create({
           body:
-            'Your order with East-West Tea has been placed. If you need to contact East-West Tea, please message them on Facebook.',
+            'Your order with ' + vendor + ' has been placed. If you need to contact East-West Tea, please message them on Facebook.',
           from: '+13466667153',
           to: order.fulfillment.pickupDetails.recipient.phone
         })
@@ -310,7 +321,7 @@ OrderTC.addResolver({
         case 'PREPARED':
           TwilioClient.messages.create({
             body:
-              'Your order with East-West Tea is ready for pickup. Please wait in the RMC courtyard for an employee to bring the order to you. Remember to wear a mask and socially distance! ',
+              'Your order with' + vendor + ' is ready for pickup. Please wait in the RMC courtyard for an employee to bring the order to you. Remember to wear a mask and socially distance! ',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })

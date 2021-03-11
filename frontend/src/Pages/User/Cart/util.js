@@ -18,6 +18,7 @@ export const GET_VENDOR = gql`
         merchantId
         locationIds
       }
+      orderLimits
     }
   }
 `

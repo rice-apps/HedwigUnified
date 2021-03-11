@@ -207,6 +207,20 @@ function generateAllPickupTimes(currHour, currMinute, startHours, startMinutes, 
   return pickupTimes
 }
 
+function verifyPickupTimes(pickupTimes, orderLimits, cartItems, maxOrders){
+  const numItems = cartItems.length
+
+  const pickupTimeLabels = pickupTimes.map(pickupTime => {
+    const key = moment(pickupTime.value, 'h:mm a').format()
+    let isInvalid = false
+    if(orderLimits[key] < numItems && maxOrders){
+      isInvalid = true
+    }
+    return {isDisabled: isInvalid}
+  })
+  return pickupTimeLabels
+}
+
 function CartDetail () {
   const [totals, setTotals] = useState(defaultTotals)
   const [pickupTime, setPickupTime] = useState(null)
@@ -389,7 +403,7 @@ function CartDetail () {
   const currMinute = moment().minutes()
 
   const {
-    getVendor: { hours: businessHours }
+    getVendor: { hours: businessHours, orderLimits, maxOrders }
   } = data
   const businessHour = businessHours[currDay]
 
@@ -419,6 +433,8 @@ function CartDetail () {
     endHours,
     endMinutes
   )
+
+  let pickupTimeLabels = verifyPickupTimes(pickupTimes, orderLimits, cart_menu, maxOrders)
 
   // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
   //   {'year': moment().year(),
@@ -501,6 +517,7 @@ function CartDetail () {
               clearable={false}
               style={styles.select}
               className='float-cart__dropdown'
+              isOptionDisabled={(option) => option.isDisabled}
             />
           </SpaceWrapper>
         )}

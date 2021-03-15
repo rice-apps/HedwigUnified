@@ -196,12 +196,12 @@ OrderTC.addResolver({
           orderCreated: order
         })
 
-        // TwilioClient.messages.create({
-        //   body:
-        //     'Your order with Cohen House has been placed. If you need to contact Cohen House, please call them at (713) 348-4000.',
-        //   from: '+13466667153',
-        //   to: order.fulfillment.pickupDetails.recipient.phone
-        // })
+        TwilioClient.messages.create({
+          body:
+            'Your order with Cohen House has been placed. If you need to contact Cohen House, please call them at (713) 348-4000.',
+          from: '+13466667153',
+          to: order.fulfillment.pickupDetails.recipient.phone
+        })
 
         return order
       } catch (error) {
@@ -323,7 +323,7 @@ OrderTC.addResolver({
         case 'PREPARED':
           TwilioClient.messages.create({
             body:
-              'Your order with Cohen House is ready for pickup. Please remember to wear a mask and socially distance! ',
+              'Your order with Cohen House is ready for pickup. Follow the directions to find the designated pickup location. Please remember to wear a mask and socially distance! ',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
@@ -331,7 +331,7 @@ OrderTC.addResolver({
         case 'COMPLETED':
           TwilioClient.messages.create({
             body:
-              'Your order with Cohen House has been picked up. If you did not pick up the order, please call them at (713) 348-4000. Tell us how your ordering and food experience was by filling out the survey here: https://forms.gle/BzW3C8JAnXD7N6Jz7 ',
+              'Your order with Cohen House has been picked up. If you did not pick up the order, please call them at (713) 348-4000. \n Tell us how your ordering and food experience was by filling out the survey here: https://forms.gle/BzW3C8JAnXD7N6Jz7 ',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })

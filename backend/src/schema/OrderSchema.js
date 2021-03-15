@@ -196,12 +196,12 @@ OrderTC.addResolver({
           orderCreated: order
         })
 
-        TwilioClient.messages.create({
-          body:
-            'Your order with Cohen House has been placed. If you need to contact Cohen House, please call them at (713) 348-4000.',
-          from: '+13466667153',
-          to: order.fulfillment.pickupDetails.recipient.phone
-        })
+        // TwilioClient.messages.create({
+        //   body:
+        //     'Your order with Cohen House has been placed. If you need to contact Cohen House, please call them at (713) 348-4000.',
+        //   from: '+13466667153',
+        //   to: order.fulfillment.pickupDetails.recipient.phone
+        // })
 
         return order
       } catch (error) {

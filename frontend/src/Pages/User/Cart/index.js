@@ -181,7 +181,7 @@ function CartDetail () {
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
-    { value: 'CREDIT', label: 'Credit Card' },
+    { value: 'None', label: 'Credit Card' },
     { value: 'TETRA', label: 'Tetra' },
     { value: 'COHEN', label: 'Cohen House' }
   ]
@@ -306,7 +306,7 @@ function CartDetail () {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
-      if (!paymentMethod || paymentMethod === 'TETRA') {
+      if (!paymentMethod || paymentMethod === 'TETRA' || paymentMethod === 'None') {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }

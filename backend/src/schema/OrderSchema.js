@@ -196,12 +196,12 @@ OrderTC.addResolver({
           orderCreated: order
         })
 
-        TwilioClient.messages.create({
-          body:
-            'Your order with East-West Tea has been placed. If you need to contact East-West Tea, please message them on Facebook.',
-          from: '+13466667153',
-          to: order.fulfillment.pickupDetails.recipient.phone
-        })
+        // TwilioClient.messages.create({
+        //   body:
+        //     'Your order with Cohen House has been placed. If you need to contact Cohen House, please call them at (713) 348-4000.',
+        //   from: '+13466667153',
+        //   to: order.fulfillment.pickupDetails.recipient.phone
+        // })
 
         return order
       } catch (error) {
@@ -323,7 +323,7 @@ OrderTC.addResolver({
         case 'PREPARED':
           TwilioClient.messages.create({
             body:
-              'Your order with East-West Tea is ready for pickup. Please wait in the RMC courtyard for an employee to bring the order to you. Remember to wear a mask and socially distance! ',
+              'Your order with Cohen House is ready for pickup. Please remember to wear a mask and socially distance! ',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
@@ -331,7 +331,7 @@ OrderTC.addResolver({
         case 'COMPLETED':
           TwilioClient.messages.create({
             body:
-              'Your order with East-West Tea has been picked up. If you did not pick up the order, please contact East-West Tea immediately via Facebook. Tell us how your ordering and food experience was by filling out the survey here: https://forms.gle/BzW3C8JAnXD7N6Jz7 ',
+              'Your order with Cohen House has been picked up. If you did not pick up the order, please call them at (713) 348-4000. Tell us how your ordering and food experience was by filling out the survey here: https://forms.gle/BzW3C8JAnXD7N6Jz7 ',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
@@ -339,7 +339,7 @@ OrderTC.addResolver({
         case 'CANCELED':
           TwilioClient.messages.create({
             body:
-              'You order with East-West Tea has been cancelled. If you would like to contact East-West Tea about your order, please message them on Facebook.',
+              'You order with Cohen House has been cancelled. If you would like to contact Cohen House about your order, please call them at (713) 348-4000',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
@@ -347,7 +347,7 @@ OrderTC.addResolver({
         default:
           TwilioClient.messages.create({
             body:
-              'Your order with East-West Tea has been accepted and is being prepared. Please do not come to pick up your order until you receive a text asking you to do so.',
+              'Your order with Cohen House has been accepted and is being prepared. Please do not come to pick up your order until you receive a text asking you to do so.',
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })

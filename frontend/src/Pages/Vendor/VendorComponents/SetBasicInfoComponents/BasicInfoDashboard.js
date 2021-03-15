@@ -178,7 +178,6 @@ const Input = styled.input`
       margin-left: 0px;
       margin-right: 0.5rem;
     `}
-
 `
 
 const TextArea = styled.textarea`
@@ -193,9 +192,9 @@ const TextArea = styled.textarea`
   font-size: 2.2vh;
   padding-left: 15px;
   font-weight: 600;
-  line-height:2.2vh;
-  padding-top:1vh;
-  border:none;
+  line-height: 2.2vh;
+  padding-top: 1vh;
+  border: none;
 `
 
 const Button = styled.div`

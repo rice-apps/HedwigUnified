@@ -14,7 +14,7 @@ const QuestionWrapper = styled.div`
   align-items: center;
   margin: 6px, 0px;
   justify-content: space-between;
-  font-family: 'avenirmedium';
+  font-family: 'avenirmedium', sans-serif;
   font-size: 2vh;
   text-align: left;
 `

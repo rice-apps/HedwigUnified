@@ -23,7 +23,7 @@ const BottomNavigationItem = styled.div`
   width: 23vh;
   border-radius: 5px;
   color: white;
-  background-color: ${props => (props.notEmpty ? '#343330' : '#9A9998')}; ;
+  background-color: ${props => (props.notEmpty ? '#343330' : '#9A9998')};
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -82,7 +82,6 @@ export const Modal = styled.div`
   top: 50%;
   border-radius: 20px;
   transform: translate(-50%, -50%);
-  top: 50%;
   background-color: white;
   width: 40vh;
   height: 40vh;

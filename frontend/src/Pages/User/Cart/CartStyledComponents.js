@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components/macro'
 
 export const FloatCartWrapper = styled.div`
-  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   padding-top: 8vh;
   min-height: 100vh;
   min-width: 100vw;
@@ -106,7 +106,7 @@ export const Title = styled.div`
   ${props =>
     props.note &&
     css`
-      margin-top:1.5vh;
+      margin-top: 1.5vh;
       font-size: 2.2vh;
       display: block;
     `}
@@ -119,7 +119,7 @@ export const TextArea = styled.textarea`
   margin: auto;
   border-color: #dddddd;
   resize: none;
-  :focus{
+  :focus {
     outline: none;
   }
 `
@@ -127,7 +127,7 @@ export const TextArea = styled.textarea`
 export const Input = styled.input`
   margin-right: 5vw;
   text-align: center;
-  :focus{
+  :focus {
     outline: none;
   }
   ${props =>
@@ -138,8 +138,8 @@ export const Input = styled.input`
       margin-bottom: 1vw;
       border-right: 0;
       border-left: 0;
-      border-top:0;
-      border-width:0.1px;
+      border-top: 0;
+      border-width: 0.1px;
     `}
 `
 

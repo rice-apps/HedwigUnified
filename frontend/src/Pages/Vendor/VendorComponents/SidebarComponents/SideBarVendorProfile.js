@@ -55,9 +55,12 @@ function SideBarVendorProfile ({ setLogo }) {
 
   // query to get the vendor... is it worth to cache the vendor merchant ID?
 
-  const { data, loading, error: queryError, refetch } = useQuery(GET_VENDOR_DATA, {
-    variables: { name: vendorName }
-  })
+  const { data, loading, error: queryError, refetch } = useQuery(
+    GET_VENDOR_DATA,
+    {
+      variables: { name: vendorName }
+    }
+  )
 
   console.log('NO', data)
 

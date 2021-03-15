@@ -10,7 +10,7 @@ const BackButton = styled.button`
   font-size: 3rem;
   background-color: #f3725b;
   color: white;
-  font-family: Proxima Nova;
+  font-family: Proxima Nova, sans-serif;
   font-weight: bold;
   :hover {
     text-decoration: underline;

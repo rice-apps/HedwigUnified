@@ -90,7 +90,7 @@
   margin: auto 20px;
 }
 
-.categoryname:hover{
+.categoryname:hover {
   font-weight: bold;
   border-bottom: #f3725b solid 2px;
 }
@@ -123,9 +123,9 @@
   cursor: pointer;
 }
 
-.itemgrid:hover{
+.itemgrid:hover {
   box-shadow: 0 0 2px rgba(33, 33, 33, 0.2);
-  background-color: #f5e7da;  
+  background-color: #f5e7da;
 }
 
 @media (min-width: 800px) {
@@ -157,8 +157,8 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-left:1vh;
-  margin-right:1vh;
+  margin-left: 1vh;
+  margin-right: 1vh;
   grid-area: NameSpace;
 }
 .itemname {

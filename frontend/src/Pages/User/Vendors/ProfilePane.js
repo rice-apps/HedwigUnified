@@ -12,7 +12,7 @@ const logoutURL = 'https://idp.rice.edu/idp/profile/cas/logout'
 const SignOutButton = styled.div`
   border: 1px solid #5a595326;
   background-color: #db6142;
-  font-family: 'avenirbook';
+  font-family: 'avenirbook', sans-serif;
   color: white;
   font-size: 3vh;
   align-self: flex-end;
@@ -128,7 +128,6 @@ function ProfilePane ({ updateLogin }) {
                 setShowProfile(!showProfile)
                 console.log(showProfile)
               }}
-
               style={{
                 cursor: 'pointer'
               }}

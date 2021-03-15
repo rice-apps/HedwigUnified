@@ -329,11 +329,13 @@ ItemTC.addResolver({
         name: vendor
       })
       try {
-        if (type === 'item') { // querying item
+        if (type === 'item') {
+          // querying item
           if (vendorData.availableItems.includes(productId)) {
             return true
           }
-        } else { // querying modifiers
+        } else {
+          // querying modifiers
           if (vendorData.availableModifiers.includes(productId)) {
             return true
           }
@@ -482,11 +484,11 @@ ItemTC.addResolver({
         availability = vendorData.availableModifiers
       }
       const idx = availability.indexOf(productId) // initialize the index to find the item
-      if (isItemAvailable && (idx === -1)) {
+      if (isItemAvailable && idx === -1) {
         availability.push(productId)
         await vendorData.save()
       }
-      if (!isItemAvailable && (idx !== -1)) {
+      if (!isItemAvailable && idx !== -1) {
         availability.splice(idx, 1)
         await vendorData.save()
       }

@@ -26,9 +26,6 @@ const Wrapper = styled.div`
 `
 
 const FaqPanel = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
   justify-content: center;
   width: 100%;
   height: 100%;
@@ -45,13 +42,13 @@ const Header = styled.h1`
   margin: 2vh;
   grid-area: HeaderSpace;
   font-size: 3.6vh;
-  font-family: 'avenirbold';
+  font-family: 'avenirbold', sans-serif;
 `
 
 const ColumnHeader = styled.h2`
   color: #5a5953;
   font-size: 3vh;
-  font-family: 'avenirbold';
+  font-family: 'avenirbold', sans-serif;
 `
 
 function FAQComp () {

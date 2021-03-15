@@ -11,8 +11,8 @@ const MainDiv = styled.div`
   align-items: center;
   align-content: center;
   justify-items: center;
-  font-family: avenir;
-  margin:1vh 0vh;
+  font-family: avenir, sans-serif;
+  margin: 1vh 0vh;
 `
 
 const HeadPhoto = styled.img`
@@ -25,7 +25,7 @@ const HeadPhoto = styled.img`
 `
 
 const Name = styled.div`
-  font-family: Proxima Nova;
+  font-family: Proxima Nova, sans-serif;
   font-weight: bold;
   font-size: 2.5vh;
   line-height: 2.8vh;
@@ -33,7 +33,7 @@ const Name = styled.div`
 `
 
 const Position = styled.div`
-  font-family: Proxima Nova;
+  font-family: Proxima Nova, sans-serif;
   font-size: 2.1vh;
   margin: 0;
   padding: 0;

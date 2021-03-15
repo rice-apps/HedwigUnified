@@ -8,7 +8,7 @@ const HelpHeader = styled.section`
   height: 8vh;
   padding-top: 3vh;
   background-color: white;
-  font-family: 'avenir';
+  font-family: 'avenir', sans-serif;
   font-weight: bold;
   font-size: 3.1vh;
 `
@@ -20,7 +20,7 @@ const BackArrowSection = styled.section`
 
 const FAQSection = styled.section`
   padding: 0vh 5vw;
-  font-family: 'avenir';
+  font-family: 'avenir', sans-serif;
 `
 
 const SubHeader = styled.section`

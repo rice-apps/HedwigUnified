@@ -286,7 +286,12 @@ function CartDetail () {
             currency: 'USD'
           }
         })
-        setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
+        setLocalStorage(
+          order,
+          orderJson,
+          createPaymentResponse.data.createPayment.url,
+          totals
+        )
       }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -521,10 +526,25 @@ function CartDetail () {
         {order.vendor.name === 'Test Account CMT' && (
           <SpaceWrapper note>
             <div>
-              <Title isolation note>Order Notes: <span style={{ opacity: '0.6', fontStyle: 'italic', fontSize: '2vh' }}>({characterCount.toString()}/100)</span> </Title>
+              <Title isolation note>
+                Order Notes:{' '}
+                <span
+                  style={{
+                    opacity: '0.6',
+                    fontStyle: 'italic',
+                    fontSize: '2vh'
+                  }}
+                >
+                  ({characterCount.toString()}/100)
+                </span>{' '}
+              </Title>
               <TextArea
                 maxLength='150'
-                note onChange={(e) => { setNote(e.target.value); setCharacterCount(e.target.value.length) }}
+                note
+                onChange={e => {
+                  setNote(e.target.value)
+                  setCharacterCount(e.target.value.length)
+                }}
                 placeholder='Type any additional dietary restrictions or concerns here (100 character limit)'
               />
             </div>

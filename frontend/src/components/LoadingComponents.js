@@ -71,7 +71,7 @@ const Hedwig = styled.img`
 
 const LoadingText = styled.div`
   font-size: 2.5vh;
-  font-family: 'avenir';
+  font-family: 'avenir', sans-serif;
   color: #f3725b;
   font-weight: bold;
   grid-area: TextSpace;

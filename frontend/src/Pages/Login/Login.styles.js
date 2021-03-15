@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
  *  Need to override font for element inside of MainDiv!
  */
 const MainDiv = styled.div`
-  font-family: 'Omnes';
+  font-family: 'Omnes', sans-serif;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -36,7 +36,7 @@ const Title = styled.h1`
   color: #f3725b;
   font-size: 3.3rem;
   margin: 0.1rem;
-  font-family: 'Omnes';
+  font-family: 'Omnes', sans-serif;
   font-style: normal;
   font-weight: 500;
 `
@@ -58,9 +58,8 @@ const LoginButton = styled.button`
 `
 
 const BackgroundCover = styled.div`
-  color:#F3725B;
-  backgound-color: white;
-  }
+  color: #f3725b;
+  background-color: white;
 `
 
 const ButtonPane = styled.div`
@@ -82,8 +81,8 @@ const CheckButton = styled.button`
   margin: 0.5rem;
   outline: none;
 
-  :hover{
-   background-color:  #ffe6cc; 
+  :hover {
+    background-color: #ffe6cc;
   }
 `
 

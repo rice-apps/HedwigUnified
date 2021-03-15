@@ -56,16 +56,13 @@ function CartHeader ({ vendorName, showBackButton }) {
   console.log(order)
   console.log(cart_menu)
 
-  const backNav = !cart_menu
-    ? '/eat'
-    : '/eat/' + vendor_data.getVendor.slug
+  const backNav = !cart_menu ? '/eat' : '/eat/' + vendor_data.getVendor.slug
 
   const currVendor = order ? order.vendor.name : null
 
   return (
     <HeaderWrapper>
       <HedwigWrapper>
-
         <IoMdArrowRoundBack
           onClick={() =>
             navigate(backNav, { state: { currentVendor: currVendor } })}
@@ -77,7 +74,6 @@ function CartHeader ({ vendorName, showBackButton }) {
             cursor: 'pointer'
           }}
         />
-
         Checkout: {vendorName}
       </HedwigWrapper>
     </HeaderWrapper>

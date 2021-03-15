@@ -41,7 +41,7 @@ const HeaderWrapper = styled.div`
   justify-items: center;
   text-align: center;
   z-index: 1;
-  font-family: 'avenir';
+  font-family: 'avenir', sans-serif;
   background-color: white;
   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);
 `
@@ -59,7 +59,7 @@ const AboutText = styled.div`
   position: absolute;
   grid-area: text;
   text-align: center;
-  font-family: Proxima Nova;
+  font-family: Proxima Nova, sans-serif;
   justify-self: center;
   top: 20%;
   font-weight: bold;
@@ -75,7 +75,7 @@ const TitleLogoWrapper = styled.div`
 const MeetHedwigText = styled.p`
   position: relative;
   color: #f3725b;
-  font-family: Proxima Nova;
+  font-family: Proxima Nova, sans-serif;
   font-size: 3vh;
   text-align: center;
   line-height: 100%;
@@ -107,10 +107,9 @@ const DescriptionBlock = styled.div`
   width: 100%;
   height: 100%;
   grid-row: 4/5;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const GoalTitle = styled.p`
@@ -125,12 +124,12 @@ const GoalTitle = styled.p`
 `
 const GoalText = styled.div`
   font-size: 2.5vh;
-  line-height:3vh;
-  margin-bottom:2.8vh;
+  line-height: 3vh;
+  margin-bottom: 2.8vh;
   text-align: left;
-  width:85%;
-  @media(min-width: 750px) {
-    width:40%;
+  width: 85%;
+  @media (min-width: 750px) {
+    width: 40%;
   }
 `
 

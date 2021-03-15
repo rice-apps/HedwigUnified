@@ -67,6 +67,13 @@ OrderTC.addResolver({
         returnEntries: false
       })
 
+      if (!orders) {
+        return {
+          cursor: newCursor,
+          orders: []
+        }
+      }
+
       const filteredOrders = orders.filter(
         order => typeof order.fulfillments !== 'undefined'
       )
@@ -94,6 +101,7 @@ OrderTC.addResolver({
         orders: returnedOrders
       }
     } catch (error) {
+      console.log(error)
       if (error instanceof ApiError) {
         return new ApolloError(
           `Finding orders using Square failed because ${JSON.stringify(error)}`
@@ -260,7 +268,10 @@ OrderTC.addResolver({
         return orderParse(order)
       }
 
-      if (vendorData.dataSource === 'SQUARE' && updatedOrderTracker.paymentType === 'CREDIT') {
+      if (
+        vendorData.dataSource === 'SQUARE' &&
+        updatedOrderTracker.paymentType === 'CREDIT'
+      ) {
         try {
           order = (
             await squareClient.ordersApi.updateOrder(orderId, {
@@ -289,7 +300,9 @@ OrderTC.addResolver({
           }
 
           throw new ApolloError(
-            `Something went wrong updating order on Square: ${JSON.stringify(error)}`
+            `Something went wrong updating order on Square: ${JSON.stringify(
+              error
+            )}`
           )
         }
       }

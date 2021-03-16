@@ -42,6 +42,10 @@ const Div = styled.div`
   padding-bottom: 10px;
 `
 
+const SelectStyled = styled.select`
+  color: ${props => props.isOptionDisabled ? 'gray' : 'black'};
+`
+
 const defaultTotals = {
   subtotal: 0,
   tax: 0,
@@ -436,6 +440,10 @@ function CartDetail () {
 
   let pickupTimeLabels = verifyPickupTimes(pickupTimes, orderLimits, cart_menu, maxOrders)
 
+  let pickupTimesVerified = pickupTimes.map((pickupTime, i) => {
+    return pickupTime.add(pickupTimeLabels[i])
+  })
+
   // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
   //   {'year': moment().year(),
   //   'month': moment().month(),
@@ -510,13 +518,15 @@ function CartDetail () {
         {order.vendor.name != 'Test Account CMT' && (
           <SpaceWrapper pickUpTime>
             <Title>Pick Up Time:</Title>
-            <Select
-              options={pickupTimes}
+            <SelectStyled
+              // options={pickupTimes}
+              options={pickupTimesVerified}
               placeholder='Select...'
               onChange={changePickupTime}
               clearable={false}
               style={styles.select}
               className='float-cart__dropdown'
+              // isOptionDisabled={(option) => option.isDisabled}
               isOptionDisabled={(option) => option.isDisabled}
             />
           </SpaceWrapper>

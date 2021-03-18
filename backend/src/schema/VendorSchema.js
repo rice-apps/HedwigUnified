@@ -211,21 +211,22 @@ VendorTC.addResolver({
       const {
         result: { objects }
       } = await catalogApi.listCatalog(undefined, 'ITEM,CATEGORY,MODIFIER_LIST')
-      const modifiers = objects.filter(
+      const modifierLists = objects.filter(
         object => object.type === 'MODIFIER_LIST'
       )
-      const availability = []
+      const availabilities = []
 
-      for (let i = 0; i < modifiers.length; i++) {
-        // extract name and id
-        availability.push(modifiers[i].id)
+      for (let i = 0; i < modifierLists.length; i++) {
+        for (let j = 0; j < modifierLists[i].modifierListData.modifiers.length; j++) {
+          availabilities.push(modifierLists[i].modifierListData.modifiers[j].id)
+        }
       }
 
       const vendorData = await Vendor.findOne({
         name: vendor
       })
 
-      vendorData.availableModifiers = availability
+      vendorData.availableModifiers = availabilities
       await vendorData.save()
       return vendorData
     } catch (error) {

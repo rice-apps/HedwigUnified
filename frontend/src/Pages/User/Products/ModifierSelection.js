@@ -1,4 +1,5 @@
 import currency from 'currency.js'
+import { GET_ITEM_AVAILABILITIES } from './../../../graphql/ProductQueries'
 
 function ModifierSelection ({ modifierCategory }) {
   const {
@@ -20,10 +21,12 @@ function ModifierSelection ({ modifierCategory }) {
       <div className='options'>
         {options.map(option => (
           <div className='optionSet' key={option.name}>
+            {console.log('option', option)}
             <label>
               {selectionType === 'MULTIPLE' ? (
                 <>
                   <input
+                    // disabled={true}
                     type='checkbox'
                     name={name}
                     className='modifierSelect'
@@ -34,6 +37,7 @@ function ModifierSelection ({ modifierCategory }) {
               ) : (
                 <>
                   <input
+                    // disabled={true}
                     type='radio'
                     name={name}
                     className='modifierSelect'

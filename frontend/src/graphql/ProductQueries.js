@@ -98,12 +98,6 @@ const SET_ITEM_AVAILABILITY = gql`
   }
 `
 
-const GET_ITEM_AVAILABILITIES = gql`
-  query GET_ITEM_AVAILABILITIES($productIds: [String!], $vendor: String!) {
-    getAvailabilities(productIds: $productIds, vendor: $vendor, type: "item")
-  }
-`
-
 const SET_MODIFIER_AVAILABILITY = gql`
   mutation SET_ITEM_AVAILABILITY(
     $vendor: String!

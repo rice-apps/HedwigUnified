@@ -13,4 +13,17 @@ const ORDER_TRACKER = gql`
   }
 `
 
-export default ORDER_TRACKER
+const GET_COMPLETED_ORDERS = gql`
+  query GET_ORDERS($vendor: String!){
+    getOrderTrackers(filter: {status: "COMPLETED", vendor: $vendor}){
+      status
+      merchantId
+      vendor
+      submissionTime
+      orderId
+      paymentId
+    }
+  }
+`
+
+export {ORDER_TRACKER, GET_COMPLETED_ORDERS}

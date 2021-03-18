@@ -29,6 +29,14 @@ OrderTC.addResolver({
     cursor: {
       type: 'String',
       defaultValue: ''
+    },
+    orderIdsToFilter: {
+      type: '[String!]',
+      defaultValue: []
+    },
+    filterById: {
+      type: 'Boolean',
+      defaultValue: false
     }
   },
   resolve: async ({ args }) => {
@@ -67,6 +75,8 @@ OrderTC.addResolver({
         returnEntries: false
       })
 
+      console.log("ORDERS", orders);
+
       if (!orders) {
         return {
           cursor: newCursor,
@@ -79,6 +89,10 @@ OrderTC.addResolver({
       )
 
       const orderIds = filteredOrders.map(order => order.id)
+
+      // this is the part we do the filtering
+      if (filterById === true) orderIds = orderIds.filter(order => orderIdsToFilter.indexOf(order) > -1);
+
       const orderTrackers = await OrderTracker.find({
         orderId: { $in: orderIds }
       })

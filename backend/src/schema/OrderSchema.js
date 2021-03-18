@@ -146,7 +146,6 @@ OrderTC.addResolver({
         if (lineItems.length() > orderLimitAtPickupTime) {
           throw new error("The pickup time interval is not available.")
         }
-        vendorDoc.update()
       }
 
       try {
@@ -194,6 +193,12 @@ OrderTC.addResolver({
         })
 
         const order = orderParse(newOrder)
+        vendorDoc.orderLimit.put(pickupTime, vendorDoc.orderLimit.get(pickupTime) + lineItems.length());
+
+        vendorDoc.update({
+          name: vendorDoc.name,
+          orderLimit: vendorDoc.orderLimit
+        })
 
         pubsub.publish('orderCreated', {
           orderCreated: order
@@ -333,6 +338,10 @@ OrderTC.addResolver({
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
+          pickupTime = order.fulfillment.pickupDetails.pickupAt
+          newLimit = vendorData.orderLimit
+          newLimit.put(pickupTime, newLimit.get(pickupTime) - 1)
+          vendorData.update({orderLimit: newLimit})
           break
         case 'CANCELED':
           TwilioClient.messages.create({
@@ -341,6 +350,10 @@ OrderTC.addResolver({
             from: '+13466667153',
             to: parsedOrder.fulfillment.pickupDetails.recipient.phone
           })
+          pickupTime = order.fulfillment.pickupDetails.pickupAt
+          newLimit = vendorData.orderLimit
+          newLimit.put(pickupTime, newLimit.get(pickupTime) - 1)
+          vendorData.update({orderLimit: newLimit})
           break
         default:
           TwilioClient.messages.create({

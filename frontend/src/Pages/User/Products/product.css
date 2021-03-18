@@ -332,5 +332,18 @@ h2 {
 
 .asterisk {
   color: #f3725b;
-  font-style: italic;
+}
+
+.required {
+  display: block;
+  color: #f3725b;
+}
+
+.asteriskRed {
+  color: red;
+}
+
+.unavailable {
+  display: block;
+  color: red;
 }

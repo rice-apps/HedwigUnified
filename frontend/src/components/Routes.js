@@ -34,6 +34,8 @@ import { SmallLoadingPage } from './LoadingComponents'
 import Launch from './../Pages/User/Launch'
 import Onboard from './../Pages/Onboard/Onboard'
 import ReturnOnboard from './../Pages/Onboard/ReturnOnboard'
+import LoadingAuth from './../Pages/Login/loadingAuth'
+
 /**
  * Requests to verify the user's token on the backend
  */
@@ -176,6 +178,10 @@ export const RoutesComponent = () => {
     {
       path: '/login',
       element: <Login />
+    },
+    {
+      path: '/loadingAuth',
+      element: <PrivateRoute element={<LoadingAuth />} />
     },
     {
       path: '/auth',

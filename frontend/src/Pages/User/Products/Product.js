@@ -266,7 +266,6 @@ function Product () {
           <p>
             {product.description} <br />
             <span className='required'> (* required) </span>
-            <span className='unavailable'> (* unavailble) </span>
           </p>
         </div>
         <div className='variantsContainer'>

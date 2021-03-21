@@ -143,6 +143,14 @@ h2 {
   border: 3px solid #5a59534d;
 }
 
+.optionSet .customRadioUnavail {
+  height: 16px;
+  width: 16px;
+  border-radius: 20px;
+  background-color: lightgray;
+  border: 3px solid lightgray;
+}
+
 .customRadio::after {
   content: '';
   position: relative;
@@ -167,6 +175,13 @@ h2 {
   height: 16px;
   width: 16px;
   border: 3px solid #5a59534d;
+}
+
+.optionSet .customCheckUnavail {
+  height: 16px;
+  width: 16px;
+  background-color: lightgray;
+  border: 3px solid lightgray;
 }
 
 .customCheck::after {
@@ -339,11 +354,6 @@ h2 {
   color: #f3725b;
 }
 
-.asteriskRed {
-  color: red;
-}
-
-.unavailable {
-  display: block;
-  color: red;
+.modifierSelectUnavailable {
+  background-color: gray;
 }

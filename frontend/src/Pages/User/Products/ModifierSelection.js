@@ -62,7 +62,7 @@ function ModifierSelection ({ modifierCategory }) {
                     className='modifierSelect'
                     value={JSON.stringify({ option })}
                   />
-                  <span className='customCheck' />
+                  <span className={isAvailable ? 'customCheck' : 'customCheckUnavail'} />
                 </>
               ) : (
                 <>
@@ -73,7 +73,7 @@ function ModifierSelection ({ modifierCategory }) {
                     className='modifierSelect'
                     value={JSON.stringify({ option })}
                   />
-                  <span className='customRadio' />
+                  <span className={isAvailable ? 'customRadio' : 'customRadioUnavail'} />
                 </>
               )}
               <p>{option.name}</p>

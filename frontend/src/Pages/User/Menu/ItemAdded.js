@@ -79,7 +79,6 @@ const ModalWrapper = styled.div`
   right: 0;
   left: 0;
   top: 25vh;
-  display: none;
   font-size: 0vh;
   margin-right: auto;
   margin-left: auto;

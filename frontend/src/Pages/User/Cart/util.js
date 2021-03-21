@@ -173,7 +173,8 @@ export const createRecord = (items, paymentType, cohenId, note, room) => {
     phone: recipient.phone,
     email: recipient.email,
     pickupTime: order.pickupTime
-      ? moment(order.pickupTime).format() : timePlaceHolder,
+      ? moment(order.pickupTime).format()
+      : timePlaceHolder,
     submissionTime: moment().toISOString(),
     location: order.vendor.locationIds[0],
     type: paymentType,

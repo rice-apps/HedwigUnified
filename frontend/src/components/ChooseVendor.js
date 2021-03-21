@@ -7,15 +7,15 @@ import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag.macro'
 
 const MainDiv = styled.div`
-    font-family: 'Omnes';
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
+  font-family: 'Omnes', sans-serif;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
 
-    background-color: white;
+  background-color: white;
 `
 const ButtonPane = styled.div`
   display: flex;
@@ -36,29 +36,21 @@ const CheckButton = styled.button`
   margin: 0.5rem;
   outline: none;
 
-  :hover{
-   background-color:  #ffe6cc; 
+  :hover {
+    background-color: #ffe6cc;
   }
 `
 const UPDATE_USER = gql`
-    mutation UPDATE_USER(
-        $vendor: [String!]
-        $netid: String!
-    ){
-        userUpdateOne(filter: {netid: $netid}
-        record: 
-        {
-            vendor: $vendor
-        }
-        ){
-        recordId
-        record{
-            name
-            netid
-            vendor
-        }
-        }
+  mutation UPDATE_USER($vendor: [String!], $netid: String!) {
+    userUpdateOne(filter: { netid: $netid }, record: { vendor: $vendor }) {
+      recordId
+      record {
+        name
+        netid
+        vendor
+      }
     }
+  }
 `
 const ChooseVendor = ({ vendors }) => {
   const navigate = useNavigate()
@@ -117,7 +109,9 @@ const ChooseVendor = ({ vendors }) => {
     navigate('/employee')
   }
 
-  const vendorList = vendors.map(vendor => <CheckButton onClick={() => vendorLogin(vendor)}>{vendor}</CheckButton>)
+  const vendorList = vendors.map(vendor => (
+    <CheckButton onClick={() => vendorLogin(vendor)}>{vendor}</CheckButton>
+  ))
 
   const goBack = () => {
     setBack(true)
@@ -126,12 +120,9 @@ const ChooseVendor = ({ vendors }) => {
   // const vendorList = <CheckButton onClick = {vendorLogin}>{vendors}</CheckButton>
   return (
     <MainDiv>
-      <ButtonPane>
-        {vendorList}
-      </ButtonPane>
+      <ButtonPane>{vendorList}</ButtonPane>
       <CheckButton onClick={goBack}>Go Back</CheckButton>
     </MainDiv>
-
   )
 }
 

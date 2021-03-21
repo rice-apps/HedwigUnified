@@ -35,7 +35,12 @@ const SquarePayment = () => {
   const userProfile = JSON.parse(localStorage.getItem('userProfile'))
   const order = JSON.parse(localStorage.getItem('order'))
   const cartItems = JSON.parse(localStorage.getItem('cartItems'))
-  async function cardNonceResponseReceived (errors, nonce, cardData, buyerVerificationToken) {
+  async function cardNonceResponseReceived (
+    errors,
+    nonce,
+    cardData,
+    buyerVerificationToken
+  ) {
     if (errors) {
       setErrorMessages(errors.map(error => error.message))
       return
@@ -98,10 +103,16 @@ const SquarePayment = () => {
 
   const loadingView = <div className='sq-wallet-loading' />
   const unavailableApple = (
-    <div className='sq-wallet-unavailable'>Apple pay unavailable. Open safari on desktop or mobile to use.</div>
+    <div className='sq-wallet-unavailable'>
+      Apple pay unavailable. Open safari on desktop or mobile to use.
+    </div>
   )
-  const unavailableGoogle = <div className='sq-wallet-unavailable'>Google pay unavailable.</div>
-  const unavailableMasterpass = <div className='sq-wallet-unavailable'>Masterpass unavailable.</div>
+  const unavailableGoogle = (
+    <div className='sq-wallet-unavailable'>Google pay unavailable.</div>
+  )
+  const unavailableMasterpass = (
+    <div className='sq-wallet-unavailable'>Masterpass unavailable.</div>
+  )
 
   return (
     <PaymentWrapper>
@@ -115,9 +126,18 @@ const SquarePayment = () => {
         postalCode={postalCode}
         focusField={focusField}
       >
-        <ApplePayButton loadingView={loadingView} unavailableView={unavailableApple} />
-        <GooglePayButton loadingView={loadingView} unavailableView={unavailableGoogle} />
-        <MasterpassButton loadingView={loadingView} unavailableView={unavailableMasterpass} />
+        <ApplePayButton
+          loadingView={loadingView}
+          unavailableView={unavailableApple}
+        />
+        <GooglePayButton
+          loadingView={loadingView}
+          unavailableView={unavailableGoogle}
+        />
+        <MasterpassButton
+          loadingView={loadingView}
+          unavailableView={unavailableMasterpass}
+        />
 
         <div className='sq-divider'>
           <span className='sq-divider-label'>Or</span>

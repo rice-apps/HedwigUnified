@@ -42,7 +42,7 @@ export const Button = styled.div`
 export const P = styled.p`
   font-size: 12pt;
   color: #5a5953;
-  font-family: 'Proxima Nova';
+  font-family: 'Proxima Nova', sans-serif;
   text-align: center;
   margin: 8px 16px 8px 16px;
 

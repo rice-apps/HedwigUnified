@@ -72,7 +72,9 @@ const PrivateRoute = ({ element, isEmployeeRoute, ...rest }) => {
 
   const token =
     localStorage.getItem('token') != null ? localStorage.getItem('token') : ''
-  const localUser = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : false
+  const localUser = localStorage.getItem('userProfile')
+    ? JSON.parse(localStorage.getItem('userProfile'))
+    : false
   console.log(token)
 
   // Verify that the token is valid on the backend

@@ -41,7 +41,7 @@ const Modal = styled.div`
   padding: 4vh 0vh 5vh 0vh;
   overflow: auto;
   &::-webkit-scrollbar {
-    -webkit-appearance: none;
+    appearance: none;
     width: 0vh;
   }
   text-align: center;

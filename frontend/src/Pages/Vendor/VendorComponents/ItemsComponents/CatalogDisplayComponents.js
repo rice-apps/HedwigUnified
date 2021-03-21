@@ -72,8 +72,6 @@ const ToggleInput = styled.input`
     box-shadow: 0 0 1px #ea907a;
   }
   &:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
 `
@@ -87,7 +85,6 @@ const ToggleSlider = styled.span`
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: 0.4s;
     transition: 0.4s;
     border-radius: 20px;
   }
@@ -99,7 +96,6 @@ const ToggleSlider = styled.span`
     left: 4px;
     bottom: 4px;
     background-color: white;
-    -webkit-transition: 0.4s;
     transition: 0.4s;
     border-radius: 50%;
   }

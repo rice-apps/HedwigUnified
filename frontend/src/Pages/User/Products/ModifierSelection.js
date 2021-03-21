@@ -36,7 +36,6 @@ function ModifierSelection ({ modifierCategory }) {
   }
 
   const availModifiers = vendor_data.getVendor.availableModifiers
-  console.log('availModifiers', availModifiers)
   let isAvailable = true
 
   return (
@@ -51,7 +50,6 @@ function ModifierSelection ({ modifierCategory }) {
         {options.map(option => (
           isAvailable = availModifiers.includes(option.dataSourceId),
           <div className='optionSet' key={option.name}>
-            {console.log('option', option)}
             <label>
               {selectionType === 'MULTIPLE' ? (
                 <>

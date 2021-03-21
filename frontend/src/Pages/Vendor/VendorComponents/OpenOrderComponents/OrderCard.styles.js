@@ -28,8 +28,9 @@ export const OrderTitleSpaceWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-rows: auto auto;
-  grid-template-areas: 'icon1 namecontact icon2'
-                       '. namecontact .';
+  grid-template-areas:
+    'icon1 namecontact icon2'
+    '. namecontact .';
   font-size: 22px;
   line-height: 23.5px;
   justify-content: center;
@@ -52,7 +53,7 @@ export const OrderTitleContactHidden = styled.div`
 export const OrderTitleContactShown = styled.div`
   grid-area: namecontact;
   opacity: 1;
-  width:100%;
+  width: 100%;
   padding: 0.5vh 0.5vh 0vh 1vh;
   border-radius: 2vh;
   &:hover {
@@ -69,7 +70,7 @@ export const OrderTitleIconTwoDiv = styled.div`
 `
 
 export const OrderTitleContact = styled.div`
-  grid-area: namecontact;  
+  grid-area: namecontact;
   display: grid;
   grid-template-columns: auto auto;
   grid-template-rows: auto auto;
@@ -78,7 +79,7 @@ export const OrderTitleContact = styled.div`
   align-items: center;
   justify-items: start;
   line-height: 3.5vh;
-  background: #F1F1F1;
+  background: #f1f1f1;
   color: black;
   font-weight: normal;
   font-size: 2vh;
@@ -185,7 +186,7 @@ export const AcceptButton = styled(ButtonWrapper)`
 
 export const CancelButton = styled(ButtonWrapper)`
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.6);
+  border: 1px solid rgba(0, 0, 0, 0.6);
 `
 
 export const ReadyButton = styled(ButtonWrapper)`
@@ -219,7 +220,7 @@ export const ModalWrapper = styled.div`
     props.cancel
       ? '0px 0px 150px 12px rgba(234,144,122,0.6)'
       : '2px 2px 9px 1pxrgba(0, 0, 0, 0.2)'};
-  font-family: 'Metropolis';
+  font-family: 'Metropolis', sans-serif;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 0.75fr 2.8fr ${props =>

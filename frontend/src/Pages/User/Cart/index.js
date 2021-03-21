@@ -181,7 +181,7 @@ function CartDetail () {
   const [nullError, setNullError] = useState(null)
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
-    { value: 'CREDIT', label: 'Credit Card' },
+    { value: 'None', label: 'Credit Card' },
     { value: 'TETRA', label: 'Tetra' },
     { value: 'COHEN', label: 'Cohen House' }
   ]
@@ -286,7 +286,12 @@ function CartDetail () {
             currency: 'USD'
           }
         })
-        setLocalStorage(order, orderJson, createPaymentResponse.data.createPayment.url, totals)
+        setLocalStorage(
+          order,
+          orderJson,
+          createPaymentResponse.data.createPayment.url,
+          totals
+        )
       }
       if (paymentMethod === 'CREDIT') {
         // navigate to Almost there page
@@ -301,7 +306,7 @@ function CartDetail () {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
-      if (!paymentMethod || paymentMethod === 'TETRA') {
+      if (!paymentMethod || paymentMethod === 'TETRA' || paymentMethod === 'None') {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
@@ -521,10 +526,25 @@ function CartDetail () {
         {order.vendor.name === 'Test Account CMT' && (
           <SpaceWrapper note>
             <div>
-              <Title isolation note>Order Notes: <span style={{ opacity: '0.6', fontStyle: 'italic', fontSize: '2vh' }}>({characterCount.toString()}/100)</span> </Title>
+              <Title isolation note>
+                Order Notes:{' '}
+                <span
+                  style={{
+                    opacity: '0.6',
+                    fontStyle: 'italic',
+                    fontSize: '2vh'
+                  }}
+                >
+                  ({characterCount.toString()}/100)
+                </span>{' '}
+              </Title>
               <TextArea
                 maxLength='150'
-                note onChange={(e) => { setNote(e.target.value); setCharacterCount(e.target.value.length) }}
+                note
+                onChange={e => {
+                  setNote(e.target.value)
+                  setCharacterCount(e.target.value.length)
+                }}
                 placeholder='Type any additional dietary restrictions or concerns here (100 character limit)'
               />
             </div>

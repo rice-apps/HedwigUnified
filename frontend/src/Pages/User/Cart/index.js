@@ -61,7 +61,7 @@ function generatePickupTimes (
   while (pickupHour <= endHour) {
     while (
       pickupMinute <= 45 &&
-      !(pickupHour+pickupMinute/60 > endHour+(endMinute-15)/60)
+      !(pickupHour + pickupMinute / 60 > endHour + (endMinute - 15) / 60)
     ) {
       pickupMinute += 15
       let strPickupMinute = ''
@@ -246,11 +246,11 @@ function CartDetail () {
     )
   }
 
-  const handleConfirmClick = async (asapTime) => {
+  const handleConfirmClick = async asapTime => {
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
-    if (pickupTimeVal < currTimeVal + asapTime/60) {
+    if (pickupTimeVal < currTimeVal + asapTime / 60) {
       alert(
         'The time you have selected is no longer valid. Please choose a later time.'
       )
@@ -305,7 +305,11 @@ function CartDetail () {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
-      if (!paymentMethod || paymentMethod === 'TETRA' || paymentMethod === 'None') {
+      if (
+        !paymentMethod ||
+        paymentMethod === 'TETRA' ||
+        paymentMethod === 'None'
+      ) {
         setLocalStorage(order, orderJson, '', totals)
         return navigate('/eat/confirmation')
       }
@@ -402,38 +406,40 @@ function CartDetail () {
   const cutoffTime = data.getVendor.cutoffTime
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i]
-    const currNumTime = currHour + currMinute/60
-    const startNumTime = timeIntervals[0][0]+timeIntervals[0][1]/60
-    if(i === 0&& currNumTime>=startNumTime){
+    const currNumTime = currHour + currMinute / 60
+    const startNumTime = timeIntervals[0][0] + timeIntervals[0][1] / 60
+    if (i === 0 && currNumTime >= startNumTime) {
       const asapTime = moment().add(asapDuration, 'minutes')
       const pickupIntervalHour = asapTime.hour()
       const pickupIntervalMinute = Math.floor(asapTime.minutes() / 15) * 15
-      const asapDisplay = { value: moment(asapTime, 'h:mm a').format(), label: 'ASAP' + ' (~' + moment(asapTime).format('h:mm A') + ')'}
+      const asapDisplay = {
+        value: moment(asapTime, 'h:mm a').format(),
+        label: 'ASAP' + ' (~' + moment(asapTime).format('h:mm A') + ')'
+      }
       pickupTimes = [
-          asapDisplay,
-          ...generatePickupTimes(
-            pickupIntervalHour,
-            pickupIntervalMinute,
-            interval[2],
-            interval[3],
-            cutoffTime
-          )
-        ]
-    }
-    else{
+        asapDisplay,
+        ...generatePickupTimes(
+          pickupIntervalHour,
+          pickupIntervalMinute,
+          interval[2],
+          interval[3],
+          cutoffTime
+        )
+      ]
+    } else {
       pickupTimes = [
-          ...pickupTimes,
-          ...generatePickupTimes(
-            interval[0],
-            interval[1],
-            interval[2],
-            interval[3],
-            cutoffTime
-          )
-        ]
+        ...pickupTimes,
+        ...generatePickupTimes(
+          interval[0],
+          interval[1],
+          interval[2],
+          interval[3],
+          cutoffTime
+        )
+      ]
     }
   }
-  console.log("Pickup Times: ", pickupTimes)
+  console.log('Pickup Times: ', pickupTimes)
 
   function changePaymentType (newPayment) {
     setPaymentMethod(newPayment.value)
@@ -531,6 +537,42 @@ function CartDetail () {
             )}
           </SpaceWrapper>
         )}
+        {order.vendor.name === 'Cohen House' && (
+          <SpaceWrapper cohenNote>
+            <div>
+              <Title>
+                Coupon Code:{' '}
+                <span
+                  style={{
+                    opacity: '0.6',
+                    fontStyle: 'italic',
+                    fontSize: '2vh'
+                  }}
+                >
+                  (optional)
+                </span>
+              </Title>
+              <div
+                style={{
+                  color: 'grey',
+                  lineHeight: '2vh',
+                  width: '80vw',
+                  margin:'0.5vh 6vw 0.9vh 6vw'
+                }}
+              >
+                *Vendor will verify coupon code. Price subject to change.
+              </div>
+              <TextArea
+                maxLength='150'
+                note
+                onChange={e => {
+                  setNote(e.target.value)
+                  setCharacterCount(e.target.value.length)
+                }}
+              />
+            </div>
+          </SpaceWrapper>
+        )}
         {order.vendor.name === 'Test Account CMT' && (
           <SpaceWrapper college>
             <Title isolation>Room Number: </Title>
@@ -573,7 +615,13 @@ function CartDetail () {
         )}
         <SpaceWrapper footer>
           <SubmitButton
-            onClick={cart_menu?.length === 0 ? null : () => {handleConfirmClick(asapDuration)}}
+            onClick={
+              cart_menu?.length === 0
+                ? null
+                : () => {
+                    handleConfirmClick(asapDuration)
+                  }
+            }
           >
             Submit Order
           </SubmitButton>

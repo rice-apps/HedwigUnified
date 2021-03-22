@@ -134,6 +134,14 @@ function MakeOrderTime (props) {
       <ExactTimeSpaceWrapper>
         <div> Pick up time: {props.pickupTime}</div>
         <div> Order Submitted: {props.submissionTime}</div>
+        <div>
+          Coupon Code:{' '}
+          {props.orderTracker.note ? (
+            <strong> {props.orderTracker.note} </strong>
+          ) : (
+            'None'
+          )}
+        </div>
         <div style={{ marginTop: '4px' }}>
           Payment: <strong>{props.paymentType === 'None' ? 'Credit Card (Beta)' : props.paymentType}</strong>
         </div>

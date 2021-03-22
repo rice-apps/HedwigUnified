@@ -7,11 +7,12 @@ export const FloatCartWrapper = styled.div`
   min-width: 100vw;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content) auto 8.4vh;
+  grid-template-rows: minmax(100px, min-content) 10vh minmax(10vh, max-content) max-content auto 8.4vh;
   grid-template-areas:
     'OrderSummary'
     'PickUpTime'
     'PaymentMethod'
+    'Extra'
     'none'
     'Footer';
   letter-spacing: 0.97px;
@@ -53,6 +54,15 @@ export const SpaceWrapper = styled.div`
     props.note &&
     css`
       grid-area: PaymentMethod;
+      display: grid;
+      border-top: 1px #dddddd solid;
+      grid-template-rows: 16vh minmax(0px, min-content);
+    `};
+    ${props =>
+    props.cohenNote &&
+    css`
+    padding-top:1.2vh;
+      grid-area: Extra;
       display: grid;
       border-top: 1px #dddddd solid;
       grid-template-rows: 16vh minmax(0px, min-content);
@@ -122,6 +132,12 @@ export const TextArea = styled.textarea`
   :focus {
     outline: none;
   }
+  ${props =>
+    props.note &&
+    css`
+      font-size:2.3vh;
+    `}
+
 `
 
 export const Input = styled.input`

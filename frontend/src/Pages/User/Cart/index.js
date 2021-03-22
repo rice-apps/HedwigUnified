@@ -408,7 +408,7 @@ function CartDetail () {
       const asapTime = moment().add(asapDuration, 'minutes')
       const pickupIntervalHour = asapTime.hour()
       const pickupIntervalMinute = Math.floor(asapTime.minutes() / 15) * 15
-      const asapDisplay = { value: moment(asapTime, 'h:mm a').format(), label: 'ASAP'}
+      const asapDisplay = { value: moment(asapTime, 'h:mm a').format(), label: 'ASAP' + ' (~' + moment(asapTime).format('h:mm A') + ')'}
       pickupTimes = [
           asapDisplay,
           ...generatePickupTimes(

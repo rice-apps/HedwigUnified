@@ -98,6 +98,7 @@ const VendorSchema = new mongoose.Schema({
   pickupInstruction: { type: String, required: false },
   orderOpeningTime: {type: String, required: false},
   cutoffTime: { type: Number, required: false },
+  asapTime: {type: Number, required: false},
   website: { type: String, required: false },
   facebook: { type: String, required: false },
   availableItems: { type: [String], required: false },

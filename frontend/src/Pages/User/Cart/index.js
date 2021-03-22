@@ -53,7 +53,7 @@ function generatePickupTimes (
   currMinute,
   endHour,
   endMinute,
-  isFirst
+  cutoffTime
 ) {
   const pickupTimes = []
   let pickupMinute = Math.ceil(currMinute / 15) * 15
@@ -61,7 +61,7 @@ function generatePickupTimes (
   while (pickupHour <= endHour) {
     while (
       pickupMinute <= 45 &&
-      !(pickupHour === endHour && pickupMinute >= endMinute - 15)
+      !(pickupHour+pickupMinute/60 > endHour+((endMinute-cutoffTime-15)/60))
     ) {
       pickupMinute += 15
       let strPickupMinute = ''
@@ -90,6 +90,7 @@ function generatePickupTimes (
         strPickupMinute += ' a.m.'
       }
       const pickupTime = strPickupHour + ':' + strPickupMinute
+      console.log(pickupTime)
       pickupTimes.push(pickupTime)
     }
     pickupMinute = 0
@@ -101,9 +102,6 @@ function generatePickupTimes (
     }
     return { value: moment(time, 'h:mm a').format(), label: time }
   })
-  if (isFirst && pickupObjs.length > 0) {
-    pickupObjs.unshift({ value: moment().add(15, 'minutes'), label: 'ASAP' })
-  }
   return pickupObjs
 }
 
@@ -179,6 +177,7 @@ function CartDetail () {
   const [note, setNote] = useState(null)
   const [characterCount, setCharacterCount] = useState(0)
   const [nullError, setNullError] = useState(null)
+  const [currentTime, setCurrentTime] = useState(moment())
   // eval to a field string if user's name, student id, or phone number is null
   const options = [
     { value: 'None', label: 'Credit Card' },
@@ -247,11 +246,11 @@ function CartDetail () {
     )
   }
 
-  const handleConfirmClick = async () => {
+  const handleConfirmClick = async (asapTime) => {
     const currTimeVal = moment().hour() + moment().minutes() / 60
     const pickupTimeVal =
       moment(pickupTime).hour() + moment(pickupTime).minutes() / 60
-    if (pickupTimeVal < currTimeVal + 0.25) {
+    if (pickupTimeVal < currTimeVal + asapTime/60) {
       alert(
         'The time you have selected is no longer valid. Please choose a later time.'
       )
@@ -334,6 +333,15 @@ function CartDetail () {
 
   //	This is to make the page re-render so that updated state is shown when item
   //  is deleted.
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment())
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
   const [, setDummyDelete] = useState(0)
 
   if (loading) return <p>'Loading vendor's business hour ...'</p>
@@ -353,8 +361,8 @@ function CartDetail () {
   //   return <p>`Error! ${avail_error.message}`</p>;
 
   const currDay = moment().day()
-  const currHour = moment().hour()
-  const currMinute = moment().minutes()
+  const currHour = moment(currentTime).hour()
+  const currMinute = moment(currentTime).minutes()
 
   const {
     getVendor: { hours: businessHours }
@@ -388,38 +396,44 @@ function CartDetail () {
     endHours,
     endMinutes
   )
+
   let pickupTimes = []
+  const asapDuration = data.getVendor.asapTime
+  const cutoffTime = data.getVendor.cutoffTime
   for (let i = 0; i < timeIntervals.length; i++) {
     const interval = timeIntervals[i]
-    i === 0
-      ? (pickupTimes = [
+    const currNumTime = currHour + currMinute/60
+    const startNumTime = timeIntervals[0][0]+timeIntervals[0][1]/60
+    if(i === 0&& currNumTime>=startNumTime){
+      const asapTime = moment().add(asapDuration, 'minutes')
+      const pickupIntervalHour = asapTime.hour()
+      const pickupIntervalMinute = Math.floor(asapTime.minutes() / 15) * 15
+      const asapDisplay = { value: moment(asapTime, 'h:mm a').format(), label: 'ASAP'}
+      pickupTimes = [
+          asapDisplay,
+          ...generatePickupTimes(
+            pickupIntervalHour,
+            pickupIntervalMinute,
+            interval[2],
+            interval[3],
+            cutoffTime
+          )
+        ]
+    }
+    else{
+      pickupTimes = [
           ...pickupTimes,
           ...generatePickupTimes(
             interval[0],
             interval[1],
             interval[2],
             interval[3],
-            true
+            cutoffTime
           )
-        ])
-      : (pickupTimes = [
-          ...pickupTimes,
-          ...generatePickupTimes(
-            interval[0],
-            interval[1],
-            interval[2],
-            interval[3],
-            false
-          )
-        ])
+        ]
+    }
   }
-
-  // pickupTimes = pickupTimes.forEach(t => t.value = moment().set(
-  //   {'year': moment().year(),
-  //   'month': moment().month(),
-  //   'date': moment().date(),
-  //   'hour': t.value.split(':')[0],
-  //   'minute': t.value.split(':')[1]}))
+  console.log("Pickup Times: ", pickupTimes)
 
   function changePaymentType (newPayment) {
     setPaymentMethod(newPayment.value)
@@ -559,7 +573,7 @@ function CartDetail () {
         )}
         <SpaceWrapper footer>
           <SubmitButton
-            onClick={cart_menu?.length === 0 ? null : handleConfirmClick}
+            onClick={cart_menu?.length === 0 ? null : () => {handleConfirmClick(asapDuration)}}
           >
             Submit Order
           </SubmitButton>

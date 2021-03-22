@@ -13,6 +13,7 @@ const GET_VENDOR_INFO = gql`
       facebook
       phone
       cutoffTime
+      orderOpeningTime
       pickupInstruction
     }
   }
@@ -27,6 +28,7 @@ const UPDATE_VENDOR = gql`
     $phone: String
     $cutoffTime: Float
     $pickupInstruction: String
+    $orderOpeningTime: String
   ) {
     updateVendor(
       record: {
@@ -36,6 +38,7 @@ const UPDATE_VENDOR = gql`
         phone: $phone
         cutoffTime: $cutoffTime
         pickupInstruction: $pickupInstruction
+        orderOpeningTime: $orderOpeningTime
       }
       filter: { name: $name }
     ) {
@@ -46,6 +49,7 @@ const UPDATE_VENDOR = gql`
         phone
         cutoffTime
         pickupInstruction
+        orderOpeningTime
       }
     }
   }
@@ -58,17 +62,19 @@ const Div = styled.div`
     css`
       height: 90%;
       width: 90%;
+      overflow: none;
       background-color: white;
       border-radius: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr 1.2fr 2.3fr 1.2fr;
+      grid-template-rows: 2.8fr 0.8fr 0.8fr 0.8fr max-content max-content max-content 1.2fr;
       grid-template-areas:
         'ImageSpace ImageSpace'
         'Name Website'
         'Email Facebook'
         'Phone Blank'
         'Cutoff Cutoff'
+        'Opening Opening'
         'Pickup Pickup'
         'Button Button';
       justify-items: center;
@@ -82,6 +88,7 @@ const Div = styled.div`
       grid-template-rows: 1fr;
       grid-template-columns: 0.6fr 2fr;
       height: 100%;
+      margin: 1.2vh 0vh;
       width: 100%;
       align-items: center;
     `}
@@ -178,6 +185,14 @@ const Input = styled.input`
       margin-left: 0px;
       margin-right: 0.5rem;
     `}
+
+  ${props =>
+    props.time &&
+    css`
+      width: 14vh;
+      margin-left: 0px;
+      margin-right: 0.5rem;
+    `}
 `
 
 const TextArea = styled.textarea`
@@ -261,7 +276,8 @@ function BasicInfoDashboard () {
     facebook,
     phone,
     cutoffTime,
-    pickupInstruction
+    pickupInstruction,
+    orderOpeningTime
   } = vendorData.getVendor
 
   function clearInputs () {
@@ -293,11 +309,13 @@ function BasicInfoDashboard () {
     facebook: facebook,
     phone: phone,
     cutoffTime: cutoffTime,
-    pickupInstruction: pickupInstruction
+    pickupInstruction: pickupInstruction,
+    orderOpeningTime: orderOpeningTime
   }
 
   if (isEmpty(placeholderInfo)) {
     setPlaceholderInfo(originalInfo)
+
   }
 
   const handleConfirmClick = async () => {
@@ -357,12 +375,33 @@ function BasicInfoDashboard () {
               min='0'
               placeholder={placeholderInfo.cutoffTime}
               onChange={e =>
-                updateInfo({ cutoffTime: parseInt(e.target.value) })}
+                updateInfo({ cutoffTime: parseInt(e.target.value) })
+              }
             />
             minutes before closing time{' '}
           </Div>
         </Div>
         <Div warning>*Orders will not be accepted after this time</Div>
+      </Div>
+
+      <Div flexWrapper gridArea='Opening'>
+        <Div bottomTitle>
+          <div>Order Opening Time:</div>
+          <Div bottomSubtitle>
+            <Input
+              time
+              class='input'
+              type='text'
+              placeholder={placeholderInfo.orderOpeningTime}
+              onChange={e => {
+                updateInfo({ orderOpeningTime: e.target.value });
+              }
+              }
+            />
+           
+          </Div>
+        </Div>
+        <Div warning>*Must be in H:MM a.m. format</Div>
       </Div>
 
       <Div flexWrapper gridArea='Pickup'>

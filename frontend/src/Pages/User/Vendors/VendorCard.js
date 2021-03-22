@@ -28,8 +28,10 @@ function VendorCard ({ vendor }) {
     phone,
     cutoffTime,
     pickupInstruction,
-    email
+    email, 
+    orderOpeningTime
   } = vendor
+
   const [statusDetail, setStatusDetail] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
   // const {data : all_vendors, errors: vendor_errors, loading: vendor_loading} = useQuery(GET_ALL_VENDORS);
@@ -79,6 +81,17 @@ function VendorCard ({ vendor }) {
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
       const endTime = convertTimeToNum(dayObj.end[i])
+      
+      if(
+        orderOpeningTime !== null
+      ){
+      if(
+        currentTime >= convertTimeToNum(orderOpeningTime) &&
+        currentTime <= startTime
+      ) {
+        return {status: 'openning'}
+      }}
+
       if (
         currentTime >= startTime &&
         currentTime <= endTime - cutoffTime / 60

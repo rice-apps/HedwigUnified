@@ -46,6 +46,7 @@ const GET_ALL_VENDORS = gql`
       cutoffTime
       pickupInstruction
       email
+      orderOpeningTime
     }
   }
 `

@@ -61,7 +61,7 @@ function generatePickupTimes (
   while (pickupHour <= endHour) {
     while (
       pickupMinute <= 45 &&
-      !(pickupHour+pickupMinute/60 > endHour+((endMinute-cutoffTime-15)/60))
+      !(pickupHour+pickupMinute/60 > endHour+(endMinute-15)/60)
     ) {
       pickupMinute += 15
       let strPickupMinute = ''

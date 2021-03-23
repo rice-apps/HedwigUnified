@@ -28,7 +28,7 @@ function VendorCard ({ vendor }) {
     phone,
     cutoffTime,
     pickupInstruction,
-    email, 
+    email,
     orderOpeningTime
   } = vendor
 
@@ -81,16 +81,15 @@ function VendorCard ({ vendor }) {
     for (let i = 0; i < dayObj.start.length; i++) {
       const startTime = convertTimeToNum(dayObj.start[i])
       const endTime = convertTimeToNum(dayObj.end[i])
-      
-      if(
-        orderOpeningTime !== null
-      ){
-      if(
-        currentTime >= convertTimeToNum(orderOpeningTime) &&
-        currentTime <= startTime
-      ) {
-        return {status: 'openning'}
-      }}
+
+      if (orderOpeningTime !== null) {
+        if (
+          currentTime >= convertTimeToNum(orderOpeningTime) &&
+          currentTime <= startTime
+        ) {
+          return { status: 'openning' }
+        }
+      }
 
       if (
         currentTime >= startTime &&

@@ -143,13 +143,15 @@ const VendorQueries = {
     .findMany({ lean: true })
     .withMiddlewares([checkLoggedIn])
     .wrapResolve(next => rp => {
-      return next(rp).then(payload => {
-        payload = payload.filter(vendor => !vendor.name.includes("East West"))
-        return payload;
-      }).catch(error => {
-        console.log(error);
-        return null;
-      })
+      return next(rp)
+        .then(payload => {
+          payload = payload.filter(vendor => !vendor.name.includes('East West'))
+          return payload
+        })
+        .catch(error => {
+          console.log(error)
+          return null
+        })
     }),
   getAllowedVendors: VendorTC.getResolver('getAllowedVendors')
 }

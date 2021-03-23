@@ -557,7 +557,7 @@ function CartDetail () {
                   color: 'grey',
                   lineHeight: '2vh',
                   width: '80vw',
-                  margin:'0.5vh 6vw 0.9vh 6vw'
+                  margin: '0.5vh 6vw 0.9vh 6vw'
                 }}
               >
                 *Vendor will verify coupon code. Price subject to change.

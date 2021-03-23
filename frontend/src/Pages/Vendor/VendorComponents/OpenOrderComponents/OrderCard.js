@@ -143,7 +143,12 @@ function MakeOrderTime (props) {
           )}
         </div>
         <div style={{ marginTop: '4px' }}>
-          Payment: <strong>{props.paymentType === 'None' ? 'Credit Card (Beta)' : props.paymentType}</strong>
+          Payment:{' '}
+          <strong>
+            {props.paymentType === 'None'
+              ? 'Credit Card (Beta)'
+              : props.paymentType}
+          </strong>
         </div>
       </ExactTimeSpaceWrapper>
       <TimeLeftSpaceWrapper>
@@ -273,7 +278,12 @@ function MakeModalDetails (props) {
       <ModalSubtitle>Payment Details: </ModalSubtitle>
       <ModalDetail>
         <div>
-          Type: <span style={{ fontWeight: 'bold' }}>{props.paymentType === 'None' ? 'Credit Card (Beta)' : props.paymentType}</span>
+          Type:{' '}
+          <span style={{ fontWeight: 'bold' }}>
+            {props.paymentType === 'None'
+              ? 'Credit Card (Beta)'
+              : props.paymentType}
+          </span>
         </div>
         {props.paymentType === 'CREDIT' ? (
           <div>
@@ -308,7 +318,7 @@ function MakeModalDetails (props) {
             </span>
           </div>
         ) : (
-          <div></div>
+          <div />
         )}
       </ModalDetail>
       <ModalSubtitle>Pickup Details:</ModalSubtitle>

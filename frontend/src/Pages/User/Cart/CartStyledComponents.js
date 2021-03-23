@@ -58,10 +58,10 @@ export const SpaceWrapper = styled.div`
       border-top: 1px #dddddd solid;
       grid-template-rows: 16vh minmax(0px, min-content);
     `};
-    ${props =>
+  ${props =>
     props.cohenNote &&
     css`
-    padding-top:1.2vh;
+      padding-top: 1.2vh;
       grid-area: Extra;
       display: grid;
       border-top: 1px #dddddd solid;
@@ -135,9 +135,8 @@ export const TextArea = styled.textarea`
   ${props =>
     props.note &&
     css`
-      font-size:2.3vh;
+      font-size: 2.3vh;
     `}
-
 `
 
 export const Input = styled.input`

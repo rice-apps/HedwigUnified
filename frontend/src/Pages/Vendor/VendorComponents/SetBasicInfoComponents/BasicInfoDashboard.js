@@ -315,7 +315,6 @@ function BasicInfoDashboard () {
 
   if (isEmpty(placeholderInfo)) {
     setPlaceholderInfo(originalInfo)
-
   }
 
   const handleConfirmClick = async () => {
@@ -375,8 +374,7 @@ function BasicInfoDashboard () {
               min='0'
               placeholder={placeholderInfo.cutoffTime}
               onChange={e =>
-                updateInfo({ cutoffTime: parseInt(e.target.value) })
-              }
+                updateInfo({ cutoffTime: parseInt(e.target.value) })}
             />
             minutes before closing time{' '}
           </Div>
@@ -394,11 +392,9 @@ function BasicInfoDashboard () {
               type='text'
               placeholder={placeholderInfo.orderOpeningTime}
               onChange={e => {
-                updateInfo({ orderOpeningTime: e.target.value });
-              }
-              }
+                updateInfo({ orderOpeningTime: e.target.value })
+              }}
             />
-           
           </Div>
         </Div>
         <Div warning>*Must be in H:MM a.m. format</Div>

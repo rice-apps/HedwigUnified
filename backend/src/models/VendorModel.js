@@ -96,9 +96,9 @@ const VendorSchema = new mongoose.Schema({
   isOpen: { type: Boolean, required: false },
   allowedNetid: { type: [String], required: false }, // change this to required true later on
   pickupInstruction: { type: String, required: false },
-  orderOpeningTime: {type: String, required: false},
+  orderOpeningTime: { type: String, required: false },
   cutoffTime: { type: Number, required: false },
-  asapTime: {type: Number, required: false},
+  asapTime: { type: Number, required: false },
   website: { type: String, required: false },
   facebook: { type: String, required: false },
   availableItems: { type: [String], required: false },

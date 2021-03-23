@@ -18,8 +18,8 @@ const squareClients = await Vendor.find()
             vendor.name === 'Cohen House'
               ? Environment.Sandbox
               : (process.env.NODE_ENV === 'production'
-                  ? Environment.Production
-                  : Environment.Sandbox),
+              ? Environment.Production
+              : Environment.Sandbox),
           accessToken: await vault
             .read(`cubbyhole/${vendor.slug.toLowerCase()}`)
             .then(res => res.data['square-access'])

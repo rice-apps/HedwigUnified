@@ -150,7 +150,7 @@ ItemTC.addResolver({
     } catch (error) {
       if (error instanceof ApiError) {
         return new ApolloError(
-          `Getting Square catalog failed because ${error.result}`
+          `Getting Square catalog failed because ${JSON.stringify(error.result)}`
         )
       }
       console.log(error)

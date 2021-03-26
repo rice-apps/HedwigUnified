@@ -1,5 +1,6 @@
 import { sc } from 'graphql-compose'
 import { Kind } from 'graphql'
+import BigInt from 'graphql-bigint'
 
 const DataSourceEnumTC = sc.createEnumTC({
   name: 'DataSourceEnum',
@@ -25,7 +26,7 @@ const MoneyTC = sc.createObjectTC({
   name: 'Money',
   description: 'Common data model money representation',
   fields: {
-    amount: 'Int!',
+    amount: sc.createScalarTC(BigInt).getTypeNonNull(),
     currency: 'String!'
   }
 })

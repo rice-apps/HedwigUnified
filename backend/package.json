@@ -15,21 +15,22 @@
   "author": "vms2@rice.edu",
   "license": "MIT",
   "dependencies": {
-    "apollo-server-express": "^2.21.2",
+    "apollo-server-express": "^2.22.1",
     "dotenv": "^8.2.0",
     "firebase-admin": "^9.5.0",
     "graphql": "^14.3.0",
+    "graphql-bigint": "^1.0.0",
     "graphql-compose": "^7.25.1",
     "graphql-compose-mongoose": "^9.2.0",
     "graphql-redis-subscriptions": "^2.3.1",
-    "ioredis": "^4.24.3",
+    "ioredis": "^4.24.4",
     "loglevel": "^1.7.1",
     "mongoose": "^5.12.2",
     "node-vault": "^0.9.21",
     "shopify-api-node": "^3.6.5",
     "shopify-buy": "^2.11.0",
-    "square": "^8.1.1",
-    "twilio": "^3.58.0"
+    "square": "^9.1.0",
+    "twilio": "^3.59.0"
   },
   "devDependencies": {
     "@types/qs": "6.9.4",

@@ -7,11 +7,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "^3.3.12",
+    "@apollo/client": "^3.3.13",
     "@emotion/react": "^11.1.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.12",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@material-ui/core": "^4.11.3",
     "antd": "^4.14.1",
     "currency.js": "^2.0.3",
@@ -21,7 +21,7 @@
     "graphql": "^15.5.0",
     "graphql-tag.macro": "^2.0.1",
     "history": "^5.0.0",
-    "immer": "^8.0.4",
+    "immer": "^9.0.1",
     "js-cookie": "^2.2.1",
     "moment": "^2.29.1",
     "omit-deep-lodash": "^1.1.5",
@@ -29,14 +29,14 @@
     "react-collapsible": "^2.8.3",
     "react-dom": "^17.0.2",
     "react-dropdown": "^1.9.2",
-    "react-icons": "^3.11.0",
+    "react-icons": "^4.2.0",
     "react-iframe": "^1.8.0",
     "react-modal": "^3.12.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.2",
-    "react-select": "^3.1.1",
+    "react-select": "^4.3.0",
     "react-spinners": "^0.10.6",
     "react-square-payment-form": "^0.7.2",
     "react-toggle": "^4.1.2",
@@ -44,7 +44,7 @@
     "serve": "^11.3.2",
     "styled-components": "^5.2.1",
     "subscriptions-transport-ws": "^0.9.18",
-    "yup": "^0.29.3"
+    "yup": "^0.32.9"
   },
   "scripts": {
     "dev": "react-scripts start",
@@ -52,7 +52,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "standard --fix --verbose | snazzy",
-    "lint:format": "prettier-standard --format 'src/**/*.{css, js, jsx, scss, ts, tsx}'",
     "lint:css": "stylelint './src/**/*.js'"
   },
   "eslintConfig": {
@@ -71,11 +70,10 @@
     ]
   },
   "devDependencies": {
-    "prettier-standard": "^16.4.1",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
     "stylelint": "^13.12.0",
-    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-recommended": "^4.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0",
     "typescript": "^4.2.3"

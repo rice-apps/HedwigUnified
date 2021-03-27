@@ -97,6 +97,7 @@ const SET_ITEM_AVAILABILITY = gql`
     }
   }
 `
+
 const SET_MODIFIER_AVAILABILITY = gql`
   mutation SET_ITEM_AVAILABILITY(
     $vendor: String!
@@ -111,7 +112,32 @@ const SET_MODIFIER_AVAILABILITY = gql`
       type: "modifier"
     ) {
       name
-      availableItems
+      availableModifiers
+    }
+  }
+`
+
+const GET_MODIFIER_LISTS = gql`
+  query GET_MODIFIER_LISTS($vendor: String!) {
+    getModifierLists(dataSource: SQUARE, vendor: $vendor) {
+      dataSourceId
+      name
+      selectionType
+      modifiers {
+        dataSourceId
+        parentListId
+        price {
+          amount
+          currency
+        }
+        name
+        description
+        dataSource
+        merchant
+        image
+      }
+      minModifiers
+      maxModifiers
     }
   }
 `
@@ -123,5 +149,6 @@ export {
   GET_ITEM_AVAILABILITY,
   SET_ITEM_AVAILABILITY,
   GET_MODIFIER_AVAILABILITY,
-  SET_MODIFIER_AVAILABILITY
+  SET_MODIFIER_AVAILABILITY,
+  GET_MODIFIER_LISTS
 }

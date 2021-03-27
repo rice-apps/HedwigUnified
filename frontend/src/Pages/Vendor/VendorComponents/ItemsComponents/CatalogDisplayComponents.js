@@ -1,7 +1,9 @@
 import styled from 'styled-components/macro'
 import {
   GET_ITEM_AVAILABILITY,
-  SET_ITEM_AVAILABILITY
+  SET_ITEM_AVAILABILITY,
+  GET_MODIFIER_AVAILABILITY,
+  SET_MODIFIER_AVAILABILITY
 } from '../../../../graphql/ProductQueries.js'
 import { useQuery, useMutation } from '@apollo/client'
 import ClipLoader from 'react-spinners/ClipLoader'
@@ -106,12 +108,18 @@ function MakeCatalogItems (props) {
     currency: 'USD'
   })
 
-  const [setAvailability] = useMutation(SET_ITEM_AVAILABILITY)
+  var SET_AVAILABILITY = SET_ITEM_AVAILABILITY;
+  var GET_AVAILABILITY = GET_ITEM_AVAILABILITY;
+  if (props.itemType === "Modifier") {
+    SET_AVAILABILITY = SET_MODIFIER_AVAILABILITY;
+    GET_AVAILABILITY = GET_MODIFIER_AVAILABILITY;
+  }
+  const [setAvailability] = useMutation(SET_AVAILABILITY)
   const {
     data: availability_info,
     error: availability_error,
     loading: availability_loading
-  } = useQuery(GET_ITEM_AVAILABILITY, {
+  } = useQuery(GET_AVAILABILITY, {
     variables: {
       vendor: currentUser.vendor[0],
       productId: props.itemId

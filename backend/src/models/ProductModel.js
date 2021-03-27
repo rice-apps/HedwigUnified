@@ -154,4 +154,4 @@ const ItemTC = sc
   .addInterfaces([ProductInterfaceTC])
   .merge(ProductInterfaceTC)
 
-export { ProductInterfaceTC, ItemTC }
+export { ProductInterfaceTC, ItemTC, ItemModifierListTC }

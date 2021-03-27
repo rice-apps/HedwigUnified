@@ -262,7 +262,7 @@ function Product () {
           <h2>{product.name}</h2>
           <p>
             {product.description} <br />
-            <span className='asterisk'> (* required) </span>
+            <span className='required'> (* required) </span>
           </p>
         </div>
         <div className='variantsContainer'>

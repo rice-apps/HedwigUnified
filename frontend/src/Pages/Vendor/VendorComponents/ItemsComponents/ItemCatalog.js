@@ -15,7 +15,8 @@ const theme = createMuiTheme({
     }
   }
 })
-const PageWrapper = styled.div`
+
+export const PageWrapper = styled.div`
   background-color: #f7f7f7;
   height: 100%;
   width: 100%;
@@ -24,7 +25,7 @@ const PageWrapper = styled.div`
   justify-content: center;
 `
 
-const CatalogWrapper = styled.div`
+export const CatalogWrapper = styled.div`
   display: grid;
   border-radius: 7px;
   height: 85%;
@@ -39,7 +40,7 @@ const CatalogWrapper = styled.div`
     'TabSpace ItemDisplaySpace';
 `
 
-const LabelWrapper = styled.div`
+export const LabelWrapper = styled.div`
   background-color: #6b6b6b;
   width: 100%;
   height: 100%;
@@ -53,14 +54,15 @@ const LabelWrapper = styled.div`
   align-items: center;
 `
 
-const TabWrapper = styled.div`
+export const TabWrapper = styled.div`
   background-color: #d7d7d7;
   width: 100%;
   height: 100%;
   grid-area: TabSpace;
+  overflow: scroll;
 `
 
-const ItemDisplayWrapper = styled.div`
+export const ItemDisplayWrapper = styled.div`
   background-color: white;
   width: 100%;
   height: 100%;
@@ -73,18 +75,7 @@ const ItemDisplayWrapper = styled.div`
   overflow-x: hidden;
 `
 
-function MakeLabelWrapper () {
-  return (
-    <LabelWrapper>
-      <div>Category</div>
-      <div>Item</div>
-      <div>Availability</div>
-      <div>Price</div>
-    </LabelWrapper>
-  )
-}
-
-const StyledTabs = styled(Tabs)`
+export const StyledTabs = styled(Tabs)`
   && {
     background-color: #7b7b7b;
     width: 100%;
@@ -92,13 +83,24 @@ const StyledTabs = styled(Tabs)`
   }
 `
 
-const StyledTab = styled(Tab)`
+export const StyledTab = styled(Tab)`
   && {
     background-color: white;
     font-weight: 700;
     width: 100%;
   }
 `
+
+function MakeLabelWrapper (props) {
+  return (
+    <LabelWrapper>
+      <div>Category</div>
+      <div>{props._typename}</div>
+      <div>Availability</div>
+      <div>Price</div>
+    </LabelWrapper>
+  )
+}
 
 function TabPanel (props) {
   const { children, value, category } = props
@@ -123,14 +125,14 @@ function ItemCatalog (props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
-    console.log(value)
+    console.log('value', value)
   }
 
   return (
     <ThemeProvider theme={theme}>
       <PageWrapper>
         <CatalogWrapper>
-          <MakeLabelWrapper />
+          <MakeLabelWrapper _typename = {props.catalog[0]._typename || "Item"}/>
           <TabWrapper>
             <StyledTabs
               orientation='vertical'
@@ -155,6 +157,7 @@ function ItemCatalog (props) {
                           itemImage={item.image}
                           itemName={item.name}
                           itemPrice={item.variants[0].price.amount}
+                          itemType={props.catalog[0]._typename || "Item"}
                         />
                       )
                     })}

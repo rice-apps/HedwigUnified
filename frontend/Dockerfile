@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.2
 
 # build environment
-FROM node:15-alpine3.13 AS build
+FROM node:16.0-alpine3.13 AS build
 
 WORKDIR /frontend
 

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.2
-FROM node:16.0-alpine3.13
+FROM node:16.1-alpine3.13
 
 RUN apk add --no-cache tini=~0.19.0
 

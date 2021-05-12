@@ -16,21 +16,21 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server-express": "^2.24.0",
-    "dotenv": "^8.2.0",
-    "firebase-admin": "^9.7.0",
+    "dotenv": "^9.0.2",
+    "firebase-admin": "^9.8.0",
     "graphql": "^14.3.0",
     "graphql-bigint": "^1.0.0",
-    "graphql-compose": "^8.0.1",
+    "graphql-compose": "^8.1.0",
     "graphql-compose-mongoose": "^9.3.0",
     "graphql-redis-subscriptions": "^2.3.1",
-    "ioredis": "^4.27.1",
+    "ioredis": "^4.27.2",
     "loglevel": "^1.7.1",
-    "mongoose": "^5.12.7",
+    "mongoose": "^5.12.8",
     "node-vault": "^0.9.21",
-    "shopify-api-node": "^3.6.11",
+    "shopify-api-node": "^3.6.12",
     "shopify-buy": "^2.11.0",
     "square": "^10.0.0",
-    "twilio": "^3.61.0"
+    "twilio": "^3.62.0"
   },
   "devDependencies": {
     "@types/qs": "6.9.6",

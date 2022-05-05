@@ -35,7 +35,7 @@ jobs:
 
       # Build our Docker images and push them with the appropriate tag
       - name: Build and push Docker images
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ./backend
           file: ./backend/Dockerfile
@@ -65,7 +65,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           build-args: |
             REACT_APP_GRAPHQL_URL=https://hedwig.riceapps.org/graphql

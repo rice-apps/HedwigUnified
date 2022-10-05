@@ -15,7 +15,7 @@ jobs:
     steps:
       # Check out our repo so we can build. Also set the release version
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
       
       - name: Set release version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout Files
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - name: Set release version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV

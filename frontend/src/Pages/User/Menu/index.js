@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import './index.css'
 import { Link } from 'react-scroll'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { GET_CATALOG } from '../../../graphql/ProductQueries.js'
 import { VENDOR_QUERY } from '../../../graphql/VendorQueries.js'
 import { useQuery } from '@apollo/client'
@@ -27,13 +27,19 @@ function Menu () {
   const anchorRef = useRef(null)
   const [] = useState(false)
   const navigate = useNavigate()
-  const { state } = useLocation()
-  const { currentVendor, slug, addedItem, addedImage } = state
+
+  const { state } = useLocation();
+  const currentVendor = state?.currentVendor;
+  const slug = state?.slug;
+  const addedItem = state?.addedItem;
+  const addedImage = state?.addedImage;
+  // const { currentVendor, slug, addedItem, addedImage } = state;
   const {
     data: catalog_info,
     error: catalog_error,
     loading: catalog_loading
   } = useQuery(GET_CATALOG, {
+    skip: state === null,
     variables: {
       // dataSource: 'SQUARE',
       vendor: currentVendor
@@ -46,6 +52,7 @@ function Menu () {
     error: vendor_error,
     loading: vendor_loading
   } = useQuery(VENDOR_QUERY, {
+    skip: state === null,
     variables: { vendor: currentVendor },
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
@@ -72,6 +79,10 @@ function Menu () {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [open])
+
+  if (!state){
+    return <Navigate to='/eat' />
+  } 
 
   if (vendor_loading) {
     return <SmallLoadingPage />

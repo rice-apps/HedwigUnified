@@ -31,7 +31,7 @@ import { SmallLoadingPage } from './../../../components/LoadingComponents'
 function VendorList ({ updateLogin }) {
   const { data, loading, error } = useQuery(GET_ALL_VENDORS)
 
-  if (error) return <p>{error.message}</p>
+  if (error) throw new Error("Error Detected!")
   if (loading) return <SmallLoadingPage />
   if (!data) return <p>No data...</p>
 

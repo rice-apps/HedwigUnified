@@ -82,7 +82,7 @@ function ClosedOrderDashboard () {
   const { data, loading, error } = useQuery(GET_COMPLETED_ORDERS, {
     variables: { location: vendorId, filter: filter }
   })
-  if (error) return <p>Error!</p>
+  if (error) throw new Error("Error Detected!")
   if (loading) return <p>Waiting...</p>
   if (!data) return <p> No closed orders </p>
 

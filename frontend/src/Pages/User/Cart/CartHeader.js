@@ -42,7 +42,7 @@ function CartHeader ({ vendorName, showBackButton }) {
     return <p>Loading...</p>
   }
   if (vendor_error) {
-    return <p>ErrorV...</p>
+    throw new Error("Error Detected!");
   }
 
   console.log(vendor_data)

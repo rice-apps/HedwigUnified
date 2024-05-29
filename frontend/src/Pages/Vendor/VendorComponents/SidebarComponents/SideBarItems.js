@@ -3,6 +3,7 @@ import styled from 'styled-components/macro'
 import './SidebarCollapsible.css'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'
+import {useState} from 'react'
 
 const SideBarItemsWrapper = styled.div`
   display: flex;
@@ -108,6 +109,12 @@ function BottomMenuItem (props) {
 }
 
 function SideBarItems () {
+  const [displayError, setError] = useState(0);
+
+  if (displayError === 1) {
+    throw new Error("Simulating React App Crash!");
+  } else {
+
   return (
     <SideBarItemsWrapper>
       <Collapsible
@@ -143,9 +150,12 @@ function SideBarItems () {
         <SubMenuItem path='/employee/set-basic-info' label='Set Basic Info' />
         <SubMenuItem path='/employee/set-store-hours' label='Set Store Hours' />
       </Collapsible>
+      <button onClick={() => setError(1)}></button>
+      {console.log(displayError)}
       <BottomMenuItem path='/employee/faq' label='Help' />
     </SideBarItemsWrapper>
   )
+}
 }
 
 export default SideBarItems

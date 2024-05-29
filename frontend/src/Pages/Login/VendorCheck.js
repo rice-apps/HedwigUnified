@@ -48,7 +48,7 @@ const VendorSelect = () => {
   } = useQuery(GET_ALLOWED_VENDORS, { variables: { name: userData.netid } })
 
   if (vendorLoading) return <SmallLoadingPage />
-  if (vendorError) return <p>User broken</p>
+  if (vendorError) throw new Error("Error Detected!");
 
   const allowedVendors = vendorData.getAllowedVendors.map(vendor => vendor.name)
 

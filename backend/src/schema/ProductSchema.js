@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-express'
 import { ApiError } from 'square'
 import { v4 as uuid } from 'uuid'
-import { ItemTC, DataSourceEnumTC, Vendor, VendorTC } from '../models/index.js'
+import { ItemTC, DataSourceEnumTC, ItemModifierListTC, Vendor, VendorTC } from '../models/index.js'
 import { squareClients } from '../utils/square.js'
 import { pubsub } from '../utils/pubsub.js'
 
@@ -158,6 +158,82 @@ ItemTC.addResolver({
     }
   }
 })
+  .addResolver({
+    name: 'getModifierLists',
+    args: {
+      vendor: 'String!',
+      dataSource: DataSourceEnumTC.getTypeNonNull().getType()
+    },
+    type: [ItemModifierListTC],
+    resolve: async ({ args }) => {
+      // Extract vendor name from args
+      const { dataSource, vendor } = args
+
+      const squareClient = squareClients.get(vendor)
+      const catalogApi = squareClient.catalogApi
+
+      try {
+        // Make Square request for catalog
+        const {
+          result: { objects }
+        } = await catalogApi.listCatalog(undefined, 'MODIFIER_LIST')
+        // Filter objects into distinct sets
+
+        const modifierLists = objects.filter(
+          object => object.type === 'MODIFIER_LIST'
+        )
+
+        // console.log('modifierLists', modifierLists)
+
+        return modifierLists.map(async modifierList => {
+          const {
+            id: parentListId,
+            modifierListData: {
+              name: modifierListName,
+              selectionType,
+              modifiers
+            }
+          } = modifierList
+
+          const returnedModifiers = modifiers.map(modifier => {
+            const {
+              id: modifierId,
+              modifierData: { name: modifierName, modifierListId, priceMoney }
+            } = modifier
+
+            return {
+              dataSourceId: modifierId,
+              parentListId: modifierListId,
+              price: {
+                amount: priceMoney ? priceMoney.amount : 0,
+                currency: priceMoney ? priceMoney.currency : 'USD'
+              },
+              name: modifierName,
+              dataSource,
+              merchant: ''
+            }
+          })
+
+          return {
+            dataSourceId: parentListId,
+            name: modifierListName,
+            selectionType: selectionType,
+            modifiers: returnedModifiers,
+            minModifiers: modifierList.min,
+            maxModifiers: modifierList.max
+          }
+        })
+      } catch (error) {
+        if (error instanceof ApiError) {
+          return new ApolloError(
+            `Getting Square catalog failed because ${error.result}`
+          )
+        }
+        console.log(error)
+        return new ApolloError('Something went wrong when getting Square catalog')
+      }
+    }
+  })
   .addResolver({
     name: 'getItem',
     args: {
@@ -346,7 +422,6 @@ ItemTC.addResolver({
           `Something went wrong getting availability for item ${productId}`
         )
       }
-
       // const squareClient = squareClients.get(vendor)
       // const catalogApi = squareClient.catalogApi
 
@@ -709,7 +784,7 @@ ItemTC.addResolver({
     }
   })
   .addResolver({
-    name: 'batchAddAvailability',
+    name: 'batchAddAvailability', // didn't use the vendor fild property
     type: [ItemTC],
     args: {
       products: '[String!]!',
@@ -885,7 +960,8 @@ const ItemQueries = {
   getCatalog: ItemTC.getResolver('getCatalog'),
   getItem: ItemTC.getResolver('getItem'),
   getAvailability: ItemTC.getResolver('getAvailability'),
-  getAvailabilities: ItemTC.getResolver('getAvailabilities')
+  getAvailabilities: ItemTC.getResolver('getAvailabilities'),
+  getModifierLists: ItemTC.getResolver('getModifierLists')
 }
 
 const ItemMutations = {

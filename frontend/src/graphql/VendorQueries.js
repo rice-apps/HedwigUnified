@@ -5,6 +5,7 @@ const VENDOR_QUERY = gql`
     getVendor(filter: { name: $vendor }) {
       name
       availableItems
+      availableModifiers
       slug
       logoUrl
       dataSource

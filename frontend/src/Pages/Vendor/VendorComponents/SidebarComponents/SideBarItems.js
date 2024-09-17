@@ -130,6 +130,7 @@ function SideBarItems () {
         }
       >
         <SubMenuItem path='/employee/items' label='Edit Items' />
+        <SubMenuItem path='/employee/modifiers' label='Edit Modifiers' />
       </Collapsible>
 
       <Collapsible

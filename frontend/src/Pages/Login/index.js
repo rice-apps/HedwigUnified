@@ -1,4 +1,5 @@
 import logo from './HedwigLogoFinal_02.svg'
+import { useState } from 'react'
 import { MainDiv, ElemDiv, Logo, Title, LoginButton } from './Login.styles'
 
 // import './Transitions.css';
@@ -15,24 +16,16 @@ function Login () {
   /* Lets user sign in in a pop-up tab, get the user's info then generates a token. */
   const signInSAML = () => {
     firebase.auth().signInWithRedirect(provider)
+    navigate('/loadingAuth')
   }
 
-  firebase
-    .auth()
-    .getRedirectResult()
-    .then(result => result.user.getIdTokenResult(true))
-    .then(idTokenResult => {
-      localStorage.setItem('token', idTokenResult.token)
-      navigate('/auth')
-    })
-    .catch(error => console.log(error))
 
   return (
     <MainDiv>
       <ElemDiv>
         <Logo src={logo} />
         <Title>hedwig</Title>
-        <LoginButton onClick={signInSAML}>Login with NetID</LoginButton>
+          <LoginButton onClick={signInSAML}>Login with NetID</LoginButton> 
       </ElemDiv>
     </MainDiv>
   )
